@@ -440,10 +440,10 @@ clean_or_hide_windows_home_dir_entries() {
 	echo "completed"
 }
 
-find_home_.bashrc__scripts() {
+find_home_.bashrc.d_scripts() {
 	(cd ~ && /usr/bin/find .bashrc.d -mindepth 1 -maxdepth 1 -type f -name '*.sh')
 }
 
-for file in $(find_home_.bashrc__scripts); do
+for file in $(find_home_.bashrc.d_scripts); do
 	. ~/"${file}"
 done

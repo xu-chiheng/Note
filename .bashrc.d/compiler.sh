@@ -1,0 +1,187 @@
+# MIT License
+
+# Copyright (c) 2023 徐持恒 Xu Chiheng
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+check_compiler_existence() {
+	local compiler="$1"
+	if [ -z "${compiler}" ]; then
+		echo "no compiler specified"
+		return 1
+	fi
+	if ! which "${compiler}" >/dev/null 2>&1; then
+		echo "compiler ${compiler} can not be found"
+		return 1
+	fi
+}
+
+print_compiler_predefined_macros() {
+	local compiler="$1"
+	shift 1
+	local args=( "$@" )
+	if ! check_compiler_existence "${compiler}"; then
+		return 1
+	fi
+
+	case "${compiler}" in
+		*g++ | *c++ )
+			"${compiler}" "${args[@]}" -E -dM -x c++ - </dev/null | sort
+			;;
+		*gcc | *clang )
+			"${compiler}" "${args[@]}" -E -dM -x c - </dev/null | sort
+			;;
+		*cl )
+			# https://stackoverflow.com/questions/3665537/how-to-find-out-cl-exes-built-in-macros
+			# https://developercommunity.visualstudio.com/t/provide-the-ability-to-list-predefined-macros-and/934925
+			rm -rf empty.* \
+			&& touch empty.cpp \
+			&& "${compiler}" "${args[@]}" /EP /Zc:preprocessor /PD empty.cpp 2>/dev/null | sort \
+			&& rm -rf empty.*
+			;;
+		* )
+			echo "unknown compiler : ${compiler}"
+			return 1
+			;;
+	esac
+}
+
+# https://stackoverflow.com/questions/17939930/finding-out-what-the-gcc-include-path-is
+# https://stackoverflow.com/questions/4980819/what-are-the-gcc-default-include-directories
+print_compiler_include_dirs() {
+	local compiler="$1"
+	shift 1
+	local args=( "$@" )
+	if ! check_compiler_existence "${compiler}"; then
+		return 1
+	fi
+
+	case "${compiler}" in
+		*g++ | *c++ )
+			echo | "${compiler}" "${args[@]}" -E -Wp,-v -xc++ - 2>&1
+			;;
+		*gcc | *clang )
+			echo | "${compiler}" "${args[@]}" -E -Wp,-v -xc - 2>&1
+			;;
+		* )
+			echo "unknown compiler : ${compiler}"
+			return 1
+			;;
+	esac
+}
+
+# print_command_options clang
+# print_command_options clang -cc1
+# print_command_options $(gcc -print-prog-name=cc1)
+# print_command_options $(gcc -print-prog-name=cc1plus)
+print_command_options() {
+	"$@" --help 2>&1 | grep -E '^\s*-{1,2}\w+\s.*'  | sed -E -e 's/^\s+//' | cut -d ' ' -f 1 | sort
+}
+
+print_gcc_configure_options() {
+	array_elements_print $(gcc -v 2>&1 | grep -E '^Configured with: ' | sed -E -e 's/^.+\/configure //' )
+}
+
+print_hello_world_program_in_c() {
+	cat <<EOF
+#include <stdio.h>
+int main(int argc, char ** argv)
+{
+	printf("Hello, World!\n");
+	return 0;
+}
+EOF
+}
+
+print_hello_world_program_in_cxx() {
+	cat <<EOF
+#include <iostream>
+int main(int argc, char ** argv)
+{
+	std::cout << "Hello, World!" << std::endl;
+	return 0;
+}
+EOF
+}
+
+# Display the programs invoked by the compiler.
+# Show commands to run and use verbose output
+show_compiler_commands() {
+	local compiler="$1"
+	shift 1
+	local args=( "$@" )
+	if ! check_compiler_existence "${compiler}"; then
+		return 1
+	fi
+
+	args+=(
+		-v
+		# -Wl,-v
+		# -Wl,--verbose
+	)
+
+	local print_hello_world_program_command
+	local source_file_name
+
+	case "${compiler}" in
+		*g++ | *c++ | *cl )
+			print_hello_world_program_command=print_hello_world_program_in_cxx
+			source_file_name=main.cpp
+			;;
+		* )
+			print_hello_world_program_command=print_hello_world_program_in_c
+			source_file_name=main.c
+			;;
+	esac
+
+	"${print_hello_world_program_command}" | tee "${source_file_name}"
+	echo_command "$(which "${compiler}")" "${args[@]}" "${source_file_name}"
+}
+
+show_compiler_commands_bfd() {
+	local compiler="$1"
+	shift 1
+	local args=( "$@" )
+	if ! check_compiler_existence "${compiler}"; then
+		return 1
+	fi
+
+	show_compiler_commands "${compiler}" "${args[@]}" -fuse-ld=bfd
+}
+
+show_compiler_commands_lld() {
+	local compiler="$1"
+	shift 1
+	local args=( "$@" )
+	if ! check_compiler_existence "${compiler}"; then
+		return 1
+	fi
+
+	show_compiler_commands "${compiler}" "${args[@]}" -fuse-ld=lld
+}
+
+llvm-config_print() {
+	local options=( $(print_command_options llvm-config) )
+	# array_elements_print "${options[@]}"
+	local option
+	for option in "${options[@]}"; do
+		echo_command llvm-config "${option}"
+		printf "\n\n"
+	done
+}

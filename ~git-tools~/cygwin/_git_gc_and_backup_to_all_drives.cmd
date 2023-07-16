@@ -1,0 +1,7 @@
+@echo off
+
+@set PATH="%CYGWIN_DIR%\bin";%PATH%
+
+cd ../..
+
+@start mintty.exe --exec bash -i -c "time_command do_git_backup do_gc backup_to_all_drives; read;"

@@ -1,0 +1,38 @@
+diff --git a/clang/lib/Basic/Targets/X86.h b/clang/lib/Basic/Targets/X86.h
+index 39edaa6684e7..2edf4f9eb362 100644
+--- a/clang/lib/Basic/Targets/X86.h
++++ b/clang/lib/Basic/Targets/X86.h
+@@ -893,7 +893,6 @@ public:
+   CygwinX86_64TargetInfo(const llvm::Triple &Triple, const TargetOptions &Opts)
+       : X86_64TargetInfo(Triple, Opts) {
+     this->WCharType = TargetInfo::UnsignedShort;
+-    TLSSupported = false;
+   }
+ 
+   void getTargetDefines(const LangOptions &Opts,
+@@ -907,6 +906,10 @@ public:
+     if (Opts.CPlusPlus)
+       Builder.defineMacro("_GNU_SOURCE");
+   }
++
++  BuiltinVaListKind getBuiltinVaListKind() const override {
++    return TargetInfo::CharPtrBuiltinVaList;
++  }
+ };
+ 
+ class LLVM_LIBRARY_VISIBILITY DarwinX86_64TargetInfo
+diff --git a/clang/lib/Driver/ToolChains/Clang.cpp b/clang/lib/Driver/ToolChains/Clang.cpp
+index 44a9548b444e..6db8d52793ea 100644
+--- a/clang/lib/Driver/ToolChains/Clang.cpp
++++ b/clang/lib/Driver/ToolChains/Clang.cpp
+@@ -6580,7 +6580,9 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
+   // -fuse-cxa-atexit is default.
+   if (!Args.hasFlag(
+           options::OPT_fuse_cxa_atexit, options::OPT_fno_use_cxa_atexit,
+-          !RawTriple.isOSAIX() && !RawTriple.isOSWindows() &&
++          !RawTriple.isOSAIX()
++          && !RawTriple.isWindowsGNUEnvironment()
++          && !RawTriple.isWindowsMSVCEnvironment() &&
+               ((RawTriple.getVendor() != llvm::Triple::MipsTechnologies) ||
+                RawTriple.hasEnvironment())) ||
+       KernelOrKext)

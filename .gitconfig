@@ -1,0 +1,18 @@
+[user]
+	name = 徐持恒 Xu Chiheng
+	email = chiheng.xu@gmail.com
+	signingkey = chiheng.xu@gmail.com
+[core]
+	editor = $EDITOR
+	filemode = true
+	ignorecase = false
+[gpg]
+	program = gpg
+[init]
+	defaultBranch = main
+[http]
+	proxy = 127.0.0.1:10809
+# https://stackoverflow.com/questions/71849415/i-cannot-add-the-parent-directory-to-safe-directory-in-git
+# git config --global --add safe.directory '*'
+[safe]
+	directory = *

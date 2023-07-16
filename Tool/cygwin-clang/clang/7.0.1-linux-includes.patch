@@ -1,0 +1,29 @@
+--- origsrc/cfe-7.0.1.src/lib/Driver/ToolChains/Linux.cpp	2018-07-30 15:44:13.000000000 -0400
++++ src/cfe-7.0.1.src/lib/Driver/ToolChains/Linux.cpp	2019-05-06 18:35:43.929048400 -0400
+@@ -454,7 +454,7 @@ std::string Linux::computeSysRoot() cons
+       return AndroidSysRootPath;
+   }
+ 
+-  if (!GCCInstallation.isValid() || !getTriple().isMIPS())
++  if (!GCCInstallation.isValid())
+     return std::string();
+ 
+   // Standalone MIPS toolchains use different names for sysroot folder
+@@ -465,6 +465,9 @@ std::string Linux::computeSysRoot() cons
+   const StringRef TripleStr = GCCInstallation.getTriple().str();
+   const Multilib &Multilib = GCCInstallation.getMultilib();
+ 
++  if(!getTriple().isMIPS())
++    return std::string("/usr/" + TripleStr.str() + "/sys-root");
++
+   std::string Path =
+       (InstallDir + "/../../../../" + TripleStr + "/libc" + Multilib.osSuffix())
+           .str();
+@@ -871,6 +874,7 @@ void Linux::addLibStdCxxIncludePaths(con
+       InstallDir.str() + "/include/g++-v" + Version.MajorStr + "." +
+           Version.MinorStr,
+       InstallDir.str() + "/include/g++-v" + Version.MajorStr,
++      InstallDir.str() + "/include/c++",
+       // Android standalone toolchain has C++ headers in yet another place.
+       LibDir.str() + "/../" + TripleStr.str() + "/include/c++/" + Version.Text,
+       // Freescale SDK C++ headers are directly in <sysroot>/usr/include/c++,

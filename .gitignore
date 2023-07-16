@@ -1,0 +1,87 @@
+
+
+~*
+*~
+.directory
+.vs
+*.downloading
+/a.out
+/*.stackdump
+/*.deb
+/*.rpm
+
+/workspace-ultragdb
+
+/.*
+
+/Desktop
+
+# Linux
+/snap
+/Backups
+/Cache
+/CachedData
+/CachedExtensions
+/Code Cache
+/Cookies
+/Cookies-journal
+/Crash Reports
+/Documents
+/GPUCache
+/Local Storage
+/Network Persistent State
+/Session Storage
+/TransportSecurit
+/User
+/exthost Crash Reports
+/languagepacks.json
+/logs
+/machineid
+/rapid_render.json
+/storage.json
+
+# Windows
+/3D Objects
+/AppData
+/Application Data
+/Contacts
+/Favorites
+/Links
+/Local Settings
+/Music
+/My Documents
+/NTUSER.DAT*
+/NetHood
+/OneDrive
+/Pictures
+/PrintHood
+/Recent
+/Saved Games
+/Searches
+/SendTo
+/Templates
+/Videos
+/ntuser.dat.*
+/ntuser.ini
+/「开始」菜单
+
+
+
+
+# whitelist must be put last
+!/~git-tools~
+!/~shortcuts*
+!/.gnupg
+!/.ssh
+!/.config
+!/.bash_profile
+!/.bashrc
+!/.bashrc.d
+!/.gitconfig
+!/.gitignore
+!/.gitattributes
+!/.hgignore
+!/.hgrc
+!/.minttyrc
+!/.wgetrc
+!/.curlrc

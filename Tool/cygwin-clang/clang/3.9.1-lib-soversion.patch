@@ -1,0 +1,15 @@
+--- origsrc/cfe-3.9.1.src/cmake/modules/AddClang.cmake	2016-07-09 20:44:00.000000000 -0500
++++ src/cfe-3.9.1.src/cmake/modules/AddClang.cmake	2017-02-20 14:01:46.788434800 -0600
+@@ -80,10 +80,11 @@ macro(add_clang_library name)
+       ${ARG_ADDITIONAL_HEADERS} # It may contain unparsed unknown args.
+       )
+   endif()
+-  if(ARG_SHARED)
++  if(ARG_SHARED OR BUILD_SHARED_LIBS)
+     set(ARG_ENABLE_SHARED SHARED)
+   endif()
+   llvm_add_library(${name} ${ARG_ENABLE_SHARED} ${ARG_UNPARSED_ARGUMENTS} ${srcs})
++  set_target_properties(${name} PROPERTIES SOVERSION "${CLANG_VERSION_MAJOR}")
+ 
+   if(TARGET ${name})
+     target_link_libraries(${name} INTERFACE ${LLVM_COMMON_LIBS})

@@ -1,0 +1,40 @@
+--- origsrc/llvm-8.0.1.src/tools/polly/CMakeLists.txt	2018-07-31 20:15:16.000000000 -0400
++++ src/llvm-8.0.1.src/tools/polly/CMakeLists.txt	2019-08-26 17:41:05.905488900 -0400
+@@ -49,7 +49,7 @@ if (NOT DEFINED LLVM_MAIN_SRC_DIR)
+         "${UNITTEST_DIR}/googletest"
+         "${UNITTEST_DIR}/googlemock"
+         )
+-      target_link_libraries(gtest PUBLIC -lpthread)
++      target_link_libraries(gtest PUBLIC -lLLVMSupport -lpthread)
+ 
+       add_library(gtest_main ${UNITTEST_DIR}/UnitTestMain/TestMain.cpp)
+       target_link_libraries(gtest_main PUBLIC gtest)
+--- origsrc/llvm-8.0.1.src/tools/polly/cmake/polly_macros.cmake	2018-01-12 11:09:18.000000000 -0500
++++ src/llvm-8.0.1.src/tools/polly/cmake/polly_macros.cmake	2019-08-26 21:41:29.338311100 -0400
+@@ -22,6 +22,7 @@ macro(add_polly_library name)
+   endif()
+   add_library( ${name} ${libkind} ${srcs} )
+   set_target_properties(${name} PROPERTIES FOLDER "Polly")
++  set_target_properties(${name} PROPERTIES SOVERSION "${LLVM_VERSION_MAJOR}")
+ 
+   if( LLVM_COMMON_DEPENDS )
+     add_dependencies( ${name} ${LLVM_COMMON_DEPENDS} )
+@@ -45,6 +46,7 @@ macro(add_polly_library name)
+     install(TARGETS ${name}
+       EXPORT LLVMExports
+       LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++      RUNTIME DESTINATION bin
+       ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX})
+   endif()
+   set_property(GLOBAL APPEND PROPERTY LLVM_EXPORTS ${name})
+--- origsrc/llvm-8.0.1.src/tools/polly/lib/CMakeLists.txt	2018-07-31 20:15:16.000000000 -0400
++++ src/llvm-8.0.1.src/tools/polly/lib/CMakeLists.txt	2019-08-26 17:43:40.910214100 -0400
+@@ -143,7 +143,7 @@ else ()
+   # hosts. This is not the case for bugpoint. Use LLVM_POLLY_LINK_INTO_TOOLS=ON
+   # instead which will automatically resolve the additional dependencies by
+   # Polly.
+-  target_link_libraries(LLVMPolly PUBLIC ${ISL_TARGET})
++  target_link_libraries(LLVMPolly PUBLIC ${ISL_TARGET} Polly)
+   if (GPU_CODEGEN)
+     target_link_libraries(LLVMPolly PUBLIC PollyPPCG)
+   endif ()

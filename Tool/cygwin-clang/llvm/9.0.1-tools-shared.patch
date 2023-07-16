@@ -1,0 +1,12 @@
+Neither shlib makes sense, nor work properly, when all libraries are built shared.
+
+--- origsrc/llvm-9.0.1.src/tools/CMakeLists.txt	2019-12-11 14:15:30.000000000 -0500
++++ src/llvm-9.0.1.src/tools/CMakeLists.txt	2020-04-30 01:48:59.664851300 -0400
+@@ -19,6 +19,7 @@ endif()
+ 
+ if(NOT LLVM_BUILD_LLVM_DYLIB AND NOT LLVM_BUILD_LLVM_C_DYLIB)
+   set(LLVM_TOOL_LLVM_SHLIB_BUILD Off)
++  set(LLVM_TOOL_REMARKS_SHLIB_BUILD Off)
+ endif()
+ 
+ if(NOT LLVM_USE_INTEL_JITEVENTS )

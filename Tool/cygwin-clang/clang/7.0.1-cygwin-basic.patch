@@ -1,0 +1,32 @@
+--- origsrc/cfe-7.0.1.src/lib/Basic/Targets/X86.h	2018-08-24 18:49:44.000000000 -0400
++++ src/cfe-7.0.1.src/lib/Basic/Targets/X86.h	2019-05-06 16:52:20.448019100 -0400
+@@ -774,7 +774,6 @@ public:
+   CygwinX86_64TargetInfo(const llvm::Triple &Triple, const TargetOptions &Opts)
+       : X86_64TargetInfo(Triple, Opts) {
+     this->WCharType = TargetInfo::UnsignedShort;
+-    TLSSupported = false;
+   }
+ 
+   void getTargetDefines(const LangOptions &Opts,
+@@ -788,6 +787,10 @@ public:
+     if (Opts.CPlusPlus)
+       Builder.defineMacro("_GNU_SOURCE");
+   }
++
++  BuiltinVaListKind getBuiltinVaListKind() const override {
++    return TargetInfo::CharPtrBuiltinVaList;
++  }
+ };
+ 
+ class LLVM_LIBRARY_VISIBILITY DarwinX86_64TargetInfo
+--- origsrc/cfe-7.0.1.src/lib/Driver/ToolChains/Clang.cpp	2018-09-04 06:40:19.000000000 -0400
++++ src/cfe-7.0.1.src/lib/Driver/ToolChains/Clang.cpp	2019-05-06 16:55:00.073974600 -0400
+@@ -4220,7 +4220,7 @@ void Clang::ConstructJob(Compilation &C,
+   // -fuse-cxa-atexit is default.
+   if (!Args.hasFlag(
+           options::OPT_fuse_cxa_atexit, options::OPT_fno_use_cxa_atexit,
+-          !RawTriple.isOSWindows() &&
++          !IsWindowsGNU && !IsWindowsMSVC &&
+               RawTriple.getOS() != llvm::Triple::Solaris &&
+               getToolChain().getArch() != llvm::Triple::hexagon &&
+               getToolChain().getArch() != llvm::Triple::xcore &&

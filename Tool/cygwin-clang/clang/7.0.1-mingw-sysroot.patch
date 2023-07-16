@@ -1,0 +1,44 @@
+--- origsrc/cfe-7.0.1.src/lib/Driver/ToolChains/MinGW.cpp	2019-05-06 18:43:20.648234800 -0400
++++ src/cfe-7.0.1.src/lib/Driver/ToolChains/MinGW.cpp	2019-05-06 18:46:10.024988300 -0400
+@@ -337,11 +337,9 @@ toolchains::MinGW::MinGW(const Driver &D
+     : ToolChain(D, Triple, Args), CudaInstallation(D, Triple, Args) {
+   getProgramPaths().push_back(getDriver().getInstalledDir());
+ 
+-  if (getDriver().SysRoot.size())
+-    Base = getDriver().SysRoot;
+   // Look for <clang-bin>/../<triplet>; if found, use <clang-bin>/.. as the
+   // base as it could still be a base for a gcc setup with libgcc.
+-  else if (llvm::ErrorOr<std::string> TargetSubdir = findClangRelativeSysroot())
++  if (llvm::ErrorOr<std::string> TargetSubdir = findClangRelativeSysroot())
+     Base = llvm::sys::path::parent_path(TargetSubdir.get());
+   else if (llvm::ErrorOr<std::string> GPPName = findGcc())
+     Base = llvm::sys::path::parent_path(
+@@ -356,8 +354,12 @@ toolchains::MinGW::MinGW(const Driver &D
+   getFilePaths().push_back(GccLibDir);
+   getFilePaths().push_back(
+       (Base + Arch + llvm::sys::path::get_separator() + "lib").str());
+-  getFilePaths().push_back(Base + "lib");
+-  // openSUSE
++  if (getDriver().SysRoot.size())
++    getFilePaths().push_back(getDriver().SysRoot + "/mingw/lib");
++  else
++#ifdef LLVM_ON_WIN32
++    getFilePaths().push_back(Base + "lib");
++#endif
+   getFilePaths().push_back(Base + Arch + "/sys-root/mingw/lib");
+ }
+ 
+@@ -478,7 +480,12 @@ void toolchains::MinGW::AddClangSystemIn
+ 
+   addSystemInclude(DriverArgs, CC1Args,
+                    Base + Arch + llvm::sys::path::get_separator() + "include");
+-  addSystemInclude(DriverArgs, CC1Args, Base + "include");
++  if (getDriver().SysRoot.size())
++    addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/mingw/include");
++#ifdef LLVM_ON_WIN32
++  else
++    addSystemInclude(DriverArgs, CC1Args, Base + "include");
++#endif
+ }
+ 
+ void toolchains::MinGW::AddClangCXXStdlibIncludeArgs(

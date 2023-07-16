@@ -1,0 +1,130 @@
+Backport of https://github.com/llvm/llvm-project/commit/e8227804ac7eef212f989339e04322113e77ec64
+
+--- origsrc/llvm-8.0.1.src/tools/polly/CMakeLists.txt	2020-04-28 15:46:10.539586500 -0400
++++ src/llvm-8.0.1.src/tools/polly/CMakeLists.txt	2020-04-28 17:21:35.200000400 -0400
+@@ -126,6 +126,9 @@ if (NOT POLLY_BUNDLED_ISL)
+   find_package(ISL MODULE REQUIRED)
+   message(STATUS "Using external libisl ${ISL_VERSION} in: ${ISL_PREFIX}")
+   set(ISL_TARGET ISL)
++  set(ISL_INCLUDE_DIRS
++    ${CMAKE_CURRENT_SOURCE_DIR}/include/polly
++  )
+ else()
+   set(ISL_INCLUDE_DIRS
+     ${CMAKE_CURRENT_BINARY_DIR}/lib/External/isl/include
+--- origsrc/llvm-8.0.1.src/tools/polly/cmake/FindISL.cmake	2017-02-27 12:54:25.000000000 -0500
++++ src/llvm-8.0.1.src/tools/polly/cmake/FindISL.cmake	2020-04-28 17:29:49.449896200 -0400
+@@ -15,7 +15,7 @@ foreach (libname IN LISTS ISL_LIBRARIES)
+       list(APPEND hints  ${dir})
+     endforeach()
+   endif()
+-  find_library(lib NAMES ${libname} HINTS ${hints} NO_DEFAULT_PATH)
++  find_library(lib NAMES ${libname} HINTS ${hints})
+   set_property(TARGET ISL APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${lib})
+ endforeach()
+ 
+--- origsrc/llvm-8.0.1.src/tools/polly/include/polly/Support/ISLTools.h	2018-07-23 11:28:50.000000000 -0400
++++ src/llvm-8.0.1.src/tools/polly/include/polly/Support/ISLTools.h	2020-04-28 15:49:14.336848600 -0400
+@@ -33,7 +33,7 @@ struct isl_iterator
+   using ElementT = list_element_type<ListT>;
+ 
+   explicit isl_iterator(const ListT &List)
+-      : List(&List), Position(List.size()) {}
++      : List(&List), Position(std::max(List.size(),0)) {}
+   isl_iterator(const ListT &List, int Position)
+       : List(&List), Position(Position) {}
+   isl_iterator &operator=(const isl_iterator &R) = default;
+--- origsrc/llvm-8.0.1.src/tools/polly/lib/Analysis/ScopInfo.cpp	2018-10-15 06:42:50.000000000 -0400
++++ src/llvm-8.0.1.src/tools/polly/lib/Analysis/ScopInfo.cpp	2020-04-28 17:34:26.043897700 -0400
+@@ -1051,6 +1051,12 @@ void MemoryAccess::realignParams() {
+   isl::set Ctx = Statement->getParent()->getContext();
+   InvalidDomain = InvalidDomain.gist_params(Ctx);
+   AccessRelation = AccessRelation.gist_params(Ctx);
++
++  // Predictable parameter order is required for JSON imports. Ensure alignment
++  // by explicitly calling align_params.
++  isl::space CtxSpace = Ctx.get_space();
++  InvalidDomain = InvalidDomain.align_params(CtxSpace);
++  AccessRelation = AccessRelation.align_params(CtxSpace);
+ }
+ 
+ const std::string MemoryAccess::getReductionOperatorStr() const {
+@@ -1309,6 +1315,12 @@ void ScopStmt::realignParams() {
+   isl::set Ctx = Parent.getContext();
+   InvalidDomain = InvalidDomain.gist_params(Ctx);
+   Domain = Domain.gist_params(Ctx);
++
++  // Predictable parameter order is required for JSON imports. Ensure alignment
++  // by explicitly calling align_params.
++  isl::space CtxSpace = Ctx.get_space();
++  InvalidDomain = InvalidDomain.align_params(CtxSpace);
++  Domain = Domain.align_params(CtxSpace);
+ }
+ 
+ /// Add @p BSet to set @p BoundedParts if @p BSet is bounded.
+@@ -2219,6 +2231,8 @@ void Scop::realignParams() {
+ 
+   // Align the parameters of all data structures to the model.
+   Context = Context.align_params(Space);
++  AssumedContext = AssumedContext.align_params(Space);
++  InvalidContext = InvalidContext.align_params(Space);
+ 
+   // Bound the size of the fortran array dimensions.
+   Context = boundFortranArrayParams(Context, arrays());
+@@ -2230,6 +2244,10 @@ void Scop::realignParams() {
+     Stmt.realignParams();
+   // Simplify the schedule according to the context too.
+   Schedule = Schedule.gist_domain_params(getContext());
++
++  // Predictable parameter order is required for JSON imports. Ensure alignment
++  // by explicitly calling align_params.
++  Schedule = Schedule.align_params(Space);
+ }
+ 
+ static isl::set simplifyAssumptionContext(isl::set AssumptionContext,
+@@ -2751,7 +2769,7 @@ bool Scop::buildDomainsWithBranchConstra
+     isl::set Domain = DomainMap.lookup(BB);
+     if (!Domain)
+       continue;
+-    MaxLoopDepth = std::max(MaxLoopDepth, isl_set_n_dim(Domain.get()));
++    MaxLoopDepth = std::max(MaxLoopDepth, (unsigned)isl_set_n_dim(Domain.get()));
+ 
+     auto *BBLoop = getRegionNodeLoop(RN, LI);
+     // Propagate the domain from BB directly to blocks that have a superset
+--- origsrc/llvm-8.0.1.src/tools/polly/lib/CodeGen/PPCGCodeGeneration.cpp	2018-08-01 06:48:38.000000000 -0400
++++ src/llvm-8.0.1.src/tools/polly/lib/CodeGen/PPCGCodeGeneration.cpp	2020-04-28 15:50:26.133330400 -0400
+@@ -42,6 +42,7 @@
+ #include "llvm/Transforms/Utils/BasicBlockUtils.h"
+ 
+ #include "isl/union_map.h"
++#include <algorithm>
+ 
+ extern "C" {
+ #include "ppcg/cuda.h"
+@@ -1787,10 +1788,10 @@ void GPUNodeBuilder::createKernel(__isl_
+ 
+   if (Kernel->n_grid > 1)
+     DeepestParallel =
+-        std::max(DeepestParallel, isl_space_dim(Kernel->space, isl_dim_set));
++        std::max(DeepestParallel, (unsigned)isl_space_dim(Kernel->space, isl_dim_set));
+   else
+     DeepestSequential =
+-        std::max(DeepestSequential, isl_space_dim(Kernel->space, isl_dim_set));
++        std::max(DeepestSequential, (unsigned)isl_space_dim(Kernel->space, isl_dim_set));
+ 
+   Value *BlockDimX, *BlockDimY, *BlockDimZ;
+   std::tie(BlockDimX, BlockDimY, BlockDimZ) = getBlockSizes(Kernel);
+--- origsrc/llvm-8.0.1.src/tools/polly/lib/Transform/ForwardOpTree.cpp	2018-07-17 02:33:31.000000000 -0400
++++ src/llvm-8.0.1.src/tools/polly/lib/Transform/ForwardOpTree.cpp	2020-04-28 17:35:58.590539300 -0400
+@@ -862,8 +862,10 @@ public:
+       }
+     }
+ 
+-    if (Modified)
++    if (Modified) {
+       ScopsModified++;
++      S->realignParams();
++    }
+     return Modified;
+   }
+ 

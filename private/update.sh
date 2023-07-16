@@ -37,8 +37,8 @@ do_update_all_files() {
 		Tool/clean.sh
 		Tool/common.sh
 
-		Tool/mingw-mode
-		Tool/cygwin-clang
+		Tool/cygwin
+		Tool/mingw
 
 		Tool/linux.sh
 		Tool/cygwin.cmd

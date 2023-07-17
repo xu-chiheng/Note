@@ -33,26 +33,24 @@ check_compiler_existence() {
 }
 
 print_compiler_predefined_macros() {
-	local compiler="$1"
-	shift 1
-	local args=( "$@" )
-	if ! check_compiler_existence "${compiler}"; then
+	if ! check_compiler_existence "$@"; then
 		return 1
 	fi
+	local compiler="$1"
 
 	case "${compiler}" in
 		*g++ | *c++ )
-			"${compiler}" "${args[@]}" -E -dM -x c++ - </dev/null | sort
+			"$@" -E -dM -x c++ - </dev/null | sort
 			;;
 		*gcc | *clang )
-			"${compiler}" "${args[@]}" -E -dM -x c - </dev/null | sort
+			"$@" -E -dM -x c - </dev/null | sort
 			;;
 		*cl )
 			# https://stackoverflow.com/questions/3665537/how-to-find-out-cl-exes-built-in-macros
 			# https://developercommunity.visualstudio.com/t/provide-the-ability-to-list-predefined-macros-and/934925
 			rm -rf empty.* \
 			&& touch empty.cpp \
-			&& "${compiler}" "${args[@]}" /EP /Zc:preprocessor /PD empty.cpp 2>/dev/null | sort \
+			&& "$@" /EP /Zc:preprocessor /PD empty.cpp 2>/dev/null | sort \
 			&& rm -rf empty.*
 			;;
 		* )
@@ -65,19 +63,17 @@ print_compiler_predefined_macros() {
 # https://stackoverflow.com/questions/17939930/finding-out-what-the-gcc-include-path-is
 # https://stackoverflow.com/questions/4980819/what-are-the-gcc-default-include-directories
 print_compiler_include_dirs() {
-	local compiler="$1"
-	shift 1
-	local args=( "$@" )
-	if ! check_compiler_existence "${compiler}"; then
+	if ! check_compiler_existence "$@"; then
 		return 1
 	fi
+	local compiler="$1"
 
 	case "${compiler}" in
 		*g++ | *c++ )
-			echo | "${compiler}" "${args[@]}" -E -Wp,-v -xc++ - 2>&1
+			echo | "$@" -E -Wp,-v -xc++ - 2>&1
 			;;
 		*gcc | *clang )
-			echo | "${compiler}" "${args[@]}" -E -Wp,-v -xc - 2>&1
+			echo | "$@" -E -Wp,-v -xc - 2>&1
 			;;
 		* )
 			echo "unknown compiler : ${compiler}"
@@ -123,12 +119,12 @@ EOF
 # Display the programs invoked by the compiler.
 # Show commands to run and use verbose output
 show_compiler_commands() {
+	if ! check_compiler_existence "$@"; then
+		return 1
+	fi
 	local compiler="$1"
 	shift 1
 	local args=( "$@" )
-	if ! check_compiler_existence "${compiler}"; then
-		return 1
-	fi
 
 	args+=(
 		-v
@@ -155,25 +151,19 @@ show_compiler_commands() {
 }
 
 show_compiler_commands_bfd() {
-	local compiler="$1"
-	shift 1
-	local args=( "$@" )
-	if ! check_compiler_existence "${compiler}"; then
+	if ! check_compiler_existence "$@"; then
 		return 1
 	fi
 
-	show_compiler_commands "${compiler}" "${args[@]}" -fuse-ld=bfd
+	show_compiler_commands "$@" -fuse-ld=bfd
 }
 
 show_compiler_commands_lld() {
-	local compiler="$1"
-	shift 1
-	local args=( "$@" )
-	if ! check_compiler_existence "${compiler}"; then
+	if ! check_compiler_existence "$@"; then
 		return 1
 	fi
 
-	show_compiler_commands "${compiler}" "${args[@]}" -fuse-ld=lld
+	show_compiler_commands "$@" -fuse-ld=lld
 }
 
 llvm-config_print() {

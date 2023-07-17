@@ -98,9 +98,9 @@ check_toolchain_build_type_and_set_compiler_flags() {
 		x86_64-pc-cygwin )
 			case "${toolchain}" in
 				Clang )
-					local cygwin_clang_c_cxx_flags=( -Wno-unknown-warning-option -Wno-gnu-line-marker  )
-					cflags+=(   "${cygwin_clang_c_cxx_flags[@]}"  )
-					cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}"  )
+					local cygwin_clang_c_cxx_flags=( -Wno-unknown-warning-option -Wno-gnu-line-marker )
+					cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
+					cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
 					;;
 			esac
 			;;
@@ -713,26 +713,6 @@ cmake_build_install_package() {
 		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
-configure_build_install_package_common() {
-	local build_type="$1"
-	local source_dir="$2"
-	local install_dir="$3"
-	local source_dir_prepare_command="$4"
-	local host_triple="$5"
-	local package="$6"
-	local version="$7"
-	local git_tag="$8"
-	local git_repo_url="$9"
-	local install_exe_dir="${10}"
-	local copy_dependent_dlls="${11}"
-	local git_default_branch="${12}"
-	shift 12
-
-	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" "${source_dir_prepare_command}" \
-		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" "${install_exe_dir}" "${copy_dependent_dlls}" "${git_default_branch}" \
-		"$@"
-}
-
 configure_build_install_package() {
 	local build_type="$1"
 	local source_dir="$2"
@@ -754,7 +734,7 @@ configure_build_install_package() {
 			--prefix="$(pwd)/${install_dir}"
 	)
 
-	time_command configure_build_install_package_common "${build_type}" "${source_dir}" "${install_dir}" "${source_dir_prepare_command}" \
+	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" "${source_dir_prepare_command}" \
 		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" "${install_exe_dir}" "${copy_dependent_dlls}" "${git_default_branch}" \
 		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
 }
@@ -782,7 +762,7 @@ gcc_configure_build_install_package() {
 		c++
 	)
 
-	time_command configure_build_install_package_common "${build_type}" "${source_dir}" "${install_dir}" "${source_dir_prepare_command}" \
+	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" "${source_dir_prepare_command}" \
 		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" "${install_exe_dir}" "${copy_dependent_dlls}" "${git_default_branch}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" "$(array_elements_join ',' "${languages[@]}")" "${host_triple}" "$@"
 }

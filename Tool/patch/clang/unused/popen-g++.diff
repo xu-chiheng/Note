@@ -1,0 +1,100 @@
+
+git_diff main...HEAD  # at /cygdrive/e/Note/Tool/llvm started
+ clang/lib/Lex/InitHeaderSearch.cpp | 63 +++++++++++++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 45 insertions(+), 18 deletions(-)
+
+diff --git a/clang/lib/Lex/InitHeaderSearch.cpp b/clang/lib/Lex/InitHeaderSearch.cpp
+index 41382d7cb3fc..4adf38184f9b 100644
+--- a/clang/lib/Lex/InitHeaderSearch.cpp
++++ b/clang/lib/Lex/InitHeaderSearch.cpp
+@@ -27,6 +27,9 @@
+ #include "llvm/Support/raw_ostream.h"
+ #include "llvm/TargetParser/Triple.h"
+ #include <optional>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ 
+ using namespace clang;
+ using namespace clang::frontend;
+@@ -84,9 +87,7 @@ public:
+                                    const llvm::Triple &triple);
+ 
+   /// Add the necessary paths to support a MinGW libstdc++.
+-  void AddMinGWCPlusPlusIncludePaths(StringRef Base,
+-                                     StringRef Arch,
+-                                     StringRef Version);
++  void AddMinGWCPlusPlusIncludePaths();
+ 
+   /// Add paths that should always be searched.
+   void AddDefaultCIncludePaths(const llvm::Triple &triple,
+@@ -211,15 +212,46 @@ bool InitHeaderSearch::AddGnuCPlusPlusIncludePaths(StringRef Base,
+   return IsBaseFound;
+ }
+ 
+-void InitHeaderSearch::AddMinGWCPlusPlusIncludePaths(StringRef Base,
+-                                                     StringRef Arch,
+-                                                     StringRef Version) {
+-  AddPath(Base + "/" + Arch + "/" + Version + "/include/c++",
+-          CXXSystem, false);
+-  AddPath(Base + "/" + Arch + "/" + Version + "/include/c++/" + Arch,
+-          CXXSystem, false);
+-  AddPath(Base + "/" + Arch + "/" + Version + "/include/c++/backward",
+-          CXXSystem, false);
++void InitHeaderSearch::AddMinGWCPlusPlusIncludePaths() {
++	// Create a pipe.
++	// This command can be executed by bash.exe and cmd.exe
++#ifdef _MSC_VER
++#define popen _popen
++#define pclose _pclose
++#endif
++  FILE *pipe = popen("echo | g++ -E -Wp,-v -xc++ - 2>&1", "r");
++
++	bool see_start = false;
++	char line[4096];
++	const char * start = "#include <...> search starts here:\n";
++	const char * end = "End of search list.\n";
++	// https://cplusplus.com/reference/cstdio/fgets
++	while (fgets(line, sizeof(line), pipe)) {
++		if (!see_start) {
++			if (strcmp(line, start) == 0) {
++				see_start = true;
++			} else {
++				// ignore
++			}
++		} else {
++			if (strcmp(line, end) == 0) {
++				break;
++			} else {
++				char * p = strchr(line, '\n');
++				if (p) {
++					*p = 0;
++				} else {
++					// without end of line ?
++					break;
++				}
++				// printf("%s\n", line + 1);
++				AddPath(line + 1, CXXSystem, false);
++			}
++		}
++	}
++
++	// Close the pipe.
++	pclose(pipe);
+ }
+ 
+ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+@@ -356,12 +388,7 @@ void InitHeaderSearch::AddDefaultCPlusPlusIncludePaths(
+     switch (triple.getEnvironment()) {
+     default: llvm_unreachable("Include management is handled in the driver.");
+     case llvm::Triple::Cygnus:
+-      // Cygwin-1.7
+-      AddMinGWCPlusPlusIncludePaths("/usr/lib/gcc", "i686-pc-cygwin", "4.7.3");
+-      AddMinGWCPlusPlusIncludePaths("/usr/lib/gcc", "i686-pc-cygwin", "4.5.3");
+-      AddMinGWCPlusPlusIncludePaths("/usr/lib/gcc", "i686-pc-cygwin", "4.3.4");
+-      // g++-4 / Cygwin-1.5
+-      AddMinGWCPlusPlusIncludePaths("/usr/lib/gcc", "i686-pc-cygwin", "4.3.2");
++      AddMinGWCPlusPlusIncludePaths();
+       break;
+     }
+     break;

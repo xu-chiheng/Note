@@ -31,9 +31,15 @@ do_update_all_files() {
 
 		Tool/build-clang.sh
 		Tool/build-clang_vs2022.sh
+
 		Tool/build-cross-gcc.sh
 		Tool/build-cross-gcc2.sh
+
+		Tool/build-binutils.sh
+		Tool/build-gcc.sh
+
 		Tool/build-qemu.sh
+
 		Tool/clean.sh
 		Tool/common.sh
 

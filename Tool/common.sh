@@ -646,15 +646,15 @@ generate_build_install_package() {
 	local build_type="$1"
 	local source_dir="$2"
 	local install_dir="$3"
-	local host_triple="$4"
-	local package="$5"
-	local version="$6"
-	local git_tag="$7"
-	local git_repo_url="$8"
-	local install_exe_dir="$9"
-	local copy_dependent_dlls="${10}"
-	local git_default_branch="${11}"
-	local source_dir_prepare_command="${12}"
+	local source_dir_prepare_command="$4"
+	local host_triple="$5"
+	local package="$6"
+	local version="$7"
+	local git_tag="$8"
+	local git_repo_url="$9"
+	local install_exe_dir="${10}"
+	local copy_dependent_dlls="${11}"
+	local git_default_branch="${12}"
 	local pushd_and_generate_command="${13}"
 	shift 13
 	local bin_tarball_name="${package}-${version}.tar"
@@ -708,9 +708,29 @@ cmake_build_install_package() {
 			-DCMAKE_CXX_FLAGS="${cxxflags}"
 	)
 
-	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" \
+	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" "${source_dir_prepare_command}" \
 		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" "${install_exe_dir}" "${copy_dependent_dlls}" "${git_default_branch}" \
-		"${source_dir_prepare_command}" pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
+		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
+}
+
+configure_build_install_package_common() {
+	local build_type="$1"
+	local source_dir="$2"
+	local install_dir="$3"
+	local source_dir_prepare_command="$4"
+	local host_triple="$5"
+	local package="$6"
+	local version="$7"
+	local git_tag="$8"
+	local git_repo_url="$9"
+	local install_exe_dir="${10}"
+	local copy_dependent_dlls="${11}"
+	local git_default_branch="${12}"
+	shift 12
+
+	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" "${source_dir_prepare_command}" \
+		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" "${install_exe_dir}" "${copy_dependent_dlls}" "${git_default_branch}" \
+		"$@"
 }
 
 configure_build_install_package() {
@@ -734,7 +754,35 @@ configure_build_install_package() {
 			--prefix="$(pwd)/${install_dir}"
 	)
 
-	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" \
+	time_command configure_build_install_package_common "${build_type}" "${source_dir}" "${install_dir}" "${source_dir_prepare_command}" \
 		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" "${install_exe_dir}" "${copy_dependent_dlls}" "${git_default_branch}" \
-		"${source_dir_prepare_command}" pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
+		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
+}
+
+gcc_configure_build_install_package() {
+	local build_type="$1"
+	local source_dir="$2"
+	local source_dir_prepare_command="$3"
+	local host_triple="$4"
+	local package="$5"
+	local version="$6"
+	local git_tag="$7"
+	local git_repo_url="$8"
+	local install_exe_dir="$9"
+	local copy_dependent_dlls="${10}"
+	local git_default_branch="${11}"
+	shift 11
+
+	local build_dir="${source_dir}-${build_type,,}-build"
+	local install_dir="${source_dir}-${build_type,,}-install"
+
+	local languages=(
+		# all
+		c
+		c++
+	)
+
+	time_command configure_build_install_package_common "${build_type}" "${source_dir}" "${install_dir}" "${source_dir_prepare_command}" \
+		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" "${install_exe_dir}" "${copy_dependent_dlls}" "${git_default_branch}" \
+		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" "$(array_elements_join ',' "${languages[@]}")" "${host_triple}" "$@"
 }

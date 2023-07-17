@@ -19,6 +19,7 @@ FIND_ARGS=(
 		-or -name '*output.txt'
 	')'
 	-and ! -name '*.sha512'
+	-and ! -name 'llvm-vs2022-build'
 )
 
 # Windows also has a find command

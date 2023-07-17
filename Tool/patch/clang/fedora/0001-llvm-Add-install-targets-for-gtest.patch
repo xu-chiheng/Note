@@ -1,0 +1,32 @@
+From 8cc3870f09d728d9017c72eba9520117a4283fee Mon Sep 17 00:00:00 2001
+From: Tom Stellard <tstellar@redhat.com>
+Date: Thu, 17 Nov 2022 09:01:10 +0000
+Subject: Add install targets for gtest
+
+Stand-alone builds need an installed version of gtest in order to run
+the unittests.
+
+Differential Revision: https://reviews.llvm.org/D137890
+---
+ llvm/CMakeLists.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index 60e1f29620af..d91338532815 100644
+--- a/llvm/CMakeLists.txt
++++ b/llvm/CMakeLists.txt
+@@ -693,6 +693,11 @@ option(LLVM_BUILD_TESTS
+   "Build LLVM unit tests. If OFF, just generate build targets." OFF)
+ option(LLVM_INCLUDE_TESTS "Generate build targets for the LLVM unit tests." ON)
+ 
++option(LLVM_INSTALL_GTEST
++  "Install the llvm gtest library.  This should be on if you want to do
++   stand-alone builds of the other projects and run their unit tests." OFF)
++
++
+ option(LLVM_BUILD_BENCHMARKS "Add LLVM benchmark targets to the list of default
+ targets. If OFF, benchmarks still could be built using Benchmarks target." OFF)
+ option(LLVM_INCLUDE_BENCHMARKS "Generate benchmark targets. If OFF, benchmarks can't be built." ON)
+-- 
+2.34.3
+

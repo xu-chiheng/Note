@@ -1,0 +1,25 @@
+diff -Naur a/llvm/docs/conf.py b/llvm/docs/conf.py
+--- a/llvm/docs/conf.py	2020-09-15 09:12:24.318287611 +0000
++++ b/llvm/docs/conf.py	2020-09-15 15:01:00.025893199 +0000
+@@ -36,20 +36,7 @@
+     '.rst': 'restructuredtext',
+ }
+ 
+-try:
+-  import recommonmark
+-except ImportError:
+-  # manpages do not use any .md sources
+-  if not tags.has('builder-man'):
+-    raise
+-else:
+-  import sphinx
+-  if sphinx.version_info >= (3, 0):
+-    # This requires 0.5 or later.
+-    extensions.append('recommonmark')
+-  else:
+-    source_parsers = {'.md': 'recommonmark.parser.CommonMarkParser'}
+-  source_suffix['.md'] = 'markdown'
++import sphinx
+ 
+ # The encoding of source files.
+ #source_encoding = 'utf-8-sig'

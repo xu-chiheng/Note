@@ -1,0 +1,18 @@
+# This library has no dependencies.
+addFilter("llvm-libs.x86_64: E: shared-lib-without-dependency-information /usr/lib64/libRemarks.so.[0-9]+")
+addFilter("llvm-googletest.x86_64: W: devel-file-in-non-devel-package")
+
+# same for llvm-test utilities
+addFilter("llvm-test.x86_64: W: no-manual-page-for-binary")
+
+# Don't warn about libs in llvm-libs
+addFilter("llvm-libs.x86_64: W: devel-file-in-non-devel-package /usr/lib64/lib")
+# These is ok in the llvm gold plugin
+addFilter("llvm-libs.x86_64: W: shared-lib-calls-exit /usr/lib64/LLVMgold.so")
+addFilter("llvm-libs.x86_64: W: no-soname /usr/lib64/LLVMgold.so")
+
+# These are without documentation
+addFilter("llvm-googletest.x86_64: W: no-documentation")
+addFilter("llvm-libs.x86_64: W: no-documentation")
+addFilter("llvm-static.x86_64: W: no-documentation")
+addFilter("llvm-test.x86_64: W: no-documentation")

@@ -1,0 +1,47 @@
+From 8cc3870f09d728d9017c72eba9520117a4283fee Mon Sep 17 00:00:00 2001
+From: Tom Stellard <tstellar@redhat.com>
+Date: Thu, 17 Nov 2022 09:01:10 +0000
+Subject: Add install targets for gtest
+
+Stand-alone builds need an installed version of gtest in order to run
+the unittests.
+
+Differential Revision: https://reviews.llvm.org/D137890
+---
+ third-party/unittest/CMakeLists.txt | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/third-party/unittest/CMakeLists.txt b/third-party/unittest/CMakeLists.txt
+index 0e54e0e57c35..1d2a52730d7d 100644
+--- a/third-party/unittest/CMakeLists.txt
++++ b/third-party/unittest/CMakeLists.txt
+@@ -65,12 +65,25 @@ if (NOT LLVM_ENABLE_THREADS)
+ endif ()
+ 
+ target_include_directories(llvm_gtest
+-  PUBLIC googletest/include googlemock/include
++  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/googletest/include>
++         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/googlemock/include>
++         $<INSTALL_INTERFACE:include/llvm-gtest/>
++         $<INSTALL_INTERFACE:include/llvm-gmock/>
+   PRIVATE googletest googlemock
+   )
+ 
+ add_subdirectory(UnitTestMain)
+ 
++if (LLVM_INSTALL_GTEST)
++export(TARGETS llvm_gtest llvm_gtest_main LLVMTestingSupport FILE LLVMGTestConfig.cmake)
++install(TARGETS llvm_gtest llvm_gtest_main LLVMTestingSupport EXPORT LLVMGTestConfig
++  ARCHIVE DESTINATION "lib${LLVM_LIBDIR_SUFFIX}" COMPONENT llvm_gtest)
++  install(EXPORT LLVMGTestConfig DESTINATION ${LLVM_INSTALL_PACKAGE_DIR} COMPONENT llvm_gtest)
++    add_llvm_install_targets(install-llvm_gtest COMPONENT llvm_gtest DEPENDS llvm_gtest LLVMGTestConfig.cmake)
++  install(DIRECTORY googletest/include/gtest/ DESTINATION include/llvm-gtest/gtest/ COMPONENT llvm_gtest)
++  install(DIRECTORY googlemock/include/gmock/ DESTINATION include/llvm-gmock/gmock/ COMPONENT llvm_gtest)
++endif()
++
+ # When LLVM_LINK_LLVM_DYLIB is enabled, libLLVM.so is added to the interface
+ # link libraries for gtest and gtest_main.  This means that any target, like
+ # unittests for example, that links against gtest will be forced to link
+-- 
+2.34.3
+

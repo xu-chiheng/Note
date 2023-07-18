@@ -35,9 +35,6 @@ PACKAGE="gcc"
 	GIT_REPO_URL="git://gcc.gnu.org/git/gcc.git"
 	SOURCE_DIR="gcc"
 
-	INSTALL_EXE_DIR="bin"
-	COPY_DEPENDENT_DLLS="no"
-
 	GIT_DEFAULT_BRANCH="master"
 
 	case "${HOST_TRIPLE}" in
@@ -123,8 +120,8 @@ PACKAGE="gcc"
 	esac
 
 	time_command gcc_configure_build_install_package \
-		"${BUILD_TYPE}" "${SOURCE_DIR}" true \
-		"${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" "${INSTALL_EXE_DIR}" "${COPY_DEPENDENT_DLLS}" "${GIT_DEFAULT_BRANCH}" \
+		"${BUILD_TYPE}" "${SOURCE_DIR}" \
+		"${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" "${GIT_DEFAULT_BRANCH}" \
 		"${CONFIGURE_OPTIONS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"

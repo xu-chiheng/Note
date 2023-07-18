@@ -33,9 +33,6 @@ PACKAGE=gcc
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
-	INSTALL_EXE_DIR="bin"
-	COPY_DEPENDENT_DLLS="no"
-
 	TARGETS=(
 		x86_64-elf
 		aarch64-elf
@@ -49,7 +46,7 @@ PACKAGE=gcc
 	)
 
 	time_command do_build_and_install_cross_gcc_for_targets \
-		"${BUILD_TYPE}" no yes "${HOST_TRIPLE}" "${CURRENT_DATETIME}" "${PACKAGE}" "${INSTALL_EXE_DIR}" "${COPY_DEPENDENT_DLLS}" \
+		"${BUILD_TYPE}" no yes "${HOST_TRIPLE}" "${CURRENT_DATETIME}" "${PACKAGE}" \
 		"${TARGETS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"

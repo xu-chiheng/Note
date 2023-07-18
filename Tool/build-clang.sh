@@ -66,9 +66,6 @@ PACKAGE=clang
 	GIT_REPO_URL="https://github.com/llvm/llvm-project"
 	SOURCE_DIR="llvm"
 
-	INSTALL_EXE_DIR="bin"
-	COPY_DEPENDENT_DLLS="no"
-
 	GIT_DEFAULT_BRANCH="main"
 
 	# case "${HOST_TRIPLE}" in
@@ -202,8 +199,8 @@ PACKAGE=clang
 	esac
 
 	time_command cmake_build_install_package \
-		"${BUILD_TYPE}" "${SOURCE_DIR}" true \
-		"${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" "${INSTALL_EXE_DIR}" "${COPY_DEPENDENT_DLLS}" "${GIT_DEFAULT_BRANCH}" \
+		"${BUILD_TYPE}" "${SOURCE_DIR}" \
+		"${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" "${GIT_DEFAULT_BRANCH}" \
 		"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" \
 		"${CMAKE_OPTIONS[@]}"
 

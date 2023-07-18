@@ -43,9 +43,9 @@ PACKAGE="gcc"
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			CONFIGURE_OPTIONS=(
-				--build=x86_64-pc-cygwin
-				--host=x86_64-pc-cygwin
-				--target=x86_64-pc-cygwin
+				# --build=x86_64-pc-cygwin
+				# --host=x86_64-pc-cygwin
+				# --target=x86_64-pc-cygwin
 				--without-libiconv-prefix
 				--without-libintl-prefix
 				--with-gcc-major-version-only
@@ -80,7 +80,40 @@ PACKAGE="gcc"
 			;;
 		x86_64-pc-mingw64 )
 			CONFIGURE_OPTIONS=(
-
+				# --build=x86_64-w64-mingw32
+				# --host=x86_64-w64-mingw32
+				# --target=x86_64-w64-mingw32
+				# --enable-bootstrap
+				# --enable-checking=release
+				# --with-arch=x86-64
+				--with-tune=generic
+				# --enable-languages=c,lto,c++,fortran,ada,objc,obj-c++,jit
+				--enable-shared
+				--enable-static
+				--enable-libatomic
+				--enable-threads=posix
+				--enable-graphite
+				--enable-fully-dynamic-string
+				--enable-libstdcxx-filesystem-ts
+				--enable-libstdcxx-time
+				--disable-libstdcxx-pch
+				--enable-lto
+				--enable-libgomp
+				--disable-multilib
+				--disable-rpath
+				# --disable-win32-registry
+				# --disable-nls
+				# --disable-werror
+				--disable-symvers
+				--with-libiconv
+				--with-system-zlib
+				--with-gmp=/mingw64
+				--with-mpfr=/mingw64
+				--with-mpc=/mingw64
+				--with-isl=/mingw64
+				--with-gnu-as
+				--with-gnu-ld
+				--disable-libstdcxx-debug
 			)
 			;;
 		* )

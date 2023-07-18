@@ -1,0 +1,15 @@
+diff --git a/libgomp/affinity-fmt.c b/libgomp/affinity-fmt.c
+index 85700a248a5..d88dee6fd72 100644
+--- a/libgomp/affinity-fmt.c
++++ b/libgomp/affinity-fmt.c
+@@ -36,6 +36,10 @@
+ #ifdef HAVE_UNAME
+ #include <sys/utsname.h>
+ #endif
++#ifdef _WIN32
++// #include <winsock2.h>  /* For gethostname() */
++#undef HAVE_GETHOSTNAME
++#endif
+ 
+ ialias_redirect (omp_get_team_num)
+ ialias_redirect (omp_get_num_teams)

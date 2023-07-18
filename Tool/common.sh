@@ -642,6 +642,31 @@ gdb_source_dir_prepare() {
 	echo_command rm -rf "${source_dir}"/{contrib,gdb,gdbserver,gdbsupport,gnulib,libdecnumber,readline,sim}
 }
 
+maybe_mingw_gcc_remove_links() {
+	local host_triple="$1"
+	local package="$2"
+	local install_dir="$3"
+
+	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
+		rm -rf /mingw "${install_dir}/${host_triple}/include" "${install_dir}/${host_triple}/lib"
+	fi
+}
+
+maybe_mingw_gcc_create_links() {
+	local host_triple="$1"
+	local package="$2"
+	local install_dir="$3"
+
+	maybe_mingw_gcc_remove_links "${host_triple}" "${package}" "${install_dir}" \
+	&& if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
+		ln -s /mingw64 /mingw \
+		&& mkdir -p "${install_dir}/${host_triple}" \
+		&& ln -s /mingw64/include "${install_dir}/${host_triple}/include" \
+		&& ln -s /mingw64/lib "${install_dir}/${host_triple}/lib"
+	fi
+}
+
+
 generate_build_install_package() {
 	local build_type="$1"
 	local source_dir="$2"
@@ -659,13 +684,17 @@ generate_build_install_package() {
 	shift 13
 	local bin_tarball_name="${package}-${version}.tar"
 
+	# https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
+
 	time_command check_dir_maybe_clone_and_checkout_tag "${source_dir}" "${git_tag}" "${git_repo_url}" \
 	&& time_command "${source_dir_prepare_command}" "${source_dir}" \
 	&& echo_command rm -rf "${install_dir}" \
+	&& maybe_mingw_gcc_create_links "${host_triple}" "${package}" "${install_dir}" \
 	&& { time_command "${pushd_and_generate_command}" "$@" \
 		&& time_command parallel_make \
 		&& time_command parallel_make install \
 		&& echo_command popd;} \
+	&& maybe_mingw_gcc_remove_links "${host_triple}" "${package}" "${install_dir}" \
 	&& if [ "${copy_dependent_dlls}" = yes ]; then
 		time_command do_copy_dependent_dlls "${host_triple}" "${install_dir}" "${install_exe_dir}"
 	fi \

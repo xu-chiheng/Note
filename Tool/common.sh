@@ -155,8 +155,8 @@ check_toolchain_build_type_and_set_compiler_flags() {
 
 	echo "TOOLCHAIN  : ${TOOLCHAIN}"
 	echo "BUILD_TYPE : ${BUILD_TYPE}"
-	echo "CC         : ${CC} $("${CC}" -dumpversion)"
-	echo "CXX        : ${CXX} $("${CXX}" -dumpversion)"
+	echo "CC         : ${CC} $("${CC}" -dumpversion) $(which "${CC}")"
+	echo "CXX        : ${CXX} $("${CXX}" -dumpversion) $(which "${CXX}")"
 	echo "CFLAGS     : ${CFLAGS}"
 	echo "CXXFLAGS   : ${CXXFLAGS}"
 	echo "LDFLAGS    : ${LDFLAGS}"

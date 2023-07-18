@@ -51,10 +51,10 @@ index 6cea9b382f21..caf7db9993eb 100644
    Args.AddLastArg(CmdArgs, options::OPT_fheinous_gnu_extensions);
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..4d9533dc6407
+index 000000000000..553b404cfbef
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,725 @@
+@@ -0,0 +1,729 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ------------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -409,7 +409,7 @@ index 000000000000..4d9533dc6407
 +
 +static bool isCrossCompiling(const llvm::Triple &T, bool RequireArchMatch) {
 +  llvm::Triple HostTriple(llvm::Triple::normalize(LLVM_HOST_TRIPLE));
-+  if (HostTriple.getOS() != llvm::Triple::Win32)
++  if (!HostTriple.isWindowsCygwinEnvironment())
 +    return true;
 +  if (RequireArchMatch && HostTriple.getArch() != T.getArch())
 +    return true;
@@ -541,6 +541,10 @@ index 000000000000..4d9533dc6407
 +  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
 +      getDriver().SysRoot.size())
 +    getFilePaths().push_back(Base + "lib");
++
++  // for Cygwin's crt0.o
++  getFilePaths().push_back(getDriver().SysRoot + "/lib");
++  getFilePaths().push_back(getDriver().SysRoot + "/usr/lib");
 +
 +  NativeLLVMSupport =
 +      Args.getLastArgValue(options::OPT_fuse_ld_EQ, CLANG_DEFAULT_LINKER)

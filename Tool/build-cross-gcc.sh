@@ -46,7 +46,7 @@ PACKAGE=gcc
 	)
 
 	time_command do_build_and_install_cross_gcc_for_targets \
-		"${BUILD_TYPE}" no yes "${HOST_TRIPLE}" "${CURRENT_DATETIME}" "${PACKAGE}" \
+		"${BUILD_TYPE}" yes yes "${HOST_TRIPLE}" "${CURRENT_DATETIME}" "${PACKAGE}" \
 		"${TARGETS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"

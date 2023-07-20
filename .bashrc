@@ -42,6 +42,32 @@ fi
 # default umask is 022, default new file mode is 755
 
 
+mingw_gcc_check_or_create_directory_links() {
+	local host_triple="$1"
+	local install_dir="$2"
+	# echo "install_dir=${install_dir}"
+
+	if ! { [ -e /mingw ] && [ "$(readlink -f /mingw)" = "$(readlink -f /mingw64)" ];}; then
+		rm -rf /mingw \
+		&& ln -s /mingw64 /mingw
+	fi \
+	&& {
+		local install_dir_target_subdir="${install_dir}/${host_triple}"
+		if ! { \
+			[ -e "${install_dir_target_subdir}" ] \
+			&& [ -e "${install_dir_target_subdir}/include" ] \
+			&& [ -e "${install_dir_target_subdir}/lib" ] \
+			&& [ "$(readlink -f "${install_dir_target_subdir}/include")" = "$(readlink -f /mingw64/include)" ] \
+			&& [ "$(readlink -f "${install_dir_target_subdir}/lib")" = "$(readlink -f /mingw64/lib)" ] \
+		;}; then
+			rm -rf "${install_dir_target_subdir}" \
+			&& mkdir -p "${install_dir_target_subdir}" \
+			&& ln -s /mingw64/include "${install_dir_target_subdir}/include" \
+			&& ln -s /mingw64/lib "${install_dir_target_subdir}/lib"
+		fi
+	}
+}
+
 set_environment_variables_at_bash_startup() {
 	export HOST_TRIPLE="$(~/config.guess)"
 	export TZ=Asia/Shanghai
@@ -202,6 +228,15 @@ set_environment_variables_at_bash_startup() {
 			# export BROWSER='C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'
 			;;
 	esac
+
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-mingw64 )
+			if which gcc >/dev/null 2>&1; then
+				mingw_gcc_check_or_create_directory_links "${HOST_TRIPLE}" "$(dirname "$(dirname "$(which gcc)")")"
+			fi
+			;;
+	esac
+
 }
 
 if [ ! -v HOST_TRIPLE ]; then

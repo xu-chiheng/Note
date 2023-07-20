@@ -117,7 +117,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			# make[1]: Leaving directory '/c/Users/Administrator/Tool/gcc-x86_64-elf-release-build/x86_64-elf/libgcc'
 			# make: *** [Makefile:13696: all-target-libgcc] Error 2
 
-			ldflags+=( -Wl,$(cygpath -m $(gcc -print-file-name=binmode.o)) )
+			ldflags+=( -Wl,"$(cygpath -m /mingw64/lib/binmode.o)" )
 			;;
 	esac
 
@@ -337,7 +337,8 @@ extract_configure_build_and_install_package() {
 	local tarball="$2"
 	local extracted_dir="$3"
 	local build_dir="$4"
-	shift 4
+	local install_dir="$5"
+	shift 5
 
 	local source_dir="${package}"
 
@@ -367,8 +368,10 @@ gcc_pushd_and_configure() {
 
 	local build_fixincludes_dir="build-${host_triple}/fixincludes"
 
+	local install_prefix="$(pwd)/${install_dir}"
+
 	local gcc_generic_configure_options=(
-			--prefix="$(pwd)/${install_dir}"
+			--prefix="${install_prefix}"
 			--enable-languages="${languages}"
 			--disable-bootstrap
 			--disable-nls
@@ -459,6 +462,8 @@ do_build_and_install_gmp_mpfr_mpc() {
 	# local mirror_site=https://mirrors.tuna.tsinghua.edu.cn
 	local mirror_site=https://mirrors.ustc.edu.cn
 
+	local install_prefix="$(pwd)/${gmp_mpfr_mpc_install_dir}"
+
 	echo "downloading source code ......" \
 	&& time_command download_and_verify_source_tarball "${mirror_site}/gnu/gmp/${gmp_tarball}" \
 	&& time_command download_and_verify_source_tarball "${mirror_site}/gnu/mpfr/${mpfr_tarball}" \
@@ -468,12 +473,12 @@ do_build_and_install_gmp_mpfr_mpc() {
 	&& echo_command rm -rf "${gmp_mpfr_mpc_install_dir}" \
 	\
 	&& echo "building gmp mpfr mpc ......" \
-	&& time_command extract_configure_build_and_install_package gmp "${gmp_tarball}" "${gmp_extracted_dir}" "${gmp_build_dir}" \
-			--prefix="$(pwd)/${gmp_mpfr_mpc_install_dir}" --disable-shared \
-	&& time_command extract_configure_build_and_install_package mpfr "${mpfr_tarball}" "${mpfr_extracted_dir}" "${mpfr_build_dir}" \
-			--prefix="$(pwd)/${gmp_mpfr_mpc_install_dir}" --disable-shared --with-gmp="$(pwd)/${gmp_mpfr_mpc_install_dir}" \
-	&& time_command extract_configure_build_and_install_package mpc "${mpc_tarball}" "${mpc_extracted_dir}" "${mpc_build_dir}" \
-			--prefix="$(pwd)/${gmp_mpfr_mpc_install_dir}" --disable-shared --with-gmp="$(pwd)/${gmp_mpfr_mpc_install_dir}" \
+	&& time_command extract_configure_build_and_install_package gmp "${gmp_tarball}" "${gmp_extracted_dir}" "${gmp_build_dir}" "${gmp_mpfr_mpc_install_dir}" \
+			--prefix="${install_prefix}" --disable-shared \
+	&& time_command extract_configure_build_and_install_package mpfr "${mpfr_tarball}" "${mpfr_extracted_dir}" "${mpfr_build_dir}" "${gmp_mpfr_mpc_install_dir}" \
+			--prefix="${install_prefix}" --disable-shared --with-gmp="${install_prefix}" \
+	&& time_command extract_configure_build_and_install_package mpc "${mpc_tarball}" "${mpc_extracted_dir}" "${mpc_build_dir}" "${gmp_mpfr_mpc_install_dir}" \
+			--prefix="${install_prefix}" --disable-shared --with-gmp="${install_prefix}" \
 	&& echo "completed"
 }
 
@@ -494,9 +499,11 @@ do_build_and_install_binutils_gcc_for_target() {
 	local bin_tarball_name="${package}-${target}-${version}.tar"
 	local binutils_build_dir="${binutils_source_dir}-${target}-${build_type,,}-build"
 
+	local install_prefix="$(pwd)/${gcc_install_dir}"
+
 	local binutils_configure_options=(
 			--target="${target}"
-			--prefix="$(pwd)/${gcc_install_dir}"
+			--prefix="${install_prefix}"
 			--disable-nls
 			--disable-werror
 	)
@@ -622,6 +629,17 @@ do_build_and_install_cross_gcc_for_targets() {
 	&& time_command sync
 }
 
+binutils_source_dir_prepare() {
+	local source_dir="$1"
+	echo_command rm -rf "${source_dir}"/{contrib,gdb,gdbserver,gdbsupport,gnulib,libdecnumber,readline,sim}
+}
+
+gdb_source_dir_prepare() {
+	local source_dir="$1"
+	# TODO: FIX
+	echo_command rm -rf "${source_dir}"/{contrib,gdb,gdbserver,gdbsupport,gnulib,libdecnumber,readline,sim}
+}
+
 pre_generate_build_install_package() {
 	local host_triple="$1"
 	local package="$2"
@@ -629,14 +647,13 @@ pre_generate_build_install_package() {
 	local install_dir="$4"
 
 	if [ "${package}" = binutils ]; then
-		echo_command rm -rf "${source_dir}"/{contrib,gdb,gdbserver,gdbsupport,gnulib,libdecnumber,readline,sim}
+		binutils_source_dir_prepare "${source_dir}"
 	elif [ "${package}" = gdb ]; then
-		# TODO: FIX
-		echo_command rm -rf "${source_dir}"/{contrib,gdb,gdbserver,gdbsupport,gnulib,libdecnumber,readline,sim}
+		gdb_source_dir_prepare "${source_dir}"
 	fi
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		rm -rf /mingw "${install_dir}/${host_triple}"
+		mingw_gcc_check_or_create_directory_links "${host_triple}" "${install_dir}"
 	fi
 
 }
@@ -646,14 +663,6 @@ post_generate_build_install_package() {
 	local package="$2"
 	local source_dir="$3"
 	local install_dir="$4"
-
-	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		rm -rf /mingw "${install_dir}/${host_triple}" \
-		&& mkdir -p "${install_dir}/${host_triple}" \
-		&& ln -s /mingw64 /mingw \
-		&& ln -s /mingw64/include "${install_dir}/${host_triple}/include" \
-		&& ln -s /mingw64/lib "${install_dir}/${host_triple}/lib"
-	fi
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = qemu ]; then
 		do_copy_dependent_dlls "${host_triple}" "${install_dir}" "."
@@ -708,10 +717,12 @@ cmake_build_install_package() {
 	local build_dir="${source_dir}-${build_type,,}-build"
 	local install_dir="${source_dir}-${build_type,,}-install"
 
+	local install_prefix="$(pwd)/${install_dir}"
+
 	local generic_cmake_options=(
 			-G 'Unix Makefiles'
 			-DCMAKE_BUILD_TYPE="${build_type}"
-			-DCMAKE_INSTALL_PREFIX="$(pwd)/${install_dir}"
+			-DCMAKE_INSTALL_PREFIX="${install_prefix}"
 
 			-DCMAKE_C_COMPILER="${cc}"
 			-DCMAKE_CXX_COMPILER="${cxx}"
@@ -739,8 +750,10 @@ configure_build_install_package() {
 	local build_dir="${source_dir}-${build_type,,}-build"
 	local install_dir="${source_dir}-${build_type,,}-install"
 
+	local install_prefix="$(pwd)/${install_dir}"
+
 	local generic_configure_options=(
-			--prefix="$(pwd)/${install_dir}"
+			--prefix="${install_prefix}"
 	)
 
 	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" \

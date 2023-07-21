@@ -156,8 +156,8 @@ git_clone_domain_user_repos() {
 
 git_remove_all_files() {
 	if [ -d .git ]; then
-		# find . -mindepth 1 -maxdepth 1 -regextype posix-extended ! -regex '\./(\.git|~git-tools~)'
-		find . -mindepth 1 -maxdepth 1 ! -name '.git' -a ! -name '~git-tools~' \
+		# find . -mindepth 1 -maxdepth 1 -regextype posix-extended ! -regex '\./(\.git|~git-tools~|patching)'
+		find . -mindepth 1 -maxdepth 1 ! -name '.git' -a ! -name '~git-tools~' -a ! -name 'patching' \
 		-print0 | xargs -0 -n100 \
 		rm -rf
 	else

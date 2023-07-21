@@ -459,7 +459,7 @@ clean_or_hide_windows_home_dir_entries() {
 	echo_command rm -rf "${dir_entries_to_delete[@]}"
 
 	local dir_entries_to_hide=(
-		$(find . -mindepth 1 -maxdepth 1 -name '.*' | sed -E -e 's;^./;;')
+		.*
 		"3D Objects" AppData Contacts Desktop Downloads Favorites Links Music Pictures Public "Saved Games" Searches Videos Documents OneDrive
 		~shortcuts_ config.guess editor.sh
 	)

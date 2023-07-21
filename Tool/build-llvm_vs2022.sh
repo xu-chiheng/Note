@@ -28,11 +28,11 @@ cd "$(dirname "$0")"
 # https://clang.llvm.org/get_started.html
 
 CURRENT_DATETIME="$(current_datetime)"
-PACKAGE=clang
+PACKAGE=llvm
 {
 	check_llvm_static_or_shared "$1"
 
-	SOURCE_DIR="llvm"
+	SOURCE_DIR="${PACKAGE}"
 
 	PROJECTS=(
 		clang

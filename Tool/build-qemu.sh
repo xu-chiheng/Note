@@ -40,9 +40,6 @@ PACKAGE="qemu"
 	VERSION=7.1.0
 	GIT_TAG="v${VERSION}"
 	GIT_REPO_URL="https://gitlab.com/qemu-project/qemu.git"
-	SOURCE_DIR="qemu"
-
-	GIT_DEFAULT_BRANCH="master"
 
 	CONFIGURE_OPTIONS=(
 		--enable-gtk
@@ -51,8 +48,8 @@ PACKAGE="qemu"
 	)
 
 	time_command configure_build_install_package \
-		"${BUILD_TYPE}" "${SOURCE_DIR}" \
-		"${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" "${GIT_DEFAULT_BRANCH}" \
+		"${BUILD_TYPE}" "${HOST_TRIPLE}" \
+		"${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" \
 		"${CONFIGURE_OPTIONS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"

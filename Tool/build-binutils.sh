@@ -33,9 +33,6 @@ PACKAGE="binutils"
 	VERSION=2.36
 	GIT_TAG="$(binutils_git_tag_from_version "${VERSION}")"
 	GIT_REPO_URL="git://sourceware.org/git/binutils-gdb.git"
-	SOURCE_DIR="binutils-gdb"
-
-	GIT_DEFAULT_BRANCH="master"
 
 	CONFIGURE_OPTIONS=(
 		--disable-nls
@@ -43,8 +40,8 @@ PACKAGE="binutils"
 	)
 
 	time_command configure_build_install_package \
-		"${BUILD_TYPE}" "${SOURCE_DIR}" \
-		"${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" "${GIT_DEFAULT_BRANCH}" \
+		"${BUILD_TYPE}" "${HOST_TRIPLE}" \
+		"${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" \
 		"${CONFIGURE_OPTIONS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"

@@ -29,8 +29,8 @@ do_update_all_files() {
 
 		Tool/.gitignore
 
-		Tool/build-clang.sh
-		Tool/build-clang_vs2022.sh
+		Tool/build-llvm.sh
+		Tool/build-llvm_vs2022.sh
 
 		Tool/build-cross-gcc.sh
 		Tool/build-cross-gcc2.sh

@@ -208,7 +208,7 @@ git_checkout_dir_revision() {
 	{ pushd "${dir}" \
 	&& echo_command maybe_git_filemode_false \
 	&& time_command git reset --hard HEAD \
-	&& time_command git checkout "${revision}" \
+	&& time_command git checkout --detach "${revision}" \
 	&& popd;}
 }
 
@@ -217,7 +217,7 @@ git_clone_and_checkout_dir_revision() {
 	local revision="$2"
 	local git_repo_url="$3"
 
-	time_command git clone "${git_repo_url}" "${dir}" \
+	time_command git clone --no-checkout "${git_repo_url}" "${dir}" \
 	&& echo_command git_checkout_dir_revision "${dir}" "${revision}"
 }
 
@@ -240,26 +240,6 @@ check_dir_maybe_clone_and_checkout_tag() {
 	else
 		echo "dir ${dir} does not exist"
 		echo_command git_clone_and_checkout_dir_revision "${dir}" "${tag}" "${git_repo_url}"
-	fi
-}
-
-check_dir_maybe_checkout_branch() {
-	local dir="$1"
-	local branch="$2"
-
-	if [ -d "${dir}" ]; then
-		if [ -f "${dir}"/patching ]; then
-			# do nothing
-			true
-		elif [ -d "${dir}"/.git ]; then
-			echo_command git_checkout_dir_revision "${dir}" "${branch}"
-		else
-			echo "source directory ${dir} exists, but contains no patching file, or .git directory."
-			false
-		fi
-	else
-		echo "dir ${dir} does not exist"
-		false
 	fi
 }
 
@@ -600,10 +580,6 @@ do_build_and_install_cross_gcc_for_targets() {
 	local gcc_source_dir="gcc"
 	local binutils_source_dir="binutils-gdb"
 
-	local gcc_git_default_branch="master"
-	local binutils_git_default_branch="master"
-
-
 	local gmp_mpfr_mpc_install_dir="gmp-mpfr-mpc-${build_type,,}-install"
 
 	if [ "${build_and_install_gmp_mpfr_mpc}" = yes ]; then
@@ -622,10 +598,6 @@ do_build_and_install_cross_gcc_for_targets() {
 	done \
 	&& time_command wait \
 	&& echo "completed" \
-	&& time_command sync \
-	\
-	&& time_command check_dir_maybe_checkout_branch "${binutils_source_dir}" "${binutils_git_default_branch}" \
-	&& time_command check_dir_maybe_checkout_branch "${gcc_source_dir}" "${gcc_git_default_branch}" \
 	&& time_command sync
 }
 
@@ -678,9 +650,8 @@ generate_build_install_package() {
 	local version="$6"
 	local git_tag="$7"
 	local git_repo_url="$8"
-	local git_default_branch="$9"
-	local pushd_and_generate_command="${10}"
-	shift 10
+	local pushd_and_generate_command="$9"
+	shift 9
 	local bin_tarball_name="${package}-${version}.tar"
 
 	# https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
@@ -694,26 +665,24 @@ generate_build_install_package() {
 		&& echo_command popd;} \
 	&& post_generate_build_install_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& time_command maybe_make_tarball_and_move "${build_type}" "${bin_tarball_name}" "${install_dir}" "${host_triple}" \
-	&& time_command check_dir_maybe_checkout_branch "${source_dir}" "${git_default_branch}" \
 	&& time_command sync
 }
 
 cmake_build_install_package() {
 	local build_type="$1"
-	local source_dir="$2"
-	local host_triple="$3"
-	local package="$4"
-	local version="$5"
-	local git_tag="$6"
-	local git_repo_url="$7"
-	local git_default_branch="$8"
-	local cc="$9"
-	local cxx="${10}"
-	local cflags="${11}"
-	local cxxflags="${12}"
-	local ldflags="${13}"
-	shift 13
+	local host_triple="$2"
+	local package="$3"
+	local version="$4"
+	local git_tag="$5"
+	local git_repo_url="$6"
+	local cc="$7"
+	local cxx="$8"
+	local cflags="$9"
+	local cxxflags="${10}"
+	local ldflags="${11}"
+	shift 11
 
+	local source_dir="${package}"
 	local build_dir="${source_dir}-${build_type,,}-build"
 	local install_dir="${source_dir}-${build_type,,}-install"
 
@@ -732,21 +701,20 @@ cmake_build_install_package() {
 	)
 
 	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" \
-		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" "${git_default_branch}" \
+		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" \
 		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
 configure_build_install_package() {
 	local build_type="$1"
-	local source_dir="$2"
-	local host_triple="$3"
-	local package="$4"
-	local version="$5"
-	local git_tag="$6"
-	local git_repo_url="$7"
-	local git_default_branch="$8"
-	shift 8
+	local host_triple="$2"
+	local package="$3"
+	local version="$4"
+	local git_tag="$5"
+	local git_repo_url="$6"
+	shift 6
 
+	local source_dir="${package}"
 	local build_dir="${source_dir}-${build_type,,}-build"
 	local install_dir="${source_dir}-${build_type,,}-install"
 
@@ -757,21 +725,20 @@ configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" \
-		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" "${git_default_branch}" \
+		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" \
 		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
 }
 
 gcc_configure_build_install_package() {
 	local build_type="$1"
-	local source_dir="$2"
-	local host_triple="$3"
-	local package="$4"
-	local version="$5"
-	local git_tag="$6"
-	local git_repo_url="$7"
-	local git_default_branch="$8"
-	shift 8
+	local host_triple="$2"
+	local package="$3"
+	local version="$4"
+	local git_tag="$5"
+	local git_repo_url="$6"
+	shift 6
 
+	local source_dir="${package}"
 	local build_dir="${source_dir}-${build_type,,}-build"
 	local install_dir="${source_dir}-${build_type,,}-install"
 
@@ -782,6 +749,6 @@ gcc_configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" \
-		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" "${git_default_branch}" \
+		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" "$(array_elements_join ',' "${languages[@]}")" "${host_triple}" "$@"
 }

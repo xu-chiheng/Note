@@ -33,9 +33,6 @@ PACKAGE="gcc"
 	VERSION=13.1.0
 	GIT_TAG="$(gcc_git_tag_from_version "${VERSION}")"
 	GIT_REPO_URL="git://gcc.gnu.org/git/gcc.git"
-	SOURCE_DIR="gcc"
-
-	GIT_DEFAULT_BRANCH="master"
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
@@ -120,8 +117,8 @@ PACKAGE="gcc"
 	esac
 
 	time_command gcc_configure_build_install_package \
-		"${BUILD_TYPE}" "${SOURCE_DIR}" \
-		"${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" "${GIT_DEFAULT_BRANCH}" \
+		"${BUILD_TYPE}" "${HOST_TRIPLE}" \
+		"${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" \
 		"${CONFIGURE_OPTIONS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"

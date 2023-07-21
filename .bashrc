@@ -41,31 +41,72 @@ fi
 
 # default umask is 022, default new file mode is 755
 
+mingw_gcc_check_or_create_directory_links_0() {
+	if ! { \
+		[ -e /mingw/include ] \
+		&& [ -e /mingw/lib ] \
+		&& [ "$(readlink -f /mingw/include)" = "$(readlink -f /mingw64/include)" ] \
+		&& [ "$(readlink -f /mingw/lib)" = "$(readlink -f /mingw64/lib)" ] \
+		;}; then
+		rm -rf /mingw/{include,lib} \
+		&& mkdir -p /mingw \
+		&& ln -s /mingw64/include /mingw/include \
+		&& ln -s /mingw64/lib /mingw/lib
+	fi
+}
 
-mingw_gcc_check_or_create_directory_links() {
+mingw_gcc_remove_directory_links_0() {
+	rm -rf /mingw
+}
+
+mingw_gcc_check_or_create_directory_links_1() {
+	local install_dir="$1"
+
+	local install_dir_mingw_subdir="${install_dir}/mingw"
+	if ! { \
+		[ -e "${install_dir_mingw_subdir}"/include ] \
+		&& [ -e "${install_dir_mingw_subdir}"/lib ] \
+		&& [ "$(readlink -f "${install_dir_mingw_subdir}"/include)" = "$(readlink -f /mingw64/include)" ] \
+		&& [ "$(readlink -f "${install_dir_mingw_subdir}"/lib)" = "$(readlink -f /mingw64/lib)" ] \
+	;}; then
+		rm -rf "${install_dir_mingw_subdir}"/{include,lib} \
+		&& mkdir -p "${install_dir_mingw_subdir}" \
+		&& ln -s /mingw64/include "${install_dir_mingw_subdir}"/include \
+		&& ln -s /mingw64/lib "${install_dir_mingw_subdir}"/lib
+	fi
+}
+
+mingw_gcc_remove_directory_links_1() {
+	local install_dir="$2"
+
+	local install_dir_mingw_subdir="${install_dir}/mingw"
+	rm -rf "${install_dir_mingw_subdir}"
+}
+
+mingw_gcc_check_or_create_directory_links_2() {
 	local host_triple="$1"
 	local install_dir="$2"
-	# echo "install_dir=${install_dir}"
 
-	if ! { [ -e /mingw ] && [ "$(readlink -f /mingw)" = "$(readlink -f /mingw64)" ];}; then
-		rm -rf /mingw \
-		&& ln -s /mingw64 /mingw
-	fi \
-	&& {
-		local install_dir_target_subdir="${install_dir}/${host_triple}"
-		if ! { \
-			[ -e "${install_dir_target_subdir}" ] \
-			&& [ -e "${install_dir_target_subdir}/include" ] \
-			&& [ -e "${install_dir_target_subdir}/lib" ] \
-			&& [ "$(readlink -f "${install_dir_target_subdir}/include")" = "$(readlink -f /mingw64/include)" ] \
-			&& [ "$(readlink -f "${install_dir_target_subdir}/lib")" = "$(readlink -f /mingw64/lib)" ] \
-		;}; then
-			rm -rf "${install_dir_target_subdir}" \
-			&& mkdir -p "${install_dir_target_subdir}" \
-			&& ln -s /mingw64/include "${install_dir_target_subdir}/include" \
-			&& ln -s /mingw64/lib "${install_dir_target_subdir}/lib"
-		fi
-	}
+	local install_dir_target_subdir="${install_dir}/${host_triple}"
+	if ! { \
+		[ -e "${install_dir_target_subdir}"/include ] \
+		&& [ -e "${install_dir_target_subdir}"/lib ] \
+		&& [ "$(readlink -f "${install_dir_target_subdir}"/include)" = "$(readlink -f /mingw64/include)" ] \
+		&& [ "$(readlink -f "${install_dir_target_subdir}"/lib)" = "$(readlink -f /mingw64/lib)" ] \
+	;}; then
+		rm -rf "${install_dir_target_subdir}"/{include,lib} \
+		&& mkdir -p "${install_dir_target_subdir}" \
+		&& ln -s /mingw64/include "${install_dir_target_subdir}"/include \
+		&& ln -s /mingw64/lib "${install_dir_target_subdir}"/lib
+	fi
+}
+
+mingw_gcc_remove_directory_links_2() {
+	local host_triple="$1"
+	local install_dir="$2"
+
+	local install_dir_target_subdir="${install_dir}/${host_triple}"
+	rm -rf "${install_dir_target_subdir}"/{include,lib}
 }
 
 set_environment_variables_at_bash_startup() {
@@ -232,7 +273,10 @@ set_environment_variables_at_bash_startup() {
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-mingw64 )
 			if which gcc >/dev/null 2>&1; then
-				mingw_gcc_check_or_create_directory_links "${HOST_TRIPLE}" "$(dirname "$(dirname "$(which gcc)")")"
+				local gcc_install_dir="$(dirname "$(dirname "$(which gcc)")")"
+				mingw_gcc_check_or_create_directory_links_0 \
+				&& mingw_gcc_check_or_create_directory_links_1 "${gcc_install_dir}" \
+				&& mingw_gcc_check_or_create_directory_links_2 "${HOST_TRIPLE}" "${gcc_install_dir}"
 			fi
 			;;
 	esac

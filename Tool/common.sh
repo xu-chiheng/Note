@@ -612,6 +612,7 @@ gdb_source_dir_prepare() {
 	echo_command rm -rf "${source_dir}"/{contrib,gdb,gdbserver,gdbsupport,gnulib,libdecnumber,readline,sim}
 }
 
+
 pre_generate_build_install_package() {
 	local host_triple="$1"
 	local package="$2"
@@ -619,13 +620,13 @@ pre_generate_build_install_package() {
 	local install_dir="$4"
 
 	if [ "${package}" = binutils ]; then
-		binutils_source_dir_prepare "${source_dir}"
+		echo_command binutils_source_dir_prepare "${source_dir}"
 	elif [ "${package}" = gdb ]; then
-		gdb_source_dir_prepare "${source_dir}"
-	fi
-
-	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		mingw_gcc_check_or_create_directory_links "${host_triple}" "${install_dir}"
+		echo_command gdb_source_dir_prepare "${source_dir}"
+	elif [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
+		echo_command mingw_gcc_check_or_create_directory_links_0 \
+		&& echo_command mingw_gcc_check_or_create_directory_links_1 "${install_dir}" \
+		&& echo_command mingw_gcc_check_or_create_directory_links_2 "${host_triple}" "${install_dir}"
 	fi
 
 }
@@ -637,7 +638,9 @@ post_generate_build_install_package() {
 	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = qemu ]; then
-		do_copy_dependent_dlls "${host_triple}" "${install_dir}" "."
+		echo_command do_copy_dependent_dlls "${host_triple}" "${install_dir}" "."
+	elif [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
+		true
 	fi
 }
 

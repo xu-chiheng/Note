@@ -43,8 +43,8 @@ do_update_all_files() {
 		Tool/clean.sh
 		Tool/common.sh
 
+		Tool/fix
 		Tool/patch
-		Tool/mingw
 
 		Tool/linux.sh
 		Tool/cygwin.cmd

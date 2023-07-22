@@ -60,10 +60,12 @@ PACKAGE=llvm
 	check_llvm_static_or_shared "$3"
 
 	# VERSION=9.0.1
-	VERSION=16.0.6
-	# VERSION=17.0.0 # commit 8ea586b82e49c18a73e2b855c7d32fc85e4394a5
+	# VERSION=16.0.6
+	VERSION=17.0.0 # commit 8ea586b82e49c18a73e2b855c7d32fc85e4394a5
 	GIT_TAG="llvmorg-${VERSION}"
 	GIT_REPO_URL="https://github.com/llvm/llvm-project"
+
+	SOURCE_DIR="${PACKAGE}"
 
 	# case "${HOST_TRIPLE}" in
 	# 	x86_64-pc-cygwin )

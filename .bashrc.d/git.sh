@@ -68,13 +68,6 @@ git_rev_parse() {
 	git rev-parse --verify --quiet "${revision}"
 }
 
-git_check_.git_directory_or_exit() {
-	if [ ! -d .git ]; then
-		echo "no .git directory"
-		exit 1
-	fi
-}
-
 # test branches are named like "test%04d"
 git_branch_delete_test_range() {
 	if [ ! -d .git ]; then

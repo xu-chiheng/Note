@@ -65,7 +65,9 @@ git_backup_directory_to_all_drives() {
 }
 
 do_git_backup() {
-	git_check_.git_directory_or_exit
+	if [ ! -d .git ]; then
+		return 1
+	fi
 
 	local gc_command="$1"
 	local backup_command="$2"
@@ -107,7 +109,9 @@ do_git_backup() {
 }
 
 do_git_commit() {
-	git_check_.git_directory_or_exit
+	if [ ! -d .git ]; then
+		return 1
+	fi
 
 	local commit_command="$1"
 	local commit_message_file="$(git_commit_message_file_name)"
@@ -264,7 +268,9 @@ git_diff_branch...HEAD() {
 }
 
 do_git_diff() {
-	git_check_.git_directory_or_exit
+	if [ ! -d .git ]; then
+		return 1
+	fi
 
 	local diff_command="$1"
 	shift 1
@@ -281,7 +287,9 @@ do_git_diff() {
 }
 
 do_git_edit_commit_message() {
-	git_check_.git_directory_or_exit
+	if [ ! -d .git ]; then
+		return 1
+	fi
 
 	local commit_message_file="$(git_commit_message_file_name)"
 	touch "${commit_message_file}"
@@ -294,7 +302,9 @@ do_git_edit_commit_message() {
 }
 
 do_git_misc() {
-	git_check_.git_directory_or_exit
+	if [ ! -d .git ]; then
+		return 1
+	fi
 
 	local misc_command="$1"
 	shift 1

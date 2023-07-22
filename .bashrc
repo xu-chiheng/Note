@@ -77,7 +77,7 @@ mingw_gcc_check_or_create_directory_links_1() {
 }
 
 mingw_gcc_remove_directory_links_1() {
-	local install_dir="$2"
+	local install_dir="$1"
 
 	local install_dir_mingw_subdir="${install_dir}/mingw"
 	rm -rf "${install_dir_mingw_subdir}"

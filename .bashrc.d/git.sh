@@ -51,21 +51,21 @@ git_update_git-tools() {
 }
 
 git_diff() {
-	if [ -d .git ]; then
-		git diff --stat=200 --summary --patch "$@"
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+
+	git diff --stat=200 --summary --patch "$@"
 }
 
 # https://stackoverflow.com/questions/5167957/is-there-a-better-way-to-find-out-if-a-local-git-branch-exists
 git_rev_parse() {
-	if [ -d .git ]; then
-		local revision="$1"
-		git rev-parse --verify --quiet "${revision}"
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+
+	local revision="$1"
+	git rev-parse --verify --quiet "${revision}"
 }
 
 git_check_.git_directory_or_exit() {
@@ -77,35 +77,35 @@ git_check_.git_directory_or_exit() {
 
 # test branches are named like "test%04d"
 git_branch_delete_test_range() {
-	if [ -d .git ]; then
-		local first="$1"
-		local last="$2"
-		local remote="$3"
-		if [ -z "${first}" ] || [ -z "${last}" ]; then
-			echo "must provide first and last number"
+	if [ ! -d .git ]; then
+		return 1
+	fi
+
+	local first="$1"
+	local last="$2"
+	local remote="$3"
+	if [ -z "${first}" ] || [ -z "${last}" ]; then
+		echo "must provide first and last number"
+		return 1
+	fi
+
+	local i
+	# https://stackoverflow.com/questions/169511/how-do-i-iterate-over-a-range-of-numbers-defined-by-variables-in-bash
+	local branches=( $(for i in $(seq "${first}" "${last}"); do printf "test%04d\n" $i; done) )
+	if [ -z "${remote}" ]; then
+		# local branches
+		echo_command git branch -D "${branches[@]}"
+	else
+		# remote branches
+		if git remote -v | grep -E "^${remote}\s"; then
+			local branch
+			for branch in "${branches[@]}"; do
+				echo_command git push "${remote}" :"${branch}"
+			done
+		else
+			echo "remote ${remote} does not exist"
 			return 1
 		fi
-
-		local i
-		# https://stackoverflow.com/questions/169511/how-do-i-iterate-over-a-range-of-numbers-defined-by-variables-in-bash
-		local branches=( $(for i in $(seq "${first}" "${last}"); do printf "test%04d\n" $i; done) )
-		if [ -z "${remote}" ]; then
-			# local branches
-			echo_command git branch -D "${branches[@]}"
-		else
-			# remote branches
-			if git remote -v | grep -E "^${remote}\s"; then
-				local branch
-				for branch in "${branches[@]}"; do
-					echo_command git push "${remote}" :"${branch}"
-				done
-			else
-				echo "remote ${remote} does not exist"
-				return 1
-			fi
-		fi
-	else
-		false
 	fi
 }
 
@@ -122,13 +122,13 @@ git_branch_delete_test_range_upstream() {
 }
 
 git_merge_-squash_and_commit() {
-	if [ -d .git ]; then
-		local branch="$1"
-		echo_command git merge --squash "${branch}" \
-		&& echo_command git commit
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+
+	local branch="$1"
+	echo_command git merge --squash "${branch}" \
+	&& echo_command git commit
 }
 
 # git_clone_domain_user_repos https://github.com xu-chiheng Tool/main/Tool
@@ -155,14 +155,14 @@ git_clone_domain_user_repos() {
 }
 
 git_remove_all_files() {
-	if [ -d .git ]; then
-		# find . -mindepth 1 -maxdepth 1 -regextype posix-extended ! -regex '\./(\.git|~git-tools~|patching)'
-		find . -mindepth 1 -maxdepth 1 ! -name '.git' -a ! -name '~git-tools~' -a ! -name 'patching' \
-		-print0 | xargs -0 -n100 \
-		rm -rf
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+
+	# find . -mindepth 1 -maxdepth 1 -regextype posix-extended ! -regex '\./(\.git|~git-tools~|patching)'
+	find . -mindepth 1 -maxdepth 1 ! -name '.git' -a ! -name '~git-tools~' -a ! -name 'patching' \
+	-print0 | xargs -0 -n100 \
+	rm -rf
 }
 
 # git_reset_--hard_HEAD() {
@@ -174,48 +174,52 @@ git_remove_all_files() {
 # }
 
 git_filemode_false() {
-	if [ -d .git ]; then
-		echo_command sed -i -e 's/filemode = true/filemode = false/' .git/config
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+
+	echo_command sed -i -e 's/filemode = true/filemode = false/' .git/config
 }
 
 git_filemode_true() {
-	if [ -d .git ]; then
-		echo_command sed -i -e 's/filemode = false/filemode = true/' .git/config
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+
+	echo_command sed -i -e 's/filemode = false/filemode = true/' .git/config
 }
 
 git_fsck() {
-	if [ -d .git ]; then
-		time_command git fsck --full --strict --progress
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+
+	time_command git fsck --full --strict --progress
 }
 
 git_reflog_expire() {
-	if [ -d .git ]; then
-		time_command git reflog expire --expire=now --all
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+
+	time_command git reflog expire --expire=now --all
 }
 
 git_gc() {
-	if [ -d .git ]; then
-		time_command git_reflog_expire \
-		&& time_command git gc --aggressive --prune=all \
-		&& time_command sync
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+
+	time_command git_reflog_expire \
+	&& time_command git gc --aggressive --prune=all \
+	&& time_command sync
 }
 
 git_print_remote_branch_tag() {
+	if [ ! -d .git ]; then
+		return 1
+	fi
+
 	echo "remotes :"
 	git remote -v
 	echo
@@ -229,46 +233,46 @@ git_print_remote_branch_tag() {
 # How do I remove the old history from a git repository?
 # https://stackoverflow.com/questions/4515580/how-do-i-remove-the-old-history-from-a-git-repository
 git_truncate() {
-	if [ -d .git ]; then
-		local first_rev="$1"
-		if [ -z "${first_rev}" ]; then
-			echo "no first revision"
-			return 1
-		fi
-		local first_commit="$(git_rev_parse "${first_rev}")"
-		if [ -z "${first_commit}" ]; then
-			echo "unknown first revision : ${first_rev}"
-			return 1
-		fi
-
-		local last_rev="$(git branch --show-current)"
-		local last_commit="$(git_rev_parse "${last_rev}")"
-
-		git_print_remote_branch_tag
-		echo "first revision : ${first_rev}"
-		git show --summary "${first_rev}"
-		printf "\n\n"
-		echo "last  revision : ${last_rev}"
-		git show --summary "${last_rev}"
-		printf "\n\n"
-
-		if ask_for_confirmation yes; then
-			echo_command git_fsck \
-			&& echo_command git reset --hard HEAD \
-			&& echo_command git checkout --orphan temp "${first_commit}" \
-			&& echo_command git commit -m "Truncated history" \
-			&& echo_command git rebase --onto temp "${first_commit}" "${last_commit}" \
-			&& echo_command git branch -D $(git branch --list | grep -E '^  ' | grep -v -E '^  temp$') \
-			&& echo_command git checkout -b main \
-			&& echo_command git branch -D temp \
-			&& echo_command git_gc \
-			&& echo "completed"
-		else
-			false
-		fi
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+
+	local first_rev="$1"
+	if [ -z "${first_rev}" ]; then
+		echo "no first revision"
+		return 1
+	fi
+	local first_commit="$(git_rev_parse "${first_rev}")"
+	if [ -z "${first_commit}" ]; then
+		echo "unknown first revision : ${first_rev}"
+		return 1
+	fi
+
+	local last_rev="$(git branch --show-current)"
+	local last_commit="$(git_rev_parse "${last_rev}")"
+
+	git_print_remote_branch_tag
+	echo "first revision : ${first_rev}"
+	git show --summary "${first_rev}"
+	printf "\n\n"
+	echo "last  revision : ${last_rev}"
+	git show --summary "${last_rev}"
+	printf "\n\n"
+
+	if ! ask_for_confirmation yes; then
+		return 1
+	fi
+
+	echo_command git_fsck \
+	&& echo_command git reset --hard HEAD \
+	&& echo_command git checkout --orphan temp "${first_commit}" \
+	&& echo_command git commit -m "Truncated history" \
+	&& echo_command git rebase --onto temp "${first_commit}" "${last_commit}" \
+	&& echo_command git branch -D $(git branch --list | grep -E '^  ' | grep -v -E '^  temp$') \
+	&& echo_command git checkout -b main \
+	&& echo_command git branch -D temp \
+	&& echo_command git_gc \
+	&& echo "completed"
 
 	# --orphan <new-branch>
 	# 	Create a new orphan branch, named <new-branch>, started from <start-point> and switch to it. The first commit made on this new branch will have no parents and it will be the root of a new history totally disconnected from

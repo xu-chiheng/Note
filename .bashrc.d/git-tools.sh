@@ -145,12 +145,11 @@ do_git_commit() {
 			echo "branch : ${branch},  current_branch : ${current_branch}"
 			echo "git checkout ${branch}"
 			echo "git merge --squash ${current_branch}"
-			if ask_for_confirmation yes; then
-				time_command git checkout "${branch}" \
-				&& time_command git merge --squash "${current_branch}"
-			else
-				false
+			if ! ask_for_confirmation yes; then
+				return 1
 			fi
+			time_command git checkout "${branch}" \
+			&& time_command git merge --squash "${current_branch}"
 			;;
 	esac \
 	&& if [ -f "${commit_message_file}" ]; then
@@ -326,12 +325,11 @@ do_git_misc() {
 			;;
 		git_reset_--hard_HEAD )
 			echo "git reset --hard HEAD"
-			if ask_for_confirmation yes; then
-				time_command git reset --hard HEAD \
-				&& time_command sync
-			else
-				false
+			if ! ask_for_confirmation yes; then
+				return 1
 			fi
+			time_command git reset --hard HEAD \
+			&& time_command sync
 			;;
 		* )
 			echo "unknown misc_command : ${misc_command}"

@@ -136,7 +136,7 @@ set_environment_variables_at_bash_startup() {
 		# https://superuser.com/questions/550732/use-mklink-in-msys
 		# https://superuser.com/questions/526736/how-to-run-internal-cmd-command-from-the-msys-shell
 
-		*-cygwin  )
+		*-cygwin )
 			# For Cygwin, add an environment variable, CYGWIN, and make sure it contains winsymlinks:nativestrict. See the Cygwin manual for details. (If you don’t do this, then Cygwin defaults to emulating symlinks by using special file contents that it understands but non-Cygwin software doesn’t.)
 			# default setting works
 			# export CYGWIN=winsymlinks:nativestrict

@@ -95,15 +95,15 @@ check_toolchain_build_type_and_set_compiler_flags() {
 	esac
 
 	case "${HOST_TRIPLE}" in
-		# x86_64-pc-cygwin )
-		# 	case "${toolchain}" in
-		# 		Clang )
-		# 			local cygwin_clang_c_cxx_flags=( -Wno-unknown-warning-option -Wno-gnu-line-marker )
-		# 			cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
-		# 			cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
-		# 			;;
-		# 	esac
-		# 	;;
+		x86_64-pc-cygwin )
+			case "${toolchain}" in
+				Clang )
+					local cygwin_clang_c_cxx_flags=( -Wno-unknown-warning-option -Wno-gnu-line-marker )
+					cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
+					cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
+					;;
+			esac
+			;;
 		x86_64-pc-mingw64 )
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
 			# binmode.obj	pbinmode.obj	Sets the default file-translation mode to binary. See _fmode.

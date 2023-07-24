@@ -211,7 +211,7 @@ set_environment_variables_at_bash_startup() {
 					packages_dir="/mnt/work/packages"
 					;;
 			esac
-			local packages=( gcc binutils gdb cross-gcc clang )
+			local packages=( gcc binutils gdb cross-gcc llvm )
 			local bin_dirs=
 			local package
 			for package in "${packages[@]}"; do

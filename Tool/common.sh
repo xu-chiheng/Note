@@ -79,10 +79,10 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			local release_c_cxx_common_flags=( "${cpu_arch_flags[@]}" -O3 )
 			cflags+=(   "${release_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${release_c_cxx_common_flags[@]}" )
-			ldflags+=( -Wl,--strip-all )
+			# ldflags+=( -Wl,--strip-all )
 			;;
 		Debug )
-			local debug_c_cxx_common_flags=( "${cpu_arch_flags[@]}" -O0 -g3 )
+			local debug_c_cxx_common_flags=( "${cpu_arch_flags[@]}" -O0 -g )
 			cflags+=(   "${debug_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${debug_c_cxx_common_flags[@]}" )
 			ldflags+=()

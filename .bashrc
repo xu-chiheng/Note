@@ -212,14 +212,14 @@ set_environment_variables_at_bash_startup() {
 					;;
 			esac
 			local packages=( gcc binutils gdb cross-gcc llvm )
-			local bin_dirs=
+			local bin_dirs=()
 			local package
 			for package in "${packages[@]}"; do
-				bin_dirs+="${packages_dir}/${package}/bin"
+				bin_dirs+=( "${packages_dir}/${package}/bin" )
 			done
 
 			if [ "${prepend_packages_bin_dirs_to_path}" = yes ]; then
-				export PATH="$(array_elements_join ':' "${bin_dirs}" "${PATH}")"
+				export PATH="$(array_elements_join ':' "${bin_dirs[@]}" "${PATH}")"
 			fi
 			;;
 	esac

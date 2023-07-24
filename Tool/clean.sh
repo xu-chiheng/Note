@@ -18,8 +18,12 @@ FIND_ARGS=(
 		-or -name 'gdb*'
 		-or -name '*output.txt'
 	')'
-	-and ! -name '*.sha512'
-	-and ! -name 'llvm-vs2022-build'
+	-and
+	-not
+	'('
+		-name '*.sha512'
+		-or -name 'llvm-vs2022-build'
+	')'
 )
 
 # Windows also has a find command

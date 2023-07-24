@@ -30,6 +30,7 @@ PACKAGE="gcc"
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
+	# VERSION=12.3.0
 	VERSION=13.1.0
 	GIT_TAG="$(gcc_git_tag_from_version "${VERSION}")"
 	GIT_REPO_URL="git://gcc.gnu.org/git/gcc.git"

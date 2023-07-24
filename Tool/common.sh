@@ -94,13 +94,30 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
+	case "${toolchain}" in
+		Clang )
+			local clang_c_cxx_flags=( -Wno-unknown-warning-option )
+			cflags+=(   "${clang_c_cxx_flags[@]}" )
+			cxxflags+=( "${clang_c_cxx_flags[@]}" )
+			;;
+	esac
+
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			case "${toolchain}" in
 				Clang )
-					local cygwin_clang_c_cxx_flags=( -Wno-unknown-warning-option -Wno-gnu-line-marker )
-					cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
-					cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
+
+					# /usr/bin/ld: ../../../../lib/libLLVMSupport.a(Parallel.cpp.o):Parallel.cpp:(.text+0x130): multiple definition of `TLS wrapper function for llvm::parallel::threadIndex'; ../../../../lib/liblldELF.a(Relocations.cpp.o):Relocations.cpp:(.text+0xf3c0): first defined here
+					# make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+					# [100%] Built target clang-scan-deps
+					# clang-8: error: linker command failed with exit code 1 (use -v to see invocation)
+					# make[2]: *** [tools/lld/tools/lld/CMakeFiles/lld.dir/build.make:273: bin/lld.exe] Error 1
+					# make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+					# make[1]: *** [CMakeFiles/Makefile2:56980: tools/lld/tools/lld/CMakeFiles/lld.dir/all] Error 2
+					# make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+					# make: *** [Makefile:156: all] Error 2
+
+					ldflags+=(  -Wl,--allow-multiple-definition )
 					;;
 			esac
 			;;

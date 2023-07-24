@@ -58,20 +58,18 @@ array_elements_print() {
 }
 
 mingw_gcc_check_or_create_directory_links() {
-	local mingw_sysroot
-	for mingw_sysroot in "$@"; do
-		if ! { \
-			[ -e "${mingw_sysroot}"/include ] \
-			&& [ -e "${mingw_sysroot}"/lib ] \
-			&& [ "$(readlink -f "${mingw_sysroot}"/include)" = "$(readlink -f /mingw64/include)" ] \
-			&& [ "$(readlink -f "${mingw_sysroot}"/lib)" = "$(readlink -f /mingw64/lib)" ] \
-		;}; then
-			rm -rf "${mingw_sysroot}"/{include,lib} \
-			&& mkdir -p "${mingw_sysroot}" \
-			&& ln -s /mingw64/include "${mingw_sysroot}"/include \
-			&& ln -s /mingw64/lib "${mingw_sysroot}"/lib
-		fi
-	done
+	local mingw_sysroot="$1"
+	if ! { \
+		[ -e "${mingw_sysroot}"/include ] \
+		&& [ -e "${mingw_sysroot}"/lib ] \
+		&& [ "$(readlink -f "${mingw_sysroot}"/include)" = "$(readlink -f /mingw64/include)" ] \
+		&& [ "$(readlink -f "${mingw_sysroot}"/lib)" = "$(readlink -f /mingw64/lib)" ] \
+	;}; then
+		rm -rf "${mingw_sysroot}"/{include,lib} \
+		&& mkdir -p "${mingw_sysroot}" \
+		&& ln -s /mingw64/include "${mingw_sysroot}"/include \
+		&& ln -s /mingw64/lib "${mingw_sysroot}"/lib
+	fi
 }
 
 # mingw_gcc_remove_directory_links_0() {
@@ -254,7 +252,9 @@ set_environment_variables_at_bash_startup() {
 		x86_64-pc-mingw64 )
 			if which gcc >/dev/null 2>&1; then
 				local gcc_install_dir="$(dirname "$(dirname "$(which gcc)")")"
-				mingw_gcc_check_or_create_directory_links /mingw "${gcc_install_dir}/mingw" "${gcc_install_dir}/${HOST_TRIPLE}"
+				mingw_gcc_check_or_create_directory_links /mingw \
+				&& mingw_gcc_check_or_create_directory_links "${gcc_install_dir}/mingw" \
+				&& mingw_gcc_check_or_create_directory_links "${gcc_install_dir}/${HOST_TRIPLE}"
 			fi
 			;;
 	esac

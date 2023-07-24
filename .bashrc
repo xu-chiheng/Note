@@ -41,73 +41,51 @@ fi
 
 # default umask is 022, default new file mode is 755
 
-mingw_gcc_check_or_create_directory_links_0() {
-	if ! { \
-		[ -e /mingw/include ] \
-		&& [ -e /mingw/lib ] \
-		&& [ "$(readlink -f /mingw/include)" = "$(readlink -f /mingw64/include)" ] \
-		&& [ "$(readlink -f /mingw/lib)" = "$(readlink -f /mingw64/lib)" ] \
-		;}; then
-		rm -rf /mingw/{include,lib} \
-		&& mkdir -p /mingw \
-		&& ln -s /mingw64/include /mingw/include \
-		&& ln -s /mingw64/lib /mingw/lib
-	fi
+# https://stackoverflow.com/questions/1527049/how-can-i-join-elements-of-a-bash-array-into-a-delimited-string
+# https://dev.to/meleu/how-to-join-array-elements-in-a-bash-script-303a
+# https://zaiste.net/posts/how-to-join-elements-of-array-bash/
+array_elements_join() {
+	local IFS="$1"
+	shift
+	echo "$*"
 }
 
-mingw_gcc_remove_directory_links_0() {
-	rm -rf /mingw
+array_elements_print() {
+	local element
+	for element in "$@"; do
+		echo "		${element}"
+	done
 }
 
-mingw_gcc_check_or_create_directory_links_1() {
-	local install_dir="$1"
-
-	local install_dir_mingw_subdir="${install_dir}/mingw"
+mingw_gcc_check_or_create_directory_links() {
+	local mingw_sysroot="$1"
 	if ! { \
-		[ -e "${install_dir_mingw_subdir}"/include ] \
-		&& [ -e "${install_dir_mingw_subdir}"/lib ] \
-		&& [ "$(readlink -f "${install_dir_mingw_subdir}"/include)" = "$(readlink -f /mingw64/include)" ] \
-		&& [ "$(readlink -f "${install_dir_mingw_subdir}"/lib)" = "$(readlink -f /mingw64/lib)" ] \
+		[ -e "${mingw_sysroot}"/include ] \
+		&& [ -e "${mingw_sysroot}"/lib ] \
+		&& [ "$(readlink -f "${mingw_sysroot}"/include)" = "$(readlink -f /mingw64/include)" ] \
+		&& [ "$(readlink -f "${mingw_sysroot}"/lib)" = "$(readlink -f /mingw64/lib)" ] \
 	;}; then
-		rm -rf "${install_dir_mingw_subdir}"/{include,lib} \
-		&& mkdir -p "${install_dir_mingw_subdir}" \
-		&& ln -s /mingw64/include "${install_dir_mingw_subdir}"/include \
-		&& ln -s /mingw64/lib "${install_dir_mingw_subdir}"/lib
+		rm -rf "${mingw_sysroot}"/{include,lib} \
+		&& mkdir -p "${mingw_sysroot}" \
+		&& ln -s /mingw64/include "${mingw_sysroot}"/include \
+		&& ln -s /mingw64/lib "${mingw_sysroot}"/lib
 	fi
 }
 
-mingw_gcc_remove_directory_links_1() {
-	local install_dir="$1"
+# mingw_gcc_remove_directory_links_0() {
+# 	rm -rf /mingw
+# }
 
-	local install_dir_mingw_subdir="${install_dir}/mingw"
-	rm -rf "${install_dir_mingw_subdir}"
-}
+# mingw_gcc_remove_directory_links_1() {
+# 	local install_dir="$1"
+# 	rm -rf "${install_dir}/mingw"
+# }
 
-mingw_gcc_check_or_create_directory_links_2() {
-	local host_triple="$1"
-	local install_dir="$2"
-
-	local install_dir_target_subdir="${install_dir}/${host_triple}"
-	if ! { \
-		[ -e "${install_dir_target_subdir}"/include ] \
-		&& [ -e "${install_dir_target_subdir}"/lib ] \
-		&& [ "$(readlink -f "${install_dir_target_subdir}"/include)" = "$(readlink -f /mingw64/include)" ] \
-		&& [ "$(readlink -f "${install_dir_target_subdir}"/lib)" = "$(readlink -f /mingw64/lib)" ] \
-	;}; then
-		rm -rf "${install_dir_target_subdir}"/{include,lib} \
-		&& mkdir -p "${install_dir_target_subdir}" \
-		&& ln -s /mingw64/include "${install_dir_target_subdir}"/include \
-		&& ln -s /mingw64/lib "${install_dir_target_subdir}"/lib
-	fi
-}
-
-mingw_gcc_remove_directory_links_2() {
-	local host_triple="$1"
-	local install_dir="$2"
-
-	local install_dir_target_subdir="${install_dir}/${host_triple}"
-	rm -rf "${install_dir_target_subdir}"/{include,lib}
-}
+# mingw_gcc_remove_directory_links_2() {
+# 	local host_triple="$1"
+# 	local install_dir="$2"
+# 	rm -rf "${install_dir}/${host_triple}"/{include,lib}
+# }
 
 set_environment_variables_at_bash_startup() {
 	export HOST_TRIPLE="$(~/config.guess)"
@@ -237,11 +215,11 @@ set_environment_variables_at_bash_startup() {
 			local bin_dirs=
 			local package
 			for package in "${packages[@]}"; do
-				bin_dirs+="${packages_dir}/${package}/bin:"
+				bin_dirs+="${packages_dir}/${package}/bin"
 			done
 
 			if [ "${prepend_packages_bin_dirs_to_path}" = yes ]; then
-				export PATH="${bin_dirs}${PATH}"
+				export PATH="$(array_elements_join ':' "${bin_dirs}" "${PATH}")"
 			fi
 			;;
 	esac
@@ -274,9 +252,9 @@ set_environment_variables_at_bash_startup() {
 		x86_64-pc-mingw64 )
 			if which gcc >/dev/null 2>&1; then
 				local gcc_install_dir="$(dirname "$(dirname "$(which gcc)")")"
-				mingw_gcc_check_or_create_directory_links_0 \
-				&& mingw_gcc_check_or_create_directory_links_1 "${gcc_install_dir}" \
-				&& mingw_gcc_check_or_create_directory_links_2 "${HOST_TRIPLE}" "${gcc_install_dir}"
+				mingw_gcc_check_or_create_directory_links /mingw \
+				&& mingw_gcc_check_or_create_directory_links "${gcc_install_dir}/mingw" \
+				&& mingw_gcc_check_or_create_directory_links "${gcc_install_dir}/${HOST_TRIPLE}"
 			fi
 			;;
 	esac
@@ -302,22 +280,6 @@ time_command() {
 		echo "$@" " # at $(pwd) failed"
 		return "${exit_status}"
 	fi
-}
-
-# https://stackoverflow.com/questions/1527049/how-can-i-join-elements-of-a-bash-array-into-a-delimited-string
-# https://dev.to/meleu/how-to-join-array-elements-in-a-bash-script-303a
-# https://zaiste.net/posts/how-to-join-elements-of-array-bash/
-array_elements_join() {
-	local IFS="$1"
-	shift
-	echo "$*"
-}
-
-array_elements_print() {
-	local element
-	for element in "$@"; do
-		echo "		${element}"
-	done
 }
 
 show_command_output_in_editor() {

@@ -641,9 +641,7 @@ pre_generate_build_install_package() {
 	elif [ "${package}" = gdb ]; then
 		echo_command gdb_source_dir_prepare "${source_dir}"
 	elif [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		echo_command mingw_gcc_check_or_create_directory_links /mingw \
-		&& echo_command mingw_gcc_check_or_create_directory_links "${install_dir}/mingw" \
-		&& echo_command mingw_gcc_check_or_create_directory_links "${install_dir}/${host_triple}"
+		echo_command mingw_gcc_check_or_create_directory_links /mingw "${install_dir}/mingw" "${install_dir}/${host_triple}"
 	fi
 
 }

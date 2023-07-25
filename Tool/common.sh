@@ -106,6 +106,13 @@ check_toolchain_build_type_and_set_compiler_flags() {
 		x86_64-pc-cygwin )
 			case "${toolchain}" in
 				Clang )
+					# /cygdrive/e/Note/Tool/llvm/clang/lib/Basic/Attributes.cpp:57:5: warning: this style of line directive is a GNU extension [-Wgnu-line-marker]
+					#    57 | # 1 "/cygdrive/e/Note/Tool/llvm-release-build/tools/clang/include/clang/Basic/AttrSubMatchRulesList.inc" 1
+					#       |     ^
+
+					local cygwin_clang_c_cxx_flags=( -Wno-gnu-line-marker )
+					cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
+					cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
 
 					# /usr/bin/ld: ../../../../lib/libLLVMSupport.a(Parallel.cpp.o):Parallel.cpp:(.text+0x130): multiple definition of `TLS wrapper function for llvm::parallel::threadIndex'; ../../../../lib/liblldELF.a(Relocations.cpp.o):Relocations.cpp:(.text+0xf3c0): first defined here
 					# make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'

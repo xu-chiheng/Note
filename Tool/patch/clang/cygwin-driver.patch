@@ -32,29 +32,12 @@ index ccdaa5c7eb68..370e7a40793e 100644
        case llvm::Triple::GNU:
          TC = std::make_unique<toolchains::MinGW>(*this, Target, Args);
          break;
-diff --git a/clang/lib/Driver/ToolChains/Clang.cpp b/clang/lib/Driver/ToolChains/Clang.cpp
-index 6cea9b382f21..caf7db9993eb 100644
---- a/clang/lib/Driver/ToolChains/Clang.cpp
-+++ b/clang/lib/Driver/ToolChains/Clang.cpp
-@@ -6183,6 +6183,12 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
-                    options::OPT_foperator_names, false))
-     CmdArgs.push_back("-fno-operator-names");
- 
-+  if (Triple.isOSCygMing() && Args.hasArg(options::OPT_static)) {
-+    CmdArgs.push_back("-flto-visibility-public-std");
-+    if (getToolChain().GetCXXStdlibType(Args) == ToolChain::CST_Libcxx)
-+      CmdArgs.push_back("-D_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS");
-+  }
-+
-   // Forward -f (flag) options which we can pass directly.
-   Args.AddLastArg(CmdArgs, options::OPT_femit_all_decls);
-   Args.AddLastArg(CmdArgs, options::OPT_fheinous_gnu_extensions);
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..553b404cfbef
+index 000000000000..a6fca43d3e80
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,729 @@
+@@ -0,0 +1,715 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ------------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -718,20 +701,6 @@ index 000000000000..553b404cfbef
 +  }
 +}
 +
-+void toolchains::Cygwin::AddCXXStdlibLibArgs(const ArgList &Args,
-+                                    ArgStringList &CmdArgs) const {
-+  switch (GetCXXStdlibType(Args)) {
-+  case ToolChain::CST_Libcxx:
-+    CmdArgs.push_back("-lc++");
-+    CmdArgs.push_back("-lc++abi");
-+    break;
-+  case ToolChain::CST_Libstdcxx:
-+    CmdArgs.push_back("-lstdc++");
-+    CmdArgs.push_back("-liconv");
-+    break;
-+  }
-+}
-+
 +static bool testTriple(const Driver &D, const llvm::Triple &Triple,
 +                       const ArgList &Args) {
 +  // If an explicit sysroot is set, that will be used and we shouldn't try to
@@ -786,10 +755,10 @@ index 000000000000..553b404cfbef
 +}
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.h b/clang/lib/Driver/ToolChains/Cygwin.h
 new file mode 100644
-index 000000000000..c9d29ab072b4
+index 000000000000..64193bd30d1d
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.h
-@@ -0,0 +1,128 @@
+@@ -0,0 +1,126 @@
 +//===--- Cygwin.h - Cygwin ToolChain Implementations --------------*- C++ -*-===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -879,8 +848,6 @@ index 000000000000..c9d29ab072b4
 +  void AddClangCXXStdlibIncludeArgs(
 +      const llvm::opt::ArgList &DriverArgs,
 +      llvm::opt::ArgStringList &CC1Args) const override;
-+  void AddCXXStdlibLibArgs(const llvm::opt::ArgList &DriverArgs,
-+                           llvm::opt::ArgStringList &CC1Args) const override;
 +
 +  void AddCudaIncludeArgs(const llvm::opt::ArgList &DriverArgs,
 +                          llvm::opt::ArgStringList &CC1Args) const override;

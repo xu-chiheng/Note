@@ -110,6 +110,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 					#    57 | # 1 "/cygdrive/e/Note/Tool/llvm-release-build/tools/clang/include/clang/Basic/AttrSubMatchRulesList.inc" 1
 					#       |     ^
 
+					# -mcmodel=medium
 					local cygwin_clang_c_cxx_flags=( -Wno-gnu-line-marker )
 					cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
 					cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )

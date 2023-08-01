@@ -60,6 +60,10 @@ PACKAGE=llvm
 	check_llvm_static_or_shared "$3"
 
 	# VERSION=9.0.1
+	# VERSION=12.0.1
+	# VERSION=13.0.1
+	# VERSION=14.0.6
+	# VERSION=15.0.7
 	# VERSION=16.0.6
 	VERSION=17.0.0 # commit 8ea586b82e49c18a73e2b855c7d32fc85e4394a5
 	GIT_TAG="llvmorg-${VERSION}"
@@ -117,6 +121,8 @@ PACKAGE=llvm
 		# XCore
 	)
 
+	CMAKE_OPTIONS=()
+
 	# https://stackoverflow.com/questions/41361631/optimize-in-cmake-by-default
 	# https://discourse.cmake.org/t/how-to-override-compiler-optimisation-level/5153
 	# https://unix.stackexchange.com/questions/187455/how-to-compile-without-optimizations-o0-using-cmake
@@ -133,7 +139,7 @@ PACKAGE=llvm
 	# 		;;
 	# esac
 
-	CMAKE_OPTIONS=(
+	CMAKE_OPTIONS+=(
 		"../${SOURCE_DIR}/llvm"
 
 		-DLLVM_TARGETS_TO_BUILD="$(array_elements_join ';' "${TARGETS[@]}")"

@@ -1,0 +1,25 @@
+diff --git a/clang/tools/libclang/CIndexer.cpp b/clang/tools/libclang/CIndexer.cpp
+index 77da2e4fa5ea..7822225c8e7a 100644
+--- a/clang/tools/libclang/CIndexer.cpp
++++ b/clang/tools/libclang/CIndexer.cpp
+@@ -28,10 +28,9 @@
+ #ifdef __CYGWIN__
+ #include <cygwin/version.h>
+ #include <sys/cygwin.h>
+-#define _WIN32 1
+ #endif
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) || defined(__CYGWIN__)
+ #include <windows.h>
+ #elif defined(_AIX)
+ #include <errno.h>
+@@ -104,7 +103,7 @@ const std::string &CIndexer::getClangResourcesPath() {
+   SmallString<128> LibClangPath;
+ 
+   // Find the location where this library lives (libclang.dylib).
+-#ifdef _WIN32
++#if defined(_WIN32) || defined(__CYGWIN__)
+   MEMORY_BASIC_INFORMATION mbi;
+   char path[MAX_PATH];
+   VirtualQuery((void *)(uintptr_t)clang_createTranslationUnit, &mbi,

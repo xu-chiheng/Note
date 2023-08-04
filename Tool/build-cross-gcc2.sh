@@ -92,7 +92,7 @@ PACKAGE=gcc
 
 	)
 
-	time_command do_build_and_install_cross_gcc_for_targets \
+	time_command build_and_install_cross_gcc_for_targets \
 		"${BUILD_TYPE}" no no "${HOST_TRIPLE}" "${CURRENT_DATETIME}" "${PACKAGE}" \
 		"${TARGETS[@]}"
 

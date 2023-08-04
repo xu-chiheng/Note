@@ -113,6 +113,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 					#       |     ^
 
 					# -mcmodel=medium
+					# -Wno-unsafe-buffer-usage
 					local cygwin_clang_c_cxx_flags=( -Wno-gnu-line-marker )
 					cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
 					cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
@@ -489,11 +490,11 @@ do_build_and_install_gmp_mpfr_mpc() {
 	&& echo "completed"
 }
 
-do_build_and_install_binutils_gcc_for_target() {
+build_and_install_binutils_gcc_for_target() {
 	local target="$1"
 	local build_type="$2"
-	local build_and_install_gmp_mpfr_mpc="$3"
-	local build_and_install_libgcc="$4"
+	local is_build_and_install_gmp_mpfr_mpc="$3"
+	local is_build_and_install_libgcc="$4"
 	local binutils_source_dir="$5"
 	local gcc_source_dir="$6"
 	local gmp_mpfr_mpc_install_dir="$7"
@@ -518,7 +519,7 @@ do_build_and_install_binutils_gcc_for_target() {
 			--without-headers
 			--target="${target}"
 	)
-	if [ "${build_and_install_gmp_mpfr_mpc}" = yes ]; then
+	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
 		gcc_configure_options+=(
 			--with-gmp="${gmp_mpfr_mpc_install_dir}"
 			--with-mpfr="${gmp_mpfr_mpc_install_dir}"
@@ -551,11 +552,11 @@ do_build_and_install_binutils_gcc_for_target() {
 			"$(array_elements_join ',' "${languages[@]}")" "${host_triple}" \
 			"${gcc_configure_options[@]}" \
 		&& time_command parallel_make all-gcc \
-		&& if [ "${build_and_install_libgcc}" = yes ]; then
+		&& if [ "${is_build_and_install_libgcc}" = yes ]; then
 			time_command parallel_make all-target-libgcc
 		fi \
 		&& time_command parallel_make install-gcc \
-		&& if [ "${build_and_install_libgcc}" = yes ]; then
+		&& if [ "${is_build_and_install_libgcc}" = yes ]; then
 			time_command parallel_make install-target-libgcc
 		fi \
 		&& echo_command popd;} \
@@ -574,10 +575,10 @@ do_build_and_install_binutils_gcc_for_target() {
 # https://wiki.gentoo.org/wiki/Crossdev
 # https://wiki.gentoo.org/wiki/Cross_build_environment
 # https://wiki.gentoo.org/wiki/Embedded_Handbook/General/Creating_a_cross-compiler
-do_build_and_install_cross_gcc_for_targets() {
+build_and_install_cross_gcc_for_targets() {
 	local build_type="$1"
-	local build_and_install_gmp_mpfr_mpc="$2"
-	local build_and_install_libgcc="$3"
+	local is_build_and_install_gmp_mpfr_mpc="$2"
+	local is_build_and_install_libgcc="$3"
 	local host_triple="$4"
 	local current_datetime="$5"
 	local package="$6"
@@ -609,7 +610,7 @@ do_build_and_install_cross_gcc_for_targets() {
 
 	local gmp_mpfr_mpc_install_dir="gmp-mpfr-mpc-${build_type,,}-install"
 
-	if [ "${build_and_install_gmp_mpfr_mpc}" = yes ]; then
+	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
 		time_command do_build_and_install_gmp_mpfr_mpc "${build_type}" "${gmp_mpfr_mpc_install_dir}" 2>&1 | tee "~${current_datetime}-gmp-mpfr-mpc-output.txt"
 	fi \
 	&& time_command check_dir_maybe_clone_and_checkout_tag "${binutils_source_dir}" "${binutils_git_tag}" "${binutils_git_repo_url}" \
@@ -618,8 +619,8 @@ do_build_and_install_cross_gcc_for_targets() {
 	\
 	&& echo "building binutils and gcc ......" \
 	&& for target in "${targets[@]}"; do
-			time_command do_build_and_install_binutils_gcc_for_target "${target}" "${build_type}" \
-			"${build_and_install_gmp_mpfr_mpc}" "${build_and_install_libgcc}" "${binutils_source_dir}" "${gcc_source_dir}" \
+			time_command build_and_install_binutils_gcc_for_target "${target}" "${build_type}" \
+			"${is_build_and_install_gmp_mpfr_mpc}" "${is_build_and_install_libgcc}" "${binutils_source_dir}" "${gcc_source_dir}" \
 			"${gmp_mpfr_mpc_install_dir}" "${host_triple}" "${package}" "${gcc_version}" \
 			2>&1 | tee "~${current_datetime}-${package}-${target}-output.txt" &
 	done \

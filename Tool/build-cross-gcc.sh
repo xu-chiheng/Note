@@ -45,7 +45,7 @@ PACKAGE=gcc
 		# arm-elf support was obsoleted in gcc-4.7 and dropped in gcc-4.8.
 	)
 
-	time_command do_build_and_install_cross_gcc_for_targets \
+	time_command build_and_install_cross_gcc_for_targets \
 		"${BUILD_TYPE}" yes yes "${HOST_TRIPLE}" "${CURRENT_DATETIME}" "${PACKAGE}" \
 		"${TARGETS[@]}"
 

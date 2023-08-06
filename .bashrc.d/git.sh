@@ -124,7 +124,7 @@ git_merge_-squash_and_commit() {
 	&& echo_command git commit
 }
 
-# git_clone_domain_user_repos https://github.com xu-chiheng Tool/main/Tool
+# git_clone_domain_user_repos https://github.com xu-chiheng Note/main/Note
 git_clone_domain_user_repos() {
 	local domain="$1"
 	local user="$2"

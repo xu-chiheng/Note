@@ -1,9 +1,36 @@
 
 
 
+patches to 16.0.6
+{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-16.0.6.patch,cygwin-CIndexer.cpp.patch,cygwin-CGExprCXX.cpp.patch}
+
+
+patches to 17.0.0
+{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-17.0.0.patch,cygwin-CIndexer.cpp.patch,cygwin-CGExprCXX.cpp.patch}
+
+
 
 cygwin-CGExprCXX.cpp.patch
 fix the regression caused by commit 67409911353323ca5edf2049ef0df54132fa1ca7, that, in Cygwin, Clang can't bootstrap.
+
+
+
+commit b6259eca16f6c923d87a1ca1d424931e37d6871a, this line of change let './build-llvm.sh Clang "" shared' fail
+diff --git a/clang/include/clang/Basic/TokenKinds.def b/clang/include/clang/Basic/TokenKinds.def
+index 96feae991ccb..6d35f1bb31fc 100644
+--- a/clang/include/clang/Basic/TokenKinds.def
++++ b/clang/include/clang/Basic/TokenKinds.def
+@@ -523,6 +523,7 @@ TYPE_TRAIT_1(__is_unbounded_array, IsUnboundedArray, KEYCXX)
+ TYPE_TRAIT_1(__is_nullptr, IsNullPointer, KEYCXX)
+ TYPE_TRAIT_1(__is_scoped_enum, IsScopedEnum, KEYCXX)
+ TYPE_TRAIT_1(__is_referenceable, IsReferenceable, KEYCXX)
++TYPE_TRAIT_1(__can_pass_in_regs, CanPassInRegs, KEYCXX)
+ TYPE_TRAIT_2(__reference_binds_to_temporary, ReferenceBindsToTemporary, KEYCXX)
+ 
+ // Embarcadero Expression Traits
+
+
+
 
 
 

@@ -1,17 +1,48 @@
 
 
 
-patches to 16.0.6
-{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-16.0.6.patch,cygwin-CIndexer.cpp.patch,cygwin-CGExprCXX.cpp.patch}
+
+on Cygwin
+stage0 : GCC 13.1.0
+stage1 : Clang 18.0.0
+stage2 : Clang 18.0.0
+stage3 : Clang 18.0.0
 
 
-patches to 17.0.0
-{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-17.0.0.patch,cygwin-CIndexer.cpp.patch,cygwin-CGExprCXX.cpp.patch}
-
+patches to 18.0.0
+{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver.patch,cygwin-CIndexer.cpp.patch,cygwin-CGExprCXX.cpp.patch}
 
 
 cygwin-CGExprCXX.cpp.patch
 fix the regression caused by commit 67409911353323ca5edf2049ef0df54132fa1ca7, that, in Cygwin, Clang can't bootstrap.
+
+cygwin-CIndexer.cpp.patch
+fix build by Clang 16+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -29,6 +60,40 @@ index 96feae991ccb..6d35f1bb31fc 100644
  
  // Embarcadero Expression Traits
 
+
+
+
+commit 28b5f3087a3fcd39c80e2b1470a950da17e4cd08
+Author: Sander de Smalen <sander.desmalen@arm.com>
+Date:   Tue May 23 16:42:56 2023 +0100
+
+    [Clang][AArch64] Add/implement ACLE keywords for SME.
+
+    This patch adds all the language-level function keywords defined in:
+
+      https://github.com/ARM-software/acle/pull/188 (merged)
+      https://github.com/ARM-software/acle/pull/261 (update after D148700 landed)
+
+    The keywords are used to control PSTATE.ZA and PSTATE.SM, which are
+    respectively used for enabling the use of the ZA matrix array and Streaming
+    mode. This information needs to be available on call sites, since the use
+    of ZA or streaming mode may have to be enabled or disabled around the
+    call-site (depending on the IR attributes set on the caller and the
+    callee). For calls to functions from a function pointer, there is no IR
+    declaration available, so the IR attributes must be added explicitly to the
+    call-site.
+
+    With the exception of '__arm_locally_streaming' and '__arm_new_za' the
+    information is part of the function's interface, not just the function
+    definition, and thus needs to be propagated through the
+    FunctionProtoType::ExtProtoInfo.
+
+    This patch adds the defintions of these keywords, as well as codegen and
+    semantic analysis to ensure conversions between function pointers are valid
+    and that no conflicting keywords are set. For example, '__arm_streaming'
+    and '__arm_streaming_compatible' are mutually exclusive.
+
+    Differential Revision: https://reviews.llvm.org/D127762
 
 
 

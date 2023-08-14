@@ -23,8 +23,8 @@
 check_toolchain_build_type_and_set_compiler_flags() {
 	local toolchain="$1"
 	local build_type="$2"
-	local cc
-	local cxx
+	local cc=
+	local cxx=
 	local cflags=()
 	local cxxflags=()
 	local ldflags=()

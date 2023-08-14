@@ -4,10 +4,13 @@
 
 on Cygwin
 stage0 : GCC 13.1.0
-stage1 : Clang 18.0.0
-stage2 : Clang 18.0.0
-stage3 : Clang 18.0.0
+stage1 : Clang 16.0.6
+stage2 : Clang 16.0.6
+stage3 : Clang 16.0.6
 
+
+patches to 16.0.6
+{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-16.0.6.patch,cygwin-CIndexer.cpp.patch,cygwin-CGExprCXX.cpp.patch}
 
 patches to 18.0.0
 {cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver.patch,cygwin-CIndexer.cpp.patch,cygwin-CGExprCXX.cpp.patch}

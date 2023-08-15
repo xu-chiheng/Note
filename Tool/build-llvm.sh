@@ -66,7 +66,7 @@ PACKAGE=llvm
 	# VERSION=15.0.7
 	# VERSION=16.0.6
 	# VERSION=17.0.0
-	VERSION=18.0.0 # commit 66bb6b4fdaedf1c4f5bc19a6fc7d2f5c33aa9471
+	VERSION=18.0.0 # commit 2827aa9dafa7e0c45697bf4fc5b067cae26623c4 2023-08-14
 	GIT_TAG="llvmorg-${VERSION}"
 	GIT_REPO_URL="https://github.com/llvm/llvm-project"
 

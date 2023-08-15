@@ -11,7 +11,7 @@ index a6bd2d41e797..30b521368c7f 100644
    ToolChains/DragonFly.cpp
    ToolChains/Flang.cpp
 diff --git a/clang/lib/Driver/Driver.cpp b/clang/lib/Driver/Driver.cpp
-index ccdaa5c7eb68..370e7a40793e 100644
+index 150040cc9dd2..017186e0cb24 100644
 --- a/clang/lib/Driver/Driver.cpp
 +++ b/clang/lib/Driver/Driver.cpp
 @@ -20,6 +20,7 @@
@@ -22,7 +22,7 @@ index ccdaa5c7eb68..370e7a40793e 100644
  #include "ToolChains/Darwin.h"
  #include "ToolChains/DragonFly.h"
  #include "ToolChains/FreeBSD.h"
-@@ -6232,6 +6233,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
+@@ -6239,6 +6240,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
          else
            TC = std::make_unique<toolchains::Generic_GCC>(*this, Target, Args);
          break;
@@ -34,10 +34,10 @@ index ccdaa5c7eb68..370e7a40793e 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..a6fca43d3e80
+index 000000000000..c530fa15bfb3
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,715 @@
+@@ -0,0 +1,732 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ------------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -117,7 +117,6 @@ index 000000000000..a6fca43d3e80
 +    }
 +  } else {
 +    AddRunTimeLibs(getToolChain(), getToolChain().getDriver(), CmdArgs, Args);
-+    CmdArgs.push_back("-lunwind");
 +  }
 +
 +  CmdArgs.push_back("-lcygwin");
@@ -224,11 +223,9 @@ index 000000000000..a6fca43d3e80
 +    else
 +      CmdArgs.push_back("_cygwin_dll_entry");
 +    CmdArgs.push_back("--enable-auto-image-base");
-+  } else {
-+    if (TC.getArch() == llvm::Triple::x86)
-+      CmdArgs.push_back("--large-address-aware");
-+    CmdArgs.push_back("--tsaware");
 +  }
++  CmdArgs.push_back("--dynamicbase");
++  CmdArgs.push_back("--allow-multiple-definition");
 +
 +  if (Args.hasArg(options::OPT_Z_Xlinker__no_demangle))
 +    CmdArgs.push_back("--no-demangle");
@@ -256,7 +253,6 @@ index 000000000000..a6fca43d3e80
 +  } else
 +    CmdArgs.push_back(OutputFile);
 +
-+  Args.AddAllArgs(CmdArgs, options::OPT_e);
 +  // FIXME: add -N, -n flags
 +  Args.AddLastArg(CmdArgs, options::OPT_r);
 +  Args.AddLastArg(CmdArgs, options::OPT_s);
@@ -264,7 +260,15 @@ index 000000000000..a6fca43d3e80
 +  Args.AddAllArgs(CmdArgs, options::OPT_u_Group);
 +  Args.AddLastArg(CmdArgs, options::OPT_Z_Flag);
 +
-+  // TODO: Add ASan stuff here
++  // Add asan_dynamic as the first import lib before other libs. This allows
++  // asan to be initialized as early as possible to increase its instrumentation
++  // coverage to include other user DLLs which has not been built with asan.
++  if (Sanitize.needsAsanRt() && !Args.hasArg(options::OPT_nostdlib) &&
++      !Args.hasArg(options::OPT_nodefaultlibs)) {
++    // Cygwin always links against a shared Cygwin DLL.
++    CmdArgs.push_back(
++        TC.getCompilerRTArgString(Args, "asan_dynamic", ToolChain::FT_Shared));
++  }
 +
 +  if (!Args.hasArg(options::OPT_nostdlib, options::OPT_nostartfiles)) {
 +    if (Args.hasArg(options::OPT_shared) || Args.hasArg(options::OPT_mdll)) {
@@ -349,8 +353,25 @@ index 000000000000..a6fca43d3e80
 +
 +      AddLibGCC(Args, CmdArgs);
 +
-+      if (Args.hasArg(options::OPT_pg))
-+        CmdArgs.push_back("-lgmon");
++      if (Sanitize.needsAsanRt()) {
++        // Cygwin always links against a shared Cygwin DLL.
++        CmdArgs.push_back(TC.getCompilerRTArgString(Args, "asan_dynamic",
++                                                    ToolChain::FT_Shared));
++        CmdArgs.push_back(
++            TC.getCompilerRTArgString(Args, "asan_dynamic_runtime_thunk"));
++        CmdArgs.push_back("--require-defined");
++        CmdArgs.push_back(TC.getArch() == llvm::Triple::x86
++                              ? "___asan_seh_interceptor"
++                              : "__asan_seh_interceptor");
++        // Make sure the linker consider all object files from the dynamic
++        // runtime thunk.
++        CmdArgs.push_back("--whole-archive");
++        CmdArgs.push_back(
++            TC.getCompilerRTArgString(Args, "asan_dynamic_runtime_thunk"));
++        CmdArgs.push_back("--no-whole-archive");
++      }
++
++      TC.addProfileRTLibs(Args, CmdArgs);
 +
 +      if (!HasWindowsApp) {
 +        // Add system libraries. If linking to libwindowsapp.a, that import
@@ -379,8 +400,6 @@ index 000000000000..a6fca43d3e80
 +      // Add crtfastmath.o if available and fast math is enabled.
 +      TC.addFastMathRuntimeIfAvailable(Args, CmdArgs);
 +
-+      if (!Args.hasArg(options::OPT_shared))
-+        CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("default-manifest.o")));
 +      CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crtend.o")));
 +    }
 +  }
@@ -534,8 +553,6 @@ index 000000000000..a6fca43d3e80
 +          .equals_insensitive("lld");
 +}
 +
-+bool toolchains::Cygwin::IsIntegratedAssemblerDefault() const { return true; }
-+
 +Tool *toolchains::Cygwin::getTool(Action::ActionClass AC) const {
 +  switch (AC) {
 +  case Action::PreprocessJobClass:
@@ -584,7 +601,7 @@ index 000000000000..a6fca43d3e80
 +}
 +
 +bool toolchains::Cygwin::isPIEDefault(const llvm::opt::ArgList &Args) const {
-+	return false;
++  return false;
 +}
 +
 +bool toolchains::Cygwin::isPICDefaultForced() const { return true; }
@@ -755,10 +772,10 @@ index 000000000000..a6fca43d3e80
 +}
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.h b/clang/lib/Driver/ToolChains/Cygwin.h
 new file mode 100644
-index 000000000000..64193bd30d1d
+index 000000000000..9866863389eb
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.h
-@@ -0,0 +1,126 @@
+@@ -0,0 +1,125 @@
 +//===--- Cygwin.h - Cygwin ToolChain Implementations --------------*- C++ -*-===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -826,7 +843,6 @@ index 000000000000..64193bd30d1d
 +
 +  bool HasNativeLLVMSupport() const override;
 +
-+  bool IsIntegratedAssemblerDefault() const override;
 +  UnwindTableLevel
 +  getDefaultUnwindTableLevel(const llvm::opt::ArgList &Args) const override;
 +  bool isPICDefault() const override;

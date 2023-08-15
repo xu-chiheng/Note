@@ -168,7 +168,8 @@ PACKAGE=llvm
 	# msbuild.exe -m LLVM.sln -property:Configuration=Debug   -fl -flp:logfile="../clang-$(current_datetime)-output.txt";verbosity=diagnostic
 	# msbuild.exe -m LLVM.sln -property:Configuration=Release -fl -flp:logfile="../clang-$(current_datetime)-output.txt";verbosity=diagnostic
 
-	{ time_command pushd_and_cmake "${VS2022_BUILD_DIR}" "${CMAKE_OPTIONS[@]}" \
+	rm -rf "${VS2022_BUILD_DIR}" \
+	&& { time_command pushd_and_cmake "${VS2022_BUILD_DIR}" "${CMAKE_OPTIONS[@]}" \
 	&& echo "double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE" \
 	&& echo_command popd;}
 

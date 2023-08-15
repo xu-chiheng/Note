@@ -131,7 +131,7 @@ PACKAGE=llvm
 
 	# case "${HOST_TRIPLE}" in
 	# 	x86_64-pc-cygwin )
-	# 		if [ "${TOOLCHAIN}" = GCC ] && [ "${BUILD_TYPE}" = Release ] ; then
+	# 		if [ "${BUILD_TYPE}" = Release ] ; then
 	# 			CMAKE_OPTIONS+=(
 	# 				-DCMAKE_C_FLAGS_RELEASE="-O1"
 	# 				-DCMAKE_CXX_FLAGS_RELEASE="-O1"

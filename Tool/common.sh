@@ -96,13 +96,13 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
-	case "${toolchain}" in
-		Clang )
-			local clang_c_cxx_flags=( -Wno-unknown-warning-option )
-			cflags+=(   "${clang_c_cxx_flags[@]}" )
-			cxxflags+=( "${clang_c_cxx_flags[@]}" )
-			;;
-	esac
+	# case "${toolchain}" in
+	# 	Clang )
+	# 		local clang_c_cxx_flags=( -Wno-unknown-warning-option )
+	# 		cflags+=(   "${clang_c_cxx_flags[@]}" )
+	# 		cxxflags+=( "${clang_c_cxx_flags[@]}" )
+	# 		;;
+	# esac
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
@@ -114,9 +114,9 @@ check_toolchain_build_type_and_set_compiler_flags() {
 
 					# -mcmodel=medium
 					# -Wno-unsafe-buffer-usage
-					local cygwin_clang_c_cxx_flags=( -Wno-gnu-line-marker )
-					cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
-					cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
+					# local cygwin_clang_c_cxx_flags=( -Wno-gnu-line-marker )
+					# cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
+					# cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
 
 					# /usr/bin/ld: ../../../../lib/libLLVMSupport.a(Parallel.cpp.o):Parallel.cpp:(.text+0x130): multiple definition of `TLS wrapper function for llvm::parallel::threadIndex'; ../../../../lib/liblldELF.a(Relocations.cpp.o):Relocations.cpp:(.text+0xf3c0): first defined here
 					# make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
@@ -128,7 +128,8 @@ check_toolchain_build_type_and_set_compiler_flags() {
 					# make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
 					# make: *** [Makefile:156: all] Error 2
 
-					ldflags+=(  -Wl,--allow-multiple-definition )
+					# ldflags+=(  -Wl,--allow-multiple-definition )
+					true
 					;;
 			esac
 			;;
@@ -161,7 +162,8 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			#       0 [main] clang-17 1507 child_info_fork::abort: \??\D:\cygwin64-packages\clang\bin\cygLLVMRISCVCodeGen-17git.dll: Loaded to different address: parent(0xE60000) != child(0xEC0000)
 			# clang++: error: unable to execute command: posix_spawn failed: Resource temporarily unavailable
 
-			ldflags+=( -Wl,--enable-auto-image-base -Wl,--dynamicbase )
+			# ldflags+=( -Wl,--dynamicbase )
+			true
 			;;
 	esac
 

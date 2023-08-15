@@ -34,10 +34,10 @@ index a268f2fa8fc5..6df7017fdf53 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..a85bbd46559a
+index 000000000000..78db504cf6d3
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,712 @@
+@@ -0,0 +1,732 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ------------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -117,7 +117,6 @@ index 000000000000..a85bbd46559a
 +    }
 +  } else {
 +    AddRunTimeLibs(getToolChain(), getToolChain().getDriver(), CmdArgs, Args);
-+    CmdArgs.push_back("-lunwind");
 +  }
 +
 +  CmdArgs.push_back("-lcygwin");
@@ -165,7 +164,7 @@ index 000000000000..a85bbd46559a
 +    CmdArgs.push_back("arm64pe");
 +    break;
 +  default:
-+    D.Diag(diag::err_target_unknown_triple) << TC.getEffectiveTriple().str();
++    llvm_unreachable("Unsupported target architecture.");
 +  }
 +
 +  if (!Args.getLastArgValue(options::OPT_fuse_ld_EQ, "link").equals_insensitive("lld")) {
@@ -224,11 +223,9 @@ index 000000000000..a85bbd46559a
 +    else
 +      CmdArgs.push_back("_cygwin_dll_entry");
 +    CmdArgs.push_back("--enable-auto-image-base");
-+  } else {
-+    if (TC.getArch() == llvm::Triple::x86)
-+      CmdArgs.push_back("--large-address-aware");
-+    CmdArgs.push_back("--tsaware");
 +  }
++  CmdArgs.push_back("--dynamicbase");
++  CmdArgs.push_back("--allow-multiple-definition");
 +
 +  if (Args.hasArg(options::OPT_Z_Xlinker__no_demangle))
 +    CmdArgs.push_back("--no-demangle");
@@ -264,7 +261,15 @@ index 000000000000..a85bbd46559a
 +  Args.AddAllArgs(CmdArgs, options::OPT_u_Group);
 +  Args.AddLastArg(CmdArgs, options::OPT_Z_Flag);
 +
-+  // TODO: Add ASan stuff here
++  // Add asan_dynamic as the first import lib before other libs. This allows
++  // asan to be initialized as early as possible to increase its instrumentation
++  // coverage to include other user DLLs which has not been built with asan.
++  if (Sanitize.needsAsanRt() && !Args.hasArg(options::OPT_nostdlib) &&
++      !Args.hasArg(options::OPT_nodefaultlibs)) {
++    // Cygwin always links against a shared Cygwin DLL.
++    CmdArgs.push_back(
++        TC.getCompilerRTArgString(Args, "asan_dynamic", ToolChain::FT_Shared));
++  }
 +
 +  if (!Args.hasArg(options::OPT_nostdlib, options::OPT_nostartfiles)) {
 +    if (Args.hasArg(options::OPT_shared) || Args.hasArg(options::OPT_mdll)) {
@@ -349,8 +354,25 @@ index 000000000000..a85bbd46559a
 +
 +      AddLibGCC(Args, CmdArgs);
 +
-+      if (Args.hasArg(options::OPT_pg))
-+        CmdArgs.push_back("-lgmon");
++      if (Sanitize.needsAsanRt()) {
++        // Cygwin always links against a shared Cygwin DLL.
++        CmdArgs.push_back(TC.getCompilerRTArgString(Args, "asan_dynamic",
++                                                    ToolChain::FT_Shared));
++        CmdArgs.push_back(
++            TC.getCompilerRTArgString(Args, "asan_dynamic_runtime_thunk"));
++        CmdArgs.push_back("--require-defined");
++        CmdArgs.push_back(TC.getArch() == llvm::Triple::x86
++                              ? "___asan_seh_interceptor"
++                              : "__asan_seh_interceptor");
++        // Make sure the linker consider all object files from the dynamic
++        // runtime thunk.
++        CmdArgs.push_back("--whole-archive");
++        CmdArgs.push_back(
++            TC.getCompilerRTArgString(Args, "asan_dynamic_runtime_thunk"));
++        CmdArgs.push_back("--no-whole-archive");
++      }
++
++      TC.addProfileRTLibs(Args, CmdArgs);
 +
 +      if (!HasWindowsApp) {
 +        // Add system libraries. If linking to libwindowsapp.a, that import
@@ -379,8 +401,6 @@ index 000000000000..a85bbd46559a
 +      // Add crtfastmath.o if available and fast math is enabled.
 +      TC.addFastMathRuntimeIfAvailable(Args, CmdArgs);
 +
-+      if (!Args.hasArg(options::OPT_shared))
-+        CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("default-manifest.o")));
 +      CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crtend.o")));
 +    }
 +  }
@@ -584,7 +604,7 @@ index 000000000000..a85bbd46559a
 +}
 +
 +bool toolchains::Cygwin::isPIEDefault(const llvm::opt::ArgList &Args) const {
-+	return false;
++  return false;
 +}
 +
 +bool toolchains::Cygwin::isPICDefaultForced() const { return true; }

@@ -1,0 +1,106 @@
+diff --git a/clang/tools/libclang/CIndexer.cpp b/clang/tools/libclang/CIndexer.cpp
+index 77da2e4fa5ea..d1bd7ad49c5f 100644
+--- a/clang/tools/libclang/CIndexer.cpp
++++ b/clang/tools/libclang/CIndexer.cpp
+@@ -26,12 +26,10 @@
+ #include <mutex>
+ 
+ #ifdef __CYGWIN__
+-#include <cygwin/version.h>
+ #include <sys/cygwin.h>
+-#define _WIN32 1
+ #endif
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) || defined(__CYGWIN__)
+ #include <windows.h>
+ #elif defined(_AIX)
+ #include <errno.h>
+@@ -104,7 +102,7 @@ const std::string &CIndexer::getClangResourcesPath() {
+   SmallString<128> LibClangPath;
+ 
+   // Find the location where this library lives (libclang.dylib).
+-#ifdef _WIN32
++#if defined(_WIN32) || defined(__CYGWIN__)
+   MEMORY_BASIC_INFORMATION mbi;
+   char path[MAX_PATH];
+   VirtualQuery((void *)(uintptr_t)clang_createTranslationUnit, &mbi,
+@@ -114,11 +112,7 @@ const std::string &CIndexer::getClangResourcesPath() {
+ #ifdef __CYGWIN__
+   char w32path[MAX_PATH];
+   strcpy(w32path, path);
+-#if CYGWIN_VERSION_API_MAJOR > 0 || CYGWIN_VERSION_API_MINOR >= 181
+   cygwin_conv_path(CCP_WIN_A_TO_POSIX, w32path, path, MAX_PATH);
+-#else
+-  cygwin_conv_to_full_posix_path(w32path, path);
+-#endif
+ #endif
+ 
+   LibClangPath += path;
+diff --git a/llvm/lib/Support/MemoryBuffer.cpp b/llvm/lib/Support/MemoryBuffer.cpp
+index 0bb11725d2fc..e118443cc782 100644
+--- a/llvm/lib/Support/MemoryBuffer.cpp
++++ b/llvm/lib/Support/MemoryBuffer.cpp
+@@ -379,14 +379,6 @@ static bool shouldUseMmap(sys::fs::file_t FD,
+   if ((FileSize & (PageSize -1)) == 0)
+     return false;
+ 
+-#if defined(__CYGWIN__)
+-  // Don't try to map files that are exactly a multiple of the physical page size
+-  // if we need a null terminator.
+-  // FIXME: We should reorganize again getPageSize() on Win32.
+-  if ((FileSize & (4096 - 1)) == 0)
+-    return false;
+-#endif
+-
+   return true;
+ }
+ 
+diff --git a/llvm/lib/Support/Unix/Process.inc b/llvm/lib/Support/Unix/Process.inc
+index 2babf07944bf..f9809a82f653 100644
+--- a/llvm/lib/Support/Unix/Process.inc
++++ b/llvm/lib/Support/Unix/Process.inc
+@@ -76,7 +76,9 @@ Process::Pid Process::getProcessId() {
+ // On Cygwin, getpagesize() returns 64k(AllocationGranularity) and
+ // offset in mmap(3) should be aligned to the AllocationGranularity.
+ Expected<unsigned> Process::getPageSize() {
+-#if defined(HAVE_GETPAGESIZE)
++#if defined(__CYGWIN__)
++  static const int page_size = 4096;
++#elif defined(HAVE_GETPAGESIZE)
+   static const int page_size = ::getpagesize();
+ #elif defined(HAVE_SYSCONF)
+   static long page_size = ::sysconf(_SC_PAGE_SIZE);
+diff --git a/llvm/lib/Support/raw_ostream.cpp b/llvm/lib/Support/raw_ostream.cpp
+index fae4a4308fd7..6b964b927c32 100644
+--- a/llvm/lib/Support/raw_ostream.cpp
++++ b/llvm/lib/Support/raw_ostream.cpp
+@@ -37,10 +37,6 @@
+ # include <unistd.h>
+ #endif
+ 
+-#if defined(__CYGWIN__)
+-#include <io.h>
+-#endif
+-
+ #if defined(_MSC_VER)
+ #include <io.h>
+ #ifndef STDIN_FILENO
+diff --git a/llvm/tools/lli/lli.cpp b/llvm/tools/lli/lli.cpp
+index c9b77e23ba07..eae61ac843b1 100644
+--- a/llvm/tools/lli/lli.cpp
++++ b/llvm/tools/lli/lli.cpp
+@@ -78,13 +78,6 @@
+ #include <io.h>
+ #endif
+ 
+-#ifdef __CYGWIN__
+-#include <cygwin/version.h>
+-#if defined(CYGWIN_VERSION_DLL_MAJOR) && CYGWIN_VERSION_DLL_MAJOR<1007
+-#define DO_NOTHING_ATEXIT 1
+-#endif
+-#endif
+-
+ using namespace llvm;
+ 
+ static codegen::RegisterCodeGenFlags CGF;

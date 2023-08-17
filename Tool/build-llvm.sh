@@ -59,7 +59,6 @@ PACKAGE=llvm
 
 	check_llvm_static_or_shared "$3"
 
-	# VERSION=9.0.1
 	# VERSION=12.0.1
 	# VERSION=13.0.1
 	# VERSION=14.0.6

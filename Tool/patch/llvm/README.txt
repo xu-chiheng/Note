@@ -10,17 +10,17 @@ stage3 : Clang 16.0.6
 
 
 16.0.6
-patch_apply . ../patch/llvm/{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-16.0.6.patch,cygwin-CIndexer.cpp.patch,cygwin-CGExprCXX.cpp.patch}
+patch_apply . ../patch/llvm/{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-16.0.6.patch,cygwin-general.patch,cygwin-CGExprCXX.cpp.patch}
 
 18.0.0
-patch_apply . ../patch/llvm/{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver.patch,cygwin-CIndexer.cpp.patch,cygwin-CGExprCXX.cpp.patch}
+patch_apply . ../patch/llvm/{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver.patch,cygwin-general.patch,cygwin-CGExprCXX.cpp.patch}
 
 
 cygwin-CGExprCXX.cpp.patch
 fix the regression caused by commit 67409911353323ca5edf2049ef0df54132fa1ca7, that, in Cygwin, Clang can't bootstrap.
 
-cygwin-CIndexer.cpp.patch
-fix build by Clang 16+
+cygwin-general.patch
+remove some uses of macro __CYGWIN__ and fix build by Clang 16+.
 
 
 
@@ -144,6 +144,21 @@ Date:   Tue Jan 31 11:43:34 2023 -0800
 
     Differential Revision: https://reviews.llvm.org/D138940
 
+commit 7e04c0ad632527df0a4c4d34a6ac6ec6a3888dfe (HEAD -> test1557663)
+Author: Xiang Li <python3kgae@outlook.com>
+Date:   Wed Oct 19 12:40:39 2022 -0700
+
+    [HLSL] Add groupshare address space.
+
+    Added keyword, LangAS and TypeAttrbute for groupshared.
+
+    Tanslate it to LangAS with asHLSLLangAS.
+
+    Make sure it translated into address space 3 for DirectX target.
+
+    Reviewed By: aaron.ballman
+
+    Differential Revision: https://reviews.llvm.org/D135060
 
 
 

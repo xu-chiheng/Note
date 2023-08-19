@@ -167,14 +167,6 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
-	# if true; then
-	#     # Do not link against shared libraries
-	#     ldflags+=( -Wl,-Bstatic )
-	# else
-	#     # Link against shared libraries
-	#     ldflags+=( -Wl,-Bdynamic )
-	# fi
-
 	export TOOLCHAIN="${toolchain}"
 	export BUILD_TYPE="${build_type}"
 	export CC="${cc}"

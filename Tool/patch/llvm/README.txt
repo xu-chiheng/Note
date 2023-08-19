@@ -3,7 +3,7 @@
 
 
 on Cygwin
-stage0 : GCC 13.1.0
+stage0 : GCC 13.2.0
 stage1 : Clang 16.0.6
 stage2 : Clang 16.0.6
 stage3 : Clang 16.0.6
@@ -11,6 +11,8 @@ stage3 : Clang 16.0.6
 
 16.0.6
 patch_apply . ../patch/llvm/{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-16.0.6.patch,cygwin-general.patch,cygwin-CGExprCXX.cpp.patch}
+patch_apply . ../patch/llvm/{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-16.0.6.patch}
+
 
 18.0.0
 patch_apply . ../patch/llvm/{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver.patch,cygwin-general.patch,cygwin-CGExprCXX.cpp.patch}

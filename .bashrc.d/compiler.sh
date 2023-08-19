@@ -20,6 +20,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+llvm_create_test_branches_for_bisect() {
+	local major_version
+	for major_version in $(seq 8 17); do
+		# echo "${major_version}"
+		local major_version_branch="remotes/origin/release/${major_version}.x"
+
+		if git_rev_parse "${major_version_branch}" >/dev/null 2>&1; then
+			local test_branch="$(printf "test%02d0000\n" "${major_version}")"
+			if ! git_rev_parse "${test_branch}" >/dev/null 2>&1; then
+				echo_command git checkout -b "${test_branch}" "$(git merge-base main "${major_version_branch}")"
+			fi
+		fi
+	done
+	echo_command git checkout main
+	echo_command git branch
+}
+
 check_compiler_existence() {
 	local compiler="$1"
 	if [ -z "${compiler}" ]; then

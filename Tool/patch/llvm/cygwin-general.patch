@@ -56,8 +56,45 @@ index 0bb11725d2fc..e118443cc782 100644
    return true;
  }
  
+diff --git a/llvm/lib/Support/Process.cpp b/llvm/lib/Support/Process.cpp
+index 30c64d3ed9ed..09e5142f2f65 100644
+--- a/llvm/lib/Support/Process.cpp
++++ b/llvm/lib/Support/Process.cpp
+@@ -23,6 +23,10 @@
+ #include <optional>
+ #include <stdlib.h> // for _Exit
+ 
++#if defined(__CYGWIN__)
++#include <windows.h>
++#endif
++
+ using namespace llvm;
+ using namespace sys;
+ 
+@@ -102,6 +106,21 @@ bool Process::AreCoreFilesPrevented() { return coreFilesPrevented; }
+     ::exit(RetCode);
+ }
+ 
++#if defined(_WIN32) || defined(__CYGWIN__)
++// This function retrieves the page size using GetNativeSystemInfo() and is
++// present solely so it can be called once to initialize the self_process member
++// below.
++static unsigned computePageSize() {
++  // GetNativeSystemInfo() provides the physical page size which may differ
++  // from GetSystemInfo() in 32-bit applications running under WOW64.
++  SYSTEM_INFO info;
++  GetNativeSystemInfo(&info);
++  // FIXME: FileOffset in MapViewOfFile() should be aligned to not dwPageSize,
++  // but dwAllocationGranularity.
++  return static_cast<unsigned>(info.dwPageSize);
++}
++#endif
++
+ // Include the platform-specific parts of this class.
+ #ifdef LLVM_ON_UNIX
+ #include "Unix/Process.inc"
 diff --git a/llvm/lib/Support/Unix/Process.inc b/llvm/lib/Support/Unix/Process.inc
-index 2babf07944bf..f9809a82f653 100644
+index 2babf07944bf..2bf53ae188eb 100644
 --- a/llvm/lib/Support/Unix/Process.inc
 +++ b/llvm/lib/Support/Unix/Process.inc
 @@ -76,7 +76,9 @@ Process::Pid Process::getProcessId() {
@@ -66,11 +103,35 @@ index 2babf07944bf..f9809a82f653 100644
  Expected<unsigned> Process::getPageSize() {
 -#if defined(HAVE_GETPAGESIZE)
 +#if defined(__CYGWIN__)
-+  static const int page_size = 4096;
++  static const int page_size = computePageSize();
 +#elif defined(HAVE_GETPAGESIZE)
    static const int page_size = ::getpagesize();
  #elif defined(HAVE_SYSCONF)
    static long page_size = ::sysconf(_SC_PAGE_SIZE);
+diff --git a/llvm/lib/Support/Windows/Process.inc b/llvm/lib/Support/Windows/Process.inc
+index 493209052a1c..98131d7bef84 100644
+--- a/llvm/lib/Support/Windows/Process.inc
++++ b/llvm/lib/Support/Windows/Process.inc
+@@ -50,19 +50,6 @@ Process::Pid Process::getProcessId() {
+   return Pid(::GetCurrentProcessId());
+ }
+ 
+-// This function retrieves the page size using GetNativeSystemInfo() and is
+-// present solely so it can be called once to initialize the self_process member
+-// below.
+-static unsigned computePageSize() {
+-  // GetNativeSystemInfo() provides the physical page size which may differ
+-  // from GetSystemInfo() in 32-bit applications running under WOW64.
+-  SYSTEM_INFO info;
+-  GetNativeSystemInfo(&info);
+-  // FIXME: FileOffset in MapViewOfFile() should be aligned to not dwPageSize,
+-  // but dwAllocationGranularity.
+-  return static_cast<unsigned>(info.dwPageSize);
+-}
+-
+ Expected<unsigned> Process::getPageSize() {
+   static unsigned Ret = computePageSize();
+   return Ret;
 diff --git a/llvm/lib/Support/raw_ostream.cpp b/llvm/lib/Support/raw_ostream.cpp
 index fae4a4308fd7..6b964b927c32 100644
 --- a/llvm/lib/Support/raw_ostream.cpp

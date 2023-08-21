@@ -20,6 +20,68 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
+
+# case "${toolchain}" in
+# 	Clang )
+# 		local clang_c_cxx_flags=( -Wno-unknown-warning-option )
+# 		cflags+=(   "${clang_c_cxx_flags[@]}" )
+# 		cxxflags+=( "${clang_c_cxx_flags[@]}" )
+# 		;;
+# esac
+
+
+
+# /cygdrive/e/Note/Tool/llvm/clang/lib/Basic/Attributes.cpp:57:5: warning: this style of line directive is a GNU extension [-Wgnu-line-marker]
+#    57 | # 1 "/cygdrive/e/Note/Tool/llvm-release-build/tools/clang/include/clang/Basic/AttrSubMatchRulesList.inc" 1
+#       |     ^
+
+# -mcmodel=medium
+# -Wno-unsafe-buffer-usage
+# local cygwin_clang_c_cxx_flags=( -Wno-gnu-line-marker )
+# cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
+# cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
+
+# /usr/bin/ld: ../../../../lib/libLLVMSupport.a(Parallel.cpp.o):Parallel.cpp:(.text+0x130): multiple definition of `TLS wrapper function for llvm::parallel::threadIndex'; ../../../../lib/liblldELF.a(Relocations.cpp.o):Relocations.cpp:(.text+0xf3c0): first defined here
+# make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+# [100%] Built target clang-scan-deps
+# clang-8: error: linker command failed with exit code 1 (use -v to see invocation)
+# make[2]: *** [tools/lld/tools/lld/CMakeFiles/lld.dir/build.make:273: bin/lld.exe] Error 1
+# make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+# make[1]: *** [CMakeFiles/Makefile2:56980: tools/lld/tools/lld/CMakeFiles/lld.dir/all] Error 2
+# make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+# make: *** [Makefile:156: all] Error 2
+
+# ldflags+=(  -Wl,--allow-multiple-definition )
+
+
+
+# https://cygwin.fandom.com/wiki/Rebaseall
+# https://community.bmc.com/s/news/aA33n000000CiC6CAK/cygwin-rebase-utility-for-bsa
+# https://pipeline.lbl.gov/code/3rd_party/licenses.win/Cygwin/rebase-3.0.README
+# https://cygwin.com/git/gitweb.cgi?p=cygwin-apps/rebase.git;f=README;hb=HEAD
+
+#       0 [main] clang-17 1506 child_info_fork::abort: \??\D:\cygwin64-packages\clang\bin\cygclangLex-17git.dll: Loaded to different address: parent(0x16E0000) != child(0x5C12D0000)
+# clang++: error: unable to execute command: posix_spawn failed: Resource temporarily unavailable
+#       0 [main] clang-17 1507 child_info_fork::abort: \??\D:\cygwin64-packages\clang\bin\cygLLVMRISCVCodeGen-17git.dll: Loaded to different address: parent(0xE60000) != child(0xEC0000)
+# clang++: error: unable to execute command: posix_spawn failed: Resource temporarily unavailable
+
+# ldflags+=( -Wl,--dynamicbase )
+
+
+
+# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
+# binmode.obj	pbinmode.obj	Sets the default file-translation mode to binary. See _fmode.
+
+# MinGW-w64 runtime has regression in binmode.o, which defaulted to text mode,
+# will cause Cross GCC to corrupt libgcc's .o and .a files
+
+# E:\Note\Tool\gcc-x86_64-elf-release-install\x86_64-elf\bin\ar.exe: libgcov.a: error reading _gcov_merge_add.o: file truncated
+# make[1]: *** [Makefile:939: libgcov.a] Error 1
+# make[1]: *** Waiting for unfinished jobs....
+# make[1]: Leaving directory '/c/Users/Administrator/Tool/gcc-x86_64-elf-release-build/x86_64-elf/libgcc'
+# make: *** [Makefile:13696: all-target-libgcc] Error 2
+
 check_toolchain_build_type_and_set_compiler_flags() {
 	local toolchain="$1"
 	local build_type="$2"
@@ -96,74 +158,46 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
-	# case "${toolchain}" in
-	# 	Clang )
-	# 		local clang_c_cxx_flags=( -Wno-unknown-warning-option )
-	# 		cflags+=(   "${clang_c_cxx_flags[@]}" )
-	# 		cxxflags+=( "${clang_c_cxx_flags[@]}" )
-	# 		;;
-	# esac
-
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			case "${toolchain}" in
 				Clang )
-					# /cygdrive/e/Note/Tool/llvm/clang/lib/Basic/Attributes.cpp:57:5: warning: this style of line directive is a GNU extension [-Wgnu-line-marker]
-					#    57 | # 1 "/cygdrive/e/Note/Tool/llvm-release-build/tools/clang/include/clang/Basic/AttrSubMatchRulesList.inc" 1
-					#       |     ^
+					local cygwin_clang_c_cxx_flags=(
+						-Wno-unknown-warning-option
+						-Wno-macro-redefined
+						-Wno-gnu-line-marker
 
-					# -mcmodel=medium
-					# -Wno-unsafe-buffer-usage
-					# local cygwin_clang_c_cxx_flags=( -Wno-gnu-line-marker )
-					# cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
-					# cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
+						# -U__clang__
+						# -U__clang_major__
+						# -U__clang_minor__
+						# -U__clang_patchlevel__
+						# -U__clang_version__
 
-					# /usr/bin/ld: ../../../../lib/libLLVMSupport.a(Parallel.cpp.o):Parallel.cpp:(.text+0x130): multiple definition of `TLS wrapper function for llvm::parallel::threadIndex'; ../../../../lib/liblldELF.a(Relocations.cpp.o):Relocations.cpp:(.text+0xf3c0): first defined here
-					# make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
-					# [100%] Built target clang-scan-deps
-					# clang-8: error: linker command failed with exit code 1 (use -v to see invocation)
-					# make[2]: *** [tools/lld/tools/lld/CMakeFiles/lld.dir/build.make:273: bin/lld.exe] Error 1
-					# make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
-					# make[1]: *** [CMakeFiles/Makefile2:56980: tools/lld/tools/lld/CMakeFiles/lld.dir/all] Error 2
-					# make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
-					# make: *** [Makefile:156: all] Error 2
+						# -U__code_model_small__
+						# -D__code_model_medium__=1
 
-					# ldflags+=(  -Wl,--allow-multiple-definition )
-					true
+						# -U__CYGWIN64__
+						-D__GNUC__=13
+						# -D__GNUC_MINOR__=2
+						# -D__GNUC_PATCHLEVEL__=0
+						-D__GNUG__=13
+
+						# -D__pic__=1
+						# -D__PIC__=1
+
+						# -U_GNU_SOURCE
+
+					)
+					cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
+					cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
 					;;
 			esac
-			;;
-		x86_64-pc-mingw64 )
-			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
-			# binmode.obj	pbinmode.obj	Sets the default file-translation mode to binary. See _fmode.
-
-			# MinGW-w64 runtime has regression in binmode.o, which defaulted to text mode,
-			# will cause Cross GCC to corrupt libgcc's .o and .a files
-
-			# E:\Note\Tool\gcc-x86_64-elf-release-install\x86_64-elf\bin\ar.exe: libgcov.a: error reading _gcov_merge_add.o: file truncated
-			# make[1]: *** [Makefile:939: libgcov.a] Error 1
-			# make[1]: *** Waiting for unfinished jobs....
-			# make[1]: Leaving directory '/c/Users/Administrator/Tool/gcc-x86_64-elf-release-build/x86_64-elf/libgcc'
-			# make: *** [Makefile:13696: all-target-libgcc] Error 2
-
-			ldflags+=( -Wl,"$(cygpath -m /mingw64/lib/binmode.o)" )
 			;;
 	esac
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			# https://cygwin.fandom.com/wiki/Rebaseall
-			# https://community.bmc.com/s/news/aA33n000000CiC6CAK/cygwin-rebase-utility-for-bsa
-			# https://pipeline.lbl.gov/code/3rd_party/licenses.win/Cygwin/rebase-3.0.README
-			# https://cygwin.com/git/gitweb.cgi?p=cygwin-apps/rebase.git;f=README;hb=HEAD
-
-			#       0 [main] clang-17 1506 child_info_fork::abort: \??\D:\cygwin64-packages\clang\bin\cygclangLex-17git.dll: Loaded to different address: parent(0x16E0000) != child(0x5C12D0000)
-			# clang++: error: unable to execute command: posix_spawn failed: Resource temporarily unavailable
-			#       0 [main] clang-17 1507 child_info_fork::abort: \??\D:\cygwin64-packages\clang\bin\cygLLVMRISCVCodeGen-17git.dll: Loaded to different address: parent(0xE60000) != child(0xEC0000)
-			# clang++: error: unable to execute command: posix_spawn failed: Resource temporarily unavailable
-
-			# ldflags+=( -Wl,--dynamicbase )
-			true
+			ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
 			;;
 	esac
 

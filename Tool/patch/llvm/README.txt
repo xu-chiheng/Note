@@ -10,13 +10,11 @@ stage3 : Clang 16.0.6
 
 
 16.0.6
-patch_apply . ../patch/llvm/{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-16.0.6.patch,cygwin-general.patch,cygwin-CGExprCXX.cpp.patch}
-patch_apply . ../patch/llvm/{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver-16.0.6.patch}
-
-
+patch_apply . ../patch/llvm/cygwin-{basic,cmodel,driver-16.0.6,general}.patch
 18.0.0
-patch_apply . ../patch/llvm/{cygwin-basic.patch,cygwin-cmodel.patch,cygwin-driver.patch,cygwin-general.patch,cygwin-CGExprCXX.cpp.patch}
+patch_apply . ../patch/llvm/cygwin-{basic,cmodel,driver,general}.patch
 
+git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 
 cygwin-CGExprCXX.cpp.patch
 fix the regression caused by commit 67409911353323ca5edf2049ef0df54132fa1ca7, that, in Cygwin, Clang can't bootstrap.
@@ -47,7 +45,21 @@ remove some uses of macro __CYGWIN__ and fix build by Clang 16+.
 
 
 
-
+commit 247fa04116a6cabf8378c6c72d90b2f705e969de, this line of change let './build-llvm.sh Clang "" shared' fail
+diff --git a/clang/include/clang/Basic/TokenKinds.def b/clang/include/clang/Basic/TokenKinds.def
+index f17a6028a137..ae67209d9b9e 100644
+--- a/clang/include/clang/Basic/TokenKinds.def
++++ b/clang/include/clang/Basic/TokenKinds.def
+@@ -942,6 +942,9 @@ ANNOTATION(module_end)
+ // into the name of a header unit.
+ ANNOTATION(header_unit)
+ 
++// Annotation for end of input in clang-repl.
++ANNOTATION(repl_input_end)
++
+ #undef PRAGMA_ANNOTATION
+ #undef ANNOTATION
+ #undef TESTING_KEYWORD
 
 
 
@@ -100,6 +112,37 @@ Date:   Tue May 23 16:42:56 2023 +0100
 
     Differential Revision: https://reviews.llvm.org/D127762
 
+
+commit 247fa04116a6cabf8378c6c72d90b2f705e969de
+Author: Jun Zhang <jun@junz.org>
+Date:   Tue May 16 20:10:43 2023 +0800
+
+    [clang] Add a new annotation token: annot_repl_input_end
+
+    This patch is the first part of the below RFC:
+    https://discourse.llvm.org/t/rfc-handle-execution-results-in-clang-repl/68493
+
+    It adds an annotation token which will replace the original EOF token
+    when we are in the incremental C++ mode. In addition, when we're
+    parsing an ExprStmt and there's a missing semicolon after the
+    expression, we set a marker in the annotation token and continue
+    parsing.
+
+    Eventually, we propogate this info in ParseTopLevelStmtDecl and are able
+    to mark this Decl as something we want to do value printing. Below is a
+    example:
+
+    clang-repl> int x = 42;
+    clang-repl> x
+    // `x` is a TopLevelStmtDecl and without a semicolon, we should set
+    // it's IsSemiMissing bit so we can do something interesting in
+    // ASTConsumer::HandleTopLevelDecl.
+
+    The idea about annotation toke is proposed by Richard Smith, thanks!
+
+    Signed-off-by: Jun Zhang <jun@junz.org>
+
+    Differential Revision: https://reviews.llvm.org/D148997
 
 
 

@@ -159,44 +159,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 	esac
 
 	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin )
-			case "${toolchain}" in
-				Clang )
-					local cygwin_clang_c_cxx_flags=(
-						-Wno-unknown-warning-option
-						-Wno-macro-redefined
-						-Wno-gnu-line-marker
-
-						# -U__clang__
-						# -U__clang_major__
-						# -U__clang_minor__
-						# -U__clang_patchlevel__
-						# -U__clang_version__
-
-						# -U__code_model_small__
-						# -D__code_model_medium__=1
-
-						# -U__CYGWIN64__
-						-D__GNUC__=13
-						# -D__GNUC_MINOR__=2
-						# -D__GNUC_PATCHLEVEL__=0
-						-D__GNUG__=13
-
-						# -D__pic__=1
-						# -D__PIC__=1
-
-						# -U_GNU_SOURCE
-
-					)
-					cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
-					cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
-					;;
-			esac
-			;;
-	esac
-
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
+		x86_64-pc-mingw64 )
 			ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
 			;;
 	esac

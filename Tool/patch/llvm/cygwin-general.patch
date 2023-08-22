@@ -64,7 +64,7 @@ index 30c64d3ed9ed..09e5142f2f65 100644
  #include <optional>
  #include <stdlib.h> // for _Exit
  
-+#if defined(__CYGWIN__)
++#if defined(_WIN32) || defined(__CYGWIN__)
 +#include <windows.h>
 +#endif
 +

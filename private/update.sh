@@ -34,9 +34,9 @@ do_update_all_files() {
 
 		Tool/build-cross-gcc.sh
 		Tool/build-cross-gcc2.sh
-
 		Tool/build-binutils.sh
 		Tool/build-gcc.sh
+		Tool/build-gdb.sh
 
 		Tool/build-qemu.sh
 

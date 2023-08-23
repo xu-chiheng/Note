@@ -39,7 +39,20 @@ remove some uses of macro __CYGWIN__ and fix build by Clang 16+.
 
 
 
-
+[  7%] Generating nonterminal symbol file for cxx grammar...
+[  7%] Generating bnf string file for cxx grammar...
+cd /cygdrive/e/Note/Tool/llvm-release-build/tools/clang/tools/extra/pseudo/include && ../../../../../../bin/clang-pseudo-gen.exe --grammar /cygdrive/e/Note/Tool/llvm/clang-tools-extra/pseudo/include/../lib/cxx/cxx.bnf --emit-symbol-list -o /cygdrive/e/Note/Tool/llvm-release-build/tools/clang/tools/extra/pseudo/include/CXXSymbols.inc
+cd /cygdrive/e/Note/Tool/llvm-release-build/tools/clang/tools/extra/pseudo/include && ../../../../../../bin/clang-pseudo-gen.exe --grammar /cygdrive/e/Note/Tool/llvm/clang-tools-extra/pseudo/include/../lib/cxx/cxx.bnf --emit-grammar-content -o /cygdrive/e/Note/Tool/llvm-release-build/tools/clang/tools/extra/pseudo/include/CXXBNF.inc
+make[2]: *** [tools/clang/tools/extra/pseudo/include/CMakeFiles/cxx_gen.dir/build.make:75: tools/clang/tools/extra/pseudo/include/CXXBNF.inc] Aborted
+make[2]: *** Deleting file 'tools/clang/tools/extra/pseudo/include/CXXBNF.inc'
+make[2]: *** Waiting for unfinished jobs....
+make[2]: *** [tools/clang/tools/extra/pseudo/include/CMakeFiles/cxx_gen.dir/build.make:80: tools/clang/tools/extra/pseudo/include/CXXSymbols.inc] Aborted
+make[2]: *** Deleting file 'tools/clang/tools/extra/pseudo/include/CXXSymbols.inc'
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+make[1]: *** [CMakeFiles/Makefile2:46834: tools/clang/tools/extra/pseudo/include/CMakeFiles/cxx_gen.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+[  7%] Built target LLVMDebugInfoCodeView
 
 
 
@@ -219,3 +232,71 @@ https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-clang
 https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-clang/PKGBUILD
 
 https://src.fedoraproject.org/rpms/llvm.git
+
+
+
+
+
+
+
+
+
+case "${toolchain}" in
+	Clang )
+		local clang_c_cxx_flags=( -Wno-unknown-warning-option )
+		cflags+=(   "${clang_c_cxx_flags[@]}" )
+		cxxflags+=( "${clang_c_cxx_flags[@]}" )
+		;;
+esac
+
+
+/cygdrive/e/Note/Tool/llvm/clang/lib/Basic/Attributes.cpp:57:5: warning: this style of line directive is a GNU extension [-Wgnu-line-marker]
+   57 | # 1 "/cygdrive/e/Note/Tool/llvm-release-build/tools/clang/include/clang/Basic/AttrSubMatchRulesList.inc" 1
+      |     ^
+
+-mcmodel=medium
+-Wno-unsafe-buffer-usage
+local cygwin_clang_c_cxx_flags=( -Wno-gnu-line-marker )
+cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
+cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
+
+/usr/bin/ld: ../../../../lib/libLLVMSupport.a(Parallel.cpp.o):Parallel.cpp:(.text+0x130): multiple definition of `TLS wrapper function for llvm::parallel::threadIndex'; ../../../../lib/liblldELF.a(Relocations.cpp.o):Relocations.cpp:(.text+0xf3c0): first defined here
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+[100%] Built target clang-scan-deps
+clang-8: error: linker command failed with exit code 1 (use -v to see invocation)
+make[2]: *** [tools/lld/tools/lld/CMakeFiles/lld.dir/build.make:273: bin/lld.exe] Error 1
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+make[1]: *** [CMakeFiles/Makefile2:56980: tools/lld/tools/lld/CMakeFiles/lld.dir/all] Error 2
+make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+make: *** [Makefile:156: all] Error 2
+
+ldflags+=(  -Wl,--allow-multiple-definition )
+
+
+
+https://cygwin.fandom.com/wiki/Rebaseall
+https://community.bmc.com/s/news/aA33n000000CiC6CAK/cygwin-rebase-utility-for-bsa
+https://pipeline.lbl.gov/code/3rd_party/licenses.win/Cygwin/rebase-3.0.README
+https://cygwin.com/git/gitweb.cgi?p=cygwin-apps/rebase.git;f=README;hb=HEAD
+
+      0 [main] clang-17 1506 child_info_fork::abort: \??\D:\cygwin64-packages\clang\bin\cygclangLex-17git.dll: Loaded to different address: parent(0x16E0000) != child(0x5C12D0000)
+clang++: error: unable to execute command: posix_spawn failed: Resource temporarily unavailable
+      0 [main] clang-17 1507 child_info_fork::abort: \??\D:\cygwin64-packages\clang\bin\cygLLVMRISCVCodeGen-17git.dll: Loaded to different address: parent(0xE60000) != child(0xEC0000)
+clang++: error: unable to execute command: posix_spawn failed: Resource temporarily unavailable
+
+ldflags+=( -Wl,--dynamicbase )
+
+
+
+https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
+binmode.obj	pbinmode.obj	Sets the default file-translation mode to binary. See _fmode.
+
+MinGW-w64 runtime has regression in binmode.o, which defaulted to text mode,
+will cause Cross GCC to corrupt libgcc's .o and .a files
+
+E:\Note\Tool\gcc-x86_64-elf-release-install\x86_64-elf\bin\ar.exe: libgcov.a: error reading _gcov_merge_add.o: file truncated
+make[1]: *** [Makefile:939: libgcov.a] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make[1]: Leaving directory '/c/Users/Administrator/Tool/gcc-x86_64-elf-release-build/x86_64-elf/libgcc'
+make: *** [Makefile:13696: all-target-libgcc] Error 2
+

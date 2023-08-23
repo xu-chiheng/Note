@@ -51,26 +51,6 @@ PACKAGE=llvm
 	TARGETS=(
 		# all
 		host
-
-		# AArch64
-		# AMDGPU
-		# ARM
-		# AVR
-		# BPF
-		# Hexagon
-		# Lanai
-		# LoongArch
-		# Mips
-		# MSP430
-		# NVPTX
-		# PowerPC
-		# RISCV
-		# Sparc
-		# SystemZ
-		# VE
-		# WebAssembly
-		# X86
-		# XCore
 	)
 
 	CMAKE_OPTIONS=(

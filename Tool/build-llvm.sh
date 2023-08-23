@@ -71,17 +71,6 @@ PACKAGE=llvm
 
 	SOURCE_DIR="${PACKAGE}"
 
-	# case "${HOST_TRIPLE}" in
-	# 	x86_64-pc-cygwin )
-	# 		case ${VERSION} in
-	# 			10.0.* | 11.0.* )
-	# 				echo "clang 10.0.* 11.0.* can't be built, because Cygwin does not support sigaction currently"
-	# 				exit 1
-	# 				;;
-	# 		esac
-	# 		;;
-	# esac
-
 	PROJECTS=(
 		clang
 		clang-tools-extra
@@ -99,26 +88,6 @@ PACKAGE=llvm
 	TARGETS=(
 		all
 		# host
-
-		# AArch64
-		# AMDGPU
-		# ARM
-		# AVR
-		# BPF
-		# Hexagon
-		# Lanai
-		# LoongArch
-		# Mips
-		# MSP430
-		# NVPTX
-		# PowerPC
-		# RISCV
-		# Sparc
-		# SystemZ
-		# VE
-		# WebAssembly
-		# X86
-		# XCore
 	)
 
 	CMAKE_OPTIONS=()

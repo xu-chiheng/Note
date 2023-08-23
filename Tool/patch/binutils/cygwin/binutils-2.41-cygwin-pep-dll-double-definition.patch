@@ -1,0 +1,18 @@
+--- origsrc/binutils-2.41/ld/configure.tgt
++++ src/binutils-2.41/ld/configure.tgt
+@@ -1050,12 +1050,12 @@
+ 			;;
+ x86_64-*-cygwin)	targ_emul=i386pep ;
+ 			targ_extra_emuls=i386pe
+-			targ_extra_ofiles="deffilep.o pdb.o pep-dll.o pe-dll.o"
++			targ_extra_ofiles="deffilep.o pdb.o pe-dll.o"
+ 			test "$targ" != "$host" && LIB_PATH='${tooldir}/lib/w32api'
+ 			;;
+ x86_64-*-mingw*)	targ_emul=i386pep ;
+ 			targ_extra_emuls=i386pe
+-			targ_extra_ofiles="deffilep.o pdb.o pep-dll.o pe-dll.o"
++			targ_extra_ofiles="deffilep.o pdb.o pe-dll.o"
+ 			;;
+ x86_64-*-gnu*)		targ_emul=elf_x86_64
+ 			targ_extra_emuls="elf32_x86_64 elf_iamcu elf_i386"
+

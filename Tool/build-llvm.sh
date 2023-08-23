@@ -32,7 +32,6 @@ cd "$(dirname "$0")"
 # https://llvm.org/docs/AdvancedBuilds.html
 # https://llvm.org/docs/BuildingADistribution.html
 
-
 # https://fuchsia.dev/fuchsia-src/development/build/toolchain
 
 # 2016 LLVM Developers’ Meeting: C. Bieneman "Developing and Shipping LLVM and Clang with CMake"
@@ -41,17 +40,9 @@ cd "$(dirname "$0")"
 # 2017 LLVM Developers’ Meeting: Petr Hosek "Compiling cross-toolchains with CMake and runtimes build"
 # https://www.youtube.com/watch?v=OCQGpUzXDsY
 
-
 # https://llvm.org/docs/CMakePrimer.html
 # https://llvm.org/docs/AdvancedBuilds.html
 
-
-
-# CMAKE_BUILD_TYPE
-# Release
-# Debug
-# RelWithDebInfo
-# MinSizeRel
 CURRENT_DATETIME="$(current_datetime)"
 PACKAGE=llvm
 {
@@ -66,7 +57,7 @@ PACKAGE=llvm
 	# VERSION=16.0.6
 	# VERSION=17.0.0
 	VERSION=18.0.0 # commit 2827aa9dafa7e0c45697bf4fc5b067cae26623c4 2023-08-14
-	GIT_TAG="llvmorg-${VERSION}"
+	GIT_TAG="$(llvm_git_tag_from_version "${VERSION}")"
 	GIT_REPO_URL="https://github.com/llvm/llvm-project"
 
 	SOURCE_DIR="${PACKAGE}"

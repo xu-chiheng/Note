@@ -25,9 +25,6 @@
 cd "$(dirname "$0")"
 . "./common.sh"
 
-# Release
-# Debug
-
 CURRENT_DATETIME="$(current_datetime)"
 PACKAGE=gcc
 {
@@ -37,12 +34,13 @@ PACKAGE=gcc
 		x86_64-elf
 		aarch64-elf
 		riscv64-elf
-		i686-elf
-		arm-eabi
-		riscv32-elf
 
-		# http://sourceware-org.1504.n7.nabble.com/Fail-to-build-gcc-with-target-arm-elf-td240634.html
-		# arm-elf support was obsoleted in gcc-4.7 and dropped in gcc-4.8.
+		# -m32
+		# i686-elf
+		# arm-eabi
+		# riscv32-elf
+
+		# x86_64-pep
 	)
 
 	time_command build_and_install_cross_gcc_for_targets \

@@ -1,0 +1,91 @@
+# -*- mode: sh; sh-shell: bash -*-
+BUILD_REQUIRES="  dejagnu"
+BUILD_REQUIRES+=" libgmp-devel libiconv-devel libintl-devel libisl-devel libmpc-devel libmpfr-devel zlib-devel"
+TOOLCHAIN_TARGET="native"
+inherit toolchain
+NAME="binutils"
+VERSION="2.41"
+RELEASE="3"
+CATEGORY="Devel"
+SUMMARY="GNU assembler, linker, and similar utilities"
+DESCRIPTION="This directory contains various GNU compilers, assemblers, linkers,
+debuggers, etc., plus their support routines, definitions, and documentation."
+HOMEPAGE="https://www.gnu.org/software/binutils/"
+LICENSE="GFDL-1.3-only AND GPL-3.0-or-later"
+
+if [[ ${PV} = *git* ]] ; then
+    GIT_URI="git://sourceware.org/git/binutils-gdb.git"
+    inherit git
+    #GIT_REV=9ac06b967fdaac7991591fdb89357da173b2f095
+    GIT_TAG="binutils-2_35_1"
+    SRC_DIR=binutils-gdb
+else
+    mirror_sourceware=" https://mirrors.kernel.org/sourceware/"
+    SRC_URI="
+      mirror://sourceware/${PN}/releases/${P}.tar.xz
+      mirror://sourceware/${PN}/releases/${P}.tar.xz.sig
+    "
+fi
+PATCH_URI="
+  ${P}-cygwin-config-rpath.patch
+  ${P}-cygwin-pep-dll-double-definition.patch
+  https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=f82ee0c8dc4ee32556e23e6cd83ef083618f704f#/${P}-cygwin-restore-bfd-seek-optimization.patch
+"
+DISTCLEANFILES="*/*.1 */doc/*.1 binutils/doc/*.man"
+
+# gdb,etc.: https://sourceware.org/ml/binutils/2014-01/msg00341.html
+BINUTILS_NO_GDB="
+  --disable-gdb
+  --disable-libdecnumber
+  --disable-readline
+  --disable-sim
+"
+CYGCONF_ARGS="
+  ${BINUTILS_NO_GDB}
+  --enable-64-bit-bfd
+  --enable-install-libiberty
+  --enable-targets=x86_64-pep
+  --with-system-zlib
+  --with-gcc-major-version-only
+"
+# --enable-targets=all
+# --enable-targets=i686-efi-pe,x86_64-efi-pe,ia64-efi-elf,x86_64-pc-cygwin,i686-pc-cygwin
+# --enable-targets=x86_64-pc-cygwin,i686-pc-cygwin,i686-efi-pe,x86_64-efi-pe,ia64-efi-elf,i686-pc-linux-gnu,x86_64-pc-linux-gnu
+
+# APIs are unstable, do not allow linking against DLLs
+# define for shared libbfd/libopcodes
+# BINUTILS_SHARED_LIBS="true"
+if defined BINUTILS_SHARED_LIBS ; then
+    inform "CONFIG: enable shared libraries"
+    CYGCONF_ARGS+="--enable-shared --enable-host-shared lt_cv_deplibs_check_method=pass_all"
+    # this patch set does not apply cleanly anymore and leads to errors
+    PATCH_URI+="
+      ${P}-cygwin-shared-libs.patch
+    "
+else
+    inform "CONFIG: disable shared libraries"
+    CYGCONF_ARGS+="--disable-shared --disable-host-shared"
+fi
+
+src_install() {
+    cd ${B}
+    cyginstall
+
+    if defined BINUTILS_SHARED_LIBS ; then
+	inform "CONFIG:  apply fixup to not allow linking against DLL"
+	rm -f ${D}/usr/lib/*.dll.a
+	sed -i -e '/^library_names=/d' ${D}/usr/lib/lib*.la
+    else
+	inform "CONFIG:  Do not apply DLL linking fixup."
+    fi
+}
+
+src_test() {
+    cd ${B}
+    # windres test causes an expect infloop after results are output
+    DEJAGNU=/dev/null \
+    RUNTESTFLAGS="--ignore windres.exp" \
+    cygmake check
+    # doesn't work due to not yet built dependencies
+    # cygtest
+}

@@ -1,0 +1,60 @@
+TOOLCHAIN_TARGET="native"
+inherit python3 toolchain
+
+NAME="gdb"
+VERSION=13.2
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="The GNU Debugger"
+DESCRIPTION="The GNU debugger, allows you to debug programs written in C, C++,
+and other languages, by executing them in a controlled fashion
+and printing their data."
+HOMEPAGE="http://sourceware.org/gdb/"
+LICENSE="GPL-3.0-or-later"
+
+SRC_URI="ftp://sourceware.org/pub/gdb/releases/gdb-${VERSION}.tar.xz"
+SRC_DIR="gdb-${VERSION}"
+PATCH_URI="
+0001-Teach-gdb-how-to-unwind-cygwin-_sigbe-and-sigdelayed.patch
+0002-Only-ignore-expected-Cygwin-OutputDebugStrings.patch
+0003-Fix-potential-memory-leak-after-using-realpath-on-Cy.patch
+0004-7.8-symtab-cygwin.patch.patch
+0005-Drop-special-way-of-getting-inferior-context-after-a.patch
+0006-Use-cygwin-pgid-if-inferior-is-a-cygwin-process.patch
+"
+RESTRICT="postinst-doc"
+BUILD_REQUIRES="libexpat-devel libguile3.0-devel libiconv-devel libintl-devel liblzma-devel libmpfr-devel libncurses-devel libreadline-devel libsource-highlight-devel libxxhash-devel libzstd-devel python39 python39-devel zlib-devel"
+REQUIRES="libiconv"
+
+# Change the version that gets printed at GDB startup to identify the package
+# it came from, while still conforming to GNU standards, which require that
+# the version number proper starts after the last space on the line.
+CYGPORT_USE_UNSTABLE_API=1
+src_unpack_hook() {
+        echo "(Cygwin ${VERSION}-${RELEASE}) ${VERSION}" >gdb/version.in
+}
+
+src_compile() {
+	cd ${B}
+	cygconf --disable-werror --enable-tui --disable-gdbtk \
+		--with-expat --with-lzma --with-mpfr --with-xxhash \
+		--with-python=python3.9 \
+		--without-libexpat-prefix --with-system-readline --with-system-zlib \
+		--without-static-standard-libraries
+	cygmake
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	python_optimize /usr/share/gdb/python
+
+	# these are shipped by binutils
+	rm -fr ${D}/usr/{include,lib}/ ${D}/usr/share/locale/
+	rm -f ${D}/usr/share/info/{bfd,configure,standards}.info
+
+	# install standard documentation files from ${S}/gdb/ not ${S}/
+        cd ${S}/gdb
+        dodoc ChangeLog COPYING MAINTAINERS NEWS README
+}

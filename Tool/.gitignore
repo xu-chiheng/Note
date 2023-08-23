@@ -3,11 +3,9 @@
 /llvm*
 /clang*
 /qemu*
-/*-gcc-*
 /gmp*
 /mpfr*
 /mpc*
-/binutils-gdb*
 /binutils*
 /gdb*
 /*.xz

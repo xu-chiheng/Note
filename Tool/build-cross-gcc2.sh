@@ -35,61 +35,6 @@ PACKAGE=gcc
 		x86_64-pc-msys
 		x86_64-pc-mingw64
 		x86_64-pc-linux
-
-		# The directory that should contain system headers does not exist:
-		#   /mingw/include
-		# make[1]: *** [Makefile:3267: stmp-fixinc] Error 1
-		# rm gfdl.pod gcc.pod gcov-dump.pod gcov-tool.pod fsf-funding.pod gpl.pod cpp.pod gcov.pod lto-dump.pod
-		# make[1]: Leaving directory '/c/Users/Administrator/Tool/gcc-x86_64-pc-mingw64-release-build/gcc'
-		# make: *** [Makefile:4285: all-gcc] Error 2
-
-
-
-
-
-
-
-		# *** ld does not support target x86_64-pc-coff
-		# *** see ld/configure.tgt for supported targets
-
-		# *** BFD does not support target x86_64-pc-coff.
-		# *** Look in bfd/config.bfd for supported targets.
-
-		# *** Configuration x86_64-pc-pe not supported
-		# make: *** [Makefile:4211: configure-gcc] Error 1
-
-		# both x86_64-coff and x86_64-pe do not work
-
-
-		# for x86_64-pc-mingw64 to x86_64-pc-cygwin cross compiling, has the following error:
-		# checking how to run the C preprocessor... /lib/cpp
-		# configure: error: in `/e/Note/Tool/gcc-x86_64-pc-cygwin-release-build/x86_64-pc-cygwin/libgcc':
-		# configure: error: C preprocessor "/lib/cpp" fails sanity check
-		# See `config.log' for more details
-		# make: *** [Makefile:13996: configure-target-libgcc] Error 1
-		# x86_64-pc-cygwin
-
-
-		# for x86_64-pc-cygwin to x86_64-pc-mingw64 cross compiling, has the following error:
-		# ../../../gcc/libgcc/libgcc2.c:2276:10: fatal error: windows.h: No such file or directory
-		#  2276 | #include <windows.h>
-		#       |          ^~~~~~~~~~~
-		# compilation terminated.
-
-		# for non cross compiling, has the following error:
-		# The directory that should contain system headers does not exist:
-		# /mingw/include
-		# make[1]: *** [Makefile:3267: stmp-fixinc] Error 1
-		# rm gfdl.pod gcc.pod gcov-dump.pod gcov-tool.pod fsf-funding.pod gpl.pod cpp.pod gcov.pod lto-dump.pod
-		# make[1]: Leaving directory '/c/Users/Administrator/Tool/gcc-x86_64-pc-mingw64-release-build/gcc'
-		# make: *** [Makefile:4285: all-gcc] Error 2
-		# x86_64-pc-mingw64
-
-		# *** Configuration x86_64-windows-pe not supported
-		# make: *** [Makefile:4222: configure-gcc] Error 1
-		# but Clang support this target
-		# x86_64-windows-pe
-
 	)
 
 	time_command build_and_install_cross_gcc_for_targets \

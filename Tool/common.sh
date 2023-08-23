@@ -156,9 +156,19 @@ binutils_git_tag_from_version() {
 	echo "binutils-$(echo "${version}" | sed -e 's/\./_/g' )"
 }
 
+gdb_git_tag_from_version() {
+	local version="$1"
+	echo "gdb-${version}-release"
+}
+
 gcc_git_tag_from_version() {
 	local version="$1"
 	echo "releases/gcc-${version}"
+}
+
+llvm_git_tag_from_version() {
+	local version="$1"
+	echo "llvmorg-${version}"
 }
 
 git_checkout_dir_revision() {
@@ -332,7 +342,7 @@ gcc_pushd_and_configure() {
 # }
 
 
-do_copy_dependent_dlls() {
+copy_dependent_dlls() {
 	local host_triple="$1"
 	local install_dir="$2"
 	local install_exe_dir="$3"
@@ -378,7 +388,7 @@ do_copy_dependent_dlls() {
 	esac
 }
 
-do_build_and_install_gmp_mpfr_mpc() {
+build_and_install_gmp_mpfr_mpc() {
 	local build_type="$1"
 	local gmp_mpfr_mpc_install_dir="$2"
 
@@ -446,6 +456,8 @@ build_and_install_binutils_gcc_for_target() {
 			--prefix="${install_prefix}"
 			--disable-nls
 			--disable-werror
+			# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
+			--disable-gdb --disable-libdecnumber --disable-readline --disable-sim
 	)
 	local gcc_configure_options=(
 			--without-headers
@@ -525,9 +537,7 @@ build_and_install_cross_gcc_for_targets() {
 	local gcc_version=12.3.0
 	local binutils_version=2.36
 
-	# bintuils 2.40 can't be built on Cygwin, due to too new version of texinfo/makeinfo package.
-
-	# Note: bintuils 2.37 2.38 and maybe 2.39 can't handle the following line in kernel link script
+	# Note: bintuils 2.37 2.38 2.39 2.40 2.41 can't handle the following line in kernel link script
 	#   .head           : { head.o (.multiboot) head.o (.*) }
 	# it can't do relocation of 32 bit code in head.o, due to commit 17c6c3b99156fe82c1e637e1a5fd9f163ac788c8
 
@@ -543,10 +553,9 @@ build_and_install_cross_gcc_for_targets() {
 	local gmp_mpfr_mpc_install_dir="gmp-mpfr-mpc-${build_type,,}-install"
 
 	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
-		time_command do_build_and_install_gmp_mpfr_mpc "${build_type}" "${gmp_mpfr_mpc_install_dir}" 2>&1 | tee "~${current_datetime}-gmp-mpfr-mpc-output.txt"
+		time_command build_and_install_gmp_mpfr_mpc "${build_type}" "${gmp_mpfr_mpc_install_dir}" 2>&1 | tee "~${current_datetime}-gmp-mpfr-mpc-output.txt"
 	fi \
 	&& time_command check_dir_maybe_clone_and_checkout_tag "${binutils_source_dir}" "${binutils_git_tag}" "${binutils_git_repo_url}" \
-	&& echo_command binutils_source_dir_prepare "${binutils_source_dir}" \
 	&& time_command check_dir_maybe_clone_and_checkout_tag "${gcc_source_dir}" "${gcc_git_tag}" "${gcc_git_repo_url}" \
 	\
 	&& echo "building binutils and gcc ......" \
@@ -561,29 +570,13 @@ build_and_install_cross_gcc_for_targets() {
 	&& time_command sync
 }
 
-binutils_source_dir_prepare() {
-	local source_dir="$1"
-	echo_command rm -rf "${source_dir}"/{contrib,gdb,gdbserver,gdbsupport,gnulib,libdecnumber,readline,sim}
-}
-
-gdb_source_dir_prepare() {
-	local source_dir="$1"
-	# TODO: FIX
-	echo_command rm -rf "${source_dir}"/{contrib,gdb,gdbserver,gdbsupport,gnulib,libdecnumber,readline,sim}
-}
-
-
 pre_generate_build_install_package() {
 	local host_triple="$1"
 	local package="$2"
 	local source_dir="$3"
 	local install_dir="$4"
 
-	if [ "${package}" = binutils ]; then
-		echo_command binutils_source_dir_prepare "${source_dir}"
-	elif [ "${package}" = gdb ]; then
-		echo_command gdb_source_dir_prepare "${source_dir}"
-	elif [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
+	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
 		echo_command mingw_gcc_check_or_create_directory_links /mingw \
 		&& echo_command mingw_gcc_check_or_create_directory_links "${install_dir}/mingw" \
 		&& echo_command mingw_gcc_check_or_create_directory_links "${install_dir}/${host_triple}"
@@ -598,7 +591,7 @@ post_generate_build_install_package() {
 	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = qemu ]; then
-		echo_command do_copy_dependent_dlls "${host_triple}" "${install_dir}" "."
+		echo_command copy_dependent_dlls "${host_triple}" "${install_dir}" "."
 	elif [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
 		true
 	fi

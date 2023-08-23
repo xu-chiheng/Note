@@ -64,21 +64,6 @@ mingw_gcc_check_or_create_directory_links() {
 	fi
 }
 
-# mingw_gcc_remove_directory_links_0() {
-# 	rm -rf /mingw
-# }
-
-# mingw_gcc_remove_directory_links_1() {
-# 	local install_dir="$1"
-# 	rm -rf "${install_dir}/mingw"
-# }
-
-# mingw_gcc_remove_directory_links_2() {
-# 	local host_triple="$1"
-# 	local install_dir="$2"
-# 	rm -rf "${install_dir}/${host_triple}"/{include,lib}
-# }
-
 set_environment_variables_at_bash_startup() {
 	export HOST_TRIPLE="$(~/config.guess)"
 	export TZ=Asia/Shanghai

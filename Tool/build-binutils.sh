@@ -30,13 +30,15 @@ PACKAGE="binutils"
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
-	VERSION=2.36
+	VERSION=2.41
 	GIT_TAG="$(binutils_git_tag_from_version "${VERSION}")"
 	GIT_REPO_URL="git://sourceware.org/git/binutils-gdb.git"
 
 	CONFIGURE_OPTIONS=(
 		--disable-nls
 		--disable-werror
+		# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
+		--disable-gdb --disable-libdecnumber --disable-readline --disable-sim
 	)
 
 	time_command configure_build_install_package \

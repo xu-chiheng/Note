@@ -33,36 +33,6 @@
 
 # default umask is 022, default new file mode is 755
 
-# https://stackoverflow.com/questions/1527049/how-can-i-join-elements-of-a-bash-array-into-a-delimited-string
-# https://dev.to/meleu/how-to-join-array-elements-in-a-bash-script-303a
-# https://zaiste.net/posts/how-to-join-elements-of-array-bash/
-array_elements_join() {
-	local IFS="$1"
-	shift
-	echo "$*"
-}
-
-array_elements_print() {
-	local element
-	for element in "$@"; do
-		echo "		${element}"
-	done
-}
-
-mingw_gcc_check_or_create_directory_links() {
-	local mingw_sysroot="$1"
-	if ! { \
-		[ -e "${mingw_sysroot}"/include ] \
-		&& [ -e "${mingw_sysroot}"/lib ] \
-		&& [ "$(readlink -f "${mingw_sysroot}"/include)" = "$(readlink -f /mingw64/include)" ] \
-		&& [ "$(readlink -f "${mingw_sysroot}"/lib)" = "$(readlink -f /mingw64/lib)" ] \
-	;}; then
-		rm -rf "${mingw_sysroot}"/{include,lib} \
-		&& mkdir -p "${mingw_sysroot}" \
-		&& ln -s /mingw64/include "${mingw_sysroot}"/include \
-		&& ln -s /mingw64/lib "${mingw_sysroot}"/lib
-	fi
-}
 
 set_environment_variables_at_bash_startup() {
 	export HOST_TRIPLE="$(~/config.guess)"
@@ -236,6 +206,37 @@ set_environment_variables_at_bash_startup() {
 			;;
 	esac
 
+}
+
+mingw_gcc_check_or_create_directory_links() {
+	local mingw_sysroot="$1"
+	if ! { \
+		[ -e "${mingw_sysroot}"/include ] \
+		&& [ -e "${mingw_sysroot}"/lib ] \
+		&& [ "$(readlink -f "${mingw_sysroot}"/include)" = "$(readlink -f /mingw64/include)" ] \
+		&& [ "$(readlink -f "${mingw_sysroot}"/lib)" = "$(readlink -f /mingw64/lib)" ] \
+	;}; then
+		rm -rf "${mingw_sysroot}"/{include,lib} \
+		&& mkdir -p "${mingw_sysroot}" \
+		&& ln -s /mingw64/include "${mingw_sysroot}"/include \
+		&& ln -s /mingw64/lib "${mingw_sysroot}"/lib
+	fi
+}
+
+# https://stackoverflow.com/questions/1527049/how-can-i-join-elements-of-a-bash-array-into-a-delimited-string
+# https://dev.to/meleu/how-to-join-array-elements-in-a-bash-script-303a
+# https://zaiste.net/posts/how-to-join-elements-of-array-bash/
+array_elements_join() {
+	local IFS="$1"
+	shift
+	echo "$*"
+}
+
+array_elements_print() {
+	local element
+	for element in "$@"; do
+		echo "		${element}"
+	done
 }
 
 echo_command() {

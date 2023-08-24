@@ -38,8 +38,8 @@ PACKAGE="qemu"
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
 	VERSION=7.1.0
-	GIT_TAG="v${VERSION}"
-	GIT_REPO_URL="https://gitlab.com/qemu-project/qemu.git"
+	GIT_TAG="$(git_tag_of_package_version "${PACKAGE}" "${VERSION}")"
+	GIT_REPO_URL="$(git_repo_url_of_package "${PACKAGE}")"
 
 	CONFIGURE_OPTIONS=(
 		--enable-gtk

@@ -151,24 +151,55 @@ maybe_git_filemode_false() {
 	esac
 }
 
-binutils_git_tag_from_version() {
-	local version="$1"
-	echo "binutils-$(echo "${version}" | sed -e 's/\./_/g' )"
+git_tag_of_package_version() {
+	local package="$1"
+	local version="$2"
+	case "${package}" in
+		binutils )
+			echo "binutils-$(echo "${version}" | sed -e 's/\./_/g' )"
+			;;
+		gdb )
+			echo "gdb-${version}-release"
+			;;
+		gcc )
+			echo "releases/gcc-${version}"
+			;;
+		llvm )
+			echo "llvmorg-${version}"
+			;;
+		qemu )
+			echo "v${version}"
+			;;
+		* )
+			echo "unknown package : ${package}"
+			exit 1
+			;;
+	esac
 }
 
-gdb_git_tag_from_version() {
-	local version="$1"
-	echo "gdb-${version}-release"
-}
-
-gcc_git_tag_from_version() {
-	local version="$1"
-	echo "releases/gcc-${version}"
-}
-
-llvm_git_tag_from_version() {
-	local version="$1"
-	echo "llvmorg-${version}"
+git_repo_url_of_package() {
+	local package="$1"
+	case "${package}" in
+		binutils )
+			echo "git://sourceware.org/git/binutils-gdb.git"
+			;;
+		gdb )
+			echo "git://sourceware.org/git/binutils-gdb.git"
+			;;
+		gcc )
+			echo "git://gcc.gnu.org/git/gcc.git"
+			;;
+		llvm )
+			echo "https://github.com/llvm/llvm-project"
+			;;
+		qemu )
+			echo "https://gitlab.com/qemu-project/qemu.git"
+			;;
+		* )
+			echo "unknown package : ${package}"
+			exit 1
+			;;
+	esac
 }
 
 git_checkout_dir_revision() {
@@ -541,14 +572,14 @@ build_and_install_cross_gcc_for_targets() {
 	#   .head           : { head.o (.multiboot) head.o (.*) }
 	# it can't do relocation of 32 bit code in head.o, due to commit 17c6c3b99156fe82c1e637e1a5fd9f163ac788c8
 
-	local gcc_git_tag="$(gcc_git_tag_from_version "${gcc_version}")"
-	local binutils_git_tag="$(binutils_git_tag_from_version "${binutils_version}")"
+	local gcc_git_tag="$(git_tag_of_package_version gcc "${gcc_version}")"
+	local binutils_git_tag="$(git_tag_of_package_version binutils "${binutils_version}")"
 
-	local gcc_git_repo_url="git://gcc.gnu.org/git/gcc.git"
-	local binutils_git_repo_url="git://sourceware.org/git/binutils-gdb.git"
+	local gcc_git_repo_url="$(git_repo_url_of_package gcc)"
+	local binutils_git_repo_url="$(git_repo_url_of_package binutils)"
 
 	local gcc_source_dir="gcc"
-	local binutils_source_dir="binutils-gdb"
+	local binutils_source_dir="binutils"
 
 	local gmp_mpfr_mpc_install_dir="gmp-mpfr-mpc-${build_type,,}-install"
 
@@ -592,8 +623,6 @@ post_generate_build_install_package() {
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = qemu ]; then
 		echo_command copy_dependent_dlls "${host_triple}" "${install_dir}" "."
-	elif [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		true
 	fi
 }
 

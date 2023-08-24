@@ -31,8 +31,8 @@ PACKAGE="gcc"
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
 	VERSION=13.2.0
-	GIT_TAG="$(gcc_git_tag_from_version "${VERSION}")"
-	GIT_REPO_URL="git://gcc.gnu.org/git/gcc.git"
+	GIT_TAG="$(git_tag_of_package_version "${PACKAGE}" "${VERSION}")"
+	GIT_REPO_URL="$(git_repo_url_of_package "${PACKAGE}")"
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )

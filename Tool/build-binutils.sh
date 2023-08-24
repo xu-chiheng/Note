@@ -31,8 +31,8 @@ PACKAGE="binutils"
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
 	VERSION=2.41
-	GIT_TAG="$(binutils_git_tag_from_version "${VERSION}")"
-	GIT_REPO_URL="git://sourceware.org/git/binutils-gdb.git"
+	GIT_TAG="$(git_tag_of_package_version "${PACKAGE}" "${VERSION}")"
+	GIT_REPO_URL="$(git_repo_url_of_package "${PACKAGE}")"
 
 	CONFIGURE_OPTIONS=(
 		--disable-nls

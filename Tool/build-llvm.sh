@@ -57,8 +57,6 @@ PACKAGE=llvm
 	# VERSION=16.0.6
 	# VERSION=17.0.0
 	VERSION=18.0.0 # commit 2827aa9dafa7e0c45697bf4fc5b067cae26623c4 2023-08-14
-	GIT_TAG="$(git_tag_of_package_version "${PACKAGE}" "${VERSION}")"
-	GIT_REPO_URL="$(git_repo_url_of_package "${PACKAGE}")"
 
 	SOURCE_DIR="${PACKAGE}"
 
@@ -165,7 +163,7 @@ PACKAGE=llvm
 
 	time_command cmake_build_install_package \
 		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
-		"${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" \
+		"${PACKAGE}" "${VERSION}" \
 		"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" \
 		"${CMAKE_OPTIONS[@]}"
 

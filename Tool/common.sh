@@ -600,12 +600,10 @@ build_and_install_cross_gcc_for_targets() {
 }
 
 pre_generate_build_install_package() {
-	local toolchain="$1"
-	local build_type="$2"
-	local host_triple="$3"
-	local package="$4"
-	local source_dir="$5"
-	local install_dir="$6"
+	local host_triple="$1"
+	local package="$2"
+	local source_dir="$3"
+	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
 		echo_command mingw_gcc_check_or_create_directory_links /mingw \
@@ -615,12 +613,10 @@ pre_generate_build_install_package() {
 }
 
 post_generate_build_install_package() {
-	local toolchain="$1"
-	local build_type="$2"
-	local host_triple="$3"
-	local package="$4"
-	local source_dir="$5"
-	local install_dir="$6"
+	local host_triple="$1"
+	local package="$2"
+	local source_dir="$3"
+	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = qemu ]; then
 		echo_command copy_dependent_dlls "${host_triple}" "${install_dir}" "."
@@ -635,22 +631,22 @@ generate_build_install_package() {
 	local install_dir="$5"
 	local package="$6"
 	local version="$7"
-	local git_tag="$8"
-	local git_repo_url="$9"
-	local pushd_and_generate_command="${10}"
-	shift 10
+	local pushd_and_generate_command="$8"
+	shift 8
 	local bin_tarball="${package}-${version}.tar"
+	local git_tag="$(git_tag_of_package_version "${package}" "${version}")"
+	local git_repo_url="$(git_repo_url_of_package "${package}")"
 
 	# https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
 
 	time_command check_dir_maybe_clone_and_checkout_tag "${source_dir}" "${git_tag}" "${git_repo_url}" \
 	&& echo_command rm -rf "${install_dir}" \
-	&& pre_generate_build_install_package "${toolchain}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+	&& pre_generate_build_install_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& { time_command "${pushd_and_generate_command}" "$@" \
 		&& time_command parallel_make \
 		&& time_command parallel_make install \
 		&& echo_command popd;} \
-	&& post_generate_build_install_package "${toolchain}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+	&& post_generate_build_install_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${install_dir}" \
 	&& time_command sync
 }
@@ -661,14 +657,12 @@ cmake_build_install_package() {
 	local host_triple="$3"
 	local package="$4"
 	local version="$5"
-	local git_tag="$6"
-	local git_repo_url="$7"
-	local cc="$8"
-	local cxx="$9"
-	local cflags="${10}"
-	local cxxflags="${11}"
-	local ldflags="${12}"
-	shift 12
+	local cc="$6"
+	local cxx="$7"
+	local cflags="$8"
+	local cxxflags="$9"
+	local ldflags="${10}"
+	shift 10
 
 	local source_dir="${package}"
 	local build_dir="${source_dir}-${build_type,,}-build"
@@ -690,7 +684,7 @@ cmake_build_install_package() {
 
 	time_command generate_build_install_package \
 		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" \
-		"${package}" "${version}" "${git_tag}" "${git_repo_url}" \
+		"${package}" "${version}" \
 		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
@@ -700,9 +694,7 @@ configure_build_install_package() {
 	local host_triple="$3"
 	local package="$4"
 	local version="$5"
-	local git_tag="$6"
-	local git_repo_url="$7"
-	shift 7
+	shift 5
 
 	local source_dir="${package}"
 	local build_dir="${source_dir}-${build_type,,}-build"
@@ -716,7 +708,7 @@ configure_build_install_package() {
 
 	time_command generate_build_install_package \
 		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" \
-		"${package}" "${version}" "${git_tag}" "${git_repo_url}" \
+		"${package}" "${version}" \
 		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
 }
 
@@ -726,9 +718,7 @@ gcc_configure_build_install_package() {
 	local host_triple="$3"
 	local package="$4"
 	local version="$5"
-	local git_tag="$6"
-	local git_repo_url="$7"
-	shift 7
+	shift 5
 
 	local source_dir="${package}"
 	local build_dir="${source_dir}-${build_type,,}-build"
@@ -742,6 +732,6 @@ gcc_configure_build_install_package() {
 
 	time_command generate_build_install_package \
 		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" \
-		"${package}" "${version}" "${git_tag}" "${git_repo_url}" \
+		"${package}" "${version}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" "$(array_elements_join ',' "${languages[@]}")" "${host_triple}" "$@"
 }

@@ -31,8 +31,6 @@ PACKAGE="gdb"
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
 	VERSION=13.2
-	GIT_TAG="$(git_tag_of_package_version "${PACKAGE}" "${VERSION}")"
-	GIT_REPO_URL="$(git_repo_url_of_package "${PACKAGE}")"
 
 	CONFIGURE_OPTIONS=(
 		--disable-nls
@@ -43,7 +41,7 @@ PACKAGE="gdb"
 
 	time_command configure_build_install_package \
 		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
-		"${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" \
+		"${PACKAGE}" "${VERSION}" \
 		"${CONFIGURE_OPTIONS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"

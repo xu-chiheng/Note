@@ -48,7 +48,7 @@ PACKAGE="qemu"
 	)
 
 	time_command configure_build_install_package \
-		"${BUILD_TYPE}" "${HOST_TRIPLE}" \
+		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
 		"${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" \
 		"${CONFIGURE_OPTIONS[@]}"
 

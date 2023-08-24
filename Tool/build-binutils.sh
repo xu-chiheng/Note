@@ -39,10 +39,11 @@ PACKAGE="binutils"
 		--disable-werror
 		# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
 		--disable-gdb --disable-libdecnumber --disable-readline --disable-sim
+		--enable-targets=all
 	)
 
 	time_command configure_build_install_package \
-		"${BUILD_TYPE}" "${HOST_TRIPLE}" \
+		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
 		"${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" \
 		"${CONFIGURE_OPTIONS[@]}"
 

@@ -20,8 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-
 check_toolchain_build_type_and_set_compiler_flags() {
 	local toolchain="$1"
 	local build_type="$2"
@@ -245,20 +243,23 @@ check_dir_maybe_clone_and_checkout_tag() {
 }
 
 maybe_make_tarball_and_move() {
-	local build_type="$1"
-	local tarball_name="$2"
-	local install_dir="$3"
-	local host_triple="$4"
+	local toolchain="$1"
+	local build_type="$2"
+	local host_triple="$3"
+	local tarball="$4"
+	local install_dir="$5"
 
-	if [ "${build_type}" != Debug ]; then
-		echo_command rm -rf "${tarball_name}" \
+	local dest_dir="${host_triple}/${toolchain,,}"
+
+	if [ "${build_type}" = Release ]; then
+		echo_command rm -rf "${tarball}"{,.sha512} \
 		&& { echo_command pushd "${install_dir}" \
-			&& time_command tar -cvf  "../${tarball_name}" * \
+			&& time_command tar -cvf  "../${tarball}" * \
 			&& echo_command popd;} \
-		&& time_command sha512_calculate_file "${tarball_name}" \
+		&& time_command sha512_calculate_file "${tarball}" \
 		\
-		&& echo_command mkdir -p "${host_triple}" \
-		&& time_command mv -f "${tarball_name}"{,.sha512} "${host_triple}"
+		&& echo_command mkdir -p "${dest_dir}" \
+		&& time_command mv -f "${tarball}"{,.sha512} "${dest_dir}"
 	fi
 }
 
@@ -366,13 +367,6 @@ gcc_pushd_and_configure() {
 	&& echo_command touch "${build_fixincludes_dir}/fixinc.sh"
 }
 
-
-# gcc_test() {
-#     time_command parallel_make -k check 2>&1 | tee "../gcc_test_$(current_datetime).txt"
-#     sync
-# }
-
-
 copy_dependent_dlls() {
 	local host_triple="$1"
 	local install_dir="$2"
@@ -465,19 +459,20 @@ build_and_install_gmp_mpfr_mpc() {
 
 build_and_install_binutils_gcc_for_target() {
 	local target="$1"
-	local build_type="$2"
-	local is_build_and_install_gmp_mpfr_mpc="$3"
-	local is_build_and_install_libgcc="$4"
-	local binutils_source_dir="$5"
-	local gcc_source_dir="$6"
-	local gmp_mpfr_mpc_install_dir="$7"
-	local host_triple="$8"
-	local package="$9"
-	local version="${10}"
+	local toolchain="$2"
+	local build_type="$3"
+	local host_triple="$4"
+	local is_build_and_install_gmp_mpfr_mpc="$5"
+	local is_build_and_install_libgcc="$6"
+	local binutils_source_dir="$7"
+	local gcc_source_dir="$8"
+	local gmp_mpfr_mpc_install_dir="$9"
+	local package="${10}"
+	local version="${11}"
 
 	local gcc_install_dir="${gcc_source_dir}-${target}-${build_type,,}-install"
 	local gcc_build_dir="${gcc_source_dir}-${target}-${build_type,,}-build"
-	local bin_tarball_name="${package}-${target}-${version}.tar"
+	local bin_tarball="${package}-${target}-${version}.tar"
 	local binutils_build_dir="${binutils_source_dir}-${target}-${build_type,,}-build"
 
 	local install_prefix="$(pwd)/${gcc_install_dir}"
@@ -490,10 +485,12 @@ build_and_install_binutils_gcc_for_target() {
 			# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
 			--disable-gdb --disable-libdecnumber --disable-readline --disable-sim
 	)
+
 	local gcc_configure_options=(
 			--without-headers
 			--target="${target}"
 	)
+
 	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
 		gcc_configure_options+=(
 			--with-gmp="${gmp_mpfr_mpc_install_dir}"
@@ -501,7 +498,6 @@ build_and_install_binutils_gcc_for_target() {
 			--with-mpc="${gmp_mpfr_mpc_install_dir}"
 		)
 	fi
-
 
 	local languages=(
 		# all
@@ -537,7 +533,7 @@ build_and_install_binutils_gcc_for_target() {
 		&& echo_command popd;} \
 	\
 	\
-	&& time_command maybe_make_tarball_and_move "${build_type}" "${bin_tarball_name}" "${gcc_install_dir}" "${host_triple}" \
+	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
 	\
 	&& echo_command export PATH="${old_path}"
 }
@@ -551,13 +547,16 @@ build_and_install_binutils_gcc_for_target() {
 # https://wiki.gentoo.org/wiki/Cross_build_environment
 # https://wiki.gentoo.org/wiki/Embedded_Handbook/General/Creating_a_cross-compiler
 build_and_install_cross_gcc_for_targets() {
-	local build_type="$1"
-	local is_build_and_install_gmp_mpfr_mpc="$2"
-	local is_build_and_install_libgcc="$3"
-	local host_triple="$4"
-	local current_datetime="$5"
-	local package="$6"
-	shift 6
+	local toolchain="$1"
+	local build_type="$2"
+	local host_triple="$3"
+	local is_build_and_install_gmp_mpfr_mpc="$4"
+	local is_build_and_install_libgcc="$5"
+	local current_datetime="$6"
+	local package="$7"
+	local gcc_version="$8"
+	local binutils_version="$9"
+	shift 9
 
 	local targets=( "$@" )
 	echo "targets :"
@@ -565,8 +564,6 @@ build_and_install_cross_gcc_for_targets() {
 	local target
 
 	# gcc 13.1.0 and binutils 2.36 combined will fail to build RISC-V libgcc, because of unrecognized new instructions.
-	local gcc_version=12.3.0
-	local binutils_version=2.36
 
 	# Note: bintuils 2.37 2.38 2.39 2.40 2.41 can't handle the following line in kernel link script
 	#   .head           : { head.o (.multiboot) head.o (.*) }
@@ -591,9 +588,10 @@ build_and_install_cross_gcc_for_targets() {
 	\
 	&& echo "building binutils and gcc ......" \
 	&& for target in "${targets[@]}"; do
-			time_command build_and_install_binutils_gcc_for_target "${target}" "${build_type}" \
+			time_command build_and_install_binutils_gcc_for_target \
+			"${target}" "${toolchain}" "${build_type}" "${host_triple}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${is_build_and_install_libgcc}" "${binutils_source_dir}" "${gcc_source_dir}" \
-			"${gmp_mpfr_mpc_install_dir}" "${host_triple}" "${package}" "${gcc_version}" \
+			"${gmp_mpfr_mpc_install_dir}" "${package}" "${gcc_version}" \
 			2>&1 | tee "~${current_datetime}-${package}-${target}-output.txt" &
 	done \
 	&& time_command wait \
@@ -602,24 +600,27 @@ build_and_install_cross_gcc_for_targets() {
 }
 
 pre_generate_build_install_package() {
-	local host_triple="$1"
-	local package="$2"
-	local source_dir="$3"
-	local install_dir="$4"
+	local toolchain="$1"
+	local build_type="$2"
+	local host_triple="$3"
+	local package="$4"
+	local source_dir="$5"
+	local install_dir="$6"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
 		echo_command mingw_gcc_check_or_create_directory_links /mingw \
 		&& echo_command mingw_gcc_check_or_create_directory_links "${install_dir}/mingw" \
 		&& echo_command mingw_gcc_check_or_create_directory_links "${install_dir}/${host_triple}"
 	fi
-
 }
 
 post_generate_build_install_package() {
-	local host_triple="$1"
-	local package="$2"
-	local source_dir="$3"
-	local install_dir="$4"
+	local toolchain="$1"
+	local build_type="$2"
+	local host_triple="$3"
+	local package="$4"
+	local source_dir="$5"
+	local install_dir="$6"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = qemu ]; then
 		echo_command copy_dependent_dlls "${host_triple}" "${install_dir}" "."
@@ -627,45 +628,47 @@ post_generate_build_install_package() {
 }
 
 generate_build_install_package() {
-	local build_type="$1"
-	local source_dir="$2"
-	local install_dir="$3"
-	local host_triple="$4"
-	local package="$5"
-	local version="$6"
-	local git_tag="$7"
-	local git_repo_url="$8"
-	local pushd_and_generate_command="$9"
-	shift 9
-	local bin_tarball_name="${package}-${version}.tar"
+	local toolchain="$1"
+	local build_type="$2"
+	local host_triple="$3"
+	local source_dir="$4"
+	local install_dir="$5"
+	local package="$6"
+	local version="$7"
+	local git_tag="$8"
+	local git_repo_url="$9"
+	local pushd_and_generate_command="${10}"
+	shift 10
+	local bin_tarball="${package}-${version}.tar"
 
 	# https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
 
 	time_command check_dir_maybe_clone_and_checkout_tag "${source_dir}" "${git_tag}" "${git_repo_url}" \
 	&& echo_command rm -rf "${install_dir}" \
-	&& pre_generate_build_install_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+	&& pre_generate_build_install_package "${toolchain}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& { time_command "${pushd_and_generate_command}" "$@" \
 		&& time_command parallel_make \
 		&& time_command parallel_make install \
 		&& echo_command popd;} \
-	&& post_generate_build_install_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
-	&& time_command maybe_make_tarball_and_move "${build_type}" "${bin_tarball_name}" "${install_dir}" "${host_triple}" \
+	&& post_generate_build_install_package "${toolchain}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${install_dir}" \
 	&& time_command sync
 }
 
 cmake_build_install_package() {
-	local build_type="$1"
-	local host_triple="$2"
-	local package="$3"
-	local version="$4"
-	local git_tag="$5"
-	local git_repo_url="$6"
-	local cc="$7"
-	local cxx="$8"
-	local cflags="$9"
-	local cxxflags="${10}"
-	local ldflags="${11}"
-	shift 11
+	local toolchain="$1"
+	local build_type="$2"
+	local host_triple="$3"
+	local package="$4"
+	local version="$5"
+	local git_tag="$6"
+	local git_repo_url="$7"
+	local cc="$8"
+	local cxx="$9"
+	local cflags="${10}"
+	local cxxflags="${11}"
+	local ldflags="${12}"
+	shift 12
 
 	local source_dir="${package}"
 	local build_dir="${source_dir}-${build_type,,}-build"
@@ -685,19 +688,21 @@ cmake_build_install_package() {
 			-DCMAKE_CXX_FLAGS="${cxxflags}"
 	)
 
-	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" \
-		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" \
+	time_command generate_build_install_package \
+		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" \
+		"${package}" "${version}" "${git_tag}" "${git_repo_url}" \
 		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
 configure_build_install_package() {
-	local build_type="$1"
-	local host_triple="$2"
-	local package="$3"
-	local version="$4"
-	local git_tag="$5"
-	local git_repo_url="$6"
-	shift 6
+	local toolchain="$1"
+	local build_type="$2"
+	local host_triple="$3"
+	local package="$4"
+	local version="$5"
+	local git_tag="$6"
+	local git_repo_url="$7"
+	shift 7
 
 	local source_dir="${package}"
 	local build_dir="${source_dir}-${build_type,,}-build"
@@ -709,19 +714,21 @@ configure_build_install_package() {
 			--prefix="${install_prefix}"
 	)
 
-	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" \
-		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" \
+	time_command generate_build_install_package \
+		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" \
+		"${package}" "${version}" "${git_tag}" "${git_repo_url}" \
 		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
 }
 
 gcc_configure_build_install_package() {
-	local build_type="$1"
-	local host_triple="$2"
-	local package="$3"
-	local version="$4"
-	local git_tag="$5"
-	local git_repo_url="$6"
-	shift 6
+	local toolchain="$1"
+	local build_type="$2"
+	local host_triple="$3"
+	local package="$4"
+	local version="$5"
+	local git_tag="$6"
+	local git_repo_url="$7"
+	shift 7
 
 	local source_dir="${package}"
 	local build_dir="${source_dir}-${build_type,,}-build"
@@ -733,7 +740,8 @@ gcc_configure_build_install_package() {
 		c++
 	)
 
-	time_command generate_build_install_package "${build_type}" "${source_dir}" "${install_dir}" \
-		"${host_triple}" "${package}" "${version}" "${git_tag}" "${git_repo_url}" \
+	time_command generate_build_install_package \
+		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" \
+		"${package}" "${version}" "${git_tag}" "${git_repo_url}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" "$(array_elements_join ',' "${languages[@]}")" "${host_triple}" "$@"
 }

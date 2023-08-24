@@ -38,10 +38,11 @@ PACKAGE="gdb"
 		--disable-nls
 		--disable-werror
 		--disable-gas --disable-binutils --disable-ld --disable-gprof
+		--enable-targets=all
 	)
 
 	time_command configure_build_install_package \
-		"${BUILD_TYPE}" "${HOST_TRIPLE}" \
+		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
 		"${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" \
 		"${CONFIGURE_OPTIONS[@]}"
 

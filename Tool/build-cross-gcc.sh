@@ -30,6 +30,9 @@ PACKAGE=gcc
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
+	GCC_VERSION=12.3.0
+	BINUTILS_VERSION=2.36
+
 	TARGETS=(
 		x86_64-elf
 		aarch64-elf
@@ -39,12 +42,12 @@ PACKAGE=gcc
 		# i686-elf
 		# arm-eabi
 		# riscv32-elf
-
-		# x86_64-pep
 	)
 
 	time_command build_and_install_cross_gcc_for_targets \
-		"${BUILD_TYPE}" yes yes "${HOST_TRIPLE}" "${CURRENT_DATETIME}" "${PACKAGE}" \
+		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
+		yes yes "${CURRENT_DATETIME}" \
+		"${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
 		"${TARGETS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"

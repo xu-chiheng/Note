@@ -30,15 +30,19 @@ PACKAGE=gcc
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
+	GCC_VERSION=12.3.0
+	BINUTILS_VERSION=2.36
+
 	TARGETS=(
 		x86_64-pc-cygwin
-		x86_64-pc-msys
 		x86_64-pc-mingw64
 		x86_64-pc-linux
 	)
 
 	time_command build_and_install_cross_gcc_for_targets \
-		"${BUILD_TYPE}" no no "${HOST_TRIPLE}" "${CURRENT_DATETIME}" "${PACKAGE}" \
+		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
+		no no "${CURRENT_DATETIME}" \
+		"${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
 		"${TARGETS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"

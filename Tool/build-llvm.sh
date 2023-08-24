@@ -164,7 +164,7 @@ PACKAGE=llvm
 	esac
 
 	time_command cmake_build_install_package \
-		"${BUILD_TYPE}" "${HOST_TRIPLE}" \
+		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
 		"${PACKAGE}" "${VERSION}" "${GIT_TAG}" "${GIT_REPO_URL}" \
 		"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" \
 		"${CMAKE_OPTIONS[@]}"

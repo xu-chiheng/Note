@@ -9,6 +9,8 @@ stage2 : Clang 16.0.6
 stage3 : Clang 16.0.6
 
 
+15.0.7
+patch_apply . ../patch/llvm/cygwin-{basic,cmodel-15.0.7,driver-15.0.7,general}.patch
 16.0.6
 patch_apply . ../patch/llvm/cygwin-{basic,cmodel,driver-16.0.6,general}.patch
 18.0.0
@@ -23,11 +25,8 @@ cygwin-general.patch
 remove some uses of macro __CYGWIN__ and fix build by Clang 16+.
 
 
-
-
-
-
-
+clang -v
+git show -s
 
 
 

@@ -2,4 +2,4 @@
 
 @set PATH="%CYGWIN_DIR%\bin";%PATH%
 
-@start mintty --exec bash.exe -i update.sh
+@start mintty.exe --exec bash -i update.sh

@@ -45,10 +45,8 @@ PACKAGE=cross-gcc
 	)
 
 	time_command build_and_install_cross_gcc_for_targets \
-		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
-		yes yes "${CURRENT_DATETIME}" \
-		"${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
-		"${TARGETS[@]}"
+		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
+		yes yes "${CURRENT_DATETIME}" "${TARGETS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
 

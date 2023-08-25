@@ -46,9 +46,7 @@ PACKAGE="qemu"
 	)
 
 	time_command configure_build_install_package \
-		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
-		"${PACKAGE}" "${VERSION}" \
-		"${CONFIGURE_OPTIONS[@]}"
+		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${CONFIGURE_OPTIONS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
 

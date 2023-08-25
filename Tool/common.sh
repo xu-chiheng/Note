@@ -547,12 +547,12 @@ build_and_install_cross_gcc_for_targets() {
 	local toolchain="$1"
 	local build_type="$2"
 	local host_triple="$3"
-	local is_build_and_install_gmp_mpfr_mpc="$4"
-	local is_build_and_install_libgcc="$5"
-	local current_datetime="$6"
-	local package="$7"
-	local gcc_version="$8"
-	local binutils_version="$9"
+	local package="$4"
+	local gcc_version="$5"
+	local binutils_version="$6"
+	local is_build_and_install_gmp_mpfr_mpc="$7"
+	local is_build_and_install_libgcc="$8"
+	local current_datetime="$9"
 	shift 9
 
 	local targets=( "$@" )

@@ -35,14 +35,13 @@ PACKAGE="gdb"
 	CONFIGURE_OPTIONS=(
 		--disable-nls
 		--disable-werror
-		--disable-gas --disable-binutils --disable-ld --disable-gprof
+		# https://sourceware.org/gdb/wiki/BuildingNatively
+		--disable-binutils --disable-ld --disable-gold --disable-gas --disable-sim --disable-gprof
 		--enable-targets=all
 	)
 
 	time_command configure_build_install_package \
-		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" \
-		"${PACKAGE}" "${VERSION}" \
-		"${CONFIGURE_OPTIONS[@]}"
+		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${CONFIGURE_OPTIONS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
 

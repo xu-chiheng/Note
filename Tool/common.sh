@@ -178,10 +178,7 @@ git_tag_of_package_version() {
 git_repo_url_of_package() {
 	local package="$1"
 	case "${package}" in
-		binutils )
-			echo "git://sourceware.org/git/binutils-gdb.git"
-			;;
-		gdb )
+		binutils | gdb )
 			echo "git://sourceware.org/git/binutils-gdb.git"
 			;;
 		gcc )

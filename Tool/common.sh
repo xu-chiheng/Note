@@ -683,8 +683,7 @@ cmake_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" \
-		"${package}" "${version}" \
+		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" "${package}" "${version}" \
 		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
@@ -707,8 +706,7 @@ configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" \
-		"${package}" "${version}" \
+		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" "${package}" "${version}" \
 		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
 }
 
@@ -731,7 +729,6 @@ gcc_configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" \
-		"${package}" "${version}" \
+		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" "${package}" "${version}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" "$(array_elements_join ',' "${languages[@]}")" "${host_triple}" "$@"
 }

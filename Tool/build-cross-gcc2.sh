@@ -26,7 +26,7 @@ cd "$(dirname "$0")"
 . "./common.sh"
 
 CURRENT_DATETIME="$(current_datetime)"
-PACKAGE=gcc
+PACKAGE=cross-gcc2
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 

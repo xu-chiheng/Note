@@ -194,7 +194,7 @@ index 000000000000..c530fa15bfb3
 +    CmdArgs.push_back("--wrap");
 +    CmdArgs.push_back("_ZdlPvRKSt9nothrow_t");
 +    CmdArgs.push_back("--wrap");
-+    CmdArgs.push_back("_ZdaPvKSt9nothrow_t");
++    CmdArgs.push_back("_ZdaPvRKSt9nothrow_t");
 +  }
 +
 +  Arg *SubsysArg =

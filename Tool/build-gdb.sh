@@ -36,7 +36,7 @@ PACKAGE="gdb"
 		--disable-nls
 		--disable-werror
 		# https://sourceware.org/gdb/wiki/BuildingNatively
-		--disable-binutils --disable-ld --disable-gold --disable-gas --disable-sim --disable-gprof
+		--disable-binutils --disable-ld --disable-gold --disable-gas --disable-gprof
 		--enable-targets=all
 	)
 

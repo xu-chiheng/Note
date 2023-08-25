@@ -36,7 +36,7 @@ PACKAGE="binutils"
 		--disable-nls
 		--disable-werror
 		# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
-		--disable-gdb --disable-libdecnumber --disable-readline --disable-sim
+		--disable-gdb --disable-gdbserver --disable-gdbsupport --disable-libdecnumber --disable-readline --disable-sim
 		--enable-targets=all
 	)
 

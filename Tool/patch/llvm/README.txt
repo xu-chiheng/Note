@@ -11,28 +11,47 @@ stage3 : Clang 16.0.6
 
 15.0.7
 patch_apply . ../patch/llvm/{cygwin-{basic,cmodel-15.0.7,driver-15.0.7,general},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
 16.0.6
 patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
+17.0.0
+patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general,CGExprCXX.cpp},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
 18.0.0
-patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver,general},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver,general,CGExprCXX.cpp},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
-
-cygwin-CGExprCXX.cpp.patch
-fix the regression caused by commit 67409911353323ca5edf2049ef0df54132fa1ca7, that, in Cygwin, Clang can't bootstrap.
-
-cygwin-general.patch
-remove some uses of macro __CYGWIN__ and fix build by Clang 16+.
-
 
 clang -v
 git show -s
 
 
+cygwin-CGExprCXX.cpp.patch
+fix the regression caused by commit 67409911353323ca5edf2049ef0df54132fa1ca7, that, in Cygwin, Clang can't bootstrap.
+
+cygwin-general.patch
+remove some uses of macro __CYGWIN__ .
+fix build error by Clang due to the conflict of CIndexer.cpp and mm_malloc.h. In mm_malloc.h, _WIN32 and __CYGWIN__ can't both be defined, but CIndexer.cpp define both.
+override Cygwin's buggy getpagesize() to Win32 computePageSize().
 
 
 
-
+In file included from /cygdrive/e/Note/Tool/llvm/clang/tools/libclang/CIndexer.cpp:35:
+In file included from /usr/include/w32api/windows.h:69:
+In file included from /usr/include/w32api/windef.h:9:
+In file included from /usr/include/w32api/minwindef.h:163:
+In file included from /usr/include/w32api/winnt.h:1658:
+In file included from /cygdrive/d/cygwin64-packages/llvm/lib/clang/18/include/x86intrin.h:15:
+In file included from /cygdrive/d/cygwin64-packages/llvm/lib/clang/18/include/immintrin.h:26:
+In file included from /cygdrive/d/cygwin64-packages/llvm/lib/clang/18/include/xmmintrin.h:31:
+/cygdrive/d/cygwin64-packages/llvm/lib/clang/18/include/mm_malloc.h:45:22: error: use of undeclared identifier '_aligned_malloc'; did you mean 'aligned_alloc'?
+   45 |   __mallocedMemory = _aligned_malloc(__size, __align);
+      |                      ^
+/usr/include/stdlib.h:332:8: note: 'aligned_alloc' declared here
+  332 | void *  aligned_alloc(size_t, size_t) __malloc_like __alloc_align(1)
+      |         ^
+[ 97%] Built target clangTidyModernizeModule
 
 
 

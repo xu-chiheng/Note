@@ -84,11 +84,14 @@ do_git_backup() {
 			false
 			;;
 	esac \
-	&& case "${backup_command}" in
-		backup_to_all_drives | backup_to_upper_directory )
+	&& {
 			local base="$(basename "$(pwd)")"
 			local tarball="${base}-$(current_datetime)".tar
-			time_command git_fsck \
+			case "${backup_command}" in
+				backup_to_all_drives )
+					time_command git_fsck
+					;;
+			esac \
 			&& { pushd .. \
 				&& case "${backup_command}" in
 					backup_to_upper_directory )
@@ -100,12 +103,7 @@ do_git_backup() {
 				esac \
 				&& popd;} \
 			&& time_command sync
-			;;
-		* )
-			echo "unknown backup_command : ${backup_command}"
-			false
-			;;
-	esac
+	}
 }
 
 do_git_commit() {

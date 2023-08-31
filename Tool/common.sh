@@ -61,7 +61,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 
 	local cpu_arch_flags=()
 	case "${HOST_TRIPLE}" in
-		x86_64-pc-* )
+		x86_64-* )
 			# https://www.phoronix.com/news/GCC-11-x86-64-Feature-Levels
 			# x86-64: CMOV, CMPXCHG8B, FPU, FXSR, MMX, FXSR, SCE, SSE, SSE2
 			# x86-64-v2: (close to Nehalem) CMPXCHG16B, LAHF-SAHF, POPCNT, SSE3, SSE4.1, SSE4.2, SSSE3
@@ -70,13 +70,15 @@ check_toolchain_build_type_and_set_compiler_flags() {
 
 			# only gcc 11+ and clang 12+ support this
 			# local cpu_arch_flags=( -march=x86-64-v3 )
-			local cpu_arch_flags+=( -march=x86-64 )
+			local cpu_arch_flags=( -march=x86-64 )
+			cflags+=(   "${cpu_arch_flags[@]}" )
+			cxxflags+=( "${cpu_arch_flags[@]}" )
 			;;
 	esac
 
 	case "${build_type}" in
 		Release )
-			local release_c_cxx_common_flags=( "${cpu_arch_flags[@]}" -O3 )
+			local release_c_cxx_common_flags=( -O3 )
 			cflags+=(   "${release_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${release_c_cxx_common_flags[@]}" )
 			ldflags+=( -Wl,--strip-all )
@@ -84,7 +86,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 		Debug )
 			# https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
 			# https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
-			local debug_c_cxx_common_flags=( "${cpu_arch_flags[@]}" -Og -g )
+			local debug_c_cxx_common_flags=( -Og -g )
 			cflags+=(   "${debug_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${debug_c_cxx_common_flags[@]}" )
 			ldflags+=()
@@ -480,7 +482,7 @@ build_and_install_binutils_gcc_for_target() {
 			--disable-nls
 			--disable-werror
 			# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
-			--disable-gdb --disable-libdecnumber --disable-readline --disable-sim
+			--disable-gdb --disable-gdbserver --disable-gdbsupport --disable-libdecnumber --disable-readline --disable-sim
 	)
 
 	local gcc_configure_options=(

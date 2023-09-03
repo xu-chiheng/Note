@@ -158,7 +158,7 @@ set_environment_variables_at_bash_startup() {
 					packages_dir="/mnt/work/packages"
 					;;
 			esac
-			local packages=( gcc binutils gdb cross-gcc cross-gcc2 llvm )
+			local packages=( gcc binutils gdb cross-gcc llvm )
 			local bin_dirs=()
 			local package
 			for package in "${packages[@]}"; do
@@ -268,7 +268,7 @@ show_command_output_in_editor() {
 }
 
 parallel_make() {
-	make -j "$(expr $(nproc) '*' 2)" "$@"
+	make -j "$(expr $(nproc --all) '*' 2)" "$@"
 }
 
 linux_terminal_execute_raw() {

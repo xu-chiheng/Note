@@ -16,7 +16,7 @@ patch_apply . ../patch/llvm/{cygwin-{basic,cmodel-15.0.7,driver-15.0.7,general},
 patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 17.0.0
-patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general,CGExprCXX.cpp},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general,{CGExprCXX,Attributes}.cpp},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0
 patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver,general,CGExprCXX.cpp},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -29,6 +29,10 @@ git show -s
 
 cygwin-CGExprCXX.cpp.patch
 fix the regression caused by commit 67409911353323ca5edf2049ef0df54132fa1ca7, that, in Cygwin, Clang can't bootstrap.
+
+cygwin-Attributes.cpp.patch
+fix the regression caused by commit 8629343a8b6c26f15f02de2fdd8db440eba71937, that, in Cygwin, Clang can't bootstrap.
+
 
 cygwin-general.patch
 remove some uses of macro __CYGWIN__ .

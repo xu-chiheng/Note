@@ -1,0 +1,13 @@
+diff --git a/clang/lib/Basic/Attributes.cpp b/clang/lib/Basic/Attributes.cpp
+index 5c168ec67da1..7be08df53f7b 100644
+--- a/clang/lib/Basic/Attributes.cpp
++++ b/clang/lib/Basic/Attributes.cpp
+@@ -4,7 +4,7 @@
+ #include "clang/Basic/IdentifierTable.h"
+ using namespace clang;
+ 
+-static int hasAttributeImpl(AttributeCommonInfo::Syntax Syntax, StringRef Name,
++int hasAttributeImpl(AttributeCommonInfo::Syntax Syntax, StringRef Name,
+                             StringRef ScopeName, const TargetInfo &Target,
+                             const LangOptions &LangOpts) {
+ 

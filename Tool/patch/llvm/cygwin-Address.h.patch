@@ -1,0 +1,28 @@
+diff --git a/clang/lib/CodeGen/Address.h b/clang/lib/CodeGen/Address.h
+index cf48df8f5e73..f25acb1fbd89 100644
+--- a/clang/lib/CodeGen/Address.h
++++ b/clang/lib/CodeGen/Address.h
+@@ -32,15 +32,21 @@ class Address {
+   CharUnits Alignment;
+ 
+ protected:
+-  Address(std::nullptr_t) : ElementType(nullptr) {}
++  Address(std::nullptr_t) : PointerAndKnownNonNull(nullptr), ElementType(nullptr) {}
+ 
+ public:
+   Address(llvm::Value *Pointer, llvm::Type *ElementType, CharUnits Alignment,
+           KnownNonNull_t IsKnownNonNull = NotKnownNonNull)
+-      : PointerAndKnownNonNull(Pointer, IsKnownNonNull),
++      : PointerAndKnownNonNull(Pointer),
+         ElementType(ElementType), Alignment(Alignment) {
+     assert(Pointer != nullptr && "Pointer cannot be null");
+     assert(ElementType != nullptr && "Element type cannot be null");
++
++    if (Alignment.isZero()) {
++      this->PointerAndKnownNonNull.setInt(IsKnownNonNull);
++      return;
++    }
++    assert(Alignment.isPowerOfTwo() && "Alignment cannot be zero");
+   }
+ 
+   static Address invalid() { return Address(nullptr); }

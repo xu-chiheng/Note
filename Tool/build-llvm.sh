@@ -75,8 +75,8 @@ PACKAGE=llvm
 	)
 
 	TARGETS=(
-		all
-		# host
+		# all
+		host
 	)
 
 	CMAKE_OPTIONS=()

@@ -22,7 +22,7 @@
 
 llvm_create_test_branches_for_bisect() {
 	local major_version
-	for major_version in $(seq 12 20); do
+	for major_version in $(seq 12 99); do
 		# echo "${major_version}"
 		local major_version_branch="remotes/origin/release/${major_version}.x"
 

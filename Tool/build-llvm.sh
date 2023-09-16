@@ -56,7 +56,7 @@ PACKAGE=llvm
 	# VERSION=15.0.7
 	# VERSION=16.0.6
 	# VERSION=17.0.0
-	VERSION=18.0.0 # commit 2827aa9dafa7e0c45697bf4fc5b067cae26623c4 2023-08-14
+	VERSION=18.0.0 # commit bce6c53464c115f5f83a57284e409b1db8c2b03f 2023-09-16
 
 	SOURCE_DIR="${PACKAGE}"
 
@@ -75,8 +75,8 @@ PACKAGE=llvm
 	)
 
 	TARGETS=(
-		# all
-		host
+		all
+		# host
 	)
 
 	CMAKE_OPTIONS=()

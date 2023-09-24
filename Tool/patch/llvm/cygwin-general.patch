@@ -1,3 +1,34 @@
+diff --git a/clang/lib/Headers/mm_malloc.h b/clang/lib/Headers/mm_malloc.h
+index d32fe5941627..6f46f10ee50f 100644
+--- a/clang/lib/Headers/mm_malloc.h
++++ b/clang/lib/Headers/mm_malloc.h
+@@ -12,7 +12,7 @@
+ 
+ #include <stdlib.h>
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(__CYGWIN__)
+ #include <malloc.h>
+ #else
+ #ifndef __cplusplus
+@@ -41,7 +41,7 @@ _mm_malloc(size_t __size, size_t __align) {
+   void *__mallocedMemory;
+ #if defined(__MINGW32__)
+   __mallocedMemory = __mingw_aligned_malloc(__size, __align);
+-#elif defined(_WIN32)
++#elif defined(_WIN32) && !defined(__CYGWIN__)
+   __mallocedMemory = _aligned_malloc(__size, __align);
+ #else
+   if (posix_memalign(&__mallocedMemory, __align, __size))
+@@ -56,7 +56,7 @@ _mm_free(void *__p)
+ {
+ #if defined(__MINGW32__)
+   __mingw_aligned_free(__p);
+-#elif defined(_WIN32)
++#elif defined(_WIN32) && !defined(__CYGWIN__)
+   _aligned_free(__p);
+ #else
+   free(__p);
 diff --git a/clang/tools/libclang/CIndexer.cpp b/clang/tools/libclang/CIndexer.cpp
 index 77da2e4fa5ea..d1bd7ad49c5f 100644
 --- a/clang/tools/libclang/CIndexer.cpp
@@ -38,10 +69,10 @@ index 77da2e4fa5ea..d1bd7ad49c5f 100644
  
    LibClangPath += path;
 diff --git a/llvm/lib/Support/MemoryBuffer.cpp b/llvm/lib/Support/MemoryBuffer.cpp
-index 0bb11725d2fc..e118443cc782 100644
+index 4cc4fe019b75..8184b32575f2 100644
 --- a/llvm/lib/Support/MemoryBuffer.cpp
 +++ b/llvm/lib/Support/MemoryBuffer.cpp
-@@ -379,14 +379,6 @@ static bool shouldUseMmap(sys::fs::file_t FD,
+@@ -384,14 +384,6 @@ static bool shouldUseMmap(sys::fs::file_t FD,
    if ((FileSize & (PageSize -1)) == 0)
      return false;
  
@@ -57,7 +88,7 @@ index 0bb11725d2fc..e118443cc782 100644
  }
  
 diff --git a/llvm/lib/Support/Process.cpp b/llvm/lib/Support/Process.cpp
-index 30c64d3ed9ed..09e5142f2f65 100644
+index 30c64d3ed9ed..6d4a7275f5fa 100644
 --- a/llvm/lib/Support/Process.cpp
 +++ b/llvm/lib/Support/Process.cpp
 @@ -23,6 +23,10 @@
@@ -133,7 +164,7 @@ index 493209052a1c..98131d7bef84 100644
    static unsigned Ret = computePageSize();
    return Ret;
 diff --git a/llvm/lib/Support/raw_ostream.cpp b/llvm/lib/Support/raw_ostream.cpp
-index fae4a4308fd7..6b964b927c32 100644
+index a4fc605019c2..0cbbb64507ee 100644
 --- a/llvm/lib/Support/raw_ostream.cpp
 +++ b/llvm/lib/Support/raw_ostream.cpp
 @@ -37,10 +37,6 @@
@@ -148,10 +179,10 @@ index fae4a4308fd7..6b964b927c32 100644
  #include <io.h>
  #ifndef STDIN_FILENO
 diff --git a/llvm/tools/lli/lli.cpp b/llvm/tools/lli/lli.cpp
-index c9b77e23ba07..eae61ac843b1 100644
+index 3b5250d56707..bad61991ae9b 100644
 --- a/llvm/tools/lli/lli.cpp
 +++ b/llvm/tools/lli/lli.cpp
-@@ -78,13 +78,6 @@
+@@ -74,13 +74,6 @@
  #include <io.h>
  #endif
  

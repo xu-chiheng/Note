@@ -16,19 +16,15 @@ patch_apply . ../patch/llvm/{cygwin-{basic,cmodel-15.0.7,driver-15.0.7,general},
 patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 17.0.0
-patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general,Address.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general,CGCall.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0
-patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver,general,Address.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver,general,CGCall.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 
 clang -v
 git show -s
-
-
-cygwin-Address.h.patch
-Fix the regression caused by commit e419e22ff6fdff97191d132555ded7811c3f5b05, that, in Cygwin, Clang can't bootstrap, using GCC 13.2.0 as stage 0 compiler.
 
 
 
@@ -37,6 +33,11 @@ Remove some uses of macro __CYGWIN__ .
 Fix build error by Clang due to the conflict of CIndexer.cpp and mm_malloc.h. In mm_malloc.h, _WIN32 and __CYGWIN__ can't both be defined, but CIndexer.cpp define both.
 Override Cygwin's buggy getpagesize() to Win32 computePageSize().
 
+
+cygwin-CGCall.h.patch
+Reduced number of inline elements of CallArgList.
+This fix bootstraping on Cygwin, using GCC 13.2.0 as stage 0 compiler.
+It seems that the size of this type can't be larger than a unknown limit.  
 
 
 In file included from /cygdrive/e/Note/Tool/llvm/clang/tools/libclang/CIndexer.cpp:35:

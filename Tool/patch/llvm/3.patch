@@ -1,0 +1,35 @@
+diff --git a/llvm/include/llvm/ADT/DenseMap.h b/llvm/include/llvm/ADT/DenseMap.h
+index 9da6f479c427..f88d722a0dad 100644
+--- a/llvm/include/llvm/ADT/DenseMap.h
++++ b/llvm/include/llvm/ADT/DenseMap.h
+@@ -803,7 +803,7 @@ public:
+     unsigned OldNumBuckets = NumBuckets;
+     BucketT *OldBuckets = Buckets;
+ 
+-    allocateBuckets(std::max<unsigned>(64, static_cast<unsigned>(NextPowerOf2(AtLeast-1))));
++    allocateBuckets(llvm::bit_ceil(std::max(64u, AtLeast)));
+     assert(Buckets);
+     if (!OldBuckets) {
+       this->BaseT::initEmpty();
+@@ -1042,7 +1042,7 @@ public:
+ 
+   void grow(unsigned AtLeast) {
+     if (AtLeast > InlineBuckets)
+-      AtLeast = std::max<unsigned>(64, NextPowerOf2(AtLeast-1));
++      AtLeast = llvm::bit_ceil(std::max(64u, AtLeast));
+ 
+     if (Small) {
+       // First move the inline buckets into a temporary storage.
+diff --git a/llvm/lib/Transforms/Utils/SimplifyCFG.cpp b/llvm/lib/Transforms/Utils/SimplifyCFG.cpp
+index 372a6698ce8a..e6d9b265dab9 100644
+--- a/llvm/lib/Transforms/Utils/SimplifyCFG.cpp
++++ b/llvm/lib/Transforms/Utils/SimplifyCFG.cpp
+@@ -6552,7 +6552,7 @@ static bool SwitchToLookupTable(SwitchInst *SI, IRBuilder<> &Builder,
+ 
+     // Make the mask's bitwidth at least 8-bit and a power-of-2 to avoid
+     // unnecessary illegal types.
+-    uint64_t TableSizePowOf2 = NextPowerOf2(std::max(7ULL, TableSize - 1ULL));
++    uint64_t TableSizePowOf2 = llvm::bit_ceil(std::max<uint64_t>(8, TableSize));
+     APInt MaskInt(TableSizePowOf2, 0);
+     APInt One(TableSizePowOf2, 1);
+     // Build bitmask; fill in a 1 bit for every case.

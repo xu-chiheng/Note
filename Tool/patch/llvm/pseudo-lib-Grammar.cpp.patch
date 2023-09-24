@@ -6,7 +6,7 @@ index 3e9c5c3c7a6c..ea5b9cfe53c4 100644
    return FollowSets;
  }
  
-+auto TerminalNames = new std::string[NumTerminals];
++static auto TerminalNames = new std::string[NumTerminals];
 +
  static llvm::ArrayRef<std::string> getTerminalNames() {
 -  static const auto &TerminalNames = []() {

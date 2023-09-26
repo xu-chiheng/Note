@@ -1,12 +1,10 @@
 
 
-
-
 on Cygwin
-stage0 : GCC 13.2.0
-stage1 : Clang 16.0.6
-stage2 : Clang 16.0.6
-stage3 : Clang 16.0.6
+stage 0 : GCC 13.2.0
+stage 1 : Clang 16.0.6
+stage 2 : Clang 16.0.6
+stage 3 : Clang 16.0.6
 
 
 15.0.7
@@ -19,7 +17,7 @@ patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general},pseudo-
 patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general,CGCall.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0
-patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver,general,CGCall.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver,general,CGCall.h,X86ISelLowering.cpp},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 
@@ -38,6 +36,12 @@ cygwin-CGCall.h.patch
 Reduced number of inline elements of CallArgList.
 This fix bootstraping on Cygwin, using GCC 13.2.0 as stage 0 compiler.
 It seems that the size of CallArgList can't be larger than an unknown limit.  
+
+
+cygwin-X86ISelLowering.cpp.patch
+Fix the regression caused by commit c04a05d898982614a2df80d928b97ed4f8c49b60, that, in Cygwin, Clang can't bootstrap.
+
+
 
 
 In file included from /cygdrive/e/Note/Tool/llvm/clang/tools/libclang/CIndexer.cpp:35:

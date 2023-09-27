@@ -7,9 +7,6 @@ stage 2 : Clang 16.0.6
 stage 3 : Clang 16.0.6
 
 
-15.0.7
-patch_apply . ../patch/llvm/{cygwin-{basic,cmodel-15.0.7,driver-15.0.7,general},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
-
 16.0.6
 patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 

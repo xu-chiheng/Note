@@ -100,6 +100,11 @@ check_toolchain_build_type_and_set_compiler_flags() {
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-mingw64 )
+			local mingw_c_cxx_common_flags=(  )
+			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
+			cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )
+			ldflags+=(  )
+
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
 			ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
 			;;

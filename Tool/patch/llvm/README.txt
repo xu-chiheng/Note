@@ -8,13 +8,13 @@ stage 3 : Clang 16.0.6
 
 
 16.0.6
-patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general},mingw-{pthread,emutls-16.0.6},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 17.0.0
-patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general,CGCall.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general,CGCall.h},mingw-{pthread,emutls,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0
-patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver,general,CGCall.h,X86ISelLowering.cpp},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../patch/llvm/{cygwin-{basic,cmodel,driver,general,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 
@@ -37,6 +37,11 @@ It seems that the size of CallArgList can't be larger than an unknown limit.
 
 cygwin-X86ISelLowering.cpp.patch
 Fix the regression caused by commit c04a05d898982614a2df80d928b97ed4f8c49b60, that, in Cygwin, Clang can't bootstrap.
+
+
+mingw-Value.h.patch
+Fix the regression caused by commit 592e935e115ffb451eb9b782376711dab6558fe0, that, in MinGW, Clang can't be built by system Clang 15.0.4.
+
 
 
 

@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Driver/CMakeLists.txt b/clang/lib/Driver/CMakeLists.txt
-index a6bd2d41e797..30b521368c7f 100644
+index 58427e3f83c4..7ab5a1ee9635 100644
 --- a/clang/lib/Driver/CMakeLists.txt
 +++ b/clang/lib/Driver/CMakeLists.txt
-@@ -54,6 +54,7 @@ add_clang_library(clangDriver
+@@ -51,6 +51,7 @@ add_clang_library(clangDriver
    ToolChains/CrossWindows.cpp
    ToolChains/CSKYToolChain.cpp
    ToolChains/Cuda.cpp
@@ -11,18 +11,18 @@ index a6bd2d41e797..30b521368c7f 100644
    ToolChains/DragonFly.cpp
    ToolChains/Flang.cpp
 diff --git a/clang/lib/Driver/Driver.cpp b/clang/lib/Driver/Driver.cpp
-index 150040cc9dd2..017186e0cb24 100644
+index 84b8fc7685fe..9d8efde4e1ed 100644
 --- a/clang/lib/Driver/Driver.cpp
 +++ b/clang/lib/Driver/Driver.cpp
-@@ -20,6 +20,7 @@
- #include "ToolChains/Contiki.h"
+@@ -17,6 +17,7 @@
+ #include "ToolChains/Clang.h"
  #include "ToolChains/CrossWindows.h"
  #include "ToolChains/Cuda.h"
 +#include "ToolChains/Cygwin.h"
  #include "ToolChains/Darwin.h"
  #include "ToolChains/DragonFly.h"
  #include "ToolChains/FreeBSD.h"
-@@ -6239,6 +6240,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
+@@ -6249,6 +6250,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
          else
            TC = std::make_unique<toolchains::Generic_GCC>(*this, Target, Args);
          break;
@@ -34,10 +34,10 @@ index 150040cc9dd2..017186e0cb24 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..c530fa15bfb3
+index 000000000000..8aa9cf5c8ec0
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,732 @@
+@@ -0,0 +1,731 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ------------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -225,7 +225,6 @@ index 000000000000..c530fa15bfb3
 +    CmdArgs.push_back("--enable-auto-image-base");
 +  }
 +  CmdArgs.push_back("--dynamicbase");
-+  CmdArgs.push_back("--allow-multiple-definition");
 +
 +  if (Args.hasArg(options::OPT_Z_Xlinker__no_demangle))
 +    CmdArgs.push_back("--no-demangle");
@@ -902,12 +901,12 @@ index 000000000000..9866863389eb
 +
 +#endif // LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_CYGWIN_H
 diff --git a/clang/lib/Lex/InitHeaderSearch.cpp b/clang/lib/Lex/InitHeaderSearch.cpp
-index 41382d7cb3fc..d419e692a272 100644
+index 1f4c7a6d67b7..695145c46b17 100644
 --- a/clang/lib/Lex/InitHeaderSearch.cpp
 +++ b/clang/lib/Lex/InitHeaderSearch.cpp
-@@ -236,9 +236,7 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
-     case llvm::Triple::ELFIAMCU:
-       break;
+@@ -205,9 +205,7 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+   if (HSOpts.UseStandardSystemIncludes) {
+     switch (os) {
      case llvm::Triple::Win32:
 -      if (triple.getEnvironment() != llvm::Triple::Cygnus)
 -        break;
@@ -916,9 +915,9 @@ index 41382d7cb3fc..d419e692a272 100644
      default:
        // FIXME: temporary hack: hard-coded paths.
        AddPath("/usr/local/include", System, false);
-@@ -318,14 +316,7 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
-   case llvm::Triple::RTEMS:
-     break;
+@@ -242,14 +240,7 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+ 
+   switch (os) {
    case llvm::Triple::Win32:
 -    switch (triple.getEnvironment()) {
 -    default: llvm_unreachable("Include management is handled in the driver.");
@@ -932,7 +931,7 @@ index 41382d7cb3fc..d419e692a272 100644
      break;
    default:
      break;
-@@ -353,17 +344,7 @@ void InitHeaderSearch::AddDefaultCPlusPlusIncludePaths(
+@@ -268,17 +259,7 @@ void InitHeaderSearch::AddDefaultCPlusPlusIncludePaths(
    llvm::Triple::OSType os = triple.getOS();
    switch (os) {
    case llvm::Triple::Win32:
@@ -949,9 +948,9 @@ index 41382d7cb3fc..d419e692a272 100644
 -    }
 +    llvm_unreachable("Include management is handled in the driver.");
      break;
-   case llvm::Triple::DragonFly:
-     AddPath("/usr/include/c++/5.0", CXXSystem, false);
-@@ -395,10 +376,7 @@ bool InitHeaderSearch::ShouldAddDefaultIncludePaths(
+   default:
+     break;
+@@ -310,10 +291,7 @@ bool InitHeaderSearch::ShouldAddDefaultIncludePaths(
      return false;
  
    case llvm::Triple::Win32:

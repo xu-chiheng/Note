@@ -11,7 +11,7 @@ index ba56a9323400..396936094072 100644
    ToolChains/DragonFly.cpp
    ToolChains/Flang.cpp
 diff --git a/clang/lib/Driver/Driver.cpp b/clang/lib/Driver/Driver.cpp
-index a268f2fa8fc5..6df7017fdf53 100644
+index 661d9977fbc5..6c9bb2c70260 100644
 --- a/clang/lib/Driver/Driver.cpp
 +++ b/clang/lib/Driver/Driver.cpp
 @@ -19,6 +19,7 @@
@@ -22,7 +22,7 @@ index a268f2fa8fc5..6df7017fdf53 100644
  #include "ToolChains/Darwin.h"
  #include "ToolChains/DragonFly.h"
  #include "ToolChains/FreeBSD.h"
-@@ -6064,6 +6065,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
+@@ -6066,6 +6067,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
          else
            TC = std::make_unique<toolchains::Generic_GCC>(*this, Target, Args);
          break;
@@ -34,10 +34,10 @@ index a268f2fa8fc5..6df7017fdf53 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..78db504cf6d3
+index 000000000000..cb3c9691e01d
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,732 @@
+@@ -0,0 +1,731 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ------------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -225,7 +225,6 @@ index 000000000000..78db504cf6d3
 +    CmdArgs.push_back("--enable-auto-image-base");
 +  }
 +  CmdArgs.push_back("--dynamicbase");
-+  CmdArgs.push_back("--allow-multiple-definition");
 +
 +  if (Args.hasArg(options::OPT_Z_Xlinker__no_demangle))
 +    CmdArgs.push_back("--no-demangle");

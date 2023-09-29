@@ -197,31 +197,88 @@ set_environment_variables_at_bash_startup() {
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-mingw64 )
-			if which gcc >/dev/null 2>&1; then
-				local gcc_install_dir="$(dirname "$(dirname "$(which gcc)")")"
-				mingw_gcc_check_or_create_directory_links /mingw \
-				&& mingw_gcc_check_or_create_directory_links "${gcc_install_dir}/mingw" \
-				&& mingw_gcc_check_or_create_directory_links "${gcc_install_dir}/${HOST_TRIPLE}"
-			fi
+			mingw_gcc_check_or_create_directory_links
 			;;
 	esac
 
 }
 
+mingw_print_root_dir() {
+	case "${MSYSTEM}" in
+		MINGW64 )
+			# msvcrt.dll
+			echo "/mingw64"
+			;;
+		UCRT64 )
+			# ucrtbase.dll
+			echo "/ucrt64"
+			;;
+		* )
+			echo "unknown MSYSTEM : ${MSYSTEM}"
+			return 1
+			;;
+	esac
+}
+
 mingw_gcc_check_or_create_directory_links() {
-	local mingw_sysroot="$1"
-	if ! { \
-		[ -e "${mingw_sysroot}"/include ] \
-		&& [ -e "${mingw_sysroot}"/lib ] \
-		&& [ "$(readlink -f "${mingw_sysroot}"/include)" = "$(readlink -f /mingw64/include)" ] \
-		&& [ "$(readlink -f "${mingw_sysroot}"/lib)" = "$(readlink -f /mingw64/lib)" ] \
-	;}; then
-		rm -rf "${mingw_sysroot}"/{include,lib} \
-		&& mkdir -p "${mingw_sysroot}" \
-		&& ln -s /mingw64/include "${mingw_sysroot}"/include \
-		&& ln -s /mingw64/lib "${mingw_sysroot}"/lib
+	if which gcc >/dev/null 2>&1; then
+		local gcc_install_dir="$(dirname "$(dirname "$(which gcc)")")"
+		mingw_gcc_check_or_create_directory_links_2 /mingw \
+		&& mingw_gcc_check_or_create_directory_links_2 "${gcc_install_dir}/mingw" \
+		&& mingw_gcc_check_or_create_directory_links_1 "${gcc_install_dir}/${HOST_TRIPLE}"
 	fi
 }
+
+mingw_gcc_check_or_create_directory_links_1() {
+	local root_dir="$(mingw_print_root_dir)"
+	local sysroot="$1"
+	if [ "${sysroot}" != "${root_dir}" ]; then
+		if ! { \
+			[ -e "${sysroot}"/include ] \
+			&& [ -e "${sysroot}"/lib ] \
+			&& [ "$(readlink -f "${sysroot}"/include)" = "$(readlink -f "${root_dir}"/include)" ] \
+			&& [ "$(readlink -f "${sysroot}"/lib)" = "$(readlink -f "${root_dir}"/lib)" ] \
+		;}; then
+			rm -rf "${sysroot}"/{include,lib} \
+			&& mkdir -p "${sysroot}" \
+			&& ln -s "${root_dir}"/include "${sysroot}"/include \
+			&& ln -s "${root_dir}"/lib "${sysroot}"/lib
+		fi
+	fi
+}
+
+mingw_gcc_remove_directory_links_1() {
+	local root_dir="$(mingw_print_root_dir)"
+	local sysroot="$1"
+	if [ "${sysroot}" != "${root_dir}" ]; then
+		echo_command rm -rf "${sysroot}"/{include,lib}
+	fi
+}
+
+mingw_gcc_check_or_create_directory_links_2() {
+	local root_dir="$(mingw_print_root_dir)"
+	local sysroot="$1"
+	if [ "${sysroot}" != "${root_dir}" ]; then
+		if ! { \
+			[ -e "${sysroot}" ] \
+			&& [ "$(readlink -f "${sysroot}")" = "$(readlink -f "${root_dir}")" ] \
+		;}; then
+			rm -rf "${sysroot}" \
+			&& mkdir -p "${sysroot}" \
+			&& rm -rf "${sysroot}" \
+			&& ln -s "${root_dir}" "${sysroot}"
+		fi
+	fi
+}
+
+mingw_gcc_remove_directory_links_2() {
+	local root_dir="$(mingw_print_root_dir)"
+	local sysroot="$1"
+	if [ "${sysroot}" != "${root_dir}" ]; then
+		echo_command rm -rf "${sysroot}"
+	fi
+}
+
 
 # https://stackoverflow.com/questions/1527049/how-can-i-join-elements-of-a-bash-array-into-a-delimited-string
 # https://dev.to/meleu/how-to-join-array-elements-in-a-bash-script-303a

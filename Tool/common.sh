@@ -603,20 +603,32 @@ build_and_install_cross_gcc_for_targets() {
 	&& time_command sync
 }
 
-pre_generate_build_install_package() {
+pre_generate_package() {
 	local host_triple="$1"
 	local package="$2"
 	local source_dir="$3"
 	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		echo_command mingw_gcc_check_or_create_directory_links /mingw \
-		&& echo_command mingw_gcc_check_or_create_directory_links "${install_dir}/mingw" \
-		&& echo_command mingw_gcc_check_or_create_directory_links "${install_dir}/${host_triple}"
+		echo_command mingw_gcc_check_or_create_directory_links \
+		&& echo_command mingw_gcc_check_or_create_directory_links_2 "$(pwd)/${install_dir}/mingw" \
+		&& echo_command mingw_gcc_check_or_create_directory_links_1 "$(pwd)/${install_dir}/${host_triple}"
 	fi
 }
 
-post_generate_build_install_package() {
+post_build_package() {
+	local host_triple="$1"
+	local package="$2"
+	local source_dir="$3"
+	local install_dir="$4"
+
+	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
+		echo_command mingw_gcc_remove_directory_links_2 "$(pwd)/${install_dir}/mingw" \
+		&& echo_command mingw_gcc_remove_directory_links_1 "$(pwd)/${install_dir}/${host_triple}"
+	fi
+}
+
+post_install_package() {
 	local host_triple="$1"
 	local package="$2"
 	local source_dir="$3"
@@ -645,12 +657,15 @@ generate_build_install_package() {
 
 	time_command check_dir_maybe_clone_and_checkout_tag "${source_dir}" "${git_tag}" "${git_repo_url}" \
 	&& echo_command rm -rf "${install_dir}" \
-	&& pre_generate_build_install_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+	&& echo_command pre_generate_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& { time_command "${pushd_and_generate_command}" "$@" \
 		&& time_command parallel_make \
+		&& echo_command pushd .. \
+		&& echo_command post_build_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		&& echo_command popd \
 		&& time_command parallel_make install \
 		&& echo_command popd;} \
-	&& post_generate_build_install_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+	&& echo_command post_install_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${install_dir}" \
 	&& time_command sync
 }

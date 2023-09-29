@@ -195,3 +195,5 @@ make[1]: *** Waiting for unfinished jobs....
 make[1]: Leaving directory '/c/Users/Administrator/Tool/gcc-x86_64-elf-release-build/x86_64-elf/libgcc'
 make: *** [Makefile:13696: all-target-libgcc] Error 2
 
+ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
+

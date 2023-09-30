@@ -20,20 +20,48 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
+maybe_create_test_branch() {
+	local major_branch="$1"
+	local test_branch="$2"
+	local trunk_branch="$3"
+
+	if ! git_rev_parse "${test_branch}" >/dev/null 2>&1; then
+		echo_command git checkout -b "${test_branch}" "$(git merge-base "${trunk_branch}" "${major_branch}")"
+	fi
+}
+
 llvm_create_test_branches_for_bisect() {
 	local major_version
-	for major_version in $(seq 12 99); do
+	for major_version in $(seq 16 99); do
 		# echo "${major_version}"
-		local major_version_branch="remotes/origin/release/${major_version}.x"
-
-		if git_rev_parse "${major_version_branch}" >/dev/null 2>&1; then
-			local test_branch="$(printf "test%02d0000\n" "${major_version}")"
-			if ! git_rev_parse "${test_branch}" >/dev/null 2>&1; then
-				echo_command git checkout -b "${test_branch}" "$(git merge-base main "${major_version_branch}")"
-			fi
+		local major_branch="remotes/origin/release/${major_version}.x"
+		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
+		if git_rev_parse "${major_branch}" >/dev/null 2>&1; then
+			maybe_create_test_branch "${major_branch}" "${test_branch}" main
+		else
+			maybe_create_test_branch main "${test_branch}" main
+			break
 		fi
 	done
 	echo_command git checkout main
+	echo_command git branch
+}
+
+gcc_create_test_branches_for_bisect() {
+	local major_version
+	for major_version in $(seq 13 99); do
+		# echo "${major_version}"
+		local major_branch="remotes/origin/releases/gcc-${major_version}"
+		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
+		if git_rev_parse "${major_branch}" >/dev/null 2>&1; then
+			maybe_create_test_branch "${major_branch}" "${test_branch}" master
+		else
+			maybe_create_test_branch master "${test_branch}" master
+			break
+		fi
+	done
+	echo_command git checkout master
 	echo_command git branch
 }
 
@@ -49,8 +77,31 @@ check_compiler_existence() {
 	fi
 }
 
+print_compiler_version() {
+	if ! check_compiler_existence "$1"; then
+		return 1
+	fi
+	local compiler="$1"
+
+	case "${compiler}" in
+		*clang | *clang++ | *clang-cl )
+			"${compiler}" -v  2>&1 | grep -E '^clang version ' | sed -E -e 's/^clang version //'
+			;;
+		*gcc | *g++ )
+			"${compiler}" -v  2>&1 | grep -E '^gcc version ' | sed -E -e 's/^gcc version //' | sed -E -e 's/ \((GCC|experimental)\)//g'
+			;;
+		*cl )
+			"${compiler}"  2>&1 | grep -E ' Compiler Version ' | sed -E -e 's/.+ Compiler Version //'
+			;;
+		* )
+			echo "unknown compiler : ${compiler}"
+			return 1
+			;;
+	esac
+}
+
 print_compiler_predefined_macros() {
-	if ! check_compiler_existence "$@"; then
+	if ! check_compiler_existence "$1"; then
 		return 1
 	fi
 	local compiler="$1"
@@ -80,7 +131,7 @@ print_compiler_predefined_macros() {
 # https://stackoverflow.com/questions/17939930/finding-out-what-the-gcc-include-path-is
 # https://stackoverflow.com/questions/4980819/what-are-the-gcc-default-include-directories
 print_compiler_include_dirs() {
-	if ! check_compiler_existence "$@"; then
+	if ! check_compiler_existence "$1"; then
 		return 1
 	fi
 	local compiler="$1"
@@ -136,7 +187,7 @@ EOF
 # Display the programs invoked by the compiler.
 # Show commands to run and use verbose output
 show_compiler_commands() {
-	if ! check_compiler_existence "$@"; then
+	if ! check_compiler_existence "$1"; then
 		return 1
 	fi
 	local compiler="$1"
@@ -168,7 +219,7 @@ show_compiler_commands() {
 }
 
 show_compiler_commands_bfd() {
-	if ! check_compiler_existence "$@"; then
+	if ! check_compiler_existence "$1"; then
 		return 1
 	fi
 
@@ -176,7 +227,7 @@ show_compiler_commands_bfd() {
 }
 
 show_compiler_commands_lld() {
-	if ! check_compiler_existence "$@"; then
+	if ! check_compiler_existence "$1"; then
 		return 1
 	fi
 

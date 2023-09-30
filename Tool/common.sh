@@ -100,10 +100,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-mingw64 )
-			local mingw_c_cxx_common_flags=(  )
-			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
-			cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )
-			ldflags+=(  )
+			mingw_gcc_check_or_create_directory_links
 
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
 			ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
@@ -120,8 +117,8 @@ check_toolchain_build_type_and_set_compiler_flags() {
 
 	echo "TOOLCHAIN  : ${TOOLCHAIN}"
 	echo "BUILD_TYPE : ${BUILD_TYPE}"
-	echo "CC         : ${CC} $("${CC}" -dumpversion) $(which "${CC}")"
-	echo "CXX        : ${CXX} $("${CXX}" -dumpversion) $(which "${CXX}")"
+	echo "CC         : ${CC} $(print_compiler_version "${CC}") $(which "${CC}")"
+	echo "CXX        : ${CXX} $(print_compiler_version "${CXX}") $(which "${CXX}")"
 	echo "CFLAGS     : ${CFLAGS}"
 	echo "CXXFLAGS   : ${CXXFLAGS}"
 	echo "LDFLAGS    : ${LDFLAGS}"
@@ -610,8 +607,7 @@ pre_generate_package() {
 	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		echo_command mingw_gcc_check_or_create_directory_links \
-		&& echo_command mingw_gcc_check_or_create_directory_links_2 "$(pwd)/${install_dir}/mingw" \
+		echo_command mingw_gcc_check_or_create_directory_links_2 "$(pwd)/${install_dir}/mingw" \
 		&& echo_command mingw_gcc_check_or_create_directory_links_1 "$(pwd)/${install_dir}/${host_triple}"
 	fi
 }

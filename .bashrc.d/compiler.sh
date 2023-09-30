@@ -66,13 +66,12 @@ gcc_create_test_branches_for_bisect() {
 }
 
 check_compiler_existence() {
-	local compiler="$1"
-	if [ -z "${compiler}" ]; then
+	if [ -z "$1" ]; then
 		echo "no compiler specified"
 		return 1
 	fi
-	if ! which "${compiler}" >/dev/null 2>&1; then
-		echo "compiler ${compiler} can not be found"
+	if ! which "$1" >/dev/null 2>&1; then
+		echo "compiler $1 can not be found"
 		return 1
 	fi
 }
@@ -81,20 +80,19 @@ print_compiler_version() {
 	if ! check_compiler_existence "$1"; then
 		return 1
 	fi
-	local compiler="$1"
 
-	case "${compiler}" in
+	case "$1" in
 		*clang | *clang++ | *clang-cl )
-			"${compiler}" -v  2>&1 | grep -E '^clang version ' | sed -E -e 's/^clang version //'
+			"$1" -v  2>&1 | grep -E '^clang version ' | sed -E -e 's/^clang version //'
 			;;
 		*gcc | *g++ )
-			"${compiler}" -v  2>&1 | grep -E '^gcc version ' | sed -E -e 's/^gcc version //' | sed -E -e 's/ \((GCC|experimental)\)//g'
+			"$1" -v  2>&1 | grep -E '^gcc version ' | sed -E -e 's/^gcc version //' | sed -E -e 's/ \((GCC|experimental)\)//g'
 			;;
 		*cl )
-			"${compiler}"  2>&1 | grep -E ' Compiler Version ' | sed -E -e 's/.+ Compiler Version //'
+			"$1"  2>&1 | grep -E ' Compiler Version ' | sed -E -e 's/.+ Compiler Version //'
 			;;
 		* )
-			echo "unknown compiler : ${compiler}"
+			echo "unknown compiler : $1"
 			return 1
 			;;
 	esac
@@ -104,9 +102,8 @@ print_compiler_predefined_macros() {
 	if ! check_compiler_existence "$1"; then
 		return 1
 	fi
-	local compiler="$1"
 
-	case "${compiler}" in
+	case "$1" in
 		*g++ | *c++ )
 			"$@" -E -dM -x c++ - </dev/null | sort
 			;;
@@ -122,7 +119,7 @@ print_compiler_predefined_macros() {
 			&& rm -rf empty.*
 			;;
 		* )
-			echo "unknown compiler : ${compiler}"
+			echo "unknown compiler : $1"
 			return 1
 			;;
 	esac
@@ -134,9 +131,8 @@ print_compiler_include_dirs() {
 	if ! check_compiler_existence "$1"; then
 		return 1
 	fi
-	local compiler="$1"
 
-	case "${compiler}" in
+	case "$1" in
 		*g++ | *c++ )
 			echo | "$@" -E -Wp,-v -xc++ - 2>&1
 			;;
@@ -144,7 +140,7 @@ print_compiler_include_dirs() {
 			echo | "$@" -E -Wp,-v -xc - 2>&1
 			;;
 		* )
-			echo "unknown compiler : ${compiler}"
+			echo "unknown compiler : $1"
 			return 1
 			;;
 	esac
@@ -190,20 +186,11 @@ show_compiler_commands() {
 	if ! check_compiler_existence "$1"; then
 		return 1
 	fi
-	local compiler="$1"
-	shift 1
-	local args=( "$@" )
-
-	args+=(
-		-v
-		# -Wl,-v
-		# -Wl,--verbose
-	)
 
 	local print_hello_world_program_command
 	local source_file_name
 
-	case "${compiler}" in
+	case "$1" in
 		*g++ | *c++ | *cl )
 			print_hello_world_program_command=print_hello_world_program_in_cxx
 			source_file_name=main.cpp
@@ -215,7 +202,7 @@ show_compiler_commands() {
 	esac
 
 	"${print_hello_world_program_command}" | tee "${source_file_name}"
-	echo_command "$(which "${compiler}")" "${args[@]}" "${source_file_name}"
+	echo_command "$@" -v "${source_file_name}"
 }
 
 show_compiler_commands_bfd() {

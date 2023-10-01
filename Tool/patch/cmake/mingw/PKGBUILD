@@ -1,0 +1,232 @@
+# Maintainer: Alexey Pavlov <alexpux@gmail.com>
+# Contributor: Ray Donnelly <mingw.android@gmail.com>
+
+_bootstrap=0
+
+_realname=cmake
+pkgbase=mingw-w64-${_realname}
+pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}"
+         $( (( _bootstrap )) || echo \
+           "${MINGW_PACKAGE_PREFIX}-ccmake" \
+           "${MINGW_PACKAGE_PREFIX}-${_realname}-gui" \
+           "${MINGW_PACKAGE_PREFIX}-${_realname}-docs"))
+pkgver=3.27.6
+pkgrel=1
+pkgdesc="A cross-platform open-source make system (mingw-w64)"
+arch=('any')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+url="https://www.cmake.org/"
+license=("spdx:MIT")
+makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
+             $( (( _bootstrap )) || echo "${MINGW_PACKAGE_PREFIX}-cmake")
+             "${MINGW_PACKAGE_PREFIX}-python-sphinx"
+             "${MINGW_PACKAGE_PREFIX}-bzip2"
+             "${MINGW_PACKAGE_PREFIX}-cppdap"
+             "${MINGW_PACKAGE_PREFIX}-ncurses"
+             "${MINGW_PACKAGE_PREFIX}-python"
+             "${MINGW_PACKAGE_PREFIX}-xz"
+             "${MINGW_PACKAGE_PREFIX}-zstd"
+             $([[ ${CARCH} != i686 ]] && echo \
+               "${MINGW_PACKAGE_PREFIX}-qt6-base" \
+               "${MINGW_PACKAGE_PREFIX}-qt6-tools" || echo \
+               "${MINGW_PACKAGE_PREFIX}-qt5-base" \
+               "${MINGW_PACKAGE_PREFIX}-qt5-winextras" \
+               "${MINGW_PACKAGE_PREFIX}-qt5-tools")
+             $([[ ${MSYSTEM} == CLANGARM64 ]] || echo "${MINGW_PACKAGE_PREFIX}-emacs")
+             $([[ ${MSYSTEM} == CLANG32 ]] || echo "${MINGW_PACKAGE_PREFIX}-fc"))
+depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
+         "${MINGW_PACKAGE_PREFIX}-pkgconf"
+         "${MINGW_PACKAGE_PREFIX}-curl"
+         "${MINGW_PACKAGE_PREFIX}-expat"
+         "${MINGW_PACKAGE_PREFIX}-jsoncpp"
+         "${MINGW_PACKAGE_PREFIX}-libarchive"
+         "${MINGW_PACKAGE_PREFIX}-libuv"
+         "${MINGW_PACKAGE_PREFIX}-ninja"
+         "${MINGW_PACKAGE_PREFIX}-rhash"
+         "${MINGW_PACKAGE_PREFIX}-zlib")
+source=("https://github.com/Kitware/CMake/releases/download/v${pkgver}/${_realname}-${pkgver}.tar.gz"
+        "0001-Disable-response-files-for-MSYS-Generator.patch"
+        "0002-Do-not-install-Qt-bundle-in-cmake-gui.patch"
+        "0003-Fix-FindGLEW-on-MINGW.patch::https://gitlab.kitware.com/cmake/cmake/-/commit/a37a04b5.patch"
+        "0004-Output-line-numbers-in-callstacks.patch"
+        "0005-Default-to-ninja-generator.patch")
+sha256sums=('ef3056df528569e0e8956f6cf38806879347ac6de6a4ff7e4105dc4578732cfb'
+            '25793edcbac05bb6d17fa9947b52ace4a6b5ccccf7758e22ae9ae022ed089061'
+            'f6cf6a6f2729db2b9427679acd09520af2cd79fc26900b19a49cead05a55cd1a'
+            'e0688d5488b2dc6e10b4e0ff2f1303fe27f42a13fa2f4bc23799eff8b0f163bd'
+            '15fdf3fb1a0f1c153c8cfbdd2b5c64035b7a04de618bfe61d7d74ced0d6a5c4b'
+            '426818278090704d2a12f62ef3dfd94c47b11fa2784bb842989b7f6a09ee7aa2')
+
+# Helper macros to help make tasks easier #
+apply_patch_with_msg() {
+  for _patch in "$@"
+  do
+    msg2 "Applying $_patch"
+    patch -Np1 -i "${srcdir}/$_patch"
+  done
+}
+
+del_file_exists() {
+  for _fname in "$@"
+  do
+    if [ -f $_fname ]; then
+      rm -rf $_fname
+    fi
+  done
+}
+# =========================================== #
+
+prepare() {
+  cd ${_realname}-${pkgver}
+  apply_patch_with_msg \
+    0001-Disable-response-files-for-MSYS-Generator.patch \
+    0002-Do-not-install-Qt-bundle-in-cmake-gui.patch \
+    0003-Fix-FindGLEW-on-MINGW.patch \
+    0004-Output-line-numbers-in-callstacks.patch
+
+  # We want cmake to default to something useful and not MSVC
+  apply_patch_with_msg \
+    0005-Default-to-ninja-generator.patch
+
+  find . -name "*.orig" -exec rm -f {} \;
+}
+
+build() {
+  mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}"
+
+  if (( _bootstrap )); then
+    if [[ ${CARCH} != i686 ]]; then
+      local -a _qtconfig=("--qt-gui" "--qt-qmake=${MINGW_PREFIX}/bin/qmake6.exe")
+    else
+      local -a _qtconfig=("--qt-gui" "--qt-qmake=${MINGW_PREFIX}/bin/qmake.exe")
+    fi
+    if [[ ${MINGW_PACKAGE_PREFIX} != *-clang- ]]; then
+      _fc_compiler=gfortran
+    else
+      _fc_compiler=flang
+    fi
+
+    MSYSTEM=MINGW FC=${MINGW_PREFIX}/bin/${_fc_compiler}.exe \
+      "${srcdir}"/${_realname}-${pkgver}/configure  \
+      --prefix=${MINGW_PREFIX}                      \
+      --datadir=share/cmake                         \
+      --docdir=share/doc/cmake                      \
+      --mandir=share/man                            \
+      --system-libs                                 \
+      --parallel=${NUMBER_OF_PROCESSORS}            \
+      --sphinx-man --sphinx-html                    \
+      --bootstrap-system-jsoncpp                    \
+      --bootstrap-system-libuv                      \
+      --bootstrap-system-librhash                   \
+      ${_qtconfig[@]}
+
+    make
+  else
+    if check_option "debug" "y"; then
+      _build_type="Debug"
+    else
+      _build_type="Release"
+    fi
+    if [[ ${CARCH} != i686 ]]; then
+      export PATH=${MINGW_PREFIX}/share/qt6/bin:$PATH
+    fi
+    MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
+    ${MINGW_PREFIX}/bin/cmake.exe -Wno-dev \
+      -GNinja \
+      -DCMAKE_BUILD_TYPE=${_build_type} \
+      -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
+      -DCMake_INSTALL_COMPONENTS=ON \
+      -DCMAKE_DATA_DIR=share/cmake \
+      -DCMAKE_DOC_DIR=share/doc/cmake \
+      -DCMAKE_MAN_DIR=share/man \
+      -DCMAKE_INFO_DIR=share/info \
+      -DCMAKE_USE_SYSTEM_LIBRARIES=ON \
+      -DSPHINX_MAN=ON \
+      -DSPHINX_HTML=ON \
+      -DSPHINX_QTHELP=ON \
+      -DBUILD_QtDialog=ON \
+      -DBUILD_CursesDialog=ON \
+      -DBUILD_TESTING=OFF \
+      -DPython_EXECUTABLE=${MINGW_PREFIX}/bin/python \
+      ../${_realname}-${pkgver}
+    ${MINGW_PREFIX}/bin/cmake.exe --build .
+  fi
+}
+
+check() {
+  cd "${srcdir}/build-${MSYSTEM}"
+  if (( _bootstrap )); then
+    ./bin/ctest.exe -j$(($(nproc)+1))
+  else
+    ${MINGW_PREFIX}/bin/cmake -DBUILD_TESTING=ON ../${_realname}-${pkgver}
+    ${MINGW_PREFIX}/bin/cmake --build .
+    ${MINGW_PREFIX}/bin/ctest.exe -j$(($(nproc)+1)) || msg2 "Tests failed"
+  fi
+}
+
+package_cmake() {
+  optdepends=("${MINGW_PACKAGE_PREFIX}-emacs: for cmake emacs mode")
+
+  cd "${srcdir}/build-${MSYSTEM}"
+  if (( _bootstrap )); then
+    ./bin/cmake.exe \
+      -DCMAKE_INSTALL_PREFIX:PATH=${pkgdir}${MINGW_PREFIX} \
+      -DCMAKE_INSTALL_LOCAL_ONLY:BOOL=OFF -P cmake_install.cmake
+  else
+    DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install . --component cmake
+    DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install . --component cpack
+    DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install . --component ctest
+    DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install . --component sphinx-man
+    DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install . --component Unspecified
+  fi
+
+  if [[ ${MSYSTEM} != CLANGARM64 ]]; then
+    install -d "${pkgdir}${MINGW_PREFIX}"/share/emacs/site-lisp/
+    ${MINGW_PREFIX}/bin/emacs -batch -f batch-byte-compile \
+      "${pkgdir}${MINGW_PREFIX}"/share/emacs/site-lisp/cmake-mode.el
+  fi
+}
+
+package_cmake-gui() {
+  pkgdesc+=" (Qt GUI)"
+  depends=("${MINGW_PACKAGE_PREFIX}-cmake")
+  if [[ ${CARCH} != i686 ]]; then
+    depends+=("${MINGW_PACKAGE_PREFIX}-qt6-base")
+  else
+    depends+=("${MINGW_PACKAGE_PREFIX}-qt5-winextras")
+  fi
+
+  cd "${srcdir}/build-${MSYSTEM}"
+  DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install . --component cmake-gui
+}
+
+package_ccmake() {
+  pkgdesc+=" (curses GUI)"
+  depends=("${MINGW_PACKAGE_PREFIX}-cmake")
+
+  cd "${srcdir}/build-${MSYSTEM}"
+  DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install . --component ccmake
+}
+
+package_cmake-docs() {
+  pkgdesc+=" (documentation)"
+  depends=()
+  conflicts=("${MINGW_PACKAGE_PREFIX}-cmake-doc-qt")
+  replaces=("${MINGW_PACKAGE_PREFIX}-cmake-doc-qt")
+  provides=("${MINGW_PACKAGE_PREFIX}-cmake-doc-qt")
+
+  cd "${srcdir}/build-${MSYSTEM}"
+  DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install . --component sphinx-html
+  DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake.exe --install . --component sphinx-qthelp
+}
+
+# template start; name=mingw-w64-splitpkg-wrappers; version=1.0;
+# vim: set ft=bash :
+
+# generate wrappers
+for _name in "${pkgname[@]}"; do
+  _short="package_${_name#${MINGW_PACKAGE_PREFIX}-}"
+  _func="$(declare -f "${_short}")"
+  eval "${_func/#${_short}/package_${_name}}"
+done
+# template end;

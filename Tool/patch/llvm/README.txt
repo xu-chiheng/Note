@@ -43,7 +43,7 @@ Override Cygwin's buggy getpagesize() to Win32 computePageSize().
 cygwin-CGCall.h.patch
 Reduced number of inline elements of CallArgList.
 This fix bootstraping on Cygwin, using GCC 13.2.0 as stage 0 compiler.
-It seems that the size of CallArgList can't be larger than an unknown limit.  
+It seems that the size of CallArgList can't exceed an unknown limit.  
 
 
 cygwin-X86ISelLowering.cpp.patch

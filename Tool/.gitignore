@@ -4,6 +4,7 @@
 /clang*
 /qemu*
 /gmp*
+/cmake*
 /mpfr*
 /mpc*
 /binutils*

@@ -1,0 +1,74 @@
+SCALLYWAG="notest"
+inherit emacs qt5
+
+NAME="cmake"
+VERSION=3.25.3
+RELEASE=1
+
+LICENSE="BSD-3-Clause"
+CATEGORY="Devel"
+SUMMARY="Cross-platform makefile generation system"
+DESCRIPTION="CMake is used to control the software compilation process using
+simple platform and compiler independent configuration files. CMake generates
+native makefiles and workspaces that can be used in the compiler environment
+of your choice. CMake is quite sophisticated: it is possible to support
+complex environments requiring system configuration, pre-processor generation,
+code generation, and template instantiation."
+HOMEPAGE="http://www.cmake.org/"
+SRC_URI="https://github.com/Kitware/CMake/releases/download/v${VERSION}/cmake-${VERSION}.tar.gz
+https://github.com/Kitware/CMake/releases/download/v${VERSION}/cmake-${VERSION}-SHA-256.txt.asc"
+
+BUILD_REQUIRES="libarchive-devel libcurl-devel libexpat-devel libjsoncpp-devel libncurses-devel librhash-devel libuuid-devel libuv-devel zlib-devel libQt5Core-devel libQt5Gui-devel librhash-devel libbz2-devel liblzma-devel libzstd-devel python39-sphinx python39-sphinxcontrib-applehelp python39-sphinxcontrib-devhelp python39-sphinxcontrib-htmlhelp python39-sphinxcontrib-jsmath python39-sphinxcontrib-qthelp python39-sphinxcontrib-serializinghtml python39-sphinxcontrib-websupport python39-alabaster emacs vim "
+
+PKG_NAMES="${NAME} ${NAME}-gui ${NAME}-doc \
+	emacs-cmake vim-cmake bash-completion-cmake"
+cmake_CONTENTS="
+	--exclude=cmake-gui.*
+	usr/bin/
+	usr/share/aclocal/
+	usr/share/cmake*/
+	usr/share/man/"
+
+cmake_gui_SUMMARY="${SUMMARY} (GUI)"
+cmake_gui_REQUIRES=${NAME}
+cmake_gui_CONTENTS="
+	etc/
+	usr/bin/cmake-gui.exe
+	usr/share/applications/
+	usr/share/man/man1/cmake-gui.*
+	usr/share/cmake*/Help/manual/cmake-gui.1.rst
+	usr/share/icons/ usr/share/mime/"
+
+cmake_doc_SUMMARY="${SUMMARY} (documentation)"
+cmake_doc_CONTENTS="usr/share/doc/"
+
+emacs_cmake_CATEGORY+=" Editors"
+emacs_cmake_SUMMARY="${SUMMARY} (Emacs mode)"
+emacs_cmake_REQUIRES=${NAME}
+emacs_cmake_CONTENTS="usr/share/emacs/"
+
+vim_cmake_CATEGORY+=" Editors"
+vim_cmake_SUMMARY="${SUMMARY} (vim)"
+vim_cmake_REQUIRES=${NAME}
+vim_cmake_CONTENTS="usr/share/vim/"
+
+bash_completion_cmake_CATEGORY+=" Shells"
+bash_completion_cmake_SUMMARY="${SUMMARY} (bash-completion)"
+bash_completion_cmake_REQUIRES=${NAME}
+bash_completion_cmake_CONTENTS="usr/share/bash-completion/"
+
+src_compile() {
+	cd ${B}
+	export CC CXX
+	${S}/bootstrap \
+		--prefix=/usr \
+		--datadir=/share/${NAME}-${VERSION} \
+		--docdir=/share/doc/${NAME} \
+		--mandir=/share/man \
+		--qt-gui \
+		--qt-qmake=${QT5_QMAKE} \
+		--system-libs \
+		--sphinx-man --sphinx-html \
+	|| error "bootstrap failed"
+	cygmake
+}

@@ -10,6 +10,7 @@ FIND_ARGS=(
 		-name 'gcc-*'
 		-or -name 'llvm-*'
 		-or -name 'qemu-*'
+		-or -name 'cmake-*'
 		-or -name 'binutils-*'
 		-or -name 'gdb-*'
 		-or -name 'gmp*'
@@ -20,8 +21,9 @@ FIND_ARGS=(
 	-and
 	-not
 	'('
+		# remove manually
 		-name '*.sha512'
-		-or -name 'llvm-vs2022-build'
+		-or -name '*-vs2022-build'
 	')'
 )
 

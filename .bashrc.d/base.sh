@@ -121,6 +121,9 @@ set_environment_variables_at_bash_startup() {
 			local youtube_dl_dir='D:\youtube-dl'
 			export PATH="${PATH}:$(cygpath -u "${notepadpp_dir}"):$(cygpath -u "${youtube_dl_dir}")"
 			;;
+	esac
+
+	case "${HOST_TRIPLE}" in
 		*-linux )
 			# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
 			case "${DESKTOP_SESSION}" in
@@ -158,7 +161,7 @@ set_environment_variables_at_bash_startup() {
 					packages_dir="/mnt/work/packages"
 					;;
 			esac
-			local packages=( gcc binutils gdb cross-gcc llvm )
+			local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
 			local bin_dirs=()
 			local package
 			for package in "${packages[@]}"; do

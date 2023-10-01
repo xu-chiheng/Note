@@ -79,25 +79,7 @@ PACKAGE=llvm
 		# host
 	)
 
-	CMAKE_OPTIONS=()
-
-	# https://stackoverflow.com/questions/41361631/optimize-in-cmake-by-default
-	# https://discourse.cmake.org/t/how-to-override-compiler-optimisation-level/5153
-	# https://unix.stackexchange.com/questions/187455/how-to-compile-without-optimizations-o0-using-cmake
-	# https://gitlab.kitware.com/cmake/cmake/-/issues/23374
-
-	# case "${HOST_TRIPLE}" in
-	# 	x86_64-pc-cygwin )
-	# 		if [ "${BUILD_TYPE}" = Release ] ; then
-	# 			CMAKE_OPTIONS+=(
-	# 				-DCMAKE_C_FLAGS_RELEASE="-O1"
-	# 				-DCMAKE_CXX_FLAGS_RELEASE="-O1"
-	# 			)
-	# 		fi
-	# 		;;
-	# esac
-
-	CMAKE_OPTIONS+=(
+	CMAKE_OPTIONS=(
 		"../${SOURCE_DIR}/llvm"
 
 		-DLLVM_TARGETS_TO_BUILD="$(array_elements_join ';' "${TARGETS[@]}")"

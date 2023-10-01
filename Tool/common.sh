@@ -176,6 +176,9 @@ git_tag_of_package_version() {
 		qemu )
 			echo "v${version}"
 			;;
+		cmake )
+			echo "v${version}"
+			;;
 		* )
 			echo "unknown package : ${package}"
 			exit 1
@@ -197,6 +200,9 @@ git_repo_url_of_package() {
 			;;
 		qemu )
 			echo "https://gitlab.com/qemu-project/qemu.git"
+			;;
+		cmake )
+			echo "https://gitlab.kitware.com/cmake/cmake.git"
 			;;
 		* )
 			echo "unknown package : ${package}"

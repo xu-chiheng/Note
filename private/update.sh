@@ -40,6 +40,9 @@ do_update_all_files() {
 
 		Tool/build-qemu.sh
 
+		Tool/build-cmake.sh
+		Tool/build-cmake_vs2022.sh
+
 		Tool/clean.sh
 		Tool/common.sh
 

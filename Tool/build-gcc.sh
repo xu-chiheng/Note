@@ -30,7 +30,8 @@ PACKAGE="gcc"
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
-	VERSION=13.2.0
+	# VERSION=13.2.0
+	VERSION=14.0.0 # commit eaa41a6dc127d8d8a38646aaadc37681691fc311 2023-09-29
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )

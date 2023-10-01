@@ -610,7 +610,7 @@ build_and_install_cross_gcc_for_targets() {
 	&& time_command sync
 }
 
-pre_generate_package() {
+pre_generate_package_action() {
 	local host_triple="$1"
 	local package="$2"
 	local source_dir="$3"
@@ -622,7 +622,7 @@ pre_generate_package() {
 	fi
 }
 
-post_build_package() {
+post_build_package_action() {
 	local host_triple="$1"
 	local package="$2"
 	local source_dir="$3"
@@ -634,7 +634,7 @@ post_build_package() {
 	fi
 }
 
-post_install_package() {
+post_install_package_action() {
 	local host_triple="$1"
 	local package="$2"
 	local source_dir="$3"
@@ -663,15 +663,15 @@ generate_build_install_package() {
 
 	time_command check_dir_maybe_clone_and_checkout_tag "${source_dir}" "${git_tag}" "${git_repo_url}" \
 	&& echo_command rm -rf "${install_dir}" \
-	&& echo_command pre_generate_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+	&& echo_command pre_generate_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& { time_command "${pushd_and_generate_command}" "$@" \
 		&& time_command parallel_make \
 		&& echo_command pushd .. \
-		&& echo_command post_build_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		&& echo_command post_build_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 		&& echo_command popd \
 		&& time_command parallel_make install \
 		&& echo_command popd;} \
-	&& echo_command post_install_package "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+	&& echo_command post_install_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${install_dir}" \
 	&& time_command sync
 }

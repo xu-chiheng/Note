@@ -1,0 +1,14 @@
+diff --git a/Source/cmLocalGenerator.cxx b/Source/cmLocalGenerator.cxx
+index da95b19f81..2e46f9dd42 100644
+--- a/Source/cmLocalGenerator.cxx
++++ b/Source/cmLocalGenerator.cxx
+@@ -1229,6 +1229,9 @@ std::vector<BT<std::string>> cmLocalGenerator::GetIncludeDirectoriesImplicit(
+       // Only exclude this hard coded path for backwards compatibility.
+       implicitExclude.emplace("/usr/include");
+     }
++#ifdef __MINGW32__
++    implicitExclude.insert("D:/msys64/mingw64/include");
++#endif
+ 
+     for (std::string const& i : impDirVec) {
+       if (implicitSet.insert(this->GlobalGenerator->GetRealPath(i)).second) {

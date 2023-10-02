@@ -617,8 +617,8 @@ pre_generate_package_action() {
 	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		echo_command mingw_gcc_check_or_create_directory_links_2 "$(pwd)/${install_dir}/mingw" \
-		&& echo_command mingw_gcc_check_or_create_directory_links_1 "$(pwd)/${install_dir}/${host_triple}"
+		echo_command mingw_gcc_check_or_create_directory_links_0 "$(pwd)/${install_dir}/mingw" \
+		&& echo_command mingw_gcc_check_or_create_directory_links_1 "$(pwd)/${install_dir}" "${host_triple}"
 	fi
 }
 
@@ -629,8 +629,8 @@ post_build_package_action() {
 	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		echo_command mingw_gcc_remove_directory_links_2 "$(pwd)/${install_dir}/mingw" \
-		&& echo_command mingw_gcc_remove_directory_links_1 "$(pwd)/${install_dir}/${host_triple}"
+		echo_command mingw_gcc_remove_directory_links_0 "$(pwd)/${install_dir}/mingw" \
+		&& echo_command mingw_gcc_remove_directory_links_1 "$(pwd)/${install_dir}" "${host_triple}"
 	fi
 }
 

@@ -226,66 +226,72 @@ mingw_print_root_dir() {
 mingw_gcc_check_or_create_directory_links() {
 	if which gcc >/dev/null 2>&1; then
 		local gcc_install_dir="$(dirname "$(dirname "$(which gcc)")")"
-		mingw_gcc_check_or_create_directory_links_2 /mingw \
-		&& mingw_gcc_check_or_create_directory_links_2 "${gcc_install_dir}/mingw" \
-		&& mingw_gcc_check_or_create_directory_links_1 "${gcc_install_dir}/${HOST_TRIPLE}"
+		mingw_gcc_check_or_create_directory_links_0 /mingw \
+		&& mingw_gcc_check_or_create_directory_links_0 "${gcc_install_dir}/mingw" \
+		&& mingw_gcc_check_or_create_directory_links_1 "${gcc_install_dir}" "${HOST_TRIPLE}"
 	fi
 }
 
 mingw_gcc_check_or_create_directory_links_1() {
 	local root_dir="$(mingw_print_root_dir)"
-	local sysroot="$1"
-	if [ "${sysroot}" != "${root_dir}" ]; then
-		if ! { \
-			[ -e "${sysroot}"/include ] \
-			&& [ -e "${sysroot}"/lib ] \
-			&& [ "$(readlink -f "${sysroot}"/include)" = "$(readlink -f "${root_dir}"/include)" ] \
-			&& [ "$(readlink -f "${sysroot}"/lib)" = "$(readlink -f "${root_dir}"/lib)" ] \
-		;}; then
-			rm -rf "${sysroot}"/{include,lib} \
-			&& mkdir -p "${sysroot}" \
-			&& ln -s "${root_dir}"/include "${sysroot}"/include \
-			&& ln -s "${root_dir}"/lib "${sysroot}"/lib
-		else
-			# echo OK 1 "${sysroot}"
-			true
-		fi
+	local gcc_install_dir="$1"
+	local host_triple="$2"
+	local sysroot="${gcc_install_dir}/${host_triple}"
+	if [ "${gcc_install_dir}" = "${root_dir}" ]; then
+		return 0
 	fi
+	if [ "${sysroot}" = "${root_dir}" ]; then
+		return 0
+	fi
+	if [ -e "${sysroot}"/include ] && [ -e "${sysroot}"/lib ] \
+		&& [ "$(readlink -f "${sysroot}"/include)" = "$(readlink -f "${root_dir}"/include)" ] \
+		&& [ "$(readlink -f "${sysroot}"/lib)" = "$(readlink -f "${root_dir}"/lib)" ] ; then
+		# echo OK 1 "${sysroot}"
+		return 0
+	fi
+	rm -rf "${sysroot}"/{include,lib} \
+	&& mkdir -p "${sysroot}" \
+	&& ln -s "${root_dir}"/include "${sysroot}"/include \
+	&& ln -s "${root_dir}"/lib "${sysroot}"/lib
 }
 
 mingw_gcc_remove_directory_links_1() {
 	local root_dir="$(mingw_print_root_dir)"
-	local sysroot="$1"
-	if [ "${sysroot}" != "${root_dir}" ]; then
-		echo_command rm -rf "${sysroot}"/{include,lib}
+	local gcc_install_dir="$1"
+	local host_triple="$2"
+	local sysroot="${gcc_install_dir}/${host_triple}"
+	if [ "${gcc_install_dir}" = "${root_dir}" ]; then
+		return 0
 	fi
+	if [ "${sysroot}" = "${root_dir}" ]; then
+		return 0
+	fi
+	echo_command rm -rf "${sysroot}"/{include,lib}
 }
 
-mingw_gcc_check_or_create_directory_links_2() {
+mingw_gcc_check_or_create_directory_links_0() {
 	local root_dir="$(mingw_print_root_dir)"
 	local sysroot="$1"
-	if [ "${sysroot}" != "${root_dir}" ]; then
-		if ! { \
-			[ -e "${sysroot}" ] \
-			&& [ "$(readlink -f "${sysroot}")" = "$(readlink -f "${root_dir}")" ] \
-		;}; then
-			rm -rf "${sysroot}" \
-			&& mkdir -p "${sysroot}" \
-			&& rm -rf "${sysroot}" \
-			&& ln -s "${root_dir}" "${sysroot}"
-		else
-			# echo OK 2 "${sysroot}"
-			true
-		fi
+	if [ "${sysroot}" = "${root_dir}" ]; then
+		return 0
 	fi
+	if [ -e "${sysroot}" ] && [ "$(readlink -f "${sysroot}")" = "$(readlink -f "${root_dir}")" ] ; then
+		# echo OK 2 "${sysroot}"
+		return 0
+	fi
+	rm -rf "${sysroot}" \
+	&& mkdir -p "${sysroot}" \
+	&& rm -rf "${sysroot}" \
+	&& ln -s "${root_dir}" "${sysroot}"
 }
 
-mingw_gcc_remove_directory_links_2() {
+mingw_gcc_remove_directory_links_0() {
 	local root_dir="$(mingw_print_root_dir)"
 	local sysroot="$1"
-	if [ "${sysroot}" != "${root_dir}" ]; then
-		echo_command rm -rf "${sysroot}"
+	if [ "${sysroot}" = "${root_dir}" ]; then
+		return 0
 	fi
+	echo_command rm -rf "${sysroot}"
 }
 
 

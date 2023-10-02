@@ -32,6 +32,18 @@ maybe_create_test_branch() {
 }
 
 llvm_create_test_branches_for_bisect() {
+	if [ "$(basename "$(pwd)")" = llvm ]; then
+		if [ -d .git ]; then
+			true
+		else
+			echo "no .git directory"
+			return 1
+		fi
+	else
+		echo "not llvm directory"
+		return 1
+	fi
+
 	local major_version
 	for major_version in $(seq 16 99); do
 		# echo "${major_version}"
@@ -49,6 +61,18 @@ llvm_create_test_branches_for_bisect() {
 }
 
 gcc_create_test_branches_for_bisect() {
+	if [ "$(basename "$(pwd)")" = gcc ]; then
+		if [ -d .git ]; then
+			true
+		else
+			echo "no .git directory"
+			return 1
+		fi
+	else
+		echo "not gcc directory"
+		return 1
+	fi
+
 	local major_version
 	for major_version in $(seq 13 99); do
 		# echo "${major_version}"

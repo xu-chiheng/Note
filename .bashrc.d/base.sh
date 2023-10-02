@@ -246,6 +246,9 @@ mingw_gcc_check_or_create_directory_links_1() {
 			&& mkdir -p "${sysroot}" \
 			&& ln -s "${root_dir}"/include "${sysroot}"/include \
 			&& ln -s "${root_dir}"/lib "${sysroot}"/lib
+		else
+			# echo OK 1 "${sysroot}"
+			true
 		fi
 	fi
 }
@@ -270,6 +273,9 @@ mingw_gcc_check_or_create_directory_links_2() {
 			&& mkdir -p "${sysroot}" \
 			&& rm -rf "${sysroot}" \
 			&& ln -s "${root_dir}" "${sysroot}"
+		else
+			# echo OK 2 "${sysroot}"
+			true
 		fi
 	fi
 }

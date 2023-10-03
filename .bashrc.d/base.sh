@@ -77,7 +77,8 @@ set_environment_variables_at_bash_startup() {
 			# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
 			local usr_bin_gpg="/usr/bin/gpg"
 			local usr_bin_gpg2="/usr/bin/gpg2"
-			if [ ! -e "${usr_bin_gpg}" ] || [ ! "$(readlink -f "${usr_bin_gpg}")" = "$(readlink -f "${usr_bin_gpg2}")" ]; then
+			if [ -e "${usr_bin_gpg2}" ] \
+				&& { [ ! -e "${usr_bin_gpg}" ] || [ ! "$(readlink -f "${usr_bin_gpg}")" = "$(readlink -f "${usr_bin_gpg2}")" ] ;}; then
 				rm -rf "${usr_bin_gpg}" \
 				&& ln -s "${usr_bin_gpg2}" "${usr_bin_gpg}"
 			fi

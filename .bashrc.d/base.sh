@@ -376,16 +376,15 @@ current_datetime() {
 }
 
 chmod_644_recently_modified_files() {
-	if [ -d .git ]; then
-		# https://www.google.com/search?q=linux+find+recently+modified+files
-		# https://www.baeldung.com/linux/recently-changed-files
-		# https://unix.stackexchange.com/questions/33850/list-of-recently-modified-files
-		find . -type f -regextype posix-extended -regex '.*\.(txt|c|h|cxx|cc|cpp|hpp|java)' -mtime -1 \
-		-print0 | xargs -0 -n100 \
-		chmod --verbose 644
-	else
-		false
+	if [ ! -d .git ]; then
+		return 1
 	fi
+	# https://www.google.com/search?q=linux+find+recently+modified+files
+	# https://www.baeldung.com/linux/recently-changed-files
+	# https://unix.stackexchange.com/questions/33850/list-of-recently-modified-files
+	find . -type f -regextype posix-extended -regex '.*\.(txt|c|h|cxx|cc|cpp|hpp|java)' -mtime -1 \
+	-print0 | xargs -0 -n100 \
+	chmod --verbose 644
 }
 
 ask_for_confirmation() {

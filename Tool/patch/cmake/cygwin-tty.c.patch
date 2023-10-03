@@ -1,0 +1,17 @@
+diff --git a/Utilities/cmlibuv/src/unix/tty.c b/Utilities/cmlibuv/src/unix/tty.c
+index d794bd53e0..881a192d9a 100644
+--- a/Utilities/cmlibuv/src/unix/tty.c
++++ b/Utilities/cmlibuv/src/unix/tty.c
+@@ -19,6 +19,12 @@
+  * IN THE SOFTWARE.
+  */
+ 
++#ifdef __CYGWIN__
++#ifndef _GNU_SOURCE
++#define _GNU_SOURCE 1
++#endif
++#endif
++
+ #include "uv.h"
+ #include "internal.h"
+ #include "spinlock.h"

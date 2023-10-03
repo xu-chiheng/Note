@@ -10,6 +10,13 @@ https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-cmake
 
 
 
+patch_apply . ../patch/gcc/{cygwin-tty.c,mingw-include}.patch
+
+
+
+
+
+
 
 https://www.google.com/search?q=%23include_next+stdlib.h
 https://www.google.com/search?q=includes_CXX.rsp

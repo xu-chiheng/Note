@@ -97,6 +97,8 @@ set_environment_variables_at_bash_startup() {
 					rm -rf "${usr_bin_connect}" \
 					&& ln -s "${mingw_connect_path}" "${usr_bin_connect}"
 				fi
+			else
+				rm -rf "${usr_bin_connect}"
 			fi
 			;;
 	esac

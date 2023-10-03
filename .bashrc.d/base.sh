@@ -152,10 +152,22 @@ set_environment_variables_at_bash_startup() {
 		x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux )
 			case "${HOST_TRIPLE}" in
 				x86_64-pc-cygwin )
-					packages_dir=$(cygpath -u 'D:\cygwin64-packages')
+					packages_dir=$(cygpath -u 'D:\cygwin-packages')
 					;;
 				x86_64-pc-mingw64 )
-					packages_dir=$(cygpath -u 'D:\mingw64-packages')
+					case "${MSYSTEM}" in
+						MINGW64 )
+							# msvcrt.dll
+							packages_dir=$(cygpath -u 'D:\mingw-packages')
+							;;
+						UCRT64 )
+							# ucrtbase.dll
+							packages_dir=$(cygpath -u 'D:\mingw-ucrt-packages')
+							;;
+						* )
+							echo "unknown MSYSTEM : ${MSYSTEM}"
+							;;
+					esac
 					;;
 				*-linux )
 					packages_dir="/mnt/work/packages"
@@ -276,7 +288,7 @@ mingw_gcc_check_or_create_directory_links_0() {
 		return 0
 	fi
 	if [ -e "${sysroot}" ] && [ "$(readlink -f "${sysroot}")" = "$(readlink -f "${root_dir}")" ] ; then
-		# echo OK 2 "${sysroot}"
+		# echo OK 0 "${sysroot}"
 		return 0
 	fi
 	rm -rf "${sysroot}" \

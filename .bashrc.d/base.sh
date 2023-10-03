@@ -77,17 +77,25 @@ set_environment_variables_at_bash_startup() {
 			# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
 			local usr_bin_gpg="/usr/bin/gpg"
 			local usr_bin_gpg2="/usr/bin/gpg2"
-			if [ ! -f "${usr_bin_gpg}" ] || [ ! "$(readlink -f "${usr_bin_gpg}")" = "$(readlink -f "${usr_bin_gpg2}")" ]; then
+			if [ ! -e "${usr_bin_gpg}" ] || [ ! "$(readlink -f "${usr_bin_gpg}")" = "$(readlink -f "${usr_bin_gpg2}")" ]; then
 				rm -rf "${usr_bin_gpg}" \
 				&& ln -s "${usr_bin_gpg2}" "${usr_bin_gpg}"
 			fi
 			# Cygwin has no connect command, symbolic link to MinGW's
 			local usr_bin_connect="/usr/bin/connect"
-			local mingw_connect_path="$(cygpath -u "${MSYS2_DIR}")/mingw64/bin/connect.exe"
-			# local mingw_connect_path="$(cygpath -u "${MSYS2_DIR}")/ucrt64/bin/connect.exe"
-			if [ ! -f "${usr_bin_connect}" ] || [ ! "$(readlink -f "${usr_bin_connect}")" = "$(readlink -f "${mingw_connect_path}")" ]; then
-				rm -rf "${usr_bin_connect}" \
-				&& ln -s "${mingw_connect_path}" "${usr_bin_connect}"
+			local mingw_connect_path_0="$(cygpath -u "${MSYS2_DIR}")/mingw64/bin/connect.exe"
+			local mingw_connect_path_1="$(cygpath -u "${MSYS2_DIR}")/ucrt64/bin/connect.exe"
+			if [ -e "${mingw_connect_path_1}" ] || [ -e "${mingw_connect_path_0}" ]; then
+				local mingw_connect_path
+				if [ -e "${mingw_connect_path_1}" ]; then
+					mingw_connect_path="${mingw_connect_path_1}"
+				else
+					mingw_connect_path="${mingw_connect_path_0}"
+				fi
+				if [ ! -e "${usr_bin_connect}" ] || [ ! "$(readlink -f "${usr_bin_connect}")" = "$(readlink -f "${mingw_connect_path}")" ]; then
+					rm -rf "${usr_bin_connect}" \
+					&& ln -s "${mingw_connect_path}" "${usr_bin_connect}"
+				fi
 			fi
 			;;
 	esac

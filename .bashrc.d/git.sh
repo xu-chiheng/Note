@@ -246,10 +246,10 @@ git_truncate() {
 
 	git_print_remote_branch_tag
 	echo "first revision : ${first_rev}"
-	git show --summary "${first_rev}"
+	git show -s "${first_rev}"
 	printf "\n\n"
 	echo "last  revision : ${last_rev}"
-	git show --summary "${last_rev}"
+	git show -s "${last_rev}"
 	printf "\n\n"
 
 	if ! ask_for_confirmation yes; then

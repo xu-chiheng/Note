@@ -53,16 +53,3 @@ index 3da484fb9e87..37c4959373f5 100644
    }
  };
  
-diff --git a/clang/lib/Driver/ToolChains/Clang.cpp b/clang/lib/Driver/ToolChains/Clang.cpp
-index 0321da8e43f6..3409c3546c70 100644
---- a/clang/lib/Driver/ToolChains/Clang.cpp
-+++ b/clang/lib/Driver/ToolChains/Clang.cpp
-@@ -6668,7 +6668,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
-     }
-   } else if (!IsMSVCCompat) {
-     // Imitate GCC 4.2.1 by default if -fms-compatibility is not in effect.
--    GNUCVer = VersionTuple(4, 2, 1);
-+    GNUCVer = VersionTuple(11, 3, 0);
-   }
-   if (!GNUCVer.empty()) {
-     CmdArgs.push_back(

@@ -64,7 +64,7 @@ PACKAGE=llvm
 		clang
 		clang-tools-extra
 		lld
-		lldb
+		# lldb
 	)
 
 	# runtime projects are not needed to build Cross Clang

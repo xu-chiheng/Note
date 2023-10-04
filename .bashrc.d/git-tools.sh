@@ -53,8 +53,8 @@ git_backup_directory_to_all_drives() {
 
 				# echo_command \
 				sudo \
-				bash -i -c "set +m; time_command copy_tarball_to_all_drives"' "$@" ;' - "${base}" "${tarball}"
-				# bash -c "set +m; $(declare -f print_hard_drives_mount_points); $(declare -f time_command); $(declare -f copy_tarball_to_all_drives); time_command copy_tarball_to_all_drives"' "$@" ;' - "${base}" "${tarball}"
+				bash -c "set +m; $(declare -f print_hard_drives_mount_points); $(declare -f time_command); $(declare -f copy_tarball_to_all_drives); time_command copy_tarball_to_all_drives"' "$@" ;' - "${base}" "${tarball}"
+				# bash -i -c "set +m; time_command copy_tarball_to_all_drives"' "$@" ;' - "${base}" "${tarball}"
 				;;
 			* )
 				echo "don't know how to copy files to all drives"
@@ -147,7 +147,13 @@ do_git_commit() {
 			local branch="$(cat .git/branch)"
 			local current_branch="$(git branch --show-current)"
 			if [ "${current_branch}" == "${branch}" ]; then
-				echo "current branch is alreay ${branch}!"
+				echo "current branch is alreay ${branch} !"
+				return 1
+			fi
+			# https://stackoverflow.com/questions/3005392/how-can-i-tell-if-one-commit-is-a-descendant-of-another-commit
+			# if [ "$(git merge-base "${branch}" "${current_branch}")" != "${branch}" ]; then
+			if ! git merge-base --is-ancestor "${branch}" "${current_branch}"; then
+				echo "${branch} is not ancestor of ${current_branch} !"
 				return 1
 			fi
 			echo "branch : ${branch},  current_branch : ${current_branch}"

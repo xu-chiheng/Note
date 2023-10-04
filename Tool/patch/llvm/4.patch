@@ -1,0 +1,17 @@
+diff --git a/lldb/source/Utility/AddressableBits.cpp b/lldb/source/Utility/AddressableBits.cpp
+index c6e25f608da7..f68729bd6e79 100644
+--- a/lldb/source/Utility/AddressableBits.cpp
++++ b/lldb/source/Utility/AddressableBits.cpp
+@@ -6,6 +6,12 @@
+ //
+ //===----------------------------------------------------------------------===//
+ 
++#ifdef __CYGWIN__
++// lldb/include/lldb/lldb-types.h defined type addr_t
++// /usr/include/machine/types.h also defined type addr_t if macro __addr_t_defined is not defined 
++#define __addr_t_defined
++#endif
++
+ #include "lldb/Utility/AddressableBits.h"
+ #include "lldb/Target/Process.h"
+ #include "lldb/lldb-types.h"

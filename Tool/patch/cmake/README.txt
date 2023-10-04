@@ -18,6 +18,13 @@ patch_apply . ../patch/gcc/{cygwin-tty.c,mingw-include}.patch
 
 
 
+
+
+
+
+
+
+
 https://www.google.com/search?q=%23include_next+stdlib.h
 https://www.google.com/search?q=includes_CXX.rsp
 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70129

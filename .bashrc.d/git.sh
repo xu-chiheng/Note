@@ -158,6 +158,17 @@ git_remove_all_files() {
 	rm -rf
 }
 
+git_checkout_-f_cleanly() {
+	if [ ! -d .git ]; then
+		return 1
+	fi
+
+	local revision="$1"
+	time_command git checkout -f "${revision}" \
+	&& time_command git_remove_all_files \
+	&& time_command git reset --hard HEAD
+}
+
 # git_reset_--hard_HEAD() {
 #     if [ -d .git ]; then
 #         echo_command git reset --hard HEAD

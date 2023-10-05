@@ -27,20 +27,15 @@ maybe_create_test_branch() {
 	local trunk_branch="$3"
 
 	if ! git_rev_parse "${test_branch}" >/dev/null 2>&1; then
-		echo_command git checkout -b "${test_branch}" "$(git merge-base "${trunk_branch}" "${major_branch}")"
+		echo_command git checkout -f -b "${test_branch}" "$(git merge-base "${trunk_branch}" "${major_branch}")"
 	fi
 }
 
 llvm_create_test_branches_for_bisect() {
-	if [ "$(basename "$(pwd)")" = llvm ]; then
-		if [ -d .git ]; then
-			true
-		else
-			echo "no .git directory"
-			return 1
-		fi
-	else
-		echo "not llvm directory"
+	if [ ! -d .git ]; then
+		return 1
+	fi
+	if [ ! "$(basename "$(pwd)")" = llvm ]; then
 		return 1
 	fi
 
@@ -56,20 +51,15 @@ llvm_create_test_branches_for_bisect() {
 			break
 		fi
 	done
-	echo_command git checkout main
+	echo_command git checkout -f main
 	echo_command git branch
 }
 
 gcc_create_test_branches_for_bisect() {
-	if [ "$(basename "$(pwd)")" = gcc ]; then
-		if [ -d .git ]; then
-			true
-		else
-			echo "no .git directory"
-			return 1
-		fi
-	else
-		echo "not gcc directory"
+	if [ ! -d .git ]; then
+		return 1
+	fi
+	if [ ! "$(basename "$(pwd)")" = gcc ]; then
 		return 1
 	fi
 
@@ -85,7 +75,31 @@ gcc_create_test_branches_for_bisect() {
 			break
 		fi
 	done
-	echo_command git checkout master
+	echo_command git checkout -f master
+	echo_command git branch
+}
+
+qemu_create_test_branches_for_bisect() {
+	if [ ! -d .git ]; then
+		return 1
+	fi
+	if [ ! "$(basename "$(pwd)")" = qemu ]; then
+		return 1
+	fi
+
+	local major_version
+	local minor_version
+	for major_version in $(seq 6 99); do
+		for minor_version in $(seq 0 9); do
+			# echo "${major_version}" "${minor_version}"
+			local major_minor_branch="remotes/origin/stable-${major_version}.${minor_version}"
+			local test_branch="$(printf "test%02d%1d0000\n" "${major_version}" "${minor_version}")"
+			if git_rev_parse "${major_minor_branch}" >/dev/null 2>&1; then
+				maybe_create_test_branch "${major_minor_branch}" "${test_branch}" master
+			fi
+		done
+	done
+	git_checkout_-f_cleanly master
 	echo_command git branch
 }
 

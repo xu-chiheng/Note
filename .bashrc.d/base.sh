@@ -229,6 +229,10 @@ set_environment_variables_at_bash_startup() {
 
 }
 
+print_gcc_install_dir() {
+	echo "$(dirname "$(dirname "$(which gcc)")")"
+}
+
 mingw_print_root_dir() {
 	case "${MSYSTEM}" in
 		MINGW64 )
@@ -248,7 +252,7 @@ mingw_print_root_dir() {
 
 mingw_gcc_check_or_create_directory_links() {
 	if which gcc >/dev/null 2>&1; then
-		local gcc_install_dir="$(dirname "$(dirname "$(which gcc)")")"
+		local gcc_install_dir="$(print_gcc_install_dir)"
 		mingw_gcc_check_or_create_directory_links_0 /mingw \
 		&& mingw_gcc_check_or_create_directory_links_0 "${gcc_install_dir}/mingw" \
 		&& mingw_gcc_check_or_create_directory_links_1 "${gcc_install_dir}" "${HOST_TRIPLE}"

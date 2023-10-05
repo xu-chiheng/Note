@@ -409,25 +409,26 @@ copy_dependent_dlls() {
 		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
 			case "${host_triple}" in
 				x86_64-pc-mingw64 )
-					root_dirs+=( "$(mingw_print_root_dir)" / )
+					root_dirs+=( "$(mingw_print_root_dir)" "$(print_gcc_install_dir)" )
 					;;
 				x86_64-pc-cygwin )
 					# cygwin1.dll
-					root_dirs+=( /usr / )
+					root_dirs+=( /usr "$(print_gcc_install_dir)" )
 					;;
 				x86_64-pc-msys )
 					# msys-2.0.dll
-					root_dirs+=( /usr / )
+					root_dirs+=( /usr )
 					;;
 			esac
 			for root_dir in "${root_dirs[@]}"
 			do
-				bin_dirs+=( "${root_dir}/bin/" )
+				bin_dirs+=( "${root_dir}/bin" )
 			done
-			# echo "bin_dirs : "  "${bin_dirs[@]}"
+			# echo "bin_dirs :"
+			# array_elements_print "${bin_dirs[@]}"
 			local dest_dir="${install_dir}/${install_exe_dir}"
 			echo_command mkdir -p "${dest_dir}" \
-			&& echo_command cp $(ldd $(find "${install_dir}" -name '*.exe') | awk '{print $3}' | grep -E "$(array_elements_join '|' "${bin_dirs[@]}")" | sort | uniq) "${dest_dir}"
+			&& echo_command cp $(ldd $(find "${dest_dir}" -name '*.exe') | awk '{print $3}' | grep -E "^($(array_elements_join '|' "${bin_dirs[@]}"))/" | sort | uniq) "${dest_dir}"
 			;;
 	esac
 }

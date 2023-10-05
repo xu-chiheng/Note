@@ -14,6 +14,7 @@
 /*.bz2
 /*.gz
 /x86_64-pc-cygwin
-/x86_64-pc-mingw64
+/x86_64-pc-mingw64-msvcrt
+/x86_64-pc-mingw64-ucrt
 
 !/*.sha512

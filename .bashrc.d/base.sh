@@ -169,7 +169,7 @@ set_environment_variables_at_bash_startup() {
 					case "${MSYSTEM}" in
 						MINGW64 )
 							# msvcrt.dll
-							packages_dir=$(cygpath -u 'D:\mingw-packages')
+							packages_dir=$(cygpath -u 'D:\mingw-msvcrt-packages')
 							;;
 						UCRT64 )
 							# ucrtbase.dll

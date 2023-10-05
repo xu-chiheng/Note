@@ -1,10 +1,6 @@
 
 
 
-
-sed -i -e 's/typedef char \*addr_t;/typedef char \*addr_t1;/' /usr/include/machine/types.h
-
-
 lldb/include/lldb/lldb-types.h defined type addr_t
 /usr/include/machine/types.h also defined type addr_t if macro __addr_t_defined is not defined 
 

@@ -260,7 +260,28 @@ maybe_make_tarball_and_move() {
 	local tarball="$4"
 	local install_dir="$5"
 
-	local dest_dir="${host_triple}/${toolchain,,}"
+	local dest_dir
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-mingw64 )
+			case "${MSYSTEM}" in
+				MINGW64 )
+					# msvcrt.dll
+					dest_dir="${host_triple}-msvcrt/${toolchain,,}"
+					;;
+				UCRT64 )
+					# ucrtbase.dll
+					dest_dir="${host_triple}-ucrt/${toolchain,,}"
+					;;
+				* )
+					echo "unknown MSYSTEM : ${MSYSTEM}"
+					return 1
+					;;
+			esac
+			;;
+		* )
+			dest_dir="${host_triple}/${toolchain,,}"
+			;;
+	esac
 
 	if [ "${build_type}" = Release ]; then
 		echo_command rm -rf "${tarball}"{,.sha512} \
@@ -388,20 +409,7 @@ copy_dependent_dlls() {
 		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
 			case "${host_triple}" in
 				x86_64-pc-mingw64 )
-					case "${MSYSTEM}" in
-						MINGW64 )
-							# msvcrt.dll
-							root_dirs+=( /mingw64 )
-							;;
-						UCRT64 )
-							# ucrtbase.dll
-							root_dirs+=( /ucrt64 )
-							;;
-						* )
-							echo "unknown MSYSTEM : ${MSYSTEM}"
-							exit 1
-							;;
-					esac
+					root_dirs+=( "$(mingw_print_root_dir)" / )
 					;;
 				x86_64-pc-cygwin )
 					# cygwin1.dll

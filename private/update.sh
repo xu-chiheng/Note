@@ -46,8 +46,8 @@ do_update_all_files() {
 		Tool/clean.sh
 		Tool/common.sh
 
-		Tool/fix
-		Tool/patch
+		Tool/_quirk
+		Tool/_patch
 
 		Tool/linux.sh
 		Tool/cygwin.cmd

@@ -260,17 +260,21 @@ maybe_make_tarball_and_move() {
 	local tarball="$4"
 	local install_dir="$5"
 
+	if [ "${build_type}" != Release ]; then
+		return 0
+	fi
+
 	local dest_dir
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-mingw64 )
 			case "${MSYSTEM}" in
 				MINGW64 )
 					# msvcrt.dll
-					dest_dir="${host_triple}-vcrt/${toolchain,,}"
+					dest_dir="_mingw-vcrt"
 					;;
 				UCRT64 )
 					# ucrtbase.dll
-					dest_dir="${host_triple}-ucrt/${toolchain,,}"
+					dest_dir="_mingw-ucrt"
 					;;
 				* )
 					echo "unknown MSYSTEM : ${MSYSTEM}"
@@ -278,21 +282,28 @@ maybe_make_tarball_and_move() {
 					;;
 			esac
 			;;
+		x86_64-pc-cygwin )
+			# cygwin1.dll
+			dest_dir="_cygwin"
+			;;
+		*-linux )
+			dest_dir="_linux"
+			;;
 		* )
-			dest_dir="${host_triple}/${toolchain,,}"
+			echo "unknown host : ${HOST_TRIPLE}"
+			return 1
 			;;
 	esac
+	dest_dir+="/${toolchain,,}"
 
-	if [ "${build_type}" = Release ]; then
-		echo_command rm -rf "${tarball}"{,.sha512} \
-		&& { echo_command pushd "${install_dir}" \
-			&& time_command tar -cvf  "../${tarball}" * \
-			&& echo_command popd;} \
-		&& time_command sha512_calculate_file "${tarball}" \
-		\
-		&& echo_command mkdir -p "${dest_dir}" \
-		&& time_command mv -f "${tarball}"{,.sha512} "${dest_dir}"
-	fi
+	echo_command rm -rf "${tarball}"{,.sha512} \
+	&& { echo_command pushd "${install_dir}" \
+		&& time_command tar -cvf  "../${tarball}" * \
+		&& echo_command popd;} \
+	&& time_command sha512_calculate_file "${tarball}" \
+	\
+	&& echo_command mkdir -p "${dest_dir}" \
+	&& time_command mv -f "${tarball}"{,.sha512} "${dest_dir}"
 }
 
 download_and_verify_source_tarball() {

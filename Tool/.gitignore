@@ -13,8 +13,9 @@
 /*.tar
 /*.bz2
 /*.gz
-/x86_64-pc-cygwin
-/x86_64-pc-mingw64-vcrt
-/x86_64-pc-mingw64-ucrt
+/_mingw-vcrt
+/_mingw-ucrt
+/_cygwin
+/_linux
 
 !/*.sha512

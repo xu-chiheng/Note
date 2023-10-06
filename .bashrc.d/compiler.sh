@@ -64,7 +64,7 @@ gcc_create_test_branches_for_bisect() {
 	fi
 
 	local major_version
-	for major_version in $(seq 13 99); do
+	for major_version in $(seq 12 99); do
 		# echo "${major_version}"
 		local major_branch="remotes/origin/releases/gcc-${major_version}"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"

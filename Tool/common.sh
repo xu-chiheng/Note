@@ -266,7 +266,7 @@ maybe_make_tarball_and_move() {
 			case "${MSYSTEM}" in
 				MINGW64 )
 					# msvcrt.dll
-					dest_dir="${host_triple}-msvcrt/${toolchain,,}"
+					dest_dir="${host_triple}-vcrt/${toolchain,,}"
 					;;
 				UCRT64 )
 					# ucrtbase.dll
@@ -409,6 +409,7 @@ copy_dependent_dlls() {
 		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
 			case "${host_triple}" in
 				x86_64-pc-mingw64 )
+					# msvcrt.dll or ucrtbase.dll
 					root_dirs+=( "$(mingw_print_root_dir)" "$(print_gcc_install_dir)" )
 					;;
 				x86_64-pc-cygwin )

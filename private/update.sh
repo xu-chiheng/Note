@@ -52,7 +52,7 @@ do_update_all_files() {
 		Tool/linux.sh
 		Tool/cygwin.cmd
 		Tool/msys.cmd
-		Tool/mingw-msvcrt.cmd
+		Tool/mingw-vcrt.cmd
 		Tool/mingw-ucrt.cmd
 		Tool/vs2022_cygwin.cmd
 		Tool/vs2022_msys.cmd

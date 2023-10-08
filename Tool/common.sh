@@ -49,7 +49,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 		* )
 			echo "unknown toolchain : ${toolchain}"
 			echo "valid toolchain : GCC Clang"
-			exit
+			exit 1
 			;;
 	esac
 
@@ -94,7 +94,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 		* )
 			echo "unknown build type : ${build_type}"
 			echo "valid build type : Release Debug"
-			exit
+			exit 1
 			;;
 	esac
 
@@ -141,7 +141,7 @@ check_llvm_static_or_shared() {
 		* )
 			echo "unknown arg : ${llvm_static_or_shared}"
 			echo "valid arg : static shared"
-			exit
+			exit 1
 			;;
 	esac
 	export LLVM_STATIC_OR_SHARED="${llvm_static_or_shared}"
@@ -181,7 +181,7 @@ git_tag_of_package_version() {
 			;;
 		* )
 			echo "unknown package : ${package}"
-			exit 1
+			return 1
 			;;
 	esac
 }
@@ -206,7 +206,7 @@ git_repo_url_of_package() {
 			;;
 		* )
 			echo "unknown package : ${package}"
-			exit 1
+			return 1
 			;;
 	esac
 }
@@ -265,7 +265,7 @@ maybe_make_tarball_and_move() {
 	fi
 
 	local dest_dir
-	case "${HOST_TRIPLE}" in
+	case "${host_triple}" in
 		x86_64-pc-mingw64 )
 			case "${MSYSTEM}" in
 				MINGW64 )
@@ -290,7 +290,7 @@ maybe_make_tarball_and_move() {
 			dest_dir="_linux"
 			;;
 		* )
-			echo "unknown host : ${HOST_TRIPLE}"
+			echo "unknown host : ${host_triple}"
 			return 1
 			;;
 	esac

@@ -27,6 +27,7 @@ do_update_all_files() {
 		.gnupg/.gitignore
 		.gnupg/gpg.conf
 
+		Tool/README.txt
 		Tool/.gitignore
 
 		Tool/build-llvm.sh

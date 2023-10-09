@@ -10,7 +10,7 @@ https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-cmake
 
 
 
-patch_apply . ../patch/gcc/{cygwin-tty.c,mingw-include}.patch
+patch_apply . ../_patch/gcc/{cygwin-tty.c,mingw-include}.patch
 
 
 

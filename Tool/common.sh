@@ -101,6 +101,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-mingw64 )
 			mingw_gcc_check_or_create_directory_links
+			# export PATH="$(print_gcc_install_dir)/libexec/gcc/x86_64-pc-mingw64/14.0.0:${PATH}"
 
 			local mingw_c_cxx_common_flags=(  )
 			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )

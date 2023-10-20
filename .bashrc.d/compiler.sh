@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 
-maybe_create_test_branch() {
+maybe_create_test_branch_for_bisect() {
 	local major_branch="$1"
 	local test_branch="$2"
 	local trunk_branch="$3"
@@ -45,9 +45,9 @@ llvm_create_test_branches_for_bisect() {
 		local major_branch="remotes/origin/release/${major_version}.x"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
 		if git_rev_parse "${major_branch}" >/dev/null 2>&1; then
-			maybe_create_test_branch "${major_branch}" "${test_branch}" main
+			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" main
 		else
-			maybe_create_test_branch main "${test_branch}" main
+			maybe_create_test_branch_for_bisect main "${test_branch}" main
 			break
 		fi
 	done
@@ -69,9 +69,9 @@ gcc_create_test_branches_for_bisect() {
 		local major_branch="remotes/origin/releases/gcc-${major_version}"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
 		if git_rev_parse "${major_branch}" >/dev/null 2>&1; then
-			maybe_create_test_branch "${major_branch}" "${test_branch}" master
+			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" master
 		else
-			maybe_create_test_branch master "${test_branch}" master
+			maybe_create_test_branch_for_bisect master "${test_branch}" master
 			break
 		fi
 	done
@@ -95,7 +95,7 @@ qemu_create_test_branches_for_bisect() {
 			local major_minor_branch="remotes/origin/stable-${major_version}.${minor_version}"
 			local test_branch="$(printf "test%02d%1d0000\n" "${major_version}" "${minor_version}")"
 			if git_rev_parse "${major_minor_branch}" >/dev/null 2>&1; then
-				maybe_create_test_branch "${major_minor_branch}" "${test_branch}" master
+				maybe_create_test_branch_for_bisect "${major_minor_branch}" "${test_branch}" master
 			fi
 		done
 	done

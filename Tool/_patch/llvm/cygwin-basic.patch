@@ -21,18 +21,3 @@ index 39edaa6684e7..2edf4f9eb362 100644
  };
  
  class LLVM_LIBRARY_VISIBILITY DarwinX86_64TargetInfo
-diff --git a/clang/lib/Driver/ToolChains/Clang.cpp b/clang/lib/Driver/ToolChains/Clang.cpp
-index 44a9548b444e..6db8d52793ea 100644
---- a/clang/lib/Driver/ToolChains/Clang.cpp
-+++ b/clang/lib/Driver/ToolChains/Clang.cpp
-@@ -6580,7 +6580,9 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
-   // -fuse-cxa-atexit is default.
-   if (!Args.hasFlag(
-           options::OPT_fuse_cxa_atexit, options::OPT_fno_use_cxa_atexit,
--          !RawTriple.isOSAIX() && !RawTriple.isOSWindows() &&
-+          !RawTriple.isOSAIX()
-+          && !RawTriple.isWindowsGNUEnvironment()
-+          && !RawTriple.isWindowsMSVCEnvironment() &&
-               ((RawTriple.getVendor() != llvm::Triple::MipsTechnologies) ||
-                RawTriple.hasEnvironment())) ||
-       KernelOrKext)

@@ -58,14 +58,14 @@ do_update_all_files() {
 		Tool/vs2022_cygwin.cmd
 		Tool/vs2022_msys.cmd
 
-		Utils/download/Cygwin
-		Utils/download/MSYS2
-		Utils/download/Visual_Studio
+		Util/download/Cygwin
+		Util/download/MSYS2
+		Util/download/Visual_Studio
 
-		Utils/other/crypto
-		Utils/other/backup
+		Util/other/crypto
+		Util/other/backup
 
-		Utils/shell
+		Util/shell
 	)
 
 	local path

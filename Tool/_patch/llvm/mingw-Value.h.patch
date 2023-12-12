@@ -1,5 +1,5 @@
 diff --git a/clang/include/clang/Interpreter/Value.h b/clang/include/clang/Interpreter/Value.h
-index c380cd91550d..ede45b410c00 100644
+index c380cd91550d..46e827f3ec28 100644
 --- a/clang/include/clang/Interpreter/Value.h
 +++ b/clang/include/clang/Interpreter/Value.h
 @@ -52,7 +52,8 @@ class ASTContext;

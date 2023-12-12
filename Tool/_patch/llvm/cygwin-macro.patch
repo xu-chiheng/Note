@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Basic/Targets/ARM.cpp b/clang/lib/Basic/Targets/ARM.cpp
-index 06e99e67c875..9a80d8898bda 100644
+index ce7e4d4639ce..c99c247924f9 100644
 --- a/clang/lib/Basic/Targets/ARM.cpp
 +++ b/clang/lib/Basic/Targets/ARM.cpp
-@@ -1400,8 +1400,6 @@ void CygwinARMTargetInfo::getTargetDefines(const LangOptions &Opts,
+@@ -1402,8 +1402,6 @@ void CygwinARMTargetInfo::getTargetDefines(const LangOptions &Opts,
    Builder.defineMacro("__CYGWIN__");
    Builder.defineMacro("__CYGWIN32__");
    DefineStd(Builder, "unix", Opts);
@@ -12,17 +12,18 @@ index 06e99e67c875..9a80d8898bda 100644
  
  DarwinARMTargetInfo::DarwinARMTargetInfo(const llvm::Triple &Triple,
 diff --git a/clang/lib/Basic/Targets/X86.cpp b/clang/lib/Basic/Targets/X86.cpp
-index 08d2722a8e52..6714e6822c5a 100644
+index b97f88647fa4..6d62d795403a 100644
 --- a/clang/lib/Basic/Targets/X86.cpp
 +++ b/clang/lib/Basic/Targets/X86.cpp
-@@ -429,8 +429,13 @@ void X86TargetInfo::getTargetDefines(const LangOptions &Opts,
+@@ -508,8 +508,14 @@ void X86TargetInfo::getTargetDefines(const LangOptions &Opts,
    Builder.defineMacro("__GCC_ASM_FLAG_OUTPUTS__");
  
    std::string CodeModel = getTargetOpts().CodeModel;
 -  if (CodeModel == "default")
 -    CodeModel = "small";
 +  if (CodeModel == "default") {
-+    if (getTriple().isWindowsCygwinEnvironment() && getTriple().getArch() == llvm::Triple::x86_64) {
++    if (getTriple().isWindowsCygwinEnvironment() &&
++        getTriple().getArch() == llvm::Triple::x86_64) {
 +      CodeModel = "medium";
 +    } else {
 +      CodeModel = "small";
@@ -32,10 +33,10 @@ index 08d2722a8e52..6714e6822c5a 100644
  
    // Target identification.
 diff --git a/clang/lib/Basic/Targets/X86.h b/clang/lib/Basic/Targets/X86.h
-index 3da484fb9e87..37c4959373f5 100644
+index 0ab1c10833db..1664fcc417b1 100644
 --- a/clang/lib/Basic/Targets/X86.h
 +++ b/clang/lib/Basic/Targets/X86.h
-@@ -629,8 +629,6 @@ public:
+@@ -643,8 +643,6 @@ public:
      Builder.defineMacro("__CYGWIN32__");
      addCygMingDefines(Opts, Builder);
      DefineStd(Builder, "unix", Opts);
@@ -44,7 +45,7 @@ index 3da484fb9e87..37c4959373f5 100644
    }
  };
  
-@@ -902,8 +900,6 @@ public:
+@@ -916,8 +914,6 @@ public:
      Builder.defineMacro("__CYGWIN64__");
      addCygMingDefines(Opts, Builder);
      DefineStd(Builder, "unix", Opts);

@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index 908484fcc0b8..a4bc1b821c22 100644
+index 5d7f8675daf8..795814f843e3 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -289,7 +289,7 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -307,7 +307,7 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
        if (Args.hasArg(options::OPT_pg))
          CmdArgs.push_back("-lgmon");
  

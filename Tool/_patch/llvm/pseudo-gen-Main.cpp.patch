@@ -1,5 +1,5 @@
 diff --git a/clang-tools-extra/pseudo/gen/Main.cpp b/clang-tools-extra/pseudo/gen/Main.cpp
-index 25cb26563837..c9367ca16ed8 100644
+index 25cb26563837..2c0bf662ef40 100644
 --- a/clang-tools-extra/pseudo/gen/Main.cpp
 +++ b/clang-tools-extra/pseudo/gen/Main.cpp
 @@ -70,13 +70,13 @@ namespace {
@@ -9,11 +9,12 @@ index 25cb26563837..c9367ca16ed8 100644
 -  static auto &TokNames = *new std::vector<std::string>{
 -#define TOK(X) llvm::StringRef(#X).upper(),
 -#define KEYWORD(Keyword, Condition) llvm::StringRef(#Keyword).upper(),
-+  static char const * TokNames[] = {
-+#define TOK(X) #X ,
-+#define KEYWORD(Keyword, Condition) #Keyword ,
++  static char const *TokNames[] = {
++#define TOK(X) #X,
++#define KEYWORD(Keyword, Condition) #Keyword,
  #include "clang/Basic/TokenKinds.def"
-       };
+-      };
++  };
    if (isToken(SID))
 -    return TokNames[symbolToToken(SID)];
 +    return llvm::StringRef(TokNames[symbolToToken(SID)]).upper();

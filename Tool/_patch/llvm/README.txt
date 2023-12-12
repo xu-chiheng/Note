@@ -28,7 +28,7 @@ patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,mac
 patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver,general,macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general,macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}

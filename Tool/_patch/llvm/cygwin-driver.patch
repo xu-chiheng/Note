@@ -11,7 +11,7 @@ index 58427e3f83c4..7ab5a1ee9635 100644
    ToolChains/DragonFly.cpp
    ToolChains/Flang.cpp
 diff --git a/clang/lib/Driver/Driver.cpp b/clang/lib/Driver/Driver.cpp
-index 84b8fc7685fe..9d8efde4e1ed 100644
+index e241706b9082..b6f3da3a006f 100644
 --- a/clang/lib/Driver/Driver.cpp
 +++ b/clang/lib/Driver/Driver.cpp
 @@ -17,6 +17,7 @@
@@ -22,7 +22,7 @@ index 84b8fc7685fe..9d8efde4e1ed 100644
  #include "ToolChains/Darwin.h"
  #include "ToolChains/DragonFly.h"
  #include "ToolChains/FreeBSD.h"
-@@ -6249,6 +6250,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
+@@ -6263,6 +6264,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
          else
            TC = std::make_unique<toolchains::Generic_GCC>(*this, Target, Args);
          break;
@@ -34,11 +34,11 @@ index 84b8fc7685fe..9d8efde4e1ed 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..8aa9cf5c8ec0
+index 000000000000..0d738540e9d3
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,731 @@
-+//===--- Cygwin.cpp - CygwinToolChain Implementation ------------------------===//
+@@ -0,0 +1,736 @@
++//===--- Cygwin.cpp - CygwinToolChain Implementation ----------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 +// See https://llvm.org/LICENSE.txt for license information.
@@ -68,10 +68,10 @@ index 000000000000..8aa9cf5c8ec0
 +
 +/// Cygwin Tools
 +void tools::Cygwin::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
-+                                           const InputInfo &Output,
-+                                           const InputInfoList &Inputs,
-+                                           const ArgList &Args,
-+                                           const char *LinkingOutput) const {
++                                            const InputInfo &Output,
++                                            const InputInfoList &Inputs,
++                                            const ArgList &Args,
++                                            const char *LinkingOutput) const {
 +  claimNoWarnArgs(Args);
 +  ArgStringList CmdArgs;
 +
@@ -99,7 +99,7 @@ index 000000000000..8aa9cf5c8ec0
 +}
 +
 +void tools::Cygwin::Linker::AddLibGCC(const ArgList &Args,
-+                                     ArgStringList &CmdArgs) const {
++                                      ArgStringList &CmdArgs) const {
 +  // Make use of compiler-rt if --rtlib option is used
 +  ToolChain::RuntimeLibType RLT = getToolChain().GetRuntimeLibType(Args);
 +  if (RLT == ToolChain::RLT_Libgcc) {
@@ -123,10 +123,10 @@ index 000000000000..8aa9cf5c8ec0
 +}
 +
 +void tools::Cygwin::Linker::ConstructJob(Compilation &C, const JobAction &JA,
-+                                        const InputInfo &Output,
-+                                        const InputInfoList &Inputs,
-+                                        const ArgList &Args,
-+                                        const char *LinkingOutput) const {
++                                         const InputInfo &Output,
++                                         const InputInfoList &Inputs,
++                                         const ArgList &Args,
++                                         const char *LinkingOutput) const {
 +  const ToolChain &TC = getToolChain();
 +  const Driver &D = TC.getDriver();
 +  const SanitizerArgs &Sanitize = TC.getSanitizerArgs(Args);
@@ -167,7 +167,8 @@ index 000000000000..8aa9cf5c8ec0
 +    D.Diag(diag::err_target_unknown_triple) << TC.getEffectiveTriple().str();
 +  }
 +
-+  if (!Args.getLastArgValue(options::OPT_fuse_ld_EQ, "link").equals_insensitive("lld")) {
++  if (!Args.getLastArgValue(options::OPT_fuse_ld_EQ, "link")
++           .equals_insensitive("lld")) {
 +    if (TC.getArch() == llvm::Triple::x86) {
 +      CmdArgs.push_back("--wrap");
 +      CmdArgs.push_back("_Znwj");
@@ -297,7 +298,7 @@ index 000000000000..8aa9cf5c8ec0
 +
 +  if (C.getDriver().IsFlangMode()) {
 +    addFortranRuntimeLibraryPath(TC, Args, CmdArgs);
-+    addFortranRuntimeLibs(TC, CmdArgs);
++    addFortranRuntimeLibs(TC, Args, CmdArgs);
 +  }
 +
 +  // TODO: Add profile stuff here
@@ -475,7 +476,8 @@ index 000000000000..8aa9cf5c8ec0
 +  Gccs.emplace_back("cygwin-gcc");
 +  // Please do not add "gcc" here
 +  for (StringRef CandidateGcc : Gccs)
-+    if (llvm::ErrorOr<std::string> GPPName = llvm::sys::findProgramByName(CandidateGcc))
++    if (llvm::ErrorOr<std::string> GPPName =
++            llvm::sys::findProgramByName(CandidateGcc))
 +      return GPPName;
 +  return make_error_code(std::errc::no_such_file_or_directory);
 +}
@@ -499,7 +501,7 @@ index 000000000000..8aa9cf5c8ec0
 +}
 +
 +toolchains::Cygwin::Cygwin(const Driver &D, const llvm::Triple &Triple,
-+                         const ArgList &Args)
++                           const ArgList &Args)
 +    : ToolChain(D, Triple, Args), CudaInstallation(D, Triple, Args),
 +      RocmInstallation(D, Triple, Args) {
 +  getProgramPaths().push_back(getDriver().getInstalledDir());
@@ -533,7 +535,8 @@ index 000000000000..8aa9cf5c8ec0
 +  getFilePaths().push_back(
 +      (Base + SubdirName + llvm::sys::path::get_separator() + "usr/lib").str());
 +  getFilePaths().push_back(
-+      (Base + SubdirName + llvm::sys::path::get_separator() + "usr/lib/w32api").str());
++      (Base + SubdirName + llvm::sys::path::get_separator() + "usr/lib/w32api")
++          .str());
 +
 +  // Only include <base>/lib if we're not cross compiling (not even for
 +  // windows->windows to a different arch), or if the sysroot has been set
@@ -623,12 +626,12 @@ index 000000000000..8aa9cf5c8ec0
 +}
 +
 +void toolchains::Cygwin::AddCudaIncludeArgs(const ArgList &DriverArgs,
-+                                           ArgStringList &CC1Args) const {
++                                            ArgStringList &CC1Args) const {
 +  CudaInstallation.AddCudaIncludeArgs(DriverArgs, CC1Args);
 +}
 +
 +void toolchains::Cygwin::AddHIPIncludeArgs(const ArgList &DriverArgs,
-+                                          ArgStringList &CC1Args) const {
++                                           ArgStringList &CC1Args) const {
 +  RocmInstallation.AddHIPIncludeArgs(DriverArgs, CC1Args);
 +}
 +
@@ -637,8 +640,8 @@ index 000000000000..8aa9cf5c8ec0
 +  RocmInstallation.print(OS);
 +}
 +
-+void toolchains::Cygwin::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
-+                                                  ArgStringList &CC1Args) const {
++void toolchains::Cygwin::AddClangSystemIncludeArgs(
++    const ArgList &DriverArgs, ArgStringList &CC1Args) const {
 +  if (DriverArgs.hasArg(options::OPT_nostdinc))
 +    return;
 +
@@ -654,9 +657,11 @@ index 000000000000..8aa9cf5c8ec0
 +  addSystemInclude(DriverArgs, CC1Args,
 +                   Base + SubdirName + llvm::sys::path::get_separator() +
 +                       "include");
-+  addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/local/include");
++  addSystemInclude(DriverArgs, CC1Args,
++                   getDriver().SysRoot + "/usr/local/include");
 +  addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/include");
-+  addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/include/w32api");
++  addSystemInclude(DriverArgs, CC1Args,
++                   getDriver().SysRoot + "/usr/include/w32api");
 +}
 +
 +void toolchains::Cygwin::addClangTargetOptions(
@@ -763,7 +768,7 @@ index 000000000000..8aa9cf5c8ec0
 +}
 +
 +void toolchains::Cygwin::fixTripleArch(const Driver &D, llvm::Triple &Triple,
-+                                      const ArgList &Args) {
++                                       const ArgList &Args) {
 +  if (Triple.getArch() == llvm::Triple::x86 ||
 +      Triple.getArch() == llvm::Triple::arm ||
 +      Triple.getArch() == llvm::Triple::thumb)
@@ -771,11 +776,11 @@ index 000000000000..8aa9cf5c8ec0
 +}
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.h b/clang/lib/Driver/ToolChains/Cygwin.h
 new file mode 100644
-index 000000000000..9866863389eb
+index 000000000000..6a31ab1f19ed
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.h
 @@ -0,0 +1,125 @@
-+//===--- Cygwin.h - Cygwin ToolChain Implementations --------------*- C++ -*-===//
++//===--- Cygwin.h - Cygwin ToolChain Implementations ------------*- C++ -*-===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 +// See https://llvm.org/LICENSE.txt for license information.
@@ -835,7 +840,7 @@ index 000000000000..9866863389eb
 +class LLVM_LIBRARY_VISIBILITY Cygwin : public ToolChain {
 +public:
 +  Cygwin(const Driver &D, const llvm::Triple &Triple,
-+        const llvm::opt::ArgList &Args);
++         const llvm::opt::ArgList &Args);
 +
 +  static void fixTripleArch(const Driver &D, llvm::Triple &Triple,
 +                            const llvm::opt::ArgList &Args);
@@ -850,8 +855,8 @@ index 000000000000..9866863389eb
 +
 +  SanitizerMask getSupportedSanitizers() const override;
 +
-+  llvm::ExceptionHandling GetExceptionModel(
-+      const llvm::opt::ArgList &Args) const override;
++  llvm::ExceptionHandling
++  GetExceptionModel(const llvm::opt::ArgList &Args) const override;
 +
 +  void
 +  AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
@@ -901,24 +906,56 @@ index 000000000000..9866863389eb
 +
 +#endif // LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_CYGWIN_H
 diff --git a/clang/lib/Lex/InitHeaderSearch.cpp b/clang/lib/Lex/InitHeaderSearch.cpp
-index 1f4c7a6d67b7..695145c46b17 100644
+index 5b1b7c859c85..771eb0b7f6a8 100644
 --- a/clang/lib/Lex/InitHeaderSearch.cpp
 +++ b/clang/lib/Lex/InitHeaderSearch.cpp
-@@ -205,9 +205,7 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+@@ -77,11 +77,6 @@ public:
+     SystemHeaderPrefixes.emplace_back(std::string(Prefix), IsSystemHeader);
+   }
+ 
+-  /// Add the necessary paths to support a MinGW libstdc++.
+-  void AddMinGWCPlusPlusIncludePaths(StringRef Base,
+-                                     StringRef Arch,
+-                                     StringRef Version);
+-
+   /// Add paths that should always be searched.
+   void AddDefaultCIncludePaths(const llvm::Triple &triple,
+                                const HeaderSearchOptions &HSOpts);
+@@ -184,17 +179,6 @@ bool InitHeaderSearch::AddUnmappedPath(const Twine &Path, IncludeDirGroup Group,
+   return false;
+ }
+ 
+-void InitHeaderSearch::AddMinGWCPlusPlusIncludePaths(StringRef Base,
+-                                                     StringRef Arch,
+-                                                     StringRef Version) {
+-  AddPath(Base + "/" + Arch + "/" + Version + "/include/c++",
+-          CXXSystem, false);
+-  AddPath(Base + "/" + Arch + "/" + Version + "/include/c++/" + Arch,
+-          CXXSystem, false);
+-  AddPath(Base + "/" + Arch + "/" + Version + "/include/c++/backward",
+-          CXXSystem, false);
+-}
+-
+ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+                                             const HeaderSearchOptions &HSOpts) {
+   if (!ShouldAddDefaultIncludePaths(triple))
+@@ -204,10 +188,6 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+ 
    if (HSOpts.UseStandardSystemIncludes) {
      switch (os) {
-     case llvm::Triple::Win32:
+-    case llvm::Triple::Win32:
 -      if (triple.getEnvironment() != llvm::Triple::Cygnus)
 -        break;
 -      [[fallthrough]];
-+      break;
      default:
        // FIXME: temporary hack: hard-coded paths.
        AddPath("/usr/local/include", System, false);
-@@ -242,14 +240,7 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+@@ -240,21 +220,6 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+     return;
+   }
  
-   switch (os) {
-   case llvm::Triple::Win32:
+-  switch (os) {
+-  case llvm::Triple::Win32:
 -    switch (triple.getEnvironment()) {
 -    default: llvm_unreachable("Include management is handled in the driver.");
 -    case llvm::Triple::Cygnus:
@@ -927,11 +964,15 @@ index 1f4c7a6d67b7..695145c46b17 100644
 -    case llvm::Triple::GNU:
 -      break;
 -    }
-+    llvm_unreachable("Include management is handled in the driver.");
-     break;
-   default:
-     break;
-@@ -268,17 +259,7 @@ void InitHeaderSearch::AddDefaultCPlusPlusIncludePaths(
+-    break;
+-  default:
+-    break;
+-  }
+-
+   AddPath("/usr/include", ExternCSystem, false);
+ }
+ 
+@@ -268,17 +233,7 @@ void InitHeaderSearch::AddDefaultCPlusPlusIncludePaths(
    llvm::Triple::OSType os = triple.getOS();
    switch (os) {
    case llvm::Triple::Win32:
@@ -950,9 +991,12 @@ index 1f4c7a6d67b7..695145c46b17 100644
      break;
    default:
      break;
-@@ -310,10 +291,7 @@ bool InitHeaderSearch::ShouldAddDefaultIncludePaths(
-     return false;
- 
+@@ -307,13 +262,8 @@ bool InitHeaderSearch::ShouldAddDefaultIncludePaths(
+   case llvm::Triple::Solaris:
+   case llvm::Triple::WASI:
+   case llvm::Triple::ZOS:
+-    return false;
+-
    case llvm::Triple::Win32:
 -    if (triple.getEnvironment() != llvm::Triple::Cygnus ||
 -        triple.isOSBinFormatMachO())

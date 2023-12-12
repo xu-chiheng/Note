@@ -1,0 +1,33 @@
+diff --git a/llvm/lib/Support/raw_ostream.cpp b/llvm/lib/Support/raw_ostream.cpp
+index 8908e7b6a150..278eb988b2e9 100644
+--- a/llvm/lib/Support/raw_ostream.cpp
++++ b/llvm/lib/Support/raw_ostream.cpp
+@@ -37,10 +37,6 @@
+ # include <unistd.h>
+ #endif
+ 
+-#if defined(__CYGWIN__)
+-#include <io.h>
+-#endif
+-
+ #if defined(_MSC_VER)
+ #include <io.h>
+ #ifndef STDIN_FILENO
+diff --git a/llvm/tools/lli/lli.cpp b/llvm/tools/lli/lli.cpp
+index 36fca4c40ed0..3e83e9394612 100644
+--- a/llvm/tools/lli/lli.cpp
++++ b/llvm/tools/lli/lli.cpp
+@@ -75,13 +75,6 @@
+ #include <io.h>
+ #endif
+ 
+-#ifdef __CYGWIN__
+-#include <cygwin/version.h>
+-#if defined(CYGWIN_VERSION_DLL_MAJOR) && CYGWIN_VERSION_DLL_MAJOR<1007
+-#define DO_NOTHING_ATEXIT 1
+-#endif
+-#endif
+-
+ using namespace llvm;
+ 
+ static codegen::RegisterCodeGenFlags CGF;

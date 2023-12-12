@@ -1,5 +1,5 @@
 diff --git a/clang/lib/CodeGen/CGCall.h b/clang/lib/CodeGen/CGCall.h
-index eaaf10c4eec6..9922612c6bad 100644
+index aee86a3242fd..5c181b8c0086 100644
 --- a/clang/lib/CodeGen/CGCall.h
 +++ b/clang/lib/CodeGen/CGCall.h
 @@ -254,7 +254,7 @@ public:
@@ -9,5 +9,5 @@ index eaaf10c4eec6..9922612c6bad 100644
 -class CallArgList : public SmallVector<CallArg, 8> {
 +class CallArgList : public SmallVector<CallArg, 2> {
  public:
-   CallArgList() : StackBase(nullptr) {}
+   CallArgList() = default;
  

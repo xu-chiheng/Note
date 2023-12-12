@@ -1,5 +1,5 @@
 diff --git a/clang-tools-extra/pseudo/lib/grammar/Grammar.cpp b/clang-tools-extra/pseudo/lib/grammar/Grammar.cpp
-index 3e9c5c3c7a6c..ea5b9cfe53c4 100644
+index 3e9c5c3c7a6c..ec6e8915a2c7 100644
 --- a/clang-tools-extra/pseudo/lib/grammar/Grammar.cpp
 +++ b/clang-tools-extra/pseudo/lib/grammar/Grammar.cpp
 @@ -172,9 +172,10 @@ std::vector<llvm::DenseSet<SymbolID>> followSets(const Grammar &G) {

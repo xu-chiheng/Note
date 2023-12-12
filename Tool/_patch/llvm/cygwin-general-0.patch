@@ -1,0 +1,70 @@
+diff --git a/clang/lib/Headers/mm_malloc.h b/clang/lib/Headers/mm_malloc.h
+index d32fe5941627..6f46f10ee50f 100644
+--- a/clang/lib/Headers/mm_malloc.h
++++ b/clang/lib/Headers/mm_malloc.h
+@@ -12,7 +12,7 @@
+ 
+ #include <stdlib.h>
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(__CYGWIN__)
+ #include <malloc.h>
+ #else
+ #ifndef __cplusplus
+@@ -41,7 +41,7 @@ _mm_malloc(size_t __size, size_t __align) {
+   void *__mallocedMemory;
+ #if defined(__MINGW32__)
+   __mallocedMemory = __mingw_aligned_malloc(__size, __align);
+-#elif defined(_WIN32)
++#elif defined(_WIN32) && !defined(__CYGWIN__)
+   __mallocedMemory = _aligned_malloc(__size, __align);
+ #else
+   if (posix_memalign(&__mallocedMemory, __align, __size))
+@@ -56,7 +56,7 @@ _mm_free(void *__p)
+ {
+ #if defined(__MINGW32__)
+   __mingw_aligned_free(__p);
+-#elif defined(_WIN32)
++#elif defined(_WIN32) && !defined(__CYGWIN__)
+   _aligned_free(__p);
+ #else
+   free(__p);
+diff --git a/clang/tools/libclang/CIndexer.cpp b/clang/tools/libclang/CIndexer.cpp
+index 77da2e4fa5ea..d1bd7ad49c5f 100644
+--- a/clang/tools/libclang/CIndexer.cpp
++++ b/clang/tools/libclang/CIndexer.cpp
+@@ -26,12 +26,10 @@
+ #include <mutex>
+ 
+ #ifdef __CYGWIN__
+-#include <cygwin/version.h>
+ #include <sys/cygwin.h>
+-#define _WIN32 1
+ #endif
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) || defined(__CYGWIN__)
+ #include <windows.h>
+ #elif defined(_AIX)
+ #include <errno.h>
+@@ -104,7 +102,7 @@ const std::string &CIndexer::getClangResourcesPath() {
+   SmallString<128> LibClangPath;
+ 
+   // Find the location where this library lives (libclang.dylib).
+-#ifdef _WIN32
++#if defined(_WIN32) || defined(__CYGWIN__)
+   MEMORY_BASIC_INFORMATION mbi;
+   char path[MAX_PATH];
+   VirtualQuery((void *)(uintptr_t)clang_createTranslationUnit, &mbi,
+@@ -114,11 +112,7 @@ const std::string &CIndexer::getClangResourcesPath() {
+ #ifdef __CYGWIN__
+   char w32path[MAX_PATH];
+   strcpy(w32path, path);
+-#if CYGWIN_VERSION_API_MAJOR > 0 || CYGWIN_VERSION_API_MINOR >= 181
+   cygwin_conv_path(CCP_WIN_A_TO_POSIX, w32path, path, MAX_PATH);
+-#else
+-  cygwin_conv_to_full_posix_path(w32path, path);
+-#endif
+ #endif
+ 
+   LibClangPath += path;

@@ -19,13 +19,17 @@ stage 3 : Clang 16.0.6
 
 
 16.0.6
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general,macro},mingw-{pthread,emutls-16.0.6,dynamicbase,findgcc},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,macro},mingw-{pthread,emutls-16.0.6,dynamicbase,findgcc},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 17.0.0
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver-16.0.6,general,macro,CGCall.h},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,macro,CGCall.h},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
+18.0.0      2023-10-05
+patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver,general,macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0
 patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general,macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 

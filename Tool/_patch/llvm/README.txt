@@ -24,10 +24,10 @@ patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,mac
 17.0.0
 patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,macro,CGCall.h},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-18.0.0      2023-10-05
+18.0.0    6f44f87011cd52367626cac111ddbb2d25784b90 2023-10-05
 patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver,general,macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-18.0.0
+18.0.0    49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09
 patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 
@@ -48,6 +48,7 @@ cygwin-CGCall.h.patch
 Reduced number of inline elements of CallArgList.
 This fix bootstraping on Cygwin, using GCC 13.2.0 as stage 0 compiler.
 It seems that the size of CallArgList can't exceed an unknown limit.  
+As commit 49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09, this patch is not needed.
 
 
 cygwin-X86ISelLowering.cpp.patch

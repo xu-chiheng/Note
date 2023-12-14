@@ -48,7 +48,7 @@ Fix the regression caused by commit c04a05d898982614a2df80d928b97ed4f8c49b60, th
 
 
 cygwin-Value.h.patch
-Cygwin does not define _WIN32
+Value.h consider Cygwin
 
 
 

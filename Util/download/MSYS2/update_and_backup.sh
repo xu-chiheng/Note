@@ -93,7 +93,7 @@ update_and_backup_msys2() {
 		&& time_command tar -cf "${msys_tarball_name}" "${msys_root_base_name}" \
 		&& time_command xz_compress "${msys_tarball_name}" \
 		&& time_command sha512_calculate_file "${msys_tarball_name}".xz \
-		&& time_command sync \
+		&& time_command sync . \
 		&& echo_command popd;} \
     && echo "completed"
 }
@@ -101,7 +101,7 @@ update_and_backup_msys2() {
 CURRENT_DATETIME="$(current_datetime)"
 time_command update_and_backup_msys2 "${CURRENT_DATETIME}" 2>&1 | tee "~${CURRENT_DATETIME}"-update_and_backup_msys2-output.txt
 
-sync
+sync .
 
 read
 

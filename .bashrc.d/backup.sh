@@ -65,12 +65,12 @@ backup_current_directory_to_iso_file() {
 			-imax -udfdvd -directory . -output "$(cygpath -w "${path}")" \
 	\
 	&& echo "sync ......" \
-	&& time_command sync \
+	&& time_command sync "${dir}" \
 	\
 	&& echo "calculating SHA512 of '${file}' ......" \
 	&& time_command sha512_calculate_file "${path}" \
 	\
-	&& time_command sync \
+	&& time_command sync "${dir}" \
 	&& echo_command rm -rf tree.txt \
 	\
 	&& echo "completed ......"

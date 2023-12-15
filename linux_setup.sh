@@ -135,7 +135,7 @@ backup_file_or_dir () {
 
 	if [ ! -f "${dir}/${tarball}" ]; then
 		echo "backing up ${path} to ${dir}/${tarball}"
-		{ pushd "${dir}" && tar -cvjf "${tarball}" "${base}" && sync && popd;}
+		{ pushd "${dir}" && tar -cvjf "${tarball}" "${base}" && sync . && popd;}
 	else
 		echo "${dir}/${tarball} already exist"
 	fi

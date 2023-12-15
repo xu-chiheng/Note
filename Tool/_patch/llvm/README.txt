@@ -36,6 +36,7 @@ clang -v
 git show -s
 
 
+https://github.com/llvm/llvm-project/pulls/xu-chiheng
 
 cygwin-general.patch
 Remove some uses of macro __CYGWIN__ .
@@ -50,6 +51,13 @@ Fix the regression caused by commit c04a05d898982614a2df80d928b97ed4f8c49b60, th
 cygwin-Value.h.patch
 Value.h consider Cygwin
 
+
+mingw-pthread.patch
+https://github.com/llvm/llvm-project/pull/74981
+
+
+mingw-emutls.patch
+https://github.com/llvm/llvm-project/pull/74980
 
 
 

@@ -26,18 +26,24 @@ git_backup_directory() {
 
 	rm -rf "${base}"-*.tar{,.gpg}{,.sha512} \
 	&& time_command tar -cf "${tarball}" "${base}"/{.git,'~git-tools~'} \
-	&& time_command sha512_calculate_file "${tarball}"
+	&& time_command sha512_calculate_file "${tarball}" \
+	&& time_command sync .
+
+	# sync "${tarball}"{,.sha512}
 }
 
 git_backup_directory_to_all_drives() {
 	local base="$1"
 	local tarball="$2"
 
+	# sync "${tarball}".gpg{,.sha512}
+
 	time_command git_backup_directory "${base}" "${tarball}" \
 	&& echo_command cp -f "${tarball}" "${tarball}".bak \
 	&& time_command gpg_encrypt_file "${tarball}" \
 	&& echo_command mv -f "${tarball}".bak "${tarball}" \
 	&& time_command sha512_calculate_file "${tarball}".gpg \
+	&& time_command sync . \
 	&& case "${HOST_TRIPLE}" in
 			*-cygwin | *-msys | *-mingw64 )
 				set +m; time_command copy_tarball_to_all_drives "${base}" "${tarball}";
@@ -102,8 +108,7 @@ do_git_backup() {
 						git_backup_directory_to_all_drives "${base}" "${tarball}"
 						;;
 				esac \
-				&& popd;} \
-			&& time_command sync
+				&& popd;}
 			;;
 		* )
 			echo "unknown backup_command : ${backup_command}"
@@ -173,7 +178,7 @@ do_git_commit() {
 	&& if [ -f "${commit_message_file}" ]; then
 		echo_command rm -rf "${commit_message_file}"
 	fi \
-	&& time_command sync
+	&& time_command sync .git
 }
 
 git_show_commit_message() {
@@ -322,11 +327,11 @@ do_git_misc() {
 	case "${misc_command}" in
 		git_add_-A )
 			time_command git add -A --verbose \
-			&& time_command sync
+			&& time_command sync .git
 			;;
 		git_fetch )
 			time_command git fetch \
-			&& time_command sync
+			&& time_command sync .git
 			;;
 		git_fsck )
 			time_command git_fsck
@@ -337,7 +342,7 @@ do_git_misc() {
 		git_pull_--rebase )
 			local remote="$1"
 			time_command git pull --rebase "${remote}" "$(git branch --show-current)" \
-			&& time_command sync
+			&& time_command sync .git
 			;;
 		git_push )
 			local remote="$1"
@@ -349,7 +354,7 @@ do_git_misc() {
 				return 1
 			fi
 			time_command git reset --hard HEAD \
-			&& time_command sync
+			&& time_command sync .git
 			;;
 		* )
 			echo "unknown misc_command : ${misc_command}"

@@ -319,7 +319,7 @@ file_operation_common() {
 		rm -rf "${failure_output_file}"
 	fi
 	printf "\n\n"
-	time_command sync
+	time_command sync .
 }
 
 do_file_operation() {

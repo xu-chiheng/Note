@@ -216,7 +216,7 @@ git_gc() {
 
 	time_command git_reflog_expire \
 	&& time_command git gc --aggressive --prune=all \
-	&& time_command sync
+	&& time_command sync .git
 }
 
 git_print_remote_branch_tag() {
@@ -391,6 +391,9 @@ copy_tarball_to_all_drives() {
 		# echo "${d}"
 		dir="${d}/Backup"
 
+		# sync "${dir}"/"${tarball}"{,.sha512}
+		# sync "${dir}"/"${tarball}"{.gpg{,.sha512},.sha512}
+
 		### run in background
 		mkdir -p "${dir}" \
 		&& rm -rf "${dir}/${base}"-*.tar{,.gpg}{,.sha512} \
@@ -401,6 +404,7 @@ copy_tarball_to_all_drives() {
 			echo "${tarball}"'{.gpg{,.sha512},.sha512}'" ======> ${dir}"
 			cp "${tarball}"{.gpg{,.sha512},.sha512} "${dir}"
 		fi \
+		&& sync "${dir}" \
 		& # run in background
 	done \
 	&& time_command wait

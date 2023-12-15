@@ -629,7 +629,7 @@ build_and_install_cross_gcc_for_targets() {
 	done \
 	&& time_command wait \
 	&& echo "completed" \
-	&& time_command sync
+	&& time_command sync .
 }
 
 pre_generate_package_action() {
@@ -695,7 +695,7 @@ generate_build_install_package() {
 		&& echo_command popd;} \
 	&& echo_command post_install_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${install_dir}" \
-	&& time_command sync
+	&& time_command sync .
 }
 
 cmake_build_install_package() {

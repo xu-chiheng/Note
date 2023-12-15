@@ -50,4 +50,4 @@ PACKAGE="qemu"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
 
-sync
+sync .

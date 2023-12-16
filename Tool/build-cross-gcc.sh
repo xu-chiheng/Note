@@ -30,8 +30,10 @@ PACKAGE=gcc
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
-	GCC_VERSION=12.3.0
-	BINUTILS_VERSION=2.36
+	# GCC_VERSION=12.3.0
+	# BINUTILS_VERSION=2.36
+	GCC_VERSION=14.0.0
+	BINUTILS_VERSION=2.42
 
 	TARGETS=(
 		x86_64-elf

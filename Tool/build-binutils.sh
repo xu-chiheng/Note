@@ -30,7 +30,8 @@ PACKAGE="binutils"
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
-	VERSION=2.41
+	# VERSION=2.41
+	VERSION=2.42 # commit 9846e9c11081a1f268c867bd99b6354680d760f6 2023-12-16
 
 	CONFIGURE_OPTIONS=(
 		--disable-nls

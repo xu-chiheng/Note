@@ -1,0 +1,13 @@
+diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
+index 0e4f723d5796..5d02692ee41d 100644
+--- a/clang/lib/Driver/ToolChains/Cygwin.cpp
++++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
+@@ -264,7 +264,7 @@ void tools::Cygwin::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+ 
+   if (C.getDriver().IsFlangMode()) {
+     addFortranRuntimeLibraryPath(TC, Args, CmdArgs);
+-    addFortranRuntimeLibs(TC, Args, CmdArgs);
++    addFortranRuntimeLibs(TC, CmdArgs);
+   }
+ 
+   // TODO: Add profile stuff here

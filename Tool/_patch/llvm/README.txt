@@ -26,9 +26,10 @@ patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,mac
 
 18.0.0    6f44f87011cd52367626cac111ddbb2d25784b90 2023-10-05
 patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver,general,macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,dynamicbase,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,driver1,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,X86ISelLowering.cpp,Value.h},mingw-{pthread,emutls,findgcc},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 
@@ -51,6 +52,16 @@ Fix the regression caused by commit c04a05d898982614a2df80d928b97ed4f8c49b60, th
 cygwin-Value.h.patch
 Value.h consider Cygwin
 
+
+cygwin-CGCall.h.patch
+Reduced number of inline elements of CallArgList.
+This fix bootstraping on Cygwin, using GCC 13.2.0 as stage 0 compiler.
+It seems that the size of CallArgList can't exceed an unknown limit.  
+As commit 49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09, this patch is not needed.
+
+mingw-Value.h.patch
+Fix the regression caused by commit 592e935e115ffb451eb9b782376711dab6558fe0, that, in MinGW, Clang can't be built by system Clang 15.0.4.
+As commit 49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09, this patch is not needed.
 
 mingw-pthread.patch
 https://github.com/llvm/llvm-project/pull/74981

@@ -1,0 +1,30 @@
+diff --git a/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp b/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
+index ce4fbfe88739..8e96c32d24f5 100644
+--- a/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
++++ b/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
+@@ -2944,18 +2944,15 @@ bool X86DAGToDAGISel::selectMOV64Imm32(SDValue N, SDValue &Imm) {
+     return false;
+ 
+   Imm = N;
+-  // Small/medium code model can reference non-TargetGlobalAddress objects with
+-  // 32 bit constants.
+-  if (N->getOpcode() != ISD::TargetGlobalAddress) {
+-    return TM.getCodeModel() == CodeModel::Small ||
+-           TM.getCodeModel() == CodeModel::Medium;
+-  }
++  if (N->getOpcode() != ISD::TargetGlobalAddress)
++    return TM.getCodeModel() == CodeModel::Small;
+ 
+-  const GlobalValue *GV = cast<GlobalAddressSDNode>(N)->getGlobal();
+-  if (std::optional<ConstantRange> CR = GV->getAbsoluteSymbolRange())
+-    return CR->getUnsignedMax().ult(1ull << 32);
++  std::optional<ConstantRange> CR =
++      cast<GlobalAddressSDNode>(N)->getGlobal()->getAbsoluteSymbolRange();
++  if (!CR)
++    return TM.getCodeModel() == CodeModel::Small;
+ 
+-  return !TM.isLargeGlobalValue(GV);
++  return CR->getUnsignedMax().ult(1ull << 32);
+ }
+ 
+ bool X86DAGToDAGISel::selectLEA64_32Addr(SDValue N, SDValue &Base,

@@ -31,6 +31,9 @@ patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,driver1,general-{0,1,2
 18.0.0    49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09
 patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
+18.0.0    f49e2b05bf3ececa2fe20c5d658ab92ab974dc36 2023-12-17
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 
 clang -v
@@ -62,6 +65,24 @@ As commit 49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09, this patch is not
 mingw-Value.h.patch
 Fix the regression caused by commit 592e935e115ffb451eb9b782376711dab6558fe0, that, in MinGW, Clang can't be built by system Clang 15.0.4.
 As commit 49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09, this patch is not needed.
+
+cygwin-X86ISelDAGToDAG.cpp.patch
+Fix the regression caused by commit ec92d74a0ef89b9dd46aee6ec8aca6bfd3c66a54, that, in Cygwin, Clang can't build binutils 2.42.
+configure:4686: checking whether we are cross compiling
+configure:4694: clang -o conftest.exe -march=x86-64 -O3  -Wl,--strip-all conftest.c  >&5
+/cygdrive/c/Users/ADMINI~1/AppData/Local/Temp/conftest-385c4a.o:conftest.c:(.text+0x10): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+/cygdrive/c/Users/ADMINI~1/AppData/Local/Temp/conftest-385c4a.o:conftest.c:(.text+0x15): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+configure:4698: $? = 1
+configure:4705: ./conftest.exe
+../binutils/configure: line 4707: ./conftest.exe: No such file or directory
+configure:4709: $? = 127
+configure:4716: error: in `/cygdrive/e/Note/Tool/binutils-release-build':
+configure:4718: error: cannot run C compiled programs.
+If you meant to cross compile, use `--host'.
+See `config.log' for more details
+
+
 
 mingw-pthread.patch
 https://github.com/llvm/llvm-project/pull/74981
@@ -150,37 +171,6 @@ index 96feae991ccb..6d35f1bb31fc 100644
 
 
 
-
-case "${toolchain}" in
-	Clang )
-		local clang_c_cxx_flags=( -Wno-unknown-warning-option )
-		cflags+=(   "${clang_c_cxx_flags[@]}" )
-		cxxflags+=( "${clang_c_cxx_flags[@]}" )
-		;;
-esac
-
-
-/cygdrive/e/Note/Tool/llvm/clang/lib/Basic/Attributes.cpp:57:5: warning: this style of line directive is a GNU extension [-Wgnu-line-marker]
-   57 | # 1 "/cygdrive/e/Note/Tool/llvm-release-build/tools/clang/include/clang/Basic/AttrSubMatchRulesList.inc" 1
-      |     ^
-
--mcmodel=medium
--Wno-unsafe-buffer-usage
-local cygwin_clang_c_cxx_flags=( -Wno-gnu-line-marker )
-cflags+=(   "${cygwin_clang_c_cxx_flags[@]}" )
-cxxflags+=( "${cygwin_clang_c_cxx_flags[@]}" )
-
-/usr/bin/ld: ../../../../lib/libLLVMSupport.a(Parallel.cpp.o):Parallel.cpp:(.text+0x130): multiple definition of `TLS wrapper function for llvm::parallel::threadIndex'; ../../../../lib/liblldELF.a(Relocations.cpp.o):Relocations.cpp:(.text+0xf3c0): first defined here
-make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
-[100%] Built target clang-scan-deps
-clang-8: error: linker command failed with exit code 1 (use -v to see invocation)
-make[2]: *** [tools/lld/tools/lld/CMakeFiles/lld.dir/build.make:273: bin/lld.exe] Error 1
-make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
-make[1]: *** [CMakeFiles/Makefile2:56980: tools/lld/tools/lld/CMakeFiles/lld.dir/all] Error 2
-make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
-make: *** [Makefile:156: all] Error 2
-
-ldflags+=(  -Wl,--allow-multiple-definition )
 
 
 

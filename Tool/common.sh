@@ -101,12 +101,34 @@ check_toolchain_build_type_and_set_compiler_flags() {
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-mingw64 )
 			mingw_gcc_check_or_create_directory_links
-			# export PATH="$(print_gcc_install_dir)/libexec/gcc/x86_64-pc-mingw64/14.0.0:${PATH}"
 
 			local mingw_c_cxx_common_flags=(  )
 			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )
-			ldflags+=()
+
+			# when building binutils 2.36-2.42 using GCC and Clang, has the following link error:
+
+			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x0): multiple definition of `sha1_init_ctx'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x0): first defined here
+			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x20): multiple definition of `sha1_read_ctx'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x20): first defined here
+			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x50): multiple definition of `sha1_finish_ctx'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x14c0): first defined here
+			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x150): multiple definition of `sha1_process_block'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x50): first defined here
+			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x1430): multiple definition of `sha1_stream'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x19b0): first defined here
+			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x1520): multiple definition of `sha1_process_bytes'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x1610): first defined here
+			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x1690): multiple definition of `sha1_buffer'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x1930): first defined here
+			# clang: error: linker command failed with exit code 1 (use -v to see invocation)
+			# make[4]: *** [Makefile:1265: ld-new.exe] Error 1
+			# make[4]: Leaving directory '/e/Note/Tool/binutils-release-build/ld'
+			# make[3]: *** [Makefile:1903: all-recursive] Error 1
+			# make[3]: Leaving directory '/e/Note/Tool/binutils-release-build/ld'
+			# make[2]: *** [Makefile:1092: all] Error 2
+			# make[2]: Leaving directory '/e/Note/Tool/binutils-release-build/ld'
+			# make[1]: *** [Makefile:7673: all-ld] Error 2
+			# make[1]: Leaving directory '/e/Note/Tool/binutils-release-build'
+			# make: *** [Makefile:1035: all] Error 2
+
+			# should put this option in the driver of GCC and Clang ?
+			ldflags+=( -Wl,--allow-multiple-definition )
+
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
 			ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
 			;;

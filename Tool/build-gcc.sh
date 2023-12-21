@@ -100,10 +100,10 @@ PACKAGE="gcc"
 				--disable-symvers
 				--with-libiconv
 				--with-system-zlib
-				--with-gmp="$(mingw_print_root_dir)"
-				--with-mpfr="$(mingw_print_root_dir)"
-				--with-mpc="$(mingw_print_root_dir)"
-				--with-isl="$(mingw_print_root_dir)"
+				--with-gmp="$(print_mingw_root_dir)"
+				--with-mpfr="$(print_mingw_root_dir)"
+				--with-mpc="$(print_mingw_root_dir)"
+				--with-isl="$(print_mingw_root_dir)"
 				--with-gnu-as
 				--with-gnu-ld
 				--disable-libstdcxx-debug

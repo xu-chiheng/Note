@@ -79,6 +79,30 @@ gcc_create_test_branches_for_bisect() {
 	echo_command git branch
 }
 
+binutils_create_test_branches_for_bisect() {
+	if [ ! -d .git ]; then
+		return 1
+	fi
+	if [ ! "$(basename "$(pwd)")" = binutils ]; then
+		return 1
+	fi
+
+	local major_version
+	for major_version in $(seq 36 99); do
+		# echo "${major_version}"
+		local major_branch="remotes/origin/binutils-2_${major_version}-branch"
+		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
+		if git_rev_parse "${major_branch}" >/dev/null 2>&1; then
+			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" master
+		else
+			maybe_create_test_branch_for_bisect master "${test_branch}" master
+			break
+		fi
+	done
+	echo_command git checkout -f master
+	echo_command git branch
+}
+
 qemu_create_test_branches_for_bisect() {
 	if [ ! -d .git ]; then
 		return 1

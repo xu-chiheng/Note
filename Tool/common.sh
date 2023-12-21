@@ -422,7 +422,7 @@ copy_dependent_dlls() {
 			case "${host_triple}" in
 				x86_64-pc-mingw64 )
 					# msvcrt.dll or ucrtbase.dll
-					root_dirs+=( "$(mingw_print_root_dir)" "$(print_gcc_install_dir)" )
+					root_dirs+=( "$(print_mingw_root_dir)" "$(print_gcc_install_dir)" )
 					;;
 				x86_64-pc-cygwin )
 					# cygwin1.dll

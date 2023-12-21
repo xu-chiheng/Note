@@ -233,7 +233,7 @@ print_gcc_install_dir() {
 	echo "$(dirname "$(dirname "$(which gcc)")")"
 }
 
-mingw_print_root_dir() {
+print_mingw_root_dir() {
 	case "${MSYSTEM}" in
 		MINGW64 )
 			# msvcrt.dll
@@ -260,62 +260,62 @@ mingw_gcc_check_or_create_directory_links() {
 }
 
 mingw_gcc_check_or_create_directory_links_1() {
-	local root_dir="$(mingw_print_root_dir)"
+	local mingw_root_dir="$(print_mingw_root_dir)"
 	local gcc_install_dir="$1"
 	local host_triple="$2"
 	local sysroot="${gcc_install_dir}/${host_triple}"
-	if [ "${gcc_install_dir}" = "${root_dir}" ]; then
+	if [ "${gcc_install_dir}" = "${mingw_root_dir}" ]; then
 		return 0
 	fi
-	if [ "${sysroot}" = "${root_dir}" ]; then
+	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
 		return 0
 	fi
 	if [ -e "${sysroot}"/include ] && [ -e "${sysroot}"/lib ] \
-		&& [ "$(readlink -f "${sysroot}"/include)" = "$(readlink -f "${root_dir}"/include)" ] \
-		&& [ "$(readlink -f "${sysroot}"/lib)" = "$(readlink -f "${root_dir}"/lib)" ] ; then
+		&& [ "$(readlink -f "${sysroot}"/include)" = "$(readlink -f "${mingw_root_dir}"/include)" ] \
+		&& [ "$(readlink -f "${sysroot}"/lib)" = "$(readlink -f "${mingw_root_dir}"/lib)" ] ; then
 		# echo OK 1 "${sysroot}"
 		return 0
 	fi
 	rm -rf "${sysroot}"/{include,lib} \
 	&& mkdir -p "${sysroot}" \
-	&& ln -s "${root_dir}"/include "${sysroot}"/include \
-	&& ln -s "${root_dir}"/lib "${sysroot}"/lib
+	&& ln -s "${mingw_root_dir}"/include "${sysroot}"/include \
+	&& ln -s "${mingw_root_dir}"/lib "${sysroot}"/lib
 }
 
 mingw_gcc_remove_directory_links_1() {
-	local root_dir="$(mingw_print_root_dir)"
+	local mingw_root_dir="$(print_mingw_root_dir)"
 	local gcc_install_dir="$1"
 	local host_triple="$2"
 	local sysroot="${gcc_install_dir}/${host_triple}"
-	if [ "${gcc_install_dir}" = "${root_dir}" ]; then
+	if [ "${gcc_install_dir}" = "${mingw_root_dir}" ]; then
 		return 0
 	fi
-	if [ "${sysroot}" = "${root_dir}" ]; then
+	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
 		return 0
 	fi
 	echo_command rm -rf "${sysroot}"/{include,lib}
 }
 
 mingw_gcc_check_or_create_directory_links_0() {
-	local root_dir="$(mingw_print_root_dir)"
+	local mingw_root_dir="$(print_mingw_root_dir)"
 	local sysroot="$1"
-	if [ "${sysroot}" = "${root_dir}" ]; then
+	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
 		return 0
 	fi
-	if [ -e "${sysroot}" ] && [ "$(readlink -f "${sysroot}")" = "$(readlink -f "${root_dir}")" ] ; then
+	if [ -e "${sysroot}" ] && [ "$(readlink -f "${sysroot}")" = "$(readlink -f "${mingw_root_dir}")" ] ; then
 		# echo OK 0 "${sysroot}"
 		return 0
 	fi
 	rm -rf "${sysroot}" \
 	&& mkdir -p "${sysroot}" \
 	&& rm -rf "${sysroot}" \
-	&& ln -s "${root_dir}" "${sysroot}"
+	&& ln -s "${mingw_root_dir}" "${sysroot}"
 }
 
 mingw_gcc_remove_directory_links_0() {
-	local root_dir="$(mingw_print_root_dir)"
+	local mingw_root_dir="$(print_mingw_root_dir)"
 	local sysroot="$1"
-	if [ "${sysroot}" = "${root_dir}" ]; then
+	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
 		return 0
 	fi
 	echo_command rm -rf "${sysroot}"
@@ -350,7 +350,7 @@ time_command() {
 		return 0
 	else
 		local exit_status=$?
-		echo "$@" " # at $(pwd) failed"
+		echo "$@" " # at $(pwd) failed with exit status ${exit_status}"
 		return "${exit_status}"
 	fi
 }

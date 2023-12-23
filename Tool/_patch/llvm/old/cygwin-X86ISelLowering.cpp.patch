@@ -1,23 +1,12 @@
 diff --git a/llvm/lib/Target/X86/X86ISelLowering.cpp b/llvm/lib/Target/X86/X86ISelLowering.cpp
-index 99c492087a45..475f39a3a0f4 100644
+index ee8d268379fe..6e1c3000200e 100644
 --- a/llvm/lib/Target/X86/X86ISelLowering.cpp
 +++ b/llvm/lib/Target/X86/X86ISelLowering.cpp
-@@ -18323,10 +18323,15 @@ unsigned X86TargetLowering::getGlobalWrapperKind(
-   if (GV && GV->isAbsoluteSymbolRef())
-     return X86ISD::Wrapper;
+@@ -18185,6 +18185,7 @@ unsigned X86TargetLowering::getGlobalWrapperKind(
  
--  // The following OpFlags under RIP-rel PIC use RIP.
-+  CodeModel::Model M = getTargetMachine().getCodeModel();
+   // The following OpFlags under RIP-rel PIC use RIP.
    if (Subtarget.isPICStyleRIPRel() &&
--      (OpFlags == X86II::MO_NO_FLAG || OpFlags == X86II::MO_COFFSTUB ||
--       OpFlags == X86II::MO_DLLIMPORT))
-+      (M == CodeModel::Small || M == CodeModel::Kernel))
-+    return X86ISD::WrapperRIP;
-+
-+  // In the medium model, functions can always be referenced RIP-relatively,
-+  // since they must be within 2GiB. This is also possible in non-PIC mode, and
-+  // shorter than the 64-bit absolute immediate that would otherwise be emitted.
-+  if (M == CodeModel::Medium && isa_and_nonnull<Function>(GV))
++      !(Subtarget.isTargetWindowsCygwin() && Subtarget.isTargetWin64()) &&
+       (OpFlags == X86II::MO_NO_FLAG || OpFlags == X86II::MO_COFFSTUB ||
+        OpFlags == X86II::MO_DLLIMPORT))
      return X86ISD::WrapperRIP;
- 
-   // GOTPCREL references must always use RIP.

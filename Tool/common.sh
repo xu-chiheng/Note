@@ -463,7 +463,7 @@ copy_dependent_dlls() {
 			# array_elements_print "${bin_dirs[@]}"
 			local dest_dir="${install_dir}/${install_exe_dir}"
 			echo_command mkdir -p "${dest_dir}" \
-			&& echo_command cp $(ldd $(find "${dest_dir}" -name '*.exe') | awk '{print $3}' | grep -E "^($(array_elements_join '|' "${bin_dirs[@]}"))/" | sort | uniq) "${dest_dir}"
+			&& echo_command cp $(ldd $(find "${dest_dir}" -name '*.exe' -o -name '*.dll') | awk '{print $3}' | grep -E "^($(array_elements_join '|' "${bin_dirs[@]}"))/" | sort | uniq) "${dest_dir}"
 			;;
 	esac
 }

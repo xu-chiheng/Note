@@ -48,15 +48,15 @@ Fix build error by Clang due to the conflict of CIndexer.cpp and mm_malloc.h. In
 Override Cygwin's buggy getpagesize() to Win32 computePageSize().
 
 
-cygwin-X86ISelLowering.cpp.patch
-Fix the regression caused by commit c04a05d898982614a2df80d928b97ed4f8c49b60 2023-08-14, that, in Cygwin, Clang can't bootstrap.
-
-
 cygwin-CGCall.h.patch
 Reduced number of inline elements of CallArgList.
 This fix bootstraping on Cygwin, using GCC 13.2.0 as stage 0 compiler.
 It seems that the size of CallArgList can't exceed an unknown limit.  
 As commit 49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09, this patch is not needed.
+
+
+cygwin-X86ISelLowering.cpp.patch
+Fix the regression caused by commit c04a05d898982614a2df80d928b97ed4f8c49b60 2023-08-14, that, in Cygwin, Clang can't bootstrap.
 
 
 cygwin-X86ISelDAGToDAG.cpp.patch

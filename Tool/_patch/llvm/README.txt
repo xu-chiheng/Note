@@ -49,7 +49,7 @@ Override Cygwin's buggy getpagesize() to Win32 computePageSize().
 
 
 cygwin-X86ISelLowering.cpp.patch
-Fix the regression caused by commit c04a05d898982614a2df80d928b97ed4f8c49b60, that, in Cygwin, Clang can't bootstrap.
+Fix the regression caused by commit c04a05d898982614a2df80d928b97ed4f8c49b60 2023-08-14, that, in Cygwin, Clang can't bootstrap.
 
 
 cygwin-CGCall.h.patch
@@ -59,13 +59,8 @@ It seems that the size of CallArgList can't exceed an unknown limit.
 As commit 49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09, this patch is not needed.
 
 
-mingw-Value.h.patch
-Fix the regression caused by commit 592e935e115ffb451eb9b782376711dab6558fe0, that, in MinGW, Clang can't be built by system Clang 15.0.4.
-As commit 49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09, this patch is not needed.
-
-
 cygwin-X86ISelDAGToDAG.cpp.patch
-Fix the regression caused by commit ec92d74a0ef89b9dd46aee6ec8aca6bfd3c66a54, that, in Cygwin, Clang can't build binutils 2.42.
+Fix the regression caused by commit ec92d74a0ef89b9dd46aee6ec8aca6bfd3c66a54 2023-12-14, that, in Cygwin, Clang can't build binutils 2.42.
 configure:4686: checking whether we are cross compiling
 configure:4694: clang -o conftest.exe -march=x86-64 -O3  -Wl,--strip-all conftest.c  >&5
 /cygdrive/c/Users/ADMINI~1/AppData/Local/Temp/conftest-385c4a.o:conftest.c:(.text+0x10): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
@@ -87,6 +82,10 @@ https://github.com/llvm/llvm-project/pull/74981
 
 mingw-emutls.patch
 https://github.com/llvm/llvm-project/pull/74980
+
+
+mingw-Value.h.patch
+Fix the regression caused by commit 592e935e115ffb451eb9b782376711dab6558fe0 2023-05-26, that, in MinGW, Clang can't be built by system Clang.
 
 
 

@@ -61,12 +61,12 @@ set_environment_variables_at_bash_startup() {
 		# https://superuser.com/questions/550732/use-mklink-in-msys
 		# https://superuser.com/questions/526736/how-to-run-internal-cmd-command-from-the-msys-shell
 
-		*-cygwin )
+		x86_64-pc-cygwin )
 			# For Cygwin, add an environment variable, CYGWIN, and make sure it contains winsymlinks:nativestrict. See the Cygwin manual for details. (If you don’t do this, then Cygwin defaults to emulating symlinks by using special file contents that it understands but non-Cygwin software doesn’t.)
 			# default setting works
 			# export CYGWIN=winsymlinks:nativestrict
 			;;
-		*-msys | *-mingw64 )
+		x86_64-pc-msys | x86_64-pc-mingw64 )
 			# For MSYS / MinGW (this includes the command-line utilities that used in the git-bash shell), add an environment variable, MSYS, and make sure it contains winsymlinks:nativestrict. (If you don’t do this, then symlinks are “emulated” by copying files and directories. This can be surprising, to say the least.)
 			export MSYS=winsymlinks:nativestrict
 			;;
@@ -115,7 +115,7 @@ set_environment_variables_at_bash_startup() {
 	esac
 
 	case "${HOST_TRIPLE}" in
-		*-cygwin | *-msys | *-mingw64 )
+		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
 			# ssh uses wrong home directory in Cygwin - Server Fault
 			# https://serverfault.com/questions/95750/ssh-uses-wrong-home-directory-in-cygwin
 			# If your $HOME variable is set, but ssh isn't recognizing it, put this line in /etc/nsswitch.conf:

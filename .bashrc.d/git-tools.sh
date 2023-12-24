@@ -93,7 +93,7 @@ do_git_backup() {
 	&& case "${backup_command}" in
 		backup_to_all_drives | backup_to_upper_directory )
 			local base="$(basename "$(pwd)")"
-			local tarball="${base}-$(current_datetime)".tar
+			local tarball="${base}-$(print_current_datetime)".tar
 			case "${backup_command}" in
 				backup_to_all_drives )
 					time_command git_fsck

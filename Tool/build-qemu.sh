@@ -32,7 +32,7 @@
 cd "$(dirname "$0")"
 . "./common.sh"
 
-CURRENT_DATETIME="$(current_datetime)"
+CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE="qemu"
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"

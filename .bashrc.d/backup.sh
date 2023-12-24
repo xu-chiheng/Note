@@ -43,7 +43,7 @@ backup_current_directory_to_iso_file() {
 		fi
 	fi
 
-	local current_datetime="$(current_datetime)"
+	local current_datetime="$(print_current_datetime)"
 	local base="$(basename "$(pwd)")"
 	local file="${base}-${current_datetime}.iso"
 	local path="${dir}/${file}"

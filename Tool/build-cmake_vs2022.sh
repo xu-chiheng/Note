@@ -25,7 +25,7 @@
 cd "$(dirname "$0")"
 . "./common.sh"
 
-CURRENT_DATETIME="$(current_datetime)"
+CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE="cmake"
 {
 	SOURCE_DIR="${PACKAGE}"

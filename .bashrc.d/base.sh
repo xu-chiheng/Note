@@ -82,10 +82,20 @@ set_environment_variables_at_bash_startup() {
 				rm -rf "${usr_bin_gpg}" \
 				&& ln -s "${usr_bin_gpg2}" "${usr_bin_gpg}"
 			fi
+	esac
+
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
 			# Cygwin has no connect command, symbolic link to MinGW's
 			local usr_bin_connect="/usr/bin/connect"
-			local mingw_connect_path_0="$(cygpath -u "${MSYS2_DIR}")/mingw64/bin/connect.exe"
-			local mingw_connect_path_1="$(cygpath -u "${MSYS2_DIR}")/ucrt64/bin/connect.exe"
+			local mingw_connect_path_0="/mingw64/bin/connect.exe"
+			local mingw_connect_path_1="/ucrt64/bin/connect.exe"
+			case "${HOST_TRIPLE}" in
+				x86_64-pc-cygwin )
+					mingw_connect_path_0="$(cygpath -u "${MSYS2_DIR}")${mingw_connect_path_0}"
+					mingw_connect_path_1="$(cygpath -u "${MSYS2_DIR}")${mingw_connect_path_1}"
+					;;
+			esac
 			if [ -e "${mingw_connect_path_1}" ] || [ -e "${mingw_connect_path_0}" ]; then
 				local mingw_connect_path
 				if [ -e "${mingw_connect_path_1}" ]; then
@@ -98,6 +108,7 @@ set_environment_variables_at_bash_startup() {
 					&& ln -s "${mingw_connect_path}" "${usr_bin_connect}"
 				fi
 			else
+				echo "no MinGW connect command"
 				rm -rf "${usr_bin_connect}"
 			fi
 			;;
@@ -386,7 +397,7 @@ linux_terminal_execute_bash_-i() {
 	linux_terminal_execute_raw bash -i "$@"
 }
 
-current_datetime() {
+print_current_datetime() {
 	date +"%Y-%m-%d-%H-%M-%S"
 }
 

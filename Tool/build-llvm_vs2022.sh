@@ -27,7 +27,7 @@ cd "$(dirname "$0")"
 
 # https://clang.llvm.org/get_started.html
 
-CURRENT_DATETIME="$(current_datetime)"
+CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=llvm
 {
 	check_llvm_static_or_shared "$1"
@@ -139,15 +139,15 @@ PACKAGE=llvm
 	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/build-devenv-exe?view=vs-2022
 	# https://stackoverflow.com/questions/18902628/using-devenv-exe-from-the-command-line-and-specifying-the-platform
 
-	# devenv.exe LLVM.sln -build "Debug|x64"   -Out "../llvm-$(current_datetime)-output.txt"
-	# devenv.exe LLVM.sln -build "Release|x64" -Out "../llvm-$(current_datetime)-output.txt"
+	# devenv.exe LLVM.sln -build "Debug|x64"   -Out "../llvm-$(print_current_datetime)-output.txt"
+	# devenv.exe LLVM.sln -build "Release|x64" -Out "../llvm-$(print_current_datetime)-output.txt"
 	# devenv.exe LLVM.sln -clean
 
 	# https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference?view=vs-2022
 	# https://learn.microsoft.com/en-us/visualstudio/msbuild/obtaining-build-logs-with-msbuild?view=vs-2022
 
-	# msbuild.exe -m LLVM.sln -property:Configuration=Debug   -fl -flp:logfile="../llvm-$(current_datetime)-output.txt";verbosity=diagnostic
-	# msbuild.exe -m LLVM.sln -property:Configuration=Release -fl -flp:logfile="../llvm-$(current_datetime)-output.txt";verbosity=diagnostic
+	# msbuild.exe -m LLVM.sln -property:Configuration=Debug   -fl -flp:logfile="../llvm-$(print_current_datetime)-output.txt";verbosity=diagnostic
+	# msbuild.exe -m LLVM.sln -property:Configuration=Release -fl -flp:logfile="../llvm-$(print_current_datetime)-output.txt";verbosity=diagnostic
 
 	rm -rf "${VS2022_BUILD_DIR}" \
 	&& { time_command pushd_and_cmake "${VS2022_BUILD_DIR}" "${CMAKE_OPTIONS[@]}" \

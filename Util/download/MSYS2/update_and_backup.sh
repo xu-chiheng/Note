@@ -98,7 +98,7 @@ update_and_backup_msys2() {
     && echo "completed"
 }
 
-CURRENT_DATETIME="$(current_datetime)"
+CURRENT_DATETIME="$(print_current_datetime)"
 time_command update_and_backup_msys2 "${CURRENT_DATETIME}" 2>&1 | tee "~${CURRENT_DATETIME}"-update_and_backup_msys2-output.txt
 
 sync .

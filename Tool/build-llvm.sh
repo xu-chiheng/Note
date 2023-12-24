@@ -43,7 +43,7 @@ cd "$(dirname "$0")"
 # https://llvm.org/docs/CMakePrimer.html
 # https://llvm.org/docs/AdvancedBuilds.html
 
-CURRENT_DATETIME="$(current_datetime)"
+CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=llvm
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"

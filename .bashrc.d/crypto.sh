@@ -305,7 +305,7 @@ file_operation_common() {
 	local handle_operation_command="$1"
 	local operation="$2"
 	shift 2
-	local current_datetime="$(current_datetime)"
+	local current_datetime="$(print_current_datetime)"
 	local output_file="~${current_datetime}-${operation}-output.txt"
 	local failure_output_file="~${current_datetime}-${operation}-failure-output.txt"
 	time_command "${handle_operation_command}" "${operation}" "$@" 2>&1 | tee "${output_file}"

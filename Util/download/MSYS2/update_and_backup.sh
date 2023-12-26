@@ -47,7 +47,7 @@ update_and_backup_msys2() {
         python-setuptools
     )
 
-    local mingw_packages=(
+    local mingw_vcrt_packages=(
         # msvcrt.dll
         mingw-w64-x86_64-libxml2
         mingw-w64-x86_64-gcc
@@ -70,13 +70,13 @@ update_and_backup_msys2() {
     )
 
     local package
-    for package in "${mingw_packages[@]}"; do
+    for package in "${mingw_vcrt_packages[@]}"; do
         mingw_ucrt_packages+=( "$(echo "${package}" | sed -e 's/^mingw-w64-/mingw-w64-ucrt-/g' )" )
     done
 
     local all_packages=(
         "${msys_packages[@]}"
-        "${mingw_packages[@]}"
+        "${mingw_vcrt_packages[@]}"
         "${mingw_ucrt_packages[@]}"
     )
     echo "packages :"

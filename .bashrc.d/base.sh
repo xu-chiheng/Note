@@ -88,20 +88,21 @@ set_environment_variables_at_bash_startup() {
 		x86_64-pc-cygwin | x86_64-pc-msys )
 			# Cygwin and MSYS2 has no connect command, symbolic link to MinGW's
 			local usr_bin_connect="/usr/bin/connect"
-			local mingw_connect_path_0="/mingw64/bin/connect.exe"
-			local mingw_connect_path_1="/ucrt64/bin/connect.exe"
+			local mingw_vcrt_connect_path="/mingw64/bin/connect.exe"
+			local mingw_ucrt_connect_path="/ucrt64/bin/connect.exe"
 			case "${HOST_TRIPLE}" in
 				x86_64-pc-cygwin )
-					mingw_connect_path_0="$(cygpath -u "${MSYS2_DIR}")${mingw_connect_path_0}"
-					mingw_connect_path_1="$(cygpath -u "${MSYS2_DIR}")${mingw_connect_path_1}"
+					local msys2_dir_cygwin_path="$(cygpath -u "${MSYS2_DIR}")"
+					mingw_vcrt_connect_path="${msys2_dir_cygwin_path}${mingw_vcrt_connect_path}"
+					mingw_ucrt_connect_path="${msys2_dir_cygwin_path}${mingw_ucrt_connect_path}"
 					;;
 			esac
-			if [ -e "${mingw_connect_path_1}" ] || [ -e "${mingw_connect_path_0}" ]; then
+			if [ -e "${mingw_ucrt_connect_path}" ] || [ -e "${mingw_vcrt_connect_path}" ]; then
 				local mingw_connect_path
-				if [ -e "${mingw_connect_path_1}" ]; then
-					mingw_connect_path="${mingw_connect_path_1}"
+				if [ -e "${mingw_ucrt_connect_path}" ]; then
+					mingw_connect_path="${mingw_ucrt_connect_path}"
 				else
-					mingw_connect_path="${mingw_connect_path_0}"
+					mingw_connect_path="${mingw_vcrt_connect_path}"
 				fi
 				if [ ! -e "${usr_bin_connect}" ] || [ ! "$(readlink -f "${usr_bin_connect}")" = "$(readlink -f "${mingw_connect_path}")" ]; then
 					rm -rf "${usr_bin_connect}" \

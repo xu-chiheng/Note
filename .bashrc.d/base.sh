@@ -85,8 +85,8 @@ set_environment_variables_at_bash_startup() {
 	esac
 
 	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			# Cygwin has no connect command, symbolic link to MinGW's
+		x86_64-pc-cygwin | x86_64-pc-msys )
+			# Cygwin and MSYS2 has no connect command, symbolic link to MinGW's
 			local usr_bin_connect="/usr/bin/connect"
 			local mingw_connect_path_0="/mingw64/bin/connect.exe"
 			local mingw_connect_path_1="/ucrt64/bin/connect.exe"

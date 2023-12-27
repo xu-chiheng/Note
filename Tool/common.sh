@@ -131,6 +131,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
 			ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
+			# ldflags+=( -Wl,"$(print_mingw_root_dir)/lib/binmode.o" )
 			;;
 	esac
 
@@ -276,6 +277,40 @@ check_dir_maybe_clone_and_checkout_tag() {
 	fi
 }
 
+print_tarball_dest_dir() {
+	local host_triple="$1"
+
+	case "${host_triple}" in
+		x86_64-pc-mingw64 )
+			case "${MSYSTEM}" in
+				MINGW64 )
+					# msvcrt.dll
+					echo "_mingw-vcrt"
+					;;
+				UCRT64 )
+					# ucrtbase.dll
+					echo "_mingw-ucrt"
+					;;
+				* )
+					echo "unknown MSYSTEM : ${MSYSTEM}"
+					return 1
+					;;
+			esac
+			;;
+		x86_64-pc-cygwin )
+			# cygwin1.dll
+			echo "_cygwin"
+			;;
+		*-linux )
+			echo "_linux"
+			;;
+		* )
+			echo "unknown host : ${host_triple}"
+			return 1
+			;;
+	esac
+}
+
 maybe_make_tarball_and_move() {
 	local toolchain="$1"
 	local build_type="$2"
@@ -287,37 +322,7 @@ maybe_make_tarball_and_move() {
 		return 0
 	fi
 
-	local dest_dir
-	case "${host_triple}" in
-		x86_64-pc-mingw64 )
-			case "${MSYSTEM}" in
-				MINGW64 )
-					# msvcrt.dll
-					dest_dir="_mingw-vcrt"
-					;;
-				UCRT64 )
-					# ucrtbase.dll
-					dest_dir="_mingw-ucrt"
-					;;
-				* )
-					echo "unknown MSYSTEM : ${MSYSTEM}"
-					return 1
-					;;
-			esac
-			;;
-		x86_64-pc-cygwin )
-			# cygwin1.dll
-			dest_dir="_cygwin"
-			;;
-		*-linux )
-			dest_dir="_linux"
-			;;
-		* )
-			echo "unknown host : ${host_triple}"
-			return 1
-			;;
-	esac
-	dest_dir+="/${toolchain,,}"
+	local dest_dir="$(print_tarball_dest_dir "${host_triple}")/${toolchain,,}"
 
 	echo_command rm -rf "${tarball}"{,.sha512} \
 	&& { echo_command pushd "${install_dir}" \

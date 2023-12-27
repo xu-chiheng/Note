@@ -142,7 +142,7 @@ set_environment_variables_at_bash_startup() {
 		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
 			local notepadpp_dir='C:\Program Files\Notepad++'
 			local youtube_dl_dir='D:\youtube-dl'
-			export PATH="${PATH}:$(cygpath -u "${notepadpp_dir}"):$(cygpath -u "${youtube_dl_dir}")"
+			export PATH="$(array_elements_join ':' "${PATH}" "$(cygpath -u "${notepadpp_dir}")" "$(cygpath -u "${youtube_dl_dir}")" )"
 			;;
 	esac
 
@@ -173,29 +173,7 @@ set_environment_variables_at_bash_startup() {
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux )
-			case "${HOST_TRIPLE}" in
-				x86_64-pc-cygwin )
-					packages_dir=$(cygpath -u 'D:\cygwin-packages')
-					;;
-				x86_64-pc-mingw64 )
-					case "${MSYSTEM}" in
-						MINGW64 )
-							# msvcrt.dll
-							packages_dir=$(cygpath -u 'D:\mingw-vcrt-packages')
-							;;
-						UCRT64 )
-							# ucrtbase.dll
-							packages_dir=$(cygpath -u 'D:\mingw-ucrt-packages')
-							;;
-						* )
-							echo "unknown MSYSTEM : ${MSYSTEM}"
-							;;
-					esac
-					;;
-				*-linux )
-					packages_dir="/mnt/work/packages"
-					;;
-			esac
+			local packages_dir="$(print_packages_dir)"
 			local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
 			local bin_dirs=()
 			local package
@@ -212,7 +190,7 @@ set_environment_variables_at_bash_startup() {
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			local qemu_dir=$(cygpath -u 'D:\qemu')
-			export PATH="${PATH}:${qemu_dir}"
+			export PATH="$(array_elements_join ':' "${PATH}" "${qemu_dir}" )"
 			;;
 		x86_64-pc-mingw64 )
 			# local qemu_dir=$(cygpath -u 'D:\qemu')
@@ -220,9 +198,7 @@ set_environment_variables_at_bash_startup() {
 			;;
 		*-linux )
 			local qemu_dir="${packages_dir}/qemu"
-			export PATH="${PATH}:${qemu_dir}/bin"
-			# local ninja_dir="${packages_dir}/ninja"
-			# export PATH="${PATH}:${ninja_dir}"
+			export PATH="$(array_elements_join ':' "${PATH}" "${qemu_dir}/bin" )"
 			;;
 	esac
 
@@ -257,6 +233,37 @@ print_mingw_root_dir() {
 			;;
 		* )
 			echo "unknown MSYSTEM : ${MSYSTEM}"
+			return 1
+			;;
+	esac
+}
+
+print_packages_dir() {
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin )
+			echo "$(cygpath -u 'D:\cygwin-packages')"
+			;;
+		x86_64-pc-mingw64 )
+			case "${MSYSTEM}" in
+				MINGW64 )
+					# msvcrt.dll
+					echo "$(cygpath -u 'D:\mingw-vcrt-packages')"
+					;;
+				UCRT64 )
+					# ucrtbase.dll
+					echo "$(cygpath -u 'D:\mingw-ucrt-packages')"
+					;;
+				* )
+					echo "unknown MSYSTEM : ${MSYSTEM}"
+					return 1
+					;;
+			esac
+			;;
+		*-linux )
+			echo "/mnt/work/packages"
+			;;
+		* )
+			echo "unknown HOST_TRIPLE : ${HOST_TRIPLE}"
 			return 1
 			;;
 	esac

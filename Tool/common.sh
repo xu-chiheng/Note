@@ -279,7 +279,6 @@ check_dir_maybe_clone_and_checkout_tag() {
 
 print_tarball_dest_dir() {
 	local host_triple="$1"
-
 	case "${host_triple}" in
 		x86_64-pc-mingw64 )
 			case "${MSYSTEM}" in

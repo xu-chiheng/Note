@@ -173,7 +173,7 @@ set_environment_variables_at_bash_startup() {
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux )
-			local packages_dir="$(print_packages_dir)"
+			local packages_dir="$(print_packages_dir "${HOST_TRIPLE}")"
 			local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
 			local bin_dirs=()
 			local package
@@ -239,7 +239,8 @@ print_mingw_root_dir() {
 }
 
 print_packages_dir() {
-	case "${HOST_TRIPLE}" in
+	local host_triple="$1"
+	case "${host_triple}" in
 		x86_64-pc-cygwin )
 			echo "$(cygpath -u 'D:\cygwin-packages')"
 			;;
@@ -263,7 +264,7 @@ print_packages_dir() {
 			echo "/mnt/work/packages"
 			;;
 		* )
-			echo "unknown HOST_TRIPLE : ${HOST_TRIPLE}"
+			echo "unknown host : ${host_triple}"
 			return 1
 			;;
 	esac

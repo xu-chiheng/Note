@@ -460,8 +460,7 @@ copy_dependent_dlls() {
 					root_dirs+=( /usr )
 					;;
 			esac
-			for root_dir in "${root_dirs[@]}"
-			do
+			for root_dir in "${root_dirs[@]}"; do
 				bin_dirs+=( "${root_dir}/bin" )
 			done
 			# echo "bin_dirs :"
@@ -570,7 +569,7 @@ build_and_install_binutils_gcc_for_target() {
 
 	echo_command rm -rf "${gcc_install_dir}" \
 	\
-	&& echo_command export PATH="${gcc_install_dir}/bin:${old_path}" \
+	&& echo_command export PATH="$(array_elements_join ':' "$(pwd)/${gcc_install_dir}/bin" "${PATH}" )" \
 	\
 	&& { time_command pushd_and_configure "${binutils_build_dir}" "${binutils_source_dir}" \
 			"${binutils_configure_options[@]}" \

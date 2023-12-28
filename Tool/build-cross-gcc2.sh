@@ -30,14 +30,20 @@ PACKAGE=gcc
 {
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
 
-	GCC_VERSION=12.3.0
-	BINUTILS_VERSION=2.36
+	# GCC_VERSION=12.3.0
+	# BINUTILS_VERSION=2.36
+	GCC_VERSION=14.0.0 # commit 61d6dee992fdfa350a0c6d2a8151ec6e2844c419 2023-12-17
+	BINUTILS_VERSION=2.42 # commit 9846e9c11081a1f268c867bd99b6354680d760f6 2023-12-16
 
 	TARGETS=(
 		x86_64-pc-cygwin
 		x86_64-pc-mingw64
 		x86_64-pc-linux
 	)
+
+	# remove "${HOST_TRIPLE}"
+	TARGETS=( ${TARGETS[@]/${HOST_TRIPLE}} )
+	array_elements_print "${TARGETS[@]}"
 
 	time_command build_and_install_cross_gcc_for_targets \
 		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \

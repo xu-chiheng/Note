@@ -40,6 +40,10 @@ cd "$(dirname "$0")"
 # 2017 LLVM Developers’ Meeting: Petr Hosek "Compiling cross-toolchains with CMake and runtimes build"
 # https://www.youtube.com/watch?v=OCQGpUzXDsY
 
+# 2023 LLVM Dev Mtg - Understanding the LLVM build
+# https://www.youtube.com/watch?v=Dnubzx8-E1M
+
+
 # https://llvm.org/docs/CMakePrimer.html
 # https://llvm.org/docs/AdvancedBuilds.html
 

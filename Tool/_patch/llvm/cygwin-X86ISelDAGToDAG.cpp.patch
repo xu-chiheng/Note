@@ -1,8 +1,8 @@
 diff --git a/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp b/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
-index 7ec59c74f5f5..103b13a426f6 100644
+index 77a997588c4f..ef8981f0e7e3 100644
 --- a/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
 +++ b/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
-@@ -2947,6 +2947,18 @@ bool X86DAGToDAGISel::selectMOV64Imm32(SDValue N, SDValue &Imm) {
+@@ -2944,6 +2944,18 @@ bool X86DAGToDAGISel::selectMOV64Imm32(SDValue N, SDValue &Imm) {
      return false;
  
    Imm = N;

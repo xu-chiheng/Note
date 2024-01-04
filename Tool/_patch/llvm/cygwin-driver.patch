@@ -11,7 +11,7 @@ index 58427e3f83c4..7ab5a1ee9635 100644
    ToolChains/DragonFly.cpp
    ToolChains/Flang.cpp
 diff --git a/clang/lib/Driver/Driver.cpp b/clang/lib/Driver/Driver.cpp
-index e241706b9082..b6f3da3a006f 100644
+index 9b2f2a374809..4d08c9a14c9b 100644
 --- a/clang/lib/Driver/Driver.cpp
 +++ b/clang/lib/Driver/Driver.cpp
 @@ -17,6 +17,7 @@
@@ -22,7 +22,7 @@ index e241706b9082..b6f3da3a006f 100644
  #include "ToolChains/Darwin.h"
  #include "ToolChains/DragonFly.h"
  #include "ToolChains/FreeBSD.h"
-@@ -6263,6 +6264,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
+@@ -6269,6 +6270,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
          else
            TC = std::make_unique<toolchains::Generic_GCC>(*this, Target, Args);
          break;
@@ -912,7 +912,7 @@ index 000000000000..6a31ab1f19ed
 +
 +#endif // LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_CYGWIN_H
 diff --git a/clang/lib/Lex/InitHeaderSearch.cpp b/clang/lib/Lex/InitHeaderSearch.cpp
-index 5b1b7c859c85..771eb0b7f6a8 100644
+index 1350fa5f01a5..a66c95445a90 100644
 --- a/clang/lib/Lex/InitHeaderSearch.cpp
 +++ b/clang/lib/Lex/InitHeaderSearch.cpp
 @@ -77,11 +77,6 @@ public:

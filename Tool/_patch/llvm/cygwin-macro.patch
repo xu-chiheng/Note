@@ -1,5 +1,5 @@
 diff --git a/clang/lib/Basic/Targets/ARM.cpp b/clang/lib/Basic/Targets/ARM.cpp
-index ce7e4d4639ce..c99c247924f9 100644
+index 01f9e844da12..800f61c0c678 100644
 --- a/clang/lib/Basic/Targets/ARM.cpp
 +++ b/clang/lib/Basic/Targets/ARM.cpp
 @@ -1402,8 +1402,6 @@ void CygwinARMTargetInfo::getTargetDefines(const LangOptions &Opts,
@@ -12,7 +12,7 @@ index ce7e4d4639ce..c99c247924f9 100644
  
  DarwinARMTargetInfo::DarwinARMTargetInfo(const llvm::Triple &Triple,
 diff --git a/clang/lib/Basic/Targets/X86.cpp b/clang/lib/Basic/Targets/X86.cpp
-index b97f88647fa4..6d62d795403a 100644
+index 3deaa19f8d4f..e6b2d1160de9 100644
 --- a/clang/lib/Basic/Targets/X86.cpp
 +++ b/clang/lib/Basic/Targets/X86.cpp
 @@ -508,8 +508,14 @@ void X86TargetInfo::getTargetDefines(const LangOptions &Opts,

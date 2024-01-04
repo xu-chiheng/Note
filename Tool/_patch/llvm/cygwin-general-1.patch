@@ -1,8 +1,8 @@
 diff --git a/llvm/lib/Support/raw_ostream.cpp b/llvm/lib/Support/raw_ostream.cpp
-index 8908e7b6a150..278eb988b2e9 100644
+index 3d3a564af51d..a0f0393f6f45 100644
 --- a/llvm/lib/Support/raw_ostream.cpp
 +++ b/llvm/lib/Support/raw_ostream.cpp
-@@ -37,10 +37,6 @@
+@@ -38,10 +38,6 @@
  # include <unistd.h>
  #endif
  
@@ -14,7 +14,7 @@ index 8908e7b6a150..278eb988b2e9 100644
  #include <io.h>
  #ifndef STDIN_FILENO
 diff --git a/llvm/tools/lli/lli.cpp b/llvm/tools/lli/lli.cpp
-index 36fca4c40ed0..3e83e9394612 100644
+index 5f1fd1578764..82a9789a3e54 100644
 --- a/llvm/tools/lli/lli.cpp
 +++ b/llvm/tools/lli/lli.cpp
 @@ -75,13 +75,6 @@

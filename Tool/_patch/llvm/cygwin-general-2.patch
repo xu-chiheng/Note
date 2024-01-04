@@ -54,10 +54,10 @@ index 30c64d3ed9ed..d0323be2ec05 100644
 +}
 +#endif
 diff --git a/llvm/lib/Support/Unix/Process.inc b/llvm/lib/Support/Unix/Process.inc
-index 2babf07944bf..2bf53ae188eb 100644
+index 551f0d7f0f02..e1c4d964db3f 100644
 --- a/llvm/lib/Support/Unix/Process.inc
 +++ b/llvm/lib/Support/Unix/Process.inc
-@@ -76,7 +76,9 @@ Process::Pid Process::getProcessId() {
+@@ -78,7 +78,9 @@ Process::Pid Process::getProcessId() {
  // On Cygwin, getpagesize() returns 64k(AllocationGranularity) and
  // offset in mmap(3) should be aligned to the AllocationGranularity.
  Expected<unsigned> Process::getPageSize() {

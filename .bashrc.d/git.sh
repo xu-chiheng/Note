@@ -169,14 +169,6 @@ git_checkout_-f_cleanly() {
 	&& time_command git reset --hard HEAD
 }
 
-# git_reset_--hard_HEAD() {
-#     if [ -d .git ]; then
-#         echo_command git reset --hard HEAD
-#     else
-#         false
-#     fi
-# }
-
 git_filemode_false() {
 	if [ ! -d .git ]; then
 		return 1

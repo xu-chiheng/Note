@@ -18,10 +18,10 @@ stage 2 : Clang 16.0.6
 stage 3 : Clang 16.0.6
 
 
-16.0.6
+16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a 2023-01-24
 patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,macro},mingw-{pthread,emutls-16.0.6,findgcc},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-17.0.7
+17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7 2023-07-25
 patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,macro,CGCall.h},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    6f44f87011cd52367626cac111ddbb2d25784b90 2023-10-05
@@ -33,6 +33,9 @@ patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,
 
 18.0.0    f49e2b05bf3ececa2fe20c5d658ab92ab974dc36 2023-12-17
 patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
+18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104 2024-01-01
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp,X86ISelDAGToDAG.cpp-2},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 
@@ -74,6 +77,31 @@ configure:4716: error: in `/cygdrive/e/Note/Tool/binutils-release-build':
 configure:4718: error: cannot run C compiled programs.
 If you meant to cross compile, use `--host'.
 See `config.log' for more details
+
+cygwin-X86ISelDAGToDAG.cpp-2.patch
+Fix the regression caused by commit 2366d53d8d8726b73408597b534d2f910c3d3e6d 2023-12-22, that, in Cygwin, Clang can't bootstrap.
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0xb9b): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0xba2): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0x126c): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0x1273): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0x1377): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0x137e): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0x1f32): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0x1f39): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0x2b76): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0x2b7d): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
+CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0x399e): additional relocation overflows omitted from the output
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+make[2]: *** [lib/Demangle/CMakeFiles/LLVMDemangle.dir/build.make:177: bin/cygLLVMDemangle-18git.dll] Error 1
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+make[1]: *** [CMakeFiles/Makefile2:10800: lib/Demangle/CMakeFiles/LLVMDemangle.dir/all] Error 2
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+[  3%] Built target obj.LLVMTableGenCommon
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+[  3%] Built target obj.LLVMCFIVerify
+make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+make: *** [Makefile:156: all] Error 2
+
 
 
 mingw-pthread.patch

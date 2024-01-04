@@ -30,10 +30,10 @@ index d32fe5941627..6f46f10ee50f 100644
  #else
    free(__p);
 diff --git a/clang/tools/libclang/CIndexer.cpp b/clang/tools/libclang/CIndexer.cpp
-index 77da2e4fa5ea..d1bd7ad49c5f 100644
+index 12d9d418dea5..e7c1bed8b740 100644
 --- a/clang/tools/libclang/CIndexer.cpp
 +++ b/clang/tools/libclang/CIndexer.cpp
-@@ -26,12 +26,10 @@
+@@ -27,12 +27,10 @@
  #include <mutex>
  
  #ifdef __CYGWIN__
@@ -47,7 +47,7 @@ index 77da2e4fa5ea..d1bd7ad49c5f 100644
  #include <windows.h>
  #elif defined(_AIX)
  #include <errno.h>
-@@ -104,7 +102,7 @@ const std::string &CIndexer::getClangResourcesPath() {
+@@ -105,7 +103,7 @@ const std::string &CIndexer::getClangResourcesPath() {
    SmallString<128> LibClangPath;
  
    // Find the location where this library lives (libclang.dylib).
@@ -56,7 +56,7 @@ index 77da2e4fa5ea..d1bd7ad49c5f 100644
    MEMORY_BASIC_INFORMATION mbi;
    char path[MAX_PATH];
    VirtualQuery((void *)(uintptr_t)clang_createTranslationUnit, &mbi,
-@@ -114,11 +112,7 @@ const std::string &CIndexer::getClangResourcesPath() {
+@@ -115,11 +113,7 @@ const std::string &CIndexer::getClangResourcesPath() {
  #ifdef __CYGWIN__
    char w32path[MAX_PATH];
    strcpy(w32path, path);

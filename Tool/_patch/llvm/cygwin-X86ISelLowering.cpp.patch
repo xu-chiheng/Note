@@ -6,7 +6,7 @@ index a90ddf132c38..3393867229ca 100644
  
    // The following OpFlags under RIP-rel PIC use RIP.
    if (Subtarget.isPICStyleRIPRel() &&
-+      !(Subtarget.isTargetWindowsCygwin() && Subtarget.isTargetWin64()) &&
++      !(Subtarget.isTargetWindowsCygwin() && Subtarget.is64Bit()) &&
        (OpFlags == X86II::MO_NO_FLAG || OpFlags == X86II::MO_COFFSTUB ||
         OpFlags == X86II::MO_DLLIMPORT))
      return X86ISD::WrapperRIP;

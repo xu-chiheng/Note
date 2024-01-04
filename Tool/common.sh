@@ -103,6 +103,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			mingw_gcc_check_or_create_directory_links
 
 			local mingw_c_cxx_common_flags=(  )
+			# mingw_c_cxx_common_flags+=( -mcmodel=medium )
 			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )
 

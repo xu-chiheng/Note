@@ -6,7 +6,7 @@ index 77a997588c4f..ef8981f0e7e3 100644
      return false;
  
    Imm = N;
-+  if (Subtarget->isTargetWindowsCygwin() && Subtarget->isTargetWin64()) {
++  if (Subtarget->isTargetWindowsCygwin() && Subtarget->is64Bit()) {
 +    if (N->getOpcode() != ISD::TargetGlobalAddress)
 +      return TM.getCodeModel() == CodeModel::Small;
 +

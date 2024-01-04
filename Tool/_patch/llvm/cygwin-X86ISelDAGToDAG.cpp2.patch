@@ -1,5 +1,5 @@
 diff --git a/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp b/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
-index ef8981f0e7e3..07749d621bde 100644
+index 77a997588c4f..8cbb0fd25e2f 100644
 --- a/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
 +++ b/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
 @@ -1828,7 +1828,9 @@ bool X86DAGToDAGISel::matchWrapper(SDValue N, X86ISelAddressMode &AM) {
@@ -7,9 +7,9 @@ index ef8981f0e7e3..07749d621bde 100644
    // such as the GOT itself.
    CodeModel::Model M = TM.getCodeModel();
 -  if (Subtarget->is64Bit() && M == CodeModel::Large && !IsRIPRelTLS)
-+  if (Subtarget->is64Bit() &&
-+      ((M == CodeModel::Large && !IsRIPRelTLS) ||
-+       (M == CodeModel::Medium && !IsRIPRel)))
++  if (Subtarget->is64Bit() && ((M == CodeModel::Large && !IsRIPRelTLS) ||
++                               (Subtarget->isTargetWindowsCygwin() &&
++                                M == CodeModel::Medium && !IsRIPRel)))
      return true;
  
    // Base and index reg must be 0 in order to use %rip as base.

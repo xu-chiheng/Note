@@ -67,7 +67,7 @@ patch_generate() {
 	&& rm -rf a b
 }
 
-patch_apply() {
+patch_apply_verify() {
 	local dir="$1"
 	shift 1
 	local patches=( "$@" )
@@ -97,9 +97,34 @@ patch_apply() {
 		fi
 	done
 
+}
+
+patch_apply() {
+	if ! patch_apply_verify "$@"; then
+		return 1
+	fi
+	local dir="$1"
+	shift 1
+	local patches=( "$@" )
+
 	cat "${patches[@]}" | {
 		pushd "${dir}" >/dev/null 2>&1 \
 		&& patch -Np1 \
+		&& popd >/dev/null 2>&1
+	}
+}
+
+patch_apply_reverse() {
+	if ! patch_apply_verify "$@"; then
+		return 1
+	fi
+	local dir="$1"
+	shift 1
+	local patches=( "$@" )
+
+	cat "${patches[@]}" | {
+		pushd "${dir}" >/dev/null 2>&1 \
+		&& patch -Rp1 \
 		&& popd >/dev/null 2>&1
 	}
 }

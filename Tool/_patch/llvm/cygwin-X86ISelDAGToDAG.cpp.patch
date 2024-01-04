@@ -1,23 +1,25 @@
 diff --git a/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp b/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
-index 77a997588c4f..ef8981f0e7e3 100644
+index 77a997588c4f..fc3cde7fba53 100644
 --- a/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
 +++ b/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
-@@ -2944,6 +2944,18 @@ bool X86DAGToDAGISel::selectMOV64Imm32(SDValue N, SDValue &Imm) {
-     return false;
- 
-   Imm = N;
-+  if (Subtarget->isTargetWindowsCygwin() && Subtarget->is64Bit()) {
-+    if (N->getOpcode() != ISD::TargetGlobalAddress)
-+      return TM.getCodeModel() == CodeModel::Small;
-+
-+    std::optional<ConstantRange> CR =
-+        cast<GlobalAddressSDNode>(N)->getGlobal()->getAbsoluteSymbolRange();
-+    if (!CR)
-+      return TM.getCodeModel() == CodeModel::Small;
-+
-+    return CR->getUnsignedMax().ult(1ull << 32);
-+  }
-+
-   // Small/medium code model can reference non-TargetGlobalAddress objects with
+@@ -2948,14 +2948,17 @@ bool X86DAGToDAGISel::selectMOV64Imm32(SDValue N, SDValue &Imm) {
    // 32 bit constants.
    if (N->getOpcode() != ISD::TargetGlobalAddress) {
+     return TM.getCodeModel() == CodeModel::Small ||
+-           TM.getCodeModel() == CodeModel::Medium;
++           (!(Subtarget->isTargetWindowsCygwin() && Subtarget->is64Bit()) &&
++            TM.getCodeModel() == CodeModel::Medium);
+   }
+ 
+   const GlobalValue *GV = cast<GlobalAddressSDNode>(N)->getGlobal();
+   if (std::optional<ConstantRange> CR = GV->getAbsoluteSymbolRange())
+     return CR->getUnsignedMax().ult(1ull << 32);
+-
+-  return !TM.isLargeGlobalValue(GV);
++  else if (Subtarget->isTargetWindowsCygwin() && Subtarget->is64Bit())
++    return TM.getCodeModel() == CodeModel::Small;
++  else
++    return !TM.isLargeGlobalValue(GV);
+ }
+ 
+ bool X86DAGToDAGISel::selectLEA64_32Addr(SDValue N, SDValue &Base,

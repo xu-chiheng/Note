@@ -29,11 +29,11 @@ check_toolchain_build_type_and_set_compiler_flags() {
 	local cxxflags=()
 	local ldflags=()
 
-	if [ -z "${toolchain}" ];then
+	if [ -z "${toolchain}" ]; then
 		toolchain=GCC
 	fi
 
-	if [ -z "${build_type}" ];then
+	if [ -z "${build_type}" ]; then
 		build_type=Release
 	fi
 
@@ -156,7 +156,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 # control llvm as a library, whether is static or shared
 check_llvm_static_or_shared() {
 	local llvm_static_or_shared="$1"
-	if [ -z "${llvm_static_or_shared}" ];then
+	if [ -z "${llvm_static_or_shared}" ]; then
 		llvm_static_or_shared=static
 	fi
 	case "${llvm_static_or_shared}" in

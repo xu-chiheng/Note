@@ -60,6 +60,28 @@ As commit 49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09, this patch is not
 
 cygwin-X86ISelLowering.cpp.patch
 Fix the regression caused by commit c04a05d898982614a2df80d928b97ed4f8c49b60 2023-08-14, that, in Cygwin, Clang can't bootstrap.
+Cygwin runtime failure: /cygdrive/e/Note/Tool/llvm-release-build/bin/llvm-min-tblgen.exe: Invalid relocation.  Offset 0x7837bccad at address 0x7ff7902c1077 doesn't fit into 32 bits
+make[1]: *** [CMakeFiles/Makefile2:11572: include/llvm/TargetParser/CMakeFiles/RISCVTargetParserTableGen.dir/all] Error 2
+Cygwin runtime failure: /cygdrive/e/Note/Tool/llvm-release-build/bin/llvm-min-tblgen.exe: Invalid relocation.  Offset 0x7837bccad at address 0x7ff7902c1077 doesn't fit into 32 bits
+Cygwin runtime failure: /cygdrive/e/Note/Tool/llvm-release-build/bin/llvm-min-tblgen.exe: Invalid relocation.  Offset 0x7837bccad at address 0x7ff7902c1077 doesn't fit into 32 bits
+make[2]: *** [include/llvm/IR/CMakeFiles/intrinsics_gen.dir/build.make:311: include/llvm/IR/IntrinsicImpl.inc] Error 127
+Cygwin runtime failure: /cygdrive/e/Note/Tool/llvm-release-build/bin/llvm-min-tblgen.exe: Invalid relocation.  Offset 0x7837bccad at address 0x7ff7902c1077 doesn't fit into 32 bits
+Cygwin runtime failure: /cygdrive/e/Note/Tool/llvm-release-build/bin/llvm-min-tblgen.exe: Invalid relocation.  Offset 0x7837bccad at address 0x7ff7902c1077 doesn't fit into 32 bits
+make[2]: *** [include/llvm/IR/CMakeFiles/intrinsics_gen.dir/build.make:237: include/llvm/IR/IntrinsicEnums.inc] Error 127
+make[2]: *** [include/llvm/Frontend/OpenACC/CMakeFiles/acc_gen.dir/build.make:172: include/llvm/Frontend/OpenACC/ACC.inc] Error 127
+make[2]: *** [include/llvm/Frontend/OpenMP/CMakeFiles/omp_gen.dir/build.make:121: include/llvm/Frontend/OpenMP/OMP.h.inc] Error 127
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [CMakeFiles/Makefile2:11520: include/llvm/Frontend/OpenACC/CMakeFiles/acc_gen.dir/all] Error 2
+make[2]: *** [include/llvm/IR/CMakeFiles/intrinsics_gen.dir/build.make:459: include/llvm/IR/IntrinsicsAMDGPU.h] Error 127
+Cygwin runtime failure: /cygdrive/e/Note/Tool/llvm-release-build/bin/llvm-min-tblgen.exe: Invalid relocation.  Offset 0x7837bccad at address 0x7ff7902c1077 doesn't fit into 32 bits
+make[2]: *** [include/llvm/Frontend/OpenMP/CMakeFiles/omp_gen.dir/build.make:172: include/llvm/Frontend/OpenMP/OMP.inc] Error 127
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+make[2]: *** [include/llvm/IR/CMakeFiles/intrinsics_gen.dir/build.make:385: include/llvm/IR/IntrinsicsAArch64.h] Error 127
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
+make[1]: *** [CMakeFiles/Makefile2:11546: include/llvm/Frontend/OpenMP/CMakeFiles/omp_gen.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:11468: include/llvm/IR/CMakeFiles/intrinsics_gen.dir/all] Error 2
+[  9%] Linking CXX executable ../../bin/FileCheck.exe
 
 
 cygwin-X86ISelDAGToDAG.cpp.patch

@@ -26,16 +26,16 @@ patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,mac
 
 18.0.0    6f44f87011cd52367626cac111ddbb2d25784b90 2023-10-05
 patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver,general,macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,driver1,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver{,1},general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    f49e2b05bf3ececa2fe20c5d658ab92ab974dc36 2023-12-17
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104 2024-01-01
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp,X86ISelDAGToDAG.cpp-2},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{,2}},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 
@@ -78,7 +78,7 @@ configure:4718: error: cannot run C compiled programs.
 If you meant to cross compile, use `--host'.
 See `config.log' for more details
 
-cygwin-X86ISelDAGToDAG.cpp-2.patch
+cygwin-X86ISelDAGToDAG.cpp2.patch
 Fix the regression caused by commit 2366d53d8d8726b73408597b534d2f910c3d3e6d 2023-12-22, that, in Cygwin, Clang can't bootstrap.
 CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0xb9b): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
 CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0xba2): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'

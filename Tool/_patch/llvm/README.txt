@@ -1,15 +1,4 @@
 
-https://cygwin.com/git-cygwin-packages/
-https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/clang.git;a=summary
-git://cygwin.com/git/cygwin-packages/clang.git
-https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/llvm.git;a=summary
-git://cygwin.com/git/cygwin-packages/llvm.git
-
-https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-clang
-https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-clang/PKGBUILD
-
-https://src.fedoraproject.org/rpms/llvm.git
-
 
 on Cygwin
 stage 0 : GCC 13.2.0
@@ -43,7 +32,28 @@ clang -v
 git show -s
 
 
-https://github.com/llvm/llvm-project/pulls/xu-chiheng
+I have build scripts and patches at https://github.com/xu-chiheng/Note .
+I can use the build scripts and patches to build and bootstrap GCC(start from 13.0.0) and Clang/LLVM(start from 16.0.0) use GCC or Clang on Cygwin and MinGW.
+If you have interests, you can look at my other PRs at https://github.com/llvm/llvm-project/pulls/xu-chiheng .
+It does not work without any of the patches.
+
+Most patches come from upstream at 
+
+https://cygwin.com/git-cygwin-packages/
+https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/clang.git;a=summary
+git://cygwin.com/git/cygwin-packages/clang.git
+https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/llvm.git;a=summary
+git://cygwin.com/git/cygwin-packages/llvm.git
+
+https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-clang
+https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-clang/PKGBUILD
+
+https://src.fedoraproject.org/rpms/llvm.git
+
+
+
+
+
 
 cygwin-general.patch
 Remove some uses of macro __CYGWIN__ .

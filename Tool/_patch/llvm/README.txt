@@ -1,20 +1,19 @@
 
 
 on Cygwin
-stage 0 : GCC 13.2.0
+stage 0 : GCC 13.2.0 or GCC 11.4.0 (pre-installed) at /usr, Clang 8.0.1 (pre-installed) at /usr does not work
 stage 1 : Clang 16.0.6
 stage 2 : Clang 16.0.6
 stage 3 : Clang 16.0.6
 
 
 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a 2023-01-24
-patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,macro},mingw-{pthread,emutls-16.0.6,findgcc},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel0,driver0,general{0,1,2},macro},mingw-{pthread,emutls0,findgcc},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7 2023-07-25
-patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver-16.0.6,general,macro,CGCall.h},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel0,driver0,general{0,1,2},macro,CGCall.h},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    6f44f87011cd52367626cac111ddbb2d25784b90 2023-10-05
-patch_apply . ../_patch/llvm/old/{cygwin-{basic,cmodel,driver,general,macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver{,1},general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09

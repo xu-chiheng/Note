@@ -115,17 +115,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )
 
-			# when building binutils 2.36-2.42 using GCC and Clang, has the following link error:
-
-			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x0): multiple definition of `sha1_init_ctx'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x0): first defined here
-			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x20): multiple definition of `sha1_read_ctx'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x20): first defined here
-			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x50): multiple definition of `sha1_finish_ctx'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x14c0): first defined here
-			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x150): multiple definition of `sha1_process_block'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x50): first defined here
-			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x1430): multiple definition of `sha1_stream'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x19b0): first defined here
-			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x1520): multiple definition of `sha1_process_bytes'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x1610): first defined here
-			# D:/msys64/ucrt64/bin/ld.exe: ../libiberty/libiberty.a(sha1.o):sha1.c:(.text+0x1690): multiple definition of `sha1_buffer'; D:/msys64/ucrt64/bin/../lib/libiberty.a(sha1.o):(.text+0x1930): first defined here
-
-			# should put this option in the driver of GCC and Clang ?
+			# pre-installed GCC 13.2.0 and Clang 17.0.6 at /ucrt64 or /mingw64 need this option
 			ldflags+=( -Wl,--allow-multiple-definition )
 
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options

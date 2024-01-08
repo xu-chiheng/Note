@@ -8,4 +8,4 @@ https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-gcc
 
 
 
-patch_apply . ../_patch/gcc/{cygwin-dynamicbase,mingw-gethostname}.patch
+patch_apply . ../_patch/gcc/{cygwin-ldflags,mingw-{ldflags,gethostname}}.patch

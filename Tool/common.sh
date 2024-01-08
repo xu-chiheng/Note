@@ -120,7 +120,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
 			ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
-			# ldflags+=( -Wl,"$(print_mingw_root_dir)/lib/binmode.o" )
+			# ldflags+=( -Wl,"$(cygpath -m "$(print_mingw_root_dir)")/lib/binmode.o" )
 			;;
 	esac
 

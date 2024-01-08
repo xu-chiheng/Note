@@ -61,7 +61,7 @@ backup_current_directory_to_iso_file() {
 	&& echo "generate tree.txt" \
 	&& echo_command tree -I '*.sha512' -o tree.txt \
 	&& echo "creating ISO file '${file}' ......" \
-	&& time_command "$(cygpath -u "${ULTRAISO}")" -volume "${current_datetime}" \
+	&& time_command UltraISO.exe -volume "${current_datetime}" \
 			-imax -udfdvd -directory . -output "$(cygpath -w "${path}")" \
 	\
 	&& echo "sync ......" \

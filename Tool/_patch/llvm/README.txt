@@ -33,7 +33,7 @@ git show -s
 
 
 I have build scripts and patches at https://github.com/xu-chiheng/Note .
-I can use the build scripts and patches to build and bootstrap GCC(start from 13.0.0) and Clang/LLVM(start from 16.0.0) use GCC or Clang on Cygwin and MinGW.
+I can use the build scripts and patches to build and bootstrap GCC(start from 13.0.0) and Clang/LLVM(start from 16.0.0), using GCC or Clang, on Cygwin and MinGW.
 If you have interests, you can look at my other PRs at https://github.com/llvm/llvm-project/pulls/xu-chiheng .
 It does not work without any of the patches.
 

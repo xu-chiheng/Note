@@ -42,17 +42,6 @@ set_environment_variables_at_bash_startup() {
 	export EDITOR=~/editor.sh
 	export GPG_ENCRYPTION_RECIPIENT="chiheng.xu@gmail.com"
 
-	local prepend_packages_bin_dirs_to_path=yes
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			if [ -v VSINSTALLDIR ]; then
-				# Visual Studio, MSVC bin dirs has been prepended to PATH
-				# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
-				prepend_packages_bin_dirs_to_path=no
-			fi
-			;;
-	esac
-
 	case "${HOST_TRIPLE}" in
 		# https://www.joshkel.com/2018/01/18/symlinks-in-windows/
 		# https://www.cygwin.com/cygwin-ug-net/using.html#pathnames-symlinks
@@ -69,6 +58,33 @@ set_environment_variables_at_bash_startup() {
 		x86_64-pc-msys | x86_64-pc-mingw64 )
 			# For MSYS / MinGW (this includes the command-line utilities that used in the git-bash shell), add an environment variable, MSYS, and make sure it contains winsymlinks:nativestrict. (If you don’t do this, then symlinks are “emulated” by copying files and directories. This can be surprising, to say the least.)
 			export MSYS=winsymlinks:nativestrict
+			;;
+	esac
+
+	local prepend_packages_bin_dirs_to_path=yes
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
+			if [ -v VSINSTALLDIR ]; then
+				# Visual Studio, MSVC bin dirs has been prepended to PATH
+				# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
+				prepend_packages_bin_dirs_to_path=no
+			fi
+			;;
+	esac
+
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux )
+			local packages_dir="$(print_packages_dir "${HOST_TRIPLE}")"
+			local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
+			local bin_dirs=()
+			local package
+			for package in "${packages[@]}"; do
+				bin_dirs+=( "${packages_dir}/${package}/bin" )
+			done
+
+			if [ "${prepend_packages_bin_dirs_to_path}" = yes ]; then
+				export PATH="$(array_elements_join ':' "${bin_dirs[@]}" "${PATH}")"
+			fi
 			;;
 	esac
 
@@ -140,9 +156,17 @@ set_environment_variables_at_bash_startup() {
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			local notepadpp_dir='C:\Program Files\Notepad++'
-			local youtube_dl_dir='D:\youtube-dl'
-			export PATH="$(array_elements_join ':' "${PATH}" "$(cygpath -u "${notepadpp_dir}")" "$(cygpath -u "${youtube_dl_dir}")" )"
+			local notepadpp_dir="$(cygpath -u 'C:\Program Files\Notepad++')"
+			local youtube_dl_dir="$(cygpath -u 'D:\youtube-dl')"
+			local ultraiso_dir="$(cygpath -u 'C:\Program Files (x86)\UltraISO')"
+			local chrome_dir="$(cygpath -u 'C:\Program Files\Google\Chrome\Application')"
+			export PATH="$(array_elements_join ':' "${PATH}" "${notepadpp_dir}" "${youtube_dl_dir}" "${ultraiso_dir}" "${chrome_dir}" )"
+			;;
+	esac
+
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
+			export BROWSER=chrome
 			;;
 	esac
 
@@ -172,22 +196,6 @@ set_environment_variables_at_bash_startup() {
 	local packages_dir
 
 	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux )
-			local packages_dir="$(print_packages_dir "${HOST_TRIPLE}")"
-			local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
-			local bin_dirs=()
-			local package
-			for package in "${packages[@]}"; do
-				bin_dirs+=( "${packages_dir}/${package}/bin" )
-			done
-
-			if [ "${prepend_packages_bin_dirs_to_path}" = yes ]; then
-				export PATH="$(array_elements_join ':' "${bin_dirs[@]}" "${PATH}")"
-			fi
-			;;
-	esac
-
-	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			local qemu_dir=$(cygpath -u 'D:\qemu')
 			export PATH="$(array_elements_join ':' "${PATH}" "${qemu_dir}" )"
@@ -199,13 +207,6 @@ set_environment_variables_at_bash_startup() {
 		*-linux )
 			local qemu_dir="${packages_dir}/qemu"
 			export PATH="$(array_elements_join ':' "${PATH}" "${qemu_dir}/bin" )"
-			;;
-	esac
-
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin )
-			export ULTRAISO='C:\Program Files (x86)\UltraISO\UltraISO.exe'
-			# export BROWSER='C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'
 			;;
 	esac
 

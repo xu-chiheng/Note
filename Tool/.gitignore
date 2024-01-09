@@ -19,3 +19,4 @@
 /_linux
 
 !/*.sha512
+!/*.cygport

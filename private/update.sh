@@ -47,6 +47,8 @@ do_update_all_files() {
 		Tool/clean.sh
 		Tool/common.sh
 
+		Tool/llvm.cygport
+
 		Tool/_quirk
 		Tool/_patch
 

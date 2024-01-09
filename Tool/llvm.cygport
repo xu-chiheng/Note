@@ -3,6 +3,8 @@ inherit ocaml python3 cmake
 # package name
 NAME="llvm"
 VERSION=16.0.6
+# VERSION=17.0.6
+# VERSION=18.0.1
 RELEASE=1
 
 # package metadata
@@ -15,47 +17,59 @@ LICENSE="Apache License v2.0 with LLVM Exceptions"
 # source and patch files
 SRC_URI="https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${VERSION}.tar.gz"
 SRC_DIR="llvm-project-llvmorg-${VERSION}"
-PATCH_URI="
 
+PATCHES=(
+	# 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a 2023-01-24
+	_patch/llvm/{cygwin-{basic,cmodel0,driver0,general{0,1,2},macro},mingw-{ldflags,pthread,emutls0,findgcc},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-"
+	# 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7 2023-07-25
+	# _patch/llvm/{cygwin-{basic,cmodel0,driver0,general{0,1,2},macro,CGCall.h},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
+	# 18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104 2024-01-01
+	# _patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{,2}},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+)
+
+PATCH_URI="${PATCHES[*]}"
 
 # CYGCMAKE_SOURCE="llvm"
+# cygport: CYGCMAKE_SOURCE seems to have no effect.
 # https://cygwin.com/pipermail/cygwin/2021-September/249412.html
 CYGCMAKE_SOURCE="$(pwd)/${NAME}-${VERSION}-${RELEASE}.${ARCH}/src/${SRC_DIR}/llvm"
 
-CYGCMAKE_ARGS="
-                -DLLVM_TARGETS_TO_BUILD=all
-                -DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld
-                -DLLVM_ENABLE_RUNTIMES=
-                -DLLVM_BUILD_RUNTIME=ON
-                -DLLVM_OPTIMIZED_TABLEGEN=ON
-                -DLLVM_ENABLE_WERROR=OFF
-                -DLLVM_ENABLE_ASSERTIONS=OFF
-                -DLLVM_ENABLE_BACKTRACES=OFF
-                -DLLVM_ENABLE_LIBXML2=ON
-                -DLLVM_ENABLE_PLUGINS=OFF
-                -DLLVM_ENABLE_MODULES=OFF
-                -DLLVM_BUILD_TESTS=OFF
-                -DLLVM_INCLUDE_TESTS=OFF
-                -DLLVM_BUILD_BENCHMARKS=OFF
-                -DLLVM_INCLUDE_BENCHMARKS=OFF
-                -DLLVM_BUILD_EXAMPLES=OFF
-                -DLLVM_INCLUDE_EXAMPLES=OFF
-                -DLLVM_INCLUDE_DOCS=OFF
-                -DCLANG_BUILD_TOOLS=ON
-                -DCLANG_ENABLE_ARCMT=ON
-                -DCLANG_ENABLE_STATIC_ANALYZER=ON
-                -DCLANG_INCLUDE_TESTS=OFF
-                -DCLANG_BUILD_EXAMPLES=OFF
-                -DCLANG_INCLUDE_DOCS=OFF
-                -DLLVM_INSTALL_UTILS=ON
-                -DLLVM_BUILD_LLVM_C_DYLIB=OFF
-                -DBUILD_SHARED_LIBS=ON
-"
+CMAKE_OPTIONS=(
+		-DLLVM_TARGETS_TO_BUILD=all
+		-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld"
+		-DLLVM_ENABLE_RUNTIMES=
+		-DLLVM_BUILD_RUNTIME=ON
+		-DLLVM_OPTIMIZED_TABLEGEN=ON
+		-DLLVM_ENABLE_WERROR=OFF
+		-DLLVM_ENABLE_ASSERTIONS=OFF
+		-DLLVM_ENABLE_BACKTRACES=OFF
+		-DLLVM_ENABLE_LIBXML2=ON
+		-DLLVM_ENABLE_PLUGINS=OFF
+		-DLLVM_ENABLE_MODULES=OFF
+		-DLLVM_BUILD_TESTS=OFF
+		-DLLVM_INCLUDE_TESTS=OFF
+		-DLLVM_BUILD_BENCHMARKS=OFF
+		-DLLVM_INCLUDE_BENCHMARKS=OFF
+		-DLLVM_BUILD_EXAMPLES=OFF
+		-DLLVM_INCLUDE_EXAMPLES=OFF
+		-DLLVM_INCLUDE_DOCS=OFF
+		-DCLANG_BUILD_TOOLS=ON
+		-DCLANG_ENABLE_ARCMT=ON
+		-DCLANG_ENABLE_STATIC_ANALYZER=ON
+		-DCLANG_INCLUDE_TESTS=OFF
+		-DCLANG_BUILD_EXAMPLES=OFF
+		-DCLANG_INCLUDE_DOCS=OFF
+		-DLLVM_INSTALL_UTILS=ON
+		-DLLVM_BUILD_LLVM_C_DYLIB=OFF
+		-DBUILD_SHARED_LIBS=ON
+)
+
+CYGCMAKE_ARGS="${CMAKE_OPTIONS[*]}"
 
 CYGCMAKE_GENERATOR="Unix Makefiles"
 
 
 
-# use the standard autotools src_compile, src_install and src_test
+# use the standard cmake src_compile, src_install and src_test

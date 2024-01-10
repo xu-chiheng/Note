@@ -91,11 +91,14 @@ set_environment_variables_at_bash_startup() {
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
-			local usr_bin_gpg="/usr/bin/gpg"
-			local usr_bin_gpg2="/usr/bin/gpg2"
+			local usr_bin_gpg="/usr/bin/gpg.exe"
+			local usr_bin_gpg2="/usr/bin/gpg2.exe"
 			if [ -e "${usr_bin_gpg2}" ] \
 				&& { [ ! -e "${usr_bin_gpg}" ] || [ ! "$(readlink -f "${usr_bin_gpg}")" = "$(readlink -f "${usr_bin_gpg2}")" ] ;}; then
-				rm -rf "${usr_bin_gpg}" \
+				if [ ! -L "${usr_bin_gpg}" ] && [ ! -e "${usr_bin_gpg}".backup ]; then
+					mv -f "${usr_bin_gpg}" "${usr_bin_gpg}".backup
+				fi \
+				&& rm -rf "${usr_bin_gpg}" \
 				&& ln -s "${usr_bin_gpg2}" "${usr_bin_gpg}"
 			fi
 	esac
@@ -103,7 +106,7 @@ set_environment_variables_at_bash_startup() {
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin | x86_64-pc-msys )
 			# Cygwin and MSYS2 has no connect command, symbolic link to MinGW's
-			local usr_bin_connect="/usr/bin/connect"
+			local usr_bin_connect="/usr/bin/connect.exe"
 			local mingw_vcrt_connect_path="/mingw64/bin/connect.exe"
 			local mingw_ucrt_connect_path="/ucrt64/bin/connect.exe"
 			case "${HOST_TRIPLE}" in
@@ -113,20 +116,26 @@ set_environment_variables_at_bash_startup() {
 					mingw_ucrt_connect_path="${msys2_dir_cygwin_path}${mingw_ucrt_connect_path}"
 					;;
 			esac
-			if [ -e "${mingw_ucrt_connect_path}" ] || [ -e "${mingw_vcrt_connect_path}" ]; then
-				local mingw_connect_path
-				if [ -e "${mingw_ucrt_connect_path}" ]; then
-					mingw_connect_path="${mingw_ucrt_connect_path}"
+			if [ -L "${usr_bin_connect}" ]; then
+				# a symlink
+				if [ -e "${mingw_ucrt_connect_path}" ] || [ -e "${mingw_vcrt_connect_path}" ]; then
+					local mingw_connect_path
+					if [ -e "${mingw_ucrt_connect_path}" ]; then
+						mingw_connect_path="${mingw_ucrt_connect_path}"
+					else
+						mingw_connect_path="${mingw_vcrt_connect_path}"
+					fi
+					if [ ! -e "${usr_bin_connect}" ] || [ ! "$(readlink -f "${usr_bin_connect}")" = "$(readlink -f "${mingw_connect_path}")" ]; then
+						rm -rf "${usr_bin_connect}" \
+						&& ln -s "${mingw_connect_path}" "${usr_bin_connect}"
+					fi
 				else
-					mingw_connect_path="${mingw_vcrt_connect_path}"
-				fi
-				if [ ! -e "${usr_bin_connect}" ] || [ ! "$(readlink -f "${usr_bin_connect}")" = "$(readlink -f "${mingw_connect_path}")" ]; then
-					rm -rf "${usr_bin_connect}" \
-					&& ln -s "${mingw_connect_path}" "${usr_bin_connect}"
+					echo "no MinGW connect command"
+					rm -rf "${usr_bin_connect}"
 				fi
 			else
-				echo "no MinGW connect command"
-				rm -rf "${usr_bin_connect}"
+				# not a symlink, keep it 
+				true
 			fi
 			;;
 	esac

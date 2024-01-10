@@ -76,11 +76,23 @@ CYGCMAKE_GENERATOR="Unix Makefiles"
 # List of automatic postinstall or packaging step(s) which should be skipped for this package, and restrictions on package use.
 RESTRICT="${RESTRICT} debuginfo diff"
 
-LDFLAGS="-Wl,--dynamicbase"
+CC=gcc
+CXX=g++
+# CC=clang
+# CXX=clang++
+
+C_CXX_COMMON_FLAGS="-march=x86-64 -O3"
+CFLAGS="${C_CXX_COMMON_FLAGS}"
+CXXFLAGS="${C_CXX_COMMON_FLAGS}"
+
+LDFLAGS="-Wl,--strip-all -Wl,--dynamicbase"
+
+MAKEOPTS="-j$(expr $(nproc --all) '*' 2)"
 
 # use the standard cmake src_compile, src_install and src_test
 
-
+# this function should be synced with the same function in common.sh
+# MIT License
 process_install_dir_bin_symlinks () {
 	local install_dir="$1"
 	pushd "${install_dir}" \

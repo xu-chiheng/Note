@@ -32,6 +32,7 @@ PATCHES=(
 PATCH_URI="${PATCHES[*]}"
 
 # CYGCMAKE_SOURCE="llvm"
+# CYGCMAKE_SOURCE="../src/${SRC_DIR}/llvm"
 # cygport: CYGCMAKE_SOURCE seems to have no effect.
 # https://cygwin.com/pipermail/cygwin/2021-September/249412.html
 CYGCMAKE_SOURCE="$(pwd)/${NAME}-${VERSION}-${RELEASE}.${ARCH}/src/${SRC_DIR}/llvm"
@@ -70,6 +71,51 @@ CYGCMAKE_ARGS="${CMAKE_OPTIONS[*]}"
 
 CYGCMAKE_GENERATOR="Unix Makefiles"
 
+# Additional post-installation restrictions
+# https://cygwin.github.io/cygport/src_postinst_cygpart.html#RESTRICT
+# List of automatic postinstall or packaging step(s) which should be skipped for this package, and restrictions on package use.
+RESTRICT="${RESTRICT} debuginfo diff"
 
+LDFLAGS="-Wl,--dynamicbase"
 
 # use the standard cmake src_compile, src_install and src_test
+
+
+process_install_dir_bin_symlinks () {
+	local install_dir="$1"
+	pushd "${install_dir}" \
+	&& for path in  $(find bin); do
+		if [ -L "${path}" ]; then
+			path2="$(readlink -f "${path}")"
+			if [ -f "${path2}" ]; then
+				local dir="$(dirname "${path}")"
+				local base="$(basename "${path}")"
+				local dir2="$(dirname "${path2}")"
+				local base2="$(basename "${path2}")"
+				local suffix="${base2##*.}"
+
+				local path1="${path}"
+				if [ ! -z "${suffix}" ]; then
+					if [[ "${base}" == *".${suffix}" ]]; then
+						# echo "The file has the specified suffix."
+						true
+					else
+						# echo "The file does not have the specified suffix."
+						path1+=".${suffix}"
+					fi
+				fi
+				if ! { rm -rf "${path}" && cp -f "${path2}" "${path1}" ;}; then
+					echo "failed to process symlink ${path} pointing to ${path2}"
+					return 1
+				fi
+			fi
+		fi
+	done \
+	&& popd
+}
+
+src_install() {
+	cd "${B}"
+	cyginstall \
+	&& process_install_dir_bin_symlinks "${D}/usr"
+}

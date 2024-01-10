@@ -460,6 +460,39 @@ copy_dependent_dlls() {
 	esac
 }
 
+process_install_dir_bin_symlinks () {
+	local install_dir="$1"
+	pushd "${install_dir}" \
+	&& for path in  $(find bin); do
+		if [ -L "${path}" ]; then
+			path2="$(readlink -f "${path}")"
+			if [ -f "${path2}" ]; then
+				local dir="$(dirname "${path}")"
+				local base="$(basename "${path}")"
+				local dir2="$(dirname "${path2}")"
+				local base2="$(basename "${path2}")"
+				local suffix="${base2##*.}"
+
+				local path1="${path}"
+				if [ ! -z "${suffix}" ]; then
+					if [[ "${base}" == *".${suffix}" ]]; then
+						# echo "The file has the specified suffix."
+						true
+					else
+						# echo "The file does not have the specified suffix."
+						path1+=".${suffix}"
+					fi
+				fi
+				if ! { rm -rf "${path}" && cp -f "${path2}" "${path1}" ;}; then
+					echo "failed to process symlink ${path} pointing to ${path2}"
+					return 1
+				fi
+			fi
+		fi
+	done \
+	&& popd
+}
+
 build_and_install_gmp_mpfr_mpc() {
 	local build_type="$1"
 	local gmp_mpfr_mpc_install_dir="$2"
@@ -678,6 +711,8 @@ post_install_package_action() {
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = qemu ]; then
 		echo_command copy_dependent_dlls "${host_triple}" "${install_dir}" "."
+	elif [ "${host_triple}" = x86_64-pc-cygwin ] && [ "${package}" = llvm ]; then
+		echo_command process_install_dir_bin_symlinks "${install_dir}"
 	fi
 }
 

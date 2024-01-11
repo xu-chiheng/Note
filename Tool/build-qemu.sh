@@ -35,7 +35,7 @@ cd "$(dirname "$0")"
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE="qemu"
 {
-	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
+	check_toolchain_build_type_and_set_compiler_flags "${HOST_TRIPLE}" "${PACKAGE}" "$1" "$2"
 
 	VERSION=7.1.0
 

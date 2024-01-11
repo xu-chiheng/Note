@@ -21,8 +21,10 @@
 # SOFTWARE.
 
 check_toolchain_build_type_and_set_compiler_flags() {
-	local toolchain="$1"
-	local build_type="$2"
+	local host_triple="$1"
+	local package="$2"
+	local toolchain="$3"
+	local build_type="$4"
 	local cc=
 	local cxx=
 	local cflags=()
@@ -60,7 +62,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 	export VERBOSE=1
 
 	local cpu_arch_flags=()
-	case "${HOST_TRIPLE}" in
+	case "${host_triple}" in
 		x86_64-* )
 			# https://www.phoronix.com/news/GCC-11-x86-64-Feature-Levels
 			# x86-64: CMOV, CMPXCHG8B, FPU, FXSR, MMX, FXSR, SCE, SSE, SSE2
@@ -98,7 +100,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
-	case "${HOST_TRIPLE}" in
+	case "${host_triple}" in
 		x86_64-pc-cygwin )
 			local cygwin_c_cxx_common_flags=(  )
 			# cygwin_c_cxx_common_flags+=( -mcmodel=small )

@@ -50,7 +50,7 @@ cd "$(dirname "$0")"
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=llvm
 {
-	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
+	check_toolchain_build_type_and_set_compiler_flags "${HOST_TRIPLE}" "${PACKAGE}" "$1" "$2"
 
 	check_llvm_static_or_shared "$3"
 

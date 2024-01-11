@@ -28,7 +28,7 @@ cd "$(dirname "$0")"
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE="binutils"
 {
-	check_toolchain_build_type_and_set_compiler_flags "$1" "$2"
+	check_toolchain_build_type_and_set_compiler_flags "${HOST_TRIPLE}" "${PACKAGE}" "$1" "$2"
 
 	# VERSION=2.41
 	VERSION=2.42 # commit 9846e9c11081a1f268c867bd99b6354680d760f6 2023-12-16

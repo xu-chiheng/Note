@@ -94,8 +94,8 @@ set_environment_variables_at_bash_startup() {
 			local usr_bin_gpg="/usr/bin/gpg.exe"
 			local usr_bin_gpg2="/usr/bin/gpg2.exe"
 			if [ -e "${usr_bin_gpg2}" ] \
-				&& { [ ! -e "${usr_bin_gpg}" ] || [ ! "$(readlink -f "${usr_bin_gpg}")" = "$(readlink -f "${usr_bin_gpg2}")" ] ;}; then
-				if [ ! -L "${usr_bin_gpg}" ] && [ ! -e "${usr_bin_gpg}".backup ]; then
+				&& ! { [ -e "${usr_bin_gpg}" ] && [ "$(readlink -f "${usr_bin_gpg}")" = "$(readlink -f "${usr_bin_gpg2}")" ] ;}; then
+				if [ -e "${usr_bin_gpg}" ] && [ ! -L "${usr_bin_gpg}" ] && [ -f "${usr_bin_gpg}" ] && [ ! -e "${usr_bin_gpg}".backup ]; then
 					mv -f "${usr_bin_gpg}" "${usr_bin_gpg}".backup
 				fi \
 				&& rm -rf "${usr_bin_gpg}" \
@@ -116,7 +116,7 @@ set_environment_variables_at_bash_startup() {
 					mingw_ucrt_connect_path="${msys2_dir_cygwin_path}${mingw_ucrt_connect_path}"
 					;;
 			esac
-			if [ -L "${usr_bin_connect}" ]; then
+			if ! { [ -e "${usr_bin_connect}" ] && [ ! -L "${usr_bin_connect}" ] && [ -f "${usr_bin_connect}" ] ;}; then
 				# a symlink
 				if [ -e "${mingw_ucrt_connect_path}" ] || [ -e "${mingw_vcrt_connect_path}" ]; then
 					local mingw_connect_path
@@ -125,7 +125,7 @@ set_environment_variables_at_bash_startup() {
 					else
 						mingw_connect_path="${mingw_vcrt_connect_path}"
 					fi
-					if [ ! -e "${usr_bin_connect}" ] || [ ! "$(readlink -f "${usr_bin_connect}")" = "$(readlink -f "${mingw_connect_path}")" ]; then
+					if ! { [ -e "${usr_bin_connect}" ] && [ "$(readlink -f "${usr_bin_connect}")" = "$(readlink -f "${mingw_connect_path}")" ] ;}; then
 						rm -rf "${usr_bin_connect}" \
 						&& ln -s "${mingw_connect_path}" "${usr_bin_connect}"
 					fi
@@ -156,7 +156,7 @@ set_environment_variables_at_bash_startup() {
 			# https://serverfault.com/questions/76042/find-out-symbolic-link-target-via-command-line
 			local home_unix_path="$(cygpath -u "${HOME}")"
 			local ssh_home_dir="/home/${USERNAME}"
-			if [ ! -d "${ssh_home_dir}" ] || [ ! "$(readlink -f "${ssh_home_dir}")" = "$(readlink -f "${home_unix_path}")" ]; then
+			if ! { [ -e "${ssh_home_dir}" ] && [ "$(readlink -f "${ssh_home_dir}")" = "$(readlink -f "${home_unix_path}")" ] ;}; then
 				rm -rf "${ssh_home_dir}" \
 				&& ln -s "${home_unix_path}" "${ssh_home_dir}"
 			fi

@@ -28,7 +28,7 @@ cd "$(dirname "$0")"
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE="gdb"
 {
-	check_toolchain_build_type_and_set_compiler_flags "${HOST_TRIPLE}" "${PACKAGE}" "$1" "$2"
+	check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
 
 	VERSION=13.2
 

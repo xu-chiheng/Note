@@ -21,10 +21,10 @@
 # SOFTWARE.
 
 check_toolchain_build_type_and_set_compiler_flags() {
-	local host_triple="$1"
-	local package="$2"
-	local toolchain="$3"
-	local build_type="$4"
+	local toolchain="$1"
+	local build_type="$2"
+	local host_triple="$3"
+	local package="$4"
 	local cc=
 	local cxx=
 	local cflags=()
@@ -164,7 +164,8 @@ check_llvm_static_or_shared() {
 }
 
 maybe_git_filemode_false() {
-	case "${HOST_TRIPLE}" in
+	local host_triple="$1"
+	case "${host_triple}" in
 		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
 			# MSYS2 git seem have file mode problem. Even newly cloned repo has diff over file mode.
 			echo_command git_filemode_false
@@ -227,44 +228,47 @@ git_repo_url_of_package() {
 }
 
 git_checkout_dir_revision() {
-	local dir="$1"
-	local revision="$2"
+	local host_triple="$1"
+	local dir="$2"
+	local revision="$3"
 
 	{ pushd "${dir}" \
-	&& echo_command maybe_git_filemode_false \
+	&& echo_command maybe_git_filemode_false "${host_triple}" \
 	&& time_command git reset --hard HEAD \
 	&& time_command git checkout --detach "${revision}" \
 	&& popd;}
 }
 
 git_clone_and_checkout_dir_revision() {
-	local dir="$1"
-	local revision="$2"
-	local git_repo_url="$3"
+	local host_triple="$1"
+	local dir="$2"
+	local revision="$3"
+	local git_repo_url="$4"
 
 	time_command git clone --no-checkout "${git_repo_url}" "${dir}" \
-	&& echo_command git_checkout_dir_revision "${dir}" "${revision}"
+	&& echo_command git_checkout_dir_revision "${host_triple}" "${dir}" "${revision}"
 }
 
 check_dir_maybe_clone_and_checkout_tag() {
-	local dir="$1"
-	local tag="$2"
-	local git_repo_url="$3"
+	local host_triple="$1"
+	local dir="$2"
+	local tag="$3"
+	local git_repo_url="$4"
 
 	if [ -d "${dir}" ]; then
 		if [ -f "${dir}"/patching ]; then
 			# do nothing
 			true
 		elif [ -d "${dir}"/.git ]; then
-			echo_command git_checkout_dir_revision "${dir}" "${tag}"
+			echo_command git_checkout_dir_revision "${host_triple}" "${dir}" "${tag}"
 		else
 			echo "source directory ${dir} exists, but contains no patching file, or .git directory."
 			echo_command rm -rf "${dir}" \
-			&& echo_command git_clone_and_checkout_dir_revision "${dir}" "${tag}" "${git_repo_url}"
+			&& echo_command git_clone_and_checkout_dir_revision "${host_triple}" "${dir}" "${tag}" "${git_repo_url}"
 		fi
 	else
 		echo "dir ${dir} does not exist"
-		echo_command git_clone_and_checkout_dir_revision "${dir}" "${tag}" "${git_repo_url}"
+		echo_command git_clone_and_checkout_dir_revision "${host_triple}" "${dir}" "${tag}" "${git_repo_url}"
 	fi
 }
 
@@ -544,13 +548,13 @@ build_and_install_binutils_gcc_for_target() {
 	local toolchain="$2"
 	local build_type="$3"
 	local host_triple="$4"
-	local is_build_and_install_gmp_mpfr_mpc="$5"
-	local is_build_and_install_libgcc="$6"
-	local binutils_source_dir="$7"
-	local gcc_source_dir="$8"
-	local gmp_mpfr_mpc_install_dir="$9"
-	local package="${10}"
-	local version="${11}"
+	local package="$5"
+	local version="$6"
+	local is_build_and_install_gmp_mpfr_mpc="$7"
+	local is_build_and_install_libgcc="$8"
+	local binutils_source_dir="$9"
+	local gcc_source_dir="${10}"
+	local gmp_mpfr_mpc_install_dir="${11}"
 
 	local gcc_install_dir="${gcc_source_dir}-${target}-${build_type,,}-install"
 	local gcc_build_dir="${gcc_source_dir}-${target}-${build_type,,}-build"
@@ -665,15 +669,15 @@ build_and_install_cross_gcc_for_targets() {
 	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
 		time_command build_and_install_gmp_mpfr_mpc "${build_type}" "${gmp_mpfr_mpc_install_dir}" 2>&1 | tee "~${current_datetime}-gmp-mpfr-mpc-output.txt"
 	fi \
-	&& time_command check_dir_maybe_clone_and_checkout_tag "${binutils_source_dir}" "${binutils_git_tag}" "${binutils_git_repo_url}" \
-	&& time_command check_dir_maybe_clone_and_checkout_tag "${gcc_source_dir}" "${gcc_git_tag}" "${gcc_git_repo_url}" \
+	&& time_command check_dir_maybe_clone_and_checkout_tag "${host_triple}" "${binutils_source_dir}" "${binutils_git_tag}" "${binutils_git_repo_url}" \
+	&& time_command check_dir_maybe_clone_and_checkout_tag "${host_triple}" "${gcc_source_dir}" "${gcc_git_tag}" "${gcc_git_repo_url}" \
 	\
 	&& echo "building binutils and gcc ......" \
 	&& for target in "${targets[@]}"; do
 			time_command build_and_install_binutils_gcc_for_target \
-			"${target}" "${toolchain}" "${build_type}" "${host_triple}" \
+			"${target}" "${toolchain}" "${build_type}" "${host_triple}" "${package}" "${gcc_version}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${is_build_and_install_libgcc}" "${binutils_source_dir}" "${gcc_source_dir}" \
-			"${gmp_mpfr_mpc_install_dir}" "${package}" "${gcc_version}" \
+			"${gmp_mpfr_mpc_install_dir}" \
 			2>&1 | tee "~${current_datetime}-${package}-${target}-output.txt" &
 	done \
 	&& time_command wait \
@@ -722,10 +726,10 @@ generate_build_install_package() {
 	local toolchain="$1"
 	local build_type="$2"
 	local host_triple="$3"
-	local source_dir="$4"
-	local install_dir="$5"
-	local package="$6"
-	local version="$7"
+	local package="$4"
+	local version="$5"
+	local source_dir="$6"
+	local install_dir="$7"
 	local pushd_and_generate_command="$8"
 	shift 8
 	local bin_tarball="${package}-${version}.tar"
@@ -734,7 +738,7 @@ generate_build_install_package() {
 
 	# https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
 
-	time_command check_dir_maybe_clone_and_checkout_tag "${source_dir}" "${git_tag}" "${git_repo_url}" \
+	time_command check_dir_maybe_clone_and_checkout_tag "${host_triple}" "${source_dir}" "${git_tag}" "${git_repo_url}" \
 	&& echo_command rm -rf "${install_dir}" \
 	&& echo_command pre_generate_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& { time_command "${pushd_and_generate_command}" "$@" \
@@ -781,7 +785,7 @@ cmake_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" "${package}" "${version}" \
+		"${toolchain}" "${build_type}" "${host_triple}" "${package}" "${version}" "${source_dir}" "${install_dir}" \
 		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
@@ -804,7 +808,7 @@ configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" "${package}" "${version}" \
+		"${toolchain}" "${build_type}" "${host_triple}" "${package}" "${version}" "${source_dir}" "${install_dir}" \
 		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
 }
 
@@ -827,6 +831,6 @@ gcc_configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${toolchain}" "${build_type}" "${host_triple}" "${source_dir}" "${install_dir}" "${package}" "${version}" \
+		"${toolchain}" "${build_type}" "${host_triple}" "${package}" "${version}" "${source_dir}" "${install_dir}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" "$(array_elements_join ',' "${languages[@]}")" "${host_triple}" "$@"
 }

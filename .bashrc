@@ -34,5 +34,7 @@ done
 # https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files
 
 if [ ! -v HOST_TRIPLE ]; then
+	# uncomment the following line, to see the time consumed
+	# time \
 	set_environment_variables_at_bash_startup
 fi

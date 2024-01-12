@@ -33,6 +33,8 @@ PACKAGE="gcc"
 	# VERSION=13.2.0
 	VERSION=14.0.0 # commit 61d6dee992fdfa350a0c6d2a8151ec6e2844c419 2023-12-17
 
+	local EXTRA_LANGUAGES=()
+
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			CONFIGURE_OPTIONS=(
@@ -116,7 +118,8 @@ PACKAGE="gcc"
 	esac
 
 	time_command gcc_configure_build_install_package \
-		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${CONFIGURE_OPTIONS[@]}"
+		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" \
+		"$(array_elements_join ',' "${EXTRA_LANGUAGES[@]}")" "${CONFIGURE_OPTIONS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
 

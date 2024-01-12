@@ -35,6 +35,8 @@ PACKAGE=gcc
 	GCC_VERSION=14.0.0    # commit 61d6dee992fdfa350a0c6d2a8151ec6e2844c419 2023-12-17
 	BINUTILS_VERSION=2.42 # commit 9846e9c11081a1f268c867bd99b6354680d760f6 2023-12-16
 
+	local EXTRA_LANGUAGES=()
+
 	TARGETS=(
 		x86_64-pc-cygwin
 		x86_64-pc-mingw64
@@ -47,7 +49,7 @@ PACKAGE=gcc
 
 	time_command build_and_install_cross_gcc_for_targets \
 		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
-		no no "${CURRENT_DATETIME}" "${TARGETS[@]}"
+		"$(array_elements_join ',' "${EXTRA_LANGUAGES[@]}")" no no "${CURRENT_DATETIME}" "${TARGETS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
 

@@ -550,11 +550,12 @@ build_and_install_binutils_gcc_for_target() {
 	local host_triple="$4"
 	local package="$5"
 	local version="$6"
-	local is_build_and_install_gmp_mpfr_mpc="$7"
-	local is_build_and_install_libgcc="$8"
-	local binutils_source_dir="$9"
-	local gcc_source_dir="${10}"
-	local gmp_mpfr_mpc_install_dir="${11}"
+	local extra_languages="$7"
+	local is_build_and_install_gmp_mpfr_mpc="$8"
+	local is_build_and_install_libgcc="$9"
+	local binutils_source_dir="${10}"
+	local gcc_source_dir="${11}"
+	local gmp_mpfr_mpc_install_dir="${12}"
 
 	local gcc_install_dir="${gcc_source_dir}-${target}-${build_type,,}-install"
 	local gcc_build_dir="${gcc_source_dir}-${target}-${build_type,,}-build"
@@ -606,7 +607,7 @@ build_and_install_binutils_gcc_for_target() {
 	\
 	\
 	&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
-			"$(array_elements_join ',' "${languages[@]}")" "${host_triple}" \
+			"$(array_elements_join ',' "${languages[@]}" "${extra_languages}")" "${host_triple}" \
 			"${gcc_configure_options[@]}" \
 		&& time_command parallel_make all-gcc \
 		&& if [ "${is_build_and_install_libgcc}" = yes ]; then
@@ -639,10 +640,11 @@ build_and_install_cross_gcc_for_targets() {
 	local package="$4"
 	local gcc_version="$5"
 	local binutils_version="$6"
-	local is_build_and_install_gmp_mpfr_mpc="$7"
-	local is_build_and_install_libgcc="$8"
-	local current_datetime="$9"
-	shift 9
+	local extra_languages="$7"
+	local is_build_and_install_gmp_mpfr_mpc="$8"
+	local is_build_and_install_libgcc="$9"
+	local current_datetime="${10}"
+	shift 10
 
 	local targets=( "$@" )
 	echo "targets :"
@@ -675,7 +677,7 @@ build_and_install_cross_gcc_for_targets() {
 	&& echo "building binutils and gcc ......" \
 	&& for target in "${targets[@]}"; do
 			time_command build_and_install_binutils_gcc_for_target \
-			"${target}" "${toolchain}" "${build_type}" "${host_triple}" "${package}" "${gcc_version}" \
+			"${target}" "${toolchain}" "${build_type}" "${host_triple}" "${package}" "${gcc_version}" "${extra_languages}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${is_build_and_install_libgcc}" "${binutils_source_dir}" "${gcc_source_dir}" \
 			"${gmp_mpfr_mpc_install_dir}" \
 			2>&1 | tee "~${current_datetime}-${package}-${target}-output.txt" &
@@ -818,7 +820,8 @@ gcc_configure_build_install_package() {
 	local host_triple="$3"
 	local package="$4"
 	local version="$5"
-	shift 5
+	local extra_languages="$6"
+	shift 6
 
 	local source_dir="${package}"
 	local build_dir="${source_dir}-${build_type,,}-build"
@@ -832,5 +835,6 @@ gcc_configure_build_install_package() {
 
 	time_command generate_build_install_package \
 		"${toolchain}" "${build_type}" "${host_triple}" "${package}" "${version}" "${source_dir}" "${install_dir}" \
-		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" "$(array_elements_join ',' "${languages[@]}")" "${host_triple}" "$@"
+		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" \
+		"$(array_elements_join ',' "${languages[@]}" "${extra_languages}")" "${host_triple}" "$@"
 }

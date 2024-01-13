@@ -33,9 +33,36 @@
 
 # default umask is 022, default new file mode is 755
 
+print_host_triple() {
+	case "$(uname -m)" in
+		x86_64 )
+			case "$(uname -o)" in
+				Cygwin )
+					echo "x86_64-pc-cygwin"
+					return 0
+					;;
+				Msys )
+					case "$(uname -s)" in
+						MSYS_NT-* )
+							echo "x86_64-pc-msys"
+							return 0
+						;;
+						MINGW64_NT-* )
+							echo "x86_64-pc-mingw64"
+							return 0
+						;;
+					esac
+					;;
+			esac
+			;;
+	esac
+
+	# fall back
+	~/config.guess
+}
 
 set_environment_variables_at_bash_startup() {
-	export HOST_TRIPLE="$(~/config.guess)"
+	export HOST_TRIPLE="$(print_host_triple)"
 	export TZ=Asia/Shanghai
 	export LANG=en_US.UTF-8
 	export LC_ALL=en_US.UTF-8

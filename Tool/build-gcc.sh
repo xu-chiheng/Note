@@ -124,3 +124,6 @@ PACKAGE="gcc"
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
 
 sync .
+
+# make -k check
+

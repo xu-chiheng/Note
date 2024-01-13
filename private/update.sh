@@ -67,6 +67,7 @@ do_update_all_files() {
 		Util/other/crypto
 		Util/other/backup
 
+		Util/quirk
 		Util/shell
 	)
 

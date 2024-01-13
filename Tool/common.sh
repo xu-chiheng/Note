@@ -220,6 +220,33 @@ git_repo_url_of_package() {
 		cmake )
 			echo "https://gitlab.kitware.com/cmake/cmake.git"
 			;;
+		bash )
+			echo "https://git.savannah.gnu.org/git/bash.git"
+			;;
+		make )
+			echo "https://git.savannah.gnu.org/git/make.git"
+			;;
+		python )
+			echo "https://github.com/python/cpython"
+			;;
+		perl )
+			echo "https://github.com/Perl/perl5"
+			;;
+		tcl )
+			echo "https://github.com/tcltk/tcl"
+			;;
+		tk )
+			echo "https://github.com/tcltk/tk"
+			;;
+		openjdk )
+			echo "https://github.com/openjdk/jdk"
+			;;
+		dotnet-runtime )
+			echo "https://github.com/dotnet/runtime"
+			;;
+		dotnet-roslyn )
+			echo "https://github.com/dotnet/roslyn"
+			;;
 		* )
 			echo "unknown package : ${package}"
 			return 1

@@ -89,6 +89,70 @@ set_environment_variables_at_bash_startup() {
 	esac
 
 	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
+			local notepadpp_dir="$(cygpath -u 'C:\Program Files\Notepad++')"
+			local youtube_dl_dir="$(cygpath -u 'D:\youtube-dl')"
+			local ultraiso_dir="$(cygpath -u 'C:\Program Files (x86)\UltraISO')"
+			local chrome_dir="$(cygpath -u 'C:\Program Files\Google\Chrome\Application')"
+			export PATH="$(array_elements_join ':' "${PATH}" "${notepadpp_dir}" "${youtube_dl_dir}" "${ultraiso_dir}" "${chrome_dir}" )"
+			;;
+	esac
+
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
+			export BROWSER=chrome
+			;;
+	esac
+
+	case "${HOST_TRIPLE}" in
+		*-linux )
+			# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
+			case "${DESKTOP_SESSION}" in
+				*plasma* )
+					FILE_EXPLORER=dolphin
+					TERMINAL_EMULATOR=konsole
+					TASK_MANAGER=ksysguard
+					;;
+				gnome | ubuntu )
+					FILE_EXPLORER=nautilus
+					TERMINAL_EMULATOR=gnome-terminal
+					TASK_MANAGER=gnome-system-monitor
+					;;
+				* )
+					echo "Unknown Desktop Environment ${DESKTOP_SESSION}"
+					;;
+			esac
+			# https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
+			export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
+			;;
+	esac
+
+	local packages_dir
+
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin )
+			local qemu_dir=$(cygpath -u 'D:\qemu')
+			export PATH="$(array_elements_join ':' "${PATH}" "${qemu_dir}" )"
+			;;
+		x86_64-pc-mingw64 )
+			# local qemu_dir=$(cygpath -u 'D:\qemu')
+			# no qemu
+			;;
+		*-linux )
+			local qemu_dir="${packages_dir}/qemu"
+			export PATH="$(array_elements_join ':' "${PATH}" "${qemu_dir}/bin" )"
+			;;
+	esac
+}
+
+fix_system_quirks_one_time() {
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-mingw64 )
+			mingw_gcc_check_or_create_directory_links
+			;;
+	esac
+
+	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
 			local usr_bin_gpg="/usr/bin/gpg.exe"
@@ -163,69 +227,9 @@ set_environment_variables_at_bash_startup() {
 			;;
 	esac
 
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			local notepadpp_dir="$(cygpath -u 'C:\Program Files\Notepad++')"
-			local youtube_dl_dir="$(cygpath -u 'D:\youtube-dl')"
-			local ultraiso_dir="$(cygpath -u 'C:\Program Files (x86)\UltraISO')"
-			local chrome_dir="$(cygpath -u 'C:\Program Files\Google\Chrome\Application')"
-			export PATH="$(array_elements_join ':' "${PATH}" "${notepadpp_dir}" "${youtube_dl_dir}" "${ultraiso_dir}" "${chrome_dir}" )"
-			;;
-	esac
-
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			export BROWSER=chrome
-			;;
-	esac
-
-	case "${HOST_TRIPLE}" in
-		*-linux )
-			# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
-			case "${DESKTOP_SESSION}" in
-				*plasma* )
-					FILE_EXPLORER=dolphin
-					TERMINAL_EMULATOR=konsole
-					TASK_MANAGER=ksysguard
-					;;
-				gnome | ubuntu )
-					FILE_EXPLORER=nautilus
-					TERMINAL_EMULATOR=gnome-terminal
-					TASK_MANAGER=gnome-system-monitor
-					;;
-				* )
-					echo "Unknown Desktop Environment ${DESKTOP_SESSION}"
-					;;
-			esac
-			# https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
-			export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
-			;;
-	esac
-
-	local packages_dir
-
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin )
-			local qemu_dir=$(cygpath -u 'D:\qemu')
-			export PATH="$(array_elements_join ':' "${PATH}" "${qemu_dir}" )"
-			;;
-		x86_64-pc-mingw64 )
-			# local qemu_dir=$(cygpath -u 'D:\qemu')
-			# no qemu
-			;;
-		*-linux )
-			local qemu_dir="${packages_dir}/qemu"
-			export PATH="$(array_elements_join ':' "${PATH}" "${qemu_dir}/bin" )"
-			;;
-	esac
-
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-mingw64 )
-			mingw_gcc_check_or_create_directory_links
-			;;
-	esac
-
+	echo "completed"
 }
+
 
 print_gcc_install_dir() {
 	echo "$(dirname "$(dirname "$(which gcc)")")"

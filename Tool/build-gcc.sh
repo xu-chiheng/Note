@@ -72,6 +72,14 @@ PACKAGE="gcc"
 				--with-default-libstdcxx-abi=gcc4-compatible
 				--enable-libstdcxx-filesystem-ts
 			)
+			EXTRA_LANGUAGES+=(
+				lto
+				fortran
+				# ada
+				objc
+				obj-c++
+				# jit
+			)
 			;;
 		x86_64-pc-mingw64 )
 			CONFIGURE_OPTIONS=(

@@ -37,6 +37,15 @@ PACKAGE=gcc
 
 	EXTRA_LANGUAGES=()
 
+	EXTRA_LANGUAGES+=(
+		lto
+		fortran
+		# ada
+		objc
+		obj-c++
+		# jit
+	)
+
 	TARGETS=(
 		x86_64-elf
 		aarch64-elf

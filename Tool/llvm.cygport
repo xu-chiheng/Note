@@ -71,11 +71,6 @@ CYGCMAKE_ARGS="${CMAKE_OPTIONS[*]}"
 
 CYGCMAKE_GENERATOR="Unix Makefiles"
 
-# Additional post-installation restrictions
-# https://cygwin.github.io/cygport/src_postinst_cygpart.html#RESTRICT
-# List of automatic postinstall or packaging step(s) which should be skipped for this package, and restrictions on package use.
-# RESTRICT="debuginfo diff"
-
 CC=gcc
 CXX=g++
 # CC=clang

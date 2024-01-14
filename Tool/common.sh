@@ -241,10 +241,10 @@ git_repo_url_of_package() {
 		openjdk )
 			echo "https://github.com/openjdk/jdk"
 			;;
-		dotnet-runtime )
+		runtime )
 			echo "https://github.com/dotnet/runtime"
 			;;
-		dotnet-roslyn )
+		roslyn )
 			echo "https://github.com/dotnet/roslyn"
 			;;
 		* )
@@ -583,6 +583,7 @@ build_and_install_binutils_gcc_for_target() {
 	local binutils_source_dir="${10}"
 	local gcc_source_dir="${11}"
 	local gmp_mpfr_mpc_install_dir="${12}"
+	local current_datetime="${13}"
 
 	local gcc_install_dir="${gcc_source_dir}-${target}-${build_type,,}-install"
 	local gcc_build_dir="${gcc_source_dir}-${target}-${build_type,,}-build"
@@ -630,7 +631,7 @@ build_and_install_binutils_gcc_for_target() {
 			"${binutils_configure_options[@]}" \
 		&& time_command parallel_make \
 		&& time_command parallel_make install \
-		&& echo_command popd;} \
+		&& echo_command popd;} 2>&1 | tee "~${current_datetime}-${package}-${target}-binutils-output.txt" \
 	\
 	\
 	&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
@@ -644,7 +645,7 @@ build_and_install_binutils_gcc_for_target() {
 		&& if [ "${is_build_and_install_libgcc}" = yes ]; then
 			time_command parallel_make install-target-libgcc
 		fi \
-		&& echo_command popd;} \
+		&& echo_command popd;} 2>&1 | tee "~${current_datetime}-${package}-${target}-gcc-output.txt" \
 	\
 	\
 	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
@@ -706,7 +707,7 @@ build_and_install_cross_gcc_for_targets() {
 			time_command build_and_install_binutils_gcc_for_target \
 			"${target}" "${toolchain}" "${build_type}" "${host_triple}" "${package}" "${gcc_version}" "${extra_languages}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${is_build_and_install_libgcc}" "${binutils_source_dir}" "${gcc_source_dir}" \
-			"${gmp_mpfr_mpc_install_dir}" \
+			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
 			2>&1 | tee "~${current_datetime}-${package}-${target}-output.txt" &
 	done \
 	&& time_command wait \

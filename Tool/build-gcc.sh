@@ -110,13 +110,18 @@ PACKAGE="gcc"
 				--disable-symvers
 				--with-libiconv
 				--with-system-zlib
-				--with-gmp="$(print_mingw_root_dir)"
-				--with-mpfr="$(print_mingw_root_dir)"
-				--with-mpc="$(print_mingw_root_dir)"
-				--with-isl="$(print_mingw_root_dir)"
+				--with-{gmp,mpfr,mpc,isl}="$(print_mingw_root_dir)"
 				--with-gnu-as
 				--with-gnu-ld
 				--disable-libstdcxx-debug
+			)
+			EXTRA_LANGUAGES+=(
+				lto
+				fortran
+				# ada
+				objc
+				obj-c++
+				# jit
 			)
 			;;
 		* )

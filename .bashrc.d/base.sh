@@ -178,12 +178,6 @@ fix_system_quirks_one_time() {
 	fi
 
 	case "${HOST_TRIPLE}" in
-		x86_64-pc-mingw64 )
-			mingw_gcc_check_or_create_directory_links
-			;;
-	esac
-
-	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
 			local usr_bin_gpg="/usr/bin/gpg.exe"
@@ -311,77 +305,6 @@ print_packages_dir() {
 			return 1
 			;;
 	esac
-}
-
-mingw_gcc_check_or_create_directory_links() {
-	if which gcc >/dev/null 2>&1; then
-		local gcc_install_dir="$(print_gcc_install_dir)"
-		mingw_gcc_check_or_create_directory_links_0 /mingw \
-		&& mingw_gcc_check_or_create_directory_links_0 "${gcc_install_dir}/mingw" \
-		&& mingw_gcc_check_or_create_directory_links_1 "${gcc_install_dir}" "${HOST_TRIPLE}"
-	fi
-}
-
-mingw_gcc_check_or_create_directory_links_1() {
-	local mingw_root_dir="$(print_mingw_root_dir)"
-	local gcc_install_dir="$1"
-	local host_triple="$2"
-	local sysroot="${gcc_install_dir}/${host_triple}"
-	if [ "${gcc_install_dir}" = "${mingw_root_dir}" ]; then
-		return 0
-	fi
-	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
-		return 0
-	fi
-	if [ -e "${sysroot}"/include ] && [ -e "${sysroot}"/lib ] \
-		&& [ "$(readlink -f "${sysroot}"/include)" = "$(readlink -f "${mingw_root_dir}"/include)" ] \
-		&& [ "$(readlink -f "${sysroot}"/lib)" = "$(readlink -f "${mingw_root_dir}"/lib)" ] ; then
-		# echo OK 1 "${sysroot}"
-		return 0
-	fi
-	rm -rf "${sysroot}"/{include,lib} \
-	&& mkdir -p "${sysroot}" \
-	&& ln -s "${mingw_root_dir}"/include "${sysroot}"/include \
-	&& ln -s "${mingw_root_dir}"/lib "${sysroot}"/lib
-}
-
-mingw_gcc_remove_directory_links_1() {
-	local mingw_root_dir="$(print_mingw_root_dir)"
-	local gcc_install_dir="$1"
-	local host_triple="$2"
-	local sysroot="${gcc_install_dir}/${host_triple}"
-	if [ "${gcc_install_dir}" = "${mingw_root_dir}" ]; then
-		return 0
-	fi
-	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
-		return 0
-	fi
-	echo_command rm -rf "${sysroot}"/{include,lib}
-}
-
-mingw_gcc_check_or_create_directory_links_0() {
-	local mingw_root_dir="$(print_mingw_root_dir)"
-	local sysroot="$1"
-	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
-		return 0
-	fi
-	if [ -e "${sysroot}" ] && [ "$(readlink -f "${sysroot}")" = "$(readlink -f "${mingw_root_dir}")" ] ; then
-		# echo OK 0 "${sysroot}"
-		return 0
-	fi
-	rm -rf "${sysroot}" \
-	&& mkdir -p "${sysroot}" \
-	&& rm -rf "${sysroot}" \
-	&& ln -s "${mingw_root_dir}" "${sysroot}"
-}
-
-mingw_gcc_remove_directory_links_0() {
-	local mingw_root_dir="$(print_mingw_root_dir)"
-	local sysroot="$1"
-	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
-		return 0
-	fi
-	echo_command rm -rf "${sysroot}"
 }
 
 

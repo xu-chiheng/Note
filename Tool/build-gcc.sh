@@ -33,7 +33,7 @@ PACKAGE="gcc"
 	# VERSION=13.2.0
 	VERSION=14.0.0 # commit 61d6dee992fdfa350a0c6d2a8151ec6e2844c419 2023-12-17
 
-	local EXTRA_LANGUAGES=()
+	EXTRA_LANGUAGES=()
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )

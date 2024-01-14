@@ -173,6 +173,10 @@ set_environment_variables_at_bash_startup() {
 }
 
 fix_system_quirks_one_time() {
+	if [ ! "$(print_host_triple)" = "$(~/config.guess)" ]; then
+		echo "host triple not equal to the output of config.guess"
+	fi
+
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-mingw64 )
 			mingw_gcc_check_or_create_directory_links
@@ -253,8 +257,6 @@ fix_system_quirks_one_time() {
 			fi
 			;;
 	esac
-
-	echo "completed"
 }
 
 
@@ -564,17 +566,6 @@ remove_temp_files() {
 	find . -type f -regextype posix-extended -regex '.*(\.(orig|rej|bak)|output.txt)' \
 	-print0 | xargs -0 -n100 \
 	rm -rf
-}
-
-# remove the test suite directories of GCC, LLVM, and maybe others
-remove_test_suite_dirs() {
-	case "$(basename "$(pwd)")" in
-		gcc | llvm | glibc )
-			find . -type d -regextype posix-extended -regex ".*/(test|unittests|testsuite)" \
-			-print0 | xargs -0 -n100 \
-			rm -rf
-			;;
-	esac
 }
 
 # https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory

@@ -1,0 +1,14 @@
+summary: Show your version. Build a one-file project.
+description: ''
+contact:
+- Vaclav Kadlcik <vkadlcik@redhat.com>
+component:
+- make
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- make
+- gcc
+duration: 5m
+extra-summary: /tools/make/Sanity/smoke-check-make-runs
+extra-task: /tools/make/Sanity/smoke-check-make-runs

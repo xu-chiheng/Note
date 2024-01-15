@@ -1,0 +1,9 @@
+mkdir -p dir/b/.
+@ [a/b/c]
+^ []
+? []
+mkdir -p a/b/.
+@ [a]
+^ []
+? []
+rm dir/b/.

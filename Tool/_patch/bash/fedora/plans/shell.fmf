@@ -1,0 +1,11 @@
+summary:
+    Run relevant tests from the shell tests repository
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/shell
+    filter: component:bash
+execute:
+    how: tmt
+environment:
+    PACKAGES: bash
+    SH_BIN: bash

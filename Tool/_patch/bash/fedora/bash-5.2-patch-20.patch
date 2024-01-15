@@ -1,0 +1,33 @@
+diff --git a/parse.y b/parse.y
+--- a/parse.y
++++ b/parse.y
+@@ -3150,6 +3150,7 @@ time_command_acceptable ()
+     case TIME:		/* time time pipeline */
+     case TIMEOPT:	/* time -p time pipeline */
+     case TIMEIGN:	/* time -p -- ... */
++    case DOLPAREN:
+       return 1;
+     default:
+       return 0;
+diff --git a/patchlevel.h b/patchlevel.h
+--- a/patchlevel.h
++++ b/patchlevel.h
+@@ -25,6 +25,6 @@
+    regexp `^#define[ 	]*PATCHLEVEL', since that's what support/mkversion.sh
+    looks for to find the patch level (for the sccs version string). */
+ 
+-#define PATCHLEVEL 19
++#define PATCHLEVEL 20
+ 
+ #endif /* _PATCHLEVEL_H_ */
+diff --git a/y.tab.c b/y.tab.c
+--- a/y.tab.c
++++ b/y.tab.c
+@@ -5465,6 +5465,7 @@ time_command_acceptable ()
+     case TIME:		/* time time pipeline */
+     case TIMEOPT:	/* time -p time pipeline */
+     case TIMEIGN:	/* time -p -- ... */
++    case DOLPAREN:
+       return 1;
+     default:
+       return 0;

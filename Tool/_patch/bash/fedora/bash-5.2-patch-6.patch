@@ -1,0 +1,230 @@
+diff --git a/builtins/common.h b/builtins/common.h
+--- a/builtins/common.h
++++ b/builtins/common.h
+@@ -257,6 +257,8 @@ extern int print_shift_error;
+ extern int expand_once_flag;
+ #endif
+ 
++extern int expaliases_flag;
++
+ /* variables from source.def */
+ extern int source_searches_cwd;
+ extern int source_uses_path;
+diff --git a/builtins/shopt.def b/builtins/shopt.def
+--- a/builtins/shopt.def
++++ b/builtins/shopt.def
+@@ -149,6 +149,9 @@ static int shopt_set_complete_direxpand PARAMS((char *, int));
+ static int set_assoc_expand PARAMS((char *, int));
+ #endif
+ 
++int expaliases_flag = 0;
++static int shopt_set_expaliases PARAMS((char *, int));
++
+ static int shopt_set_debug_mode PARAMS((char *, int));
+ 
+ static int shopt_login_shell;
+@@ -198,7 +201,7 @@ static struct {
+ #endif
+   { "dotglob", &glob_dot_filenames, (shopt_set_func_t *)NULL },
+   { "execfail", &no_exit_on_failed_exec, (shopt_set_func_t *)NULL },
+-  { "expand_aliases", &expand_aliases, (shopt_set_func_t *)NULL },
++  { "expand_aliases", &expaliases_flag, shopt_set_expaliases },
+ #if defined (DEBUGGER)
+   { "extdebug", &debugging_mode, shopt_set_debug_mode },
+ #endif
+@@ -350,7 +353,7 @@ reset_shopt_options ()
+   check_window_size = CHECKWINSIZE_DEFAULT;
+   allow_null_glob_expansion = glob_dot_filenames = 0;
+   no_exit_on_failed_exec = 0;
+-  expand_aliases = 0;
++  expand_aliases = expaliases_flag = 0;
+   extended_quote = 1;
+   fail_glob_expansion = 0;
+   glob_asciirange = GLOBASCII_DEFAULT;
+@@ -631,6 +634,15 @@ shopt_set_debug_mode (option_name, mode)
+   return (0);
+ }
+ 
++static int
++shopt_set_expaliases (option_name, mode)
++     char *option_name;
++     int mode;
++{
++  expand_aliases = expaliases_flag;
++  return 0;
++}
++
+ #if defined (READLINE)
+ static int
+ shopt_enable_hostname_completion (option_name, mode)
+diff --git a/execute_cmd.c b/execute_cmd.c
+--- a/execute_cmd.c
++++ b/execute_cmd.c
+@@ -1536,7 +1536,7 @@ execute_in_subshell (command, asynchronous, pipe_in, pipe_out, fds_to_close)
+ 	 expansion with `shopt -s expand_alias' to continue to expand
+ 	 aliases. */
+       if (ois != interactive_shell)
+-	expand_aliases = 0;
++	expand_aliases = expaliases_flag = 0;
+     }
+ 
+   /* Subshells are neither login nor interactive. */
+diff --git a/general.c b/general.c
+--- a/general.c
++++ b/general.c
+@@ -91,7 +91,7 @@ static struct {
+ {
+   &interactive_comments,
+   &source_uses_path,
+-  &expand_aliases,
++  &expaliases_flag,
+   &inherit_errexit,
+   &print_shift_error,
+   0
+@@ -106,7 +106,8 @@ posix_initialize (on)
+   /* Things that should be turned on when posix mode is enabled. */
+   if (on != 0)
+     {
+-      interactive_comments = source_uses_path = expand_aliases = 1;
++      interactive_comments = source_uses_path = 1;
++      expand_aliases = expaliases_flag = 1;
+       inherit_errexit = 1;
+       source_searches_cwd = 0;
+       print_shift_error = 1;
+@@ -116,13 +117,14 @@ posix_initialize (on)
+   else if (saved_posix_vars)		/* on == 0, restore saved settings */
+     {
+       set_posix_options (saved_posix_vars);
++      expand_aliases = expaliases_flag;
+       free (saved_posix_vars);
+       saved_posix_vars = 0;
+     }
+   else	/* on == 0, restore a default set of settings */
+     {
+       source_searches_cwd = 1;
+-      expand_aliases = interactive_shell;
++      expand_aliases = expaliases_flag = interactive_shell;	/* XXX */
+       print_shift_error = 0;
+     }
+ }
+diff --git a/parse.y b/parse.y
+--- a/parse.y
++++ b/parse.y
+@@ -3306,6 +3306,8 @@ reset_parser ()
+   if (parser_state & (PST_EXTPAT|PST_CMDSUBST))
+     extended_glob = global_extglob;
+ #endif
++  if (parser_state & (PST_CMDSUBST|PST_STRING))
++    expand_aliases = expaliases_flag;
+ 
+   parser_state = 0;
+   here_doc_first_line = 0;
+@@ -4388,6 +4390,7 @@ parse_string_to_command (string, flags)
+   if (flags & SX_COMPLETE)
+     parser_state |= PST_NOERROR;
+ 
++  parser_state |= PST_STRING;
+   expand_aliases = 0;
+ 
+   cmd = 0;
+@@ -6401,7 +6404,7 @@ parse_string_to_word_list (s, flags, whom)
+       /* State flags we don't want to persist into compound assignments. */
+       parser_state &= ~PST_NOEXPAND;	/* parse_comsub sentinel */
+       /* State flags we want to set for this run through the tokenizer. */
+-      parser_state |= PST_COMPASSIGN|PST_REPARSE;
++      parser_state |= PST_COMPASSIGN|PST_REPARSE|PST_STRING;
+     }
+ 
+   while ((tok = read_token (READ)) != yacc_EOF)
+diff --git a/parser.h b/parser.h
+--- a/parser.h
++++ b/parser.h
+@@ -50,6 +50,7 @@
+ #define PST_ENDALIAS	0x200000	/* just finished expanding and consuming an alias */
+ #define PST_NOEXPAND	0x400000	/* don't expand anything in read_token_word; for command substitution */
+ #define PST_NOERROR	0x800000	/* don't print error messages in yyerror */
++#define PST_STRING	0x1000000	/* parsing a string to a command or word list */
+ 
+ /* Definition of the delimiter stack.  Needed by parse.y and bashhist.c. */
+ struct dstack {
+diff --git a/patchlevel.h b/patchlevel.h
+--- a/patchlevel.h
++++ b/patchlevel.h
+@@ -25,6 +25,6 @@
+    regexp `^#define[ 	]*PATCHLEVEL', since that's what support/mkversion.sh
+    looks for to find the patch level (for the sccs version string). */
+ 
+-#define PATCHLEVEL 5
++#define PATCHLEVEL 6
+ 
+ #endif /* _PATCHLEVEL_H_ */
+diff --git a/shell.c b/shell.c
+--- a/shell.c
++++ b/shell.c
+@@ -1844,8 +1844,8 @@ reset_option_defaults ()
+ static void
+ init_interactive ()
+ {
+-  expand_aliases = interactive_shell = startup_state = 1;
+-  interactive = 1;
++  expand_aliases = expaliases_flag = 1;
++  interactive_shell = startup_state = interactive = 1;
+ #if defined (HISTORY)
+   if (enable_history_list == -1)
+     enable_history_list = 1;				/* set default  */
+@@ -1865,7 +1865,7 @@ init_noninteractive ()
+   bash_history_reinit (0);
+ #endif /* HISTORY */
+   interactive_shell = startup_state = interactive = 0;
+-  expand_aliases = posixly_correct;	/* XXX - was 0 not posixly_correct */
++  expand_aliases = expaliases_flag = posixly_correct;	/* XXX - was 0 not posixly_correct */
+   no_line_editing = 1;
+ #if defined (JOB_CONTROL)
+   /* Even if the shell is not interactive, enable job control if the -i or
+@@ -1882,7 +1882,7 @@ init_interactive_script ()
+     enable_history_list = 1;
+ #endif
+   init_noninteractive ();
+-  expand_aliases = interactive_shell = startup_state = 1;
++  expand_aliases = expaliases_flag = interactive_shell = startup_state = 1;
+ #if defined (HISTORY)
+   remember_on_history = enable_history_list;	/* XXX */
+ #endif
+@@ -2025,7 +2025,7 @@ shell_reinitialize ()
+   debugging = do_version = line_number = last_command_exit_value = 0;
+   forced_interactive = interactive_shell = 0;
+   subshell_environment = running_in_background = 0;
+-  expand_aliases = 0;
++  expand_aliases = expaliases_flag = 0;
+   bash_argv_initialized = 0;
+ 
+   /* XXX - should we set jobs_m_flag to 0 here? */
+diff --git a/y.tab.c b/y.tab.c
+--- a/y.tab.c
++++ b/y.tab.c
+@@ -5617,6 +5617,8 @@ reset_parser ()
+   if (parser_state & (PST_EXTPAT|PST_CMDSUBST))
+     extended_glob = global_extglob;
+ #endif
++  if (parser_state & (PST_CMDSUBST|PST_STRING))
++    expand_aliases = expaliases_flag;
+ 
+   parser_state = 0;
+   here_doc_first_line = 0;
+@@ -6699,6 +6701,7 @@ parse_string_to_command (string, flags)
+   if (flags & SX_COMPLETE)
+     parser_state |= PST_NOERROR;
+ 
++  parser_state |= PST_STRING;
+   expand_aliases = 0;
+ 
+   cmd = 0;
+@@ -8712,7 +8715,7 @@ parse_string_to_word_list (s, flags, whom)
+       /* State flags we don't want to persist into compound assignments. */
+       parser_state &= ~PST_NOEXPAND;	/* parse_comsub sentinel */
+       /* State flags we want to set for this run through the tokenizer. */
+-      parser_state |= PST_COMPASSIGN|PST_REPARSE;
++      parser_state |= PST_COMPASSIGN|PST_REPARSE|PST_STRING;
+     }
+ 
+   while ((tok = read_token (READ)) != yacc_EOF)

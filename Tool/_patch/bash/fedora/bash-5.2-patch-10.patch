@@ -1,0 +1,41 @@
+diff --git a/general.c b/general.c
+--- a/general.c
++++ b/general.c
+@@ -683,21 +683,20 @@ check_binary_file (sample, sample_len)
+      int sample_len;
+ {
+   register int i;
++  int nline;
+   unsigned char c;
+ 
+   if (sample_len >= 4 && sample[0] == 0x7f && sample[1] == 'E' && sample[2] == 'L' && sample[3] == 'F')
+     return 1;
+ 
+   /* Generally we check the first line for NULs. If the first line looks like
+-     a `#!' interpreter specifier, we just look for NULs anywhere in the
+-     buffer. */
+-  if (sample[0] == '#' && sample[1] == '!')
+-    return (memchr (sample, '\0', sample_len) != NULL);
++     a `#!' interpreter specifier, we look for NULs in the first two lines. */
++  nline = (sample[0] == '#' && sample[1] == '!') ? 2 : 1;
+ 
+   for (i = 0; i < sample_len; i++)
+     {
+       c = sample[i];
+-      if (c == '\n')
++      if (c == '\n' && --nline == 0)
+ 	return (0);
+       if (c == '\0')
+ 	return (1);
+diff --git a/patchlevel.h b/patchlevel.h
+index e59027ac..9ddc79f7 100644
+--- a/patchlevel.h
++++ b/patchlevel.h
+@@ -25,6 +25,6 @@
+    regexp `^#define[ 	]*PATCHLEVEL', since that's what support/mkversion.sh
+    looks for to find the patch level (for the sccs version string). */
+ 
+-#define PATCHLEVEL 9
++#define PATCHLEVEL 10
+ 
+ #endif /* _PATCHLEVEL_H_ */

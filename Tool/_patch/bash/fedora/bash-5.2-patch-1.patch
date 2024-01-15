@@ -1,0 +1,24 @@
+diff --git a/patchlevel.h b/patchlevel.h
+--- a/patchlevel.h
++++ b/patchlevel.h
+@@ -25,6 +25,6 @@
+    regexp `^#define[ 	]*PATCHLEVEL', since that's what support/mkversion.sh
+    looks for to find the patch level (for the sccs version string). */
+ 
+-#define PATCHLEVEL 0
++#define PATCHLEVEL 1
+ 
+ #endif /* _PATCHLEVEL_H_ */
+diff --git a/subst.c b/subst.c
+index d9feabca..93b91606 100644
+--- a/subst.c
++++ b/subst.c
+@@ -10857,7 +10857,7 @@ expand_array_subscript (string, sindex, quoted, flags)
+   exp = substring (string, si+1, ni);
+   t = expand_subscript_string (exp, quoted & ~(Q_ARITH|Q_DOUBLE_QUOTES));
+   free (exp);
+-  exp = sh_backslash_quote (t, abstab, 0);
++  exp = t ? sh_backslash_quote (t, abstab, 0) : savestring ("");
+   free (t);
+ 
+   slen = STRLEN (exp);

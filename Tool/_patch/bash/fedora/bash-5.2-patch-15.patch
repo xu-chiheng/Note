@@ -1,0 +1,163 @@
+diff --git a/builtins/common.h b/builtins/common.h
+--- a/builtins/common.h
++++ b/builtins/common.h
+@@ -51,6 +51,7 @@ do { \
+ #define SEVAL_FUNCDEF	0x080		/* only allow function definitions */
+ #define SEVAL_ONECMD	0x100		/* only allow a single command */
+ #define SEVAL_NOHISTEXP	0x200		/* inhibit history expansion */
++#define SEVAL_NOOPTIMIZE 0x400		/* don't try to set optimization flags */
+ 
+ /* Flags for describe_command, shared between type.def and command.def */
+ #define CDESC_ALL		0x001	/* type -a */
+diff --git a/builtins/eval.def b/builtins/eval.def
+--- a/builtins/eval.def
++++ b/builtins/eval.def
+@@ -53,5 +53,5 @@ eval_builtin (list)
+     return (EX_USAGE);
+   list = loptend;	/* skip over possible `--' */
+ 
+-  return (list ? evalstring (string_list (list), "eval", SEVAL_NOHIST) : EXECUTION_SUCCESS);
++  return (list ? evalstring (string_list (list), "eval", SEVAL_NOHIST|SEVAL_NOOPTIMIZE) : EXECUTION_SUCCESS);
+ }
+diff --git a/builtins/evalstring.c b/builtins/evalstring.c
+--- a/builtins/evalstring.c
++++ b/builtins/evalstring.c
+@@ -132,8 +132,8 @@ optimize_connection_fork (command)
+   if (command->type == cm_connection &&
+       (command->value.Connection->connector == AND_AND || command->value.Connection->connector == OR_OR || command->value.Connection->connector == ';') &&
+       (command->value.Connection->second->flags & CMD_TRY_OPTIMIZING) &&
+-      ((startup_state == 2 && should_suppress_fork (command->value.Connection->second)) ||
+-       ((subshell_environment & SUBSHELL_PAREN) && should_optimize_fork (command->value.Connection->second, 0))))
++      (should_suppress_fork (command->value.Connection->second) ||
++      ((subshell_environment & SUBSHELL_PAREN) && should_optimize_fork (command->value.Connection->second, 0))))
+     {
+       command->value.Connection->second->flags |= CMD_NO_FORK;
+       command->value.Connection->second->value.Simple->flags |= CMD_NO_FORK;
+@@ -290,6 +290,7 @@ parse_prologue (string, flags, tag)
+    	(flags & SEVAL_NOFREE) -> don't free STRING when finished
+    	(flags & SEVAL_RESETLINE) -> reset line_number to 1
+    	(flags & SEVAL_NOHISTEXP) -> history_expansion_inhibited -> 1
++   	(flags & SEVAL_NOOPTIMIZE) -> don't try to turn on optimizing flags
+ */
+ 
+ int
+@@ -502,7 +503,9 @@ parse_and_execute (string, from_file, flags)
+ 		 if we are at the end of the command string, the last in a
+ 		 series of connection commands is
+ 		 command->value.Connection->second. */
+-	      else if (command->type == cm_connection && can_optimize_connection (command))
++	      else if (command->type == cm_connection &&
++		       (flags & SEVAL_NOOPTIMIZE) == 0 &&
++		       can_optimize_connection (command))
+ 		{
+ 		  command->value.Connection->second->flags |= CMD_TRY_OPTIMIZING;
+ 		  command->value.Connection->second->value.Simple->flags |= CMD_TRY_OPTIMIZING;
+diff --git a/execute_cmd.c b/execute_cmd.c
+--- a/execute_cmd.c
++++ b/execute_cmd.c
+@@ -1654,7 +1654,8 @@ execute_in_subshell (command, asynchronous, pipe_in, pipe_out, fds_to_close)
+      subshell sets an exit trap, so we set CMD_NO_FORK for simple commands
+      and set CMD_TRY_OPTIMIZING for simple commands on the right side of an
+      and-or or `;' list to test for optimizing forks when they are executed. */
+-  if (user_subshell && command->type == cm_subshell)
++  if (user_subshell && command->type == cm_subshell &&
++      (command->flags & (CMD_TIME_PIPELINE|CMD_INVERT_RETURN)) == 0)
+     optimize_subshell_command (command->value.Subshell->command);
+ 
+   /* Do redirections, then dispose of them before recursive call. */
+diff --git a/jobs.c b/jobs.c
+--- a/jobs.c
++++ b/jobs.c
+@@ -4220,7 +4220,7 @@ run_sigchld_trap (nchild)
+   jobs_list_frozen = 1;
+   for (i = 0; i < nchild; i++)
+     {
+-      parse_and_execute (savestring (trap_command), "trap", SEVAL_NOHIST|SEVAL_RESETLINE);
++      parse_and_execute (savestring (trap_command), "trap", SEVAL_NOHIST|SEVAL_RESETLINE|SEVAL_NOOPTIMIZE);
+     }
+ 
+   run_unwind_frame ("SIGCHLD trap");
+diff --git a/parse.y b/parse.y
+--- a/parse.y
++++ b/parse.y
+@@ -2827,7 +2827,7 @@ execute_variable_command (command, vname)
+   if (last_lastarg)
+     last_lastarg = savestring (last_lastarg);
+ 
+-  parse_and_execute (savestring (command), vname, SEVAL_NONINT|SEVAL_NOHIST);
++  parse_and_execute (savestring (command), vname, SEVAL_NONINT|SEVAL_NOHIST|SEVAL_NOOPTIMIZE);
+ 
+   restore_parser_state (&ps);
+   bind_variable ("_", last_lastarg, 0);
+diff --git a/patchlevel.h b/patchlevel.h
+--- a/patchlevel.h
++++ b/patchlevel.h
+@@ -25,6 +25,6 @@
+    regexp `^#define[ 	]*PATCHLEVEL', since that's what support/mkversion.sh
+    looks for to find the patch level (for the sccs version string). */
+ 
+-#define PATCHLEVEL 14
++#define PATCHLEVEL 15
+ 
+ #endif /* _PATCHLEVEL_H_ */
+diff --git a/trap.c b/trap.c
+--- a/trap.c
++++ b/trap.c
+@@ -304,6 +304,7 @@ run_pending_traps ()
+   sh_parser_state_t pstate;
+   volatile int save_return_catch_flag, function_code;
+   procenv_t save_return_catch;
++  char *trap_command, *old_trap;
+ #if defined (ARRAY_VARS)
+   ARRAY *ps;
+ #endif
+@@ -419,6 +420,9 @@ run_pending_traps ()
+ 	    }
+ 	  else
+ 	    {
++	      old_trap = trap_list[sig];
++	      trap_command = savestring (old_trap);
++
+ 	      save_parser_state (&pstate);
+ 	      save_subst_varlist = subst_assign_varlist;
+ 	      subst_assign_varlist = 0;
+@@ -441,7 +445,8 @@ run_pending_traps ()
+ 		}
+ 
+ 	      if (function_code == 0)
+-		x = parse_and_execute (savestring (trap_list[sig]), "trap", SEVAL_NONINT|SEVAL_NOHIST|SEVAL_RESETLINE);
++	        /* XXX is x always last_command_exit_value? */
++		x = parse_and_execute (trap_command, "trap", SEVAL_NONINT|SEVAL_NOHIST|SEVAL_RESETLINE|SEVAL_NOOPTIMIZE);
+ 	      else
+ 		{
+ 		  parse_and_execute_cleanup (sig + 1);	/* XXX - could use -1 */
+@@ -1002,7 +1007,7 @@ run_exit_trap ()
+       if (code == 0 && function_code == 0)
+ 	{
+ 	  reset_parser ();
+-	  parse_and_execute (trap_command, "exit trap", SEVAL_NONINT|SEVAL_NOHIST|SEVAL_RESETLINE);
++	  parse_and_execute (trap_command, "exit trap", SEVAL_NONINT|SEVAL_NOHIST|SEVAL_RESETLINE|SEVAL_NOOPTIMIZE);
+ 	}
+       else if (code == ERREXIT)
+ 	retval = last_command_exit_value;
+@@ -1109,7 +1114,7 @@ _run_trap_internal (sig, tag)
+ 	  function_code = setjmp_nosigs (return_catch);
+ 	}
+ 
+-      flags = SEVAL_NONINT|SEVAL_NOHIST;
++      flags = SEVAL_NONINT|SEVAL_NOHIST|SEVAL_NOOPTIMIZE;
+       if (sig != DEBUG_TRAP && sig != RETURN_TRAP && sig != ERROR_TRAP)
+ 	flags |= SEVAL_RESETLINE;
+       evalnest++;
+diff --git a/y.tab.c b/y.tab.c
+--- a/y.tab.c
++++ b/y.tab.c
+@@ -5138,7 +5138,7 @@ execute_variable_command (command, vname)
+   if (last_lastarg)
+     last_lastarg = savestring (last_lastarg);
+ 
+-  parse_and_execute (savestring (command), vname, SEVAL_NONINT|SEVAL_NOHIST);
++  parse_and_execute (savestring (command), vname, SEVAL_NONINT|SEVAL_NOHIST|SEVAL_NOOPTIMIZE);
+ 
+   restore_parser_state (&ps);
+   bind_variable ("_", last_lastarg, 0);

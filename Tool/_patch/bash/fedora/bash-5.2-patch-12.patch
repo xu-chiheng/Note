@@ -1,0 +1,268 @@
+diff --git a/builtins/common.h b/builtins/common.h
+--- a/builtins/common.h
++++ b/builtins/common.h
+@@ -257,6 +257,10 @@ extern int print_shift_error;
+ extern int expand_once_flag;
+ #endif
+ 
++#if defined (EXTENDED_GLOB)
++extern int extglob_flag;
++#endif
++
+ extern int expaliases_flag;
+ 
+ /* variables from source.def */
+diff --git a/builtins/shopt.def b/builtins/shopt.def
+--- a/builtins/shopt.def
++++ b/builtins/shopt.def
+@@ -149,6 +149,11 @@ static int shopt_set_complete_direxpand PARAMS((char *, int));
+ static int set_assoc_expand PARAMS((char *, int));
+ #endif
+ 
++#if defined (EXTENDED_GLOB)
++int extglob_flag = EXTGLOB_DEFAULT;
++static int shopt_set_extglob PARAMS((char *, int));
++#endif
++
+ int expaliases_flag = 0;
+ static int shopt_set_expaliases PARAMS((char *, int));
+ 
+@@ -206,7 +211,7 @@ static struct {
+   { "extdebug", &debugging_mode, shopt_set_debug_mode },
+ #endif
+ #if defined (EXTENDED_GLOB)
+-  { "extglob", &extended_glob, (shopt_set_func_t *)NULL },
++  { "extglob", &extglob_flag, shopt_set_extglob },
+ #endif
+   { "extquote", &extended_quote, (shopt_set_func_t *)NULL },
+   { "failglob", &fail_glob_expansion, (shopt_set_func_t *)NULL },
+@@ -377,7 +382,7 @@ reset_shopt_options ()
+ #endif
+ 
+ #if defined (EXTENDED_GLOB)
+-  extended_glob = EXTGLOB_DEFAULT;
++  extended_glob = extglob_flag = EXTGLOB_DEFAULT;
+ #endif
+ 
+ #if defined (ARRAY_VARS)
+@@ -643,6 +648,17 @@ shopt_set_expaliases (option_name, mode)
+   return 0;
+ }
+ 
++#if defined (EXTENDED_GLOB)
++static int
++shopt_set_extglob (option_name, mode)
++     char *option_name;
++     int mode;
++{
++  extended_glob = extglob_flag;
++  return 0;
++}
++#endif
++
+ #if defined (READLINE)
+ static int
+ shopt_enable_hostname_completion (option_name, mode)
+diff --git a/execute_cmd.c b/execute_cmd.c
+--- a/execute_cmd.c
++++ b/execute_cmd.c
+@@ -3990,13 +3990,11 @@ execute_cond_node (cond)
+       else
+ #endif /* COND_REGEXP */
+ 	{
+-	  int oe;
+-	  oe = extended_glob;
+ 	  extended_glob = 1;
+ 	  result = binary_test (cond->op->word, arg1, arg2, TEST_PATMATCH|TEST_ARITHEXP|TEST_LOCALE)
+ 				  ? EXECUTION_SUCCESS
+ 				  : EXECUTION_FAILURE;
+-	  extended_glob = oe;
++	  extended_glob = extglob_flag;
+ 	}
+       if (arg1 != nullstr)
+ 	free (arg1);
+diff --git a/parse.y b/parse.y
+--- a/parse.y
++++ b/parse.y
+@@ -125,7 +125,7 @@ do { \
+ } while (0)
+ 
+ #if defined (EXTENDED_GLOB)
+-extern int extended_glob;
++extern int extended_glob, extglob_flag;
+ #endif
+ 
+ #if defined (TRANSLATABLE_STRINGS)
+@@ -3304,7 +3304,7 @@ reset_parser ()
+ #if defined (EXTENDED_GLOB)
+   /* Reset to global value of extended glob */
+   if (parser_state & (PST_EXTPAT|PST_CMDSUBST))
+-    extended_glob = global_extglob;
++    extended_glob = extglob_flag;
+ #endif
+   if (parser_state & (PST_CMDSUBST|PST_STRING))
+     expand_aliases = expaliases_flag;
+@@ -4124,10 +4124,10 @@ parse_comsub (qc, open, close, lenp, flags)
+     expand_aliases = posixly_correct != 0;
+ #if defined (EXTENDED_GLOB)
+   /* If (parser_state & PST_EXTPAT), we're parsing an extended pattern for a
+-     conditional command and have already set global_extglob appropriately. */
++     conditional command and have already set extended_glob appropriately. */
+   if (shell_compatibility_level <= 51 && was_extpat == 0)
+     {
+-      local_extglob = global_extglob = extended_glob;
++      local_extglob = extended_glob;
+       extended_glob = 1;
+     }
+ #endif
+@@ -4235,7 +4235,7 @@ xparse_dolparen (base, string, indp, flags)
+ {
+   sh_parser_state_t ps;
+   sh_input_line_state_t ls;
+-  int orig_ind, nc, sflags, start_lineno;
++  int orig_ind, nc, sflags, start_lineno, local_extglob;
+   char *ret, *ep, *ostring;
+ 
+ /*debug_parser(1);*/
+@@ -4278,7 +4278,7 @@ xparse_dolparen (base, string, indp, flags)
+      old value will be restored by restore_parser_state(). */
+   expand_aliases = 0;
+ #if defined (EXTENDED_GLOB)
+-  global_extglob = extended_glob;		/* for reset_parser() */
++  local_extglob = extended_glob;
+ #endif
+ 
+   token_to_read = DOLPAREN;			/* let's trick the parser */
+@@ -4296,6 +4296,9 @@ xparse_dolparen (base, string, indp, flags)
+   restore_input_line_state (&ls);
+   restore_parser_state (&ps);
+ 
++#if defined (EXTENDED_GLOB)
++  extended_glob = local_extglob;
++#endif
+   token_to_read = 0;
+ 
+   /* If parse_string returns < 0, we need to jump to top level with the
+@@ -4731,12 +4734,16 @@ cond_term ()
+ 	}
+ 
+       /* rhs */
++#if defined (EXTENDED_GLOB)
+       local_extglob = extended_glob;
+       if (parser_state & PST_EXTPAT)
+ 	extended_glob = 1;
++#endif
+       tok = read_token (READ);
++#if defined (EXTENDED_GLOB)
+       if (parser_state & PST_EXTPAT)
+ 	extended_glob = local_extglob;
++#endif
+       parser_state &= ~(PST_REGEXP|PST_EXTPAT);
+ 
+       if (tok == WORD)
+@@ -4783,7 +4790,6 @@ parse_cond_command ()
+ {
+   COND_COM *cexp;
+ 
+-  global_extglob = extended_glob;
+   cexp = cond_expr ();
+   return (make_cond_command (cexp));
+ }
+diff --git a/patchlevel.h b/patchlevel.h
+--- a/patchlevel.h
++++ b/patchlevel.h
+@@ -25,6 +25,6 @@
+    regexp `^#define[ 	]*PATCHLEVEL', since that's what support/mkversion.sh
+    looks for to find the patch level (for the sccs version string). */
+ 
+-#define PATCHLEVEL 11
++#define PATCHLEVEL 12
+ 
+ #endif /* _PATCHLEVEL_H_ */
+diff --git a/y.tab.c b/y.tab.c
+--- a/y.tab.c
++++ b/y.tab.c
+@@ -175,7 +175,7 @@ do { \
+ } while (0)
+ 
+ #if defined (EXTENDED_GLOB)
+-extern int extended_glob;
++extern int extended_glob, extglob_flag;
+ #endif
+ 
+ #if defined (TRANSLATABLE_STRINGS)
+@@ -5615,7 +5615,7 @@ reset_parser ()
+ #if defined (EXTENDED_GLOB)
+   /* Reset to global value of extended glob */
+   if (parser_state & (PST_EXTPAT|PST_CMDSUBST))
+-    extended_glob = global_extglob;
++    extended_glob = extglob_flag;
+ #endif
+   if (parser_state & (PST_CMDSUBST|PST_STRING))
+     expand_aliases = expaliases_flag;
+@@ -6435,10 +6435,10 @@ parse_comsub (qc, open, close, lenp, flags)
+     expand_aliases = posixly_correct != 0;
+ #if defined (EXTENDED_GLOB)
+   /* If (parser_state & PST_EXTPAT), we're parsing an extended pattern for a
+-     conditional command and have already set global_extglob appropriately. */
++     conditional command and have already set extended_glob appropriately. */
+   if (shell_compatibility_level <= 51 && was_extpat == 0)
+     {
+-      local_extglob = global_extglob = extended_glob;
++      local_extglob = extended_glob;
+       extended_glob = 1;
+     }
+ #endif
+@@ -6546,7 +6546,7 @@ xparse_dolparen (base, string, indp, flags)
+ {
+   sh_parser_state_t ps;
+   sh_input_line_state_t ls;
+-  int orig_ind, nc, sflags, start_lineno;
++  int orig_ind, nc, sflags, start_lineno, local_extglob;
+   char *ret, *ep, *ostring;
+ 
+ /*debug_parser(1);*/
+@@ -6589,7 +6589,7 @@ xparse_dolparen (base, string, indp, flags)
+      old value will be restored by restore_parser_state(). */
+   expand_aliases = 0;
+ #if defined (EXTENDED_GLOB)
+-  global_extglob = extended_glob;		/* for reset_parser() */
++  local_extglob = extended_glob;
+ #endif
+ 
+   token_to_read = DOLPAREN;			/* let's trick the parser */
+@@ -6607,6 +6607,9 @@ xparse_dolparen (base, string, indp, flags)
+   restore_input_line_state (&ls);
+   restore_parser_state (&ps);
+ 
++#if defined (EXTENDED_GLOB)
++  extended_glob = local_extglob;
++#endif
+   token_to_read = 0;
+ 
+   /* If parse_string returns < 0, we need to jump to top level with the
+@@ -7042,12 +7045,16 @@ cond_term ()
+ 	}
+ 
+       /* rhs */
++#if defined (EXTENDED_GLOB)
+       local_extglob = extended_glob;
+       if (parser_state & PST_EXTPAT)
+ 	extended_glob = 1;
++#endif
+       tok = read_token (READ);
++#if defined (EXTENDED_GLOB)
+       if (parser_state & PST_EXTPAT)
+ 	extended_glob = local_extglob;
++#endif
+       parser_state &= ~(PST_REGEXP|PST_EXTPAT);
+ 
+       if (tok == WORD)
+@@ -7094,7 +7101,6 @@ parse_cond_command ()
+ {
+   COND_COM *cexp;
+ 
+-  global_extglob = extended_glob;
+   cexp = cond_expr ();
+   return (make_cond_command (cexp));
+ }

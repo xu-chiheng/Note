@@ -1,0 +1,174 @@
+# Maintainer: Alexey Pavlov <alexpux@gmail.com>
+# Contributor: Ray Donnelly <mingw.android@gmail.com>
+
+pkgbase=bash
+pkgname=('bash' 'bash-devel')
+_basever=5.2
+_patchlevel=021 #prepare for some patches
+pkgver=${_basever}.${_patchlevel}
+pkgrel=1
+pkgdesc="The GNU Bourne Again shell"
+arch=('i686' 'x86_64')
+license=('GPL')
+url="https://www.gnu.org/software/bash/bash.html"
+msys2_repository_url="https://git.savannah.gnu.org/cgit/bash.git"
+validpgpkeys=('7C0135FB088AAF6C66C650B9BB5869F064EA74AB') # Chet Ramey
+makedepends=('gettext-devel' 'libreadline-devel>=7.0' 'ncurses-devel' 'autotools' 'gcc')
+source=(https://ftp.gnu.org/gnu/bash/bash-${_basever}.tar.gz{,.sig}
+        0001-bash-4.4-cygwin.patch
+        0002-bash-4.3-msysize.patch
+        0005-bash-4.3-msys2-fix-lineendings.patch
+        0006-bash-4.3-add-pwd-W-option.patch
+        0007-fix-static-build.patch)
+if [ $_patchlevel -gt 000 ]; then
+  for (( p=1; p<=$((10#${_patchlevel})); p++ )); do
+    source=(${source[@]} https://ftp.gnu.org/gnu/bash/bash-${_basever}-patches/bash${_basever//./}-$(printf "%03d" $p){,.sig})
+  done
+fi
+noextract=(${pkgbase}-${_basever}.tar.gz)
+validpgpkeys=('7C0135FB088AAF6C66C650B9BB5869F064EA74AB') # Chet Ramey
+
+prepare() {
+  [[ -d ${pkgbase}-${_basever} ]] && rm -rf ${pkgbase}-${_basever}
+  tar -xzvf ${srcdir}/${pkgbase}-${_basever}.tar.gz || true
+  cd ${srcdir}/${pkgname}-${_basever}
+
+  # Remove patch-created file.
+  [[ -f cross-build/msys32.cache ]] && rm -rf cross-build/msys32.cache
+
+  for (( p=1; p<=$((10#${_patchlevel})); p++ )); do
+    msg "applying patch bash${_basever//./}-$(printf "%03d" $p)"
+    patch -p0 -i $srcdir/bash${_basever//./}-$(printf "%03d" $p)
+  done
+
+  patch -p1 -i ${srcdir}/0001-bash-4.4-cygwin.patch
+  patch -p1 -i ${srcdir}/0002-bash-4.3-msysize.patch
+  patch -p1 -i ${srcdir}/0005-bash-4.3-msys2-fix-lineendings.patch
+  patch -p1 -i ${srcdir}/0006-bash-4.3-add-pwd-W-option.patch
+  patch -p1 -i ${srcdir}/0007-fix-static-build.patch
+
+  autoconf
+}
+
+build() {
+  cd ${srcdir}/${pkgname}-$_basever
+
+  ./configure --build=${CHOST} \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --enable-static-link \
+    --enable-readline \
+    --without-libintl-prefix \
+    --without-libiconv-prefix \
+    --with-installed-readline \
+    --without-bash-malloc \
+    --with-curses \
+    bash_cv_dev_stdin=present \
+    bash_cv_dev_fd=standard \
+    bash_cv_termcap_lib=libncurses
+
+  # Prepopulate the release level.
+  expr ${pkgrel} > .build || :
+
+  # CFLAGS+=" -D_STATIC_BUILD"
+  make CPPFLAGS=-DWORDEXP_OPTION \
+       HISTORY_LDFLAGS= \
+       READLINE_LDFLAGS= \
+       LOCAL_LDFLAGS='-Wl,--export-all,--out-implib,lib$(@:.exe=.dll.a)'
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-$_basever
+  make check
+}
+
+package_bash() {
+  provides=('sh')
+
+  cd ${srcdir}/${pkgname}-$_basever
+  make DESTDIR=${pkgdir} install
+
+  cp -fp ${pkgdir}/usr/bin/{ba,}sh.exe
+
+  cd ${pkgdir}/usr/share/man/man1 > /dev/null
+  echo '.so man1/bash.1' > sh.1
+  echo '.so man1/bash_builtins.1.gz' > alias.1
+
+  gzip alias.1
+  for f in bg bind break builtin caller case cd command compgen complete \
+    continue declare dirs disown do done elif else enable esac eval exec \
+    exit export fc fg fi for function getopts hash help history if in jobs \
+    let local logout popd pushd read readonly return select set shift shopt \
+    source suspend then time times trap type typeset ulimit umask unalias \
+    unset until wait while [ ; do
+    cp -fp alias.1.gz $f.1.gz
+  done
+}
+
+package_bash-devel() {
+ pkgdesc="Bash headers and libraries"
+ groups=('development')
+ options=('staticlibs')
+ backup=()
+
+ mkdir -p ${pkgdir}/usr/{include,lib,bin}
+ cd ${srcdir}/bash-$_basever
+ cp -f libbash.dll.a ${pkgdir}/usr/lib/
+
+ mkdir -p  ${pkgdir}/usr/include/bash
+ for f in [^y]*.h builtins/*.h include/*.h lib/{glob,tilde}/*.h
+ do
+   /usr/bin/install ${f} ${pkgdir}/usr/include/bash
+ done
+}
+
+sha256sums=('a139c166df7ff4471c5e0733051642ee5556c1cc8a4a78f145583c5c81ab32fb'
+            'SKIP'
+            '948b8b5401dcb4e5eb577cfa6543e740e2e3bd0690939d8e77d078d75d110097'
+            '6ca7633a87db7caf1d2d1a96779681c365d0ad2c11b2ea758e772f4ebff2a62f'
+            'c55c24110fbe90a2000411239e6399c1baed2843a61220b4e8a7a036f4a7436a'
+            '500c75c64593a70276585345a55c807226c0cc220d08b7cccece2ab005b3bcea'
+            'cbae1aa81d56eba4e916bdaf2b2983731d6e2537dd8d606a3b378e49bcb81e79'
+            'f42f2fee923bc2209f406a1892772121c467f44533bedfe00a176139da5d310a'
+            'SKIP'
+            '45cc5e1b876550eee96f95bffb36c41b6cb7c07d33f671db5634405cd00fd7b8'
+            'SKIP'
+            '6a090cdbd334306fceacd0e4a1b9e0b0678efdbbdedbd1f5842035990c8abaff'
+            'SKIP'
+            '38827724bba908cf5721bd8d4e595d80f02c05c35f3dd7dbc4cd3c5678a42512'
+            'SKIP'
+            'ece0eb544368b3b4359fb8464caa9d89c7a6743c8ed070be1c7d599c3675d357'
+            'SKIP'
+            'd1e0566a257d149a0d99d450ce2885123f9995e9c01d0a5ef6df7044a72a468c'
+            'SKIP'
+            '2500a3fc21cb08133f06648a017cebfa27f30ea19c8cbe8dfefdf16227cfd490'
+            'SKIP'
+            '6b4bd92fd0099d1bab436b941875e99e0cb3c320997587182d6267af1844b1e8'
+            'SKIP'
+            'f95a817882eaeb0cb78bce82859a86bbb297a308ced730ebe449cd504211d3cd'
+            'SKIP'
+            'c7705e029f752507310ecd7270aef437e8043a9959e4d0c6065a82517996c1cd'
+            'SKIP'
+            '831b5f25bf3e88625f3ab315043be7498907c551f86041fa3b914123d79eb6f4'
+            'SKIP'
+            '2fb107ce1fb8e93f36997c8b0b2743fc1ca98a454c7cc5a3fcabec533f67d42c'
+            'SKIP'
+            '094b4fd81bc488a26febba5d799689b64d52a5505b63e8ee854f48d356bc7ce6'
+            'SKIP'
+            '3ef9246f2906ef1e487a0a3f4c647ae1c289cbd8459caa7db5ce118ef136e624'
+            'SKIP'
+            'ef73905169db67399a728e238a9413e0d689462cb9b72ab17a05dba51221358a'
+            'SKIP'
+            '155853bc5bd10e40a9bea369fb6f50a203a7d0358e9e32321be0d9fa21585915'
+            'SKIP'
+            '1c48cecbc9b7b4217990580203b7e1de19c4979d0bd2c0e310167df748df2c89'
+            'SKIP'
+            '4641dd49dd923b454dd0a346277907090410f5d60a29a2de3b82c98e49aaaa80'
+            'SKIP'
+            '325c26860ad4bba8558356c4ab914ac57e7b415dac6f5aae86b9b05ccb7ed282'
+            'SKIP'
+            'b6fc252aeb95ce67c9b017d29d81e8a5e285db4bf20d4ec8cdca35892be5c01d'
+            'SKIP'
+            '8334b88117ad047598f23581aeb0c66c0248cdd77abc3b4e259133aa307650cd'
+            'SKIP')

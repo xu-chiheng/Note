@@ -1,0 +1,32 @@
+diff --git a/patchlevel.h b/patchlevel.h
+--- a/patchlevel.h
++++ b/patchlevel.h
+@@ -25,6 +25,6 @@
+    regexp `^#define[ 	]*PATCHLEVEL', since that's what support/mkversion.sh
+    looks for to find the patch level (for the sccs version string). */
+ 
+-#define PATCHLEVEL 20
++#define PATCHLEVEL 21
+ 
+ #endif /* _PATCHLEVEL_H_ */
+diff --git a/subst.c b/subst.c
+--- a/subst.c
++++ b/subst.c
+@@ -1693,7 +1693,7 @@ extract_heredoc_dolbrace_string (string, sindex, quoted, flags)
+ 	  t = extract_command_subst (string, &si, flags);
+ 	  CHECK_STRING_OVERRUN (i, si, slen, c);
+ 
+-	  tlen = si - i - 1;
++	  tlen = si - i - 2;
+ 	  RESIZE_MALLOCED_BUFFER (result, result_index, tlen + 4, result_size, 64);
+ 	  result[result_index++] = c;
+ 	  result[result_index++] = LPAREN;
+@@ -1713,7 +1713,7 @@ extract_heredoc_dolbrace_string (string, sindex, quoted, flags)
+ 	  t = extract_process_subst (string, (string[i] == '<' ? "<(" : ">)"), &si, flags);
+ 	  CHECK_STRING_OVERRUN (i, si, slen, c);
+ 
+-	  tlen = si - i - 1;
++	  tlen = si - i - 2;
+ 	  RESIZE_MALLOCED_BUFFER (result, result_index, tlen + 4, result_size, 64);
+ 	  result[result_index++] = c;
+ 	  result[result_index++] = LPAREN;

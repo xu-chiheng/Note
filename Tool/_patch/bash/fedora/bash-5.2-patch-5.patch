@@ -1,0 +1,24 @@
+diff --git a/patchlevel.h b/patchlevel.h
+--- a/patchlevel.h
++++ b/patchlevel.h
+@@ -25,6 +25,6 @@
+    regexp `^#define[ 	]*PATCHLEVEL', since that's what support/mkversion.sh
+    looks for to find the patch level (for the sccs version string). */
+ 
+-#define PATCHLEVEL 4
++#define PATCHLEVEL 5
+ 
+ #endif /* _PATCHLEVEL_H_ */
+diff --git a/subst.c b/subst.c
+--- a/subst.c
++++ b/subst.c
+@@ -8965,7 +8965,8 @@ pat_subst (string, pat, rep, mflags)
+       return (ret);
+     }
+   else if (*string == 0 && (match_pattern (string, pat, mtype, &s, &e) != 0))
+-    return ((mflags & MATCH_EXPREP) ? strcreplace (rep, '&', "", 2) : savestring (rep));
++    return (mflags & MATCH_EXPREP) ? strcreplace (rep, '&', "", 2)
++				   : (rep ? savestring (rep) : savestring (""));
+ 
+   ret = (char *)xmalloc (rsize = 64);
+   ret[0] = '\0';

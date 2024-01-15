@@ -1,0 +1,34 @@
+diff --git a/patchlevel.h b/patchlevel.h
+--- a/patchlevel.h
++++ b/patchlevel.h
+@@ -25,6 +25,6 @@
+    regexp `^#define[ 	]*PATCHLEVEL', since that's what support/mkversion.sh
+    looks for to find the patch level (for the sccs version string). */
+ 
+-#define PATCHLEVEL 7
++#define PATCHLEVEL 8
+ 
+ #endif /* _PATCHLEVEL_H_ */
+diff --git a/subst.c b/subst.c
+--- a/subst.c
++++ b/subst.c
+@@ -3819,6 +3819,10 @@ pos_params (string, start, end, quoted, pflags)
+ #define EXP_CHAR(s) (s == '$' || s == '`' || s == CTLESC || s == '~')
+ #endif
+ 
++/* We don't perform process substitution in arithmetic expressions, so don't
++   bother checking for it. */
++#define ARITH_EXP_CHAR(s) (s == '$' || s == '`' || s == CTLESC || s == '~')
++
+ /* If there are any characters in STRING that require full expansion,
+    then call FUNC to expand STRING; otherwise just perform quote
+    removal if necessary.  This returns a new string. */
+@@ -4028,7 +4032,7 @@ expand_arith_string (string, quoted)
+   i = saw_quote = 0;
+   while (string[i])
+     {
+-      if (EXP_CHAR (string[i]))
++      if (ARITH_EXP_CHAR (string[i]))
+ 	break;
+       else if (string[i] == '\'' || string[i] == '\\' || string[i] == '"')
+ 	saw_quote = string[i];

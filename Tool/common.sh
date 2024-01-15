@@ -266,6 +266,24 @@ git_tag_of_package_version() {
 		cmake )
 			echo "v${version}"
 			;;
+		bash )
+			echo "bash-${version}"
+			;;
+		make )
+			echo "${version}"
+			;;
+		perl )
+			echo "v${version}"
+			;;
+		python )
+			echo "v${version}"
+			;;
+		cygwin )
+			echo "cygwin-${version}"
+			;;
+		mingw )
+			echo "v${version}"
+			;;
 		* )
 			echo "unknown package : ${package}"
 			return 1
@@ -317,6 +335,12 @@ git_repo_url_of_package() {
 			;;
 		roslyn )
 			echo "https://github.com/dotnet/roslyn"
+			;;
+		cygwin )
+			echo "https://cygwin.com/git/newlib-cygwin.git"
+			;;
+		mingw )
+			echo "https://git.code.sf.net/p/mingw-w64/mingw-w64"
 			;;
 		* )
 			echo "unknown package : ${package}"

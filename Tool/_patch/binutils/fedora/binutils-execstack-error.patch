@@ -1,0 +1,1513 @@
+diff -rupN binutils.orig/bfd/elf.c binutils-2.41/bfd/elf.c
+--- binutils.orig/bfd/elf.c	2023-10-19 12:11:46.526939794 +0100
++++ binutils-2.41/bfd/elf.c	2023-10-19 12:11:56.514949624 +0100
+@@ -7013,6 +7013,9 @@ assign_file_positions_except_relocs (bfd
+     {
+       if (link_info != NULL && ! link_info->no_warn_rwx_segments)
+ 	{
++	  bool warned_tls = false;
++	  bool warned_rwx = false;
++
+ 	  /* Memory resident segments with non-zero size and RWX
+ 	     permissions are a security risk, so we generate a warning
+ 	     here if we are creating any.  */
+@@ -7025,16 +7028,47 @@ assign_file_positions_except_relocs (bfd
+ 	      if (phdr->p_memsz == 0)
+ 		continue;
+ 
+-	      if (phdr->p_type == PT_TLS && (phdr->p_flags & PF_X))
+-		_bfd_error_handler (_("warning: %pB has a TLS segment"
+-				      " with execute permission"),
+-				    abfd);
+-	      else if (phdr->p_type == PT_LOAD
++	      if (! warned_tls
++		  && phdr->p_type == PT_TLS
++		  && (phdr->p_flags & PF_X))
++		{
++		  if (link_info->warn_is_error_for_rwx_segments)
++		    {
++		      _bfd_error_handler (_("\
++error: %pB has a TLS segment with execute permission"),
++					  abfd);
++		      return false;
++		    }
++
++		  _bfd_error_handler (_("\
++warning: %pB has a TLS segment with execute permission"),
++				      abfd);
++		  if (warned_rwx)
++		    break;
++
++		  warned_tls = true;
++		}
++	      else if (! warned_rwx
++		       && phdr->p_type == PT_LOAD
+ 		       && ((phdr->p_flags & (PF_R | PF_W | PF_X))
+ 			   == (PF_R | PF_W | PF_X)))
+-		_bfd_error_handler (_("warning: %pB has a LOAD segment"
+-				      " with RWX permissions"),
+-				    abfd);
++		{
++		  if (link_info->warn_is_error_for_rwx_segments)
++		    {
++		      _bfd_error_handler (_("\
++error: %pB has a LOAD segment with RWX permissions"),
++					  abfd);
++		      return false;
++		    }
++
++		  _bfd_error_handler (_("\
++warning: %pB has a LOAD segment with RWX permissions"),
++				      abfd);
++		  if (warned_tls)
++		    break;
++
++		  warned_rwx = true;
++		}
+ 	    }
+ 	}
+ 
+diff -rupN binutils.orig/bfd/elflink.c binutils-2.41/bfd/elflink.c
+--- binutils.orig/bfd/elflink.c	2023-10-19 12:11:46.523939791 +0100
++++ binutils-2.41/bfd/elflink.c	2023-10-19 12:11:56.515949625 +0100
+@@ -7149,9 +7149,20 @@ bfd_elf_size_dynamic_sections (bfd *outp
+       /* If the user has explicitly requested warnings, then generate one even
+ 	 though the choice is the result of another command line option.  */
+       if (info->warn_execstack == 1)
+-	_bfd_error_handler
+-	  (_("\
++	{
++	  if (info->error_execstack)
++	    {
++	      _bfd_error_handler
++		(_("\
++error: creating an executable stack because of -z execstack command line option"));
++	      return false;
++	    }
++
++	  _bfd_error_handler
++	    (_("\
+ warning: enabling an executable stack because of -z execstack command line option"));
++	}
++
+       elf_stack_flags (output_bfd) = PF_R | PF_W | PF_X;
+     }
+   else if (info->noexecstack)
+@@ -7207,11 +7218,29 @@ warning: enabling an executable stack be
+ 		     being enabled despite the fact that it was not requested
+ 		     on the command line.  */
+ 		  if (noteobj)
+-		    _bfd_error_handler (_("\
++		    {
++		      if (info->error_execstack)
++			{
++			  _bfd_error_handler (_("\
++error: %s: is triggering the generation of an executable stack (because it has an executable .note.GNU-stack section)"),
++					      bfd_get_filename (noteobj));
++			  return false;
++			}
++
++		      _bfd_error_handler (_("\
+ warning: %s: requires executable stack (because the .note.GNU-stack section is executable)"),
+ 		       bfd_get_filename (noteobj));
++		    }
+ 		  else if (emptyobj)
+ 		    {
++		      if (info->error_execstack)
++			{
++			  _bfd_error_handler (_("\
++error: %s: is triggering the generation of an executable stack because it does not have a .note.GNU-stack section"),
++					      bfd_get_filename (emptyobj));
++			  return false;
++			}
++
+ 		      _bfd_error_handler (_("\
+ warning: %s: missing .note.GNU-stack section implies executable stack"),
+ 					  bfd_get_filename (emptyobj));
+diff -rupN binutils.orig/include/bfdlink.h binutils-2.41/include/bfdlink.h
+--- binutils.orig/include/bfdlink.h	2023-10-19 12:11:47.238940495 +0100
++++ binutils-2.41/include/bfdlink.h	2023-10-19 12:11:56.515949625 +0100
+@@ -484,26 +484,49 @@ struct bfd_link_info
+      --dynamic-list command line options.  */
+   unsigned int dynamic: 1;
+ 
+-  /* TRUE if PT_GNU_STACK segment should be created with PF_R|PF_W|PF_X
+-     flags.  */
++  /* Set if the "-z execstack" option has been used to request that a
++     PT_GNU_STACK segment should be created with PF_R, PF_W and PF_X
++     flags set.
++
++     Note - if performing a relocatable link then a .note.GNU-stack
++     section will be created instead, if one does not exist already.
++     The section will have the SHF_EXECINSTR flag bit set.  */
+   unsigned int execstack: 1;
+ 
+-  /* TRUE if PT_GNU_STACK segment should be created with PF_R|PF_W
+-     flags.  */
++  /* Set if the "-z noexecstack" option has been used to request that a
++     PT_GNU_STACK segment should be created with PF_R and PF_W flags.  Or
++     a non-executable .note.GNU-stack section for relocateable links.
++
++     Note - this flag is not quite orthogonal to execstack, since both
++     of these flags can be 0.  In this case a stack segment can still
++     be created, but it will only have the PF_X flag bit set if one or
++     more of the input files contains a .note.GNU-stack section with the
++     SHF_EXECINSTR flag bit set, or if the default behaviour for the
++     architecture is to create executable stacks.
++
++     The execstack and noexecstack flags should never both be 1.  */
+   unsigned int noexecstack: 1;
+ 
+   /* Tri-state variable:
+      0 => do not warn when creating an executable stack.
+-     1 => always warn when creating an executable stack.
+-     >1 => warn when creating an executable stack if execstack is 0.  */
++     1 => always warn when creating an executable stack (for any reason).
++     2 => only warn when an executable stack has been requested an object
++          file and execstack is 0 or noexecstack is 1.
++     3 => not used.  */
+   unsigned int warn_execstack: 2;
++  /* TRUE if a warning generated because of warn_execstack should be instead
++     be treated as an error.  */
++  unsigned int error_execstack: 1;
+ 
+-  /* TRUE if warnings should not be generated for TLS segments with eXecute
++  /* TRUE if warnings should NOT be generated for TLS segments with eXecute
+      permission or LOAD segments with RWX permissions.  */
+   unsigned int no_warn_rwx_segments: 1;
+   /* TRUE if the user gave either --warn-rwx-segments or
+-     --no-warn-rwx-segments.  */
++     --no-warn-rwx-segments on the linker command line.  */
+   unsigned int user_warn_rwx_segments: 1;
++  /* TRUE if warnings generated when no_warn_rwx_segements is 0 should
++     instead be treated as errors.  */
++  unsigned int warn_is_error_for_rwx_segments: 1;
+ 
+   /* TRUE if the stack can be made executable because of the absence of a
+      .note.GNU-stack section in an input file.  Note - even if this field
+diff -rupN binutils.orig/ld/NEWS binutils-2.41/ld/NEWS
+--- binutils.orig/ld/NEWS	2023-10-19 12:11:47.274940530 +0100
++++ binutils-2.41/ld/NEWS	2023-10-19 12:11:56.515949625 +0100
+@@ -1,5 +1,14 @@
+ -*- text -*-
+ 
++* Added --warn-execstack-objects to warn about executable stacks only when an
++  input object file requests one.  Also added --error-execstack and
++  --error-rxw-segments options to convert warnings about executable stacks and
++  segments into errors.
++
++  Also added --enable-error-execstack=[yes|no] and
++  --enable-error-rwx-segments=[yes|no] configure options to set the default for
++  converting warnings into errors.
++
+ Changes in 2.41:
+ 
+ * The linker now accepts a command line option of --remap-inputs
+diff -rupN binutils.orig/ld/config.in binutils-2.41/ld/config.in
+--- binutils.orig/ld/config.in	2023-10-19 12:11:47.607940858 +0100
++++ binutils-2.41/ld/config.in	2023-10-19 12:11:56.515949625 +0100
+@@ -19,6 +19,14 @@
+ /* Define if you want compressed debug sections by default. */
+ #undef DEFAULT_FLAG_COMPRESS_DEBUG
+ 
++/* Define to 1 if you want to turn executable stack warnings into errors by
++   default. */
++#undef DEFAULT_LD_ERROR_EXECSTACK
++
++/* Define to 1 if you want to turn executable segment warnings into errors by
++   default. */
++#undef DEFAULT_LD_ERROR_RWX_SEGMENTS
++
+ /* Define to 0 if you want to disable the generation of an executable stack
+    when a .note-GNU-stack section is missing. */
+ #undef DEFAULT_LD_EXECSTACK
+diff -rupN binutils.orig/ld/configure binutils-2.41/ld/configure
+--- binutils.orig/ld/configure	2023-10-19 12:11:47.607940858 +0100
++++ binutils-2.41/ld/configure	2023-10-19 12:11:56.516949626 +0100
+@@ -848,7 +848,9 @@ enable_relro
+ enable_textrel_check
+ enable_separate_code
+ enable_warn_execstack
++enable_error_execstack
+ enable_warn_rwx_segments
++enable_error_rwx_segments
+ enable_default_execstack
+ enable_error_handling_script
+ enable_default_hash_style
+@@ -15638,6 +15640,16 @@ esac
+ fi
+ 
+ 
++ac_default_ld_error_execstack=0
++# Check whether --enable-error-execstack was given.
++if test "${enable_error_execstack+set}" = set; then :
++  enableval=$enable_error_execstack; case "${enableval}" in
++  yes) ac_default_ld_error_execstack=1 ;;
++  no)  ac_default_ld_error_execstack=0 ;;
++esac
++fi
++
++
+ ac_default_ld_warn_rwx_segments=unset
+ # Check whether --enable-warn-rwx-segments was given.
+ if test "${enable_warn_rwx_segments+set}" = set; then :
+@@ -15648,6 +15660,16 @@ esac
+ fi
+ 
+ 
++ac_default_ld_error_rwx_segments=0
++# Check whether --enable-error-rwx-segments was given.
++if test "${enable_error_rwx_segments+set}" = set; then :
++  enableval=$enable_error_rwx_segments; case "${enableval}" in
++  yes) ac_default_ld_error_rwx_segments=1 ;;
++  no)  ac_default_ld_error_rwx_segments=0 ;;
++esac
++fi
++
++
+ ac_default_ld_default_execstack=unset
+ # Check whether --enable-default-execstack was given.
+ if test "${enable_default_execstack+set}" = set; then :
+@@ -17442,6 +17464,12 @@ cat >>confdefs.h <<_ACEOF
+ _ACEOF
+ 
+ 
++
++cat >>confdefs.h <<_ACEOF
++#define DEFAULT_LD_ERROR_EXECSTACK $ac_default_ld_error_execstack
++_ACEOF
++
++
+ if test "${ac_default_ld_warn_rwx_segments}" = unset; then
+   ac_default_ld_warn_rwx_segments=1
+ fi
+@@ -17451,6 +17479,12 @@ cat >>confdefs.h <<_ACEOF
+ _ACEOF
+ 
+ 
++
++cat >>confdefs.h <<_ACEOF
++#define DEFAULT_LD_ERROR_RWX_SEGMENTS $ac_default_ld_error_rwx_segments
++_ACEOF
++
++
+ if test "${ac_default_ld_default_execstack}" = unset; then
+   ac_default_ld_default_execstack=1
+ fi
+diff -rupN binutils.orig/ld/configure.ac binutils-2.41/ld/configure.ac
+--- binutils.orig/ld/configure.ac	2023-10-19 12:11:47.607940858 +0100
++++ binutils-2.41/ld/configure.ac	2023-10-19 12:11:56.516949626 +0100
+@@ -225,6 +225,15 @@ AC_ARG_ENABLE(warn-execstack,
+   no)  ac_default_ld_warn_execstack=0 ;;
+ esac])
+ 
++ac_default_ld_error_execstack=0
++AC_ARG_ENABLE(error-execstack,
++	      AS_HELP_STRING([--enable-error-execstack],
++	      [turn executable stack warnings into errors]),
++[case "${enableval}" in
++  yes) ac_default_ld_error_execstack=1 ;;
++  no)  ac_default_ld_error_execstack=0 ;;
++esac])
++
+ ac_default_ld_warn_rwx_segments=unset
+ AC_ARG_ENABLE(warn-rwx-segments,
+ 	      AS_HELP_STRING([--enable-warn-rwx-segments],
+@@ -234,6 +243,15 @@ AC_ARG_ENABLE(warn-rwx-segments,
+   no)  ac_default_ld_warn_rwx_segments=0 ;;
+ esac])
+ 
++ac_default_ld_error_rwx_segments=0
++AC_ARG_ENABLE(error-rwx-segments,
++	      AS_HELP_STRING([--enable-error-rwx-segments],
++	      [turn executable segment warnings into errors]),
++[case "${enableval}" in
++  yes) ac_default_ld_error_rwx_segments=1 ;;
++  no)  ac_default_ld_error_rwx_segments=0 ;;
++esac])
++
+ ac_default_ld_default_execstack=unset
+ AC_ARG_ENABLE(default-execstack,
+ 	      AS_HELP_STRING([--enable-default-execstack],
+@@ -568,6 +586,10 @@ AC_DEFINE_UNQUOTED(DEFAULT_LD_WARN_EXECS
+   $ac_default_ld_warn_execstack,
+   [Define to 1 if you want to enable --warn-execstack in ELF linker by default.])
+ 
++AC_DEFINE_UNQUOTED(DEFAULT_LD_ERROR_EXECSTACK,
++  $ac_default_ld_error_execstack,
++  [Define to 1 if you want to turn executable stack warnings into errors by default.])
++
+ if test "${ac_default_ld_warn_rwx_segments}" = unset; then
+   ac_default_ld_warn_rwx_segments=1
+ fi
+@@ -575,6 +597,10 @@ AC_DEFINE_UNQUOTED(DEFAULT_LD_WARN_RWX_S
+   $ac_default_ld_warn_rwx_segments,
+   [Define to 0 if you want to disable --warn-rwx-segments in ELF linker by default.])
+ 
++AC_DEFINE_UNQUOTED(DEFAULT_LD_ERROR_RWX_SEGMENTS,
++  $ac_default_ld_error_rwx_segments,
++  [Define to 1 if you want to turn executable segment warnings into errors by default.])
++
+ if test "${ac_default_ld_default_execstack}" = unset; then
+   ac_default_ld_default_execstack=1
+ fi
+diff -rupN binutils.orig/ld/emultempl/elf.em binutils-2.41/ld/emultempl/elf.em
+--- binutils.orig/ld/emultempl/elf.em	2023-10-19 12:11:47.286940542 +0100
++++ binutils-2.41/ld/emultempl/elf.em	2023-10-19 12:11:56.516949626 +0100
+@@ -95,6 +95,8 @@ fragment <<EOF
+   link_info.warn_execstack = DEFAULT_LD_WARN_EXECSTACK;
+   link_info.no_warn_rwx_segments = ! DEFAULT_LD_WARN_RWX_SEGMENTS;
+   link_info.default_execstack = DEFAULT_LD_EXECSTACK;
++  link_info.error_execstack = DEFAULT_LD_ERROR_EXECSTACK;
++  link_info.warn_is_error_for_rwx_segments = DEFAULT_LD_ERROR_RWX_SEGMENTS;
+ }
+ 
+ EOF
+diff -rupN binutils.orig/ld/ld.texi binutils-2.41/ld/ld.texi
+--- binutils.orig/ld/ld.texi	2023-10-19 12:11:47.607940858 +0100
++++ binutils-2.41/ld/ld.texi	2023-10-19 12:11:56.517949627 +0100
+@@ -2762,28 +2762,51 @@ detect the use of global constructors.
+ @cindex warnings, on executable stack
+ @cindex executable stack, warnings on
+ @item --warn-execstack
++@itemx --warn-execstack-objects
+ @itemx --no-warn-execstack
+-On ELF platforms this option controls how the linker generates warning
+-messages when it creates an output file with an executable stack.  By
+-default the linker will not warn if the @command{-z execstack} command
+-line option has been used, but this behaviour can be overridden by the
+-@option{--warn-execstack} option.
+-
+-On the other hand the linker will normally warn if the stack is made
+-executable because one or more of the input files need an execuable
+-stack and neither of the @command{-z execstack} or @command{-z
+-noexecstack} command line options have been specified.  This warning
+-can be disabled via the @command{--no-warn-execstack} option.
++On ELF platforms the linker may generate warning messages if it is
++asked to create an output file that contains an executable stack.
++There are three possible states:
++@enumerate
++@item
++Do not generate any warnings.
++@item
++Always generate warnings, even if the executable stack is requested
++via the @option{-z execstack} command line option.
++@item
++Only generate a warning if an object file requests an executable
++stack, but not if the @option{-z execstack} option is used.
++@end enumerate
++
++The default state depends upon how the linker was configured when it
++was built.  The @option{--no-warn-execstack} option always puts the
++linker into the no-warnings state.  The @option{--warn-execstack}
++option puts the linker into the warn-always state.  The
++@option{--warn-execstack-objects} option puts the linker into the
++warn-for-object-files-only state.
+ 
+-Note: ELF format input files specify that they need an executable
++Note: ELF format input files can specify that they need an executable
+ stack by having a @var{.note.GNU-stack} section with the executable
+ bit set in its section flags.  They can specify that they do not need
+-an executable stack by having that section, but without the executable
+-flag bit set.  If an input file does not have a @var{.note.GNU-stack}
+-section present then the default behaviour is target specific.  For
+-some targets, then absence of such a section implies that an
+-executable stack @emph{is} required.  This is often a problem for hand
+-crafted assembler files.
++an executable stack by having the same section, but without the
++executable flag bit set.  If an input file does not have a
++@var{.note.GNU-stack} section then the default behaviour is target
++specific.  For some targets, then absence of such a section implies
++that an executable stack @emph{is} required.  This is often a problem
++for hand crafted assembler files.
++
++@kindex --error-execstack
++@item --error-execstack
++@itemx --no-error-execstack
++If the linker is going to generate a warning message about an
++executable stack then the @option{--error-execstack} option will
++instead change that warning into an error.  Note - this option does
++not change the linker's execstack warning generation state.  Use
++@option{--warn-execstack} or @option{--warn-execstack-objects} to set
++a specific warning state.
++
++The @option{--no-error-execstack} option will restore the default
++behaviour of generating warning messages.
+ 
+ @kindex --warn-multiple-gp
+ @item --warn-multiple-gp
+@@ -2822,6 +2845,20 @@ These warnings are enabled by default.
+ @option{--no-warn-rwx-segments} option and re-enabled via the
+ @option{--warn-rwx-segments} option.
+ 
++@kindex --error-rwx-segments
++@item --error-rwx-segments
++@itemx --no-error-rwx-segments
++If the linker is going to generate a warning message about an
++executable, writeable segment, or an executable TLS segment, then the
++@option{--error-rwx-segments} option will turn this warning into an
++error instead.  The @option{--no-error-rwx-segments} option will
++restore the default behaviour of just generating a warning message.
++
++Note - the @option{--error-rwx-segments} option does not by itself
++turn on warnings about these segments.  These warnings are either
++enabled by default, if the linker was configured that way, or via the
++@option{--warn-rwx-segments} command line option.
++
+ @kindex --warn-section-align
+ @cindex warnings, on section alignment
+ @cindex section alignment, warnings on
+diff -rupN binutils.orig/ld/ldlex.h binutils-2.41/ld/ldlex.h
+--- binutils.orig/ld/ldlex.h	2023-10-19 12:11:47.296940552 +0100
++++ binutils-2.41/ld/ldlex.h	2023-10-19 12:11:56.517949627 +0100
+@@ -168,10 +168,15 @@ enum option_values
+   OPTION_CTF_VARIABLES,
+   OPTION_NO_CTF_VARIABLES,
+   OPTION_CTF_SHARE_TYPES,
++  OPTION_ERROR_EXECSTACK,
++  OPTION_NO_ERROR_EXECSTACK,
++  OPTION_WARN_EXECSTACK_OBJECTS,
+   OPTION_WARN_EXECSTACK,
+   OPTION_NO_WARN_EXECSTACK,
+   OPTION_WARN_RWX_SEGMENTS,
+   OPTION_NO_WARN_RWX_SEGMENTS,
++  OPTION_ERROR_RWX_SEGMENTS,
++  OPTION_NO_ERROR_RWX_SEGMENTS,
+   OPTION_ENABLE_LINKER_VERSION,
+   OPTION_DISABLE_LINKER_VERSION,
+   OPTION_REMAP_INPUTS,
+diff -rupN binutils.orig/ld/lexsup.c binutils-2.41/ld/lexsup.c
+--- binutils.orig/ld/lexsup.c	2023-10-19 12:11:47.297940553 +0100
++++ binutils-2.41/ld/lexsup.c	2023-10-19 12:11:56.517949627 +0100
+@@ -551,14 +551,27 @@ static const struct ld_option ld_options
+   { {"warn-constructors", no_argument, NULL, OPTION_WARN_CONSTRUCTORS},
+     '\0', NULL, N_("Warn if global constructors/destructors are seen"),
+     TWO_DASHES },
++
++  { {"error-execstack", no_argument, NULL, OPTION_ERROR_EXECSTACK},
++    '\0', NULL, NULL, TWO_DASHES },
++  { {"no-error-execstack", no_argument, NULL, OPTION_NO_ERROR_EXECSTACK},
++    '\0', NULL, NULL, TWO_DASHES },
++  { {"warn-execstack-objects", no_argument, NULL, OPTION_WARN_EXECSTACK_OBJECTS},
++    '\0', NULL, NULL, TWO_DASHES },
+   { {"warn-execstack", no_argument, NULL, OPTION_WARN_EXECSTACK},
+-    '\0', NULL, N_("Warn when creating an executable stack"), TWO_DASHES },
++    '\0', NULL, NULL, TWO_DASHES },
+   { {"no-warn-execstack", no_argument, NULL, OPTION_NO_WARN_EXECSTACK},
+-    '\0', NULL, N_("Do not warn when creating an executable stack"), TWO_DASHES },
++    '\0', NULL, NULL, TWO_DASHES },
++
++  { {"error-rwx-segments", no_argument, NULL, OPTION_ERROR_RWX_SEGMENTS},
++    '\0', NULL, NULL, TWO_DASHES },
++  { {"no-error-rwx-segments", no_argument, NULL, OPTION_NO_ERROR_RWX_SEGMENTS},
++    '\0', NULL, NULL, TWO_DASHES },
+   { {"warn-rwx-segments", no_argument, NULL, OPTION_WARN_RWX_SEGMENTS},
+-    '\0', NULL, N_("Warn when creating executable segments"), TWO_DASHES },
++    '\0', NULL, NULL, TWO_DASHES },
+   { {"no-warn-rwx-segments", no_argument, NULL, OPTION_NO_WARN_RWX_SEGMENTS},
+-    '\0', NULL, N_("Do not warn when creating executable segments"), TWO_DASHES },
++    '\0', NULL, NULL, TWO_DASHES },
++
+   { {"warn-multiple-gp", no_argument, NULL, OPTION_WARN_MULTIPLE_GP},
+     '\0', NULL, N_("Warn if the multiple GP values are used"), TWO_DASHES },
+   { {"warn-once", no_argument, NULL, OPTION_WARN_ONCE},
+@@ -944,12 +957,29 @@ parse_args (unsigned argc, char **argv)
+ 	case OPTION_NON_CONTIGUOUS_REGIONS_WARNINGS:
+ 	  link_info.non_contiguous_regions_warnings = true;
+ 	  break;
++
++	case OPTION_ERROR_EXECSTACK:
++	  link_info.error_execstack = 1;
++	  break;
++	case OPTION_NO_ERROR_EXECSTACK:
++	  link_info.error_execstack = 0;
++	  break;
++	case OPTION_WARN_EXECSTACK_OBJECTS:
++	  link_info.warn_execstack = 2;
++	  break;
+ 	case OPTION_WARN_EXECSTACK:
+ 	  link_info.warn_execstack = 1;
+ 	  break;
+ 	case OPTION_NO_WARN_EXECSTACK:
+ 	  link_info.warn_execstack = 0;
+ 	  break;
++
++	case OPTION_ERROR_RWX_SEGMENTS:
++	  link_info.warn_is_error_for_rwx_segments = 1;
++	  break;
++	case OPTION_NO_ERROR_RWX_SEGMENTS:
++	  link_info.warn_is_error_for_rwx_segments = 0;
++	  break;
+ 	case OPTION_WARN_RWX_SEGMENTS:
+ 	  link_info.no_warn_rwx_segments = 0;
+ 	  link_info.user_warn_rwx_segments = 1;
+@@ -958,6 +988,7 @@ parse_args (unsigned argc, char **argv)
+ 	  link_info.no_warn_rwx_segments = 1;
+ 	  link_info.user_warn_rwx_segments = 1;
+ 	  break;
++
+ 	case 'e':
+ 	  lang_add_entry (optarg, true);
+ 	  break;
+@@ -2239,24 +2270,32 @@ elf_static_list_options (FILE *file)
+   -z muldefs                  Allow multiple definitions\n"));
+   fprintf (file, _("\
+   -z stack-size=SIZE          Set size of stack segment\n"));
++
+   fprintf (file, _("\
+   -z execstack                Mark executable as requiring executable stack\n"));
+   fprintf (file, _("\
+-  -z noexecstack              Mark executable as not requiring executable stack\n"));
+-#if DEFAULT_LD_WARN_EXECSTACK == 1
++  -z noexecstack              Mark executable as not requiring executable stack\n"));  
+   fprintf (file, _("\
+-  --warn-execstack            Generate a warning if the stack is executable (default)\n"));
++  --warn-execstack-objects    Generate a warning if an object file requests an executable stack\n"));
++#if DEFAULT_LD_WARN_EXECSTACK == 0
++  fprintf (file, _("\
++  --warn-execstack            Generate a warning if creating an executable stack\n"));
+ #else
+   fprintf (file, _("\
+-  --warn-execstack            Generate a warning if the stack is executable\n"));
++  --warn-execstack            Generate a warning if creating an executable stack (default)\n"));
+ #endif
+ #if DEFAULT_LD_WARN_EXECSTACK == 0
+   fprintf (file, _("\
+-  --no-warn-execstack         Do not generate a warning if the stack is executable (default)\n"));
++  --no-warn-execstack         Do not generate a warning if creating an executable stack (default)\n"));
+ #else
+   fprintf (file, _("\
+-  --no-warn-execstack         Do not generate a warning if the stack is executable\n"));
++  --no-warn-execstack         Do not generate a warning if creating an executable stack\n"));
+ #endif
++  fprintf (file, _("\
++  --error-execstack           Turn warnings about executable stacks into errors\n"));
++  fprintf (file, _("\
++  --no-error-execstack         Do not turn warnings about executable stacks into errors\n"));
++  
+ #if DEFAULT_LD_WARN_RWX_SEGMENTS
+   fprintf (file, _("\
+   --warn-rwx-segments         Generate a warning if a LOAD segment has RWX permissions (default)\n"));
+@@ -2269,6 +2308,11 @@ elf_static_list_options (FILE *file)
+   --no-warn-rwx-segments      Do not generate a warning if a LOAD segments has RWX permissions (default)\n"));
+ #endif
+   fprintf (file, _("\
++  --error-rwx-segments        Turn warnings about loadable RWX segments into errors\n"));
++  fprintf (file, _("\
++  --no-error-rwx-segments     Do not turn warnings about loadable RWX segments into errors\n"));
++
++  fprintf (file, _("\
+   -z unique-symbol            Avoid duplicated local symbol names\n"));
+   fprintf (file, _("\
+   -z nounique-symbol          Keep duplicated local symbol names (default)\n"));
+diff -rupN binutils.orig/ld/testsuite/ld-elf/commonpage2.d binutils-2.41/ld/testsuite/ld-elf/commonpage2.d
+--- binutils.orig/ld/testsuite/ld-elf/commonpage2.d	2023-10-19 12:11:47.381940636 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/commonpage2.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,6 +1,6 @@
+ #source: maxpage1.s
+ #as: --32
+-#ld: -z max-page-size=0x200000 -z common-page-size=0x100000 -T maxpage4.t
++#ld: -z max-page-size=0x200000 -z common-page-size=0x100000 -T maxpage4.t --no-warn-rwx-segments
+ #readelf: -l --wide
+ #target: x86_64-*-linux*
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-elf/elf.exp binutils-2.41/ld/testsuite/ld-elf/elf.exp
+--- binutils.orig/ld/testsuite/ld-elf/elf.exp	2023-10-19 12:11:47.385940640 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/elf.exp	2023-10-19 12:11:56.517949627 +0100
+@@ -216,7 +216,7 @@ if {   [istarget *-*-*linux*]
+     || [istarget *-*-gnu*] } {
+     run_ld_link_tests [list \
+ 	[list "stack exec" \
+-	    "-z execstack" \
++	    "-z execstack --no-error-execstack" \
+ 	    "" \
+ 	    "" \
+ 	    {stack.s} \
+@@ -263,14 +263,14 @@ if {   [istarget *-*-*linux*]
+     # of the first test by forcing the flags.
+     run_ld_link_tests [list \
+ 	[list "PR ld/29072 (warn about an executable .note.GNU-stack)" \
+-	    "-e 0 --warn-execstack --warn-rwx-segments" \
++	    "-e 0 --warn-execstack --warn-rwx-segments --no-error-rwx-segments --no-error-execstack" \
+ 	    "" \
+ 	    "" \
+ 	    {pr29072-a.s} \
+ 	    {{ld pr29072.a.warn}} \
+ 	    "pr29072-a.exe"] \
+ 	[list "PR 29072 (warn about -z execstack)" \
+-	    "-z execstack --warn-execstack" \
++	    "-z execstack --warn-execstack --no-error-execstack" \
+ 	    "" \
+ 	    "" \
+ 	    {stack.s} \
+@@ -284,14 +284,14 @@ if {   [istarget *-*-*linux*]
+ 	    {} \
+ 	    "pr29072-d.exe"] \
+ 	[list "Ensure that a warning issued when creating a segment with RWX permissions" \
+-	    "-e 0 -Tnobits-1.t --warn-rwx-segments" \
++	    "-e 0 -Tnobits-1.t --warn-rwx-segments --no-error-rwx-segments" \
+ 	    "" \
+ 	    "" \
+ 	    {nobits-1.s} \
+ 	     {{ld rwx-segments-1.l}} \
+ 	    "rwx-segments-1.exe"] \
+ 	[list "Ensure that a warning issued when creating a TLS segment with execute permission" \
+-	    "-e 0 -T rwx-segments-2.t --warn-rwx-segments" \
++	    "-e 0 -T rwx-segments-2.t --warn-rwx-segments --no-error-rwx-segments" \
+ 	    "" \
+ 	    "" \
+ 	    {size-2.s} \
+@@ -311,7 +311,7 @@ if {   [istarget *-*-*linux*]
+     if { [target_defaults_to_execstack] } {
+ 	run_ld_link_tests [list \
+ 	   [list "PR ld/29072 (warn about absent .note.GNU-stack)" \
+-	    "-e 0 -z stack-size=0x123400  --warn-execstack" \
++	    "-e 0 -z stack-size=0x123400  --warn-execstack --no-error-execstack" \
+ 	    "" \
+ 	    "" \
+ 	    {pr29072-b.s} \
+@@ -321,7 +321,7 @@ if {   [istarget *-*-*linux*]
+     } else {
+ 	run_ld_link_tests [list \
+ 	   [list "PR ld/29072 (ignore absent .note.GNU-stack)" \
+-	    "-e 0 -z stack-size=0x123400" \
++	    "-e 0 -z stack-size=0x123400 --no-error-execstack" \
+ 	    "" \
+ 	    "" \
+ 	    {pr29072-b.s} \
+diff -rupN binutils.orig/ld/testsuite/ld-elf/header.d binutils-2.41/ld/testsuite/ld-elf/header.d
+--- binutils.orig/ld/testsuite/ld-elf/header.d	2023-10-19 12:11:47.387940642 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/header.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,5 +1,5 @@
+ # target: *-*-linux* *-*-gnu* *-*-vxworks arm*-*-uclinuxfdpiceabi
+-# ld: -T header.t -z max-page-size=0x100 -z common-page-size=0x100
++# ld: -T header.t -z max-page-size=0x100 -z common-page-size=0x100 --no-warn-rwx-segments
+ # objdump: -hpw
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-elf/loadaddr1.d binutils-2.41/ld/testsuite/ld-elf/loadaddr1.d
+--- binutils.orig/ld/testsuite/ld-elf/loadaddr1.d	2023-10-19 12:11:47.388940643 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/loadaddr1.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,5 +1,5 @@
+ #source: loadaddr.s
+-#ld: -T loadaddr1.t -T loadaddr.t -z max-page-size=0x200000 -z noseparate-code
++#ld: -T loadaddr1.t -T loadaddr.t -z max-page-size=0x200000 -z noseparate-code --no-warn-rwx-segments
+ #readelf: -l --wide
+ #target: *-*-linux* *-*-gnu* arm*-*-uclinuxfdpiceabi
+ #xfail: h8300-*-* rx-*-linux*
+diff -rupN binutils.orig/ld/testsuite/ld-elf/loadaddr2.d binutils-2.41/ld/testsuite/ld-elf/loadaddr2.d
+--- binutils.orig/ld/testsuite/ld-elf/loadaddr2.d	2023-10-19 12:11:47.388940643 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/loadaddr2.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,5 +1,5 @@
+ #source: loadaddr.s
+-#ld: -T loadaddr2.t -T loadaddr.t -z max-page-size=0x200000 -z noseparate-code
++#ld: -T loadaddr2.t -T loadaddr.t -z max-page-size=0x200000 -z noseparate-code --no-warn-rwx-segments
+ #readelf: -l --wide
+ #target: *-*-linux* *-*-gnu* arm*-*-uclinuxfdpiceabi
+ #xfail: h8300-*-* rx-*-linux*
+diff -rupN binutils.orig/ld/testsuite/ld-elf/maxpage4.d binutils-2.41/ld/testsuite/ld-elf/maxpage4.d
+--- binutils.orig/ld/testsuite/ld-elf/maxpage4.d	2023-10-19 12:11:47.389940644 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/maxpage4.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,6 +1,6 @@
+ #source: maxpage1.s
+ #as: --32
+-#ld: -z max-page-size=0x200000 -T maxpage4.t
++#ld: -z max-page-size=0x200000 -T maxpage4.t --no-warn-rwx-segments
+ #readelf: -l --wide
+ #target: x86_64-*-linux* i?86-*-linux-gnu i?86-*-gnu*
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-elf/nobits-1.d binutils-2.41/ld/testsuite/ld-elf/nobits-1.d
+--- binutils.orig/ld/testsuite/ld-elf/nobits-1.d	2023-10-19 12:11:47.390940645 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/nobits-1.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,4 +1,4 @@
+-#ld: -Tnobits-1.t
++#ld: -Tnobits-1.t --no-warn-rwx-segments
+ #readelf: -l --wide
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-elf/note-1.d binutils-2.41/ld/testsuite/ld-elf/note-1.d
+--- binutils.orig/ld/testsuite/ld-elf/note-1.d	2023-10-19 12:11:47.390940645 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/note-1.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,4 +1,4 @@
+-#ld: -Tnote-1.t
++#ld: -Tnote-1.t --no-warn-rwx-segments
+ #readelf: -l --wide
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-elf/orphan-10.d binutils-2.41/ld/testsuite/ld-elf/orphan-10.d
+--- binutils.orig/ld/testsuite/ld-elf/orphan-10.d	2023-10-19 12:11:47.391940646 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/orphan-10.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,5 +1,5 @@
+ #source: orphan-10.s
+-#ld: -N -T orphan-9.ld
++#ld: -N -T orphan-9.ld --no-warn-rwx-segments
+ #objdump: -h
+ #xfail: [uses_genelf]
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-elf/orphan-11.d binutils-2.41/ld/testsuite/ld-elf/orphan-11.d
+--- binutils.orig/ld/testsuite/ld-elf/orphan-11.d	2023-10-19 12:11:47.391940646 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/orphan-11.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,5 +1,5 @@
+ #source: orphan-11.s
+-#ld: -T orphan-11.ld --orphan-handling=error
++#ld: -T orphan-11.ld --orphan-handling=error --no-warn-rwx-segments
+ #objdump: -wh
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-elf/orphan-12.d binutils-2.41/ld/testsuite/ld-elf/orphan-12.d
+--- binutils.orig/ld/testsuite/ld-elf/orphan-12.d	2023-10-19 12:11:47.391940646 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/orphan-12.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,5 +1,5 @@
+ #source: orphan-12.s
+-#ld: -T orphan-11.ld --strip-debug --orphan-handling=error
++#ld: -T orphan-11.ld --strip-debug --orphan-handling=error --no-warn-rwx-segments
+ #objdump: -wh
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-elf/orphan-5.d binutils-2.41/ld/testsuite/ld-elf/orphan-5.d
+--- binutils.orig/ld/testsuite/ld-elf/orphan-5.d	2023-10-19 12:11:47.391940646 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/orphan-5.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,4 +1,4 @@
+ #name: Report warning for orphan sections
+-#ld: --script orphan.ld --orphan-handling=warn
++#ld: --script orphan.ld --orphan-handling=warn --no-warn-rwx-segments
+ #source: orphan.s
+ #warning_output: orphan-5.l
+diff -rupN binutils.orig/ld/testsuite/ld-elf/orphan-7.d binutils-2.41/ld/testsuite/ld-elf/orphan-7.d
+--- binutils.orig/ld/testsuite/ld-elf/orphan-7.d	2023-10-19 12:11:47.391940646 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/orphan-7.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,4 +1,4 @@
+ #name: Discard orphan sections
+-#ld: --script orphan.ld --orphan-handling=discard
++#ld: --script orphan.ld --orphan-handling=discard --no-warn-rwx-segments
+ #source: orphan.s
+ #map: orphan-7.map
+diff -rupN binutils.orig/ld/testsuite/ld-elf/orphan-8.d binutils-2.41/ld/testsuite/ld-elf/orphan-8.d
+--- binutils.orig/ld/testsuite/ld-elf/orphan-8.d	2023-10-19 12:11:47.391940646 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/orphan-8.d	2023-10-19 12:11:56.517949627 +0100
+@@ -1,4 +1,4 @@
+ #name: Place orphan sections
+-#ld: --script orphan.ld --orphan-handling=place
++#ld: --script orphan.ld --orphan-handling=place --no-warn-rwx-segments
+ #source: orphan.s
+ #map: orphan-8.map
+diff -rupN binutils.orig/ld/testsuite/ld-elf/orphan-9.d binutils-2.41/ld/testsuite/ld-elf/orphan-9.d
+--- binutils.orig/ld/testsuite/ld-elf/orphan-9.d	2023-10-19 12:11:47.391940646 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/orphan-9.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,5 +1,5 @@
+ #source: orphan-9.s
+-#ld: -N -T orphan-9.ld
++#ld: -N -T orphan-9.ld --no-warn-rwx-segments
+ #objdump: -h
+ #xfail: [uses_genelf]
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-elf/orphan-region.d binutils-2.41/ld/testsuite/ld-elf/orphan-region.d
+--- binutils.orig/ld/testsuite/ld-elf/orphan-region.d	2023-10-19 12:11:47.391940646 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/orphan-region.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,5 +1,5 @@
+ #source: orphan-region.s
+-#ld: -T orphan-region.ld -N -z stack-size=0
++#ld: -T orphan-region.ld -N -z stack-size=0 --no-warn-rwx-segments
+ #readelf: -S -l --wide
+ #xfail: [uses_genelf] hppa*64*-*-* spu-*-* *-*-nacl*
+ # if not using elf.em, you don't get fancy orphan handling
+diff -rupN binutils.orig/ld/testsuite/ld-elf/orphan.d binutils-2.41/ld/testsuite/ld-elf/orphan.d
+--- binutils.orig/ld/testsuite/ld-elf/orphan.d	2023-10-19 12:11:47.391940646 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/orphan.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,5 +1,5 @@
+ #source: orphan.s
+-#ld: -T orphan.ld
++#ld: -T orphan.ld --no-warn-rwx-segments
+ #readelf: -S --wide
+ #xfail: [uses_genelf]
+ # if not using elf.em, you don't get fancy orphan handling
+diff -rupN binutils.orig/ld/testsuite/ld-elf/pr19539.d binutils-2.41/ld/testsuite/ld-elf/pr19539.d
+--- binutils.orig/ld/testsuite/ld-elf/pr19539.d	2023-10-19 12:11:47.394940649 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/pr19539.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,6 +1,6 @@
+ #source: start.s
+ #source: pr19539.s
+-#ld: -pie -T pr19539.t --warn-textrel
++#ld: -pie -T pr19539.t --warn-textrel --no-warn-rwx-segments
+ #readelf : --dyn-syms --wide
+ #warning: .*: creating DT_TEXTREL in a PIE
+ #target: *-*-linux* *-*-gnu* *-*-solaris* arm*-*-uclinuxfdpiceabi
+diff -rupN binutils.orig/ld/testsuite/ld-elf/pr26256-1a.d binutils-2.41/ld/testsuite/ld-elf/pr26256-1a.d
+--- binutils.orig/ld/testsuite/ld-elf/pr26256-1a.d	2023-10-19 12:11:47.401940656 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/pr26256-1a.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,5 +1,5 @@
+ #source: pr26256-1.s
+-#ld: -e _start -T pr26256-1.t
++#ld: -e _start -T pr26256-1.t --no-warn-rwx-segments
+ #nm: -n
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-elf/pr26907.d binutils-2.41/ld/testsuite/ld-elf/pr26907.d
+--- binutils.orig/ld/testsuite/ld-elf/pr26907.d	2023-10-19 12:11:47.402940657 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/pr26907.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,4 +1,4 @@
+-#ld: -T pr26907.ld
++#ld: -T pr26907.ld --no-warn-rwx-segments
+ #readelf: -lW
+ #xfail: dlx-*-* ft32-*-* h8300-*-* ip2k-*-* m32r*-*-elf* m32r*-*-rtems*
+ #xfail: moxie-*-* msp430-*-* mt-*-* pru*-*-* visium-*-*
+diff -rupN binutils.orig/ld/testsuite/ld-elf/pr28597.d binutils-2.41/ld/testsuite/ld-elf/pr28597.d
+--- binutils.orig/ld/testsuite/ld-elf/pr28597.d	2023-10-19 12:11:47.403940658 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/pr28597.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,3 +1,3 @@
+-#ld: -shared -T pr28597.t
++#ld: -shared -T pr28597.t --no-warn-rwx-segments
+ #error: .*: discarded output section: `.plt'
+ #target: i?86-*-* x86_64-*-*
+diff -rupN binutils.orig/ld/testsuite/ld-elf/retain2.d binutils-2.41/ld/testsuite/ld-elf/retain2.d
+--- binutils.orig/ld/testsuite/ld-elf/retain2.d	2023-10-19 12:11:47.405940660 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/retain2.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,5 +1,5 @@
+ #name: SHF_GNU_RETAIN 2 (remove SHF_GNU_RETAIN sections by placing in /DISCARD/)
+ #source: retain1.s
+-#ld: -e _start -Map=retain2.map --gc-sections --script=retain2.ld
++#ld: -e _start -Map=retain2.map --gc-sections --script=retain2.ld --no-warn-rwx-segments
+ #map: retain2.map
+ #notarget: ![supports_gnu_osabi] ![check_gc_sections_available]
+diff -rupN binutils.orig/ld/testsuite/ld-elf/shared.exp binutils-2.41/ld/testsuite/ld-elf/shared.exp
+--- binutils.orig/ld/testsuite/ld-elf/shared.exp	2023-10-19 12:11:47.408940663 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/shared.exp	2023-10-19 12:11:56.518949628 +0100
+@@ -259,13 +259,13 @@ if { [check_gc_sections_available] } {
+ 	    "pr20828-v.so"] \
+ 	[list \
+ 	    "PR ld/20828 forcibly exported symbol version without section GC" \
+-	    "$LFLAGS --no-dynamic-linker -e foo -E -T pr20828-v.ld" "" "" \
++	    "$LFLAGS --no-dynamic-linker -e foo -E -T pr20828-v.ld --no-error-rwx-segments" "" "" \
+ 	    {pr20828-v.s} \
+ 	    {{objdump -p pr20828-v.od}} \
+ 	    "pr20828-v-1"] \
+ 	[list \
+ 	    "PR ld/20828 forcibly exported symbol version with section GC" \
+-	    "$LFLAGS --no-dynamic-linker -e foo --gc-sections -E -T pr20828-v.ld" "" "" \
++	    "$LFLAGS --no-dynamic-linker -e foo --gc-sections -E -T pr20828-v.ld --no-error-rwx-segments" "" "" \
+ 	    {pr20828-v.s} \
+ 	    {{objdump -p pr20828-v.od}} \
+ 	    "pr20828-v-2"]]
+@@ -282,7 +282,7 @@ if { [check_gc_sections_available] } {
+ 	[list \
+ 	    "PR ld/21233 dynamic symbols with section GC\
+ 	     (auxiliary shared library)" \
+-	    "$LFLAGS -shared -T pr21233.ld" "" "$AFLAGS_PIC" \
++	    "$LFLAGS -shared -T pr21233.ld --no-error-rwx-segments" "" "$AFLAGS_PIC" \
+ 	    {pr21233-l.s} \
+ 	    {{readelf --dyn-syms pr21233-l.sd}} \
+ 	    "libpr21233.so"]]
+@@ -290,7 +290,7 @@ if { [check_gc_sections_available] } {
+     run_ld_link_tests [list \
+ 	[list \
+ 	    "PR ld/21233 dynamic symbols with section GC (--undefined)" \
+-	    "$LFLAGS --gc-sections -e foo --undefined=bar -T pr21233.ld" \
++	    "$LFLAGS --gc-sections -e foo --undefined=bar -T pr21233.ld --no-error-rwx-segments" \
+ 	    "tmpdir/libpr21233.so" "" \
+ 	    {pr21233.s} \
+ 	    {{readelf --dyn-syms pr21233.sd}} \
+@@ -300,7 +300,7 @@ if { [check_gc_sections_available] } {
+ 	[list \
+ 	    "PR ld/21233 dynamic symbols with section GC (--require-defined)" \
+ 	    "$LFLAGS --gc-sections -e foo --require-defined=bar\
+-	     -T pr21233.ld" \
++	     -T pr21233.ld --no-error-rwx-segments" \
+ 	    "tmpdir/libpr21233.so" "" \
+ 	    {pr21233.s} \
+ 	    {{readelf --dyn-syms pr21233.sd}} \
+@@ -309,7 +309,7 @@ if { [check_gc_sections_available] } {
+     run_ld_link_tests [list \
+ 	[list \
+ 	    "PR ld/21233 dynamic symbols with section GC (EXTERN)" \
+-	    "$LFLAGS --gc-sections -e foo -T pr21233-e.ld" \
++	    "$LFLAGS --gc-sections -e foo -T pr21233-e.ld --no-error-rwx-segments" \
+ 	    "tmpdir/libpr21233.so" "" \
+ 	    {pr21233.s} \
+ 	    {{readelf --dyn-syms pr21233.sd}} \
+diff -rupN binutils.orig/ld/testsuite/ld-elf/size-1.d binutils-2.41/ld/testsuite/ld-elf/size-1.d
+--- binutils.orig/ld/testsuite/ld-elf/size-1.d	2023-10-19 12:11:47.406940661 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/size-1.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,5 +1,5 @@
+ #source: size-1.s
+-#ld: -T size-1.t
++#ld: -T size-1.t --no-warn-rwx-segments
+ #objdump: -s
+ # v850 .tdata/.tbss are not TLS sections
+ #xfail: v850*-*-*
+diff -rupN binutils.orig/ld/testsuite/ld-elf/textaddr7.d binutils-2.41/ld/testsuite/ld-elf/textaddr7.d
+--- binutils.orig/ld/testsuite/ld-elf/textaddr7.d	2023-10-19 12:11:47.407940662 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/textaddr7.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,5 +1,5 @@
+ #source: maxpage1.s
+-#ld: -n -z max-page-size=0x200000 -Ttext-segment 0x10000
++#ld: -n -z max-page-size=0x200000 -Ttext-segment 0x10000 --no-warn-rwx-segments
+ #readelf: -l --wide
+ #target: *-*-linux-gnu *-*-gnu* arm*-*-uclinuxfdpiceabi
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-elf/warn1.d binutils-2.41/ld/testsuite/ld-elf/warn1.d
+--- binutils.orig/ld/testsuite/ld-elf/warn1.d	2023-10-19 12:11:47.408940663 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/warn1.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,7 +1,7 @@
+ #source: start.s
+ #source: symbol1ref.s
+ #source: symbol1w.s
+-#ld: -T group.ld
++#ld: -T group.ld --no-warn-rwx-segments
+ #warning: ^[^\n]*\): warning: witty one-liner$
+ #readelf: -s
+ #xfail: [is_generic]
+diff -rupN binutils.orig/ld/testsuite/ld-elf/warn2.d binutils-2.41/ld/testsuite/ld-elf/warn2.d
+--- binutils.orig/ld/testsuite/ld-elf/warn2.d	2023-10-19 12:11:47.408940663 +0100
++++ binutils-2.41/ld/testsuite/ld-elf/warn2.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,7 +1,7 @@
+ #source: start.s
+ #source: symbol2ref.s
+ #source: symbol2w.s
+-#ld: -T group.ld
++#ld: -T group.ld --no-warn-rwx-segments
+ #warning: ^[^\n]*\.[obj]+: warning: function 'Foo' used$
+ #readelf: -s
+ # if not using elf.em, you don't get fancy section handling
+diff -rupN binutils.orig/ld/testsuite/ld-i386/discarded1.d binutils-2.41/ld/testsuite/ld-i386/discarded1.d
+--- binutils.orig/ld/testsuite/ld-i386/discarded1.d	2023-10-19 12:11:47.420940674 +0100
++++ binutils-2.41/ld/testsuite/ld-i386/discarded1.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,3 +1,3 @@
+ #as: --32
+-#ld: -melf_i386 -T discarded1.t
++#ld: -melf_i386 -T discarded1.t --no-error-rwx-segments
+ #error: .*discarded output section: `.got.plt'
+diff -rupN binutils.orig/ld/testsuite/ld-i386/pr19175.d binutils-2.41/ld/testsuite/ld-i386/pr19175.d
+--- binutils.orig/ld/testsuite/ld-i386/pr19175.d	2023-10-19 12:11:47.427940681 +0100
++++ binutils-2.41/ld/testsuite/ld-i386/pr19175.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,6 +1,6 @@
+ #source: pr19175.s
+ #as: --32 -mrelax-relocations=yes
+-#ld: -Bsymbolic -shared -melf_i386 -T pr19175.t
++#ld: -Bsymbolic -shared -melf_i386 -T pr19175.t --no-error-rwx-segments
+ #objdump: -dw
+ 
+ .*: +file format .*
+diff -rupN binutils.orig/ld/testsuite/ld-i386/pr19539.d binutils-2.41/ld/testsuite/ld-i386/pr19539.d
+--- binutils.orig/ld/testsuite/ld-i386/pr19539.d	2023-10-19 12:11:47.427940681 +0100
++++ binutils-2.41/ld/testsuite/ld-i386/pr19539.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,5 +1,5 @@
+ #as: --32
+-#ld: -pie -m elf_i386 -T pr19539.t -z notext
++#ld: -pie -m elf_i386 -T pr19539.t -z notext --no-error-rwx-segments
+ #readelf: -r --wide
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 1 entry:
+diff -rupN binutils.orig/ld/testsuite/ld-i386/pr23189.d binutils-2.41/ld/testsuite/ld-i386/pr23189.d
+--- binutils.orig/ld/testsuite/ld-i386/pr23189.d	2023-10-19 12:11:47.430940684 +0100
++++ binutils-2.41/ld/testsuite/ld-i386/pr23189.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,5 +1,5 @@
+ #as: --32  -mrelax-relocations=yes
+-#ld: -shared -melf_i386 -T pr23189.t
++#ld: -shared -melf_i386 -T pr23189.t --no-error-rwx-segments
+ #readelf: -r --wide
+ 
+ There are no relocations in this file.
+diff -rupN binutils.orig/ld/testsuite/ld-plugin/lto-3r.d binutils-2.41/ld/testsuite/ld-plugin/lto-3r.d
+--- binutils.orig/ld/testsuite/ld-plugin/lto-3r.d	2023-10-19 12:11:47.511940764 +0100
++++ binutils-2.41/ld/testsuite/ld-plugin/lto-3r.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,4 +1,4 @@
+-#ld: -r tmpdir/lto-3b.o
++#ld: -r tmpdir/lto-3b.o --no-error-execstack
+ #source: dummy.s
+ #nm: -p
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-plugin/lto-5r.d binutils-2.41/ld/testsuite/ld-plugin/lto-5r.d
+--- binutils.orig/ld/testsuite/ld-plugin/lto-5r.d	2023-10-19 12:11:47.511940764 +0100
++++ binutils-2.41/ld/testsuite/ld-plugin/lto-5r.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,4 +1,4 @@
+-#ld: -r tmpdir/lto-5a.o tmpdir/lto-5b.o
++#ld: -r tmpdir/lto-5a.o tmpdir/lto-5b.o --no-error-execstack
+ #source: dummy.s
+ #nm: -p
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-plugin/lto.exp binutils-2.41/ld/testsuite/ld-plugin/lto.exp
+--- binutils.orig/ld/testsuite/ld-plugin/lto.exp	2023-10-19 12:11:47.517940770 +0100
++++ binutils-2.41/ld/testsuite/ld-plugin/lto.exp	2023-10-19 12:11:56.518949628 +0100
+@@ -127,7 +127,7 @@ set lto_link_tests [list \
+    "" "-flto -O2 $lto_fat $NOSANITIZE_CFLAGS" \
+    {pr12758b.c} {} "libpr12758.a"] \
+   [list "PR ld/12758" \
+-   "$NOPIE_LDFLAGS $NOSANITIZE_CFLAGS -O2 -Wl,-e,foo -nostdlib -flto -fuse-linker-plugin tmpdir/pr12758a.o -Wl,--start-group tmpdir/libpr12758.a -Wl,--end-group" \
++  "$NOPIE_LDFLAGS $NOSANITIZE_CFLAGS -O2 -Wl,-e,foo -nostdlib -flto -fuse-linker-plugin tmpdir/pr12758a.o -Wl,--start-group tmpdir/libpr12758.a -Wl,--end-group -Wl,--no-error-execstack" \
+    "$NOSANITIZE_CFLAGS" \
+    {dummy.c} {} "pr12758.exe"] \
+   [list "Build libpr13183.a" \
+@@ -919,7 +919,7 @@ run_cc_link_tests $lto_link_symbol_tests
+ 
+ run_ld_link_tests [list \
+   [list "PR ld/19317 (2)" \
+-   "-r tmpdir/pr19317.o" "" "" \
++   "-r tmpdir/pr19317.o --no-error-execstack" "" "" \
+    {dummy.s} {} "pr19317-r.o"] \
+ ]
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-powerpc/ppc476-shared.d binutils-2.41/ld/testsuite/ld-powerpc/ppc476-shared.d
+--- binutils.orig/ld/testsuite/ld-powerpc/ppc476-shared.d	2023-10-19 12:11:47.525940778 +0100
++++ binutils-2.41/ld/testsuite/ld-powerpc/ppc476-shared.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,6 +1,6 @@
+ #source: ppc476-shared.s
+ #as: -a32
+-#ld: -melf32ppc -q -shared -z common-page-size=0x10000 -z notext --ppc476-workaround -T ppc476-shared.lnk
++#ld: -melf32ppc -q -shared -z common-page-size=0x10000 -z notext --ppc476-workaround -T ppc476-shared.lnk --no-error-rwx-segments
+ #objdump: -dr
+ #target: powerpc*-*-*
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-powerpc/ppc476-shared2.d binutils-2.41/ld/testsuite/ld-powerpc/ppc476-shared2.d
+--- binutils.orig/ld/testsuite/ld-powerpc/ppc476-shared2.d	2023-10-19 12:11:47.525940778 +0100
++++ binutils-2.41/ld/testsuite/ld-powerpc/ppc476-shared2.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,6 +1,6 @@
+ #source: ppc476-shared.s
+ #as: -a32
+-#ld: -melf32ppc -shared -z common-page-size=0x10000 -z notext --ppc476-workaround -T ppc476-shared.lnk
++#ld: -melf32ppc -shared -z common-page-size=0x10000 -z notext --ppc476-workaround -T ppc476-shared.lnk --no-error-rwx-segments
+ #objdump: -R
+ #target: powerpc*-*-*
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-powerpc/pr28827-2.d binutils-2.41/ld/testsuite/ld-powerpc/pr28827-2.d
+--- binutils.orig/ld/testsuite/ld-powerpc/pr28827-2.d	2023-10-19 12:11:47.525940778 +0100
++++ binutils-2.41/ld/testsuite/ld-powerpc/pr28827-2.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,5 +1,5 @@
+ #as: -a64
+-#ld: -melf64ppc --plt-align=0 -T pr28827-2.lnk
++#ld: -melf64ppc --plt-align=0 -T pr28827-2.lnk --no-error-rwx-segments
+ #objdump: -dr
+ 
+ .*:     file format .*
+diff -rupN binutils.orig/ld/testsuite/ld-s390/s390.exp binutils-2.41/ld/testsuite/ld-s390/s390.exp
+--- binutils.orig/ld/testsuite/ld-s390/s390.exp	2023-10-19 12:11:47.541940793 +0100
++++ binutils-2.41/ld/testsuite/ld-s390/s390.exp	2023-10-19 12:11:56.518949628 +0100
+@@ -83,7 +83,7 @@ set s390xtests {
+      {{objdump -dzrj.text gotreloc_64-relro-1.dd}}
+      "gotreloc_64-1"}
+     {"PLT: offset test"
+-     "-shared -m elf64_s390 -dT pltoffset-1.ld" ""
++     "-shared -m elf64_s390 -dT pltoffset-1.ld --no-error-rwx-segments" ""
+      "-m64" {pltoffset-1.s}
+      {{objdump "-dzrj.text --stop-address=16" pltoffset-1.dd}}
+      "pltoffset-1"}
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/align2a.d binutils-2.41/ld/testsuite/ld-scripts/align2a.d
+--- binutils.orig/ld/testsuite/ld-scripts/align2a.d	2023-10-19 12:11:47.542940794 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/align2a.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,4 +1,4 @@
+-# ld: --defsym data_align=16 -T align2.t
++# ld: --defsym data_align=16 -T align2.t --no-error-rwx-segments
+ # objdump: --section-headers
+ 
+ [^:]+: +file format.*
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/align2b.d binutils-2.41/ld/testsuite/ld-scripts/align2b.d
+--- binutils.orig/ld/testsuite/ld-scripts/align2b.d	2023-10-19 12:11:47.542940794 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/align2b.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,4 +1,4 @@
+-# ld: --defsym data_align=32 -T align2.t
++# ld: --defsym data_align=32 -T align2.t --no-error-rwx-segments
+ # objdump: --section-headers
+ 
+ [^:]+: +file +format.*
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/align5.d binutils-2.41/ld/testsuite/ld-scripts/align5.d
+--- binutils.orig/ld/testsuite/ld-scripts/align5.d	2023-10-19 12:11:47.542940794 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/align5.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,7 +1,7 @@
+ # source: align2a.s
+-# ld: -T align5.t
++# ld: -T align5.t --no-error-rwx-segments
+ # nm: -n
+ 
+ #...
+ .*foo
+-#...
+\ No newline at end of file
++#...
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/alignof.exp binutils-2.41/ld/testsuite/ld-scripts/alignof.exp
+--- binutils.orig/ld/testsuite/ld-scripts/alignof.exp	2023-10-19 12:11:47.542940794 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/alignof.exp	2023-10-19 12:11:56.518949628 +0100
+@@ -39,7 +39,7 @@ if { [is_pecoff_format] } {
+ }
+ 
+ if ![ld_link $ld tmpdir/alignof "-T $srcdir/$subdir/alignof.t \
+-	$IMAGE_BASE tmpdir/alignof.o"] {
++	$IMAGE_BASE tmpdir/alignof.o --no-error-rwx-segments"] {
+     fail $testname
+     return
+ }
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/crossref.exp binutils-2.41/ld/testsuite/ld-scripts/crossref.exp
+--- binutils.orig/ld/testsuite/ld-scripts/crossref.exp	2023-10-19 12:11:47.551940803 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/crossref.exp	2023-10-19 12:11:56.518949628 +0100
+@@ -80,7 +80,7 @@ if [is_pecoff_format] {
+     append flags " --image-base 0"
+ }
+ 
+-set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross1 -T $srcdir/$subdir/cross1.t tmpdir/cross1.o tmpdir/cross2.o"]
++set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross1 -T $srcdir/$subdir/cross1.t tmpdir/cross1.o tmpdir/cross2.o --no-error-rwx-segments"]
+ 
+ set exec_output [prune_warnings $exec_output]
+ 
+@@ -105,7 +105,7 @@ if { ![ld_compile "$CC_FOR_TARGET $NOSAN
+     return
+ }
+ 
+-set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross2 -T $srcdir/$subdir/cross2.t tmpdir/cross3.o"]
++set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross2 -T $srcdir/$subdir/cross2.t tmpdir/cross3.o --no-error-rwx-segments"]
+ set exec_output [prune_warnings $exec_output]
+ 
+ regsub -all "(^|\n)($ld: warning: cannot find entry symbol\[^\n\]*\n?)" $exec_output "\\1" exec_output
+@@ -139,7 +139,7 @@ if ![ld_relocate $ld tmpdir/cross3-parti
+     return
+ }
+ 
+-set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross3 -T $srcdir/$subdir/cross3.t tmpdir/cross3-partial.o tmpdir/cross2.o"]
++set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross3 -T $srcdir/$subdir/cross3.t tmpdir/cross3-partial.o tmpdir/cross2.o --no-error-rwx-segments"]
+ 
+ set exec_output [prune_warnings $exec_output]
+ 
+@@ -152,7 +152,7 @@ if [string match "" $exec_output] then {
+     fail $test3
+ }
+ 
+-set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross4 -T $srcdir/$subdir/cross4.t tmpdir/cross4.o"]
++set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross4 -T $srcdir/$subdir/cross4.t tmpdir/cross4.o --no-error-rwx-segments"]
+ set exec_output [prune_warnings $exec_output]
+ 
+ regsub -all "(^|\n)($ld: warning: cannot find entry symbol\[^\n\]*\n?)" $exec_output "\\1" exec_output
+@@ -164,7 +164,7 @@ if [string match "" $exec_output] then {
+     fail $test4
+ }
+ 
+-set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross5 -T $srcdir/$subdir/cross5.t tmpdir/cross4.o"]
++set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross5 -T $srcdir/$subdir/cross5.t tmpdir/cross4.o --no-error-rwx-segments"]
+ set exec_output [prune_warnings $exec_output]
+ 
+ regsub -all "(^|\n)($ld: warning: cannot find entry symbol\[^\n\]*\n?)" $exec_output "\\1" exec_output
+@@ -180,7 +180,7 @@ if [string match "" $exec_output] then {
+     }
+ }
+ 
+-set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross6 -T $srcdir/$subdir/cross6.t tmpdir/cross3.o"]
++set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross6 -T $srcdir/$subdir/cross6.t tmpdir/cross3.o --no-error-rwx-segments"]
+ set exec_output [prune_warnings $exec_output]
+ 
+ regsub -all "(^|\n)($ld: warning: cannot find entry symbol\[^\n\]*\n?)" $exec_output "\\1" exec_output
+@@ -192,7 +192,7 @@ if [string match "" $exec_output] then {
+     fail $test6
+ }
+ 
+-set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross7 -T $srcdir/$subdir/cross7.t tmpdir/cross3.o"]
++set exec_output [run_host_cmd "$ld" "$flags -o tmpdir/cross7 -T $srcdir/$subdir/cross7.t tmpdir/cross3.o --no-error-rwx-segments"]
+ set exec_output [prune_warnings $exec_output]
+ 
+ regsub -all "(^|\n)($ld: warning: cannot find entry symbol\[^\n\]*\n?)" $exec_output "\\1" exec_output
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/defined2.d binutils-2.41/ld/testsuite/ld-scripts/defined2.d
+--- binutils.orig/ld/testsuite/ld-scripts/defined2.d	2023-10-19 12:11:47.543940795 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/defined2.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,4 +1,4 @@
+-#ld: -Tdefined2.t
++#ld: -Tdefined2.t --no-error-rwx-segments
+ #nm: -B
+ #source: phdrs.s
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/defined3.d binutils-2.41/ld/testsuite/ld-scripts/defined3.d
+--- binutils.orig/ld/testsuite/ld-scripts/defined3.d	2023-10-19 12:11:47.543940795 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/defined3.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,4 +1,4 @@
+-#ld: -Tdefined3.t
++#ld: -Tdefined3.t --no-error-rwx-segments
+ #nm: -B
+ #source: phdrs.s
+ #source: defined.s
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/defined5.d binutils-2.41/ld/testsuite/ld-scripts/defined5.d
+--- binutils.orig/ld/testsuite/ld-scripts/defined5.d	2023-10-19 12:11:47.543940795 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/defined5.d	2023-10-19 12:11:56.518949628 +0100
+@@ -1,4 +1,4 @@
+-#ld: -Tdefined5.t
++#ld: -Tdefined5.t --no-error-rwx-segments
+ #warning: .*multiple definition of `defined'.*
+ #nm: -B
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/pr14962.d binutils-2.41/ld/testsuite/ld-scripts/pr14962.d
+--- binutils.orig/ld/testsuite/ld-scripts/pr14962.d	2023-10-19 12:11:47.546940798 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/pr14962.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,4 +1,4 @@
+-#ld: -Ttext=0x1000 -Tdata=0x2000 -T pr14962.t
++#ld: -Ttext=0x1000 -Tdata=0x2000 -T pr14962.t --no-error-rwx-segments
+ #source: pr14962a.s
+ #source: pr14962b.s
+ #nm: -n
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/pr18963.d binutils-2.41/ld/testsuite/ld-scripts/pr18963.d
+--- binutils.orig/ld/testsuite/ld-scripts/pr18963.d	2023-10-19 12:11:47.546940798 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/pr18963.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,5 +1,5 @@
+ # source: data.s
+-# ld: -T pr18963.t
++# ld: -T pr18963.t --no-error-rwx-segments
+ # nm: -B -n
+ # notarget: *-*-vms
+ # Skip for VMS based targets as the linker automatically adds extra libraries that may not be present in a cross build.
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/pr20302.d binutils-2.41/ld/testsuite/ld-scripts/pr20302.d
+--- binutils.orig/ld/testsuite/ld-scripts/pr20302.d	2023-10-19 12:11:47.546940798 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/pr20302.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,4 +1,4 @@
+-#ld: -Tdata=0x1000 -Tdata=0x2000 -Tcross2.t
++#ld: -Tdata=0x1000 -Tdata=0x2000 -Tcross2.t --no-error-rwx-segments
+ #source: align2a.s
+ #objdump: -h
+ #notarget: *-*-*aout *-*-netbsd *-*-vms ns32k-*-* rx-*-*
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/print-memory-usage.exp binutils-2.41/ld/testsuite/ld-scripts/print-memory-usage.exp
+--- binutils.orig/ld/testsuite/ld-scripts/print-memory-usage.exp	2023-10-19 12:11:47.547940799 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/print-memory-usage.exp	2023-10-19 12:11:56.519949629 +0100
+@@ -51,7 +51,7 @@ run_ld_link_tests {
+ 
+     {
+ 	"print-memory-usage-2"
+-	"-T print-memory-usage-2.t --print-memory-usage"
++	"-T print-memory-usage-2.t --print-memory-usage --no-error-rwx-segments"
+ 	""
+ 	""
+ 	{ "print-memory-usage-1.s" }
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-at1.d binutils-2.41/ld/testsuite/ld-scripts/rgn-at1.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-at1.d	2023-10-19 12:11:47.548940800 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-at1.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ # name: rgn-at1
+ # source: rgn-at.s
+-# ld: -T rgn-at1.t
++# ld: -T rgn-at1.t --no-error-rwx-segments
+ # objdump: -w -h
+ # xfail: rx-*-*
+ #   FAILS on the RX because the linker has to set LMA == VMA for the
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-at10.d binutils-2.41/ld/testsuite/ld-scripts/rgn-at10.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-at10.d	2023-10-19 12:11:47.548940800 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-at10.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,5 +1,5 @@
+ #source: rgn-at10.s
+-#ld: -T rgn-at10.t
++#ld: -T rgn-at10.t --no-error-rwx-segments
+ #objdump: -h --wide
+ #xfail: hppa*64*-*-hpux* v850*-*-*
+ # Test that lma is adjusted in case the section start vma is aligned and
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-at4.d binutils-2.41/ld/testsuite/ld-scripts/rgn-at4.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-at4.d	2023-10-19 12:11:47.548940800 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-at4.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ # name: rgn-at4
+ # source: rgn-at.s
+-# ld: -T rgn-at4.t
++# ld: -T rgn-at4.t --no-error-rwx-segments
+ # objdump: -w -h
+ # xfail: rx-*-*
+ #   FAILS on the RX because the linker has to set LMA == VMA for the
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-at6.d binutils-2.41/ld/testsuite/ld-scripts/rgn-at6.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-at6.d	2023-10-19 12:11:47.548940800 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-at6.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,5 +1,5 @@
+ #source: rgn-at6.s
+-#ld: -T rgn-at6.t
++#ld: -T rgn-at6.t --no-error-rwx-segments
+ #objdump: -h --wide
+ # Test that lma is aligned as for vma when lma_region==region.
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-at8.d binutils-2.41/ld/testsuite/ld-scripts/rgn-at8.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-at8.d	2023-10-19 12:11:47.548940800 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-at8.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,5 +1,5 @@
+ #source: rgn-at6.s
+-#ld: -T rgn-at8.t
++#ld: -T rgn-at8.t --no-error-rwx-segments
+ #objdump: -h --wide
+ # Test that lma is aligned when lma_region!=region and requested by script.
+ 
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-at9.d binutils-2.41/ld/testsuite/ld-scripts/rgn-at9.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-at9.d	2023-10-19 12:11:47.548940800 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-at9.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,5 +1,5 @@
+ #source: rgn-at6.s
+-#ld: -T rgn-at9.t
++#ld: -T rgn-at9.t --no-error-rwx-segments
+ #objdump: -h --wide
+ #xfail: rx-*-*
+ # Test that lma is adjusted in case the section start vma is aligned and
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-over1.d binutils-2.41/ld/testsuite/ld-scripts/rgn-over1.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-over1.d	2023-10-19 12:11:47.549940801 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-over1.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ # name: rgn-over1
+ # source: rgn-over.s
+-# ld: -T rgn-over1.t -Map tmpdir/rgn-over1.map
++# ld: -T rgn-over1.t -Map tmpdir/rgn-over1.map --no-error-rwx-segments
+ # error: \A[^ \n]*?ld[^:\n]*?: [^\n]*?section \`.text' will not fit in region `r1'\n[^ \n]*?ld[^:\n]*?: region `r1' overflowed by 16 bytes\Z
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-over2.d binutils-2.41/ld/testsuite/ld-scripts/rgn-over2.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-over2.d	2023-10-19 12:11:47.549940801 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-over2.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ # name: rgn-over2
+ # source: rgn-over.s
+-# ld: -T rgn-over2.t -Map tmpdir/rgn-over2.map
++# ld: -T rgn-over2.t -Map tmpdir/rgn-over2.map --no-error-rwx-segments
+ # error: \A[^ \n]*?ld[^:\n]*?: [^\n]*?section `\.data' will not fit in region `r1'\n[^ \n]*?ld[^:\n]*?: region `r1' overflowed by 4 bytes\Z
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-over4.d binutils-2.41/ld/testsuite/ld-scripts/rgn-over4.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-over4.d	2023-10-19 12:11:47.549940801 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-over4.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ # name: rgn-over4
+ # source: rgn-over.s
+-# ld: -T rgn-over4.t -Map tmpdir/rgn-over4.map
++# ld: -T rgn-over4.t -Map tmpdir/rgn-over4.map --no-error-rwx-segments
+ # error: \A[^ \n]*?ld[^:\n]*?: [^:\n]*?section `\.text' will not fit in region `r1'\n[^ \n]*?ld[^:\n]*?: region `r1' overflowed by 16 bytes\Z
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-over5.d binutils-2.41/ld/testsuite/ld-scripts/rgn-over5.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-over5.d	2023-10-19 12:11:47.549940801 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-over5.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ # name: rgn-over5
+ # source: rgn-over.s
+-# ld: -T rgn-over5.t -Map tmpdir/rgn-over5.map
++# ld: -T rgn-over5.t -Map tmpdir/rgn-over5.map --no-error-rwx-segments
+ # error: \A[^ \n]*?ld[^:\n]*?: [^\n]*?section `\.text' will not fit in region `v1'\n[^ \n]*?ld[^:\n]*?: region `v1' overflowed by 16 bytes\Z
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/rgn-over6.d binutils-2.41/ld/testsuite/ld-scripts/rgn-over6.d
+--- binutils.orig/ld/testsuite/ld-scripts/rgn-over6.d	2023-10-19 12:11:47.549940801 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/rgn-over6.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ # name: rgn-over6
+ # source: rgn-over.s
+-# ld: -T rgn-over6.t -Map tmpdir/rgn-over6.map
++# ld: -T rgn-over6.t -Map tmpdir/rgn-over6.map --no-error-rwx-segments
+ # error: \A[^ \n]*?ld[^:\n]*?: [^\n]*?section `\.text' will not fit in region `r1'\n[^ \n]*?ld[^:\n]*?: [^\n]*?section `\.text' will not fit in region `v1'\n[^ \n]*?ld[^:\n]*?: region `r1' overflowed by 16 bytes\n[^ \n]*?ld[^:\n]*?: region `v1' overflowed by 16 bytes\Z
+ 
+ #...
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/script.exp binutils-2.41/ld/testsuite/ld-scripts/script.exp
+--- binutils.orig/ld/testsuite/ld-scripts/script.exp	2023-10-19 12:11:47.549940801 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/script.exp	2023-10-19 12:11:56.519949629 +0100
+@@ -190,7 +190,7 @@ if { [is_pecoff_format] } then {
+ }
+ set flags $LDFLAGS
+ 
+-if ![ld_link $ld tmpdir/script "$flags -T $srcdir/$subdir/script.t tmpdir/script.o"] {
++if ![ld_link $ld tmpdir/script "$flags -T $srcdir/$subdir/script.t tmpdir/script.o --no-error-rwx-segments"] {
+     fail $testname
+ } else {
+     check_script
+@@ -198,7 +198,7 @@ if ![ld_link $ld tmpdir/script "$flags -
+ 
+ set testname "MRI script"
+ 
+-if ![ld_link $ld tmpdir/script "$flags -c $srcdir/$subdir/scriptm.t"] {
++if ![ld_link $ld tmpdir/script "$flags -c $srcdir/$subdir/scriptm.t --no-error-rwx-segments"] {
+     fail $testname
+ } else {
+     check_script
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/sizeof.exp binutils-2.41/ld/testsuite/ld-scripts/sizeof.exp
+--- binutils.orig/ld/testsuite/ld-scripts/sizeof.exp	2023-10-19 12:11:47.550940802 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/sizeof.exp	2023-10-19 12:11:56.519949629 +0100
+@@ -34,7 +34,7 @@ if { [is_pecoff_format] } {
+ }
+ 
+ if ![ld_link $ld tmpdir/sizeof "$LDFLAGS -T $srcdir/$subdir/sizeof.t \
+-	$IMAGE_BASE tmpdir/sizeof.o"] {
++	$IMAGE_BASE tmpdir/sizeof.o --no-error-rwx-segments"] {
+     fail $testname
+     return
+ }
+diff -rupN binutils.orig/ld/testsuite/ld-scripts/sort-file.d binutils-2.41/ld/testsuite/ld-scripts/sort-file.d
+--- binutils.orig/ld/testsuite/ld-scripts/sort-file.d	2023-10-19 12:11:47.550940802 +0100
++++ binutils-2.41/ld/testsuite/ld-scripts/sort-file.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ #source: sort-file2.s
+ #source: sort-file1.s
+-#ld: -T sort-file.t
++#ld: -T sort-file.t --no-error-rwx-segments
+ #nm: -n
+ 
+ # Check that SORT_BY_NAME on filenames works
+diff -rupN binutils.orig/ld/testsuite/ld-x86-64/discarded1.d binutils-2.41/ld/testsuite/ld-x86-64/discarded1.d
+--- binutils.orig/ld/testsuite/ld-x86-64/discarded1.d	2023-10-19 12:11:47.577940829 +0100
++++ binutils-2.41/ld/testsuite/ld-x86-64/discarded1.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,3 +1,3 @@
+ #as: --64
+-#ld: -melf_x86_64 -T discarded1.t
++#ld: -melf_x86_64 -T discarded1.t --no-error-rwx-segments
+ #error: .*discarded output section: `.got.plt'
+diff -rupN binutils.orig/ld/testsuite/ld-x86-64/pr19175.d binutils-2.41/ld/testsuite/ld-x86-64/pr19175.d
+--- binutils.orig/ld/testsuite/ld-x86-64/pr19175.d	2023-10-19 12:11:47.585940837 +0100
++++ binutils-2.41/ld/testsuite/ld-x86-64/pr19175.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ #source: pr19175.s
+ #as: --64
+-#ld: -Bsymbolic -shared -melf_x86_64 -T pr19175.t
++#ld: -Bsymbolic -shared -melf_x86_64 -T pr19175.t --no-error-rwx-segments
+ #objdump: -dw
+ 
+ .*: +file format .*
+diff -rupN binutils.orig/ld/testsuite/ld-x86-64/pr19539a.d binutils-2.41/ld/testsuite/ld-x86-64/pr19539a.d
+--- binutils.orig/ld/testsuite/ld-x86-64/pr19539a.d	2023-10-19 12:11:47.585940837 +0100
++++ binutils-2.41/ld/testsuite/ld-x86-64/pr19539a.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ #source: pr19539.s
+ #as: --64
+-#ld: -pie -m elf_x86_64 -T pr19539.t -z notext
++#ld: -pie -m elf_x86_64 -T pr19539.t -z notext --no-error-rwx-segments
+ #readelf: -r --wide
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 1 entry:
+diff -rupN binutils.orig/ld/testsuite/ld-x86-64/pr19539b.d binutils-2.41/ld/testsuite/ld-x86-64/pr19539b.d
+--- binutils.orig/ld/testsuite/ld-x86-64/pr19539b.d	2023-10-19 12:11:47.585940837 +0100
++++ binutils-2.41/ld/testsuite/ld-x86-64/pr19539b.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,6 +1,6 @@
+ #source: pr19539.s
+ #as: --x32
+-#ld: -pie -m elf32_x86_64 -T pr19539.t -z notext
++#ld: -pie -m elf32_x86_64 -T pr19539.t -z notext --no-error-rwx-segments
+ #readelf: -r --wide
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 1 entry:
+diff -rupN binutils.orig/ld/testsuite/ld-x86-64/pr23189.d binutils-2.41/ld/testsuite/ld-x86-64/pr23189.d
+--- binutils.orig/ld/testsuite/ld-x86-64/pr23189.d	2023-10-19 12:11:47.590940842 +0100
++++ binutils-2.41/ld/testsuite/ld-x86-64/pr23189.d	2023-10-19 12:11:56.519949629 +0100
+@@ -1,5 +1,5 @@
+ #as: --64  -mrelax-relocations=yes
+-#ld: -shared -melf_x86_64 -T pr23189.t
++#ld: -shared -melf_x86_64 -T pr23189.t --no-error-rwx-segments
+ #readelf: -r --wide
+ 
+ There are no relocations in this file.
+--- binutils.orig/bfd/elflink.c	2023-11-14 13:16:18.706749224 +0000
++++ binutils-2.41/bfd/elflink.c	2023-11-14 13:17:27.584837271 +0000
+@@ -7150,14 +7150,6 @@ bfd_elf_size_dynamic_sections (bfd *outp
+ 	 though the choice is the result of another command line option.  */
+       if (info->warn_execstack == 1)
+ 	{
+-	  if (info->error_execstack)
+-	    {
+-	      _bfd_error_handler
+-		(_("\
+-error: creating an executable stack because of -z execstack command line option"));
+-	      return false;
+-	    }
+-
+ 	  _bfd_error_handler
+ 	    (_("\
+ warning: enabling an executable stack because of -z execstack command line option"));
+@@ -7219,14 +7211,6 @@ warning: enabling an executable stack be
+ 		     on the command line.  */
+ 		  if (noteobj)
+ 		    {
+-		      if (info->error_execstack)
+-			{
+-			  _bfd_error_handler (_("\
+-error: %s: is triggering the generation of an executable stack (because it has an executable .note.GNU-stack section)"),
+-					      bfd_get_filename (noteobj));
+-			  return false;
+-			}
+-
+ 		      _bfd_error_handler (_("\
+ warning: %s: requires executable stack (because the .note.GNU-stack section is executable)"),
+ 		       bfd_get_filename (noteobj));

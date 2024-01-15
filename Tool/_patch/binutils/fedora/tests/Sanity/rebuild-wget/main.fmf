@@ -1,0 +1,16 @@
+summary: Rebuild wget
+description: ''
+contact: Milos Prchlik <mprchlik@redhat.com>
+component:
+- binutils
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+- wget
+- koji
+- rpm-build
+- gcc
+duration: 1h
+extra-summary: /tools/binutils/Sanity/rebuild-wget
+extra-task: /tools/binutils/Sanity/rebuild-wget

@@ -1,0 +1,5 @@
+PURPOSE of /CoreOS/binutils/Regression/bz1465318-FJ7-4-Bug-REG-The-results-of-gprof-command
+Description: Test for BZ#1465318 ([FJ7.4 Bug] [REG] The results of gprof command)
+Author: Milos Prchlik <mprchlik@redhat.com>
+Bug summary: [FJ7.4 Bug]: [REG] The results of gprof command with some options differ between RHEL7.4 beta and RHEL7.3.
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1465318

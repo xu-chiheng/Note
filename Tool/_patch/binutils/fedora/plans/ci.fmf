@@ -1,0 +1,5 @@
+summary: CI Gating Plan
+discover:
+    how: fmf
+execute:
+    how: tmt

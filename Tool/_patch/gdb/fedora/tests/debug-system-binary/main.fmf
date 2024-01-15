@@ -1,0 +1,17 @@
+summary: Debug a system binary.
+description: ''
+contact:
+- Marek Polacek <mpolacek@redhat.com>
+component:
+- gdb
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- gdb
+- coreutils
+- coreutils-debuginfo
+- glibc
+- glibc-debuginfo
+duration: 5m
+extra-summary: /tools/gdb/Sanity/debug-system-binary
+extra-task: /tools/gdb/Sanity/debug-system-binary

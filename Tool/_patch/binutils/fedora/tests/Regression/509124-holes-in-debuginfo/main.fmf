@@ -1,0 +1,25 @@
+summary: holes in debuginfo
+description: "(1) readelf fix now posted upstream:\n    http://sourceware.org/ml/binutils/2009-07/msg00123.html\n\
+    QA: New testcase: binutils-all/testranges.s\n\n(2) gcc has been fixed based on\
+    \ this bugreport by Jakub upstream:\n    http://gcc.gnu.org/bugzilla/show_bug.cgi?id=40713\n\
+    \    gcc44 backport request for RHEL-5.5 is: Bug 510958\n\n(3) Going to be backported\
+    \ for RHEL-5.5 readelf.\n    It has been already fixed by Nick Clifton upstream:\n\
+    \    http://sourceware.org/ml/binutils/2009-06/msg00418.html\n    http://sourceware.org/ml/binutils-cvs/2009-06/msg00158.html\n\
+    QA: RHEL-only new testcase: binutils-all/testloc.S\n    as a part of binutils-all/readelf.exp\
+    \ (not shown when PASSing)    \n"
+contact: Michal Nowak <mnowak@redhat.com>
+component:
+- binutils
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+- gcc44
+- gcc
+- gcc44-c++
+- gcc-c++
+duration: 15m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=509124
+extra-summary: /tools/binutils/Regressions/readelf/509124-holes-in-debuginfo
+extra-task: /tools/binutils/Regressions/readelf/509124-holes-in-debuginfo

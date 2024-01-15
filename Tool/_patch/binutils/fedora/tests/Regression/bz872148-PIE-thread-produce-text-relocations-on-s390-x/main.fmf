@@ -1,0 +1,30 @@
+summary: Test for BZ#872148 (PIE + __thread produce text relocations on s390(x))
+description: |
+    Bug summary: PIE + __thread produce text relocations on s390(x)
+    Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=872148
+
+    Requires systemd without a workaround:
+
+    # PIE is broken on s390 (#868839, #872148)
+    %ifnarch s390 s390x
+    %global _hardened_build 1
+    %endif
+
+    ^^ this is a workaround that makes bug disappear for this particular reproducer.
+    So, fetch systemd srpm, comment this condition out, rebuild, install, reboot, then
+    you can run this tests. One day I may make this part automatic but replacing systemd
+    wouldn't be seen as a good behaviour by other tests run after this task, so not yet.
+contact: Milos Prchlik <mprchlik@redhat.com>
+component:
+- binutils
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+- elfutils
+- gcc
+duration: 15m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=872148
+extra-summary: /tools/binutils/Regression/bz872148-PIE-thread-produce-text-relocations-on-s390-x
+extra-task: /tools/binutils/Regression/bz872148-PIE-thread-produce-text-relocations-on-s390-x

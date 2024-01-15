@@ -1,0 +1,14 @@
+summary: 'eu-unstrip: do not seem to match'
+description: ''
+contact: Michal Nowak <mnowak@redhat.com>
+component:
+- binutils
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=698005
+extra-summary: /tools/binutils/Regression/bz698005-eu-unstrip-do-not-seem-to-match
+extra-task: /tools/binutils/Regression/bz698005-eu-unstrip-do-not-seem-to-match

@@ -1,0 +1,29 @@
+--- binutils.orig/bfd/merge.c	2023-11-07 09:49:56.923358543 +0000
++++ binutils-2.41/bfd/merge.c	2023-11-07 09:51:47.031552039 +0000
+@@ -167,7 +167,7 @@ static bool
+ sec_merge_maybe_resize (struct sec_merge_hash *table, unsigned added)
+ {
+   struct bfd_hash_table *bfdtab = &table->table;
+-  if (bfdtab->count + added > table->nbuckets * 2 / 3)
++  if (bfdtab->count + added > table->nbuckets / 3 * 2)
+     {
+       unsigned i;
+       unsigned long newnb = table->nbuckets * 2;
+@@ -175,7 +175,7 @@ sec_merge_maybe_resize (struct sec_merge
+       uint64_t *newl;
+       unsigned long alloc;
+ 
+-      while (bfdtab->count + added > newnb * 2 / 3)
++      while (bfdtab->count + added > newnb / 3 * 2)
+ 	{
+ 	  newnb *= 2;
+ 	  if (!newnb)
+@@ -240,7 +240,7 @@ sec_merge_hash_insert (struct sec_merge_
+   hashp->u.suffix = NULL;
+   hashp->next = NULL;
+   // We must not need resizing, otherwise _index is wrong
+-  BFD_ASSERT (bfdtab->count + 1 <= table->nbuckets * 2 / 3);
++  BFD_ASSERT (bfdtab->count + 1 <= table->nbuckets / 3 * 2);
+   bfdtab->count++;
+   table->key_lens[_index] = (hash << 32) | (uint32_t)len;
+   table->values[_index] = hashp;

@@ -1,0 +1,5 @@
+PURPOSE of /CoreOS/binutils/Regression/bz959422-TLS-variable-wrongly-relocated-on-debug-info
+Description: Test for BZ#959422 (TLS variable wrongly relocated on .debug_info)
+Author: Milos Prchlik <mprchlik@redhat.com>
+Bug summary: TLS variable wrongly relocated on .debug_info
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=959422

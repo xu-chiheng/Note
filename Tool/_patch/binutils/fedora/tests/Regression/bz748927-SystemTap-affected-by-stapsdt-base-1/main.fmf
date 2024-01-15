@@ -1,0 +1,28 @@
+summary: Make sure there is .stapsdt.base field
+description: |
+    arch = s390,s390x && distro = rhel-7: False
+    arch = ppc64 && distro = rhel-7: False
+    arch = aarch64: False
+    arch = ppc64le: False
+contact: Michal Nowak <mnowak@redhat.com>
+component:
+- binutils
+- glibc
+- systemtap
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+- glibc.i386
+- glibc.x86_64
+- glibc.ppc
+- glibc.ppc64
+- glibc.s390
+- glibc.s390x
+- glibc.ia64
+- glibc.i686
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=748927
+extra-summary: /tools/binutils/Regression/bz748927-SystemTap-affected-by-stapsdt-base-1
+extra-task: /tools/binutils/Regression/bz748927-SystemTap-affected-by-stapsdt-base-1

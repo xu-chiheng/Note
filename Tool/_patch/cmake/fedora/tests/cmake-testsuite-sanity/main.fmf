@@ -1,0 +1,15 @@
+summary: cmake testing by upstream testsuite
+description: ''
+contact:
+- Michal Kolar <mkolar@redhat.com>
+component:
+- cmake
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- cmake
+- dnf-utils
+- rpm-build
+duration: 1h
+extra-summary: /tools/cmake/Sanity/cmake-testsuite-sanity
+extra-task: /tools/cmake/Sanity/cmake-testsuite-sanity

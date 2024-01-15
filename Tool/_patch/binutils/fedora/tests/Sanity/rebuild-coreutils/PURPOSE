@@ -1,0 +1,3 @@
+PURPOSE of /tools/binutils/Sanity/rebuild-coreutils
+Description: Rebuild coreutils
+Author: Milos Prchlik <mprchlik@redhat.com>

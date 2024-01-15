@@ -1,0 +1,3 @@
+PURPOSE of /tools/cmake/Sanity/cmake-testsuite-sanity
+Description: cmake testing by upstream testsuite
+Author: Michal Kolar <mkolar@redhat.com>

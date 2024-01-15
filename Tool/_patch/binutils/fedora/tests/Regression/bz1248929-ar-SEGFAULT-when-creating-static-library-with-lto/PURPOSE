@@ -1,0 +1,8 @@
+PURPOSE of /tools/binutils/Regression/bz1248929-ar-SEGFAULT-when-creating-static-library-with-lto
+Description: Test for BZ#1248929 (ar SEGFAULT when creating static library with lto)
+Author: Milos Prchlik <mprchlik@redhat.com>
+Bug summary: ar SEGFAULT when creating static library with lto
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1248929
+
+Relevancy:
+collection = devtoolset-4: PACKAGES=devtoolset-4-binutils REQUIRES=devtoolset-4-gcc

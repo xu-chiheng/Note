@@ -1,0 +1,17 @@
+b main
+r
+n 10
+si 30
+up
+n 15
+watch myname
+p/s myname
+si 10
+up
+down
+bt
+frame 1
+b xexit
+c
+c
+q

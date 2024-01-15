@@ -5,6 +5,7 @@ git://cygwin.com/git/cygwin-packages/cmake.git
 
 https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-cmake
 
+https://src.fedoraproject.org/rpms/cmake.git
 
 
 

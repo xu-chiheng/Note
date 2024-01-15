@@ -1,0 +1,160 @@
+diff -rup fred/gas/config/tc-i386.c binutils-2.41/gas/config/tc-i386.c
+--- fred/gas/config/tc-i386.c	2023-12-07 10:00:21.013005830 +0000
++++ binutils-2.41/gas/config/tc-i386.c	2023-12-07 10:00:28.037015037 +0000
+@@ -1053,8 +1053,8 @@ static const arch_entry cpu_arch[] =
+   SUBARCH (xsavec, XSAVEC, ANY_XSAVEC, false),
+   SUBARCH (xsaves, XSAVES, ANY_XSAVES, false),
+   SUBARCH (aes, AES, ANY_AES, false),
+-  SUBARCH (pclmul, PCLMUL, ANY_PCLMUL, false),
+-  SUBARCH (clmul, PCLMUL, ANY_PCLMUL, true),
++  SUBARCH (pclmul, PCLMULQDQ, ANY_PCLMULQDQ, false),
++  SUBARCH (clmul, PCLMULQDQ, ANY_PCLMULQDQ, true),
+   SUBARCH (fsgsbase, FSGSBASE, FSGSBASE, false),
+   SUBARCH (rdrnd, RDRND, RDRND, false),
+   SUBARCH (f16c, F16C, ANY_F16C, false),
+@@ -1861,7 +1861,7 @@ cpu_flags_match (const insn_template *t)
+ 		      || (sse2avx && !i.prefix[DATA_PREFIX]))
+ 		  && (!x.bitfield.cpuaes || cpu.bitfield.cpuaes)
+ 		  && (!x.bitfield.cpugfni || cpu.bitfield.cpugfni)
+-		  && (!x.bitfield.cpupclmul || cpu.bitfield.cpupclmul))
++		  && (!x.bitfield.cpupclmulqdq || cpu.bitfield.cpupclmulqdq))
+ 		match |= CPU_FLAGS_ARCH_MATCH;
+ 	    }
+ 	  else if (x.bitfield.cpuavx512f)
+diff -rup fred/opcodes/i386-gen.c binutils-2.41/opcodes/i386-gen.c
+--- fred/opcodes/i386-gen.c	2023-12-07 10:00:22.092007244 +0000
++++ binutils-2.41/opcodes/i386-gen.c	2023-12-07 10:00:28.038015039 +0000
+@@ -79,7 +79,7 @@ static const dependency isa_dependencies
+   { "AMDFAM10",
+     "K8|FISTTP|SSE4A|ABM|MONITOR" },
+   { "BDVER1",
+-    "GENERIC64|FISTTP|Rdtscp|MONITOR|CX16|LAHF_SAHF|XOP|ABM|LWP|SVME|AES|PCLMUL|PRFCHW" },
++    "GENERIC64|FISTTP|Rdtscp|MONITOR|CX16|LAHF_SAHF|XOP|ABM|LWP|SVME|AES|PCLMULQDQ|PRFCHW" },
+   { "BDVER2",
+     "BDVER1|FMA|BMI|TBM|F16C" },
+   { "BDVER3",
+@@ -87,7 +87,7 @@ static const dependency isa_dependencies
+   { "BDVER4",
+     "BDVER3|AVX2|Movbe|BMI2|RdRnd|MWAITX" },
+   { "ZNVER1",
+-    "GENERIC64|FISTTP|Rdtscp|MONITOR|CX16|LAHF_SAHF|AVX2|SSE4A|ABM|SVME|AES|PCLMUL|PRFCHW|FMA|BMI|F16C|Xsaveopt|FSGSBase|Movbe|BMI2|RdRnd|ADX|RdSeed|SMAP|SHA|XSAVEC|XSAVES|ClflushOpt|CLZERO|MWAITX" },
++    "GENERIC64|FISTTP|Rdtscp|MONITOR|CX16|LAHF_SAHF|AVX2|SSE4A|ABM|SVME|AES|PCLMULQDQ|PRFCHW|FMA|BMI|F16C|Xsaveopt|FSGSBase|Movbe|BMI2|RdRnd|ADX|RdSeed|SMAP|SHA|XSAVEC|XSAVES|ClflushOpt|CLZERO|MWAITX" },
+   { "ZNVER2",
+     "ZNVER1|CLWB|RDPID|RDPRU|MCOMMIT|WBNOINVD" },
+   { "ZNVER3",
+@@ -97,7 +97,7 @@ static const dependency isa_dependencies
+   { "BTVER1",
+     "GENERIC64|FISTTP|MONITOR|CX16|LAHF_SAHF|Rdtscp|SSSE3|SSE4A|ABM|PRFCHW|Clflush|FISTTP|SVME" },
+   { "BTVER2",
+-    "BTVER1|AVX|BMI|F16C|AES|PCLMUL|Movbe|Xsaveopt|PRFCHW" },
++    "BTVER1|AVX|BMI|F16C|AES|PCLMULQDQ|Movbe|Xsaveopt|PRFCHW" },
+   { "286",
+     "186" },
+   { "386",
+@@ -132,7 +132,7 @@ static const dependency isa_dependencies
+     "XSAVE" },
+   { "AES",
+     "SSE2" },
+-  { "PCLMUL",
++  { "PCLMULQDQ",
+     "SSE2" },
+   { "FMA",
+     "AVX" },
+@@ -307,7 +307,7 @@ static bitfield cpu_flags[] =
+   BITFIELD (Xsave),
+   BITFIELD (Xsaveopt),
+   BITFIELD (AES),
+-  BITFIELD (PCLMUL),
++  BITFIELD (PCLMULQDQ),
+   BITFIELD (FMA),
+   BITFIELD (FMA4),
+   BITFIELD (XOP),
+diff -rup fred/opcodes/i386-init.h binutils-2.41/opcodes/i386-init.h
+--- fred/opcodes/i386-init.h	2023-12-07 10:00:22.092007244 +0000
++++ binutils-2.41/opcodes/i386-init.h	2023-12-07 10:00:51.260045479 +0000
+@@ -432,7 +432,7 @@
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
+ 
+-#define CPU_PCLMUL_FLAGS \
++#define CPU_PCLMULQDQ_FLAGS \
+   { { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, \
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+       0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+@@ -1791,7 +1791,7 @@
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
+ 
+-#define CPU_ANY_PCLMUL_FLAGS \
++#define CPU_ANY_PCLMULQDQ_FLAGS \
+   { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+       0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+diff -rup fred/opcodes/i386-opc.h binutils-2.41/opcodes/i386-opc.h
+--- fred/opcodes/i386-opc.h	2023-12-07 10:00:22.093007246 +0000
++++ binutils-2.41/opcodes/i386-opc.h	2023-12-07 10:00:28.038015039 +0000
+@@ -121,8 +121,8 @@ enum
+   CpuXsaveopt,
+   /* AES support required */
+   CpuAES,
+-  /* PCLMUL support required */
+-  CpuPCLMUL,
++  /* PCLMULQDQ support required */
++  CpuPCLMULQDQ,
+   /* FMA support required */
+   CpuFMA,
+   /* FMA4 support required */
+@@ -374,7 +374,7 @@ typedef union i386_cpu_flags
+       unsigned int cpuxsave:1;
+       unsigned int cpuxsaveopt:1;
+       unsigned int cpuaes:1;
+-      unsigned int cpupclmul:1;
++      unsigned int cpupclmulqdq:1;
+       unsigned int cpufma:1;
+       unsigned int cpufma4:1;
+       unsigned int cpuxop:1;
+diff -rup fred/opcodes/i386-opc.tbl binutils-2.41/opcodes/i386-opc.tbl
+--- fred/opcodes/i386-opc.tbl	2023-12-07 10:00:22.093007246 +0000
++++ binutils-2.41/opcodes/i386-opc.tbl	2023-12-07 10:00:28.038015039 +0000
+@@ -1448,15 +1448,15 @@ vaesdeclast, 0x66df, VAES, Modrm|Vex256|
+ vaesenc, 0x66dc, VAES, Modrm|Vex256|Space0F38|VexVVVV|VexWIG|NoSuf, { RegYMM|Unspecified|BaseIndex, RegYMM, RegYMM }
+ vaesenclast, 0x66dd, VAES, Modrm|Vex256|Space0F38|VexVVVV|VexWIG|NoSuf, { RegYMM|Unspecified|BaseIndex, RegYMM, RegYMM }
+ 
+-// PCLMUL
++// PCLMULQDQ
+ 
+ <pclmul:cpu:attr, $avx:AVX|:Vex128|VexW0|SSE2AVX|VexVVVV, $sse::>
+ 
+-pclmulqdq<pclmul>, 0x660f3a44, <pclmul:cpu>PCLMUL, Modrm|<pclmul:attr>|NoSuf, { Imm8|Imm8S, RegXMM|Unspecified|BaseIndex, RegXMM }
+-pclmullqlqdq<pclmul>, 0x660f3a44/0x00, <pclmul:cpu>PCLMUL, Modrm|<pclmul:attr>|NoSuf|ImmExt, { RegXMM|Unspecified|BaseIndex, RegXMM }
+-pclmulhqlqdq<pclmul>, 0x660f3a44/0x01, <pclmul:cpu>PCLMUL, Modrm|<pclmul:attr>|NoSuf|ImmExt, { RegXMM|Unspecified|BaseIndex, RegXMM }
+-pclmullqhqdq<pclmul>, 0x660f3a44/0x10, <pclmul:cpu>PCLMUL, Modrm|<pclmul:attr>|NoSuf|ImmExt, { RegXMM|Unspecified|BaseIndex, RegXMM }
+-pclmulhqhqdq<pclmul>, 0x660f3a44/0x11, <pclmul:cpu>PCLMUL, Modrm|<pclmul:attr>|NoSuf|ImmExt, { RegXMM|Unspecified|BaseIndex, RegXMM }
++pclmulqdq<pclmul>, 0x660f3a44, <pclmul:cpu>PCLMULQDQ, Modrm|<pclmul:attr>|NoSuf, { Imm8|Imm8S, RegXMM|Unspecified|BaseIndex, RegXMM }
++pclmullqlqdq<pclmul>, 0x660f3a44/0x00, <pclmul:cpu>PCLMULQDQ, Modrm|<pclmul:attr>|NoSuf|ImmExt, { RegXMM|Unspecified|BaseIndex, RegXMM }
++pclmulhqlqdq<pclmul>, 0x660f3a44/0x01, <pclmul:cpu>PCLMULQDQ, Modrm|<pclmul:attr>|NoSuf|ImmExt, { RegXMM|Unspecified|BaseIndex, RegXMM }
++pclmullqhqdq<pclmul>, 0x660f3a44/0x10, <pclmul:cpu>PCLMULQDQ, Modrm|<pclmul:attr>|NoSuf|ImmExt, { RegXMM|Unspecified|BaseIndex, RegXMM }
++pclmulhqhqdq<pclmul>, 0x660f3a44/0x11, <pclmul:cpu>PCLMULQDQ, Modrm|<pclmul:attr>|NoSuf|ImmExt, { RegXMM|Unspecified|BaseIndex, RegXMM }
+ 
+ // GFNI
+ 
+@@ -1771,13 +1771,13 @@ vaesenclast, 0x66dd, AVX|AES, Modrm|Vex|
+ vaesimc, 0x66db, AVX|AES, Modrm|Vex|Space0F38|VexWIG|NoSuf, { Unspecified|BaseIndex|RegXMM, RegXMM }
+ vaeskeygenassist, 0x66df, AVX|AES, Modrm|Vex|Space0F3A|VexWIG|NoSuf, { Imm8, Unspecified|BaseIndex|RegXMM, RegXMM }
+ 
+-// PCLMUL + AVX
++// PCLMULQDQ + AVX
+ 
+-vpclmulqdq, 0x6644, AVX|PCLMUL, Modrm|Vex|Space0F3A|VexVVVV|VexWIG|NoSuf, { Imm8|Imm8S, Unspecified|BaseIndex|RegXMM, RegXMM, RegXMM }
+-vpclmullqlqdq, 0x6644/0x00, AVX|PCLMUL, Modrm|Vex|Space0F3A|VexVVVV|VexWIG|NoSuf|ImmExt, { Unspecified|BaseIndex|RegXMM, RegXMM, RegXMM }
+-vpclmulhqlqdq, 0x6644/0x01, AVX|PCLMUL, Modrm|Vex|Space0F3A|VexVVVV|VexWIG|NoSuf|ImmExt, { Unspecified|BaseIndex|RegXMM, RegXMM, RegXMM }
+-vpclmullqhqdq, 0x6644/0x10, AVX|PCLMUL, Modrm|Vex|Space0F3A|VexVVVV|VexWIG|NoSuf|ImmExt, { Unspecified|BaseIndex|RegXMM, RegXMM, RegXMM }
+-vpclmulhqhqdq, 0x6644/0x11, AVX|PCLMUL, Modrm|Vex|Space0F3A|VexVVVV|VexWIG|NoSuf|ImmExt, { Unspecified|BaseIndex|RegXMM, RegXMM, RegXMM }
++vpclmulqdq, 0x6644, AVX|PCLMULQDQ, Modrm|Vex|Space0F3A|VexVVVV|VexWIG|NoSuf, { Imm8|Imm8S, Unspecified|BaseIndex|RegXMM, RegXMM, RegXMM }
++vpclmullqlqdq, 0x6644/0x00, AVX|PCLMULQDQ, Modrm|Vex|Space0F3A|VexVVVV|VexWIG|NoSuf|ImmExt, { Unspecified|BaseIndex|RegXMM, RegXMM, RegXMM }
++vpclmulhqlqdq, 0x6644/0x01, AVX|PCLMULQDQ, Modrm|Vex|Space0F3A|VexVVVV|VexWIG|NoSuf|ImmExt, { Unspecified|BaseIndex|RegXMM, RegXMM, RegXMM }
++vpclmullqhqdq, 0x6644/0x10, AVX|PCLMULQDQ, Modrm|Vex|Space0F3A|VexVVVV|VexWIG|NoSuf|ImmExt, { Unspecified|BaseIndex|RegXMM, RegXMM, RegXMM }
++vpclmulhqhqdq, 0x6644/0x11, AVX|PCLMULQDQ, Modrm|Vex|Space0F3A|VexVVVV|VexWIG|NoSuf|ImmExt, { Unspecified|BaseIndex|RegXMM, RegXMM, RegXMM }
+ 
+ // GFNI + AVX
+ 

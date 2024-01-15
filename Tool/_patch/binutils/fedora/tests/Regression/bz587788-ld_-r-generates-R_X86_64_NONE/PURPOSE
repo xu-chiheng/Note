@@ -1,0 +1,42 @@
+WRONG:
+
+    $ readelf -r foo2.o
+    
+    Relocation section '.rela.debug_info' at offset 0x618 contains 11 entries:
+      Offset          Info           Type           Sym. Value    Sym. Name + Addend
+    000000000006  00040000000a R_X86_64_32       0000000000000000 .debug_abbrev + 0
+    00000000000c  00080000000a R_X86_64_32       0000000000000000 .debug_str + b
+    000000000011  00080000000a R_X86_64_32       0000000000000000 .debug_str + 38
+    000000000015  00080000000a R_X86_64_32       0000000000000000 .debug_str + 6
+    000000000019  000100000001 R_X86_64_64       0000000000000000 .text + 0
+    000000000021  000100000001 R_X86_64_64       0000000000000000 .text + 0
+    000000000029  00060000000a R_X86_64_32       0000000000000000 .debug_line + 0
+    00000000002e  00080000000a R_X86_64_32       0000000000000000 .debug_str + 33
+    00000000003b  000c00000001 R_X86_64_64       0000000000000004 here + 0
+    00000000004b  00080000000a R_X86_64_32       0000000000000000 .debug_str + 0
+->  000000000058  000000000000 R_X86_64_NONE                        0000000000000000
+    
+    Relocation section '.rela.debug_pubnames' at offset 0x720 contains 1 entries:
+      Offset          Info           Type           Sym. Value    Sym. Name + Addend
+    000000000006  00050000000a R_X86_64_32       0000000000000000 .debug_info + 0
+
+
+OK:
+
+    Relocation section '.rela.debug_info' at offset 0x628 contains 10 entries:
+      Offset          Info           Type           Sym. Value    Sym. Name + Addend
+    000000000006  00040000000a R_X86_64_32       0000000000000000 .debug_abbrev + 0
+    00000000000c  00080000000a R_X86_64_32       0000000000000000 .debug_str + 1f
+    000000000011  00080000000a R_X86_64_32       0000000000000000 .debug_str + 46
+    000000000015  00080000000a R_X86_64_32       0000000000000000 .debug_str + b
+    000000000019  000100000001 R_X86_64_64       0000000000000000 .text + 0
+    000000000021  000100000001 R_X86_64_64       0000000000000000 .text + 0
+    000000000029  00060000000a R_X86_64_32       0000000000000000 .debug_line + 0
+    00000000002e  00080000000a R_X86_64_32       0000000000000000 .debug_str + 6
+    00000000003b  000c00000001 R_X86_64_64       0000000000000004 here + 0
+    00000000004b  00080000000a R_X86_64_32       0000000000000000 .debug_str + 0
+    
+    Relocation section '.rela.debug_pubnames' at offset 0x730 contains 1 entries:
+      Offset          Info           Type           Sym. Value    Sym. Name + Addend
+    000000000006  00050000000a R_X86_64_32       0000000000000000 .debug_info + 0
+

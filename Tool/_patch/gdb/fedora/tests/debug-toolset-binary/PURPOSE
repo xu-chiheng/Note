@@ -1,0 +1,3 @@
+PURPOSE of /tools/gdb/Sanity/debug-toolset-binary
+Description: We debug a binary that is delivered via the Toolset.
+Author: Marek Polacek <polacek@redhat.com>

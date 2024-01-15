@@ -1,0 +1,14 @@
+summary: Rebuild coreutils
+description: ''
+contact: Milos Prchlik <mprchlik@redhat.com>
+component:
+- binutils
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+- koji
+- rpm-build
+duration: 1h
+extra-summary: /tools/binutils/Sanity/rebuild-coreutils
+extra-task: /tools/binutils/Sanity/rebuild-coreutils

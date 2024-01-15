@@ -1,0 +1,3 @@
+PURPOSE of /tools/binutils/Sanity/testsuite
+Description: The test rebuilds binutils.src.rpm and runs the suite.
+Author: Michael Petlan <mpetlan@redhat.com>

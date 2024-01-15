@@ -1,0 +1,5 @@
+PURPOSE of /tools/binutils/Regression/bz1573872-ld-should-allow-lea-foo-GOT-ecx
+Description: Test for BZ#1573872 (ld should allow "lea foo@GOT, %ecx")
+Author: Milos Prchlik <mprchlik@redhat.com>
+Bug summary: ld should allow "lea foo@GOT, %ecx"
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1573872

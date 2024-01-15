@@ -1,7 +1,7 @@
-From 98904ab3503bd5c01a368c21c046c02913f41507 Mon Sep 17 00:00:00 2001
+From a9f50b60641820dd44819b9ffe54bea49a461bf5 Mon Sep 17 00:00:00 2001
 From: Jon Turney <jon.turney@dronecode.org.uk>
 Date: Sun, 24 Jul 2016 18:18:10 +0100
-Subject: [PATCH 04/10] 7.8-symtab-cygwin.patch
+Subject: [PATCH 4/6] 7.8-symtab-cygwin.patch
 
 See https://sourceware.org/ml/gdb-patches/2002-03/msg00557.html
 ---
@@ -9,10 +9,10 @@ See https://sourceware.org/ml/gdb-patches/2002-03/msg00557.html
  1 file changed, 37 insertions(+)
 
 diff --git a/gdb/symtab.c b/gdb/symtab.c
-index f96ad9554d9..c1169f7a652 100644
+index e9bc7b2c933..dc92e8ee3c6 100644
 --- a/gdb/symtab.c
 +++ b/gdb/symtab.c
-@@ -791,6 +791,10 @@ create_demangled_names_hash (struct objfile_per_bfd_storage *per_bfd)
+@@ -896,6 +896,10 @@ create_demangled_names_hash (struct objfile_per_bfd_storage *per_bfd)
       free_demangled_name_entry, xcalloc, xfree));
  }
  
@@ -22,9 +22,9 @@ index f96ad9554d9..c1169f7a652 100644
 +
  /* See symtab.h  */
  
- char *
-@@ -800,6 +804,39 @@ symbol_find_demangled_name (struct general_symbol_info *gsymbol,
-   char *demangled = NULL;
+ gdb::unique_xmalloc_ptr<char>
+@@ -905,6 +909,39 @@ symbol_find_demangled_name (struct general_symbol_info *gsymbol,
+   gdb::unique_xmalloc_ptr<char> demangled;
    int i;
  
 +  /* On Windows, some functions use the `stdcall' calling convention,
@@ -60,9 +60,9 @@ index f96ad9554d9..c1169f7a652 100644
 +        }
 +    }
 +
-   if (gsymbol->language () == language_unknown)
-     gsymbol->m_language = language_auto;
- 
+   if (gsymbol->language () != language_unknown)
+     {
+       const struct language_defn *lang = language_def (gsymbol->language ());
 -- 
-2.28.0
+2.42.1
 

@@ -1,0 +1,5 @@
+PURPOSE of /tools/binutils/Regression/bz1311352-objdump-S-disassembly-code-doesn-t-follow
+Description: Test for BZ#1311352 (objdump -S   disassembly code doesn't follow)
+Author: Milos Prchlik <mprchlik@redhat.com>
+Bug summary: objdump -S   disassembly code doesn't follow /usr/lib/debug/.... conventions, so can't find sources
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1311352

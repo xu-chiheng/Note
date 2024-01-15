@@ -1,0 +1,22 @@
+summary: We debug a binary that is delivered via the Toolset.
+description: ''
+contact:
+- Marek Polacek <mpolacek@redhat.com>
+component:
+- gdb
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- gdb
+- coreutils
+- binutils
+- binutils-debuginfo
+- glibc
+- glibc-debuginfo
+- gcc
+- gcc-debuginfo
+- zlib
+- zlib-debuginfo
+duration: 5m
+extra-summary: /tools/gdb/Sanity/debug-toolset-binary
+extra-task: /tools/gdb/Sanity/debug-toolset-binary

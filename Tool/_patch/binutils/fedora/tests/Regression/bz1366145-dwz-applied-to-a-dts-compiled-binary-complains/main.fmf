@@ -1,0 +1,29 @@
+summary: Test for BZ#1366145 (dwz applied to a dts-compiled binary complains)
+description: |
+    Bug summary: dwz applied to a dts-compiled binary complains about section offsets not monotonically increasing
+    Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1366145
+
+    Needs a bit more complicated relevancy settings. DWZ is not available in RHEL-6 - unless
+    you have DTS installed, then you can use (and test) dwz from devtoolset-N-dwz package.
+
+    # First two lines result in "True" when (RHEL6 && DTS).
+    distro = rhel-6 && collection = devtoolset-6: REQUIRES="devtoolset-6-gcc devtoolset-6-dwz"
+    distro = rhel-6 && collection = devtoolset-4: REQUIRES="devtoolset-4-gcc devtoolset-4-dwz"
+
+    # No DTS? No dwz then.
+    distro = rhel-6: False
+
+    # Only RHEL7 remains, and default REQUIRES is good enough for logging. Drop every other distro.
+    distro != rhel-7: False
+contact: Sergey Kolosov <skolosov@redhat.com>
+component:
+- binutils
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+- dwz
+- gcc
+duration: 2h
+extra-summary: /tools/binutils/Regression/bz1366145-dwz-applied-to-a-dts-compiled-binary-complains
+extra-task: /tools/binutils/Regression/bz1366145-dwz-applied-to-a-dts-compiled-binary-complains

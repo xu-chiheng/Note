@@ -1,0 +1,43 @@
+From FEDORA_PATCHES Mon Sep 17 00:00:00 2001
+From: Kevin Buettner <kevinb@redhat.com>
+Date: Fri, 20 Jan 2023 15:15:59 -0700
+Subject: gdb-gcc-13-backport-self-move-diagnostic-fix
+
+;; gcc 13 fallout: Backport Jan-Benedict Glaw's fix for the self-move
+;; warning check
+
+Fix self-move warning check for GCC 13+
+
+GCC 13 got the self-move warning (0abb78dda084a14b3d955757c6431fff71c263f3),
+but that warning is only checked for clang, resulting in:
+
+/usr/lib/gcc-snapshot/bin/g++ -x c++    -I. -I. -I./config -DLOCALEDIR="\"/tmp/gdb-m68k-linux/share/locale\"" -DHAVE_CONFIG_H -I./../include/opcode -I./../readline/readline/.. -I./../zlib  -I../bfd -I./../bfd -I./../include -I../libdecnumber -I./../libdecnumber  -I./../gnulib/import -I../gnulib/import -I./.. -I.. -I./../libbacktrace/ -I../libbacktrace/  -DTUI=1    -I./.. -pthread  -Wall -Wpointer-arith -Wno-unused -Wunused-value -Wunused-variable -Wunused-function -Wno-switch -Wno-char-subscripts -Wempty-body -Wunused-but-set-parameter -Wunused-but-set-variable -Wno-sign-compare -Wno-error=maybe-uninitialized -Wno-mismatched-tags -Wsuggest-override -Wimplicit-fallthrough=3 -Wduplicated-cond -Wshadow=local -Wdeprecated-copy -Wdeprecated-copy-dtor -Wredundant-move -Wmissing-declarations -Wstrict-null-sentinel -Wformat -Wformat-nonliteral -Werror -g -O2   -c -o unittests/environ-selftests.o -MT unittests/environ-selftests.o -MMD -MP -MF unittests/.deps/environ-selftests.Tpo unittests/environ-selftests.c
+unittests/environ-selftests.c: In function 'void selftests::gdb_environ_tests::test_self_move()':
+unittests/environ-selftests.c:228:7: error: moving 'env' of type 'gdb_environ' to itself [-Werror=self-move]
+  228 |   env = std::move (env);
+      |   ~~~~^~~~~~~~~~~~~~~~~
+unittests/environ-selftests.c:228:7: note: remove 'std::move' call
+cc1plus: all warnings being treated as errors
+make[1]: *** [Makefile:1896: unittests/environ-selftests.o] Error 1
+make[1]: Leaving directory '/var/lib/laminar/run/gdb-m68k-linux/3/binutils-gdb/gdb'
+make: *** [Makefile:13193: all-gdb] Error 2
+
+diff --git a/include/diagnostics.h b/include/diagnostics.h
+--- a/include/diagnostics.h
++++ b/include/diagnostics.h
+@@ -79,6 +79,15 @@
+ # define DIAGNOSTIC_IGNORE_FORMAT_NONLITERAL \
+   DIAGNOSTIC_IGNORE ("-Wformat-nonliteral")
+ 
++# if __GNUC__ >= 5
++#  define DIAGNOSTIC_IGNORE_UNUSED_BUT_SET_VARIABLE \
++   DIAGNOSTIC_IGNORE ("-Wunused-but-set-variable")
++# endif
++
++# if __GNUC__ >= 13
++#  define DIAGNOSTIC_IGNORE_SELF_MOVE DIAGNOSTIC_IGNORE ("-Wself-move")
++# endif
++
+ /* GCC 4.8's "diagnostic push/pop" seems broken when using this, -Wswitch
+    remains enabled at the error level even after a pop.  Therefore, don't
+    use it for GCC < 5.  */

@@ -1,0 +1,25 @@
+summary: The test rebuilds binutils.src.rpm and runs the suite.
+description: ''
+contact: Michael Petlan <mpetlan@redhat.com>
+component:
+- binutils
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+- texinfo
+- glibc-static
+- dejagnu
+- bison
+- flex
+- zlib-static
+- sharutils
+- yum-utils
+- libstdc++-static
+- rpm-build
+- gcc-c++
+- annobin-plugin-gcc
+- koji
+duration: 3h
+extra-summary: /tools/binutils/Sanity/testsuite
+extra-task: /tools/binutils/Sanity/testsuite

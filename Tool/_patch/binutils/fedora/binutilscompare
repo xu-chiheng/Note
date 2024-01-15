@@ -1,0 +1,70 @@
+#! /usr/bin/perl
+# Compare build logs for the testsuite results regressions.
+# $Id$
+
+use strict;
+use warnings;
+use Data::Dumper;
+
+my $reverse=shift @ARGV if ($ARGV[0]||"") eq "-r";
+
+sub readfile($)
+{
+my($filename)=@_;
+
+	local *F;
+	open F,$filename or die "open \"$filename\": $!";
+	my $F=do { local $/; <F>; };
+	close F or die "close \"$filename\": $!";
+	return $F;
+}
+
+sub writefile($$)
+{
+my($filename,$content)=@_;
+
+	local *F;
+	open F,">$filename" or die "create \"$filename\": $!";
+	print F $content or die "write \"$filename\": $!";
+	close F or die "close \"$filename\": $!";
+}
+
+local *DIR;
+opendir DIR,"tests" or die "opendir: $!";
+my %arch;
+for my $name (sort readdir(DIR)) {
+	next if $name!~/-([^-]*)[.]log$/o;
+	my $arch=$1;
+	(my $sum=$name)=~s/log$/sum/ or die;
+	my $i=readfile "tests/$name";
+	my $o="";
+	while ($i=~/\n(Native configuration is.*?Summary ===\n.*?\n)make\Q[\E/gs) {
+		$o.=$1;
+	}
+	# Version string differs.
+	$o=~s{/builddir/build/BUILD/binutils-[^/]*/+}{}g;
+	$o=~s{^(Version .*) 20\d{6}$}{$1}mg;
+	$o=~s{^(\Q../as-new\E) 20\d{6}$}{$1}mg;
+	$o=~s{^(build-[^/]*/ld/ld-new) 20\d{6}$}{$1}mg;
+	writefile "tests/$sum",$o;
+	push @{$arch{$arch}},$sum;
+}
+closedir DIR or die "closedir: $!";
+
+for (values(%arch)) {
+	next if 2==@$_;
+	warn "Single element: ".${$_}[0]."\n" if 1==@$_;
+	die "Not 2 elements:\n".Dumper($_) if 1!=@$_;
+}
+
+system("rm -f tests/gdbcompare-*.diff") and die;
+
+for my $arch (sort keys(%arch)) {
+	next if 2!=@{$arch{$arch}};
+	# sub trans { return {"."=>0,"-"=>1}->{($_[0]=~/([-.])[^-.]+[.]\w+$/)[0]}.$_[0]; };
+	sub trans { return $_[0]; };
+	my @sorted=sort { my $a1=trans $a; my $b1=trans $b; ($b1 cmp $a1) * ($reverse ? -1 : +1); } @{$arch{$arch}};
+	do { system $_ and die $_; } for "diff -u tests/'".$sorted[1]."' tests/'".$sorted[0]."' >tests/gdbcompare-'$arch'.sum.diff;true";
+}
+
+system("vim tests/gdbcompare-*.sum.diff");

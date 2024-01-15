@@ -1,0 +1,15 @@
+summary: ELFOSABI_LINUX is incorrectly set in a dynamic ifunc-using executable
+description: ''
+contact: Michal Nowak <mnowak@redhat.com>
+component:
+- binutils
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+- gcc
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=689829
+extra-summary: /tools/binutils/Regression/bz689829-ELFOSABI_LINUX-is-incorrectly-set-in-a-dynamic-ifunc-using-executable
+extra-task: /tools/binutils/Regression/bz689829-ELFOSABI_LINUX-is-incorrectly-set-in-a-dynamic-ifunc-using-executable

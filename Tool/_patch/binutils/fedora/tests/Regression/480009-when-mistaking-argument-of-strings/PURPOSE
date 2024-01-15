@@ -1,0 +1,27 @@
+[RHEL5.2]
+# strings -n file1
+strings: invalid integer argument file1
+
+# strings --bytes file1
+strings: invalid integer argument file1
+
+# strings -n 0
+strings: invalid number 0
+
+# strings --bytes 0
+strings: invalid number 0
+
+
+[RHEL5.3]
+# strings -n file1
+strings: invalid minimum string length 0
+
+# strings --bytes file1
+strings: invalid minimum string length 0
+
+# strings -n 0
+strings: invalid minimum string length 0
+
+# strings --bytes 0
+strings: invalid minimum string length 0
+

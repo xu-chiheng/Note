@@ -1,0 +1,3 @@
+PURPOSE of /tools/binutils/Sanity/rebuild-wget
+Description: Rebuild wget
+Author: Milos Prchlik <mprchlik@redhat.com>

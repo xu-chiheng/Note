@@ -1,0 +1,64 @@
+summary: rebuild-emacs
+description: |
+    From: Jeff Law
+
+    ... stuff deleted ...
+
+    emacs is highly sensitive to the order and structure of executables
+    produced by the linker.  This is an artifact of its undumping mechanism
+    (essentially starts emacs, loads a bunch of stuff, core dumps, then
+    turns the core dump into a new executable).
+
+    We've seen a lot of pain around this for ppc64le as well as after the
+    RELRO improvements we made to binutils/ld over the last 6 months.
+
+    ISTM that the testing plans for RHEL going forward ought to include a
+    test build of emacs with the new binutils installed.  No further tests
+    are necessary since the build process for emacs exercises the
+    problematic bits.
+contact: Martin Cermak <mcermak@redhat.com>
+component:
+- binutils
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- alsa-lib-devel
+- atk-devel
+- binutils
+- cairo-devel
+- dbus-devel
+- emacs
+- fontconfig-devel
+- freetype-devel
+- GConf2-devel
+- giflib-devel
+- gnutls-devel
+- gpm-devel
+- gtk3-devel
+- ImageMagick-devel
+- libjpeg-devel
+- liblockfile-devel
+- libotf-devel
+- libpng-devel
+- librsvg2-devel
+- libselinux-devel
+- libtiff-devel
+- libX11-devel
+- libXau-devel
+- libXdmcp-devel
+- libXpm-devel
+- libXrender-devel
+- libXt-devel
+- m17n-lib-devel
+- ncurses-devel
+- python2-devel
+- texinfo
+- xorg-x11-proto-devel
+- pango
+- pango-devel
+- yum-utils
+- koji
+- rpm-build
+duration: 24h
+extra-summary: /tools/binutils/Regression/rebuild-emacs
+extra-task: /tools/binutils/Regression/rebuild-emacs

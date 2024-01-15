@@ -1,0 +1,19 @@
+summary: ld fails to merge different visibility for the same symbol in distinct object
+    files
+description: ''
+contact: Michal Nowak <mnowak@redhat.com>
+component:
+- binutils
+- binutils220
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+- binutils220
+- gcc44
+- gcc
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=531269
+extra-summary: /tools/binutils/Regressions/ld/531269-ld-fails-to-merge-different-visibility-for-the-same-symbol
+extra-task: /tools/binutils/Regressions/ld/531269-ld-fails-to-merge-different-visibility-for-the-same-symbol

@@ -1,0 +1,3 @@
+PURPOSE of /tools/binutils/Regressions/ld/bz533321-programs-linked-with-gcc-static-s-fail-with-unexpected-reloc-type-in-static-binary
+Description: This only happens with gcc -static -s; compiling with gcc -static and then stripping with strip works fine.
+Author: Michal Nowak <mnowak@redhat.com>

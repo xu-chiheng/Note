@@ -1,0 +1,239 @@
+diff -rupN binutils.orig/bfd/elfnn-riscv.c binutils-2.41/bfd/elfnn-riscv.c
+--- binutils.orig/bfd/elfnn-riscv.c	2024-01-02 17:35:07.412218130 +0000
++++ binutils-2.41/bfd/elfnn-riscv.c	2024-01-02 17:36:52.274311071 +0000
+@@ -1737,7 +1737,10 @@ perform_relocation (const reloc_howto_ty
+ {
+   if (howto->pc_relative)
+     value -= sec_addr (input_section) + rel->r_offset;
+-  value += rel->r_addend;
++
++  /* PR31179, ignore the non-zero addend of R_RISCV_SUB_ULEB128.  */
++  if (ELFNN_R_TYPE (rel->r_info) != R_RISCV_SUB_ULEB128)
++    value += rel->r_addend;
+ 
+   switch (ELFNN_R_TYPE (rel->r_info))
+     {
+@@ -1818,10 +1821,7 @@ perform_relocation (const reloc_howto_ty
+ 	value = ENCODE_CITYPE_LUI_IMM (RISCV_CONST_HIGH_PART (value));
+       break;
+ 
+-    /* SUB_ULEB128 must be applied after SET_ULEB128, so we only write the
+-       value back for SUB_ULEB128 should be enough.  */
+-    case R_RISCV_SET_ULEB128:
+-      break;
++    /* R_RISCV_SET_ULEB128 won't go into here.  */
+     case R_RISCV_SUB_ULEB128:
+       {
+ 	unsigned int len = 0;
+@@ -2514,7 +2514,7 @@ riscv_elf_relocate_section (bfd *output_
+ 	  else
+ 	    {
+ 	      msg = ("Mismatched R_RISCV_SET_ULEB128, it must be paired with"
+-		     "and applied before R_RISCV_SUB_ULEB128");
++		     " and applied before R_RISCV_SUB_ULEB128");
+ 	      r = bfd_reloc_dangerous;
+ 	    }
+ 	  break;
+@@ -2523,14 +2523,40 @@ riscv_elf_relocate_section (bfd *output_
+ 	  if (uleb128_set_rel != NULL
+ 	      && uleb128_set_rel->r_offset == rel->r_offset)
+ 	    {
+-	      relocation = uleb128_set_vma - relocation;
++	      relocation = uleb128_set_vma - relocation
++			   + uleb128_set_rel->r_addend;
+ 	      uleb128_set_vma = 0;
+ 	      uleb128_set_rel = NULL;
++
++	      /* PR31179, the addend of SUB_ULEB128 should be zero if using
++		 .uleb128, but we make it non-zero by accident in assembler,
++		 so just ignore it in perform_relocation, and make assembler
++		 continue doing the right thing.  Don't reset the addend of
++		 SUB_ULEB128 to zero here since it will break the --emit-reloc,
++		 even though the non-zero addend is unexpected.
++
++		 We encourage people to rebuild their stuff to get the
++		 non-zero addend of SUB_ULEB128, but that might need some
++		 times, so report warnings to inform people need to rebuild
++		 if --check-uleb128 is enabled.  However, since the failed
++		 .reloc cases for ADD/SET/SUB/ULEB128 are rarely to use, it
++		 may acceptable that stop supproting them until people rebuld
++		 their stuff, maybe half-year or one year later.  I believe
++		 this might be the least harmful option that we should go.
++
++		 Or maybe we should teach people that don't write the
++		 .reloc R_RISCV_SUB* with non-zero constant, and report
++		 warnings/errors in assembler.  */
++	      if (htab->params->check_uleb128
++		  && rel->r_addend != 0)
++		_bfd_error_handler (_("%pB: warning: R_RISCV_SUB_ULEB128 with"
++				      " non-zero addend, please rebuild by"
++				      " Fedora 40 binutils or up"), input_bfd);
+ 	    }
+ 	  else
+ 	    {
+ 	      msg = ("Mismatched R_RISCV_SUB_ULEB128, it must be paired with"
+-		     "and applied after R_RISCV_SET_ULEB128");
++		     " and applied after R_RISCV_SET_ULEB128");
+ 	      r = bfd_reloc_dangerous;
+ 	    }
+ 	  break;
+@@ -5123,7 +5149,13 @@ _bfd_riscv_relax_section (bfd *abfd, ase
+ 	  if (h != NULL && h->type == STT_GNU_IFUNC)
+ 	    continue;
+ 
++	  /* Maybe we should check UNDEFWEAK_NO_DYNAMIC_RELOC here?  But that
++	     will break the undefweak relaxation testcases, so just make sure
++	     we won't do relaxations for linker_def symbols in short-term.  */
+ 	  if (h->root.type == bfd_link_hash_undefweak
++	      /* The linker_def symbol like __ehdr_start that may be undefweak
++		 for now, but will be guaranteed to be defined later.  */
++	      && !h->root.linker_def
+ 	      && (relax_func == _bfd_riscv_relax_lui
+ 		  || relax_func == _bfd_riscv_relax_pc))
+ 	    {
+diff -rupN binutils.orig/bfd/elfxx-riscv.h binutils-2.41/bfd/elfxx-riscv.h
+--- binutils.orig/bfd/elfxx-riscv.h	2024-01-02 17:35:07.412218130 +0000
++++ binutils-2.41/bfd/elfxx-riscv.h	2024-01-02 17:35:24.252233056 +0000
+@@ -31,6 +31,8 @@ struct riscv_elf_params
+ {
+   /* Whether to relax code sequences to GP-relative addressing.  */
+   bool relax_gp;
++  /* Whether to check if SUB_ULEB128 relocation has non-zero addend.  */
++  bool check_uleb128;
+ };
+ 
+ extern void riscv_elf32_set_options (struct bfd_link_info *,
+diff -rupN binutils.orig/ld/NEWS binutils-2.41/ld/NEWS
+--- binutils.orig/ld/NEWS	2024-01-02 17:35:08.012218662 +0000
++++ binutils-2.41/ld/NEWS	2024-01-02 17:35:56.139261318 +0000
+@@ -1,5 +1,10 @@
+ -*- text -*-
+ 
++* On RISC-V, add ld target option --[no-]check-uleb128.  Should rebuild the
++  objects by binutils 2.42 and up if enabling the option and get warnings,
++  since the non-zero addend of SUB_ULEB128 shouldn't be generated from .uleb128
++  directives.
++
+ * Added --warn-execstack-objects to warn about executable stacks only when an
+   input object file requests one.  Also added --error-execstack and
+   --error-rxw-segments options to convert warnings about executable stacks and
+diff -rupN binutils.orig/ld/emultempl/riscvelf.em binutils-2.41/ld/emultempl/riscvelf.em
+--- binutils.orig/ld/emultempl/riscvelf.em	2024-01-02 17:35:07.699218385 +0000
++++ binutils-2.41/ld/emultempl/riscvelf.em	2024-01-02 17:35:24.252233056 +0000
+@@ -25,7 +25,8 @@ fragment <<EOF
+ #include "elf/riscv.h"
+ #include "elfxx-riscv.h"
+ 
+-static struct riscv_elf_params params = { .relax_gp = 1 };
++static struct riscv_elf_params params = { .relax_gp = 1,
++					  .check_uleb128 = 0};
+ EOF
+ 
+ # Define some shell vars to insert bits of code into the standard elf
+@@ -35,17 +36,23 @@ enum risccv_opt
+ {
+   OPTION_RELAX_GP = 321,
+   OPTION_NO_RELAX_GP,
++  OPTION_CHECK_ULEB128,
++  OPTION_NO_CHECK_ULEB128,
+ };
+ '
+ 
+ PARSE_AND_LIST_LONGOPTS=${PARSE_AND_LIST_LONGOPTS}'
+     { "relax-gp", no_argument, NULL, OPTION_RELAX_GP },
+     { "no-relax-gp", no_argument, NULL, OPTION_NO_RELAX_GP },
++    { "check-uleb128", no_argument, NULL, OPTION_CHECK_ULEB128 },
++    { "no-check-uleb128", no_argument, NULL, OPTION_NO_CHECK_ULEB128 },
+ '
+ 
+ PARSE_AND_LIST_OPTIONS=${PARSE_AND_LIST_OPTIONS}'
+   fprintf (file, _("  --relax-gp                  Perform GP relaxation\n"));
+   fprintf (file, _("  --no-relax-gp               Don'\''t perform GP relaxation\n"));
++  fprintf (file, _("  --check-uleb128             Check if SUB_ULEB128 has non-zero addend\n"));
++  fprintf (file, _("  --no-check-uleb128          Don'\''t check if SUB_ULEB128 has non-zero addend\n"));
+ '
+ 
+ PARSE_AND_LIST_ARGS_CASES=${PARSE_AND_LIST_ARGS_CASES}'
+@@ -56,6 +63,14 @@ PARSE_AND_LIST_ARGS_CASES=${PARSE_AND_LI
+     case OPTION_NO_RELAX_GP:
+       params.relax_gp = 0;
+       break;
++
++    case OPTION_CHECK_ULEB128:
++      params.check_uleb128 = 1;
++      break;
++
++    case OPTION_NO_CHECK_ULEB128:
++      params.check_uleb128 = 0;
++      break;
+ '
+ 
+ fragment <<EOF
+diff -rupN binutils.orig/ld/testsuite/ld-riscv-elf/ld-riscv-elf.exp binutils-2.41/ld/testsuite/ld-riscv-elf/ld-riscv-elf.exp
+--- binutils.orig/ld/testsuite/ld-riscv-elf/ld-riscv-elf.exp	2024-01-02 17:35:07.942218600 +0000
++++ binutils-2.41/ld/testsuite/ld-riscv-elf/ld-riscv-elf.exp	2024-01-02 17:35:24.252233056 +0000
+@@ -173,6 +173,8 @@ if [istarget "riscv*-*-*"] {
+     run_dump_test "attr-phdr"
+     run_dump_test "relax-max-align-gp"
+     run_dump_test "uleb128"
++    run_dump_test "pr31179"
++    run_dump_test "pr31179-r"
+     run_ld_link_tests [list \
+ 	[list "Weak reference 32" "-T weakref.ld -m[riscv_choose_ilp32_emul]" "" \
+ 	    "-march=rv32i -mabi=ilp32" {weakref32.s} \
+diff -rupN binutils.orig/ld/testsuite/ld-riscv-elf/pr31179-r.d binutils-2.41/ld/testsuite/ld-riscv-elf/pr31179-r.d
+--- binutils.orig/ld/testsuite/ld-riscv-elf/pr31179-r.d	1970-01-01 01:00:00.000000000 +0100
++++ binutils-2.41/ld/testsuite/ld-riscv-elf/pr31179-r.d	2024-01-02 17:35:24.252233056 +0000
+@@ -0,0 +1,10 @@
++#source: pr31179.s
++#as:
++#readelf: -Wr
++
++Relocation section '.rela.text' at .*
++[ 	]+Offset[ 	]+Info[ 	]+Type[ 	]+.*
++[0-9a-f]+[ 	]+[0-9a-f]+[ 	]+R_RISCV_SET_ULEB128[ 	]+[0-9a-f]+[ 	]+bar \+ 1
++[0-9a-f]+[ 	]+[0-9a-f]+[ 	]+R_RISCV_SUB_ULEB128[ 	]+[0-9a-f]+[ 	]+foo \+ 0
++[0-9a-f]+[ 	]+[0-9a-f]+[ 	]+R_RISCV_SET_ULEB128[ 	]+[0-9a-f]+[ 	]+bar \+ 1
++[0-9a-f]+[ 	]+[0-9a-f]+[ 	]+R_RISCV_SUB_ULEB128[ 	]+[0-9a-f]+[ 	]+foo \+ 1
+diff -rupN binutils.orig/ld/testsuite/ld-riscv-elf/pr31179.d binutils-2.41/ld/testsuite/ld-riscv-elf/pr31179.d
+--- binutils.orig/ld/testsuite/ld-riscv-elf/pr31179.d	1970-01-01 01:00:00.000000000 +0100
++++ binutils-2.41/ld/testsuite/ld-riscv-elf/pr31179.d	2024-01-02 17:35:24.252233056 +0000
+@@ -0,0 +1,11 @@
++#source: pr31179.s
++#as:
++#ld: --check-uleb128
++#objdump: -sj .text
++#warning: .*R_RISCV_SUB_ULEB128 with non-zero addend, please rebuild by Fedora 40 binutils or up
++
++.*:[ 	]+file format .*
++
++Contents of section .text:
++
++[ 	]+[0-9a-f]+[ 	]+00000303[ 	]+.*
+diff -rupN binutils.orig/ld/testsuite/ld-riscv-elf/pr31179.s binutils-2.41/ld/testsuite/ld-riscv-elf/pr31179.s
+--- binutils.orig/ld/testsuite/ld-riscv-elf/pr31179.s	1970-01-01 01:00:00.000000000 +0100
++++ binutils-2.41/ld/testsuite/ld-riscv-elf/pr31179.s	2024-01-02 17:35:24.252233056 +0000
+@@ -0,0 +1,13 @@
++.globl _start
++_start:
++
++foo:
++.2byte 0
++bar:
++
++.uleb128 bar - foo + 1
++
++reloc:
++.reloc reloc, R_RISCV_SET_ULEB128, bar + 1
++.reloc reloc, R_RISCV_SUB_ULEB128, foo + 1
++.byte 0x0
+--- binutils.orig/gas/config/tc-riscv.c	2024-01-03 13:08:16.588286420 +0000
++++ binutils-2.41/gas/config/tc-riscv.c	2024-01-03 13:08:32.749297812 +0000
+@@ -4949,6 +4949,7 @@ riscv_insert_uleb128_fixes (bfd *abfd AT
+       fix_new_exp (fragP, fragP->fr_fix, 0,
+ 		   exp_dup, 0, BFD_RELOC_RISCV_SET_ULEB128);
+       exp_dup->X_add_symbol = exp->X_op_symbol;
++      exp_dup->X_add_number = 0; /* Set addend of SUB_ULEB128 to zero.  */
+       fix_new_exp (fragP, fragP->fr_fix, 0,
+ 		   exp_dup, 0, BFD_RELOC_RISCV_SUB_ULEB128);
+     }

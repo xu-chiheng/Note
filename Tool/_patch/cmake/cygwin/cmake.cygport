@@ -2,7 +2,7 @@ SCALLYWAG="notest"
 inherit emacs qt5
 
 NAME="cmake"
-VERSION=3.25.3
+VERSION=3.27.9
 RELEASE=1
 
 LICENSE="BSD-3-Clause"

@@ -1,0 +1,15 @@
+summary: Test for BZ#1624776 (binutils ld removes some R_X86_64_JUMP_SLOT)
+description: |
+    Bug summary: binutils: ld removes some R_X86_64_JUMP_SLOT relocations
+    Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1624776
+contact: Edjunior Machado <emachado@redhat.com>
+component:
+- binutils
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- binutils
+- sed
+duration: 5m
+extra-summary: /tools/binutils/Regression/bz1624776-binutils-ld-removes-some-R-X86-64-JUMP-SLOT
+extra-task: /tools/binutils/Regression/bz1624776-binutils-ld-removes-some-R-X86-64-JUMP-SLOT

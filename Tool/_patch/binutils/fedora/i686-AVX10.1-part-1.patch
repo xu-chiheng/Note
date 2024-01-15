@@ -1,0 +1,209 @@
+From e30e95759268ce5a5a1f752b3c9fa3e4a182db99 Mon Sep 17 00:00:00 2001
+From: Jan Beulich <jbeulich@suse.com>
+Date: Fri, 1 Sep 2023 12:28:57 +0200
+Subject: [PATCH] x86: correct source used for two non-AVX512 VEXWIG tests
+
+These shouldn't wrongly include the AVX512VL sources. Obviously the
+expectations therefore also need to change.
+---
+ gas/testsuite/gas/i386/vaes-wig1.d       | 118 ++++-------------------
+ gas/testsuite/gas/i386/vpclmulqdq-wig1.d |  44 +++------
+ 2 files changed, 32 insertions(+), 130 deletions(-)
+
+diff --git a/gas/testsuite/gas/i386/vaes-wig1.d b/gas/testsuite/gas/i386/vaes-wig1.d
+index 8e8567e01df..9d37e52b49e 100644
+--- a/gas/testsuite/gas/i386/vaes-wig1.d
++++ b/gas/testsuite/gas/i386/vaes-wig1.d
+@@ -1,7 +1,7 @@
+ #as: -mvexwig=1
+ #objdump: -dw
+ #name: i386 AVX/VAES wig insns
+-#source: avx512vl_vaes.s
++#source: vaes.s
+ 
+ .*: +file format .*
+ 
+@@ -9,100 +9,24 @@
+ Disassembly of section \.text:
+ 
+ 00000000 <_start>:
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 de f4[ 	]*vaesdec %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 de b4 f4 c0 1d fe ff[ 	]*vaesdec -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 de b2 f0 07 00 00[ 	]*vaesdec 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 de f4[ 	]*vaesdec %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 de b4 f4 c0 1d fe ff[ 	]*vaesdec -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 de b2 e0 0f 00 00[ 	]*vaesdec 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 df f4[ 	]*vaesdeclast %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 df b4 f4 c0 1d fe ff[ 	]*vaesdeclast -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 df b2 f0 07 00 00[ 	]*vaesdeclast 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 df f4[ 	]*vaesdeclast %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 df b4 f4 c0 1d fe ff[ 	]*vaesdeclast -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 df b2 e0 0f 00 00[ 	]*vaesdeclast 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dc f4[ 	]*vaesenc %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dc b4 f4 c0 1d fe ff[ 	]*vaesenc -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dc b2 f0 07 00 00[ 	]*vaesenc 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dc f4[ 	]*vaesenc %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dc b4 f4 c0 1d fe ff[ 	]*vaesenc -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dc b2 e0 0f 00 00[ 	]*vaesenc 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dd f4[ 	]*vaesenclast %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dd b4 f4 c0 1d fe ff[ 	]*vaesenclast -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dd b2 f0 07 00 00[ 	]*vaesenclast 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dd f4[ 	]*vaesenclast %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dd b4 f4 c0 1d fe ff[ 	]*vaesenclast -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dd b2 e0 0f 00 00[ 	]*vaesenclast 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 de f4[ 	]*\{evex\} vaesdec %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 de b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesdec -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 de 72 7f[ 	]*\{evex\} vaesdec 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 de f4[ 	]*\{evex\} vaesdec %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 de b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesdec -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 de 72 7f[ 	]*\{evex\} vaesdec 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 df f4[ 	]*\{evex\} vaesdeclast %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 df b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesdeclast -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 df 72 7f[ 	]*\{evex\} vaesdeclast 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 df f4[ 	]*\{evex\} vaesdeclast %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 df b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesdeclast -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 df 72 7f[ 	]*\{evex\} vaesdeclast 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dc f4[ 	]*\{evex\} vaesenc %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dc b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesenc -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dc 72 7f[ 	]*\{evex\} vaesenc 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dc f4[ 	]*\{evex\} vaesenc %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dc b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesenc -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dc 72 7f[ 	]*\{evex\} vaesenc 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dd f4[ 	]*\{evex\} vaesenclast %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dd b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesenclast -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dd 72 7f[ 	]*\{evex\} vaesenclast 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dd f4[ 	]*\{evex\} vaesenclast %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dd b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesenclast -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dd 72 7f[ 	]*\{evex\} vaesenclast 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 de f4[ 	]*vaesdec %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 de b4 f4 c0 1d fe ff[ 	]*vaesdec -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 de b2 f0 07 00 00[ 	]*vaesdec 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 de f4[ 	]*vaesdec %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 de b4 f4 c0 1d fe ff[ 	]*vaesdec -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 de b2 e0 0f 00 00[ 	]*vaesdec 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 df f4[ 	]*vaesdeclast %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 df b4 f4 c0 1d fe ff[ 	]*vaesdeclast -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 df b2 f0 07 00 00[ 	]*vaesdeclast 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 df f4[ 	]*vaesdeclast %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 df b4 f4 c0 1d fe ff[ 	]*vaesdeclast -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 df b2 e0 0f 00 00[ 	]*vaesdeclast 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dc f4[ 	]*vaesenc %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dc b4 f4 c0 1d fe ff[ 	]*vaesenc -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dc b2 f0 07 00 00[ 	]*vaesenc 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dc f4[ 	]*vaesenc %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dc b4 f4 c0 1d fe ff[ 	]*vaesenc -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dc b2 e0 0f 00 00[ 	]*vaesenc 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dd f4[ 	]*vaesenclast %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dd b4 f4 c0 1d fe ff[ 	]*vaesenclast -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d1 dd b2 f0 07 00 00[ 	]*vaesenclast 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dd f4[ 	]*vaesenclast %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dd b4 f4 c0 1d fe ff[ 	]*vaesenclast -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e2 d5 dd b2 e0 0f 00 00[ 	]*vaesenclast 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 de f4[ 	]*\{evex\} vaesdec %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 de b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesdec -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 de 72 7f[ 	]*\{evex\} vaesdec 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 de f4[ 	]*\{evex\} vaesdec %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 de b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesdec -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 de 72 7f[ 	]*\{evex\} vaesdec 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 df f4[ 	]*\{evex\} vaesdeclast %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 df b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesdeclast -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 df 72 7f[ 	]*\{evex\} vaesdeclast 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 df f4[ 	]*\{evex\} vaesdeclast %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 df b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesdeclast -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 df 72 7f[ 	]*\{evex\} vaesdeclast 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dc f4[ 	]*\{evex\} vaesenc %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dc b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesenc -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dc 72 7f[ 	]*\{evex\} vaesenc 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dc f4[ 	]*\{evex\} vaesenc %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dc b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesenc -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dc 72 7f[ 	]*\{evex\} vaesenc 0xfe0\(%edx\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dd f4[ 	]*\{evex\} vaesenclast %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dd b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesenclast -0x1e240\(%esp,%esi,8\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 08 dd 72 7f[ 	]*\{evex\} vaesenclast 0x7f0\(%edx\),%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dd f4[ 	]*\{evex\} vaesenclast %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dd b4 f4 c0 1d fe ff[ 	]*\{evex\} vaesenclast -0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f2 55 28 dd 72 7f[ 	]*\{evex\} vaesenclast 0xfe0\(%edx\),%ymm5,%ymm6
++[ 	]*[a-f0-9]+:	c4 e2 cd dc d4       	vaesenc %ymm4,%ymm6,%ymm2
++[ 	]*[a-f0-9]+:	c4 e2 cd dc 39       	vaesenc \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd dd d4       	vaesenclast %ymm4,%ymm6,%ymm2
++[ 	]*[a-f0-9]+:	c4 e2 cd dd 39       	vaesenclast \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd de d4       	vaesdec %ymm4,%ymm6,%ymm2
++[ 	]*[a-f0-9]+:	c4 e2 cd de 39       	vaesdec \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd df d4       	vaesdeclast %ymm4,%ymm6,%ymm2
++[ 	]*[a-f0-9]+:	c4 e2 cd df 39       	vaesdeclast \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd dc d4       	vaesenc %ymm4,%ymm6,%ymm2
++[ 	]*[a-f0-9]+:	c4 e2 cd dc 39       	vaesenc \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd dc 39       	vaesenc \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd dd d4       	vaesenclast %ymm4,%ymm6,%ymm2
++[ 	]*[a-f0-9]+:	c4 e2 cd dd 39       	vaesenclast \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd dd 39       	vaesenclast \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd de d4       	vaesdec %ymm4,%ymm6,%ymm2
++[ 	]*[a-f0-9]+:	c4 e2 cd de 39       	vaesdec \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd de 39       	vaesdec \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd df d4       	vaesdeclast %ymm4,%ymm6,%ymm2
++[ 	]*[a-f0-9]+:	c4 e2 cd df 39       	vaesdeclast \(%ecx\),%ymm6,%ymm7
++[ 	]*[a-f0-9]+:	c4 e2 cd df 39       	vaesdeclast \(%ecx\),%ymm6,%ymm7
+ #pass
+diff --git a/gas/testsuite/gas/i386/vpclmulqdq-wig1.d b/gas/testsuite/gas/i386/vpclmulqdq-wig1.d
+index 843bf56bc21..52bb1651201 100644
+--- a/gas/testsuite/gas/i386/vpclmulqdq-wig1.d
++++ b/gas/testsuite/gas/i386/vpclmulqdq-wig1.d
+@@ -1,7 +1,7 @@
+ #as: -mvexwig=1
+ #objdump: -dw
+ #name: i386 AVX/VPCLMULQDQ wig insns
+-#source: avx512vl_vpclmulqdq.s
++#source: vpclmulqdq.s
+ 
+ .*: +file format .*
+ 
+@@ -9,36 +9,14 @@
+ Disassembly of section \.text:
+ 
+ 00000000 <_start>:
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 e9 44 da ab[ 	]*vpclmulqdq \$0xab,%xmm2,%xmm2,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 e9 44 9c f4 c0 1d fe ff 7b[ 	]*vpclmulqdq \$0x7b,-0x1e240\(%esp,%esi,8\),%xmm2,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 e9 44 9a f0 07 00 00 7b[ 	]*vpclmulqdq \$0x7b,0x7f0\(%edx\),%xmm2,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 d5 44 e1 ab[ 	]*vpclmulqdq \$0xab,%ymm1,%ymm5,%ymm4
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 d5 44 a4 f4 c0 1d fe ff 7b[ 	]*vpclmulqdq \$0x7b,-0x1e240\(%esp,%esi,8\),%ymm5,%ymm4
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 d5 44 a2 e0 0f 00 00 7b[ 	]*vpclmulqdq \$0x7b,0xfe0\(%edx\),%ymm5,%ymm4
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 6d 08 44 da ab[ 	]*\{evex\} vpclmulqdq \$0xab,%xmm2,%xmm2,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 6d 08 44 9c f4 c0 1d fe ff 7b[ 	]*\{evex\} vpclmulqdq \$0x7b,-0x1e240\(%esp,%esi,8\),%xmm2,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 6d 08 44 5a 7f 7b[ 	]*\{evex\} vpclmulqdq \$0x7b,0x7f0\(%edx\),%xmm2,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 55 28 44 e1 ab[ 	]*\{evex\} vpclmulqdq \$0xab,%ymm1,%ymm5,%ymm4
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 55 28 44 a4 f4 c0 1d fe ff 7b[ 	]*\{evex\} vpclmulqdq \$0x7b,-0x1e240\(%esp,%esi,8\),%ymm5,%ymm4
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 55 28 44 62 7f 7b[ 	]*\{evex\} vpclmulqdq \$0x7b,0xfe0\(%edx\),%ymm5,%ymm4
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 65 08 44 e2 11[ 	]*\{evex\} vpclmulhqhqdq %xmm2,%xmm3,%xmm4
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 5d 08 44 eb 01[ 	]*\{evex\} vpclmulhqlqdq %xmm3,%xmm4,%xmm5
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 55 08 44 f4 10[ 	]*\{evex\} vpclmullqhqdq %xmm4,%xmm5,%xmm6
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 4d 08 44 fd 00[ 	]*\{evex\} vpclmullqlqdq %xmm5,%xmm6,%xmm7
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 6d 28 44 d9 11[ 	]*\{evex\} vpclmulhqhqdq %ymm1,%ymm2,%ymm3
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 65 28 44 e2 01[ 	]*\{evex\} vpclmulhqlqdq %ymm2,%ymm3,%ymm4
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 5d 28 44 eb 10[ 	]*\{evex\} vpclmullqhqdq %ymm3,%ymm4,%ymm5
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 55 28 44 f4 00[ 	]*\{evex\} vpclmullqlqdq %ymm4,%ymm5,%ymm6
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 d1 44 db ab[ 	]*vpclmulqdq \$0xab,%xmm3,%xmm5,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 d1 44 9c f4 c0 1d fe ff 7b[ 	]*vpclmulqdq \$0x7b,-0x1e240\(%esp,%esi,8\),%xmm5,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 d1 44 9a f0 07 00 00 7b[ 	]*vpclmulqdq \$0x7b,0x7f0\(%edx\),%xmm5,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 ed 44 d2 ab[ 	]*vpclmulqdq \$0xab,%ymm2,%ymm2,%ymm2
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 ed 44 94 f4 c0 1d fe ff 7b[ 	]*vpclmulqdq \$0x7b,-0x1e240\(%esp,%esi,8\),%ymm2,%ymm2
+-[ 	]*[a-f0-9]+:[ 	]*c4 e3 ed 44 92 e0 0f 00 00 7b[ 	]*vpclmulqdq \$0x7b,0xfe0\(%edx\),%ymm2,%ymm2
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 55 08 44 db ab[ 	]*\{evex\} vpclmulqdq \$0xab,%xmm3,%xmm5,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 55 08 44 9c f4 c0 1d fe ff 7b[ 	]*\{evex\} vpclmulqdq \$0x7b,-0x1e240\(%esp,%esi,8\),%xmm5,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 55 08 44 5a 7f 7b[ 	]*\{evex\} vpclmulqdq \$0x7b,0x7f0\(%edx\),%xmm5,%xmm3
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 6d 28 44 d2 ab[ 	]*\{evex\} vpclmulqdq \$0xab,%ymm2,%ymm2,%ymm2
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 6d 28 44 94 f4 c0 1d fe ff 7b[ 	]*\{evex\} vpclmulqdq \$0x7b,-0x1e240\(%esp,%esi,8\),%ymm2,%ymm2
+-[ 	]*[a-f0-9]+:[ 	]*62 f3 6d 28 44 52 7f 7b[ 	]*\{evex\} vpclmulqdq \$0x7b,0xfe0\(%edx\),%ymm2,%ymm2
++[ 	]*[a-f0-9]+:[ 	]*c4 e3 d5 44 f4 ab[ 	]*vpclmulqdq \$0xab,%ymm4,%ymm5,%ymm6
++[ 	]*[a-f0-9]+:[ 	]*c4 e3 d5 44 b4 f4 c0 1d fe ff 7b[ 	]*vpclmulqdq \$0x7b,-0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
++[ 	]*[a-f0-9]+:[ 	]*c4 e3 d5 44 b2 e0 0f 00 00 7b[ 	]*vpclmulqdq \$0x7b,0xfe0\(%edx\),%ymm5,%ymm6
++[ 	]*[a-f0-9]+:[ 	]*c4 e3 ed 44 d9 11[ 	]*vpclmulhqhqdq %ymm1,%ymm2,%ymm3
++[ 	]*[a-f0-9]+:[ 	]*c4 e3 e5 44 e2 01[ 	]*vpclmulhqlqdq %ymm2,%ymm3,%ymm4
++[ 	]*[a-f0-9]+:[ 	]*c4 e3 dd 44 eb 10[ 	]*vpclmullqhqdq %ymm3,%ymm4,%ymm5
++[ 	]*[a-f0-9]+:[ 	]*c4 e3 d5 44 f4 00[ 	]*vpclmullqlqdq %ymm4,%ymm5,%ymm6
++[ 	]*[a-f0-9]+:[ 	]*c4 e3 d5 44 f4 ab[ 	]*vpclmulqdq \$0xab,%ymm4,%ymm5,%ymm6
++[ 	]*[a-f0-9]+:[ 	]*c4 e3 d5 44 b4 f4 c0 1d fe ff 7b[ 	]*vpclmulqdq \$0x7b,-0x1e240\(%esp,%esi,8\),%ymm5,%ymm6
++[ 	]*[a-f0-9]+:[ 	]*c4 e3 d5 44 b2 e0 0f 00 00 7b[ 	]*vpclmulqdq \$0x7b,0xfe0\(%edx\),%ymm5,%ymm6
+ #pass
+-- 
+2.43.0
+

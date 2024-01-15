@@ -1,0 +1,128 @@
+From FEDORA_PATCHES Mon Sep 17 00:00:00 2001
+From: Kevin Buettner <kevinb@redhat.com>
+Date: Tue, 1 Feb 2022 11:32:48 -0700
+Subject: gdb-rhbz2042664-fix-sect_index_data-internal-error
+
+;; Backport fix which fixes internal error due to libcc_s lacking a
+;; .data section.
+
+Fix GDB internal error by using text (instead of data) section offset
+
+Fedora Rawhide is now using gcc-12.0.  As part of updating to the
+gcc-12.0 package set, Rawhide is also now using a version of libgcc_s
+which lacks a .data section.  This causes gdb to fail in the following
+fashion while debugging a program (such as gdb) which uses libgcc_s:
+
+    (top-gdb) run
+    Starting program: rawhide-master/bld/gdb/gdb
+    ...
+    objfiles.h:467: internal-error: sect_index_data not initialized
+    A problem internal to GDB has been detected,
+    further debugging may prove unreliable.
+    ...
+
+I snipped the backtrace from the above output.  Instead, here's a
+portion of a backtrace obtained using GDB's backtrace command.
+(Obviously, in order to obtain it, I used a GDB which has been patched
+with this commit.)
+
+    #0  internal_error (
+	file=0xc6a508 "gdb/objfiles.h", line=467,
+	fmt=0xc6a4e8 "sect_index_data not initialized")
+	at gdbsupport/errors.cc:51
+    #1  0x00000000005f9651 in objfile::data_section_offset (this=0x4fa48f0)
+	at gdb/objfiles.h:467
+    #2  0x000000000097c5f8 in relocate_address (address=0x17244, objfile=0x4fa48f0)
+	at gdb/stap-probe.c:1333
+    #3  0x000000000097c630 in stap_probe::get_relocated_address (this=0xa1a17a0,
+	objfile=0x4fa48f0)
+	at gdb/stap-probe.c:1341
+    #4  0x00000000004d7025 in create_exception_master_breakpoint_probe (
+	objfile=0x4fa48f0)
+	at gdb/breakpoint.c:3505
+    #5  0x00000000004d7426 in create_exception_master_breakpoint ()
+	at gdb/breakpoint.c:3575
+    #6  0x00000000004efcc1 in breakpoint_re_set ()
+	at gdb/breakpoint.c:13407
+    #7  0x0000000000956998 in solib_add (pattern=0x0, from_tty=0, readsyms=1)
+	at gdb/solib.c:1001
+    #8  0x00000000009576a8 in handle_solib_event ()
+	at gdb/solib.c:1269
+    ...
+
+The function 'relocate_address' in gdb/stap-probe.c attempts to do
+its "relocation" by using objfile->data_section_offset().  That
+method, data_section_offset() is defined as follows in objfiles.h:
+
+  CORE_ADDR data_section_offset () const
+  {
+    return section_offsets[SECT_OFF_DATA (this)];
+  }
+
+The internal error occurs when the SECT_OFF_DATA macro finds that the
+'sect_index_data' field is -1:
+
+    #define SECT_OFF_DATA(objfile) \
+	 ((objfile->sect_index_data == -1) \
+	  ? (internal_error (__FILE__, __LINE__, \
+			     _("sect_index_data not initialized")), -1)	\
+	  : objfile->sect_index_data)
+
+relocate_address() is obtaining the section offset in order to compute
+a relocated address.  For some ABIs, such as the System V ABI, the
+section offsets will all be the same.  So for those ABIs, it doesn't
+matter which offset is used.  However, other ABIs, such as the FDPIC
+ABI, will have different offsets for the various sections.  Thus, for
+those ABIs, it is vital that this and other relocation code use the
+correct offset.
+
+In stap_probe::get_relocated_address, the address to which to add the
+offset (thus forming the relocated address) is obtained via
+this->get_address (); get_address is a getter for m_address in
+probe.h.  It's documented/defined as follows (also in probe.h):
+
+  /* The address where the probe is inserted, relative to
+     SECT_OFF_TEXT.  */
+  CORE_ADDR m_address;
+
+(Thanks to Tom Tromey for this observation.)
+
+So, based on this, the current use of data_section_offset /
+SECT_OFF_DATA is wrong.  This relocation code should have been using
+text_section_offset / SECT_OFF_TEXT all along.  That being the
+case, I've adjusted the stap-probe.c relocation code accordingly.
+
+Searching the sources turned up one other use of data_section_offset,
+in gdb/dtrace-probe.c, so I've updated that code as well.  The same
+reasoning presented above applies to this case too.
+
+Summary:
+
+	* gdb/dtrace-probe.c (dtrace_probe::get_relocated_address):
+	Use method text_section_offset instead of data_section_offset.
+	* gdb/stap-probe.c (relocate_address): Likewise.
+
+diff --git a/gdb/dtrace-probe.c b/gdb/dtrace-probe.c
+--- a/gdb/dtrace-probe.c
++++ b/gdb/dtrace-probe.c
+@@ -684,7 +684,7 @@ dtrace_probe::is_enabled () const
+ CORE_ADDR
+ dtrace_probe::get_relocated_address (struct objfile *objfile)
+ {
+-  return this->get_address () + objfile->data_section_offset ();
++  return this->get_address () + objfile->text_section_offset ();
+ }
+ 
+ /* Implementation of the get_argument_count method.  */
+diff --git a/gdb/stap-probe.c b/gdb/stap-probe.c
+--- a/gdb/stap-probe.c
++++ b/gdb/stap-probe.c
+@@ -1330,7 +1330,7 @@ stap_probe::parse_arguments (struct gdbarch *gdbarch)
+ static CORE_ADDR
+ relocate_address (CORE_ADDR address, struct objfile *objfile)
+ {
+-  return address + objfile->data_section_offset ();
++  return address + objfile->text_section_offset ();
+ }
+ 
+ /* Implementation of the get_relocated_address method.  */

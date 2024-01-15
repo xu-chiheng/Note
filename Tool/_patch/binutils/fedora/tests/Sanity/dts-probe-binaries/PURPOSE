@@ -1,0 +1,3 @@
+PURPOSE of /tools/binutils/Sanity/dts-probe-binaries
+Description: Toolset binutils on system/toolset/built binaries.
+Author: Marek Polacek <polacek@redhat.com>

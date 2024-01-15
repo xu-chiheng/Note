@@ -1,0 +1,5 @@
+PURPOSE of /CoreOS/binutils/Regression/bz850832-The-binutils-package-contains-the-windmc-1-manual
+Description: Test for BZ#850832 (The binutils package contains the windmc(1) manual)
+Author: Milos Prchlik <mprchlik@redhat.com>
+Bug summary: The binutils package contains the windmc(1) manual page but the utility is not included
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=850832

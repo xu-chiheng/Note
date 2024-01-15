@@ -1,0 +1,8 @@
+PURPOSE of /tools/binutils/Regression/bz895241-Bogus-warning-about-cross-object-references-to
+Description: Test for BZ#895241 (Bogus warning about cross object references to)
+Author: Milos Prchlik <mprchlik@redhat.com>
+Bug summary: Bogus warning about cross object references to hidden symbols in GOLD
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=895241
+
+Relevancy:
+collection = devtoolset-4: PACKAGES=devtoolset-4-binutils REQUIRES=devtoolset-4-gcc ALTERNATIVES_ROOT=/opt/rh/devtoolset-4/root

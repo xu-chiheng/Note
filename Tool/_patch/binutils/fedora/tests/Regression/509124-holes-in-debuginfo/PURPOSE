@@ -1,0 +1,14 @@
+(1) readelf fix now posted upstream:
+    http://sourceware.org/ml/binutils/2009-07/msg00123.html
+QA: New testcase: binutils-all/testranges.s
+
+(2) gcc has been fixed based on this bugreport by Jakub upstream:
+    http://gcc.gnu.org/bugzilla/show_bug.cgi?id=40713
+    gcc44 backport request for RHEL-5.5 is: Bug 510958
+
+(3) Going to be backported for RHEL-5.5 readelf.
+    It has been already fixed by Nick Clifton upstream:
+    http://sourceware.org/ml/binutils/2009-06/msg00418.html
+    http://sourceware.org/ml/binutils-cvs/2009-06/msg00158.html
+QA: RHEL-only new testcase: binutils-all/testloc.S
+    as a part of binutils-all/readelf.exp (not shown when PASSing)    

@@ -1,0 +1,13 @@
+This is an update to the latest upstream version:
+
+https://sourceware.org/pipermail/gdb-announce/2023/000137.html
+
+See the /usr/share/doc/gdb/NEWS file for a list of user-visible changes.
+
+In addition, it contains the following patches carried forward from the previous Cygwin package:
+
+* Teach the demangler to deal with '@'-decorated __stdcall functions
+* (experimental) Teach gdb how to unwind frames for the Cygwin signal delivery wrapper functions _sigbe and sigdelayed
+* Fix a memory leak which would occur in the case when the result of realpath() is greater than or equal to SO_NAME_MAX_PATH_SIZE (Corinna Vinschen)
+* Simplify and improve handling of inferior context after a Cygwin signal
+* Use cygwin pgid if inferior is a cygwin process (Takashi Yano)

@@ -2,7 +2,7 @@ TOOLCHAIN_TARGET="native"
 inherit python3 toolchain
 
 NAME="gdb"
-VERSION=13.2
+VERSION=14.1
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="The GNU Debugger"
@@ -22,9 +22,23 @@ PATCH_URI="
 0005-Drop-special-way-of-getting-inferior-context-after-a.patch
 0006-Use-cygwin-pgid-if-inferior-is-a-cygwin-process.patch
 "
+CYGWIN_FILES="ANNOUNCE"
+
 RESTRICT="postinst-doc"
 BUILD_REQUIRES="libexpat-devel libguile3.0-devel libiconv-devel libintl-devel liblzma-devel libmpfr-devel libncurses-devel libreadline-devel libsource-highlight-devel libxxhash-devel libzstd-devel python39 python39-devel zlib-devel"
 REQUIRES="libiconv"
+
+PKG_NAMES="gdb gdb-multiarch"
+
+gdb_CONTENTS="--exclude=usr/bin/*multiarch* *"
+
+gdb_multiarch_SUMMARY="${SUMMARY} (supports all targets)"
+gdb_multiarch_DESCRIPTION="${DESCRIPTION}
+
+(For cross-debugging, connecting to a gdbserver running on a different
+architecture)"
+gdb_multiarch_REQUIRES="gdb"
+gdb_multiarch_CONTENTS="usr/bin/*multiarch*"
 
 # Change the version that gets printed at GDB startup to identify the package
 # it came from, while still conforming to GNU standards, which require that
@@ -34,18 +48,30 @@ src_unpack_hook() {
         echo "(Cygwin ${VERSION}-${RELEASE}) ${VERSION}" >gdb/version.in
 }
 
-src_compile() {
-	cd ${B}
-	cygconf --disable-werror --enable-tui --disable-gdbtk \
-		--with-expat --with-lzma --with-mpfr --with-xxhash \
+do_build() {
+	builddir=${B}/build$1
+	mkdir ${builddir} && cd ${builddir}
+	cygconf $2 \
+		--disable-werror --enable-tui --disable-gdbtk --disable-sim \
+		--with-expat --with-lzma --with-xxhash \
 		--with-python=python3.9 \
 		--without-libexpat-prefix --with-system-readline --with-system-zlib \
 		--without-static-standard-libraries
 	cygmake
 }
 
+src_compile() {
+	do_build
+	do_build -multiarch --enable-targets=all
+}
+
 src_install() {
-	cd ${B}
+	cd ${B}/build-multiarch
+	cygmake DESTDIR=${D} install-gdb install-gdbserver
+	mv ${D}/usr/bin/gdb.exe ${D}/usr/bin/gdb-multiarch.exe
+	mv ${D}/usr/bin/gdbserver.exe ${D}/usr/bin/gdbserver-multiarch.exe
+
+	cd ${B}/build
 	cyginstall
 
 	python_optimize /usr/share/gdb/python
@@ -55,6 +81,6 @@ src_install() {
 	rm -f ${D}/usr/share/info/{bfd,configure,standards}.info
 
 	# install standard documentation files from ${S}/gdb/ not ${S}/
-        cd ${S}/gdb
-        dodoc ChangeLog COPYING MAINTAINERS NEWS README
+	cd ${S}/gdb
+	dodoc ChangeLog COPYING MAINTAINERS NEWS README
 }

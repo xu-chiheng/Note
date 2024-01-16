@@ -12,6 +12,12 @@ FIND_ARGS=(
 		-or -name 'qemu-*'
 		-or -name 'cmake-*'
 		-or -name 'binutils-*'
+		-or -name 'bash-*'
+		-or -name 'make-*'
+		-or -name 'perl-*'
+		-or -name 'python-*'
+		-or -name 'cygwin-*'
+		-or -name 'mingw-*'
 		-or -name 'gdb-*'
 		-or -name 'gmp*'
 		-or -name 'mpfr*'
@@ -24,6 +30,9 @@ FIND_ARGS=(
 		# remove manually
 		-name '*.sha512'
 		-or -name '*-vs2022-build'
+		-or -name '*.cmd'
+		-or -name '*.sh'
+		-or -name '*.cygport'
 	')'
 )
 

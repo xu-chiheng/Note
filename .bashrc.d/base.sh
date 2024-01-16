@@ -110,7 +110,7 @@ set_environment_variables_at_bash_startup() {
 			done
 
 			if [ "${prepend_packages_bin_dirs_to_path}" = yes ]; then
-				export PATH="$(array_elements_join ':' "${bin_dirs[@]}" "${PATH}")"
+				export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
 			fi
 			;;
 	esac
@@ -121,7 +121,7 @@ set_environment_variables_at_bash_startup() {
 			local youtube_dl_dir="$(cygpath -u 'D:\youtube-dl')"
 			local ultraiso_dir="$(cygpath -u 'C:\Program Files (x86)\UltraISO')"
 			local chrome_dir="$(cygpath -u 'C:\Program Files\Google\Chrome\Application')"
-			export PATH="$(array_elements_join ':' "${PATH}" "${notepadpp_dir}" "${youtube_dl_dir}" "${ultraiso_dir}" "${chrome_dir}" )"
+			export PATH="$(join_array_elements ':' "${PATH}" "${notepadpp_dir}" "${youtube_dl_dir}" "${ultraiso_dir}" "${chrome_dir}" )"
 			;;
 	esac
 
@@ -159,7 +159,7 @@ set_environment_variables_at_bash_startup() {
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			local qemu_dir=$(cygpath -u 'D:\qemu')
-			export PATH="$(array_elements_join ':' "${PATH}" "${qemu_dir}" )"
+			export PATH="$(join_array_elements ':' "${PATH}" "${qemu_dir}" )"
 			;;
 		x86_64-pc-mingw64 )
 			# local qemu_dir=$(cygpath -u 'D:\qemu')
@@ -167,7 +167,7 @@ set_environment_variables_at_bash_startup() {
 			;;
 		*-linux )
 			local qemu_dir="${packages_dir}/qemu"
-			export PATH="$(array_elements_join ':' "${PATH}" "${qemu_dir}/bin" )"
+			export PATH="$(join_array_elements ':' "${PATH}" "${qemu_dir}/bin" )"
 			;;
 	esac
 }
@@ -253,28 +253,6 @@ fix_system_quirks_one_time() {
 	esac
 }
 
-
-print_gcc_install_dir() {
-	echo "$(dirname "$(dirname "$(which gcc)")")"
-}
-
-print_mingw_root_dir() {
-	case "${MSYSTEM}" in
-		MINGW64 )
-			# msvcrt.dll
-			echo "/mingw64"
-			;;
-		UCRT64 )
-			# ucrtbase.dll
-			echo "/ucrt64"
-			;;
-		* )
-			echo "unknown MSYSTEM : ${MSYSTEM}"
-			return 1
-			;;
-	esac
-}
-
 print_packages_dir() {
 	local host_triple="$1"
 	case "${host_triple}" in
@@ -311,13 +289,13 @@ print_packages_dir() {
 # https://stackoverflow.com/questions/1527049/how-can-i-join-elements-of-a-bash-array-into-a-delimited-string
 # https://dev.to/meleu/how-to-join-array-elements-in-a-bash-script-303a
 # https://zaiste.net/posts/how-to-join-elements-of-array-bash/
-array_elements_join() {
+join_array_elements() {
 	local IFS="$1"
 	shift
 	echo "$*"
 }
 
-array_elements_print() {
+print_array_elements() {
 	local element
 	for element in "$@"; do
 		echo "		${element}"

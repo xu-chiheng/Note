@@ -59,7 +59,7 @@ PACKAGE=gcc
 
 	time_command build_and_install_cross_gcc_for_targets \
 		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
-		"$(array_elements_join ',' "${EXTRA_LANGUAGES[@]}")" yes yes "${CURRENT_DATETIME}" "${TARGETS[@]}"
+		"$(join_array_elements ',' "${EXTRA_LANGUAGES[@]}")" yes yes "${CURRENT_DATETIME}" "${TARGETS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
 

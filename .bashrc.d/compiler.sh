@@ -217,7 +217,7 @@ print_command_options() {
 }
 
 print_gcc_configure_options() {
-	array_elements_print $(gcc -v 2>&1 | grep -E '^Configured with: ' | sed -E -e 's/^.+\/configure //' )
+	print_array_elements $(gcc -v 2>&1 | grep -E '^Configured with: ' | sed -E -e 's/^.+\/configure //' )
 }
 
 print_hello_world_program_in_c() {
@@ -285,7 +285,7 @@ show_compiler_commands_lld() {
 
 llvm-config_print() {
 	local options=( $(print_command_options llvm-config) )
-	# array_elements_print "${options[@]}"
+	# print_array_elements "${options[@]}"
 	local option
 	for option in "${options[@]}"; do
 		echo_command llvm-config "${option}"
@@ -309,8 +309,20 @@ remove_test_suite_dirs() {
 # https://dmalcolm.fedorapeople.org/gcc/newbies-guide/working-with-the-testsuite.html
 # https://stackoverflow.com/questions/44943652/how-to-run-unit-tests-on-an-installed-gcc-installation
 # http://lambda.phys.tohoku.ac.jp/~tsukada/INSTALL/test.html
-gcc_run_test_suite() {
-	time_command make -k check 2>&1 | tee "../~$(print_current_datetime)-gcc-test-output.txt"
+gnu_toolchain_run_test_suite() {
+	local make_command=( parallel_make )
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
+			# too many jobs will cause following errors :
+			# -574947849 [main] expect 10703 tty_list::allocate: No pty allocated
+			# FAIL: gcc.dg/torture/matrix-4.c   -O2 -flto  (test for excess errors)
+			# -559944125 [main] expect 12177 tty_list::allocate: No pty allocated
+			# FAIL: g++.old-deja/g++.mike/p6611.C  -std=c++20 (test for excess errors)
+			make_command+=( -j 80 )
+			;;
+	esac
+
+	time_command "${make_command[@]}" -k check 2>&1 | tee "../~$(print_current_datetime)-$(basename "$(pwd)")-test-output.txt"
 }
 
 # https://llvm.org/docs/TestingGuide.html

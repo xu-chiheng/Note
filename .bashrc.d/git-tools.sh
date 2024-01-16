@@ -123,7 +123,7 @@ do_git_commit() {
 	fi
 
 	local commit_command="$1"
-	local commit_message_file="$(git_commit_message_file_name)"
+	local commit_message_file="$(print_git_commit_message_file_name)"
 	case "${commit_command}" in
 		"" | -S  | merge_--squash | -S_merge_--squash )
 			true
@@ -182,7 +182,7 @@ do_git_commit() {
 }
 
 git_show_commit_message() {
-	local commit_message_file="$(git_commit_message_file_name)"
+	local commit_message_file="$(print_git_commit_message_file_name)"
 	if [ -f "${commit_message_file}" ]; then
 		echo "${commit_message_file} :"
 		cat "${commit_message_file}"
@@ -306,7 +306,7 @@ do_git_edit_commit_message() {
 		return 1
 	fi
 
-	local commit_message_file="$(git_commit_message_file_name)"
+	local commit_message_file="$(print_git_commit_message_file_name)"
 	touch "${commit_message_file}"
 	${EDITOR} "${commit_message_file}"
 	# https://stackoverflow.com/questions/9964823/how-to-check-if-a-file-is-empty-in-bash

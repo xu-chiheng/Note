@@ -82,9 +82,9 @@ PACKAGE=llvm
 
 		"../${SOURCE_DIR}/llvm"
 
-		-DLLVM_TARGETS_TO_BUILD="$(array_elements_join ';' "${TARGETS[@]}")"
-		-DLLVM_ENABLE_PROJECTS="$(array_elements_join ';' "${PROJECTS[@]}")"
-		-DLLVM_ENABLE_RUNTIMES="$(array_elements_join ';' "${RUNTIMES[@]}")"
+		-DLLVM_TARGETS_TO_BUILD="$(join_array_elements ';' "${TARGETS[@]}")"
+		-DLLVM_ENABLE_PROJECTS="$(join_array_elements ';' "${PROJECTS[@]}")"
+		-DLLVM_ENABLE_RUNTIMES="$(join_array_elements ';' "${RUNTIMES[@]}")"
 		-DLLVM_BUILD_RUNTIME=ON
 
 		-DLLVM_BUILD_TESTS=OFF

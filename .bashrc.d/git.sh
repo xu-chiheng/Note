@@ -284,7 +284,7 @@ git_truncate() {
 	# git gc --aggressive # aggressively collect garbage; may take a lot of time on large repos
 }
 
-git_commit_message_file_name() {
+print_git_commit_message_file_name() {
 	echo "~commit-message.txt"
 }
 

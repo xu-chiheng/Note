@@ -163,6 +163,27 @@ check_llvm_static_or_shared() {
 	echo "LLVM_STATIC_OR_SHARED : ${LLVM_STATIC_OR_SHARED}"
 }
 
+print_gcc_install_dir() {
+	echo "$(dirname "$(dirname "$(which gcc)")")"
+}
+
+print_mingw_root_dir() {
+	case "${MSYSTEM}" in
+		MINGW64 )
+			# msvcrt.dll
+			echo "/mingw64"
+			;;
+		UCRT64 )
+			# ucrtbase.dll
+			echo "/ucrt64"
+			;;
+		* )
+			echo "unknown MSYSTEM : ${MSYSTEM}"
+			return 1
+			;;
+	esac
+}
+
 mingw_gcc_check_or_create_directory_links() {
 	if which gcc >/dev/null 2>&1; then
 		local gcc_install_dir="$(print_gcc_install_dir)"
@@ -469,7 +490,7 @@ pushd_and_cmake() {
 	shift 1
 
 	echo "cmake options :"
-	array_elements_print "$@"
+	print_array_elements "$@"
 
 	echo_command rm -rf "${build_dir}" \
 	&& echo_command mkdir "${build_dir}" \
@@ -483,7 +504,7 @@ pushd_and_configure() {
 	shift 2
 
 	echo "configure options :"
-	array_elements_print "$@"
+	print_array_elements "$@"
 
 	echo_command rm -rf "${build_dir}" \
 	&& echo_command mkdir "${build_dir}" \
@@ -580,10 +601,10 @@ copy_dependent_dlls() {
 				bin_dirs+=( "${root_dir}/bin" )
 			done
 			# echo "bin_dirs :"
-			# array_elements_print "${bin_dirs[@]}"
+			# print_array_elements "${bin_dirs[@]}"
 			local dest_dir="${install_dir}/${install_exe_dir}"
 			echo_command mkdir -p "${dest_dir}" \
-			&& echo_command cp $(ldd $(find "${dest_dir}" -name '*.exe' -o -name '*.dll') | awk '{print $3}' | grep -E "^($(array_elements_join '|' "${bin_dirs[@]}"))/" | sort | uniq) "${dest_dir}"
+			&& echo_command cp $(ldd $(find "${dest_dir}" -name '*.exe' -o -name '*.dll') | awk '{print $3}' | grep -E "^($(join_array_elements '|' "${bin_dirs[@]}"))/" | sort | uniq) "${dest_dir}"
 			;;
 	esac
 }
@@ -720,7 +741,7 @@ build_and_install_binutils_gcc_for_target() {
 
 	echo_command rm -rf "${gcc_install_dir}" \
 	\
-	&& echo_command export PATH="$(array_elements_join ':' "$(pwd)/${gcc_install_dir}/bin" "${PATH}" )" \
+	&& echo_command export PATH="$(join_array_elements ':' "$(pwd)/${gcc_install_dir}/bin" "${PATH}" )" \
 	\
 	&& { time_command pushd_and_configure "${binutils_build_dir}" "${binutils_source_dir}" \
 			"${binutils_configure_options[@]}" \
@@ -730,7 +751,7 @@ build_and_install_binutils_gcc_for_target() {
 	\
 	\
 	&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
-			"$(array_elements_join ',' "${languages[@]}" "${extra_languages}")" "${host_triple}" \
+			"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${host_triple}" \
 			"${gcc_configure_options[@]}" \
 		&& time_command parallel_make all-gcc \
 		&& if [ "${is_build_and_install_libgcc}" = yes ]; then
@@ -771,7 +792,7 @@ build_and_install_cross_gcc_for_targets() {
 
 	local targets=( "$@" )
 	echo "targets :"
-	array_elements_print "${targets[@]}"
+	print_array_elements "${targets[@]}"
 	local target
 
 	# gcc 13.1.0 and binutils 2.36 combined will fail to build RISC-V libgcc, because of unrecognized new instructions.
@@ -959,5 +980,5 @@ gcc_configure_build_install_package() {
 	time_command generate_build_install_package \
 		"${toolchain}" "${build_type}" "${host_triple}" "${package}" "${version}" "${source_dir}" "${install_dir}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" \
-		"$(array_elements_join ',' "${languages[@]}" "${extra_languages}")" "${host_triple}" "$@"
+		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${host_triple}" "$@"
 }

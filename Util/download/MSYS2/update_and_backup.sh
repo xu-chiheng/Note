@@ -80,7 +80,7 @@ update_and_backup_msys2() {
         "${mingw_ucrt_packages[@]}"
     )
     echo "packages :"
-    array_elements_print "${all_packages[@]}"
+    print_array_elements "${all_packages[@]}"
 
     local msys_root_parent_dir="$(cd "$(cygpath -m "${MSYS2_DIR}")/.." && pwd)"
     local msys_root_base_name="$(basename "$(cygpath -m "${MSYS2_DIR}")")"

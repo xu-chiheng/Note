@@ -54,11 +54,11 @@ PACKAGE=gcc
 
 	# remove ${HOST_TRIPLE}
 	TARGETS=( ${TARGETS[@]/${HOST_TRIPLE}} )
-	array_elements_print "${TARGETS[@]}"
+	print_array_elements "${TARGETS[@]}"
 
 	time_command build_and_install_cross_gcc_for_targets \
 		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
-		"$(array_elements_join ',' "${EXTRA_LANGUAGES[@]}")" no no "${CURRENT_DATETIME}" "${TARGETS[@]}"
+		"$(join_array_elements ',' "${EXTRA_LANGUAGES[@]}")" no no "${CURRENT_DATETIME}" "${TARGETS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
 

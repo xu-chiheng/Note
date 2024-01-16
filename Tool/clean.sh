@@ -28,8 +28,8 @@ FIND_ARGS=(
 	-not
 	'('
 		# remove manually
-		-name '*.sha512'
-		-or -name '*-vs2022-build'
+		-name '*-vs2022-build'
+		-or -name '*.sha512'
 		-or -name '*.cmd'
 		-or -name '*.sh'
 		-or -name '*.cygport'

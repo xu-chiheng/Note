@@ -96,9 +96,7 @@ process_install_dir_bin_symlinks () {
 		if [ -L "${path}" ]; then
 			path2="$(readlink -f "${path}")"
 			if [ -f "${path2}" ]; then
-				local dir="$(dirname "${path}")"
 				local base="$(basename "${path}")"
-				local dir2="$(dirname "${path2}")"
 				local base2="$(basename "${path2}")"
 				local suffix="${base2##*.}"
 

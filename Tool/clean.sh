@@ -7,7 +7,8 @@ FIND_ARGS=(
 	-mindepth 1
 	-maxdepth 1
 	'('
-		-name 'gcc-*'
+		-name '*output.txt'
+		-or -name 'gcc-*'
 		-or -name 'llvm-*'
 		-or -name 'qemu-*'
 		-or -name 'cmake-*'
@@ -22,7 +23,6 @@ FIND_ARGS=(
 		-or -name 'gmp*'
 		-or -name 'mpfr*'
 		-or -name 'mpc*'
-		-or -name '*output.txt'
 	')'
 	-and
 	-not

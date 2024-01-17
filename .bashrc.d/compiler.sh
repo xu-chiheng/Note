@@ -309,6 +309,7 @@ remove_test_suite_dirs() {
 # https://dmalcolm.fedorapeople.org/gcc/newbies-guide/working-with-the-testsuite.html
 # https://stackoverflow.com/questions/44943652/how-to-run-unit-tests-on-an-installed-gcc-installation
 # http://lambda.phys.tohoku.ac.jp/~tsukada/INSTALL/test.html
+# GCC Binutils GDB
 gnu_toolchain_run_test_suite() {
 	local make_command=( parallel_make )
 	case "${HOST_TRIPLE}" in
@@ -328,6 +329,5 @@ gnu_toolchain_run_test_suite() {
 # https://llvm.org/docs/TestingGuide.html
 # https://llvm.org/docs/TestSuiteGuide.html
 llvm_run_test_suite() {
-
-	true
+	time_command make -k check-llvm 2>&1 | tee "../~$(print_current_datetime)-$(basename "$(pwd)")-test-output.txt"
 }

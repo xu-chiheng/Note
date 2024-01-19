@@ -80,11 +80,11 @@ set_environment_variables_at_bash_startup() {
 		x86_64-pc-cygwin )
 			# For Cygwin, add an environment variable, CYGWIN, and make sure it contains winsymlinks:nativestrict. See the Cygwin manual for details. (If you don’t do this, then Cygwin defaults to emulating symlinks by using special file contents that it understands but non-Cygwin software doesn’t.)
 			# default setting works
-			# export CYGWIN=winsymlinks:nativestrict
+			export CYGWIN=winsymlinks:native
 			;;
 		x86_64-pc-msys | x86_64-pc-mingw64 )
 			# For MSYS / MinGW (this includes the command-line utilities that used in the git-bash shell), add an environment variable, MSYS, and make sure it contains winsymlinks:nativestrict. (If you don’t do this, then symlinks are “emulated” by copying files and directories. This can be surprising, to say the least.)
-			export MSYS=winsymlinks:nativestrict
+			export MSYS=winsymlinks:native
 			;;
 	esac
 
@@ -117,11 +117,22 @@ set_environment_variables_at_bash_startup() {
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			local notepadpp_dir="$(cygpath -u 'C:\Program Files\Notepad++')"
-			local youtube_dl_dir="$(cygpath -u 'D:\youtube-dl')"
-			local ultraiso_dir="$(cygpath -u 'C:\Program Files (x86)\UltraISO')"
-			local chrome_dir="$(cygpath -u 'C:\Program Files\Google\Chrome\Application')"
-			export PATH="$(join_array_elements ':' "${PATH}" "${notepadpp_dir}" "${youtube_dl_dir}" "${ultraiso_dir}" "${chrome_dir}" )"
+			local dirs=(
+				'C:\Program Files\Notepad++'
+				# 'C:\Program Files\Microsoft VS Code'
+				'C:\Program Files\Google\Chrome\Application'
+				'C:\Program Files (x86)\UltraISO'
+				'D:\qemu'
+				'D:\youtube-dl'
+
+			)
+			local dirs2=()
+			local dir
+			for dir in "${dirs[@]}"; do
+				dirs2+=( "$(cygpath -u "${dir}")" )
+			done
+
+			export PATH="$(join_array_elements ':' "${PATH}" "${dirs2[@]}")"
 			;;
 	esac
 
@@ -157,14 +168,6 @@ set_environment_variables_at_bash_startup() {
 	local packages_dir
 
 	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin )
-			local qemu_dir=$(cygpath -u 'D:\qemu')
-			export PATH="$(join_array_elements ':' "${PATH}" "${qemu_dir}" )"
-			;;
-		x86_64-pc-mingw64 )
-			# local qemu_dir=$(cygpath -u 'D:\qemu')
-			# no qemu
-			;;
 		*-linux )
 			local qemu_dir="${packages_dir}/qemu"
 			export PATH="$(join_array_elements ':' "${PATH}" "${qemu_dir}/bin" )"

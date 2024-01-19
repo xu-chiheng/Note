@@ -23,6 +23,7 @@ patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,C
 patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104 2024-01-01
+18.0.0    8b4bb15f6d879fd8655f9e41fee224a8a59f238c 2024-01-19
 patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{,2}},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}

@@ -31,7 +31,7 @@ PACKAGE="gcc"
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
 
 	# VERSION=13.2.0
-	VERSION=14.0.0 # commit 61d6dee992fdfa350a0c6d2a8151ec6e2844c419 2023-12-17
+	VERSION=14.0.0 # commit 7e949ffaafb415150047127f529377502097d897 2024-01-19
 
 	EXTRA_LANGUAGES=()
 

@@ -103,6 +103,11 @@ set_environment_variables_at_bash_startup() {
 		x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux )
 			local packages_dir="$(print_packages_dir "${HOST_TRIPLE}")"
 			local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
+			case "${HOST_TRIPLE}" in
+				*-linux )
+					packages+=( qemu )
+					;;
+			esac
 			local bin_dirs=()
 			local package
 			for package in "${packages[@]}"; do
@@ -165,14 +170,6 @@ set_environment_variables_at_bash_startup() {
 			;;
 	esac
 
-	local packages_dir
-
-	case "${HOST_TRIPLE}" in
-		*-linux )
-			local qemu_dir="${packages_dir}/qemu"
-			export PATH="$(join_array_elements ':' "${PATH}" "${qemu_dir}/bin" )"
-			;;
-	esac
 }
 
 fix_system_quirks_one_time() {

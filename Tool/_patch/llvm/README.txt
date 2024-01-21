@@ -1,4 +1,22 @@
 
+I have build scripts and patches at https://github.com/xu-chiheng/Note .
+I can use the build scripts and patches to build and bootstrap GCC(start from 13.0.0) and Clang/LLVM(start from 16.0.0), using GCC or Clang, on Cygwin and MinGW.
+If you have interests, you can look at my other PRs at https://github.com/llvm/llvm-project/pulls/xu-chiheng .
+
+Most patches come from upstream at 
+
+https://cygwin.com/git-cygwin-packages/
+https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/clang.git;a=summary
+git://cygwin.com/git/cygwin-packages/clang.git
+https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/llvm.git;a=summary
+git://cygwin.com/git/cygwin-packages/llvm.git
+
+https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-clang
+https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-clang/PKGBUILD
+
+https://src.fedoraproject.org/rpms/llvm.git
+
+
 
 on Cygwin
 stage 0 : GCC 13.2.0 or GCC 11.4.0 (pre-installed) at /usr, Clang 8.0.1 (pre-installed) at /usr does not work
@@ -23,32 +41,16 @@ patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,C
 patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104 2024-01-01
-18.0.0    8b4bb15f6d879fd8655f9e41fee224a8a59f238c 2024-01-19
 patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{,2}},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
+18.0.0    8b4bb15f6d879fd8655f9e41fee224a8a59f238c 2024-01-19
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{,2}},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+              ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 
 clang -v
 git show -s
-
-
-I have build scripts and patches at https://github.com/xu-chiheng/Note .
-I can use the build scripts and patches to build and bootstrap GCC(start from 13.0.0) and Clang/LLVM(start from 16.0.0), using GCC or Clang, on Cygwin and MinGW.
-If you have interests, you can look at my other PRs at https://github.com/llvm/llvm-project/pulls/xu-chiheng .
-It does not work without any of the patches.
-
-Most patches come from upstream at 
-
-https://cygwin.com/git-cygwin-packages/
-https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/clang.git;a=summary
-git://cygwin.com/git/cygwin-packages/clang.git
-https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/llvm.git;a=summary
-git://cygwin.com/git/cygwin-packages/llvm.git
-
-https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-clang
-https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-clang/PKGBUILD
-
-https://src.fedoraproject.org/rpms/llvm.git
 
 
 
@@ -133,6 +135,15 @@ make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
 [  3%] Built target obj.LLVMCFIVerify
 make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
 make: *** [Makefile:156: all] Error 2
+
+
+cygwin-disable-debug-ata.patch
+Fix the regression caused by commit 7c71a09d5e712bedbed867226b3fa0bbfe789384 2024-01-10, that, in Cygwin, Clang can't bootstrap.
+Stuck at cmake configure :
+-- Looking for pfm_initialize in pfm
+-- Looking for pfm_initialize in pfm - not found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+
 
 
 

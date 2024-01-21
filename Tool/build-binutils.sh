@@ -31,7 +31,7 @@ PACKAGE="binutils"
 	check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
 
 	# VERSION=2.41
-	VERSION=2.42 # commit 633789901c83d6899685d9011517eb751aa31972 2024-01-19
+	VERSION=2.43 # commit 633789901c83d6899685d9011517eb751aa31972 2024-01-19
 
 	CONFIGURE_OPTIONS=(
 		--disable-nls

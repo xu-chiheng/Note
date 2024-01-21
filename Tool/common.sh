@@ -73,10 +73,10 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			# only gcc 11+ and clang 12+ support this
 			# local cpu_arch_flags=( -march=x86-64-v3 )
 			local cpu_arch_flags=( -march=x86-64 )
-			cflags+=(   "${cpu_arch_flags[@]}" )
-			cxxflags+=( "${cpu_arch_flags[@]}" )
 			;;
 	esac
+	cflags+=(   "${cpu_arch_flags[@]}" )
+	cxxflags+=( "${cpu_arch_flags[@]}" )
 
 	case "${build_type}" in
 		Release )

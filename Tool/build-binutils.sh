@@ -27,8 +27,9 @@ cd "$(dirname "$0")"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE="binutils"
+check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
 {
-	check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
+	dump_toolchain_build_type_and_compiler_flags
 
 	# VERSION=2.41
 	VERSION=2.43 # commit 633789901c83d6899685d9011517eb751aa31972 2024-01-19
@@ -44,6 +45,6 @@ PACKAGE="binutils"
 	time_command configure_build_install_package \
 		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${CONFIGURE_OPTIONS[@]}"
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
+} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-${TOOLCHAIN,,}-${BUILD_TYPE,,}-output.txt"
 
 sync .

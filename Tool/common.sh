@@ -133,7 +133,9 @@ check_toolchain_build_type_and_set_compiler_flags() {
 	export CFLAGS="${cflags[*]}"
 	export CXXFLAGS="${cxxflags[*]}"
 	export LDFLAGS="${ldflags[*]}"
+}
 
+dump_toolchain_build_type_and_compiler_flags() {
 	echo "TOOLCHAIN  : ${TOOLCHAIN}"
 	echo "BUILD_TYPE : ${BUILD_TYPE}"
 	echo "CC         : ${CC} $(print_compiler_version "${CC}") $(which "${CC}")"
@@ -160,6 +162,9 @@ check_llvm_static_or_shared() {
 			;;
 	esac
 	export LLVM_STATIC_OR_SHARED="${llvm_static_or_shared}"
+}
+
+dump_llvm_static_or_shared() {
 	echo "LLVM_STATIC_OR_SHARED : ${LLVM_STATIC_OR_SHARED}"
 }
 
@@ -641,8 +646,10 @@ process_install_dir_bin_symlinks () {
 }
 
 build_and_install_gmp_mpfr_mpc() {
-	local build_type="$1"
-	local gmp_mpfr_mpc_install_dir="$2"
+	local package="$1"
+	local toolchain="$2"
+	local build_type="$3"
+	local gmp_mpfr_mpc_install_dir="$4"
 
 	local gmp_version=6.2.1
 	local mpfr_version=4.1.0
@@ -656,9 +663,9 @@ build_and_install_gmp_mpfr_mpc() {
 	local mpfr_extracted_dir="mpfr-${mpfr_version}"
 	local mpc_extracted_dir="mpc-${mpc_version}"
 
-	local gmp_build_dir="gmp-${build_type,,}-build"
-	local mpfr_build_dir="mpfr-${build_type,,}-build"
-	local mpc_build_dir="mpc-${build_type,,}-build"
+	local gmp_build_dir="gmp-${toolchain,,}-${build_type,,}-build"
+	local mpfr_build_dir="mpfr-${toolchain,,}-${build_type,,}-build"
+	local mpc_build_dir="mpc-${toolchain,,}-${build_type,,}-build"
 
 	# local mirror_site=https://mirrors.aliyun.com
 	# local mirror_site=https://mirrors.tuna.tsinghua.edu.cn
@@ -677,10 +684,13 @@ build_and_install_gmp_mpfr_mpc() {
 	&& echo "building gmp mpfr mpc ......" \
 	&& time_command extract_configure_build_and_install_package gmp "${gmp_tarball}" "${gmp_extracted_dir}" "${gmp_build_dir}" "${gmp_mpfr_mpc_install_dir}" \
 			--prefix="${install_prefix}" --disable-shared \
+			2>&1 | tee "~${current_datetime}-${package}-${toolchain,,}-${build_type,,}-gmp-output.txt" \
 	&& time_command extract_configure_build_and_install_package mpfr "${mpfr_tarball}" "${mpfr_extracted_dir}" "${mpfr_build_dir}" "${gmp_mpfr_mpc_install_dir}" \
 			--prefix="${install_prefix}" --disable-shared --with-gmp="${install_prefix}" \
+			2>&1 | tee "~${current_datetime}-${package}-${toolchain,,}-${build_type,,}-mpfr-output.txt" \
 	&& time_command extract_configure_build_and_install_package mpc "${mpc_tarball}" "${mpc_extracted_dir}" "${mpc_build_dir}" "${gmp_mpfr_mpc_install_dir}" \
 			--prefix="${install_prefix}" --disable-shared --with-gmp="${install_prefix}" \
+			2>&1 | tee "~${current_datetime}-${package}-${toolchain,,}-${build_type,,}-mpc-output.txt" \
 	&& echo "completed"
 }
 
@@ -699,10 +709,10 @@ build_and_install_binutils_gcc_for_target() {
 	local gmp_mpfr_mpc_install_dir="${12}"
 	local current_datetime="${13}"
 
-	local gcc_install_dir="${gcc_source_dir}-${target}-${build_type,,}-install"
-	local gcc_build_dir="${gcc_source_dir}-${target}-${build_type,,}-build"
+	local gcc_install_dir="${gcc_source_dir}-${target}-${toolchain,,}-${build_type,,}-install"
+	local gcc_build_dir="${gcc_source_dir}-${target}-${toolchain,,}-${build_type,,}-build"
 	local bin_tarball="${package}-${target}-${version}.tar"
-	local binutils_build_dir="${binutils_source_dir}-${target}-${build_type,,}-build"
+	local binutils_build_dir="${binutils_source_dir}-${target}-${toolchain,,}-${build_type,,}-build"
 
 	local install_prefix="$(pwd)/${gcc_install_dir}"
 
@@ -745,7 +755,7 @@ build_and_install_binutils_gcc_for_target() {
 			"${binutils_configure_options[@]}" \
 		&& time_command parallel_make \
 		&& time_command parallel_make install \
-		&& echo_command popd;} 2>&1 | tee "~${current_datetime}-${package}-${target}-binutils-output.txt" \
+		&& echo_command popd;} 2>&1 | tee "~${current_datetime}-${package}-${toolchain,,}-${build_type,,}-${target}-binutils-output.txt" \
 	\
 	\
 	&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
@@ -759,7 +769,7 @@ build_and_install_binutils_gcc_for_target() {
 		&& if [ "${is_build_and_install_libgcc}" = yes ]; then
 			time_command parallel_make install-target-libgcc
 		fi \
-		&& echo_command popd;} 2>&1 | tee "~${current_datetime}-${package}-${target}-gcc-output.txt" \
+		&& echo_command popd;} 2>&1 | tee "~${current_datetime}-${package}-${toolchain,,}-${build_type,,}-${target}-gcc-output.txt" \
 	\
 	\
 	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
@@ -808,10 +818,10 @@ build_and_install_cross_gcc_for_targets() {
 	local gcc_source_dir="gcc"
 	local binutils_source_dir="binutils"
 
-	local gmp_mpfr_mpc_install_dir="gmp-mpfr-mpc-${build_type,,}-install"
+	local gmp_mpfr_mpc_install_dir="gmp-mpfr-mpc-${toolchain,,}-${build_type,,}-install"
 
 	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
-		time_command build_and_install_gmp_mpfr_mpc "${build_type}" "${gmp_mpfr_mpc_install_dir}" 2>&1 | tee "~${current_datetime}-gmp-mpfr-mpc-output.txt"
+		time_command build_and_install_gmp_mpfr_mpc "${package}" "${toolchain}" "${build_type}" "${gmp_mpfr_mpc_install_dir}" 2>&1 | tee "~${current_datetime}-${package}-${toolchain,,}-${build_type,,}-gmp-mpfr-mpc-output.txt"
 	fi \
 	&& time_command check_dir_maybe_clone_and_checkout_tag "${host_triple}" "${binutils_source_dir}" "${binutils_git_tag}" "${binutils_git_repo_url}" \
 	&& time_command check_dir_maybe_clone_and_checkout_tag "${host_triple}" "${gcc_source_dir}" "${gcc_git_tag}" "${gcc_git_repo_url}" \
@@ -822,7 +832,7 @@ build_and_install_cross_gcc_for_targets() {
 			"${target}" "${toolchain}" "${build_type}" "${host_triple}" "${package}" "${gcc_version}" "${extra_languages}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${is_build_and_install_libgcc}" "${binutils_source_dir}" "${gcc_source_dir}" \
 			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
-			2>&1 | tee "~${current_datetime}-${package}-${target}-output.txt" &
+			2>&1 | tee "~${current_datetime}-${package}-${toolchain,,}-${build_type,,}-${target}-output.txt" &
 	done \
 	&& time_command wait \
 	&& echo "completed" \
@@ -911,8 +921,8 @@ cmake_build_install_package() {
 	shift 10
 
 	local source_dir="${package}"
-	local build_dir="${source_dir}-${build_type,,}-build"
-	local install_dir="${source_dir}-${build_type,,}-install"
+	local build_dir="${source_dir}-${toolchain,,}-${build_type,,}-build"
+	local install_dir="${source_dir}-${toolchain,,}-${build_type,,}-install"
 
 	local install_prefix="$(pwd)/${install_dir}"
 
@@ -942,8 +952,8 @@ configure_build_install_package() {
 	shift 5
 
 	local source_dir="${package}"
-	local build_dir="${source_dir}-${build_type,,}-build"
-	local install_dir="${source_dir}-${build_type,,}-install"
+	local build_dir="${source_dir}-${toolchain,,}-${build_type,,}-build"
+	local install_dir="${source_dir}-${toolchain,,}-${build_type,,}-install"
 
 	local install_prefix="$(pwd)/${install_dir}"
 
@@ -966,8 +976,8 @@ gcc_configure_build_install_package() {
 	shift 6
 
 	local source_dir="${package}"
-	local build_dir="${source_dir}-${build_type,,}-build"
-	local install_dir="${source_dir}-${build_type,,}-install"
+	local build_dir="${source_dir}-${toolchain,,}-${build_type,,}-build"
+	local install_dir="${source_dir}-${toolchain,,}-${build_type,,}-install"
 
 	local languages=(
 		# all

@@ -49,10 +49,11 @@ cd "$(dirname "$0")"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=llvm
+check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
+check_llvm_static_or_shared "$3"
 {
-	check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
-
-	check_llvm_static_or_shared "$3"
+	dump_toolchain_build_type_and_compiler_flags
+	dump_llvm_static_or_shared
 
 	# VERSION=12.0.1
 	# VERSION=13.0.1
@@ -152,6 +153,6 @@ PACKAGE=llvm
 		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" \
 		"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${CMAKE_OPTIONS[@]}"
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
+} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-${TOOLCHAIN,,}-${BUILD_TYPE,,}-output.txt"
 
 sync .

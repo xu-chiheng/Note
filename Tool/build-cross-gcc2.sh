@@ -27,8 +27,9 @@ cd "$(dirname "$0")"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=gcc
+check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
 {
-	check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
+	dump_toolchain_build_type_and_compiler_flags
 
 	# GCC_VERSION=12.3.0
 	# BINUTILS_VERSION=2.36
@@ -60,6 +61,6 @@ PACKAGE=gcc
 		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
 		"$(join_array_elements ',' "${EXTRA_LANGUAGES[@]}")" no no "${CURRENT_DATETIME}" "${TARGETS[@]}"
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
+} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-${TOOLCHAIN,,}-${BUILD_TYPE,,}-output.txt"
 
 sync .

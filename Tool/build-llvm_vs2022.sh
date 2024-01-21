@@ -29,8 +29,9 @@ cd "$(dirname "$0")"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=llvm
+check_llvm_static_or_shared "$1"
 {
-	check_llvm_static_or_shared "$1"
+	dump_llvm_static_or_shared
 
 	SOURCE_DIR="${PACKAGE}"
 
@@ -154,6 +155,6 @@ PACKAGE=llvm
 	&& echo "double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE" \
 	&& echo_command popd;}
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
+} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-vs2022-output.txt"
 
 sync .

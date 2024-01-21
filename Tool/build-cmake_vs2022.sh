@@ -43,6 +43,6 @@ PACKAGE="cmake"
 	&& echo "double click the CMake.sln file, in Visual Studio IDE, set cmake as startup project, and build/debug cmake in IDE" \
 	&& echo_command popd;}
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-output.txt"
+} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-vs2022-output.txt"
 
 sync .

@@ -12,5 +12,6 @@ VS2022_DIR=C:\Program Files\Microsoft Visual Studio\2022\Enterprise
 VCPKG_DIR=D:\vcpkg
 HOME=%USERPROFILE%
 
-I also use the following command in cmd.exe to make a link, this is optional.
-mklink /j E:\Note %USERPROFILE%
+I also use one of the following commands to make a link, this is optional.
+ln -s ~ "$(cygpath -u 'E:\Note')"
+mklink /D E:\Note %USERPROFILE%

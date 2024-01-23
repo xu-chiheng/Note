@@ -618,7 +618,7 @@ copy_dependent_dlls() {
 process_install_dir_bin_symlinks () {
 	local install_dir="$1"
 	pushd "${install_dir}" \
-	&& for path in  $(find bin); do
+	&& for path in $(find bin); do
 		if [ -L "${path}" ]; then
 			path2="$(readlink -f "${path}")"
 			if [ -f "${path2}" ]; then
@@ -648,9 +648,10 @@ process_install_dir_bin_symlinks () {
 
 build_and_install_gmp_mpfr_mpc() {
 	local package="$1"
-	local toolchain="$2"
-	local build_type="$3"
-	local gmp_mpfr_mpc_install_dir="$4"
+	local host_triple="$2"
+	local toolchain="$3"
+	local build_type="$4"
+	local gmp_mpfr_mpc_install_dir="$5"
 
 	local host_os="$(print_host_os_of_triple "${host_triple}")"
 
@@ -759,7 +760,8 @@ build_and_install_binutils_gcc_for_target() {
 			"${binutils_configure_options[@]}" \
 		&& time_command parallel_make \
 		&& time_command parallel_make install \
-		&& echo_command popd;} 2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-${target}-binutils-output.txt" \
+		&& echo_command popd;} \
+		2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-${target}-binutils-output.txt" \
 	\
 	\
 	&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
@@ -773,7 +775,8 @@ build_and_install_binutils_gcc_for_target() {
 		&& if [ "${is_build_and_install_libgcc}" = yes ]; then
 			time_command parallel_make install-target-libgcc
 		fi \
-		&& echo_command popd;} 2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-${target}-gcc-output.txt" \
+		&& echo_command popd;} \
+		2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-${target}-gcc-output.txt" \
 	\
 	\
 	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
@@ -827,7 +830,7 @@ build_and_install_cross_gcc_for_targets() {
 	local gmp_mpfr_mpc_install_dir="gmp-mpfr-mpc-${host_os}-${toolchain,,}-${build_type,,}-install"
 
 	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
-		time_command build_and_install_gmp_mpfr_mpc "${package}" "${toolchain}" "${build_type}" "${gmp_mpfr_mpc_install_dir}" \
+		time_command build_and_install_gmp_mpfr_mpc "${package}" "${host_triple}" "${toolchain}" "${build_type}" "${gmp_mpfr_mpc_install_dir}" \
 		2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-gmp-mpfr-mpc-output.txt"
 	fi \
 	&& time_command check_dir_maybe_clone_and_checkout_tag "${host_triple}" "${binutils_source_dir}" "${binutils_git_tag}" "${binutils_git_repo_url}" \

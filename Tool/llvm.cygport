@@ -92,7 +92,7 @@ MAKEOPTS="-j$(expr $(nproc --all) '*' 2)"
 process_install_dir_bin_symlinks () {
 	local install_dir="$1"
 	pushd "${install_dir}" \
-	&& for path in  $(find bin); do
+	&& for path in $(find bin); do
 		if [ -L "${path}" ]; then
 			path2="$(readlink -f "${path}")"
 			if [ -f "${path2}" ]; then

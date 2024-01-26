@@ -5,11 +5,10 @@ If you have interests, you can look at my other PRs at https://github.com/llvm/l
 
 Most patches come from upstream at 
 
-https://cygwin.com/git-cygwin-packages/
-https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/clang.git;a=summary
-git://cygwin.com/git/cygwin-packages/clang.git
-https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/llvm.git;a=summary
-git://cygwin.com/git/cygwin-packages/llvm.git
+https://cygwin.com/cgit/cygwin-packages
+https://cygwin.com/cgit/cygwin-packages/clang
+https://cygwin.com/cgit/cygwin-packages/llvm
+
 
 https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-clang
 https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-clang/PKGBUILD

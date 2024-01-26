@@ -1,6 +1,5 @@
 
-https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/gdb.git;a=summary
-https://cygwin.com/git/cygwin-packages/gdb.git
+https://cygwin.com/cgit/cygwin-packages/gdb
 
 https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-gdb
 

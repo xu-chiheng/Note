@@ -447,8 +447,7 @@ print_host_os_of_triple() {
 			echo "linux"
 			;;
 		* )
-			echo "unknown host : ${host_triple}"
-			return 1
+			echo "${host_triple##*-}"
 			;;
 	esac
 }

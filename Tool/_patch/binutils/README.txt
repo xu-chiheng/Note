@@ -1,6 +1,5 @@
 
-https://cygwin.com/git-cygwin-packages/?p=git/cygwin-packages/binutils.git;a=summary
-https://cygwin.com/git/cygwin-packages/binutils.git
+https://cygwin.com/cgit/cygwin-packages/binutils
 
 https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-binutils
 

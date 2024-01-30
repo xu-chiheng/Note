@@ -65,16 +65,16 @@ install_caddy() {
 	# https://caddyserver.com/docs/install
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
-		apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
-		curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-		curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
-		apt update
-		apt install caddy
+		apt install -y debian-keyring debian-archive-keyring apt-transport-https curl \
+		&& curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg \
+		&& curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list \
+		&& apt update \
+		&& apt install -y caddy
 	elif which dnf; then
 		# Fedora, RedHat, CentOS
-		dnf install 'dnf-command(copr)'
-		dnf copr enable @caddy/caddy
-		dnf install caddy
+		dnf install -y 'dnf-command(copr)' \
+		&& dnf copr enable @caddy/caddy \
+		&& dnf install -y caddy
 	elif which pacman; then
 		# Arch Linux, Manjaro, Parabola
 		pacman -Syu caddy

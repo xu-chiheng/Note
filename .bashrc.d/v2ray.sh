@@ -190,6 +190,7 @@ print_vmess_info_in_verbose() {
 	local link="vmess://$(echo -n "${raw}" | base64 -w 0)"
 	echo "web_server_name : ${web_server_name}"
 	echo "web_server_port : ${web_server_port}"
+	echo "ip_addr         : ${ip_addr}"
 	echo "ray_path        : ${ray_path}"
 	echo "ray_uuid        : ${ray_uuid}"
 	echo

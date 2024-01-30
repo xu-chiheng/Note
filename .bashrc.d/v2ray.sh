@@ -1,18 +1,23 @@
 
 
 install_base_tools() {
-# Debian/Ubuntu:
-	apt update
-	apt install curl
-# CentOS/RedHat :
-	yum makecache
-	yum install curl
-# Fedora:
-	dnf makecache
-	dnf install curl
-# openSUSE/SUSE:
-	zypper refresh
-	zypper install curl
+	if which apt; then
+		# Debian/Ubuntu:
+		apt update \
+		&& apt install curl
+	elif which yum; then
+		# CentOS/RedHat :
+		yum makecache \
+		&& yum install curl
+	elif which dnf; then
+		# Fedora:
+		dnf makecache \
+		&& dnf install curl
+	elif which refresh; then
+		# openSUSE/SUSE:
+		zypper refresh \
+		&& zypper install curl
+	fi
 }
 
 # https://guide.v2fly.org/prep/install.html
@@ -31,19 +36,19 @@ install_xray() {
 
 
 install_nginx() {
-
+	true
 }
 
 install_caddy() {
-
+	true
 }
 
 install_apache() {
-
+	true
 }
 
 install_wireguard() {
-
+	true
 }
 
 print_ssl_certificate_file_location() {

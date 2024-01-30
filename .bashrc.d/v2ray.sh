@@ -186,50 +186,6 @@ print_ray_config() {
 EOF
 }
 
-print_nginx_config() {
-	local web_server_name="$1"
-	local web_server_port="$2"
-	local web_server_document_root="$3"
-	local ssl_certificate="$4"
-	local ssl_certificate_key="$5"
-	local ray_path="$6"
-	local ray_port="$7"
-
-	cat <<EOF
-server {
-  listen ${web_server_port} ssl;
-  listen [::]:${web_server_port} ssl;
-  
-  ssl_certificate       ${ssl_certificate};
-  ssl_certificate_key   ${ssl_certificate_key};
-  ssl_session_timeout 1d;
-  ssl_session_cache shared:MozSSL:10m;
-  ssl_session_tickets off;
-  
-  ssl_protocols         TLSv1.2 TLSv1.3;
-  ssl_ciphers           ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
-  ssl_prefer_server_ciphers off;
-  
-  server_name           ${web_server_name};
-  root                  ${web_server_document_root};
-  location ${ray_path} { # 与 V2Ray 配置中的 path 保持一致
-    if (\$http_upgrade != "websocket") { # WebSocket协商失败时返回404
-        return 404;
-    }
-    proxy_redirect off;
-    proxy_pass http://127.0.0.1:${ray_port}; # 假设WebSocket监听在环回地址的10000端口上
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade \$http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_set_header Host \$host;
-    # Show real IP in v2ray access.log
-    proxy_set_header X-Real-IP \$remote_addr;
-    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-  }
-}
-EOF
-}
-
 print_caddy_config() {
 	local web_server_name="$1"
 	local web_server_port="$2"
@@ -243,23 +199,7 @@ print_caddy_config() {
 	# ssl_certificate and ssl_certificate_key are not needed
 
 	cat <<EOF
-# Caddy v2 (recommended)
-${web_server_name} {
-    log {
-        output file /etc/caddy/caddy.log
-    }
-    tls {
-        protocols tls1.2 tls1.3
-        ciphers TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
-        curves x25519
-    }
-    @v2ray_websocket {
-        path ${ray_path}
-        header Connection Upgrade
-        header Upgrade websocket
-    }
-    reverse_proxy @v2ray_websocket localhost:${ray_port}
-}
+
 EOF
 }
 
@@ -333,7 +273,7 @@ install_v2ray_websocket_tls_web_proxy() {
 	local web_server_document_root="/usr/share/${web_server_type}/html"
 	case "${web_server_type}" in
 		nginx )
-			web_server_config_file="/etc/nginx/conf.d/${web_server_name}-ws-tls.conf"
+			web_server_config_file="/etc/nginx/conf.d/${web_server_name}.conf"
 			web_server_port="$(port_number_generate)"
 			;;
 		caddy )
@@ -343,24 +283,26 @@ install_v2ray_websocket_tls_web_proxy() {
 			;;
 	esac
 
-	install_v2ray_websocket_tls_web_proxy_1
+	# install_v2ray_websocket_tls_web_proxy_1
 
-	mkdir -p "${web_server_document_root}"
+	# mkdir -p "${web_server_document_root}"
 
-	case "${web_server_type}" in
-		nginx )
-			ssl_certificate_issue "${web_server_name}"
-			ssl_certificate_install "${web_server_name}" "${ssl_certificate}" "${ssl_certificate_key}"
-			;;
-		caddy )
-			# not needed
-			true
-			;;
-	esac
+	# case "${web_server_type}" in
+	# 	nginx )
+	# 		ssl_certificate_issue "${web_server_name}"
+	# 		ssl_certificate_install "${web_server_name}" "${ssl_certificate}" "${ssl_certificate_key}"
+	# 		;;
+	# 	caddy )
+	# 		# not needed
+	# 		true
+	# 		;;
+	# esac
 
 
-	print_${web_server_type}_config "${web_server_name}" "${web_server_port}" "${web_server_document_root}" \
-		"${ssl_certificate}" "${ssl_certificate_key}" "${ray_path}" "${ray_port}" | tee "${web_server_config_file}"
+	print_nginx_main_config | tee /etc/nginx/nginx.conf
+
+	print_nginx_web_server_config "${web_server_name}" "${web_server_port}" "${web_server_document_root}" \
+		"${ssl_certificate}" "${ssl_certificate_key}" "${ray_path}" "${ray_port}" | tee "/etc/nginx/conf.d/${web_server_name}.conf"
 
 	print_ray_config "${web_server_name}" "${ray_uuid}" "${ray_path}" "${ray_port}" | tee "${ray_config_file}"
 
@@ -370,8 +312,14 @@ install_v2ray_websocket_tls_web_proxy() {
 
 # /etc/nginx/nginx.conf
 print_nginx_main_config(){
+	local user=
+	if id nginx; then
+		user="nginx"
+	else
+		user="www-data"
+	fi
 	cat <<EOF
-user www-data;
+user ${user};
 worker_processes auto;
 error_log /var/log/nginx/error.log;
 pid /run/nginx.pid;
@@ -409,7 +357,7 @@ http {
 EOF
 }
 
-# /etc/nginx/conf.d/cla1.metakernel.com.conf
+# /etc/nginx/conf.d/${web_server_name}.conf
 print_nginx_web_server_config(){
 	local web_server_name="$1"
 	local web_server_port="$2"
@@ -444,7 +392,7 @@ server {
     ssl_certificate ${ssl_certificate};
     ssl_certificate_key ${ssl_certificate_key};
 
-    root /usr/share/nginx/html;
+    root ${web_server_document_root};
     location / {
         proxy_ssl_server_name on;
         proxy_pass https://maimai.sega.jp;

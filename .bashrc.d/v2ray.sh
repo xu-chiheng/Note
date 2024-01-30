@@ -343,6 +343,7 @@ install_v2ray_websocket_tls_web_proxy() {
 			;;
 	esac
 
+	install_v2ray_websocket_tls_web_proxy_1
 
 	mkdir -p "${web_server_document_root}"
 

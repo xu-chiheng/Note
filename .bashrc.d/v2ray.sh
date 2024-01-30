@@ -19,15 +19,24 @@ install_base_tools() {
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt update \
-		&& apt install -y curl
+		&& apt install -y openssl cron socat curl
 	elif which dnf; then
 		# Fedora, RedHat, CentOS
 		dnf makecache \
-		&& dnf install -y curl
+		&& dnf install -y openssl cron socat curl
 	elif which pacman; then
 		# Arch Linux, Manjaro, Parabola
-		pacman -Syu curl
+		pacman -Syu openssl cron socat curl
 	fi
+}
+
+# https://guide.v2fly.org/advanced/tls.html
+install_acme_sh() {
+	rm -rf ~/.acme.sh \
+	&& curl  https://get.acme.sh | sh \
+	&& source ~/.bashrc \
+	&& ~/.acme.sh/acme.sh  --upgrade  --auto-upgrade \
+	&& ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 }
 
 start_and_enable_service() {

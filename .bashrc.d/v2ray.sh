@@ -22,16 +22,16 @@ install_base_tools() {
 
 # https://guide.v2fly.org/prep/install.html
 install_v2ray() {
-	curl https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh | bash
-	systemctl start v2ray
-	systemctl enable v2ray
+	curl https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh | bash \
+	&& systemctl start v2ray \
+	&& systemctl enable v2ray
 }
 
 # https://github.com/XTLS/Xray-install
 install_xray() {
-	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
-	systemctl start xray
-	systemctl enable xray
+	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install \
+	&& systemctl start xray \
+	&& systemctl enable xray
 }
 
 

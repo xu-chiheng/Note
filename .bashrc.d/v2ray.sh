@@ -141,51 +141,6 @@ install_wireguard() {
 	true
 }
 
-
-
-# https://guide.v2fly.org/advanced/wss_and_web.html
-
-print_ray_config() {
-	local web_server_name="$1"
-	local ray_uuid="$2"
-	local ray_path="$3"
-	local ray_port="$4"
-
-	# web_server_name is not needed here
-
-	cat <<EOF
-{
-  "inbounds": [
-    {
-      "port": ${ray_port},
-      "listen":"127.0.0.1",//只监听 127.0.0.1，避免除本机外的机器探测到开放了 10000 端口
-      "protocol": "vmess",
-      "settings": {
-        "clients": [
-          {
-            "id": "${ray_uuid}",
-            "alterId": 0
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "ws",
-        "wsSettings": {
-          "path": "${ray_path}"
-        }
-      }
-    }
-  ],
-  "outbounds": [
-    {
-      "protocol": "freedom",
-      "settings": {}
-    }
-  ]
-}
-EOF
-}
-
 print_caddy_config() {
 	local web_server_name="$1"
 	local web_server_port="$2"

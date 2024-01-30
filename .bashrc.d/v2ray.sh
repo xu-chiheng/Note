@@ -263,6 +263,43 @@ ${web_server_name} {
 EOF
 }
 
+install_v2ray_websocket_tls_web_proxy_1() {
+	install_base_tools
+	install_acme_sh
+	install_${ray_core_type}
+	install_${web_server_type}
+}
+
+print_vmess_info_in_verbose() {
+	local web_server_name="$1"
+	local web_server_port="$2"
+	local ray_path="$3"
+	local ray_uuid="$4"
+
+	local raw="{
+  \"v\":\"2\",
+  \"ps\":\"\",
+  \"add\":\"0.0.0.0\",
+  \"port\":\"${web_server_port}\",
+  \"id\":\"${ray_uuid}\",
+  \"aid\":\"0\",
+  \"net\":\"ws\",
+  \"type\":\"none\",
+  \"host\":\"${web_server_name}\",
+  \"path\":\"${ray_path}\",
+  \"tls\":\"tls\"
+}"
+
+	local link="vmess://$(echo -n "${raw}" | base64 -w 0)"
+	echo "web_server_name : ${web_server_name}"
+	echo "web_server_port : ${web_server_port}"
+	echo "ray_path        : ${ray_path}"
+	echo "ray_uuid        : ${ray_uuid}"
+	echo
+	echo "vmess link      : ${link}"
+
+}
+
 install_v2ray_websocket_tls_web_proxy() {
 	local web_server_name="$1"
     local ray_uuid="$(ray_uuid_generate)"
@@ -300,10 +337,6 @@ install_v2ray_websocket_tls_web_proxy() {
 			;;
 	esac
 
-	install_base_tools
-	install_acme_sh
-	install_${ray_core_type}
-	install_${web_server_type}
 
 	mkdir -p "${web_server_document_root}"
 

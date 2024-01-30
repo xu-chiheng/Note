@@ -4,19 +4,19 @@ install_base_tools() {
 	if which apt; then
 		# Debian/Ubuntu:
 		apt update \
-		&& apt install curl
+		&& apt install -y curl
 	elif which yum; then
 		# CentOS/RedHat :
 		yum makecache \
-		&& yum install curl
+		&& yum install -y curl
 	elif which dnf; then
 		# Fedora:
 		dnf makecache \
-		&& dnf install curl
+		&& dnf install -y curl
 	elif which refresh; then
 		# openSUSE/SUSE:
 		zypper refresh \
-		&& zypper install curl
+		&& zypper install -y curl
 	fi
 }
 
@@ -36,7 +36,21 @@ install_xray() {
 
 
 install_nginx() {
-	true
+	if which apt; then
+		# Debian/Ubuntu:
+		apt install -y nginx
+	elif which yum; then
+		# CentOS/RedHat :
+		yum install -y nginx
+	elif which dnf; then
+		# Fedora:
+		dnf install -y nginx
+	elif which refresh; then
+		# openSUSE/SUSE:
+		zypper install -y nginx
+	fi \
+	&& systemctl start nginx \
+	&& systemctl enable nginx
 }
 
 install_caddy() {

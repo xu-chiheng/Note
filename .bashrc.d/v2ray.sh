@@ -309,8 +309,8 @@ install_v2ray_websocket_tls_web_proxy() {
 
     local ray_uuid="$(ray_uuid_generate)"
 
-	local ssl_certificate="/etc/v2ray/v2ray.crt"
-	local ssl_certificate_key="/etc/v2ray/v2ray.key"
+	local ssl_certificate="/usr/local/etc/xray/${web_server_name}.pem"
+	local ssl_certificate_key="/usr/local/etc/xray/${web_server_name}.key"
 	local ray_core_type=xray # v2ray
 	local web_server_type=nginx # caddy
 
@@ -384,9 +384,9 @@ events {
 }
 
 http {
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                      '$status $body_bytes_sent "$http_referer" '
-                      '"$http_user_agent" "$http_x_forwarded_for"';
+    log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+                      '\$status \$body_bytes_sent "\$http_referer" '
+                      '"\$http_user_agent" "\$http_x_forwarded_for"';
 
     access_log  /var/log/nginx/access.log  main;
     server_tokens off;
@@ -416,7 +416,7 @@ server {
     listen 80;
     listen [::]:80;
     server_name cla1.metakernel.com;
-    return 301 https://$server_name:44283$request_uri;
+    return 301 https://\$server_name:44283\$request_uri;
 }
 
 server {
@@ -450,11 +450,11 @@ server {
       proxy_redirect off;
       proxy_pass http://127.0.0.1:8400;
       proxy_http_version 1.1;
-      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Upgrade \$http_upgrade;
       proxy_set_header Connection "upgrade";
-      proxy_set_header Host $host;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host \$host;
+      proxy_set_header X-Real-IP \$remote_addr;
+      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     }
 }
 EOF

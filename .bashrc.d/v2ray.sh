@@ -188,7 +188,7 @@ EOF
 
 print_nginx_config() {
 	local web_server_name="$1"
-	local port="$2"
+	local web_server_port="$2"
 	local document_root="$3"
 	local certificate="$4"
 	local certificate_key="$5"
@@ -197,8 +197,8 @@ print_nginx_config() {
 
 	cat <<EOF
 server {
-  listen ${port} ssl;
-  listen [::]:${port} ssl;
+  listen ${web_server_port} ssl;
+  listen [::]:${web_server_port} ssl;
   
   ssl_certificate       ${certificate};
   ssl_certificate_key   ${certificate_key};
@@ -232,14 +232,14 @@ EOF
 
 print_caddy_config() {
 	local web_server_name="$1"
-	local port="$2"
+	local web_server_port="$2"
 	local document_root="$3"
 	local certificate="$4"
 	local certificate_key="$5"
 	local ray_path="$6"
 	local ray_port="$7"
 
-	# port must be 443
+	# web_server_port must be 443
 	# certificate and certificate_key are not needed
 
 	cat <<EOF

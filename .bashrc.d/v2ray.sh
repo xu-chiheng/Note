@@ -262,8 +262,11 @@ install_v2ray_websocket_tls_web_proxy() {
 
 	print_ray_config "${web_server_name}" "${ray_uuid}" "${ray_path}" "${ray_port}" | tee "${ray_config_file}"
 
-	iptables -I INPUT -p tcp --dport "${web_server_port}" -j ACCEPT
-	iptables -I INPUT -p udp --dport "${web_server_port}" -j ACCEPT
+	# firewall-cmd --permanent --add-port=${web_server_port}/tcp
+	# firewall-cmd --permanent --add-port=${web_server_port}/udp
+
+	# iptables -I INPUT -p tcp --dport "${web_server_port}" -j ACCEPT
+	# iptables -I INPUT -p udp --dport "${web_server_port}" -j ACCEPT
 
 	print_vmess_info_in_verbose "${web_server_name}" "${web_server_port}" "${ray_path}" "${ray_uuid}"
 

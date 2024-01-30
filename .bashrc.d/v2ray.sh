@@ -411,18 +411,26 @@ EOF
 
 # /etc/nginx/conf.d/cla1.metakernel.com.conf
 print_nginx_web_server_config(){
+	local web_server_name="$1"
+	local web_server_port="$2"
+	local web_server_document_root="$3"
+	local ssl_certificate="$4"
+	local ssl_certificate_key="$5"
+	local ray_path="$6"
+	local ray_port="$7"
+
 	cat <<EOF
 server {
     listen 80;
     listen [::]:80;
-    server_name cla1.metakernel.com;
-    return 301 https://\$server_name:44283\$request_uri;
+    server_name ${web_server_name};
+    return 301 https://\$server_name:${web_server_port}\$request_uri;
 }
 
 server {
-    listen       44283 ssl http2;
-    listen       [::]:44283 ssl http2;
-    server_name cla1.metakernel.com;
+    listen       ${web_server_port} ssl http2;
+    listen       [::]:${web_server_port} ssl http2;
+    server_name ${web_server_name};
     charset utf-8;
 
     # ssl配置
@@ -433,22 +441,22 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
     ssl_session_tickets off;
-    ssl_certificate /usr/local/etc/xray/cla1.metakernel.com.pem;
-    ssl_certificate_key /usr/local/etc/xray/cla1.metakernel.com.key;
+    ssl_certificate ${ssl_certificate};
+    ssl_certificate_key ${ssl_certificate_key};
 
     root /usr/share/nginx/html;
     location / {
         proxy_ssl_server_name on;
         proxy_pass https://maimai.sega.jp;
         proxy_set_header Accept-Encoding '';
-        sub_filter "maimai.sega.jp" "cla1.metakernel.com";
+        sub_filter "maimai.sega.jp" "${web_server_name}";
         sub_filter_once off;
     }
         location = /robots.txt {}
 
-    location /6nzGULFhcO1qRmMay1al0nwbkposCVr7TsNrxhJ2UfkbD7b5EqFgqk5TX5DTeHZzcaiMoDQBPI5QsSVWYFu4uBT1syHzxqkH8M7t {
+    location ${ray_path} {
       proxy_redirect off;
-      proxy_pass http://127.0.0.1:8400;
+      proxy_pass http://127.0.0.1:${ray_port};
       proxy_http_version 1.1;
       proxy_set_header Upgrade \$http_upgrade;
       proxy_set_header Connection "upgrade";

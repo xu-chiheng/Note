@@ -407,29 +407,6 @@ xz_decompress() {
 	time_command xz -dT0 "$@"
 }
 
-# https://www.geeksforgeeks.org/create-a-password-generator-using-shell-scripting/
-# https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
-# https://unix.stackexchange.com/questions/230673/how-to-generate-a-random-string
-password_generate() {
-	local i
-	for i in $(seq 1 40);
-	do
-		# openssl rand -help
-		# openssl rand -base64 48
-		# openssl rand -hex 64
-		tr -cd '[:alnum:]' < /dev/urandom | fold -w100 | head -n1
-	done
-}
-
-# https://stackoverflow.com/questions/2556190/random-number-from-a-range-in-a-bash-script
-port_number_generate() {
-	local i
-	for i in $(seq 1 40);
-	do
-		shuf -i 2000-65000 -n 1
-	done
-}
-
 # https://stackoverflow.com/questions/4544669/batch-convert-latin-1-files-to-utf-8-using-iconv
 iconv_text_files_to_UTF-8() {
 	local from_encoding="$1"

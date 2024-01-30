@@ -1,5 +1,20 @@
 
 
+# https://www.geeksforgeeks.org/create-a-password-generator-using-shell-scripting/
+# https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
+# https://unix.stackexchange.com/questions/230673/how-to-generate-a-random-string
+password_generate() {
+	# openssl rand -help
+	# openssl rand -base64 48
+	# openssl rand -hex 64
+	tr -cd '[:alnum:]' < /dev/urandom | fold -w100 | head -n1
+}
+
+# https://stackoverflow.com/questions/2556190/random-number-from-a-range-in-a-bash-script
+port_number_generate() {
+	shuf -i 2000-65000 -n 1
+}
+
 install_base_tools() {
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
@@ -47,6 +62,8 @@ install_xray() {
 	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
 
+# https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
+# /etc/nginx/nginx.conf
 install_nginx() {
 	if which nginx; then
 		return 0

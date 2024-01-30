@@ -333,7 +333,7 @@ install_v2ray_websocket_tls_web_proxy() {
 	local web_server_document_root="/usr/share/${web_server_type}/html"
 	case "${web_server_type}" in
 		nginx )
-			web_server_config_file=/etc/nginx/nginx.conf
+			web_server_config_file="/etc/nginx/conf.d/${web_server_name}-ws-tls.conf"
 			web_server_port="$(port_number_generate)"
 			;;
 		caddy )

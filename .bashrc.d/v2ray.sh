@@ -419,18 +419,16 @@ print_ray_config_2() {
 	local ray_path="$3"
 	local ray_port="$4"
 
-	# web_server_name is not needed here
-
 	cat <<EOF
 {
   "inbounds": [{
-    "port": 8400,
+    "port": ${ray_port},
     "listen": "127.0.0.1",
     "protocol": "vmess",
     "settings": {
       "clients": [
         {
-          "id": "c459e17f-08ff-445a-8155-d48039462172",
+          "id": "${ray_uuid}",
           "level": 1,
           "alterId": 0
         }
@@ -440,9 +438,9 @@ print_ray_config_2() {
     "streamSettings": {
         "network": "ws",
         "wsSettings": {
-            "path": "/6nzGULFhcO1qRmMay1al0nwbkposCVr7TsNrxhJ2UfkbD7b5EqFgqk5TX5DTeHZzcaiMoDQBPI5QsSVWYFu4uBT1syHzxqkH8M7t",
+            "path": "${ray_path}",
             "headers": {
-                "Host": "cla1.metakernel.com"
+                "Host": "${web_server_name}"
             }
         }
     }

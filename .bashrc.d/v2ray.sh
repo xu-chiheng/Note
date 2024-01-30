@@ -302,6 +302,11 @@ print_vmess_info_in_verbose() {
 
 install_v2ray_websocket_tls_web_proxy() {
 	local web_server_name="$1"
+	if [ -z "${web_server_name}" ]; then
+		echo "must provide a web server name"
+		return 1;
+	fi
+
     local ray_uuid="$(ray_uuid_generate)"
 
 	local ssl_certificate="/etc/v2ray/v2ray.crt"

@@ -368,13 +368,6 @@ install_v2ray_websocket_tls_web_proxy() {
 
 }
 
-print_nginx_web_server_config(){
-	cat <<EOF
-
-
-EOF
-}
-
 # /etc/nginx/nginx.conf
 print_nginx_main_config(){
 	cat <<EOF
@@ -412,6 +405,57 @@ http {
     # See http://nginx.org/en/docs/ngx_core_module.html#include
     # for more information.
     include /etc/nginx/conf.d/*.conf;
+}
+EOF
+}
+
+# /etc/nginx/conf.d/cla1.metakernel.com.conf
+print_nginx_web_server_config(){
+	cat <<EOF
+server {
+    listen 80;
+    listen [::]:80;
+    server_name cla1.metakernel.com;
+    return 301 https://$server_name:44283$request_uri;
+}
+
+server {
+    listen       44283 ssl http2;
+    listen       [::]:44283 ssl http2;
+    server_name cla1.metakernel.com;
+    charset utf-8;
+
+    # ssl配置
+    ssl_protocols TLSv1.1 TLSv1.2;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+    ssl_ecdh_curve secp384r1;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+    ssl_session_tickets off;
+    ssl_certificate /usr/local/etc/xray/cla1.metakernel.com.pem;
+    ssl_certificate_key /usr/local/etc/xray/cla1.metakernel.com.key;
+
+    root /usr/share/nginx/html;
+    location / {
+        proxy_ssl_server_name on;
+        proxy_pass https://maimai.sega.jp;
+        proxy_set_header Accept-Encoding '';
+        sub_filter "maimai.sega.jp" "cla1.metakernel.com";
+        sub_filter_once off;
+    }
+        location = /robots.txt {}
+
+    location /6nzGULFhcO1qRmMay1al0nwbkposCVr7TsNrxhJ2UfkbD7b5EqFgqk5TX5DTeHZzcaiMoDQBPI5QsSVWYFu4uBT1syHzxqkH8M7t {
+      proxy_redirect off;
+      proxy_pass http://127.0.0.1:8400;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
 }
 EOF
 }

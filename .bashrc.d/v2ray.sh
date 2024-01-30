@@ -171,10 +171,12 @@ print_vmess_info_in_verbose() {
 	local ray_path="$3"
 	local ray_uuid="$4"
 
+	local ip_addr="$(ifconfig eth0 | grep 'inet '| awk '{print $2}')"
+
 	local raw="{
   \"v\":\"2\",
   \"ps\":\"\",
-  \"add\":\"0.0.0.0\",
+  \"add\":\"${ip_addr}\",
   \"port\":\"${web_server_port}\",
   \"id\":\"${ray_uuid}\",
   \"aid\":\"0\",
@@ -257,6 +259,9 @@ install_v2ray_websocket_tls_web_proxy() {
 		"${ssl_certificate}" "${ssl_certificate_key}" "${ray_path}" "${ray_port}" | tee "/etc/nginx/conf.d/${web_server_name}.conf"
 
 	print_ray_config "${web_server_name}" "${ray_uuid}" "${ray_path}" "${ray_port}" | tee "${ray_config_file}"
+
+	iptables -I INPUT -p tcp --dport "${web_server_port}" -j ACCEPT
+	iptables -I INPUT -p udp --dport "${web_server_port}" -j ACCEPT
 
 	print_vmess_info_in_verbose "${web_server_name}" "${web_server_port}" "${ray_path}" "${ray_uuid}"
 
@@ -368,7 +373,7 @@ server {
 EOF
 }
 
-print_ray_config_2() {
+print_ray_config() {
 	local web_server_name="$1"
 	local ray_uuid="$2"
 	local ray_path="$3"

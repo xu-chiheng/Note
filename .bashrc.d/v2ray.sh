@@ -20,20 +20,30 @@ install_base_tools() {
 	fi
 }
 
+start_and_enable_service() {
+	local service="$1"
+
+	systemctl start "${service}" \
+	&& systemctl enable "${service}"
+}
+
+stop_and_disable_service() {
+	local service="$1"
+
+	systemctl stop "${service}" \
+	&& systemctl disable "${service}"
+
+}
+
 # https://guide.v2fly.org/prep/install.html
 install_v2ray() {
-	curl https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh | bash \
-	&& systemctl start v2ray \
-	&& systemctl enable v2ray
+	curl https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh | bash
 }
 
 # https://github.com/XTLS/Xray-install
 install_xray() {
-	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install \
-	&& systemctl start xray \
-	&& systemctl enable xray
+	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
-
 
 install_nginx() {
 	if which apt; then
@@ -48,20 +58,18 @@ install_nginx() {
 	elif which refresh; then
 		# openSUSE/SUSE:
 		zypper install -y nginx
-	fi \
-	&& systemctl start nginx \
-	&& systemctl enable nginx
+	fi
 }
 
 install_caddy() {
 	# https://caddyserver.com/docs/install
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
-		sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
-		curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-		curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
-		sudo apt update
-		sudo apt install caddy
+		apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
+		curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+		curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+		apt update
+		apt install caddy
 	elif which dnf; then
 		# Fedora, RedHat, CentOS
 		dnf install 'dnf-command(copr)'
@@ -70,9 +78,7 @@ install_caddy() {
 	elif which pacman; then
 		# Arch Linux, Manjaro, Parabola
 		pacman -Syu caddy
-	fi \
-	&& systemctl start caddy \
-	&& systemctl enable caddy
+	fi
 }
 
 install_apache() {

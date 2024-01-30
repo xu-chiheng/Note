@@ -39,6 +39,26 @@ install_acme_sh() {
 	&& ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 }
 
+ssl_certificate_issue() {
+	local server_name="$1"
+	~/.acme.sh/acme.sh --issue -d "${server_name}" --standalone --keylength ec-256 --force
+}
+
+ssl_certificate_renew() {
+	local server_name="$1"
+	~/.acme.sh/acme.sh --renew -d "${server_name}" --force --ecc
+}
+
+ssl_certificate_install() {
+	local server_name="$1"
+	local ssl_certificate_file_location="$2"
+	local ssl_certificate_key_file_location="$3"
+	~/.acme.sh/acme.sh --installcert -d "${server_name}" --ecc \
+                          --fullchain-file "${ssl_certificate_file_location}" \
+                          --key-file "${ssl_certificate_key_file_location}"
+}
+
+
 start_and_enable_service() {
 	local service="$1"
 
@@ -117,21 +137,15 @@ install_wireguard() {
 	true
 }
 
-print_ssl_certificate_file_location() {
-	echo "/etc/v2ray/v2ray.crt"
-}
 
-print_ssl_certificate_key_file_location() {
-	echo "/etc/v2ray/v2ray.key"
-}
 
 # https://guide.v2fly.org/advanced/wss_and_web.html
 
 print_v2ray_config() {
 	local server_name="$1"
 	local uuid="$2"
-	local ws_path="$3"
-	local ws_port="$4"
+	local v2ray_path="$3"
+	local v2ray_port="$4"
 
 	# server_name is not needed here
 
@@ -139,7 +153,7 @@ print_v2ray_config() {
 {
   "inbounds": [
     {
-      "port": ${ws_port},
+      "port": ${v2ray_port},
       "listen":"127.0.0.1",//只监听 127.0.0.1，避免除本机外的机器探测到开放了 10000 端口
       "protocol": "vmess",
       "settings": {
@@ -153,7 +167,7 @@ print_v2ray_config() {
       "streamSettings": {
         "network": "ws",
         "wsSettings": {
-          "path": "${ws_path}"
+          "path": "${v2ray_path}"
         }
       }
     }
@@ -174,8 +188,8 @@ print_nginx_config() {
 	local document_root="$3"
 	local certificate="$4"
 	local certificate_key="$5"
-	local ws_path="$6"
-	local ws_port="$7"
+	local v2ray_path="$6"
+	local v2ray_port="$7"
 
 	cat <<EOF
 server {
@@ -193,12 +207,12 @@ server {
   ssl_prefer_server_ciphers off;
   
   server_name           ${server_name};
-  location ${ws_path} { # 与 V2Ray 配置中的 path 保持一致
+  location ${v2ray_path} { # 与 V2Ray 配置中的 path 保持一致
     if (\$http_upgrade != "websocket") { # WebSocket协商失败时返回404
         return 404;
     }
     proxy_redirect off;
-    proxy_pass http://127.0.0.1:${ws_port}; # 假设WebSocket监听在环回地址的10000端口上
+    proxy_pass http://127.0.0.1:${v2ray_port}; # 假设WebSocket监听在环回地址的10000端口上
     proxy_http_version 1.1;
     proxy_set_header Upgrade \$http_upgrade;
     proxy_set_header Connection "upgrade";
@@ -217,8 +231,8 @@ print_caddy_config() {
 	local document_root="$3"
 	local certificate="$4"
 	local certificate_key="$5"
-	local ws_path="$6"
-	local ws_port="$7"
+	local v2ray_path="$6"
+	local v2ray_port="$7"
 
 	# port must be 443
 	# certificate and certificate_key are not needed
@@ -235,12 +249,31 @@ ${server_name} {
         curves x25519
     }
     @v2ray_websocket {
-        path ${ws_path}
+        path ${v2ray_path}
         header Connection Upgrade
         header Upgrade websocket
     }
-    reverse_proxy @v2ray_websocket localhost:${ws_port}
+    reverse_proxy @v2ray_websocket localhost:${v2ray_port}
 }
 EOF
 }
 
+install_v2ray_websocket_tls_web_proxy() {
+	local ssl_certificate_file_location="/etc/v2ray/v2ray.crt"
+	local ssl_certificate_key_file_location="/etc/v2ray/v2ray.key"
+	local v2ray_core_type=xray
+	local web_server_type=nginx
+
+	local web_server_config_file=
+	local web_server_port=
+	local v2ray_port=
+
+
+
+
+
+
+
+
+
+}

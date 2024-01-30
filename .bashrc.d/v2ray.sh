@@ -270,14 +270,11 @@ install_v2ray_websocket_tls_web_proxy() {
 
 	local web_server_config_file=
 	local web_server_port=
-	local web_server_document_root="/usr/share/${web_server_type}/html"
 	case "${web_server_type}" in
 		nginx )
-			web_server_config_file="/etc/nginx/conf.d/${web_server_name}.conf"
 			web_server_port="$(port_number_generate)"
 			;;
 		caddy )
-			web_server_config_file=/etc/caddy/Caddyfile
 			# must be 443
 			web_server_port=443
 			;;
@@ -412,6 +409,52 @@ server {
       proxy_set_header X-Real-IP \$remote_addr;
       proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     }
+}
+EOF
+}
+
+print_ray_config_2() {
+	local web_server_name="$1"
+	local ray_uuid="$2"
+	local ray_path="$3"
+	local ray_port="$4"
+
+	# web_server_name is not needed here
+
+	cat <<EOF
+{
+  "inbounds": [{
+    "port": 8400,
+    "listen": "127.0.0.1",
+    "protocol": "vmess",
+    "settings": {
+      "clients": [
+        {
+          "id": "c459e17f-08ff-445a-8155-d48039462172",
+          "level": 1,
+          "alterId": 0
+        }
+      ],
+      "disableInsecureEncryption": false
+    },
+    "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+            "path": "/6nzGULFhcO1qRmMay1al0nwbkposCVr7TsNrxhJ2UfkbD7b5EqFgqk5TX5DTeHZzcaiMoDQBPI5QsSVWYFu4uBT1syHzxqkH8M7t",
+            "headers": {
+                "Host": "cla1.metakernel.com"
+            }
+        }
+    }
+  }],
+  "outbounds": [{
+    "protocol": "freedom",
+    "settings": {}
+  },{
+    "protocol": "blackhole",
+    "settings": {},
+    "tag": "blocked"
+  }]
 }
 EOF
 }

@@ -252,6 +252,7 @@ install_v2ray_websocket_tls_web_proxy() {
 	# 		;;
 	# esac
 
+	web_server_document_root=/usr/share/nginx/html
 
 	print_nginx_main_config | tee /etc/nginx/nginx.conf
 

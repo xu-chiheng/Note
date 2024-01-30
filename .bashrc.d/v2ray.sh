@@ -30,6 +30,7 @@ stop_and_disable_service() {
 }
 
 # https://guide.v2fly.org/prep/install.html
+# /usr/local/bin/v2ray run -config /usr/local/etc/v2ray/config.json
 install_v2ray() {
 	if which v2ray; then
 		return 0
@@ -38,6 +39,7 @@ install_v2ray() {
 }
 
 # https://github.com/XTLS/Xray-install
+# /usr/local/bin/xray run -config /usr/local/etc/xray/config.json
 install_xray() {
 	if which xray; then
 		return 0
@@ -61,8 +63,9 @@ install_nginx() {
 	fi
 }
 
+# https://caddyserver.com/docs/install
+# /usr/bin/caddy run --environ --config /etc/caddy/Caddyfile
 install_caddy() {
-	# https://caddyserver.com/docs/install
 	if which caddy; then
 		return 0
 	fi

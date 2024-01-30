@@ -147,7 +147,7 @@ install_wireguard() {
 
 print_ray_config() {
 	local web_server_name="$1"
-	local uuid="$2"
+	local ray_uuid="$2"
 	local ray_path="$3"
 	local ray_port="$4"
 
@@ -163,7 +163,7 @@ print_ray_config() {
       "settings": {
         "clients": [
           {
-            "id": "${uuid}",
+            "id": "${ray_uuid}",
             "alterId": 0
           }
         ]
@@ -189,9 +189,9 @@ EOF
 print_nginx_config() {
 	local web_server_name="$1"
 	local web_server_port="$2"
-	local document_root="$3"
-	local certificate="$4"
-	local certificate_key="$5"
+	local web_server_document_root="$3"
+	local ssl_certificate="$4"
+	local ssl_certificate_key="$5"
 	local ray_path="$6"
 	local ray_port="$7"
 
@@ -200,8 +200,8 @@ server {
   listen ${web_server_port} ssl;
   listen [::]:${web_server_port} ssl;
   
-  ssl_certificate       ${certificate};
-  ssl_certificate_key   ${certificate_key};
+  ssl_certificate       ${ssl_certificate};
+  ssl_certificate_key   ${ssl_certificate_key};
   ssl_session_timeout 1d;
   ssl_session_cache shared:MozSSL:10m;
   ssl_session_tickets off;
@@ -211,7 +211,7 @@ server {
   ssl_prefer_server_ciphers off;
   
   server_name           ${web_server_name};
-  root                  ${document_root};
+  root                  ${web_server_document_root};
   location ${ray_path} { # 与 V2Ray 配置中的 path 保持一致
     if (\$http_upgrade != "websocket") { # WebSocket协商失败时返回404
         return 404;
@@ -233,14 +233,14 @@ EOF
 print_caddy_config() {
 	local web_server_name="$1"
 	local web_server_port="$2"
-	local document_root="$3"
-	local certificate="$4"
-	local certificate_key="$5"
+	local web_server_document_root="$3"
+	local ssl_certificate="$4"
+	local ssl_certificate_key="$5"
 	local ray_path="$6"
 	local ray_port="$7"
 
 	# web_server_port must be 443
-	# certificate and certificate_key are not needed
+	# ssl_certificate and ssl_certificate_key are not needed
 
 	cat <<EOF
 # Caddy v2 (recommended)
@@ -265,10 +265,10 @@ EOF
 
 install_v2ray_websocket_tls_web_proxy() {
 	local web_server_name="$1"
-    local uuid="$(ray_uuid_generate)"
+    local ray_uuid="$(ray_uuid_generate)"
 
-	local certificate="/etc/v2ray/v2ray.crt"
-	local certificate_key="/etc/v2ray/v2ray.key"
+	local ssl_certificate="/etc/v2ray/v2ray.crt"
+	local ssl_certificate_key="/etc/v2ray/v2ray.key"
 	local ray_core_type=xray # v2ray
 	local web_server_type=nginx # caddy
 
@@ -308,12 +308,12 @@ install_v2ray_websocket_tls_web_proxy() {
 	mkdir -p "${web_server_document_root}"
 
 	ssl_certificate_issue "${web_server_name}"
-	ssl_certificate_install "${web_server_name}" "${certificate}" "${certificate_key}"
+	ssl_certificate_install "${web_server_name}" "${ssl_certificate}" "${ssl_certificate_key}"
 
 	print_${web_server_type}_config "${web_server_name}" "${web_server_port}" "${web_server_document_root}" \
-		"${certificate}" "${certificate_key}" "${ray_path}" "${ray_port}" | tee "${web_server_config_file}"
+		"${ssl_certificate}" "${ssl_certificate_key}" "${ray_path}" "${ray_port}" | tee "${web_server_config_file}"
 
-	print_ray_config "${web_server_name}" "${uuid}" "${ray_path}" "${ray_port}" | tee "${ray_config_file}"
+	print_ray_config "${web_server_name}" "${ray_uuid}" "${ray_path}" "${ray_port}" | tee "${ray_config_file}"
 
 
 

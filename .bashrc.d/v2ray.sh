@@ -333,6 +333,7 @@ install_v2ray_websocket_tls_web_proxy() {
 			;;
 		caddy )
 			web_server_config_file=/etc/caddy/Caddyfile
+			# must be 443
 			web_server_port=443
 			;;
 	esac
@@ -340,15 +341,24 @@ install_v2ray_websocket_tls_web_proxy() {
 
 	mkdir -p "${web_server_document_root}"
 
-	ssl_certificate_issue "${web_server_name}"
-	ssl_certificate_install "${web_server_name}" "${ssl_certificate}" "${ssl_certificate_key}"
+	case "${web_server_type}" in
+		nginx )
+			ssl_certificate_issue "${web_server_name}"
+			ssl_certificate_install "${web_server_name}" "${ssl_certificate}" "${ssl_certificate_key}"
+			;;
+		caddy )
+			# not needed
+			true
+			;;
+	esac
+
 
 	print_${web_server_type}_config "${web_server_name}" "${web_server_port}" "${web_server_document_root}" \
 		"${ssl_certificate}" "${ssl_certificate_key}" "${ray_path}" "${ray_port}" | tee "${web_server_config_file}"
 
 	print_ray_config "${web_server_name}" "${ray_uuid}" "${ray_path}" "${ray_port}" | tee "${ray_config_file}"
 
-
+	print_vmess_info_in_verbose "${web_server_name}" "${web_server_port}" "${ray_path}" "${ray_uuid}"
 
 }
 

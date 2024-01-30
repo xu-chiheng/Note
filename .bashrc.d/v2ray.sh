@@ -15,6 +15,10 @@ port_number_generate() {
 	shuf -i 2000-65000 -n 1
 }
 
+ray_uuid_generate() {
+	cat '/proc/sys/kernel/random/uuid'
+}
+
 install_base_tools() {
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
@@ -141,11 +145,11 @@ install_wireguard() {
 
 # https://guide.v2fly.org/advanced/wss_and_web.html
 
-print_v2ray_config() {
+print_ray_config() {
 	local server_name="$1"
 	local uuid="$2"
-	local v2ray_path="$3"
-	local v2ray_port="$4"
+	local ray_path="$3"
+	local ray_port="$4"
 
 	# server_name is not needed here
 
@@ -153,7 +157,7 @@ print_v2ray_config() {
 {
   "inbounds": [
     {
-      "port": ${v2ray_port},
+      "port": ${ray_port},
       "listen":"127.0.0.1",//只监听 127.0.0.1，避免除本机外的机器探测到开放了 10000 端口
       "protocol": "vmess",
       "settings": {
@@ -167,7 +171,7 @@ print_v2ray_config() {
       "streamSettings": {
         "network": "ws",
         "wsSettings": {
-          "path": "${v2ray_path}"
+          "path": "${ray_path}"
         }
       }
     }
@@ -188,8 +192,8 @@ print_nginx_config() {
 	local document_root="$3"
 	local certificate="$4"
 	local certificate_key="$5"
-	local v2ray_path="$6"
-	local v2ray_port="$7"
+	local ray_path="$6"
+	local ray_port="$7"
 
 	cat <<EOF
 server {
@@ -207,12 +211,12 @@ server {
   ssl_prefer_server_ciphers off;
   
   server_name           ${server_name};
-  location ${v2ray_path} { # 与 V2Ray 配置中的 path 保持一致
+  location ${ray_path} { # 与 V2Ray 配置中的 path 保持一致
     if (\$http_upgrade != "websocket") { # WebSocket协商失败时返回404
         return 404;
     }
     proxy_redirect off;
-    proxy_pass http://127.0.0.1:${v2ray_port}; # 假设WebSocket监听在环回地址的10000端口上
+    proxy_pass http://127.0.0.1:${ray_port}; # 假设WebSocket监听在环回地址的10000端口上
     proxy_http_version 1.1;
     proxy_set_header Upgrade \$http_upgrade;
     proxy_set_header Connection "upgrade";
@@ -231,8 +235,8 @@ print_caddy_config() {
 	local document_root="$3"
 	local certificate="$4"
 	local certificate_key="$5"
-	local v2ray_path="$6"
-	local v2ray_port="$7"
+	local ray_path="$6"
+	local ray_port="$7"
 
 	# port must be 443
 	# certificate and certificate_key are not needed
@@ -249,31 +253,65 @@ ${server_name} {
         curves x25519
     }
     @v2ray_websocket {
-        path ${v2ray_path}
+        path ${ray_path}
         header Connection Upgrade
         header Upgrade websocket
     }
-    reverse_proxy @v2ray_websocket localhost:${v2ray_port}
+    reverse_proxy @v2ray_websocket localhost:${ray_port}
 }
 EOF
 }
 
 install_v2ray_websocket_tls_web_proxy() {
-	local ssl_certificate_file_location="/etc/v2ray/v2ray.crt"
-	local ssl_certificate_key_file_location="/etc/v2ray/v2ray.key"
-	local v2ray_core_type=xray
-	local web_server_type=nginx
+	local server_name="$1"
+	local document_root=
+
+    local uuid="$(ray_uuid_generate)"
+
+	local certificate="/etc/v2ray/v2ray.crt"
+	local certificate_key="/etc/v2ray/v2ray.key"
+	local ray_core_type=xray # v2ray
+	local web_server_type=nginx # caddy
+
+	local ray_path="/$(password_generate)"
+	local ray_port="$(port_number_generate)"
+
+
+	local ray_config_file=
+	case "${ray_core_type}" in
+		xray )
+			ray_config_file=/usr/local/etc/xray/config.json
+			;;
+		v2ray )
+			ray_config_file=/usr/local/etc/v2ray/config.json
+			;;
+	esac
 
 	local web_server_config_file=
 	local web_server_port=
-	local v2ray_port=
+	case "${web_server_type}" in
+		nginx )
+			web_server_config_file=/etc/nginx/nginx.conf
+			web_server_port="$(port_number_generate)"
+			;;
+		caddy )
+			web_server_config_file=/etc/caddy/Caddyfile
+			web_server_port=443
+			;;
+	esac
 
+	install_base_tools
+	install_acme_sh
+	install_${ray_core_type}
+	install_${web_server_type}
 
-
-
-
+	ssl_certificate_issue "${server_name}"
+	ssl_certificate_install "${server_name}" "${certificate}" "${certificate_key}"
 
 
 
 
 }
+
+
+

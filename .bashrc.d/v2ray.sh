@@ -44,20 +44,20 @@ install_acme_sh() {
 }
 
 ssl_certificate_issue() {
-	local server_name="$1"
-	~/.acme.sh/acme.sh --issue -d "${server_name}" --standalone --keylength ec-256 --force
+	local web_server_name="$1"
+	~/.acme.sh/acme.sh --issue -d "${web_server_name}" --standalone --keylength ec-256 --force
 }
 
 ssl_certificate_renew() {
-	local server_name="$1"
-	~/.acme.sh/acme.sh --renew -d "${server_name}" --force --ecc
+	local web_server_name="$1"
+	~/.acme.sh/acme.sh --renew -d "${web_server_name}" --force --ecc
 }
 
 ssl_certificate_install() {
-	local server_name="$1"
+	local web_server_name="$1"
 	local ssl_certificate_file_location="$2"
 	local ssl_certificate_key_file_location="$3"
-	~/.acme.sh/acme.sh --installcert -d "${server_name}" --ecc \
+	~/.acme.sh/acme.sh --installcert -d "${web_server_name}" --ecc \
                           --fullchain-file "${ssl_certificate_file_location}" \
                           --key-file "${ssl_certificate_key_file_location}"
 }
@@ -146,12 +146,12 @@ install_wireguard() {
 # https://guide.v2fly.org/advanced/wss_and_web.html
 
 print_ray_config() {
-	local server_name="$1"
+	local web_server_name="$1"
 	local uuid="$2"
 	local ray_path="$3"
 	local ray_port="$4"
 
-	# server_name is not needed here
+	# web_server_name is not needed here
 
 	cat <<EOF
 {
@@ -187,7 +187,7 @@ EOF
 }
 
 print_nginx_config() {
-	local server_name="$1"
+	local web_server_name="$1"
 	local port="$2"
 	local document_root="$3"
 	local certificate="$4"
@@ -210,7 +210,8 @@ server {
   ssl_ciphers           ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
   ssl_prefer_server_ciphers off;
   
-  server_name           ${server_name};
+  server_name           ${web_server_name};
+  root                  ${document_root};
   location ${ray_path} { # 与 V2Ray 配置中的 path 保持一致
     if (\$http_upgrade != "websocket") { # WebSocket协商失败时返回404
         return 404;
@@ -230,7 +231,7 @@ EOF
 }
 
 print_caddy_config() {
-	local server_name="$1"
+	local web_server_name="$1"
 	local port="$2"
 	local document_root="$3"
 	local certificate="$4"
@@ -243,7 +244,7 @@ print_caddy_config() {
 
 	cat <<EOF
 # Caddy v2 (recommended)
-${server_name} {
+${web_server_name} {
     log {
         output file /etc/caddy/caddy.log
     }
@@ -263,9 +264,7 @@ EOF
 }
 
 install_v2ray_websocket_tls_web_proxy() {
-	local server_name="$1"
-	local document_root=
-
+	local web_server_name="$1"
     local uuid="$(ray_uuid_generate)"
 
 	local certificate="/etc/v2ray/v2ray.crt"
@@ -289,6 +288,7 @@ install_v2ray_websocket_tls_web_proxy() {
 
 	local web_server_config_file=
 	local web_server_port=
+	local web_server_document_root="/usr/share/${web_server_type}/html"
 	case "${web_server_type}" in
 		nginx )
 			web_server_config_file=/etc/nginx/nginx.conf
@@ -305,9 +305,15 @@ install_v2ray_websocket_tls_web_proxy() {
 	install_${ray_core_type}
 	install_${web_server_type}
 
-	ssl_certificate_issue "${server_name}"
-	ssl_certificate_install "${server_name}" "${certificate}" "${certificate_key}"
+	mkdir -p "${web_server_document_root}"
 
+	ssl_certificate_issue "${web_server_name}"
+	ssl_certificate_install "${web_server_name}" "${certificate}" "${certificate_key}"
+
+	print_${web_server_type}_config "${web_server_name}" "${web_server_port}" "${web_server_document_root}" \
+		"${certificate}" "${certificate_key}" "${ray_path}" "${ray_port}" | tee "${web_server_config_file}"
+
+	print_ray_config "${web_server_name}" "${uuid}" "${ray_path}" "${ray_port}" | tee "${ray_config_file}"
 
 
 

@@ -2,21 +2,16 @@
 
 install_base_tools() {
 	if which apt; then
-		# Debian/Ubuntu:
+		# Debian, Ubuntu, Raspbian
 		apt update \
 		&& apt install -y curl
-	elif which yum; then
-		# CentOS/RedHat :
-		yum makecache \
-		&& yum install -y curl
 	elif which dnf; then
-		# Fedora:
+		# Fedora, RedHat, CentOS
 		dnf makecache \
 		&& dnf install -y curl
-	elif which refresh; then
-		# openSUSE/SUSE:
-		zypper refresh \
-		&& zypper install -y curl
+	elif which pacman; then
+		# Arch Linux, Manjaro, Parabola
+		pacman -Syu curl
 	fi
 }
 
@@ -47,17 +42,14 @@ install_xray() {
 
 install_nginx() {
 	if which apt; then
-		# Debian/Ubuntu:
+		# Debian, Ubuntu, Raspbian
 		apt install -y nginx
-	elif which yum; then
-		# CentOS/RedHat :
-		yum install -y nginx
 	elif which dnf; then
-		# Fedora:
+		# Fedora, RedHat, CentOS
 		dnf install -y nginx
-	elif which refresh; then
-		# openSUSE/SUSE:
-		zypper install -y nginx
+	elif which pacman; then
+		# Arch Linux, Manjaro, Parabola
+		pacman -Syu nginx
 	fi
 }
 

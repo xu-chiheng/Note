@@ -27,20 +27,28 @@ stop_and_disable_service() {
 
 	systemctl stop "${service}" \
 	&& systemctl disable "${service}"
-
 }
 
 # https://guide.v2fly.org/prep/install.html
 install_v2ray() {
+	if which v2ray; then
+		return 0
+	fi
 	curl https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh | bash
 }
 
 # https://github.com/XTLS/Xray-install
 install_xray() {
+	if which xray; then
+		return 0
+	fi
 	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
 
 install_nginx() {
+	if which nginx; then
+		return 0
+	fi
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt install -y nginx
@@ -55,6 +63,9 @@ install_nginx() {
 
 install_caddy() {
 	# https://caddyserver.com/docs/install
+	if which caddy; then
+		return 0
+	fi
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt install -y debian-keyring debian-archive-keyring apt-transport-https curl \
@@ -71,10 +82,6 @@ install_caddy() {
 		# Arch Linux, Manjaro, Parabola
 		pacman -Syu caddy
 	fi
-}
-
-install_apache() {
-	true
 }
 
 install_wireguard() {
@@ -207,39 +214,4 @@ ${server_name} {
 }
 EOF
 }
-
-print_apache_config() {
-	local server_name="$1"
-	local port="$2"
-	local document_root="$3"
-	local certificate="$4"
-	local certificate_key="$5"
-	local ws_path="$6"
-	local ws_port="$7"
-
-	cat <<EOF
-<VirtualHost *:${port}>
-  DocumentRoot "${document_root}"
-  ServerName ${server_name}
-
-  SSLEngine on
-  
-  SSLCertificateFile ${certificate}
-  SSLCertificateKeyFile ${certificate_key}
-  
-  SSLProtocol             all -SSLv3 -TLSv1 -TLSv1.1
-  SSLCipherSuite          ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
-  SSLHonorCipherOrder     off
-  SSLSessionTickets       off
-  
-  <Location "${ws_path}/">
-    ProxyPass ws://127.0.0.1:${ws_port}${ws_path}/ upgrade=WebSocket
-    ProxyAddHeaders Off
-    ProxyPreserveHost On
-    RequestHeader append X-Forwarded-For %{REMOTE_ADDR}s
-  </Location>
-</VirtualHost>
-EOF
-}
-
 

@@ -458,6 +458,8 @@ outputVmessWS() {
 
     local link="vmess://$(echo -n ${raw} | base64 -w 0)"
 
+    echo  
+    echo  
     echo -e "   ${BLUE}IP(address): ${PLAIN} ${RED}${IP}${PLAIN}"
     echo -e "   ${BLUE}端口(port)：${PLAIN}${RED}${PORT}${PLAIN}"
     echo -e "   ${BLUE}id(uuid)：${PLAIN}${RED}${UUID}${PLAIN}"
@@ -472,26 +474,6 @@ outputVmessWS() {
     echo -e "   ${BLUE}vmess链接:${PLAIN} $RED$link$PLAIN"
     echo  
     echo  
-}
-
-showInfo() {
-    res="$(status)"
-    if [[ $res -lt 2 ]]; then
-        colorEcho $RED " Xray未安装，请先安装！"
-        return
-    fi
-    
-    echo ""
-    echo -n -e " ${BLUE}Xray运行状态：${PLAIN}"
-    statusText
-    echo -e " ${BLUE}Xray配置文件: ${PLAIN} ${RED}${CONFIG_FILE}${PLAIN}"
-    colorEcho $BLUE " Xray配置信息："
-
-    getConfigFileInfo
-
-    echo -e "   ${BLUE}协议: ${PLAIN} ${RED}${protocol}${PLAIN}"
-
-	outputVmessWS
 }
 
 menu() {
@@ -531,9 +513,6 @@ menu() {
         12)
             uninstall
             ;;
-        16)
-            showInfo
-            ;;
         *)
             colorEcho $RED " 请选择正确的操作！"
             exit 1
@@ -545,11 +524,11 @@ action=$1
 [[ -z $1 ]] && action=menu
 
 case "$action" in
-    menu|uninstall|showInfo)
+    menu|uninstall)
         ${action}
         ;;
     *)
         echo " 参数错误"
-        echo " 用法: `basename $0` [menu|uninstall|showInfo]"
+        echo " 用法: `basename $0` [menu|uninstall]"
         ;;
 esac

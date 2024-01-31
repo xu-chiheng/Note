@@ -59,22 +59,22 @@ print_ipv4_address() {
 }
 
 getData() {
-        echo ""
-        echo " Xray一键脚本，运行之前请确认如下条件已经具备："
-        echo "  1. 一个伪装域名"
-        echo "  2. 伪装域名DNS解析指向当前服务器ip（${IP}）"
-        echo " "
-        while true
-        do
-            read -p " 请输入伪装域名：" DOMAIN
-            if [[ -z "${DOMAIN}" ]]; then
-                echo " 域名输入错误，请重新输入！"
-            else
-                break
-            fi
-        done
-        DOMAIN=${DOMAIN,,}
-        echo " 伪装域名(host)：$DOMAIN"
+	echo ""
+	echo " Xray一键脚本，运行之前请确认如下条件已经具备："
+	echo "  1. 一个伪装域名"
+	echo "  2. 伪装域名DNS解析指向当前服务器ip（${IP}）"
+	echo " "
+	while true
+	do
+		read -p " 请输入伪装域名：" DOMAIN
+		if [[ -z "${DOMAIN}" ]]; then
+			echo " 域名输入错误，请重新输入！"
+		else
+			break
+		fi
+	done
+	DOMAIN=${DOMAIN,,}
+	echo " 伪装域名(host)：$DOMAIN"
 }
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
@@ -96,9 +96,9 @@ install_nginx() {
 }
 
 getCert() {
-    mkdir -p /usr/local/etc/xray
+	mkdir -p /usr/local/etc/xray
 
-	curl  https://get.acme.sh | sh \
+	curl https://get.acme.sh | sh \
 	&& source ~/.bashrc \
 	&& ~/.acme.sh/acme.sh --upgrade  --auto-upgrade \
 	&& ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
@@ -117,7 +117,7 @@ getCert() {
 
 configNginx() {
 	rm -rf "${NGINX_CONF_PATH}"
-    mkdir -p /usr/share/nginx/html;
+	mkdir -p /usr/share/nginx/html;
 cat > /usr/share/nginx/html/robots.txt <<EOF
 User-Agent: *
 Disallow: /
@@ -169,9 +169,9 @@ http {
 }
 EOF
 
-    mkdir -p ${NGINX_CONF_PATH}
-    # VMESS+WS+TLS
-    cat > ${NGINX_CONF_PATH}/${DOMAIN}.conf<<EOF
+	mkdir -p ${NGINX_CONF_PATH}
+	# VMESS+WS+TLS
+	cat > ${NGINX_CONF_PATH}/${DOMAIN}.conf<<EOF
 server {
     listen 80;
     listen [::]:80;
@@ -218,32 +218,32 @@ EOF
 }
 
 setSelinux() {
-    if [[ -f /etc/selinux/config ]] && grep 'SELINUX=enforcing' /etc/selinux/config; then
-        sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
-        setenforce 0
-    fi
+if [[ -f /etc/selinux/config ]] && grep 'SELINUX=enforcing' /etc/selinux/config; then
+	sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
+	setenforce 0
+fi
 }
 
 setFirewall() {
-    if which firewall-cmd 2>/dev/null; then
-        if systemctl status firewalld > /dev/null 2>&1; then
-            firewall-cmd --permanent --add-service=http
-            firewall-cmd --permanent --add-service=https
-            if [[ "$PORT" != "443" ]]; then
-                firewall-cmd --permanent --add-port=${PORT}/tcp
-                firewall-cmd --permanent --add-port=${PORT}/udp
-            fi
-            firewall-cmd --reload
-        else
-            if [[ "$(iptables -nL | nl | grep FORWARD | awk '{print $1}')" != "3" ]]; then
-                iptables -I INPUT -p tcp --dport 80 -j ACCEPT
-                iptables -I INPUT -p tcp --dport 443 -j ACCEPT
-                if [[ "$PORT" != "443" ]]; then
-                    iptables -I INPUT -p tcp --dport ${PORT} -j ACCEPT
-                    iptables -I INPUT -p udp --dport ${PORT} -j ACCEPT
-                fi
-            fi
-        fi
+	if which firewall-cmd 2>/dev/null; then
+		if systemctl status firewalld > /dev/null 2>&1; then
+			firewall-cmd --permanent --add-service=http
+			firewall-cmd --permanent --add-service=https
+			if [[ "$PORT" != "443" ]]; then
+				firewall-cmd --permanent --add-port=${PORT}/tcp
+				firewall-cmd --permanent --add-port=${PORT}/udp
+			fi
+			firewall-cmd --reload
+		else
+			if [[ "$(iptables -nL | nl | grep FORWARD | awk '{print $1}')" != "3" ]]; then
+				iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+				iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+				if [[ "$PORT" != "443" ]]; then
+					iptables -I INPUT -p tcp --dport ${PORT} -j ACCEPT
+					iptables -I INPUT -p udp --dport ${PORT} -j ACCEPT
+				fi
+			fi
+		fi
 	elif which iptables 2>/dev/null; then
 		if [[ "$(iptables -nL | nl | grep FORWARD | awk '{print $1}')" != "3" ]]; then
 			iptables -I INPUT -p tcp --dport 80 -j ACCEPT
@@ -264,15 +264,14 @@ setFirewall() {
 			fi
 		fi
 	fi
-
 }
 
 installXray() {
-    bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
 
 vmessWSConfig() {
-    cat > $CONFIG_FILE<<EOF
+	cat > $CONFIG_FILE<<EOF
 {
   "inbounds": [{
     "port": $XPORT,
@@ -311,41 +310,38 @@ EOF
 }
 
 configXray() {
-    mkdir -p /usr/local/xray
-
-	# VMESS+WS+TLS
+	mkdir -p /usr/local/xray
 	vmessWSConfig
-
 }
 
 install() {
 	IP="$(print_ipv4_address)"
 
-    getData
+	getData
 
 	CONFIG_FILE="/usr/local/etc/xray/config.json"
 	NGINX_CONF_PATH="/etc/nginx/conf.d"
 	CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
 	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
-    UUID="$(ray_uuid_generate)"
+	UUID="$(ray_uuid_generate)"
 	PORT="$(port_number_generate)"
 	XPORT="$(port_number_generate)"
 	WSPATH="/$(password_generate)"
 
 	install_base_tools
-    setSelinux
-    setFirewall
-    getCert
+	setSelinux
+	setFirewall
+	getCert
 
-    install_nginx
-    configNginx
+	install_nginx
+	configNginx
 	start_and_enable_service nginx
 
-    installXray
-    configXray
+	installXray
+	configXray
 	start_and_enable_service xray
 
-    outputVmessWS
+	outputVmessWS
 }
 
 uninstall() {
@@ -354,7 +350,7 @@ uninstall() {
 }
 
 outputVmessWS() {
-    local raw="{
+	local raw="{
   \"v\":\"2\",
   \"ps\":\"\",
   \"add\":\"$IP\",
@@ -368,60 +364,60 @@ outputVmessWS() {
   \"tls\":\"tls\"
 }"
 
-    local link="vmess://$(echo -n ${raw} | base64 -w 0)"
+	local link="vmess://$(echo -n ${raw} | base64 -w 0)"
 
-    echo  
-    echo  
-    echo "   IP(address)           : ${IP}"
-    echo "   端口(port)            : ${PORT}"
-    echo "   id(uuid)              : ${UUID}"
-    echo "   额外id(alterid)       : 0"
-    echo "   加密方式(security)    : none"
-    echo "   传输协议(network)     : ws" 
-    echo "   伪装类型(type)        : none"
-    echo "   伪装域名/主机名(host) : ${DOMAIN}"
-    echo "   路径(path)            : ${WSPATH}"
-    echo "   底层安全传输(tls)     : tls"
-    echo  
-    echo "   vmess链接: $link"
-    echo
-    echo
+	echo  
+	echo  
+	echo "   IP(address)           : ${IP}"
+	echo "   端口(port)            : ${PORT}"
+	echo "   id(uuid)              : ${UUID}"
+	echo "   额外id(alterid)       : 0"
+	echo "   加密方式(security)    : none"
+	echo "   传输协议(network)     : ws" 
+	echo "   伪装类型(type)        : none"
+	echo "   伪装域名/主机名(host) : ${DOMAIN}"
+	echo "   路径(path)            : ${WSPATH}"
+	echo "   底层安全传输(tls)     : tls"
+	echo  
+	echo "   vmess链接 : $link"
+	echo
+	echo
 }
 
 menu() {
-    clear
-    echo "#############################################################"
-    echo "#                    Xray 一键安装脚本                      #"
-    echo "# 作者: MisakaNo の 小破站                                  #"
-    echo "# 博客: https://blog.misaka.rest                            #"
-    echo "# GitHub 项目: https://github.com/Misaka-blog               #"
-    echo "# GitLab 项目: https://gitlab.com/Misaka-blog               #"
-    echo "# Telegram 频道: https://t.me/misakanocchannel              #"
-    echo "# Telegram 群组: https://t.me/misakanoc                     #"
-    echo "# YouTube 频道: https://www.youtube.com/@misaka-blog        #"
-    echo "#############################################################"
-    echo ""
-    echo " 4. 安装Xray-VMESS+WS+TLS(推荐)"
-    echo " -------------"
-    echo " 12. 卸载Xray"
-    echo " -------------"
-    echo " 0. 退出"
-    echo 
+	clear
+	echo "#############################################################"
+	echo "#                    Xray 一键安装脚本                      #"
+	echo "# 作者: MisakaNo の 小破站                                  #"
+	echo "# 博客: https://blog.misaka.rest                            #"
+	echo "# GitHub 项目: https://github.com/Misaka-blog               #"
+	echo "# GitLab 项目: https://gitlab.com/Misaka-blog               #"
+	echo "# Telegram 频道: https://t.me/misakanocchannel              #"
+	echo "# Telegram 群组: https://t.me/misakanoc                     #"
+	echo "# YouTube 频道: https://www.youtube.com/@misaka-blog        #"
+	echo "#############################################################"
+	echo ""
+	echo " 4. 安装Xray-VMESS+WS+TLS(推荐)"
+	echo " -------------"
+	echo " 12. 卸载Xray"
+	echo " -------------"
+	echo " 0. 退出"
+	echo 
 
-    read -p " 请选择操作[0-17]：" answer
-    case $answer in
-        4)
+	read -p " 请选择操作[0-17]：" answer
+	case $answer in
+		4)
 			uninstall
-            install
-            ;;
-        12)
-            uninstall
-            ;;
-        *)
-            echo " 请选择正确的操作！"
-            exit 1
-            ;;
-    esac
+			install
+			;;
+		12)
+			uninstall
+			;;
+		*)
+			echo " 请选择正确的操作！"
+			exit 1
+			;;
+	esac
 }
 
 menu

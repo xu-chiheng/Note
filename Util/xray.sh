@@ -70,46 +70,6 @@ colorEcho() {
     echo -e "${1}${@:2}${PLAIN}"
 }
 
-status() {
-    if [[ ! -f /usr/local/bin/xray ]]; then
-        echo 0
-        return
-    fi
-    if [[ ! -f $CONFIG_FILE ]]; then
-        echo 1
-        return
-    fi
-    port="$(grep port $CONFIG_FILE | head -n 1 | cut -d: -f2| tr -d \",' ')"
-    res="$(ss -nutlp | grep ${port} | grep -i xray)"
-    if [[ -z "$res" ]]; then
-        echo 2
-        return
-    fi
-
-	echo 3
-}
-
-statusText() {
-    res="$(status)"
-    case $res in
-        2)
-            echo -e ${GREEN}已安装${PLAIN} ${RED}未运行${PLAIN}
-            ;;
-        3)
-            echo -e ${GREEN}已安装${PLAIN} ${GREEN}Xray正在运行${PLAIN}
-            ;;
-        4)
-            echo -e ${GREEN}已安装${PLAIN} ${GREEN}Xray正在运行${PLAIN}, ${RED}Nginx未运行${PLAIN}
-            ;;
-        5)
-            echo -e ${GREEN}已安装${PLAIN} ${GREEN}Xray正在运行, Nginx正在运行${PLAIN}
-            ;;
-        *)
-            echo -e ${RED}未安装${PLAIN}
-            ;;
-    esac
-}
-
 getData() {
     if true; then
         echo ""
@@ -501,8 +461,6 @@ menu() {
     echo -e " ${GREEN}17.${PLAIN} 查看Xray日志"
     echo " -------------"
     echo -e " ${GREEN}0.${PLAIN} 退出"
-    echo -n " 当前状态："
-    statusText
     echo 
 
     read -p " 请选择操作[0-17]：" answer

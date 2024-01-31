@@ -216,10 +216,10 @@ EOF
 }
 
 setSelinux() {
-if [[ -f /etc/selinux/config ]] && grep 'SELINUX=enforcing' /etc/selinux/config; then
-	sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
-	setenforce 0
-fi
+	if [[ -f /etc/selinux/config ]] && grep 'SELINUX=enforcing' /etc/selinux/config; then
+		sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
+		setenforce 0
+	fi
 }
 
 setFirewall() {

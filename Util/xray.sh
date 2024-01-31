@@ -224,7 +224,7 @@ setSelinux() {
 
 setFirewall() {
 	if which firewall-cmd 2>/dev/null; then
-		if systemctl status firewalld > /dev/null 2>&1; then
+		if systemctl status firewalld >/dev/null 2>&1; then
 			firewall-cmd --permanent --add-service=http
 			firewall-cmd --permanent --add-service=https
 			if [[ "$PORT" != "443" ]]; then
@@ -343,10 +343,10 @@ install() {
 }
 
 uninstall() {
-	if which nginx; then
+	if which nginx >/dev/null 2>&1 && systemctl status nginx >/dev/null 2>&1; then
 		stop_and_disable_service nginx
 	fi
-	if which xray; then
+	if which xray >/dev/null 2>&1 && systemctl status xray >/dev/null 2>&1; then
 		stop_and_disable_service xray
 	fi
 }

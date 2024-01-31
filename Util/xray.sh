@@ -152,42 +152,6 @@ getData() {
 
     if true; then
         echo ""
-        colorEcho $BLUE " 请选择伪装站类型:"
-        echo "   1) 静态网站(位于/usr/share/nginx/html)"
-        echo "   3) 世嘉maimai日本官网(https://maimai.sega.jp)"
-        echo "   4) 高清壁纸站(https://wallhaven.cc)"
-        echo "   5) 自定义反代站点(需以http或者https开头)"
-        read -p " 请选择伪装网站类型 [默认:世嘉maimai日本官网]: " answer
-        if [[ -z "$answer" ]]; then
-            PROXY_URL="https://maimai.sega.jp"
-        else
-            case $answer in
-            1)
-                PROXY_URL=""
-                ;;
-            3)
-                PROXY_URL="https://maimai.sega.jp"
-                ;;
-            4)
-                PROXY_URL="https://wallhaven.cc"
-                ;;
-            5)
-                read -p " 请输入反代站点(以http或者https开头)：" PROXY_URL
-                if [[ -z "$PROXY_URL" ]]; then
-                    colorEcho $RED " 请输入反代网站！"
-                    exit 1
-                elif [[ "${PROXY_URL:0:4}" != "http" ]]; then
-                    colorEcho $RED " 反代网站必须以http或https开头！"
-                    exit 1
-                fi
-                ;;
-            *)
-                colorEcho $RED " 请输入正确的选项！"
-                exit 1
-            esac
-        fi
-        REMOTE_HOST=`echo ${PROXY_URL} | cut -d/ -f3`
-        colorEcho $BLUE " 伪装网站：$PROXY_URL"
 
         echo ""
         colorEcho $BLUE "  是否允许搜索引擎爬取网站？[默认：不允许]"
@@ -309,16 +273,6 @@ http {
 EOF
     fi
 
-    if [[ "$PROXY_URL" = "" ]]; then
-        action=""
-    else
-        action="proxy_ssl_server_name on;
-        proxy_pass $PROXY_URL;
-        proxy_set_header Accept-Encoding '';
-        sub_filter \"$REMOTE_HOST\" \"$DOMAIN\";
-        sub_filter_once off;"
-    fi
-
     if true; then
         mkdir -p ${NGINX_CONF_PATH}
         # VMESS+WS+TLS
@@ -350,7 +304,7 @@ server {
 
     root /usr/share/nginx/html;
     location / {
-        $action
+
     }
     $ROBOT_CONFIG
 

@@ -374,33 +374,6 @@ uninstall() {
 	stop_and_disable_service xray
 }
 
-getConfigFileInfo() {
-    tls="false"
-    ws="false"
-    protocol="VMess"
-
-    uid=`grep id $CONFIG_FILE | head -n1| cut -d: -f2 | tr -d \",' '`
-    alterid=`grep alterId $CONFIG_FILE  | cut -d: -f2 | tr -d \",' '`
-    network=`grep network $CONFIG_FILE  | tail -n1| cut -d: -f2 | tr -d \",' '`
-    [[ -z "$network" ]] && network="tcp"
-    domain=`grep serverName $CONFIG_FILE | cut -d: -f2 | tr -d \",' '`
-    if [[ "$domain" = "" ]]; then
-        domain=`grep Host $CONFIG_FILE | cut -d: -f2 | tr -d \",' '`
-        if [[ "$domain" != "" ]]; then
-            ws="true"
-            tls="true"
-            wspath=`grep path $CONFIG_FILE | cut -d: -f2 | tr -d \",' '`
-        fi
-    else
-        tls="true"
-    fi
-    if [[ "$ws" = "true" ]]; then
-        port=`grep -i ssl $NGINX_CONF_PATH/${domain}.conf| head -n1 | awk '{print $2}'`
-    else
-        port=`grep port $CONFIG_FILE | cut -d: -f2 | tr -d \",' '`
-    fi
-}
-
 outputVmessWS() {
     local raw="{
   \"v\":\"2\",

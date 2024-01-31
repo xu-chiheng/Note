@@ -58,13 +58,6 @@ print_ipv4_address() {
 	ifconfig "${interface}" | grep 'inet '| awk '{print $2}'
 }
 
-
-RED="\033[31m"      # Error message
-GREEN="\033[32m"    # Success message
-YELLOW="\033[33m"   # Warning message
-BLUE="\033[36m"     # Info message
-PLAIN='\033[0m'
-
 getData() {
     if true; then
         echo ""
@@ -385,18 +378,18 @@ outputVmessWS() {
 
     echo  
     echo  
-    echo -e "   ${BLUE}IP(address): ${PLAIN} ${RED}${IP}${PLAIN}"
-    echo -e "   ${BLUE}端口(port)：${PLAIN}${RED}${PORT}${PLAIN}"
-    echo -e "   ${BLUE}id(uuid)：${PLAIN}${RED}${UUID}${PLAIN}"
-    echo -e "   ${BLUE}额外id(alterid)：${PLAIN} ${RED}0${PLAIN}"
-    echo -e "   ${BLUE}加密方式(security)：${PLAIN} ${RED}none${PLAIN}"
-    echo -e "   ${BLUE}传输协议(network)：${PLAIN} ${RED}WS${PLAIN}" 
-    echo -e "   ${BLUE}伪装类型(type)：${PLAIN}${RED}none$PLAIN"
-    echo -e "   ${BLUE}伪装域名/主机名(host)/SNI/peer名称：${PLAIN}${RED}${DOMAIN}${PLAIN}"
-    echo -e "   ${BLUE}路径(path)：${PLAIN}${RED}${WSPATH}${PLAIN}"
-    echo -e "   ${BLUE}底层安全传输(tls)：${PLAIN}${RED}TLS${PLAIN}"
+    echo -e "   IP(address):  ${IP}"
+    echo -e "   端口(port)：${PORT}"
+    echo -e "   id(uuid)：${UUID}"
+    echo -e "   额外id(alterid)： 0"
+    echo -e "   加密方式(security)： none"
+    echo -e "   传输协议(network)： WS" 
+    echo -e "   伪装类型(type)：none"
+    echo -e "   伪装域名/主机名(host)/SNI/peer名称：${DOMAIN}"
+    echo -e "   路径(path)：${WSPATH}"
+    echo -e "   底层安全传输(tls)：TLS"
     echo  
-    echo -e "   ${BLUE}vmess链接:${PLAIN} $RED$link$PLAIN"
+    echo -e "   vmess链接: $link"
     echo  
     echo  
 }
@@ -404,28 +397,28 @@ outputVmessWS() {
 menu() {
     clear
     echo "#############################################################"
-    echo -e "#                    ${RED}Xray 一键安装脚本${PLAIN}                     #"
-    echo -e "# ${GREEN}作者${PLAIN}: MisakaNo の 小破站                                  #"
-    echo -e "# ${GREEN}博客${PLAIN}: https://blog.misaka.rest                            #"
-    echo -e "# ${GREEN}GitHub 项目${PLAIN}: https://github.com/Misaka-blog               #"
-    echo -e "# ${GREEN}GitLab 项目${PLAIN}: https://gitlab.com/Misaka-blog               #"
-    echo -e "# ${GREEN}Telegram 频道${PLAIN}: https://t.me/misakanocchannel              #"
-    echo -e "# ${GREEN}Telegram 群组${PLAIN}: https://t.me/misakanoc                     #"
-    echo -e "# ${GREEN}YouTube 频道${PLAIN}: https://www.youtube.com/@misaka-blog        #"
+    echo -e "#                    Xray 一键安装脚本                     #"
+    echo -e "# 作者: MisakaNo の 小破站                                  #"
+    echo -e "# 博客: https://blog.misaka.rest                            #"
+    echo -e "# GitHub 项目: https://github.com/Misaka-blog               #"
+    echo -e "# GitLab 项目: https://gitlab.com/Misaka-blog               #"
+    echo -e "# Telegram 频道: https://t.me/misakanocchannel              #"
+    echo -e "# Telegram 群组: https://t.me/misakanoc                     #"
+    echo -e "# YouTube 频道: https://www.youtube.com/@misaka-blog        #"
     echo "#############################################################"
     echo ""
-    echo -e " ${GREEN}4.${PLAIN} 安装Xray-${BLUE}VMESS+WS+TLS${PLAIN}${RED}(推荐)${PLAIN}"
+    echo -e " 4. 安装Xray-VMESS+WS+TLS(推荐)"
     echo " -------------"
-    echo -e " ${GREEN}12. ${RED}卸载Xray${PLAIN}"
+    echo -e " 12. 卸载Xray"
     echo " -------------"
-    echo -e " ${GREEN}13.${PLAIN} 启动Xray"
-    echo -e " ${GREEN}14.${PLAIN} 重启Xray"
-    echo -e " ${GREEN}15.${PLAIN} 停止Xray"
+    echo -e " 13. 启动Xray"
+    echo -e " 14. 重启Xray"
+    echo -e " 15. 停止Xray"
     echo " -------------"
-    echo -e " ${GREEN}16.${PLAIN} 查看Xray配置"
-    echo -e " ${GREEN}17.${PLAIN} 查看Xray日志"
+    echo -e " 16. 查看Xray配置"
+    echo -e " 17. 查看Xray日志"
     echo " -------------"
-    echo -e " ${GREEN}0.${PLAIN} 退出"
+    echo -e " 0. 退出"
     echo 
 
     read -p " 请选择操作[0-17]：" answer

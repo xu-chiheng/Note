@@ -282,8 +282,6 @@ install_nginx() {
 }
 
 getCert() {
-	CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
-	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
     mkdir -p /usr/local/etc/xray
 
 	curl  https://get.acme.sh | sh \
@@ -538,6 +536,10 @@ configXray() {
 
 install() {
     getData
+
+	CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
+	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
+
 
 	install_base_tools
 

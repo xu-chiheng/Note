@@ -378,47 +378,40 @@ outputVmessWS() {
 
     echo  
     echo  
-    echo -e "   IP(address):  ${IP}"
-    echo -e "   端口(port)：${PORT}"
-    echo -e "   id(uuid)：${UUID}"
-    echo -e "   额外id(alterid)： 0"
-    echo -e "   加密方式(security)： none"
-    echo -e "   传输协议(network)： WS" 
-    echo -e "   伪装类型(type)：none"
-    echo -e "   伪装域名/主机名(host)/SNI/peer名称：${DOMAIN}"
-    echo -e "   路径(path)：${WSPATH}"
-    echo -e "   底层安全传输(tls)：TLS"
+    echo "   IP(address)       :  ${IP}"
+    echo "   端口(port)         ：${PORT}"
+    echo "   id(uuid)          ：${UUID}"
+    echo "   额外id(alterid)    ： 0"
+    echo "   加密方式(security)   ： none"
+    echo "   传输协议(network)   ： ws" 
+    echo "   伪装类型(type)      ：none"
+    echo "   伪装域名/主机名(host) ：${DOMAIN}"
+    echo "   路径(path)          ：${WSPATH}"
+    echo "   底层安全传输(tls)    ：tls"
     echo  
-    echo -e "   vmess链接: $link"
-    echo  
-    echo  
+    echo "   vmess链接: $link"
+    echo
+    echo
 }
 
 menu() {
     clear
     echo "#############################################################"
-    echo -e "#                    Xray 一键安装脚本                     #"
-    echo -e "# 作者: MisakaNo の 小破站                                  #"
-    echo -e "# 博客: https://blog.misaka.rest                            #"
-    echo -e "# GitHub 项目: https://github.com/Misaka-blog               #"
-    echo -e "# GitLab 项目: https://gitlab.com/Misaka-blog               #"
-    echo -e "# Telegram 频道: https://t.me/misakanocchannel              #"
-    echo -e "# Telegram 群组: https://t.me/misakanoc                     #"
-    echo -e "# YouTube 频道: https://www.youtube.com/@misaka-blog        #"
+    echo "#                    Xray 一键安装脚本                     #"
+    echo "# 作者: MisakaNo の 小破站                                  #"
+    echo "# 博客: https://blog.misaka.rest                            #"
+    echo "# GitHub 项目: https://github.com/Misaka-blog               #"
+    echo "# GitLab 项目: https://gitlab.com/Misaka-blog               #"
+    echo "# Telegram 频道: https://t.me/misakanocchannel              #"
+    echo "# Telegram 群组: https://t.me/misakanoc                     #"
+    echo "# YouTube 频道: https://www.youtube.com/@misaka-blog        #"
     echo "#############################################################"
     echo ""
-    echo -e " 4. 安装Xray-VMESS+WS+TLS(推荐)"
+    echo " 4. 安装Xray-VMESS+WS+TLS(推荐)"
     echo " -------------"
-    echo -e " 12. 卸载Xray"
+    echo " 12. 卸载Xray"
     echo " -------------"
-    echo -e " 13. 启动Xray"
-    echo -e " 14. 重启Xray"
-    echo -e " 15. 停止Xray"
-    echo " -------------"
-    echo -e " 16. 查看Xray配置"
-    echo -e " 17. 查看Xray日志"
-    echo " -------------"
-    echo -e " 0. 退出"
+    echo " 0. 退出"
     echo 
 
     read -p " 请选择操作[0-17]：" answer

@@ -540,12 +540,10 @@ install() {
 
 
 	install_base_tools
-
-    install_nginx
     setFirewall
-
     getCert
 
+    install_nginx
     configNginx
 
     installXray

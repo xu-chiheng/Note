@@ -59,11 +59,11 @@ print_ipv4_address() {
 }
 
 getData() {
-	echo ""
+	echo
 	echo " Xray一键脚本，运行之前请确认如下条件已经具备："
 	echo "  1. 一个伪装域名"
 	echo "  2. 伪装域名DNS解析指向当前服务器ip（${IP}）"
-	echo " "
+	echo
 	while true
 	do
 		read -p " 请输入伪装域名：" DOMAIN
@@ -74,7 +74,7 @@ getData() {
 		fi
 	done
 	DOMAIN=${DOMAIN,,}
-	echo " 伪装域名(host)：$DOMAIN"
+	echo " 伪装域名(host)：${DOMAIN}"
 }
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
@@ -96,20 +96,18 @@ install_nginx() {
 }
 
 getCert() {
-	mkdir -p /usr/local/etc/xray
-
-	curl https://get.acme.sh | sh \
+	mkdir -p /usr/local/etc/xray \
+	&& curl https://get.acme.sh | sh \
 	&& source ~/.bashrc \
 	&& ~/.acme.sh/acme.sh --upgrade  --auto-upgrade \
-	&& ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
-
-	if ! [[ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]]; then
+	&& ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt \
+	&& if ! [[ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]]; then
 		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
-	fi
-	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
+	fi \
+	&& ~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 		--key-file       "${KEY_FILE}"  \
-		--fullchain-file "${CERT_FILE}"
-	if ! [[ -f "${CERT_FILE}" && -f "${KEY_FILE}" ]]; then
+		--fullchain-file "${CERT_FILE}" \
+	&& if ! [[ -f "${CERT_FILE}" && -f "${KEY_FILE}" ]]; then
 		echo " 获取证书失败，请到 Github Issues 反馈"
 		exit 1
 	fi
@@ -357,7 +355,7 @@ outputVmessWS() {
 	local raw="{
   \"v\":\"2\",
   \"ps\":\"\",
-  \"add\":\"$IP\",
+  \"add\":\"${IP}\",
   \"port\":\"${PORT}\",
   \"id\":\"${UUID}\",
   \"aid\":\"0\",

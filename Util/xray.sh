@@ -345,8 +345,12 @@ install() {
 }
 
 uninstall() {
-	stop_and_disable_service nginx
-	stop_and_disable_service xray
+	if which nginx; then
+		stop_and_disable_service nginx
+	fi
+	if which xray; then
+		stop_and_disable_service xray
+	fi
 }
 
 outputVmessWS() {

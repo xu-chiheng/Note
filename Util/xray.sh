@@ -149,12 +149,6 @@ getData() {
         colorEcho ${BLUE}  " 伪装域名(host)：$DOMAIN"
 
     fi
-
-    echo ""
-    read -p " 是否安装BBR(默认安装)?[y/n]:" NEED_BBR
-    [[ -z "$NEED_BBR" ]] && NEED_BBR=y
-    [[ "$NEED_BBR" = "Y" ]] && NEED_BBR=y
-    colorEcho $BLUE " 安装BBR：$NEED_BBR"
 }
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
@@ -350,10 +344,6 @@ setFirewall() {
     fi
 }
 
-installBBR() {
-    true
-}
-
 installXray() {
     bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
@@ -423,6 +413,7 @@ install() {
 	uninstall
 
 	install_base_tools
+    setSelinux
     setFirewall
     getCert
 
@@ -433,9 +424,6 @@ install() {
     installXray
     configXray
 	start_and_enable_service xray
-
-    setSelinux
-    installBBR
 
     showInfo
 }

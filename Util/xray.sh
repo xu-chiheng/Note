@@ -198,8 +198,10 @@ getCert() {
 configNginx() {
 	rm -rf "${NGINX_CONF_PATH}"
     mkdir -p /usr/share/nginx/html;
-	echo 'User-Agent: *' > /usr/share/nginx/html/robots.txt
-	echo 'Disallow: /' >> /usr/share/nginx/html/robots.txt
+cat > /usr/share/nginx/html/robots.txt <<EOF
+User-Agent: *
+Disallow: /
+EOF
 
 	if [[ ! -f /etc/nginx/nginx.conf.bak ]]; then
 		mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak

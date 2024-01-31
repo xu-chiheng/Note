@@ -19,7 +19,6 @@ do_update_all_files() {
 		editor.sh
 
 		__clean_and_hide.cmd
-		linux_setup.sh
 
 		.ssh/.gitignore
 		.ssh/config

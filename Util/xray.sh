@@ -250,8 +250,7 @@ setFirewall() {
             fi
             firewall-cmd --reload
         else
-            nl="$(iptables -nL | nl | grep FORWARD | awk '{print $1}')"
-            if [[ "$nl" != "3" ]]; then
+            if [[ "$(iptables -nL | nl | grep FORWARD | awk '{print $1}')" != "3" ]]; then
                 iptables -I INPUT -p tcp --dport 80 -j ACCEPT
                 iptables -I INPUT -p tcp --dport 443 -j ACCEPT
                 if [[ "$PORT" != "443" ]]; then
@@ -261,8 +260,7 @@ setFirewall() {
             fi
         fi
 	elif which iptables 2>/dev/null; then
-		nl="$(iptables -nL | nl | grep FORWARD | awk '{print $1}')"
-		if [[ "$nl" != "3" ]]; then
+		if [[ "$(iptables -nL | nl | grep FORWARD | awk '{print $1}')" != "3" ]]; then
 			iptables -I INPUT -p tcp --dport 80 -j ACCEPT
 			iptables -I INPUT -p tcp --dport 443 -j ACCEPT
 			if [[ "$PORT" != "443" ]]; then

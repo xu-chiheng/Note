@@ -545,16 +545,16 @@ install() {
 
     install_nginx
     configNginx
+	start_and_enable_service nginx
 
     installXray
     configXray
 	start_and_enable_service xray
 
-
     setSelinux
     installBBR
 
-    start
+    # start
     showInfo
 }
 

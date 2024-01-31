@@ -378,16 +378,16 @@ outputVmessWS() {
 
     echo  
     echo  
-    echo "   IP(address)       :  ${IP}"
-    echo "   端口(port)         ：${PORT}"
-    echo "   id(uuid)          ：${UUID}"
-    echo "   额外id(alterid)    ： 0"
-    echo "   加密方式(security)   ： none"
-    echo "   传输协议(network)   ： ws" 
-    echo "   伪装类型(type)      ：none"
+    echo "   IP(address)           :  ${IP}"
+    echo "   端口(port)            ：${PORT}"
+    echo "   id(uuid)              ：${UUID}"
+    echo "   额外id(alterid)       ： 0"
+    echo "   加密方式(security)    ： none"
+    echo "   传输协议(network)     ： ws" 
+    echo "   伪装类型(type)        ：none"
     echo "   伪装域名/主机名(host) ：${DOMAIN}"
-    echo "   路径(path)          ：${WSPATH}"
-    echo "   底层安全传输(tls)    ：tls"
+    echo "   路径(path)            ：${WSPATH}"
+    echo "   底层安全传输(tls)     ：tls"
     echo  
     echo "   vmess链接: $link"
     echo

@@ -478,7 +478,6 @@ installXray() {
 }
 
 vmessWSConfig() {
-    local uuid="$(ray_uuid_generate)"
     cat > $CONFIG_FILE<<EOF
 {
   "inbounds": [{
@@ -488,7 +487,7 @@ vmessWSConfig() {
     "settings": {
       "clients": [
         {
-          "id": "$uuid",
+          "id": "$UUID",
           "level": 1,
           "alterId": 0
         }
@@ -533,6 +532,7 @@ install() {
 	NGINX_CONF_PATH="/etc/nginx/conf.d/"
 	CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
 	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
+    UUID="$(ray_uuid_generate)"
 
 	uninstall
 

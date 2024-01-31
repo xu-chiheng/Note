@@ -290,12 +290,11 @@ getCert() {
 	&& ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 
 	if ! [[ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]]; then
-		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --pre-hook "systemctl stop nginx" --post-hook "systemctl restart nginx" --standalone
+		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
 	fi
 	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 		--key-file       "${KEY_FILE}"  \
-		--fullchain-file "${CERT_FILE}" \
-		--reloadcmd     "service nginx force-reload"
+		--fullchain-file "${CERT_FILE}"
 	if ! [[ -f "${CERT_FILE}" && -f "${KEY_FILE}" ]]; then
 		colorEcho $RED " 获取证书失败，请到 Github Issues 反馈"
 		exit 1

@@ -406,7 +406,7 @@ install() {
     configXray
 	start_and_enable_service xray
 
-    showInfo
+    outputVmessWS
 }
 
 uninstall() {

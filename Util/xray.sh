@@ -323,7 +323,7 @@ EOF
         mkdir -p ${NGINX_CONF_PATH}
         # VMESS+WS+TLS
         if true; then
-            cat > ${NGINX_CONF_PATH}${DOMAIN}.conf<<EOF
+            cat > ${NGINX_CONF_PATH}/${DOMAIN}.conf<<EOF
 server {
     listen 80;
     listen [::]:80;
@@ -484,7 +484,7 @@ install() {
     getData
 
 	CONFIG_FILE="/usr/local/etc/xray/config.json"
-	NGINX_CONF_PATH="/etc/nginx/conf.d/"
+	NGINX_CONF_PATH="/etc/nginx/conf.d"
 	CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
 	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
     UUID="$(ray_uuid_generate)"
@@ -539,7 +539,7 @@ getConfigFileInfo() {
         tls="true"
     fi
     if [[ "$ws" = "true" ]]; then
-        port=`grep -i ssl $NGINX_CONF_PATH${domain}.conf| head -n1 | awk '{print $2}'`
+        port=`grep -i ssl $NGINX_CONF_PATH/${domain}.conf| head -n1 | awk '{print $2}'`
     else
         port=`grep port $CONFIG_FILE | cut -d: -f2 | tr -d \",' '`
     fi

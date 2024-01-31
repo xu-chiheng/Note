@@ -65,12 +65,6 @@ YELLOW="\033[33m"   # Warning message
 BLUE="\033[36m"     # Info message
 PLAIN='\033[0m'
 
-CONFIG_FILE="/usr/local/etc/xray/config.json"
-
-IP="$(print_ipv4_address)"
-
-NGINX_CONF_PATH="/etc/nginx/conf.d/"
-
 checkSystem() {
     res=`which yum 2>/dev/null`
     if which apt; then
@@ -534,9 +528,13 @@ configXray() {
 install() {
     getData
 
+	CONFIG_FILE="/usr/local/etc/xray/config.json"
+	IP="$(print_ipv4_address)"
+	NGINX_CONF_PATH="/etc/nginx/conf.d/"
 	CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
 	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
 
+	uninstall
 
 	install_base_tools
     setFirewall
@@ -617,6 +615,8 @@ outputVmessWS() {
     echo -e "   ${BLUE}底层安全传输(tls)：${PLAIN}${RED}TLS${PLAIN}"
     echo  
     echo -e "   ${BLUE}vmess链接:${PLAIN} $RED$link$PLAIN"
+    echo  
+    echo  
 }
 
 showInfo() {

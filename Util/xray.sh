@@ -196,22 +196,20 @@ getCert() {
 }
 
 configNginx() {
-	rm -rf "${NGINX_CONF_PATH}"/*
+	rm -rf "${NGINX_CONF_PATH}"
     mkdir -p /usr/share/nginx/html;
 	echo 'User-Agent: *' > /usr/share/nginx/html/robots.txt
 	echo 'Disallow: /' >> /usr/share/nginx/html/robots.txt
 
-    if true; then
-        if [[ ! -f /etc/nginx/nginx.conf.bak ]]; then
-            mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
-        fi
-        res=`id nginx 2>/dev/null`
-        if [[ "$?" != "0" ]]; then
-            user="www-data"
-        else
-            user="nginx"
-        fi
-        cat > /etc/nginx/nginx.conf<<EOF
+	if [[ ! -f /etc/nginx/nginx.conf.bak ]]; then
+		mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
+	fi
+	if ! id nginx 2>/dev/null; then
+		user="www-data"
+	else
+		user="nginx"
+	fi
+	cat > /etc/nginx/nginx.conf<<EOF
 user $user;
 worker_processes auto;
 error_log /var/log/nginx/error.log;
@@ -248,13 +246,10 @@ http {
     include /etc/nginx/conf.d/*.conf;
 }
 EOF
-    fi
 
-    if true; then
-        mkdir -p ${NGINX_CONF_PATH}
-        # VMESS+WS+TLS
-        if true; then
-            cat > ${NGINX_CONF_PATH}/${DOMAIN}.conf<<EOF
+    mkdir -p ${NGINX_CONF_PATH}
+    # VMESS+WS+TLS
+    cat > ${NGINX_CONF_PATH}/${DOMAIN}.conf<<EOF
 server {
     listen 80;
     listen [::]:80;
@@ -297,8 +292,7 @@ server {
     }
 }
 EOF
-        fi
-    fi
+
 }
 
 setSelinux() {

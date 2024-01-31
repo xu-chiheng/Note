@@ -59,7 +59,6 @@ print_ipv4_address() {
 }
 
 getData() {
-    if true; then
         echo ""
         echo " Xray一键脚本，运行之前请确认如下条件已经具备："
         echo "  1. 一个伪装域名"
@@ -76,8 +75,6 @@ getData() {
         done
         DOMAIN=${DOMAIN,,}
         echo " 伪装域名(host)：$DOMAIN"
-
-    fi
 }
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
@@ -335,9 +332,6 @@ install() {
 	XPORT="$(port_number_generate)"
 	WSPATH="/$(password_generate)"
 
-
-	uninstall
-
 	install_base_tools
     setSelinux
     setFirewall
@@ -378,16 +372,16 @@ outputVmessWS() {
 
     echo  
     echo  
-    echo "   IP(address)           :  ${IP}"
-    echo "   端口(port)            ：${PORT}"
-    echo "   id(uuid)              ：${UUID}"
-    echo "   额外id(alterid)       ： 0"
-    echo "   加密方式(security)    ： none"
-    echo "   传输协议(network)     ： ws" 
-    echo "   伪装类型(type)        ：none"
-    echo "   伪装域名/主机名(host) ：${DOMAIN}"
-    echo "   路径(path)            ：${WSPATH}"
-    echo "   底层安全传输(tls)     ：tls"
+    echo "   IP(address)           : ${IP}"
+    echo "   端口(port)            : ${PORT}"
+    echo "   id(uuid)              : ${UUID}"
+    echo "   额外id(alterid)       : 0"
+    echo "   加密方式(security)    : none"
+    echo "   传输协议(network)     : ws" 
+    echo "   伪装类型(type)        : none"
+    echo "   伪装域名/主机名(host) : ${DOMAIN}"
+    echo "   路径(path)            : ${WSPATH}"
+    echo "   底层安全传输(tls)     : tls"
     echo  
     echo "   vmess链接: $link"
     echo
@@ -397,7 +391,7 @@ outputVmessWS() {
 menu() {
     clear
     echo "#############################################################"
-    echo "#                    Xray 一键安装脚本                     #"
+    echo "#                    Xray 一键安装脚本                      #"
     echo "# 作者: MisakaNo の 小破站                                  #"
     echo "# 博客: https://blog.misaka.rest                            #"
     echo "# GitHub 项目: https://github.com/Misaka-blog               #"
@@ -417,6 +411,7 @@ menu() {
     read -p " 请选择操作[0-17]：" answer
     case $answer in
         4)
+			uninstall
             install
             ;;
         12)

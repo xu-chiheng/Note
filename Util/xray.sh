@@ -554,19 +554,12 @@ install() {
     setSelinux
     installBBR
 
-    # start
     showInfo
 }
 
 uninstall() {
 	stop_and_disable_service nginx
 	stop_and_disable_service xray
-}
-
-start() {
-    systemctl stop nginx
-    systemctl start nginx
-    systemctl restart xray
 }
 
 getConfigFileInfo() {

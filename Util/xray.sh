@@ -241,7 +241,7 @@ setSelinux() {
 
 setFirewall() {
     if which firewall-cmd 2>/dev/null; then
-        if systemctl status firewalld > /dev/null 2>&1;then
+        if systemctl status firewalld > /dev/null 2>&1; then
             firewall-cmd --permanent --add-service=http
             firewall-cmd --permanent --add-service=https
             if [[ "$PORT" != "443" ]]; then
@@ -260,29 +260,28 @@ setFirewall() {
                 fi
             fi
         fi
-    else
-        if which iptables 2>/dev/null; then
-            nl="$(iptables -nL | nl | grep FORWARD | awk '{print $1}')"
-            if [[ "$nl" != "3" ]]; then
-                iptables -I INPUT -p tcp --dport 80 -j ACCEPT
-                iptables -I INPUT -p tcp --dport 443 -j ACCEPT
-                if [[ "$PORT" != "443" ]]; then
-                    iptables -I INPUT -p tcp --dport ${PORT} -j ACCEPT
-                    iptables -I INPUT -p udp --dport ${PORT} -j ACCEPT
-                fi
-            fi
-        elif which ufw 2>/dev/null; then
-                res="$(ufw status | grep -i inactive)"
-                if [[ "$res" = "" ]]; then
-                    ufw allow http/tcp
-                    ufw allow https/tcp
-                    if [[ "$PORT" != "443" ]]; then
-                        ufw allow ${PORT}/tcp
-                        ufw allow ${PORT}/udp
-                    fi
-                fi
-        fi
-    fi
+	elif which iptables 2>/dev/null; then
+		nl="$(iptables -nL | nl | grep FORWARD | awk '{print $1}')"
+		if [[ "$nl" != "3" ]]; then
+			iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+			iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+			if [[ "$PORT" != "443" ]]; then
+				iptables -I INPUT -p tcp --dport ${PORT} -j ACCEPT
+				iptables -I INPUT -p udp --dport ${PORT} -j ACCEPT
+			fi
+		fi
+	elif which ufw 2>/dev/null; then
+		res="$(ufw status | grep -i inactive)"
+		if [[ "$res" = "" ]]; then
+			ufw allow http/tcp
+			ufw allow https/tcp
+			if [[ "$PORT" != "443" ]]; then
+				ufw allow ${PORT}/tcp
+				ufw allow ${PORT}/udp
+			fi
+		fi
+	fi
+
 }
 
 installXray() {

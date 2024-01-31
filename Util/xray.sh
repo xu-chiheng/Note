@@ -648,16 +648,6 @@ showInfo() {
 	outputVmessWS
 }
 
-showLog() {
-    res="$(status)"
-    if [[ $res -lt 2 ]]; then
-        colorEcho $RED " Xray未安装，请先安装！"
-        return
-    fi
-
-    journalctl -xen -u xray --no-pager
-}
-
 menu() {
     clear
     echo "#############################################################"
@@ -698,9 +688,6 @@ menu() {
         16)
             showInfo
             ;;
-        17)
-            showLog
-            ;;
         *)
             colorEcho $RED " 请选择正确的操作！"
             exit 1
@@ -714,11 +701,11 @@ action=$1
 [[ -z $1 ]] && action=menu
 
 case "$action" in
-    menu|uninstall|showInfo|showLog)
+    menu|uninstall|showInfo)
         ${action}
         ;;
     *)
         echo " 参数错误"
-        echo " 用法: `basename $0` [menu|uninstall|showInfo|showLog]"
+        echo " 用法: `basename $0` [menu|uninstall|showInfo]"
         ;;
 esac

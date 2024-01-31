@@ -568,23 +568,9 @@ uninstall() {
 }
 
 start() {
-    res="$(status)"
-    if [[ $res -lt 2 ]]; then
-        colorEcho $RED " Xray未安装，请先安装！"
-        return
-    fi
     systemctl stop nginx
     systemctl start nginx
     systemctl restart xray
-    sleep 2
-    
-    port="$(grep port $CONFIG_FILE| head -n 1| cut -d: -f2| tr -d \",' ')"
-    res="$(ss -nutlp| grep ${port} | grep -i xray)"
-    if [[ "$res" = "" ]]; then
-        colorEcho $RED " Xray启动失败，请检查日志或查看端口是否被占用！"
-    else
-        colorEcho $BLUE " Xray启动成功"
-    fi
 }
 
 getConfigFileInfo() {
@@ -712,9 +698,6 @@ menu() {
         12)
             uninstall
             ;;
-        13)
-            start
-            ;;
         16)
             showInfo
             ;;
@@ -734,11 +717,11 @@ action=$1
 [[ -z $1 ]] && action=menu
 
 case "$action" in
-    menu|uninstall|start|showInfo|showLog)
+    menu|uninstall|showInfo|showLog)
         ${action}
         ;;
     *)
         echo " 参数错误"
-        echo " 用法: `basename $0` [menu|uninstall|start|showInfo|showLog]"
+        echo " 用法: `basename $0` [menu|uninstall|showInfo|showLog]"
         ;;
 esac

@@ -482,9 +482,6 @@ installBBR() {
 
 installXray() {
     bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
-    systemctl stop xray
-    systemctl daemon-reload
-    systemctl enable xray.service
 }
 
 vmessWSConfig() {
@@ -552,8 +549,9 @@ install() {
     configNginx
 
     installXray
-
     configXray
+	start_and_enable_service xray
+
 
     setSelinux
     installBBR

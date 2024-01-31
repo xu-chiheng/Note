@@ -49,11 +49,15 @@ stop_and_disable_service() {
 	&& systemctl disable "${service}"
 }
 
-print_ipv4_address() {
-	local interface="$1"
+print_network_interface_name() {
+	ip addr show | grep -E '^[0-9]+: ' | awk '{print $2}' | grep -v -E 'lo:' | tr -d ':'
+}
 
+print_ipv4_address() {
+	local interface="$(print_network_interface_name)"
 	ifconfig "${interface}" | grep 'inet '| awk '{print $2}'
 }
+
 
 RED="\033[31m"      # Error message
 GREEN="\033[32m"    # Success message
@@ -63,7 +67,7 @@ PLAIN='\033[0m'
 
 CONFIG_FILE="/usr/local/etc/xray/config.json"
 
-IP="$(print_ipv4_address eth0)"
+IP="$(print_ipv4_address)"
 
 NGINX_CONF_PATH="/etc/nginx/conf.d/"
 

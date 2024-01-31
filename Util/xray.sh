@@ -451,15 +451,4 @@ menu() {
     esac
 }
 
-action=$1
-[[ -z $1 ]] && action=menu
-
-case "$action" in
-    menu|uninstall)
-        ${action}
-        ;;
-    *)
-        echo " 参数错误"
-        echo " 用法: `basename $0` [menu|uninstall]"
-        ;;
-esac
+menu

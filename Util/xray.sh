@@ -442,31 +442,31 @@ getConfigFileInfo() {
 }
 
 outputVmessWS() {
-    raw="{
+    local raw="{
   \"v\":\"2\",
   \"ps\":\"\",
   \"add\":\"$IP\",
-  \"port\":\"${port}\",
-  \"id\":\"${uid}\",
-  \"aid\":\"$alterid\",
-  \"net\":\"${network}\",
+  \"port\":\"${PORT}\",
+  \"id\":\"${UUID}\",
+  \"aid\":\"0\",
+  \"net\":\"ws\",
   \"type\":\"none\",
-  \"host\":\"${domain}\",
-  \"path\":\"${wspath}\",
+  \"host\":\"${DOMAIN}\",
+  \"path\":\"${WSPATH}\",
   \"tls\":\"tls\"
 }"
-    link=`echo -n ${raw} | base64 -w 0`
-    link="vmess://${link}"
+
+    local link="vmess://$(echo -n ${raw} | base64 -w 0)"
 
     echo -e "   ${BLUE}IP(address): ${PLAIN} ${RED}${IP}${PLAIN}"
-    echo -e "   ${BLUE}端口(port)：${PLAIN}${RED}${port}${PLAIN}"
-    echo -e "   ${BLUE}id(uuid)：${PLAIN}${RED}${uid}${PLAIN}"
-    echo -e "   ${BLUE}额外id(alterid)：${PLAIN} ${RED}${alterid}${PLAIN}"
+    echo -e "   ${BLUE}端口(port)：${PLAIN}${RED}${PORT}${PLAIN}"
+    echo -e "   ${BLUE}id(uuid)：${PLAIN}${RED}${UUID}${PLAIN}"
+    echo -e "   ${BLUE}额外id(alterid)：${PLAIN} ${RED}0${PLAIN}"
     echo -e "   ${BLUE}加密方式(security)：${PLAIN} ${RED}none${PLAIN}"
-    echo -e "   ${BLUE}传输协议(network)：${PLAIN} ${RED}${network}${PLAIN}" 
+    echo -e "   ${BLUE}传输协议(network)：${PLAIN} ${RED}WS${PLAIN}" 
     echo -e "   ${BLUE}伪装类型(type)：${PLAIN}${RED}none$PLAIN"
-    echo -e "   ${BLUE}伪装域名/主机名(host)/SNI/peer名称：${PLAIN}${RED}${domain}${PLAIN}"
-    echo -e "   ${BLUE}路径(path)：${PLAIN}${RED}${wspath}${PLAIN}"
+    echo -e "   ${BLUE}伪装域名/主机名(host)/SNI/peer名称：${PLAIN}${RED}${DOMAIN}${PLAIN}"
+    echo -e "   ${BLUE}路径(path)：${PLAIN}${RED}${WSPATH}${PLAIN}"
     echo -e "   ${BLUE}底层安全传输(tls)：${PLAIN}${RED}TLS${PLAIN}"
     echo  
     echo -e "   ${BLUE}vmess链接:${PLAIN} $RED$link$PLAIN"

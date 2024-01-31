@@ -286,16 +286,13 @@ getCert() {
 	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
     mkdir -p /usr/local/etc/xray
 
-	rm -rf ~/.acme.sh \
-	&& curl  https://get.acme.sh | sh \
+	curl  https://get.acme.sh | sh \
 	&& source ~/.bashrc \
-	&& ~/.acme.sh/acme.sh  --upgrade  --auto-upgrade \
+	&& ~/.acme.sh/acme.sh --upgrade  --auto-upgrade \
 	&& ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 
-	~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --pre-hook "systemctl stop nginx" --post-hook "systemctl restart nginx" --standalone
 	if ! [[ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]]; then
-		colorEcho $RED " 获取证书失败，请复制上面的红色文字到 Github Issues 反馈"
-		exit 1
+		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --pre-hook "systemctl stop nginx" --post-hook "systemctl restart nginx" --standalone
 	fi
 	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 		--key-file       "${KEY_FILE}"  \

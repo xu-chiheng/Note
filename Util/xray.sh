@@ -65,29 +65,24 @@ YELLOW="\033[33m"   # Warning message
 BLUE="\033[36m"     # Info message
 PLAIN='\033[0m'
 
-
-colorEcho() {
-    echo -e "${1}${@:2}${PLAIN}"
-}
-
 getData() {
     if true; then
         echo ""
         echo " Xray一键脚本，运行之前请确认如下条件已经具备："
-        colorEcho ${YELLOW} "  1. 一个伪装域名"
-        colorEcho ${YELLOW} "  2. 伪装域名DNS解析指向当前服务器ip（${IP}）"
+        echo "  1. 一个伪装域名"
+        echo "  2. 伪装域名DNS解析指向当前服务器ip（${IP}）"
         echo " "
         while true
         do
             read -p " 请输入伪装域名：" DOMAIN
             if [[ -z "${DOMAIN}" ]]; then
-                colorEcho ${RED} " 域名输入错误，请重新输入！"
+                echo " 域名输入错误，请重新输入！"
             else
                 break
             fi
         done
         DOMAIN=${DOMAIN,,}
-        colorEcho ${BLUE}  " 伪装域名(host)：$DOMAIN"
+        echo " 伪装域名(host)：$DOMAIN"
 
     fi
 }
@@ -125,7 +120,7 @@ getCert() {
 		--key-file       "${KEY_FILE}"  \
 		--fullchain-file "${CERT_FILE}"
 	if ! [[ -f "${CERT_FILE}" && -f "${KEY_FILE}" ]]; then
-		colorEcho $RED " 获取证书失败，请到 Github Issues 反馈"
+		echo " 获取证书失败，请到 Github Issues 反馈"
 		exit 1
 	fi
 }
@@ -442,7 +437,7 @@ menu() {
             uninstall
             ;;
         *)
-            colorEcho $RED " 请选择正确的操作！"
+            echo " 请选择正确的操作！"
             exit 1
             ;;
     esac

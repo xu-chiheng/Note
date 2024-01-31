@@ -322,7 +322,7 @@ configNginx() {
         else
             user="nginx"
         fi
-        cat > /etc/nginx/nginx.conf<<-EOF
+        cat > /etc/nginx/nginx.conf<<EOF
 user $user;
 worker_processes auto;
 error_log /var/log/nginx/error.log;
@@ -375,7 +375,7 @@ EOF
         mkdir -p ${NGINX_CONF_PATH}
         # VMESS+WS+TLS
         if true; then
-            cat > ${NGINX_CONF_PATH}${DOMAIN}.conf<<-EOF
+            cat > ${NGINX_CONF_PATH}${DOMAIN}.conf<<EOF
 server {
     listen 80;
     listen [::]:80;
@@ -484,8 +484,8 @@ installXray() {
 }
 
 vmessWSConfig() {
-    local uuid="$(cat '/proc/sys/kernel/random/uuid')"
-    cat > $CONFIG_FILE<<-EOF
+    local uuid="$(ray_uuid_generate)"
+    cat > $CONFIG_FILE<<EOF
 {
   "inbounds": [{
     "port": $XPORT,

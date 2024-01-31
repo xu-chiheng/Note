@@ -49,13 +49,8 @@ stop_and_disable_service() {
 	&& systemctl disable "${service}"
 }
 
-print_network_interface_name() {
-	ip addr show | grep -E '^[0-9]+: ' | awk '{print $2}' | grep -v -E 'lo:' | tr -d ':'
-}
-
 print_ipv4_address() {
-	local interface="$(print_network_interface_name)"
-	ifconfig "${interface}" | grep 'inet '| awk '{print $2}'
+	curl ifconfig.me
 }
 
 getData() {

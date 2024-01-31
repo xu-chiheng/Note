@@ -135,14 +135,7 @@ getData() {
         echo " Xray一键脚本，运行之前请确认如下条件已经具备："
         colorEcho ${YELLOW} "  1. 一个伪装域名"
         colorEcho ${YELLOW} "  2. 伪装域名DNS解析指向当前服务器ip（${IP}）"
-        colorEcho ${BLUE} "  3. 如果/root目录下有 xray.pem 和 xray.key 证书密钥文件，无需理会条件2"
         echo " "
-        read -p " 确认满足按y，按其他退出脚本：" answer
-        if [[ "${answer,,}" != "y" ]]; then
-            exit 0
-        fi
-
-        echo ""
         while true
         do
             read -p " 请输入伪装域名：" DOMAIN
@@ -155,45 +148,6 @@ getData() {
         DOMAIN=${DOMAIN,,}
         colorEcho ${BLUE}  " 伪装域名(host)：$DOMAIN"
 
-        echo ""
-        if [[ -f ~/xray.pem && -f ~/xray.key ]]; then
-            colorEcho ${BLUE}  " 检测到自有证书，将使用其部署"
-            CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
-            KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
-        else
-            true
-        fi
-    fi
-
-    echo ""
-    if true; then
-        read -p " 请输入Nginx监听端口[100-65535的一个数字]：" PORT
-        [[ -z "${PORT}" ]] && PORT="$(port_number_generate)"
-        if [ "${PORT:0:1}" = "0" ]; then
-            colorEcho ${BLUE}  " 端口不能以0开头"
-            exit 1
-        fi
-        colorEcho ${BLUE}  " Nginx端口：$PORT"
-        XPORT="$(port_number_generate)"
-    fi
-
-    if true; then
-        echo ""
-        while true
-        do
-            read -p " 请输入伪装路径，以/开头(回车以自动生成)：" WSPATH
-            if [[ -z "${WSPATH}" ]]; then
-                WSPATH="/$(password_generate)"
-                break
-            elif [[ "${WSPATH:0:1}" != "/" ]]; then
-                colorEcho ${RED}  " 伪装路径必须以/开头！"
-            elif [[ "${WSPATH}" = "/" ]]; then
-                colorEcho ${RED}   " 不能使用根路径！"
-            else
-                break
-            fi
-        done
-        colorEcho ${BLUE}  " ws路径：$WSPATH"
     fi
 
     if true; then
@@ -525,14 +479,19 @@ configXray() {
 }
 
 install() {
+	IP="$(print_ipv4_address)"
+
     getData
 
 	CONFIG_FILE="/usr/local/etc/xray/config.json"
-	IP="$(print_ipv4_address)"
 	NGINX_CONF_PATH="/etc/nginx/conf.d/"
 	CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
 	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
     UUID="$(ray_uuid_generate)"
+	PORT="$(port_number_generate)"
+	XPORT="$(port_number_generate)"
+	WSPATH="/$(password_generate)"
+
 
 	uninstall
 

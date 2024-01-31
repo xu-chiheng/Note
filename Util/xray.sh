@@ -65,25 +65,6 @@ YELLOW="\033[33m"   # Warning message
 BLUE="\033[36m"     # Info message
 PLAIN='\033[0m'
 
-checkSystem() {
-    res=`which yum 2>/dev/null`
-    if which apt; then
-        PMT="apt"
-        CMD_INSTALL="apt install -y "
-        CMD_REMOVE="apt remove -y "
-        CMD_UPGRADE="apt update; apt upgrade -y; apt autoremove -y"
-    elif which dnf; then
-        PMT="dnf"
-        CMD_INSTALL="dnf install -y "
-        CMD_REMOVE="dnf remove -y "
-        CMD_UPGRADE="dnf update -y"
-    elif which yum; then
-        PMT="yum"
-        CMD_INSTALL="yum install -y "
-        CMD_REMOVE="yum remove -y "
-        CMD_UPGRADE="yum update -y"
-    fi
-}
 
 colorEcho() {
     echo -e "${1}${@:2}${PLAIN}"
@@ -559,8 +540,6 @@ menu() {
             ;;
     esac
 }
-
-checkSystem
 
 action=$1
 [[ -z $1 ]] && action=menu

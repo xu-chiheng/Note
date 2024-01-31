@@ -303,6 +303,7 @@ getCert() {
 }
 
 configNginx() {
+	rm -rf "${NGINX_CONF_PATH}"/*
     mkdir -p /usr/share/nginx/html;
     if [[ "$ALLOW_SPIDER" = "n" ]]; then
         echo 'User-Agent: *' > /usr/share/nginx/html/robots.txt

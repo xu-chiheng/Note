@@ -150,24 +150,6 @@ getData() {
 
     fi
 
-    if true; then
-        echo ""
-
-        echo ""
-        colorEcho $BLUE "  是否允许搜索引擎爬取网站？[默认：不允许]"
-        echo "    y)允许，会有更多ip请求网站，但会消耗一些流量，vps流量充足情况下推荐使用"
-        echo "    n)不允许，爬虫不会访问网站，访问ip比较单一，但能节省vps流量"
-        read -p "  请选择：[y/n]" answer
-        if [[ -z "$answer" ]]; then
-            ALLOW_SPIDER="n"
-        elif [[ "${answer,,}" = "y" ]]; then
-            ALLOW_SPIDER="y"
-        else
-            ALLOW_SPIDER="n"
-        fi
-        colorEcho $BLUE " 允许搜索引擎：$ALLOW_SPIDER"
-    fi
-
     echo ""
     read -p " 是否安装BBR(默认安装)?[y/n]:" NEED_BBR
     [[ -z "$NEED_BBR" ]] && NEED_BBR=y
@@ -216,13 +198,8 @@ getCert() {
 configNginx() {
 	rm -rf "${NGINX_CONF_PATH}"/*
     mkdir -p /usr/share/nginx/html;
-    if [[ "$ALLOW_SPIDER" = "n" ]]; then
-        echo 'User-Agent: *' > /usr/share/nginx/html/robots.txt
-        echo 'Disallow: /' >> /usr/share/nginx/html/robots.txt
-        ROBOT_CONFIG="    location = /robots.txt {}"
-    else
-        ROBOT_CONFIG=""
-    fi
+	echo 'User-Agent: *' > /usr/share/nginx/html/robots.txt
+	echo 'Disallow: /' >> /usr/share/nginx/html/robots.txt
 
     if true; then
         if [[ ! -f /etc/nginx/nginx.conf.bak ]]; then
@@ -306,7 +283,7 @@ server {
     location / {
 
     }
-    $ROBOT_CONFIG
+    location = /robots.txt {}
 
     location ${WSPATH} {
       proxy_redirect off;

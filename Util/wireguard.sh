@@ -103,7 +103,12 @@ install() {
 	install_base_tools
 	install_wireguard
 
+    create_server_if
+    create_client_if
 
+	echo
+	cat /etc/wireguard/${SERVER_WG_NIC}_client
+	echo
 
 }
 

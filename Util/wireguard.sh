@@ -1,6 +1,18 @@
 
 # https://www.wireguard.com/quickstart/
 
+print_ipv4_address() {
+	curl ifconfig.me
+}
+
+print_default_nic() {
+	ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1
+}
+
+port_number_generate() {
+	shuf -i 10000-65535 -n 1
+}
+
 install_base_tools() {
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
@@ -78,17 +90,14 @@ EOF
 
 install() {
 
-	SERVER_PUB_IPV4="${VPN_SERVER_PUB_IPV4:-$(_ipv4)}"
-	SERVER_PUB_IPV6="${VPN_SERVER_PUB_IPV6:-$(_ipv6)}"
-	SERVER_PUB_NIC="${VPN_SERVER_PUB_NIC:-$(_nic)}"
-	SERVER_WG_NIC="${VPN_SERVER_WG_NIC:-wg0}"
-	SERVER_WG_IPV4="${VPN_SERVER_WG_IPV4:-10.88.88.1}"
-	SERVER_WG_IPV6="${VPN_SERVER_WG_IPV6:-fd88:88:88::1}"
-	SERVER_WG_PORT="${VPN_SERVER_WG_PORT:-$(_port)}"
-	CLIENT_WG_IPV4="${VPN_CLIENT_WG_IPV4:-10.88.88.2}"
-	CLIENT_WG_IPV6="${VPN_CLIENT_WG_IPV6:-fd88:88:88::2}"
-	CLIENT_DNS_1="${VPN_CLIENT_DNS_1:-1.1.1.1}"
-	CLIENT_DNS_2="${VPN_CLIENT_DNS_2:-8.8.8.8}"
+	SERVER_PUB_IPV4="$(print_ipv4_address)"
+	SERVER_PUB_NIC="$(print_default_nic)"
+	SERVER_WG_NIC="wg0"
+	SERVER_WG_IPV4="10.88.88.1"
+	SERVER_WG_PORT="$(port_number_generate)"
+	CLIENT_WG_IPV4="10.88.88.2"
+	CLIENT_DNS_1="1.1.1.1"
+	CLIENT_DNS_2="8.8.8.8"
 
 
 	install_base_tools

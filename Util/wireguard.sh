@@ -40,21 +40,7 @@ create_server_if() {
     CLIENT_PRE_SHARED_KEY="$( wg genpsk )"
     _info "Create server interface: /etc/wireguard/${SERVER_WG_NIC}.conf"
     [ ! -d "/etc/wireguard" ] && mkdir -p "/etc/wireguard"
-    if [ -n "${SERVER_PUB_IPV6}" ]; then
-        cat > /etc/wireguard/${SERVER_WG_NIC}.conf <<EOF
-[Interface]
-Address = ${SERVER_WG_IPV4}/24,${SERVER_WG_IPV6}/64
-ListenPort = ${SERVER_WG_PORT}
-PrivateKey = ${SERVER_PRIVATE_KEY}
-
-[Peer]
-PublicKey = ${CLIENT_PUBLIC_KEY}
-AllowedIPs = ${CLIENT_WG_IPV4}/32,${CLIENT_WG_IPV6}/128
-PresharedKey = ${CLIENT_PRE_SHARED_KEY}
-PersistentKeepalive = 25
-EOF
-    else
-        cat > /etc/wireguard/${SERVER_WG_NIC}.conf <<EOF
+    cat > /etc/wireguard/${SERVER_WG_NIC}.conf <<EOF
 [Interface]
 Address = ${SERVER_WG_IPV4}/24
 ListenPort = ${SERVER_WG_PORT}
@@ -66,28 +52,14 @@ AllowedIPs = ${CLIENT_WG_IPV4}/32
 PresharedKey = ${CLIENT_PRE_SHARED_KEY}
 PersistentKeepalive = 25
 EOF
-    fi
+
     chmod 600 /etc/wireguard/${SERVER_WG_NIC}.conf
 }
 
 # Create client interface
 create_client_if() {
     _info "Create client interface: /etc/wireguard/${SERVER_WG_NIC}_client"
-    if [ -n "${SERVER_PUB_IPV6}" ]; then
-        cat > /etc/wireguard/${SERVER_WG_NIC}_client <<EOF
-[Interface]
-PrivateKey = ${CLIENT_PRIVATE_KEY}
-Address = ${CLIENT_WG_IPV4}/24,${CLIENT_WG_IPV6}/64
-DNS = ${CLIENT_DNS_1},${CLIENT_DNS_2}
-
-[Peer]
-PublicKey = ${SERVER_PUBLIC_KEY}
-PresharedKey = ${CLIENT_PRE_SHARED_KEY}
-AllowedIPs = 0.0.0.0/0,::/0
-Endpoint = ${SERVER_PUB_IPV4}:${SERVER_WG_PORT}
-EOF
-    else
-        cat > /etc/wireguard/${SERVER_WG_NIC}_client <<EOF
+    cat > /etc/wireguard/${SERVER_WG_NIC}_client <<EOF
 [Interface]
 PrivateKey = ${CLIENT_PRIVATE_KEY}
 Address = ${CLIENT_WG_IPV4}/24
@@ -99,6 +71,6 @@ PresharedKey = ${CLIENT_PRE_SHARED_KEY}
 AllowedIPs = 0.0.0.0/0
 Endpoint = ${SERVER_PUB_IPV4}:${SERVER_WG_PORT}
 EOF
-    fi
+
     chmod 600 /etc/wireguard/${SERVER_WG_NIC}_client
 }

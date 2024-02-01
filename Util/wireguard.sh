@@ -74,3 +74,17 @@ EOF
 
     chmod 600 /etc/wireguard/${SERVER_WG_NIC}_client
 }
+
+
+install() {
+	install_base_tools
+	install_wireguard
+
+
+
+}
+
+install
+
+
+

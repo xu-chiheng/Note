@@ -1,4 +1,7 @@
 
+# https://github.com/teddysun/across
+# https://github.com/hwdsl2/wireguard-install
+
 # https://www.wireguard.com/quickstart/
 
 print_ipv4_address() {
@@ -45,14 +48,14 @@ install_wireguard() {
 
 # Create server interface
 create_server_if() {
-    SERVER_PRIVATE_KEY="$(wg genkey)"
-    SERVER_PUBLIC_KEY="$(echo ${SERVER_PRIVATE_KEY} | wg pubkey)"
-    CLIENT_PRIVATE_KEY="$(wg genkey)"
-    CLIENT_PUBLIC_KEY="$(echo ${CLIENT_PRIVATE_KEY} | wg pubkey)"
-    CLIENT_PRE_SHARED_KEY="$( wg genpsk )"
-    echo "Create server interface: /etc/wireguard/${SERVER_WG_NIC}.conf"
-    [ ! -d "/etc/wireguard" ] && mkdir -p "/etc/wireguard"
-    cat > /etc/wireguard/${SERVER_WG_NIC}.conf <<EOF
+	SERVER_PRIVATE_KEY="$(wg genkey)"
+	SERVER_PUBLIC_KEY="$(echo ${SERVER_PRIVATE_KEY} | wg pubkey)"
+	CLIENT_PRIVATE_KEY="$(wg genkey)"
+	CLIENT_PUBLIC_KEY="$(echo ${CLIENT_PRIVATE_KEY} | wg pubkey)"
+	CLIENT_PRE_SHARED_KEY="$( wg genpsk )"
+	echo "Create server interface: /etc/wireguard/${SERVER_WG_NIC}.conf"
+	[ ! -d "/etc/wireguard" ] && mkdir -p "/etc/wireguard"
+	cat > /etc/wireguard/${SERVER_WG_NIC}.conf <<EOF
 [Interface]
 Address = ${SERVER_WG_IPV4}/24
 ListenPort = ${SERVER_WG_PORT}
@@ -65,13 +68,13 @@ PresharedKey = ${CLIENT_PRE_SHARED_KEY}
 PersistentKeepalive = 25
 EOF
 
-    chmod 600 /etc/wireguard/${SERVER_WG_NIC}.conf
+	chmod 600 /etc/wireguard/${SERVER_WG_NIC}.conf
 }
 
 # Create client interface
 create_client_if() {
-    echo "Create client interface: /etc/wireguard/${SERVER_WG_NIC}_client"
-    cat > /etc/wireguard/${SERVER_WG_NIC}_client <<EOF
+	echo "Create client interface: /etc/wireguard/${SERVER_WG_NIC}_client"
+	cat > /etc/wireguard/${SERVER_WG_NIC}_client <<EOF
 [Interface]
 PrivateKey = ${CLIENT_PRIVATE_KEY}
 Address = ${CLIENT_WG_IPV4}/24
@@ -84,12 +87,11 @@ AllowedIPs = 0.0.0.0/0
 Endpoint = ${SERVER_PUB_IPV4}:${SERVER_WG_PORT}
 EOF
 
-    chmod 600 /etc/wireguard/${SERVER_WG_NIC}_client
+	chmod 600 /etc/wireguard/${SERVER_WG_NIC}_client
 }
 
 
 install() {
-
 	SERVER_PUB_IPV4="$(print_ipv4_address)"
 	SERVER_PUB_NIC="$(print_default_nic)"
 	SERVER_WG_NIC="wg0"
@@ -103,14 +105,13 @@ install() {
 	install_base_tools
 	install_wireguard
 
-    create_server_if
-    create_client_if
+	create_server_if
+	create_client_if
 	systemctl restart wg-quick@${SERVER_WG_NIC}
 
 	echo
 	cat /etc/wireguard/${SERVER_WG_NIC}_client
 	echo
-
 }
 
 install

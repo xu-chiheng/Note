@@ -50,7 +50,7 @@ create_server_if() {
     CLIENT_PRIVATE_KEY="$(wg genkey)"
     CLIENT_PUBLIC_KEY="$(echo ${CLIENT_PRIVATE_KEY} | wg pubkey)"
     CLIENT_PRE_SHARED_KEY="$( wg genpsk )"
-    _info "Create server interface: /etc/wireguard/${SERVER_WG_NIC}.conf"
+    echo "Create server interface: /etc/wireguard/${SERVER_WG_NIC}.conf"
     [ ! -d "/etc/wireguard" ] && mkdir -p "/etc/wireguard"
     cat > /etc/wireguard/${SERVER_WG_NIC}.conf <<EOF
 [Interface]
@@ -70,7 +70,7 @@ EOF
 
 # Create client interface
 create_client_if() {
-    _info "Create client interface: /etc/wireguard/${SERVER_WG_NIC}_client"
+    echo "Create client interface: /etc/wireguard/${SERVER_WG_NIC}_client"
     cat > /etc/wireguard/${SERVER_WG_NIC}_client <<EOF
 [Interface]
 PrivateKey = ${CLIENT_PRIVATE_KEY}
@@ -105,6 +105,7 @@ install() {
 
     create_server_if
     create_client_if
+	systemctl restart wg-quick@${SERVER_WG_NIC}
 
 	echo
 	cat /etc/wireguard/${SERVER_WG_NIC}_client

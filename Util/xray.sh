@@ -53,6 +53,7 @@ print_ipv4_address() {
 	curl ifconfig.me
 }
 
+# https://github.com/teddysun/across/raw/master/bbr.sh
 enable_bbr() {
     sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
     sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf

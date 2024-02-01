@@ -13,7 +13,7 @@ password_generate() {
 
 # https://stackoverflow.com/questions/2556190/random-number-from-a-range-in-a-bash-script
 port_number_generate() {
-	shuf -i 2000-65000 -n 1
+	shuf -i 10000-65535 -n 1
 }
 
 ray_uuid_generate() {

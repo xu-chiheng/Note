@@ -1,6 +1,9 @@
 #!/bin/bash
 
 
+# https://guide.v2fly.org/advanced/wss_and_web.html
+
+
 # https://www.geeksforgeeks.org/create-a-password-generator-using-shell-scripting/
 # https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
 # https://unix.stackexchange.com/questions/230673/how-to-generate-a-random-string

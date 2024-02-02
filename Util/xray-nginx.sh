@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# VMess
+# https://guide.v2fly.org/basics/vmess.html
 # WebSocket + TLS + Web
 # https://guide.v2fly.org/advanced/wss_and_web.html
 

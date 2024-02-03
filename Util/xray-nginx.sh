@@ -43,15 +43,15 @@ install_base_tools() {
 start_and_enable_service() {
 	local service="$1"
 
-	systemctl start "${service}" \
-	&& systemctl enable "${service}"
+	systemctl start "${service}"
+	systemctl enable "${service}"
 }
 
 stop_and_disable_service() {
 	local service="$1"
 
-	systemctl stop "${service}" \
-	&& systemctl disable "${service}"
+	systemctl stop "${service}"
+	systemctl disable "${service}"
 }
 
 print_ipv4_address() {
@@ -65,6 +65,28 @@ enable_bbr() {
     echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
     echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
     sysctl -p >/dev/null 2>&1
+}
+
+# https://www.cyberciti.biz/faq/linux-disable-firewall-command/
+
+disable_firwall() {
+	if which firewalld; then
+		stop_and_disable_service firewalld
+	elif which ufw; then
+		stop_and_disable_service ufw
+	elif which iptables; then
+		stop_and_disable_service iptables
+	fi
+}
+
+setSelinux() {
+	if [[ -f /etc/selinux/config ]] && grep 'SELINUX=enforcing' /etc/selinux/config; then
+		sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
+		setenforce 0
+	fi
+}
+
+disable_selinux() {
 }
 
 getData() {
@@ -222,13 +244,6 @@ server {
 }
 EOF
 
-}
-
-setSelinux() {
-	if [[ -f /etc/selinux/config ]] && grep 'SELINUX=enforcing' /etc/selinux/config; then
-		sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
-		setenforce 0
-	fi
 }
 
 setFirewall() {

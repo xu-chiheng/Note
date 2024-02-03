@@ -58,16 +58,20 @@ print_ipv4_address() {
 	curl ifconfig.me
 }
 
+# https://teddysun.com/489.html
 # https://github.com/teddysun/across/raw/master/bbr.sh
+# https://v2rayssr.com/bbr.html
 enable_bbr() {
     sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
     sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
     echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
     echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
-    sysctl -p >/dev/null 2>&1
+    sysctl -p
+	lsmod | grep bbr
 }
 
 # https://www.cyberciti.biz/faq/linux-disable-firewall-command/
+# https://www.tecmint.com/start-stop-disable-enable-firewalld-iptables-firewall/
 disable_firwall() {
 	if which firewalld; then
 		stop_and_disable_service firewalld

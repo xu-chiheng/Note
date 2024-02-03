@@ -68,7 +68,6 @@ enable_bbr() {
 }
 
 # https://www.cyberciti.biz/faq/linux-disable-firewall-command/
-
 disable_firwall() {
 	if which firewalld; then
 		stop_and_disable_service firewalld
@@ -79,14 +78,13 @@ disable_firwall() {
 	fi
 }
 
-setSelinux() {
-	if [[ -f /etc/selinux/config ]] && grep 'SELINUX=enforcing' /etc/selinux/config; then
-		sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
-		setenforce 0
-	fi
-}
-
+# https://docs.aws.amazon.com/linux/al2023/ug/disable-option-selinux.html
 disable_selinux() {
+	if [ -f /etc/selinux/config ]; then
+		sed -i -e 's/^SELINUX=(enforcing|permissive)$/SELINUX=disabled/g' /etc/selinux/config
+		# after reboot
+		# getenforce
+	fi
 }
 
 getData() {

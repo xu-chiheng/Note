@@ -55,6 +55,14 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
+	local cc_install_dir="$(print_program_dir_upper_dir "${cc}")"
+	local cxx_install_dir="$(print_program_dir_upper_dir "${cxx}")"
+
+	if [ "${cc_install_dir}" != "${cxx_install_dir}" ]; then
+		echo "the install dirs of C compiler ${cc} at ${cc_install_dir} and C++ compiler ${cxx} at ${cxx_install_dir} is not the same"
+		exit 1
+	fi
+
 	# Disable color errors globally?
 	# http://clang-developers.42468.n3.nabble.com/Disable-color-errors-globally-td4065317.html
 	export TERM=dumb
@@ -106,8 +114,10 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			# cygwin_c_cxx_common_flags+=( -mcmodel=small )
 			cflags+=(   "${cygwin_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${cygwin_c_cxx_common_flags[@]}" )
-			# pre-installed GCC 11.4.0 and Clang 8.0.1 at /usr need this option
-			ldflags+=( -Wl,--dynamicbase )
+			if [ "${cc_install_dir}" = /usr ]; then
+				# pre-installed GCC 11.4.0 and Clang 8.0.1 at /usr need this option
+				ldflags+=( -Wl,--dynamicbase )
+			fi
 			;;
 		x86_64-pc-mingw64 )
 			mingw_gcc_check_or_create_directory_links
@@ -116,10 +126,10 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			# mingw_c_cxx_common_flags+=( -mcmodel=medium )
 			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )
-
-			# pre-installed GCC 13.2.0 and Clang 17.0.6 at /ucrt64 or /mingw64 need this option
-			ldflags+=( -Wl,--allow-multiple-definition )
-
+			if [ "${cc_install_dir}" = "$(print_mingw_root_dir)" ]; then
+				# pre-installed GCC 13.2.0 and Clang 17.0.6 at /ucrt64 or /mingw64 need this option
+				ldflags+=( -Wl,--allow-multiple-definition )
+			fi
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
 			ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
 			# ldflags+=( -Wl,"$(cygpath -m "$(print_mingw_root_dir)")/lib/binmode.o" )
@@ -169,7 +179,7 @@ dump_llvm_static_or_shared() {
 }
 
 print_gcc_install_dir() {
-	echo "$(dirname "$(dirname "$(which gcc)")")"
+	print_program_dir_upper_dir gcc
 }
 
 print_mingw_root_dir() {

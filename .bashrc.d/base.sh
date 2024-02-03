@@ -494,3 +494,14 @@ clean_or_hide_windows_home_dir_entries() {
 
 	echo "completed"
 }
+
+print_program_dir() {
+	local program="$1"
+	dirname "$(which "${program}")"
+}
+
+print_program_dir_upper_dir() {
+	local program="$1"
+	dirname "$(print_program_dir "${program}")"
+}
+

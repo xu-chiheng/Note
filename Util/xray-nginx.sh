@@ -61,6 +61,9 @@ print_ipv4_address() {
 # https://teddysun.com/489.html
 # https://github.com/teddysun/across/raw/master/bbr.sh
 # https://v2rayssr.com/bbr.html
+# https://www.437r.com/archives/64
+# https://bbr.me/bbr.html
+# https://www.qinyuanyang.com/post/360.html
 enable_bbr() {
 	sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
 	sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf

@@ -136,8 +136,8 @@ getCert() {
 		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
 	fi
 
-	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc
-		--key-file       "${KEY_FILE}"
+	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
+		--key-file       "${KEY_FILE}" \
 		--fullchain-file "${CERT_FILE}"
 
 	if ! { [ -f "${CERT_FILE}" ] && [ -f "${KEY_FILE}" ] ;}; then

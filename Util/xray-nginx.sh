@@ -79,6 +79,7 @@ disable_firwall() {
 }
 
 # https://docs.aws.amazon.com/linux/al2023/ug/disable-option-selinux.html
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
 disable_selinux() {
 	if [ -f /etc/selinux/config ]; then
 		sed -i -e 's/^SELINUX=(enforcing|permissive)$/SELINUX=disabled/g' /etc/selinux/config
@@ -125,18 +126,21 @@ install_nginx() {
 }
 
 getCert() {
-	mkdir -p /usr/local/etc/xray \
-	&& curl https://get.acme.sh | sh \
-	&& source ~/.bashrc \
-	&& ~/.acme.sh/acme.sh --upgrade  --auto-upgrade \
-	&& ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt \
-	&& if ! [[ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]]; then
+	mkdir -p /usr/local/etc/xray
+	curl https://get.acme.sh | sh
+	source ~/.bashrc
+	~/.acme.sh/acme.sh --upgrade --auto-upgrade
+	~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
+
+	if ! [ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]; then
 		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
-	fi \
-	&& ~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
-		--key-file       "${KEY_FILE}"  \
-		--fullchain-file "${CERT_FILE}" \
-	&& if ! [[ -f "${CERT_FILE}" && -f "${KEY_FILE}" ]]; then
+	fi
+
+	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc
+		--key-file       "${KEY_FILE}"
+		--fullchain-file "${CERT_FILE}"
+
+	if ! [ -f "${CERT_FILE}" && -f "${KEY_FILE}" ]; then
 		echo " 获取证书失败，请到 Github Issues 反馈"
 		exit 1
 	fi
@@ -244,48 +248,6 @@ EOF
 
 }
 
-setFirewall() {
-	if which firewall-cmd 2>/dev/null; then
-		if systemctl status firewalld >/dev/null 2>&1; then
-			firewall-cmd --permanent --add-service=http
-			firewall-cmd --permanent --add-service=https
-			if [[ "$PORT" != "443" ]]; then
-				firewall-cmd --permanent --add-port=${PORT}/tcp
-				firewall-cmd --permanent --add-port=${PORT}/udp
-			fi
-			firewall-cmd --reload
-		else
-			if [[ "$(iptables -nL | nl | grep FORWARD | awk '{print $1}')" != "3" ]]; then
-				iptables -I INPUT -p tcp --dport 80 -j ACCEPT
-				iptables -I INPUT -p tcp --dport 443 -j ACCEPT
-				if [[ "$PORT" != "443" ]]; then
-					iptables -I INPUT -p tcp --dport ${PORT} -j ACCEPT
-					iptables -I INPUT -p udp --dport ${PORT} -j ACCEPT
-				fi
-			fi
-		fi
-	elif which iptables 2>/dev/null; then
-		if [[ "$(iptables -nL | nl | grep FORWARD | awk '{print $1}')" != "3" ]]; then
-			iptables -I INPUT -p tcp --dport 80 -j ACCEPT
-			iptables -I INPUT -p tcp --dport 443 -j ACCEPT
-			if [[ "$PORT" != "443" ]]; then
-				iptables -I INPUT -p tcp --dport ${PORT} -j ACCEPT
-				iptables -I INPUT -p udp --dport ${PORT} -j ACCEPT
-			fi
-		fi
-	elif which ufw 2>/dev/null; then
-		res="$(ufw status | grep -i inactive)"
-		if [[ "$res" = "" ]]; then
-			ufw allow http/tcp
-			ufw allow https/tcp
-			if [[ "$PORT" != "443" ]]; then
-				ufw allow ${PORT}/tcp
-				ufw allow ${PORT}/udp
-			fi
-		fi
-	fi
-}
-
 installXray() {
 	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
@@ -351,8 +313,8 @@ install() {
 	uninstall
 	install_base_tools
 	enable_bbr
-	setSelinux
-	setFirewall
+	disable_firwall
+	disable_selinux
 	getCert
 
 	install_nginx

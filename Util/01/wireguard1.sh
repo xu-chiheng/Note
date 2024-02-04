@@ -117,7 +117,6 @@ install() {
 
 	create_server_if
 	create_client_if
-	# systemctl enable wg-quick@${SERVER_WG_NIC}
 	wg-quick down ${SERVER_WG_NIC}
 	wg-quick up ${SERVER_WG_NIC}
 

@@ -1,8 +1,13 @@
 
+
+# https://teddysun.com/554.html
 # https://github.com/teddysun/across
 # https://github.com/hwdsl2/wireguard-install
+# https://github.com/atrandys/wireguard
 
 # https://www.wireguard.com/quickstart/
+# https://www.wireguard.com/install/
+
 
 print_ipv4_address() {
 	curl ifconfig.me
@@ -31,7 +36,6 @@ install_base_tools() {
 	fi
 }
 
-# https://www.wireguard.com/install/
 install_wireguard() {
 	if which apt; then
 		# Debian, Ubuntu, Raspbian

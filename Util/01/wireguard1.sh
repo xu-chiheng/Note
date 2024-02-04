@@ -117,8 +117,11 @@ install() {
 
 	create_server_if
 	create_client_if
-	wg-quick down ${SERVER_WG_NIC}
-	wg-quick up ${SERVER_WG_NIC}
+	# wg-quick down ${SERVER_WG_NIC}
+	# wg-quick up ${SERVER_WG_NIC}
+	systemctl daemon-reload
+	systemctl start wg-quick@${SERVER_WG_NIC}
+	systemctl enable wg-quick@${SERVER_WG_NIC}
 
 	echo
 	cat /etc/wireguard/${SERVER_WG_NIC}_client

@@ -45,6 +45,15 @@ install_wireguard() {
 	fi
 }
 
+# Enable IP forwarding
+enable_ip_forward() {
+    echo "Enable IP forward"
+    sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf
+    sed -i '/net.ipv6.conf.all.forwarding/d' /etc/sysctl.conf
+    echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+    echo "net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
+    sysctl -p
+}
 
 # Create server interface
 create_server_if() {

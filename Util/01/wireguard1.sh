@@ -105,9 +105,9 @@ install() {
 	install_base_tools
 	install_wireguard
 
-	wg-quick down ${SERVER_WG_NIC}
 	create_server_if
 	create_client_if
+	wg-quick down ${SERVER_WG_NIC}
 	wg-quick up ${SERVER_WG_NIC}
 
 	echo

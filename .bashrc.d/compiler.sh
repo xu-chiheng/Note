@@ -132,7 +132,7 @@ check_compiler_existence() {
 		echo "no compiler specified"
 		return 1
 	fi
-	if ! which "$1" >/dev/null 2>&1; then
+	if ! quiet_command which "$1"; then
 		echo "compiler $1 can not be found"
 		return 1
 	fi

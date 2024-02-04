@@ -200,7 +200,7 @@ print_mingw_root_dir() {
 }
 
 mingw_gcc_check_or_create_directory_links() {
-	if which gcc >/dev/null 2>&1; then
+	if quiet_command which gcc; then
 		local gcc_install_dir="$(print_gcc_install_dir)"
 		mingw_gcc_check_or_create_directory_links_0 /mingw \
 		&& mingw_gcc_check_or_create_directory_links_0 "${gcc_install_dir}/mingw" \

@@ -302,6 +302,10 @@ print_array_elements() {
 	done
 }
 
+quiet_command() {
+	"$@" 2>&1 >/dev/null
+}
+
 echo_command() {
 	echo "$@" " # at $(pwd)"
 	"$@"

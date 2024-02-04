@@ -112,6 +112,7 @@ install() {
 
 
 	install_base_tools
+	enable_ip_forward
 	install_wireguard
 
 	create_server_if

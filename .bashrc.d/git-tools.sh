@@ -252,7 +252,7 @@ git_diff_branch...HEAD() {
 	if [ -z "${branch}" ]; then
 		echo "branch is not specified."
 		return 1
-	elif ! git_rev_parse "${branch}" 2>&1 >/dev/null; then
+	elif ! quiet_command git_rev_parse "${branch}"; then
 		echo "branch ${branch} does not exist."
 		return 1
 	fi

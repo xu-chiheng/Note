@@ -26,7 +26,7 @@ maybe_create_test_branch_for_bisect() {
 	local test_branch="$2"
 	local trunk_branch="$3"
 
-	if ! git_rev_parse "${test_branch}" >/dev/null 2>&1; then
+	if ! quiet_command git_rev_parse "${test_branch}"; then
 		echo_command git checkout -f -b "${test_branch}" "$(git merge-base "${trunk_branch}" "${major_branch}")"
 	fi
 }
@@ -44,7 +44,7 @@ llvm_create_test_branches_for_bisect() {
 		# echo "${major_version}"
 		local major_branch="remotes/origin/release/${major_version}.x"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
-		if git_rev_parse "${major_branch}" >/dev/null 2>&1; then
+		if quiet_command git_rev_parse "${major_branch}"; then
 			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" main
 		else
 			maybe_create_test_branch_for_bisect main "${test_branch}" main
@@ -68,7 +68,7 @@ gcc_create_test_branches_for_bisect() {
 		# echo "${major_version}"
 		local major_branch="remotes/origin/releases/gcc-${major_version}"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
-		if git_rev_parse "${major_branch}" >/dev/null 2>&1; then
+		if quiet_command git_rev_parse "${major_branch}"; then
 			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" master
 		else
 			maybe_create_test_branch_for_bisect master "${test_branch}" master
@@ -92,7 +92,7 @@ binutils_create_test_branches_for_bisect() {
 		# echo "${major_version}"
 		local major_branch="remotes/origin/binutils-2_${major_version}-branch"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
-		if git_rev_parse "${major_branch}" >/dev/null 2>&1; then
+		if quiet_command git_rev_parse "${major_branch}"; then
 			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" master
 		else
 			maybe_create_test_branch_for_bisect master "${test_branch}" master
@@ -118,7 +118,7 @@ qemu_create_test_branches_for_bisect() {
 			# echo "${major_version}" "${minor_version}"
 			local major_minor_branch="remotes/origin/stable-${major_version}.${minor_version}"
 			local test_branch="$(printf "test%02d%1d0000\n" "${major_version}" "${minor_version}")"
-			if git_rev_parse "${major_minor_branch}" >/dev/null 2>&1; then
+			if quiet_command git_rev_parse "${major_minor_branch}"; then
 				maybe_create_test_branch_for_bisect "${major_minor_branch}" "${test_branch}" master
 			fi
 		done

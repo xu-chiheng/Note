@@ -38,7 +38,7 @@ git_update_git-tools_1() {
 	echo "${dir}"
 	if [ ! -d "${dir}"/'~git-tools~' ] \
 		|| { [ ! "$(readlink -f "${dir}")" = "$(readlink -f ~)" ] \
-		&& ! diff -Naur "${dir}"/'~git-tools~' ~/'~git-tools~' >/dev/null 2>&1 ;}; then
+		&& ! quiet_command diff -Naur "${dir}"/'~git-tools~' ~/'~git-tools~' ;}; then
 		echo_command rm -rf "${dir}"/'~git-tools~' \
 		&& echo_command cp -rf ~/'~git-tools~' "${dir}"/
 	fi

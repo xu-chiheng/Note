@@ -108,9 +108,9 @@ patch_apply() {
 	local patches=( "$@" )
 
 	cat "${patches[@]}" | {
-		pushd "${dir}" >/dev/null 2>&1 \
+		quiet_command pushd "${dir}" \
 		&& patch -Np1 \
-		&& popd >/dev/null 2>&1
+		&& quiet_command popd
 	}
 }
 
@@ -123,8 +123,8 @@ patch_apply_reverse() {
 	local patches=( "$@" )
 
 	cat "${patches[@]}" | {
-		pushd "${dir}" >/dev/null 2>&1 \
+		quiet_command pushd "${dir}" \
 		&& patch -Rp1 \
-		&& popd >/dev/null 2>&1
+		&& quiet_command popd
 	}
 }

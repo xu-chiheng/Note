@@ -55,13 +55,20 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
-	local cc_install_dir="$(print_program_dir_upper_dir "${cc}")"
-	local cxx_install_dir="$(print_program_dir_upper_dir "${cxx}")"
+	local cc_dir="$(print_program_dir "${cc}")"
+	local cxx_dir="$(print_program_dir "${cxx}")"
 
-	if [ "${cc_install_dir}" != "${cxx_install_dir}" ]; then
-		echo "the install dirs of C compiler ${cc} at ${cc_install_dir} and C++ compiler ${cxx} at ${cxx_install_dir} is not the same"
+	if [ "${cc_dir}" != "${cxx_dir}" ]; then
+		echo "the dirs of C compiler ${cc} at ${cc_dir} and C++ compiler ${cxx} at ${cxx_dir} is not the same"
 		exit 1
 	fi
+	if [ "$(basename "${cc_dir}")" != bin ]; then
+		echo "compiler is not in a bin directory"
+		exit 1
+	fi
+	local compiler_install_dir="$(dirname "${cc_dir}")"
+
+
 
 	# Disable color errors globally?
 	# http://clang-developers.42468.n3.nabble.com/Disable-color-errors-globally-td4065317.html
@@ -114,7 +121,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			# cygwin_c_cxx_common_flags+=( -mcmodel=small )
 			cflags+=(   "${cygwin_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${cygwin_c_cxx_common_flags[@]}" )
-			if [ "${cc_install_dir}" = /usr ]; then
+			if [ "${compiler_install_dir}" = /usr ]; then
 				# pre-installed GCC 11.4.0 and Clang 8.0.1 at /usr need this option
 				ldflags+=( -Wl,--dynamicbase )
 			fi
@@ -126,7 +133,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			# mingw_c_cxx_common_flags+=( -mcmodel=medium )
 			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )
-			if [ "${cc_install_dir}" = "$(print_mingw_root_dir)" ]; then
+			if [ "${compiler_install_dir}" = "$(print_mingw_root_dir)" ]; then
 				# pre-installed GCC 13.2.0 and Clang 17.0.6 at /ucrt64 or /mingw64 need this option
 				ldflags+=( -Wl,--allow-multiple-definition )
 			fi

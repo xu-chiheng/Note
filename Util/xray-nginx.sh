@@ -21,7 +21,7 @@ port_number_generate() {
 	shuf -i 10000-65535 -n 1
 }
 
-ray_uuid_generate() {
+xray_uuid_generate() {
 	cat '/proc/sys/kernel/random/uuid'
 }
 
@@ -314,7 +314,7 @@ install() {
 	NGINX_CONF_PATH="/etc/nginx/conf.d"
 	CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
 	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
-	UUID="$(ray_uuid_generate)"
+	UUID="$(xray_uuid_generate)"
 	PORT="$(port_number_generate)"
 	XPORT="$(port_number_generate)"
 	WSPATH="/$(password_generate)"

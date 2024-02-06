@@ -105,53 +105,11 @@ EOF
 	# VMESS+WS+TLS
 	cat > ${NGINX_CONF_PATH}/${DOMAIN}.conf<<EOF
 server {
-    listen 80;
-    listen [::]:80;
-    server_name ${DOMAIN};
-    return 301 https://\$server_name:${PORT}\$request_uri;
-}
-
-server {
-    listen       ${PORT} ssl http2;
-    listen       [::]:${PORT} ssl http2;
-    server_name ${DOMAIN};
-    charset utf-8;
-
-    # ssl配置
-    ssl_protocols TLSv1.1 TLSv1.2;
-    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
-    ssl_ecdh_curve secp384r1;
-    ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_timeout 10m;
-    ssl_session_tickets off;
-    ssl_certificate ${CERT_FILE};
-    ssl_certificate_key ${KEY_FILE};
-
-    root /usr/share/nginx/html;
-    location / {
-
-    }
-    location = /robots.txt {}
-
-    location ${WSPATH} {
-      proxy_redirect off;
-      proxy_pass http://127.0.0.1:${XPORT};
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade \$http_upgrade;
-      proxy_set_header Connection "upgrade";
-      proxy_set_header Host \$host;
-      proxy_set_header X-Real-IP \$remote_addr;
-      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    }
-}
-
-server {
-  listen 443 ssl;
-  listen [::]:443 ssl;
+  listen ${PORT} ssl;
+  listen [::]:${PORT} ssl;
   
-  ssl_certificate       /etc/v2ray/v2ray.crt;
-  ssl_certificate_key   /etc/v2ray/v2ray.key;
+  ssl_certificate       ${CERT_FILE};
+  ssl_certificate_key   ${KEY_FILE};
   ssl_session_timeout 1d;
   ssl_session_cache shared:MozSSL:10m;
   ssl_session_tickets off;
@@ -160,23 +118,22 @@ server {
   ssl_ciphers           ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
   ssl_prefer_server_ciphers off;
   
-  server_name           mydomain.me;
-  location /ray { # 与 V2Ray 配置中的 path 保持一致
-    if ($http_upgrade != "websocket") { # WebSocket协商失败时返回404
+  server_name           ${DOMAIN};
+  location ${WSPATH} { # 与 V2Ray 配置中的 path 保持一致
+    if (\$http_upgrade != "websocket") { # WebSocket协商失败时返回404
         return 404;
     }
     proxy_redirect off;
-    proxy_pass http://127.0.0.1:10000; # 假设WebSocket监听在环回地址的10000端口上
+    proxy_pass http://127.0.0.1:${XPORT}; # 假设WebSocket监听在环回地址的10000端口上
     proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Upgrade \$http_upgrade;
     proxy_set_header Connection "upgrade";
-    proxy_set_header Host $host;
+    proxy_set_header Host \$host;
     # Show real IP in v2ray access.log
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Real-IP \$remote_addr;
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
   }
 }
-
 EOF
 
 }

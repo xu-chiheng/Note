@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env -S bash -i
 
 # VMess
 # https://guide.v2fly.org/basics/vmess.html
@@ -173,59 +173,42 @@ getCert() {
 }
 
 configNginx() {
-	rm -rf "${NGINX_CONF_PATH}"
-	mkdir -p /usr/share/nginx/html;
-cat > /usr/share/nginx/html/robots.txt <<EOF
+	pushd /usr/share/nginx \
+	&& if [ ! -f html.tar ]; then
+		mkdir -p html \
+		&& { cat <<EOF
 User-Agent: *
 Disallow: /
 EOF
-
-	if [[ ! -f /etc/nginx/nginx.conf.bak ]]; then
-		mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
-	fi
-	if ! id nginx 2>/dev/null; then
-		user="www-data"
+} > html/robots.txt \
+		&& tar -cvf html.tar html \
+		&& sha512_calculate_file html.tar
 	else
-		user="nginx"
-	fi
-	cat > /etc/nginx/nginx.conf<<EOF
-user $user;
-worker_processes auto;
-error_log /var/log/nginx/error.log;
-pid /run/nginx.pid;
+		if ! sha512_check_file html.tar.sha512; then
+			echo "/usr/share/nginx/html.tar is corrupt"
+			exit 1
+		fi \
+		&& rm -rf html \
+		&& tar -xvf html.tar
+	fi \
+	&& popd
 
-# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
-include /usr/share/nginx/modules/*.conf;
 
-events {
-    worker_connections 1024;
-}
+	pushd /etc/nginx \
+	&& if [ ! -f nginx.conf.bak ]; then
+		sha512_check_file nginx.conf \
+		&& cp -f nginx.conf nginx.conf.bak
+	else
+		rm -rf nginx.conf \
+		&& cp -f nginx.conf.bak nginx.conf \
+		&& if ! sha512_check_file nginx.conf.sha512; then
+			echo "/etc/nginx/nginx.conf is corrupt"
+			exit 1
+		fi
+	fi \
+	&& popd
 
-http {
-    log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
-                      '\$status \$body_bytes_sent "\$http_referer" '
-                      '"\$http_user_agent" "\$http_x_forwarded_for"';
-
-    access_log  /var/log/nginx/access.log  main;
-    server_tokens off;
-
-    sendfile            on;
-    tcp_nopush          on;
-    tcp_nodelay         on;
-    keepalive_timeout   65;
-    types_hash_max_size 2048;
-    gzip                on;
-
-    include             /etc/nginx/mime.types;
-    default_type        application/octet-stream;
-
-    # Load modular configuration files from the /etc/nginx/conf.d directory.
-    # See http://nginx.org/en/docs/ngx_core_module.html#include
-    # for more information.
-    include /etc/nginx/conf.d/*.conf;
-}
-EOF
-
+	rm -rf "${NGINX_CONF_PATH}"
 	mkdir -p ${NGINX_CONF_PATH}
 	# VMESS+WS+TLS
 	cat > ${NGINX_CONF_PATH}/${DOMAIN}.conf<<EOF
@@ -435,3 +418,5 @@ menu() {
 }
 
 menu
+
+

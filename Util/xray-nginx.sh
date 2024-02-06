@@ -78,6 +78,9 @@ enable_bbr() {
 	lsmod | grep bbr
 }
 
+# https://www.techrepublic.com/article/how-to-disable-ipv6-on-linux/
+# https://techdocs.broadcom.com/us/en/ca-enterprise-software/it-operations-management/network-flow-analysis/23-3/installing/system-recommendations-and-requirements/linux-servers/disable-ipv6-networking-on-linux-servers.html
+# https://www.geeksforgeeks.org/how-to-disable-ipv6-in-linux/
 disable_ipv6() {
 	sed -i '/net.ipv6.conf.all.disable_ipv6/d' /etc/sysctl.conf
 	sed -i '/net.ipv6.conf.default.disable_ipv6/d' /etc/sysctl.conf
@@ -86,6 +89,7 @@ disable_ipv6() {
 	echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
 	echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
 	sysctl -p
+	ip a | grep inet6
 }
 
 # https://www.cyberciti.biz/faq/linux-disable-firewall-command/

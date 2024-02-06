@@ -54,8 +54,13 @@ stop_and_disable_service() {
 	systemctl disable "${service}"
 }
 
+print_default_nic() {
+	ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1
+}
+
 print_ipv4_address() {
-	curl ifconfig.me
+	# curl ifconfig.me
+	ip addr show "$(print_default_nic)" | grep 'inet ' | awk '{print $2}' | sed -E 's,/.*$,,'
 }
 
 # https://teddysun.com/489.html

@@ -78,6 +78,16 @@ enable_bbr() {
 	lsmod | grep bbr
 }
 
+disable_ipv6() {
+	sed -i '/net.ipv6.conf.all.disable_ipv6/d' /etc/sysctl.conf
+	sed -i '/net.ipv6.conf.default.disable_ipv6/d' /etc/sysctl.conf
+	sed -i '/net.ipv6.conf.lo.disable_ipv6/d' /etc/sysctl.conf
+	echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+	echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+	echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
+	sysctl -p
+}
+
 # https://www.cyberciti.biz/faq/linux-disable-firewall-command/
 # https://www.tecmint.com/start-stop-disable-enable-firewalld-iptables-firewall/
 disable_firwall() {
@@ -324,6 +334,7 @@ install() {
 
 	uninstall
 	install_base_tools
+	disable_ipv6
 	enable_bbr
 	disable_firwall
 	disable_selinux

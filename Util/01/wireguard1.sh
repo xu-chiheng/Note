@@ -1,3 +1,4 @@
+#!/usr/bin/env -S bash -i
 
 
 # https://teddysun.com/554.html
@@ -8,33 +9,6 @@
 # https://www.wireguard.com/quickstart/
 # https://www.wireguard.com/install/
 
-
-print_ipv4_address() {
-	curl ifconfig.me
-}
-
-print_default_nic() {
-	ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1
-}
-
-port_number_generate() {
-	shuf -i 10000-65535 -n 1
-}
-
-install_base_tools() {
-	if which apt; then
-		# Debian, Ubuntu, Raspbian
-		apt update \
-		&& apt install -y iproute2
-	elif which dnf; then
-		# Fedora, RedHat, CentOS
-		dnf makecache \
-		&& dnf install -y iproute
-	elif which pacman; then
-		# Arch Linux, Manjaro, Parabola
-		pacman -Syu iproute
-	fi
-}
 
 install_wireguard() {
 	if which apt; then
@@ -47,16 +21,6 @@ install_wireguard() {
 		# Arch Linux, Manjaro, Parabola
 		pacman -Syu wireguard-tools
 	fi
-}
-
-# Enable IP forwarding
-enable_ip_forward() {
-    echo "Enable IP forward"
-    sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf
-    sed -i '/net.ipv6.conf.all.forwarding/d' /etc/sysctl.conf
-    echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
-    echo "net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
-    sysctl -p
 }
 
 # Create server interface

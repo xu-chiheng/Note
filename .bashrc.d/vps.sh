@@ -24,14 +24,14 @@ install_base_tools() {
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt update \
-		&& apt install -y openssl cron socat curl
+		&& apt install -y openssl cron socat curl iproute2
 	elif which dnf; then
 		# Fedora, RedHat, CentOS
 		dnf makecache \
-		&& dnf install -y openssl cron socat curl
+		&& dnf install -y openssl cron socat curl iproute
 	elif which pacman; then
 		# Arch Linux, Manjaro, Parabola
-		pacman -Syu openssl cron socat curl
+		pacman -Syu openssl cron socat curl iproute
 	fi
 }
 
@@ -85,6 +85,16 @@ disable_ipv6() {
 	echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
 	sysctl -p
 	ip a | grep inet6
+}
+
+# Enable IP forwarding
+enable_ip_forward() {
+    echo "Enable IP forward"
+    sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf
+    sed -i '/net.ipv6.conf.all.forwarding/d' /etc/sysctl.conf
+    echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+    echo "net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
+    sysctl -p
 }
 
 # https://www.cyberciti.biz/faq/linux-disable-firewall-command/

@@ -16,11 +16,12 @@ install_base_tools() {
 		# Debian, Ubuntu, Raspbian
 		apt update
 		apt install -y socat openssl cron curl iproute2
+		apt remove -y iptables firewalld ufw
 	elif which dnf; then
 		# Fedora, RedHat, CentOS
 		dnf makecache
 		dnf install -y socat openssl cron curl iproute
-		dnf remove -y iptables
+		dnf remove -y iptables firewalld ufw
 	elif which pacman; then
 		# Arch Linux, Manjaro, Parabola
 		pacman -Syu socat openssl cron curl iproute

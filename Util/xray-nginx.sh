@@ -202,7 +202,6 @@ install() {
 	install_base_tools
 	disable_ipv6
 	enable_bbr
-	disable_firwall
 	disable_selinux
 	getCert
 
@@ -215,6 +214,8 @@ install() {
 	start_and_enable_service xray
 
 	outputVmessWS
+
+	reboot
 }
 
 uninstall() {

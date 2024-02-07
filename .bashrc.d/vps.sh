@@ -15,23 +15,21 @@ xray_uuid_generate() {
 	cat '/proc/sys/kernel/random/uuid'
 }
 
-upate_system_and_install_download_tools() {
+linux_update_and_upgrade_system() {
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt update -y
 		apt upgrade -y
-		apt install -y git curl wget
 		reboot
 	elif which dnf; then
 		# Fedora, RedHat, CentOS
 		dnf makecache
 		dnf update -y
 		dnf upgrade -y
-		dnf install -y git curl wget
 		reboot
 	elif which pacman; then
 		# Arch Linux, Manjaro, Parabola
-		pacman -Syu git curl wget
+		pacman -Syu
 		reboot
 	fi
 }
@@ -117,15 +115,15 @@ enable_ip_forward() {
 
 # https://www.cyberciti.biz/faq/linux-disable-firewall-command/
 # https://www.tecmint.com/start-stop-disable-enable-firewalld-iptables-firewall/
-disable_firwall() {
-	if which firewalld; then
-		stop_and_disable_service firewalld
-	elif which ufw; then
-		stop_and_disable_service ufw
-	elif which iptables; then
-		stop_and_disable_service iptables
-	fi
-}
+# disable_firwall() {
+# 	if which firewalld; then
+# 		stop_and_disable_service firewalld
+# 	elif which ufw; then
+# 		stop_and_disable_service ufw
+# 	elif which iptables; then
+# 		stop_and_disable_service iptables
+# 	fi
+# }
 
 # https://docs.aws.amazon.com/linux/al2023/ug/disable-option-selinux.html
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux

@@ -145,38 +145,33 @@ installXray() {
 vmessWSConfig() {
 	cat > $CONFIG_FILE<<EOF
 {
-  "inbounds": [{
-    "port": $XPORT,
-    "listen": "127.0.0.1",
-    "protocol": "vmess",
-    "settings": {
-      "clients": [
-        {
-          "id": "$UUID",
-          "level": 1,
-          "alterId": 0
-        }
-      ],
-      "disableInsecureEncryption": false
-    },
-    "streamSettings": {
+  "inbounds": [
+    {
+      "port": $XPORT,
+      "listen":"127.0.0.1",//只监听 127.0.0.1，避免除本机外的机器探测到开放了 10000 端口
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "$UUID",
+            "alterId": 0
+          }
+        ]
+      },
+      "streamSettings": {
         "network": "ws",
         "wsSettings": {
-            "path": "$WSPATH",
-            "headers": {
-                "Host": "$DOMAIN"
-            }
+        "path": "$WSPATH"
         }
+      }
     }
-  }],
-  "outbounds": [{
-    "protocol": "freedom",
-    "settings": {}
-  },{
-    "protocol": "blackhole",
-    "settings": {},
-    "tag": "blocked"
-  }]
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    }
+  ]
 }
 EOF
 }

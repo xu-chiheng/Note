@@ -14,15 +14,16 @@ xray_uuid_generate() {
 install_base_tools() {
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
-		apt update \
-		&& apt install -y openssl cron socat curl iproute2
+		apt update
+		apt install -y socat openssl cron curl iproute2
 	elif which dnf; then
 		# Fedora, RedHat, CentOS
-		dnf makecache \
-		&& dnf install -y openssl cron socat curl iproute
+		dnf makecache
+		dnf install -y socat openssl cron curl iproute
+		dnf remove -y iptables
 	elif which pacman; then
 		# Arch Linux, Manjaro, Parabola
-		pacman -Syu openssl cron socat curl iproute
+		pacman -Syu socat openssl cron curl iproute
 	fi
 }
 

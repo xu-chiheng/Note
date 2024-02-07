@@ -5,6 +5,9 @@
 # WebSocket + TLS + Web
 # https://guide.v2fly.org/advanced/wss_and_web.html
 
+# Works on Debian 12, Ubuntu 22.04 LTS, Rocky Linux 8 at 2024-02-07
+# does not work on Fedora 39, Rocky Linux 9 at 2024-02-07
+
 
 getData() {
 	echo

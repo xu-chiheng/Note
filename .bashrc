@@ -38,4 +38,3 @@ if [ ! -v HOST_TRIPLE ]; then
 	# time_command \
 	set_environment_variables_at_bash_startup
 fi
-. "/root/.acme.sh/acme.sh.env"

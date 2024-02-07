@@ -56,7 +56,7 @@ do_update_all_files() {
 		Util/download/{Cygwin,MSYS2,Visual_Studio}
 
 		Util/other/{crypto,backup}
-		Util/{linux_setup,xray-nginx}.sh
+		Util/{linux_setup,xray-nginx,wireguard}.sh
 
 		Util/quirk
 		Util/shell

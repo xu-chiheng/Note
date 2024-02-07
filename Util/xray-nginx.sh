@@ -198,11 +198,12 @@ install() {
 	XPORT="$(port_number_generate)"
 	WSPATH="/$(password_generate_one)"
 
-	uninstall
-	linux_install_base_tools
 	linux_disable_ipv6
 	linux_enable_bbr
 	linux_disable_selinux
+
+	uninstall
+	linux_install_base_tools
 	getCert
 
 	install_nginx

@@ -217,10 +217,10 @@ install() {
 }
 
 uninstall() {
-	if which nginx >/dev/null 2>&1 && systemctl status nginx >/dev/null 2>&1; then
+	if quiet_command which nginx && quiet_command systemctl status nginx; then
 		linux_stop_and_disable_service nginx
 	fi
-	if which xray >/dev/null 2>&1 && systemctl status xray >/dev/null 2>&1; then
+	if quiet_command which xray && quiet_command systemctl status xray; then
 		linux_stop_and_disable_service xray
 	fi
 }

@@ -40,7 +40,7 @@ install_base_tools() {
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt update
-		apt install -y socat openssl cron curl iproute2
+		apt install -y socat openssl curl iproute2
 		apt remove -y iptables firewalld ufw
 	elif which dnf; then
 		# Fedora, RedHat, CentOS

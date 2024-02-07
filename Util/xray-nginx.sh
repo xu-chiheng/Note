@@ -90,7 +90,8 @@ EOF
 	pushd /etc/nginx \
 	&& if [ ! -f nginx.conf.bak ]; then
 		sha512_calculate_file nginx.conf \
-		&& mv -f nginx.conf nginx.conf.bak
+		&& mv -f nginx.conf nginx.conf.bak \
+		&& cp -f nginx.conf.bak nginx.conf
 	else
 		rm -rf nginx.conf \
 		&& cp -f nginx.conf.bak nginx.conf \

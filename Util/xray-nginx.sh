@@ -54,6 +54,7 @@ getCert() {
 		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
 	fi
 
+	rm -rf "${CERT_FILE}" "${KEY_FILE}"
 	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 		--key-file       "${KEY_FILE}" \
 		--fullchain-file "${CERT_FILE}"

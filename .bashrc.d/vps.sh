@@ -45,7 +45,7 @@ install_base_tools() {
 	elif which dnf; then
 		# Fedora, RedHat, CentOS
 		dnf makecache
-		dnf install -y socat openssl cron curl iproute
+		dnf install -y socat openssl curl iproute
 		dnf remove -y iptables firewalld ufw
 	elif which pacman; then
 		# Arch Linux, Manjaro, Parabola

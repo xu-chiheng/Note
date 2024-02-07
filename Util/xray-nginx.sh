@@ -185,7 +185,7 @@ configXray() {
 }
 
 install() {
-	IP="$(print_ipv4_address)"
+	IP="$(linux_print_ipv4_address)"
 
 	getData
 
@@ -199,19 +199,19 @@ install() {
 	WSPATH="/$(password_generate_one)"
 
 	uninstall
-	install_base_tools
-	disable_ipv6
-	enable_bbr
-	disable_selinux
+	linux_install_base_tools
+	linux_disable_ipv6
+	linux_enable_bbr
+	linux_disable_selinux
 	getCert
 
 	install_nginx
 	configNginx
-	start_and_enable_service nginx
+	linux_start_and_enable_service nginx
 
 	installXray
 	configXray
-	start_and_enable_service xray
+	linux_start_and_enable_service xray
 
 	outputVmessWS
 
@@ -220,10 +220,10 @@ install() {
 
 uninstall() {
 	if which nginx >/dev/null 2>&1 && systemctl status nginx >/dev/null 2>&1; then
-		stop_and_disable_service nginx
+		linux_stop_and_disable_service nginx
 	fi
 	if which xray >/dev/null 2>&1 && systemctl status xray >/dev/null 2>&1; then
-		stop_and_disable_service xray
+		linux_stop_and_disable_service xray
 	fi
 }
 

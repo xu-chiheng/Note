@@ -69,8 +69,8 @@ EOF
 
 
 install() {
-	SERVER_PUB_IPV4="$(print_ipv4_address)"
-	SERVER_PUB_NIC="$(print_default_nic)"
+	SERVER_PUB_IPV4="$(linux_print_ipv4_address)"
+	SERVER_PUB_NIC="$(linux_print_default_nic)"
 	SERVER_WG_NIC="wg0"
 	SERVER_WG_IPV4="10.88.88.1"
 	SERVER_WG_PORT="$(port_number_generate)"
@@ -79,8 +79,8 @@ install() {
 	CLIENT_DNS_2="8.8.8.8"
 
 
-	install_base_tools
-	enable_ip_forward
+	linux_install_base_tools
+	linux_enable_ip_forward
 	install_wireguard
 
 	create_server_if

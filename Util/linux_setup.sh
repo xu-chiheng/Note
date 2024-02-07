@@ -624,8 +624,8 @@ disable_firewall () {
 	esac
 }
 
-disable_selinux () {
-	echo disable_selinux
+linux_disable_selinux () {
+	echo linux_disable_selinux
 	case "${OS_NAME}" in
 		Fedora | CentOSStream | Rocky )
 			# 直接修改系统配置文件/etc/selinux/config
@@ -787,7 +787,7 @@ set_fastest_mirror_and_update \
 && disable_kde_wallet \
 && disable_kde_suspend_and_lock \
 && disable_firewall \
-&& disable_selinux \
+&& linux_disable_selinux \
 && set_hostname \
 && install_samba \
 && install_wireguard \

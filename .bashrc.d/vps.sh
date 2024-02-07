@@ -37,17 +37,16 @@ linux_update_and_upgrade_system() {
 linux_install_base_tools() {
 	if which apt; then
 		# Debian, Ubuntu, Raspbian
-		apt update
 		apt install -y socat openssl iproute2
 		apt remove -y iptables firewalld ufw
 	elif which dnf; then
 		# Fedora, RedHat, CentOS
-		dnf makecache
 		dnf install -y socat openssl iproute
 		dnf remove -y iptables firewalld ufw
 	elif which pacman; then
 		# Arch Linux, Manjaro, Parabola
 		pacman -Syu socat openssl iproute
+		pacman -Ry iptables firewalld ufw
 	fi
 }
 

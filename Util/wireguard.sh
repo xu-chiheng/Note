@@ -11,13 +11,13 @@
 
 
 install_wireguard() {
-	if which apt; then
+	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt install -y wireguard
-	elif which dnf; then
+	elif quiet_command which dnf; then
 		# Fedora, RedHat, CentOS
 		dnf install -y wireguard-tools
-	elif which pacman; then
+	elif quiet_command which pacman; then
 		# Arch Linux, Manjaro, Parabola
 		pacman -Syu wireguard-tools
 	fi

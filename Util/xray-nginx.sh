@@ -29,16 +29,13 @@ getData() {
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
 # /etc/nginx/nginx.conf
 install_nginx() {
-	if which nginx; then
-		return 0
-	fi
-	if which apt; then
+	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt install -y nginx
-	elif which dnf; then
+	elif quiet_command which dnf; then
 		# Fedora, RedHat, CentOS
 		dnf install -y nginx
-	elif which pacman; then
+	elif quiet_command which pacman; then
 		# Arch Linux, Manjaro, Parabola
 		pacman -Syu nginx
 	fi

@@ -104,7 +104,7 @@ disable_firwall() {
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
 disable_selinux() {
 	if [ -f /etc/selinux/config ]; then
-		sed -i -e 's/^SELINUX=(enforcing|permissive)$/SELINUX=disabled/g' /etc/selinux/config
+		sed -i -E 's/^SELINUX=.*$/SELINUX=disabled/g' /etc/selinux/config
 		# after reboot
 		# getenforce
 	fi

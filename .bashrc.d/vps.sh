@@ -4,7 +4,11 @@
 
 # https://stackoverflow.com/questions/2556190/random-number-from-a-range-in-a-bash-script
 port_number_generate() {
-	shuf -i 10000-65535 -n 1
+	local start="$1"
+	if [ -z "${start}" ]; then
+		start=10000
+	fi 
+	shuf -i "${start}"-65535 -n 1
 }
 
 xray_uuid_generate() {

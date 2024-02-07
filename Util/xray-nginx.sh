@@ -194,7 +194,7 @@ install() {
 	UUID="$(xray_uuid_generate)"
 	PORT="$(port_number_generate)"
 	XPORT="$(port_number_generate)"
-	WSPATH="/$(password_generate)"
+	WSPATH="/$(password_generate_one)"
 
 	uninstall
 	install_base_tools

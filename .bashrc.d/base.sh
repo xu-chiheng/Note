@@ -451,6 +451,13 @@ remove_temp_files() {
 	rm -rf
 }
 
+password_generate_one() {
+	# openssl rand -help
+	# openssl rand -base64 48
+	# openssl rand -hex 64
+	tr -cd '[:alnum:]' < /dev/urandom | fold -w100 | head -n1
+}
+
 # https://www.geeksforgeeks.org/create-a-password-generator-using-shell-scripting/
 # https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
 # https://unix.stackexchange.com/questions/230673/how-to-generate-a-random-string
@@ -459,7 +466,7 @@ password_generate() {
 	# openssl rand -base64 48
 	# openssl rand -hex 64
 	for i in $(seq 1 40); do
-		tr -cd '[:alnum:]' < /dev/urandom | fold -w100 | head -n1
+		password_generate_one
 	done
 }
 

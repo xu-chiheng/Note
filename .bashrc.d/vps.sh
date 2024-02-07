@@ -1,15 +1,6 @@
 
 
 
-# https://www.geeksforgeeks.org/create-a-password-generator-using-shell-scripting/
-# https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
-# https://unix.stackexchange.com/questions/230673/how-to-generate-a-random-string
-password_generate() {
-	# openssl rand -help
-	# openssl rand -base64 48
-	# openssl rand -hex 64
-	tr -cd '[:alnum:]' < /dev/urandom | fold -w100 | head -n1
-}
 
 # https://stackoverflow.com/questions/2556190/random-number-from-a-range-in-a-bash-script
 port_number_generate() {

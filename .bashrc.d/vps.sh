@@ -73,6 +73,18 @@ linux_print_ipv4_address() {
 	ip addr show "$(linux_print_default_nic)" | grep 'inet ' | awk '{print $2}' | sed -E 's,/.*$,,'
 }
 
+# https://phoenixnap.com/kb/sysctl
+# https://man7.org/linux/man-pages/man8/sysctl.8.html
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/kernel_administration_guide/working_with_sysctl_and_kernel_tunables
+linux_sysctl_one_line() {
+	local variable="$1"
+	local value="$2"
+
+	sed -i "/${variable}/d" /etc/sysctl.conf
+	echo "${variable} = ${value}" >> /etc/sysctl.conf
+	sysctl -w "${variable}=${value}"
+}
+
 # https://teddysun.com/489.html
 # https://github.com/teddysun/across/raw/master/bbr.sh
 # https://v2rayssr.com/bbr.html
@@ -80,11 +92,8 @@ linux_print_ipv4_address() {
 # https://bbr.me/bbr.html
 # https://www.qinyuanyang.com/post/360.html
 linux_enable_bbr() {
-	sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
-	sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
-	echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
-	echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
-	sysctl -p
+	linux_sysctl_one_line net.core.default_qdisc fq
+	linux_sysctl_one_line net.ipv4.tcp_congestion_control bbr
 	lsmod | grep bbr
 }
 
@@ -92,24 +101,16 @@ linux_enable_bbr() {
 # https://techdocs.broadcom.com/us/en/ca-enterprise-software/it-operations-management/network-flow-analysis/23-3/installing/system-recommendations-and-requirements/linux-servers/disable-ipv6-networking-on-linux-servers.html
 # https://www.geeksforgeeks.org/how-to-disable-ipv6-in-linux/
 linux_disable_ipv6() {
-	sed -i '/net.ipv6.conf.all.disable_ipv6/d' /etc/sysctl.conf
-	sed -i '/net.ipv6.conf.default.disable_ipv6/d' /etc/sysctl.conf
-	sed -i '/net.ipv6.conf.lo.disable_ipv6/d' /etc/sysctl.conf
-	echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
-	echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
-	echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
-	sysctl -p
+	linux_sysctl_one_line net.ipv6.conf.all.disable_ipv6 1
+	linux_sysctl_one_line net.ipv6.conf.default.disable_ipv6 1
+	linux_sysctl_one_line net.ipv6.conf.lo.disable_ipv6 1
 	ip a | grep inet6
 }
 
 # Enable IP forwarding
 linux_enable_ip_forward() {
-    echo "Enable IP forward"
-    sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf
-    sed -i '/net.ipv6.conf.all.forwarding/d' /etc/sysctl.conf
-    echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
-    echo "net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
-    sysctl -p
+	linux_sysctl_one_line net.ipv4.ip_forward 1
+	linux_sysctl_one_line net.ipv6.conf.all.forwarding 1
 }
 
 # https://www.cyberciti.biz/faq/linux-disable-firewall-command/

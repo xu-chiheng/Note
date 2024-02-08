@@ -91,6 +91,11 @@ linux_print_ipv4_address() {
 	ip addr show "$(linux_print_default_nic)" | grep 'inet ' | head -1 | awk '{print $2}' | sed -E 's,/.*$,,'
 }
 
+linux_get_ip_address_of_domain_name() {
+	local domain_name="$1"
+	ping -c 1 "${domain_name}" | head -1 | awk '{print $3}' | sed -E 's/^\(//' | sed -E 's/\)://'
+}
+
 # https://phoenixnap.com/kb/sysctl
 # https://man7.org/linux/man-pages/man8/sysctl.8.html
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/kernel_administration_guide/working_with_sysctl_and_kernel_tunables

@@ -83,12 +83,12 @@ linux_stop_and_disable_service() {
 }
 
 linux_print_default_nic() {
-	ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1
+	ip -4 route ls | grep default | head -1 | awk '{print $5}'
 }
 
 linux_print_ipv4_address() {
 	# curl ifconfig.me
-	ip addr show "$(linux_print_default_nic)" | grep 'inet ' | awk '{print $2}' | sed -E 's,/.*$,,'
+	ip addr show "$(linux_print_default_nic)" | grep 'inet ' | head -1 | awk '{print $2}' | sed -E 's,/.*$,,'
 }
 
 # https://phoenixnap.com/kb/sysctl

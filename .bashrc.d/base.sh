@@ -514,3 +514,23 @@ print_program_dir_upper_dir() {
 	dirname "$(print_program_dir "${program}")"
 }
 
+backup_or_restore_file_or_dir() {
+	local file_or_dir="$1"
+	local dir="$(dirname "${file_or_dir}")"
+	local base="$(basename "${file_or_dir}")"
+
+	pushd "${dir}" \
+	&& if [ ! -f "${base}".tar ]; then
+		tar -cvf "${base}".tar "${base}" \
+		&& sha512_calculate_file "${base}".tar
+	else
+		if ! sha512_check_file "${base}".tar.sha512; then
+			echo "${file_or_dir}.tar is corrupt"
+			return 1
+		fi \
+		&& rm -rf "${base}" \
+		&& tar -xvf "${base}".tar
+	fi \
+	&& popd
+}
+

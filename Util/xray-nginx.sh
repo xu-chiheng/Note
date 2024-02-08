@@ -64,41 +64,14 @@ getCert() {
 }
 
 configNginx() {
-	pushd /usr/share/nginx \
-	&& if [ ! -f html.tar ]; then
-		mkdir -p html \
-		&& { cat <<EOF
+	if ! backup_or_restore_file_or_dir /usr/share/nginx/html \
+		|| ! backup_or_restore_file_or_dir /etc/nginx; then
+		exit 1
+	fi
+	cat > /usr/share/nginx/html/robots.txt <<EOF
 User-Agent: *
 Disallow: /
 EOF
-} > html/robots.txt \
-		&& tar -cvf html.tar html \
-		&& sha512_calculate_file html.tar
-	else
-		if ! sha512_check_file html.tar.sha512; then
-			echo "/usr/share/nginx/html.tar is corrupt"
-			exit 1
-		fi \
-		&& rm -rf html \
-		&& tar -xvf html.tar
-	fi \
-	&& popd
-
-
-	pushd /etc/nginx \
-	&& if [ ! -f nginx.conf.bak ]; then
-		sha512_calculate_file nginx.conf \
-		&& mv -f nginx.conf nginx.conf.bak \
-		&& cp -f nginx.conf.bak nginx.conf
-	else
-		rm -rf nginx.conf \
-		&& cp -f nginx.conf.bak nginx.conf \
-		&& if ! sha512_check_file nginx.conf.sha512; then
-			echo "/etc/nginx/nginx.conf is corrupt"
-			exit 1
-		fi
-	fi \
-	&& popd
 
 	rm -rf "${NGINX_CONF_PATH}"
 	mkdir -p ${NGINX_CONF_PATH}

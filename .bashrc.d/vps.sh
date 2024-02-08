@@ -134,11 +134,11 @@ linux_enable_ip_forward() {
 # https://www.cyberciti.biz/faq/linux-disable-firewall-command/
 # https://www.tecmint.com/start-stop-disable-enable-firewalld-iptables-firewall/
 # disable_firwall() {
-# 	if which firewalld; then
+# 	if quiet_command which firewalld; then
 # 		linux_stop_and_disable_service firewalld
-# 	elif which ufw; then
+# 	elif quiet_command which ufw; then
 # 		linux_stop_and_disable_service ufw
-# 	elif which iptables; then
+# 	elif quiet_command which iptables; then
 # 		linux_stop_and_disable_service iptables
 # 	fi
 # }

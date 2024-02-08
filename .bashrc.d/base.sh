@@ -303,8 +303,8 @@ print_array_elements() {
 }
 
 quiet_command() {
-	"$@" 2>&1 >/dev/null
-	# "$@" &>/dev/null
+	# "$@" 2>&1 >/dev/null
+	"$@" &>/dev/null
 }
 
 echo_command() {

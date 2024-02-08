@@ -303,6 +303,9 @@ print_array_elements() {
 }
 
 quiet_command() {
+	# https://stackoverflow.com/questions/18012930/how-can-i-redirect-all-output-to-dev-null
+	# https://www.digitalocean.com/community/tutorials/dev-null-in-linux
+	# https://www.baeldung.com/linux/silencing-bash-output
 	"$@" >/dev/null 2>&1
 	# "$@" &>/dev/null
 }

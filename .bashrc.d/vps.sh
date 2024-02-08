@@ -93,7 +93,7 @@ linux_print_ipv4_address() {
 
 linux_get_ip_address_of_domain_name() {
 	local domain_name="$1"
-	ping -c 1 "${domain_name}" | head -1 | awk '{print $3}' | sed -E 's/^\(//' | sed -E 's/\)://'
+	ping -c 1 "${domain_name}" | head -1 | awk '{print $3}' | sed -E 's/^\(//' | sed -E 's/\).*$//'
 }
 
 # https://phoenixnap.com/kb/sysctl

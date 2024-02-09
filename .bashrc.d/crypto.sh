@@ -36,9 +36,9 @@ file_split_one() {
 	echo "${file} started"
 	if rm -rf "${dir}" \
 		&& mkdir -p "${dir}" \
-		&& { quiet_command pushd "${dir}" \
+		&& { pushd "${dir}" \
 			&& split --bytes="${size}" --suffix-length=9 --additional-suffix=.chunk --numeric-suffixes "../${base}" \
-			&& quiet_command popd;}; then
+			&& popd;}; then
 		echo "${file} finished"
 		rm -rf "${file}"
 		return 0
@@ -136,9 +136,9 @@ sha512_calculate_file() {
 	local dir="$(dirname "${file}")"
 	local base="$(basename "${file}")"
 	echo "${file} started"
-	if { quiet_command pushd "${dir}" \
+	if { pushd "${dir}" \
 		&& sha512sum "${base}" >"${base}".sha512 \
-		&& quiet_command popd;}; then
+		&& popd;}; then
 		echo "${file} finished"
 		return 0
 	else
@@ -180,9 +180,9 @@ sha512_check_file() {
 		return 0
 	fi
 	echo "${sum} started"
-	if { quiet_command pushd "${dir}" \
+	if { pushd "${dir}" \
 		&& sha512sum --check --status "${base}" \
-		&& quiet_command popd;}; then
+		&& popd;}; then
 		echo "${sum} finished"
 		return 0
 	else

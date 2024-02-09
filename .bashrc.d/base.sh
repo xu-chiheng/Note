@@ -285,7 +285,6 @@ print_packages_dir() {
 	esac
 }
 
-
 # https://stackoverflow.com/questions/1527049/how-can-i-join-elements-of-a-bash-array-into-a-delimited-string
 # https://dev.to/meleu/how-to-join-array-elements-in-a-bash-script-303a
 # https://zaiste.net/posts/how-to-join-elements-of-array-bash/

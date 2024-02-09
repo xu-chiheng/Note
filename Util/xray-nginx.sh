@@ -24,7 +24,7 @@ getData() {
 	done
 	DOMAIN=${DOMAIN,,}
 
-	if [ "$(linux_get_ip_address_of_domain_name "${DOMAIN}")" != "${IP}" ]; then
+	if [ "$(linux_resolve_hostname "${DOMAIN}")" != "${IP}" ]; then
 		echo "伪装域名${DOMAIN}不指向${IP}"
 		exit 1
 	fi

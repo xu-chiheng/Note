@@ -38,17 +38,14 @@ linux_update_and_upgrade_system() {
 		# Debian, Ubuntu, Raspbian
 		apt update -y
 		apt upgrade -y
-		reboot
 	elif quiet_command which dnf; then
 		# Fedora, RedHat, CentOS
 		dnf makecache
 		dnf update -y
 		dnf upgrade -y
-		reboot
 	elif quiet_command which pacman; then
 		# Arch Linux, Manjaro, Parabola
 		pacman -Syu
-		reboot
 	fi
 }
 
@@ -91,9 +88,11 @@ linux_print_ipv4_address() {
 	ip addr show "$(linux_print_default_nic)" | grep 'inet ' | head -1 | awk '{print $2}' | sed -E 's,/.*$,,'
 }
 
-linux_get_ip_address_of_domain_name() {
-	local domain_name="$1"
-	ping -c 1 "${domain_name}" | head -1 | awk '{print $3}' | sed -E 's/^\(//' | sed -E 's/\).*$//'
+# https://unix.stackexchange.com/questions/20784/how-can-i-resolve-a-hostname-to-an-ip-address-in-a-bash-script
+# https://www.baeldung.com/linux/bash-script-resolve-hostname
+linux_resolve_hostname() {
+	local hostname="$1"
+	ping -c 1 "${hostname}" | head -1 | awk '{print $3}' | sed -E 's/^\(//' | sed -E 's/\).*$//'
 }
 
 # https://phoenixnap.com/kb/sysctl

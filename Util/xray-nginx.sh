@@ -31,21 +31,6 @@ getData() {
 	echo " 伪装域名(host)：${DOMAIN}"
 }
 
-# https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
-# /etc/nginx/nginx.conf
-installNginx() {
-	if quiet_command which apt; then
-		# Debian, Ubuntu, Raspbian
-		apt install -y nginx
-	elif quiet_command which dnf; then
-		# Fedora, RedHat, CentOS
-		dnf install -y nginx
-	elif quiet_command which pacman; then
-		# Arch Linux, Manjaro, Parabola
-		pacman -Syu nginx
-	fi
-}
-
 getCert() {
 	curl https://get.acme.sh | sh
 	source ~/.bashrc
@@ -68,6 +53,20 @@ getCert() {
 	fi
 }
 
+# https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
+installNginx() {
+	if quiet_command which apt; then
+		# Debian, Ubuntu, Raspbian
+		apt install -y nginx
+	elif quiet_command which dnf; then
+		# Fedora, RedHat, CentOS
+		dnf install -y nginx
+	elif quiet_command which pacman; then
+		# Arch Linux, Manjaro, Parabola
+		pacman -Syu nginx
+	fi
+}
+
 configNginx() {
 	if ! backup_or_restore_file_or_dir /usr/share/nginx/html \
 		|| ! backup_or_restore_file_or_dir /etc/nginx; then
@@ -79,9 +78,9 @@ Disallow: /
 EOF
 
 	rm -rf "${NGINX_CONF_PATH}"
-	mkdir -p ${NGINX_CONF_PATH}
+	mkdir -p "${NGINX_CONF_PATH}"
 	# VMESS+WS+TLS
-	cat > ${NGINX_CONF_PATH}/${DOMAIN}.conf<<EOF
+	cat >"${NGINX_CONF_PATH}/${DOMAIN}.conf" <<EOF
 server {
   listen ${PORT} ssl;
   listen [::]:${PORT} ssl;
@@ -122,17 +121,17 @@ installXray() {
 
 configXray() {
 	mkdir -p /usr/local/etc/xray
-	cat > $CONFIG_FILE<<EOF
+	cat >"${CONFIG_FILE}" <<EOF
 {
   "inbounds": [
     {
-      "port": $XPORT,
+      "port": ${XPORT},
       "listen":"127.0.0.1",//只监听 127.0.0.1，避免除本机外的机器探测到开放了 10000 端口
       "protocol": "vmess",
       "settings": {
         "clients": [
           {
-            "id": "$UUID",
+            "id": "${UUID}",
             "alterId": 0
           }
         ]
@@ -140,7 +139,7 @@ configXray() {
       "streamSettings": {
         "network": "ws",
         "wsSettings": {
-        "path": "$WSPATH"
+        "path": "${WSPATH}"
         }
       }
     }

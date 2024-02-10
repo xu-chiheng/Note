@@ -120,7 +120,8 @@ installXray() {
 	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
 
-vmessWSConfig() {
+configXray() {
+	mkdir -p /usr/local/xray
 	cat > $CONFIG_FILE<<EOF
 {
   "inbounds": [
@@ -152,11 +153,6 @@ vmessWSConfig() {
   ]
 }
 EOF
-}
-
-configXray() {
-	mkdir -p /usr/local/xray
-	vmessWSConfig
 }
 
 install() {
@@ -195,29 +191,27 @@ install() {
 }
 
 uninstall() {
-	if quiet_command which nginx && quiet_command systemctl status nginx; then
-		linux_stop_and_disable_service nginx
-	fi
-	if quiet_command which xray && quiet_command systemctl status xray; then
-		linux_stop_and_disable_service xray
-	fi
+	linux_stop_and_disable_service nginx
+	linux_stop_and_disable_service xray
 }
 
 outputVmessWS() {
-	local raw="{
-  \"v\":\"2\",
-  \"ps\":\"\",
-  \"add\":\"${IP}\",
-  \"port\":\"${PORT}\",
-  \"id\":\"${UUID}\",
-  \"aid\":\"0\",
-  \"net\":\"ws\",
-  \"type\":\"none\",
-  \"host\":\"${DOMAIN}\",
-  \"path\":\"${WSPATH}\",
-  \"tls\":\"tls\"
-}"
-
+	local raw=$(cat <<EOF
+{
+  "v": "2",
+  "ps": "",
+  "add": "${IP}",
+  "port": "${PORT}",
+  "id": "${UUID}",
+  "aid": "0",
+  "net": "ws",
+  "type": "none",
+  "host": "${DOMAIN}",
+  "path": "${WSPATH}",
+  "tls": "tls"
+}
+EOF
+)
 	local link="vmess://$(echo -n ${raw} | base64 -w 0)"
 
 	echo  

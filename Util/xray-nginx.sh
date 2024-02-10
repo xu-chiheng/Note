@@ -33,7 +33,7 @@ getData() {
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
 # /etc/nginx/nginx.conf
-install_nginx() {
+installNginx() {
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt install -y nginx
@@ -47,7 +47,6 @@ install_nginx() {
 }
 
 getCert() {
-	mkdir -p /usr/local/etc/xray
 	curl https://get.acme.sh | sh
 	source ~/.bashrc
 	~/.acme.sh/acme.sh --upgrade --auto-upgrade
@@ -57,6 +56,7 @@ getCert() {
 		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
 	fi
 
+	mkdir -p /usr/local/etc/xray
 	rm -rf "${CERT_FILE}" "${KEY_FILE}"
 	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 		--key-file       "${KEY_FILE}" \
@@ -121,7 +121,7 @@ installXray() {
 }
 
 configXray() {
-	mkdir -p /usr/local/xray
+	mkdir -p /usr/local/etc/xray
 	cat > $CONFIG_FILE<<EOF
 {
   "inbounds": [
@@ -177,7 +177,7 @@ install() {
 	linux_install_base_tools
 	getCert
 
-	install_nginx
+	installNginx
 	configNginx
 	linux_start_and_enable_service nginx
 
@@ -193,6 +193,7 @@ install() {
 uninstall() {
 	linux_stop_and_disable_service nginx
 	linux_stop_and_disable_service xray
+	rm -rf /usr/local/etc/xray
 }
 
 outputVmessWS() {

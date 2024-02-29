@@ -44,7 +44,7 @@ if type apt &>/dev/null; then
 	apt update -y
 	apt install -y git
 elif type dnf &>/dev/null; then
-	dnf install -y git redhat-lsb-core
+	dnf install -y git lsb_release
 elif type pacman &>/dev/null; then
 	pacman -Sy git
 else
@@ -108,7 +108,7 @@ get_os_and_version () {
 	OS_VERSION="$(lsb_release -sr)"
 
 	case "${OS_NAME}" in
-		Ubuntu | Fedora | CentOSStream | Rocky | Arch | Manjaro )
+		Ubuntu | Fedora | CentOSStream | RockyLinux | Arch | Manjaro )
 			true
 		;;
 		* )
@@ -239,7 +239,7 @@ set_fastest_mirror_and_update () {
 			&& dnf -y update \
 			&& dnf -y upgrade
 		;;
-		Rocky )
+		RockyLinux )
 			# should be similar to CentOSStream
 			backup_file_or_dir /etc/yum.repos.d \
 			&& find /etc/yum.repos.d -type f -print0 | xargs -0 sed -i \
@@ -279,7 +279,7 @@ install_basic_packages () {
 			# newer packages are available
 			basic_packages+=" htop neofetch astyle"
 		;;
-		CentOSStream | Rocky )
+		CentOSStream | RockyLinux )
 			basic_packages+=""
 		;;
 	esac
@@ -288,7 +288,7 @@ install_basic_packages () {
 			# KDE packages are available
 			basic_packages+=" dolphin konsole ksysguard kwrite"
 		;;
-		CentOSStream | Rocky )
+		CentOSStream | RockyLinux )
 			# GNOME only
 			basic_packages+=""
 		;;
@@ -306,7 +306,7 @@ install_basic_packages () {
 		Ubuntu )
 			basic_packages+=" g++"
 		;;
-		CentOSStream | Rocky )
+		CentOSStream | RockyLinux )
 			basic_packages+=" gcc-c++"
 		;;
 		Arch | Manjaro )
@@ -319,7 +319,7 @@ install_basic_packages () {
 		Ubuntu | Fedora )
 			basic_packages+=" dejagnu autogen texinfo sharutils doxygen"
 		;;
-		CentOSStream | Rocky )
+		CentOSStream | RockyLinux )
 			basic_packages+=""
 		;;
 		Arch | Manjaro )
@@ -331,7 +331,7 @@ install_basic_packages () {
 		Ubuntu )
 			basic_packages+=" libgmp-dev libmpfr-dev libmpc-dev libzip-dev libppl-dev"
 		;;
-		Fedora | CentOSStream | Rocky )
+		Fedora | CentOSStream | RockyLinux )
 			basic_packages+=" gmp gmp-devel mpfr mpfr-devel libmpc libzip libzip-devel"
 			case "${OS_NAME}" in
 				Fedora | CentOSStream )
@@ -353,7 +353,7 @@ install_basic_packages () {
 		Ubuntu )
 			apt install -y ${basic_packages}
 		;;
-		Fedora | CentOSStream | Rocky )
+		Fedora | CentOSStream | RockyLinux )
 			dnf install -y ${basic_packages}
 		;;
 		Arch | Manjaro )
@@ -406,7 +406,7 @@ install_notepadqq() {
 			&& ln -s /var/lib/snapd/snap /snap \
 			&& snap install notepadqq
 		;;
-		CentOSStream | Rocky )
+		CentOSStream | RockyLinux )
 			true
 		;;
 		Arch | Manjaro )
@@ -421,7 +421,7 @@ install_vs_code () {
 		Ubuntu )
 			snap install --classic code
 		;;
-		Fedora | CentOSStream | Rocky )
+		Fedora | CentOSStream | RockyLinux )
 			# https://computingforgeeks.com/install-visual-studio-code-on-fedora/
 			rpm --import https://packages.microsoft.com/keys/microsoft.asc \
 			&& cat <<EOF | tee /etc/yum.repos.d/vscode.repo
@@ -448,7 +448,7 @@ install_atom () {
 		Ubuntu )
 			snap install --classic atom
 		;;
-		Fedora | CentOSStream | Rocky )
+		Fedora | CentOSStream | RockyLinux )
 			# Fedora安装Atom
 			# https://fedoramagazine.org/install-atom-fedora/
 			# dnf install -y ./atom.x86_64.rpm
@@ -470,7 +470,7 @@ install_google_chrome () {
 			&& apt install -y ./google-chrome-stable_current_amd64.deb \
 			&& rm -rf google-chrome-stable_current_amd64.deb
 		;;
-		Fedora | CentOSStream | Rocky )
+		Fedora | CentOSStream | RockyLinux )
 			dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 		;;
 		Arch | Manjaro )
@@ -501,7 +501,7 @@ install_openjdk () {
 			# dnf install -y java-1.8.0-openjdk
 			# dnf install -y java-latest-openjdk
 		;;
-		CentOSStream | Rocky )
+		CentOSStream | RockyLinux )
 			dnf install -y java-11-openjdk-devel
 			# alternatives --config java
 		;;
@@ -524,7 +524,7 @@ install_qemu () {
 		Fedora )
 			dnf install -y qemu qemu-kvm libvirt-daemon libvirt bridge-utils virt-manager
 		;;
-		CentOSStream | Rocky )
+		CentOSStream | RockyLinux )
 			dnf install -y qemu-kvm libvirt-daemon libvirt virt-manager
 		;;
 		Arch | Manjaro )
@@ -553,7 +553,7 @@ install_qemu_build_requirements () {
 		Fedora )
 			dnf install -y git glib2-devel libfdt-devel pixman-devel zlib-devel bzip2 ninja-build python3 'SDL2*' 'gtk3*'
 		;;
-		CentOSStream | Rocky )
+		CentOSStream | RockyLinux )
 			# no ninja-build and SDL2, QEMU cant't be built
 			dnf install -y git glib2-devel pixman-devel zlib-devel bzip2 python3 'gtk3*'
 		;;
@@ -608,7 +608,7 @@ disable_firewall () {
 			ufw disable \
 			&& ufw status
 		;;
-		Fedora | CentOSStream | Rocky )
+		Fedora | CentOSStream | RockyLinux )
 			# systemctl stop iptables
 			# systemctl disable iptables
 
@@ -627,7 +627,7 @@ disable_firewall () {
 linux_disable_selinux () {
 	echo linux_disable_selinux
 	case "${OS_NAME}" in
-		Fedora | CentOSStream | Rocky )
+		Fedora | CentOSStream | RockyLinux )
 			# 直接修改系统配置文件/etc/selinux/config
 			sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 			# cat /etc/selinux/config
@@ -653,7 +653,7 @@ set_hostname() {
 		CentOSStream )
 			echo "centos" >/etc/hostname
 		;;
-		Rocky )
+		RockyLinux )
 			echo "rocky" >/etc/hostname
 		;;
 		Ubuntu )
@@ -708,7 +708,7 @@ install_samba() {
 	# http://www.cnblogs.com/mchina/archive/2012/12/18/2816717.html
 
 	case "${OS_NAME}" in
-		Fedora | CentOSStream | Rocky )
+		Fedora | CentOSStream | RockyLinux )
 			dnf -v -y install samba samba-client \
 			&& systemctl start smb \
 			&& systemctl start nmb \
@@ -757,11 +757,11 @@ install_wireguard() {
 		;;
 		CentOSStream )
 			yum install -y elrepo-release epel-release
-			yum install -y kmod-wireguard wireguard-tools
+			yum install -y wireguard-tools
 		;;
-		Rocky )
+		RockyLinux )
 			yum install -y elrepo-release epel-release
-			yum install -y kmod-wireguard wireguard-tools
+			yum install -y wireguard-tools
 		;;
 		Ubuntu )
 			apt install -y wireguard

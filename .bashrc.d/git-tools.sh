@@ -45,7 +45,7 @@ git_backup_directory_to_all_drives() {
 	&& time_command sha512_calculate_file "${tarball}".gpg \
 	&& time_command sync . \
 	&& case "${HOST_TRIPLE}" in
-			*-cygwin | *-msys | *-mingw64 )
+			*-cygwin | *-msys | *-mingw64 | *-linux )
 				set +m; time_command copy_tarball_to_all_drives "${base}" "${tarball}";
 				;;
 			*-linux )

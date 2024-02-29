@@ -35,9 +35,9 @@ open_files_in_editor() {
 			# code --wait --new-window "${translated_file_paths[@]}"
 			;;
 		*-linux )
-			code --wait --new-window "$@"
+			# code --wait --new-window "$@"
 			# gedit "$@"
-			# kwrite "$@"
+			kwrite "$@"
 			;;
 	esac
 }

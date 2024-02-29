@@ -41,6 +41,10 @@ print_host_triple() {
 					echo "x86_64-pc-cygwin"
 					return 0
 					;;
+				*Linux )
+					echo "x86_64-pc-linux"
+					return 0
+					;;
 				Msys )
 					case "$(uname -s)" in
 						MSYS_NT-* )

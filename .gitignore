@@ -40,6 +40,20 @@
 /machineid
 /rapid_render.json
 /storage.json
+/anaconda-ks.cfg
+/initial-setup-ks.cfg
+/CachedProfilesData
+/Crashpad
+/DawnCache
+/Dictionaries
+/Preferences
+/Service Worker
+/TransportSecurity
+/Trust Tokens
+/Trust Tokens-journal
+/WebStorage
+/databases
+
 
 # Windows
 /3D Objects

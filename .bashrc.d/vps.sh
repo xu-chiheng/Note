@@ -33,22 +33,6 @@ xray_uuid_generate() {
 	cat '/proc/sys/kernel/random/uuid'
 }
 
-linux_update_and_upgrade_system() {
-	if quiet_command which apt; then
-		# Debian, Ubuntu, Raspbian
-		apt update -y
-		apt upgrade -y
-	elif quiet_command which dnf; then
-		# Fedora, RedHat, CentOS
-		dnf makecache
-		dnf update -y
-		dnf upgrade -y
-	elif quiet_command which pacman; then
-		# Arch Linux, Manjaro, Parabola
-		pacman -Syu
-	fi
-}
-
 linux_uninstall_firewall() {
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian

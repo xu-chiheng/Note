@@ -49,19 +49,29 @@ linux_update_and_upgrade_system() {
 	fi
 }
 
-linux_install_base_tools() {
+linux_uninstall_firewall() {
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
-		apt install -y tar socat openssl iproute2
 		apt remove -y iptables firewalld ufw
 	elif quiet_command which dnf; then
 		# Fedora, RedHat, CentOS
-		dnf install -y tar socat openssl iproute
 		dnf remove -y iptables firewalld ufw
 	elif quiet_command which pacman; then
 		# Arch Linux, Manjaro, Parabola
-		pacman -Syu tar socat openssl iproute
 		pacman -Ry iptables firewalld ufw
+	fi
+}
+
+linux_install_vps_basic_tools() {
+	if quiet_command which apt; then
+		# Debian, Ubuntu, Raspbian
+		apt install -y tar socat openssl iproute2
+	elif quiet_command which dnf; then
+		# Fedora, RedHat, CentOS
+		dnf install -y tar socat openssl iproute
+	elif quiet_command which pacman; then
+		# Arch Linux, Manjaro, Parabola
+		pacman -Syu tar socat openssl iproute
 	fi
 }
 

@@ -79,7 +79,8 @@ install() {
 	CLIENT_DNS_2="8.8.8.8"
 
 
-	linux_install_base_tools
+	linux_uninstall_firewall
+	linux_install_vps_basic_tools
 	linux_enable_ip_forward
 	install_wireguard
 

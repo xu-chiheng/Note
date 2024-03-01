@@ -173,7 +173,8 @@ install() {
 	linux_disable_selinux
 
 	uninstall
-	linux_install_base_tools
+	linux_uninstall_firewall
+	linux_install_vps_basic_tools
 	getCert
 
 	installNginx

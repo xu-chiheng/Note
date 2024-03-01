@@ -273,7 +273,7 @@ install_basic_packages () {
 
 	local basic_packages=""
 
-	basic_packages+=" open-vm-tools git gitk nano emacs"
+	basic_packages+=" open-vm-tools git gitk nano emacs texinfo"
 	case "${OS_NAME}" in
 		Ubuntu | Fedora | Arch | Manjaro )
 			# newer packages are available

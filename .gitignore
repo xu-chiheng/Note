@@ -4,6 +4,7 @@
 *~
 .directory
 .vs
+code.lock
 *.downloading
 /a.out
 /*.stackdump

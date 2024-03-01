@@ -344,7 +344,7 @@ git_repo_url_of_package() {
 			echo "git://gcc.gnu.org/git/gcc.git"
 			;;
 		llvm )
-			echo "https://github.com/llvm/llvm-project"
+			echo "git@github.com:llvm/llvm-project.git"
 			;;
 		qemu )
 			echo "https://gitlab.com/qemu-project/qemu.git"
@@ -744,18 +744,24 @@ build_and_install_binutils_gcc_for_target() {
 			--disable-werror
 			# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
 			--disable-gdb --disable-gdbserver --disable-gdbsupport --disable-libdecnumber --disable-readline --disable-sim
+
+			# optional options
+			--enable-interwork
+			--enable-multilib
 	)
 
 	local gcc_configure_options=(
 			--without-headers
 			--target="${target}"
+
+			# optional options
+			--enable-interwork
+			--enable-multilib
 	)
 
 	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
 		gcc_configure_options+=(
-			--with-gmp="${gmp_mpfr_mpc_install_dir}"
-			--with-mpfr="${gmp_mpfr_mpc_install_dir}"
-			--with-mpc="${gmp_mpfr_mpc_install_dir}"
+			--with-{gmp,mpfr,mpc}="$(pwd)/${gmp_mpfr_mpc_install_dir}"
 		)
 	fi
 

@@ -51,6 +51,12 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 		x86_64-pc-cygwin
 		x86_64-pc-mingw64
 		x86_64-pc-linux
+		aarch64-unknown-linux
+		riscv64-unknown-linux
+		ppc64le-unknown-linux
+		loongarch64-unknown-linux
+		sparc64-unknown-linux
+		mips64-unknown-linux
 	)
 
 	# remove ${HOST_TRIPLE}

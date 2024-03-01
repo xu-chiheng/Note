@@ -578,7 +578,9 @@ gcc_pushd_and_configure() {
 	# --disable-fixincludes
 	# make[2]: *** No rule to make target '../build-x86_64-pc-cygwin/fixincludes/fixinc.sh', needed by 'stmp-fixinc'.  Stop.
 
-	local build_fixincludes_dir="build-${host_triple}/fixincludes"
+	# do not use the host triple passed in
+	local build_triple="$(~/config.guess)"
+	local build_fixincludes_dir="build-${build_triple}/fixincludes"
 
 	local install_prefix="$(pwd)/${install_dir}"
 

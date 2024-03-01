@@ -301,56 +301,6 @@ install_basic_packages() {
 	esac
 }
 
-install_notepadqq() {
-	# https://www.2daygeek.com/install-notepadqq-source-code-editor-in-arch-linux-mint-ubuntu-debian-fedora/
-
-	# For Fedora Users
-	# $ sudo dnf copr enable ngompa/notepadqq
-	# $ sudo dnf install notepadqq
-
-	# Manual Method For Fedora Users
-	# $ sudo dnf install qt5 qt5-devel qt5-qtwebkit qt5-qttools qt5-qtsvg
-	# $ export QMAKE=/usr/bin/qmake-qt5
-	# $ git clone https://github.com/notepadqq/notepadqq.git
-	# $ cd notepadqq/
-	# $ ./configure --lrelease /usr/bin/lrelease-qt5 --prefix /usr
-	# $ make
-	# $ sudo make install
-
-	# For CentOS 7 Users
-	# $ sudo yum install epel-release
-	# $ sudo wget https://copr.fedoraproject.org/coprs/ngompa/notepadqq/repo/epel-7/ngompa-notepadqq-epel-7.repo -O /etc/yum.repos.d/ngompa-notepadqq-epel-7.repo
-	# $ sudo yum install notepadqq
-
-	# Alternate Repository for RPM based systems Fedora, CentOS, etc.
-	# $ cd /etc/yum.repos.d
-	# $ sudo wget http://sea.fedorapeople.org/sea-devel.repo
-	# $ sudo yum install notepadqq
-	# $ sudo dnf install notepadqq
-
-	case "${OS_NAME}" in
-		Ubuntu | Debian )
-			apt install -y notepadqq
-			;;
-		Fedora )
-			# https://www.reddit.com/r/Fedora/comments/n1qtnh/how_can_i_install_notepadqq_on_fedora/
-			# On recent Fedora, you could do this:
-			# flatpak install notepadqq
-
-			# https://snapcraft.io/install/notepadqq/fedora
-			dnf install -y snapd \
-			&& ln -s /var/lib/snapd/snap /snap \
-			&& snap install notepadqq
-			;;
-		CentOSStream | RockyLinux )
-			true
-			;;
-		Arch | Manjaro )
-			pacman -S notepadqq
-			;;
-	esac
-}
-
 install_vs_code() {
 	case "${OS_NAME}" in
 		Ubuntu | Debian )
@@ -620,7 +570,6 @@ time_command set_fastest_mirror_and_update \
 && time_command linux_uninstall_firewall \
 && time_command linux_disable_selinux \
 && time_command install_basic_packages \
-&& time_command install_notepadqq \
 && time_command install_vs_code \
 && time_command install_google_chrome \
 && time_command install_qemu \

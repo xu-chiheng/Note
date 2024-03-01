@@ -95,14 +95,14 @@ linux_print_default_nic() {
 
 linux_print_ipv4_address() {
 	# curl ifconfig.me
-	ip addr show "$(linux_print_default_nic)" | grep 'inet ' | head -1 | awk '{print $2}' | sed -E 's,/.*$,,'
+	ip addr show "$(linux_print_default_nic)" | grep 'inet ' | head -1 | awk '{print $2}' | sed -E -e 's,/.*$,,'
 }
 
 # https://unix.stackexchange.com/questions/20784/how-can-i-resolve-a-hostname-to-an-ip-address-in-a-bash-script
 # https://www.baeldung.com/linux/bash-script-resolve-hostname
 linux_resolve_hostname() {
 	local hostname="$1"
-	ping -c 1 "${hostname}" | head -1 | awk '{print $3}' | sed -E 's/^\(//' | sed -E 's/\).*$//'
+	ping -c 1 "${hostname}" | head -1 | awk '{print $3}' | sed -E -e 's/^\(//' | sed -E -e 's/\).*$//'
 }
 
 # https://phoenixnap.com/kb/sysctl
@@ -112,7 +112,7 @@ linux_sysctl_one_line() {
 	local variable="$1"
 	local value="$2"
 
-	sed -i "/${variable}/d" /etc/sysctl.conf
+	sed -i -e "/${variable}/d" /etc/sysctl.conf
 	echo "${variable} = ${value}" >> /etc/sysctl.conf
 	sysctl -w "${variable}=${value}"
 }
@@ -123,6 +123,11 @@ linux_sysctl_one_line() {
 # https://www.437r.com/archives/64
 # https://bbr.me/bbr.html
 # https://www.qinyuanyang.com/post/360.html
+# https://www.techrepublic.com/article/how-to-enable-tcp-bbr-to-improve-network-speed-on-linux/
+# https://wiki.crowncloud.net/?How_to_enable_BBR_on_Ubuntu_20_04
+# https://www.hostwinds.com/tutorials/how-to-enable-googles-tcp-bbr-linux-cloud-vps
+# https://www.linuxbabe.com/ubuntu/enable-google-tcp-bbr-ubuntu
+# https://serverfault.com/questions/867056/tcp-congestion-control-for-ipv6-under-linux
 linux_enable_bbr() {
 	linux_sysctl_one_line net.core.default_qdisc fq
 	linux_sysctl_one_line net.ipv4.tcp_congestion_control bbr
@@ -161,7 +166,7 @@ linux_enable_ip_forward() {
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
 linux_disable_selinux() {
 	if [ -f /etc/selinux/config ]; then
-		sed -i -E 's/^SELINUX=.*$/SELINUX=disabled/g' /etc/selinux/config
+		sed -i -E -e 's/^SELINUX=.*$/SELINUX=disabled/g' /etc/selinux/config
 		# after reboot
 		# getenforce
 	fi

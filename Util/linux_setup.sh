@@ -616,29 +616,6 @@ install_samba() {
 	esac
 }
 
-install_wireguard() {
-	# https://www.wireguard.com/install/
-	case "${OS_NAME}" in
-		Fedora )
-			dnf install -y wireguard-tools
-			;;
-		CentOSStream )
-			yum install -y elrepo-release epel-release
-			yum install -y wireguard-tools
-			;;
-		RockyLinux )
-			yum install -y elrepo-release epel-release
-			yum install -y wireguard-tools
-			;;
-		Ubuntu | Debian )
-			apt install -y wireguard
-			;;
-		Arch | Manjaro )
-			pacman -S wireguard-tools
-			;;
-	esac
-}
-
 time_command set_fastest_mirror_and_update \
 && time_command linux_uninstall_firewall \
 && time_command linux_disable_selinux \
@@ -653,5 +630,4 @@ time_command set_fastest_mirror_and_update \
 && time_command disable_kde_suspend_and_lock \
 && time_command set_hostname \
 && time_command install_samba \
-&& time_command install_wireguard \
 && echo "Completed!"

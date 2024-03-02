@@ -25,11 +25,11 @@
 cd "$(dirname "$0")"
 
 
-# Kubuntu 20.04.3 21.04
-# Fedora KDE 28-1.1 34-1.2
-# CentOSStream 8
+# Fedora 39
 # Rocky Linux 9
 # Debian 12
+# Kubuntu 22.04
+
 
 # https://unix.stackexchange.com/questions/189777/how-to-launch-shell-script-with-double-click-in-centos-7
 # https://unix.stackexchange.com/questions/80822/ubuntu-unity-attach-script-to-launcher

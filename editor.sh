@@ -34,7 +34,7 @@ open_files_in_editor() {
 			notepad++ -multiInst -nosession -noPlugin "${translated_file_paths[@]}"
 			# code --wait --new-window "${translated_file_paths[@]}"
 			;;
-		*-linux )
+		*-linux-gnu )
 			# code --wait --new-window "$@"
 			# gedit "$@"
 			kwrite "$@"

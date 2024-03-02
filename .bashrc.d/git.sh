@@ -306,7 +306,7 @@ print_hard_drives_mount_points() {
 				fi
 			done
 			;;
-		*-linux )
+		*-linux-gnu )
 			# Linux hard drive device file naming convention
 			# regular expression special characters
 			for d in $(cat /proc/mounts | grep -E '^/dev/[hsv]d[a-z](|[1-9][0-9]*) (/|(/\w+)+) ' | cut -d ' ' -f 2); do

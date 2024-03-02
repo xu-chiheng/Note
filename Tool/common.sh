@@ -460,11 +460,12 @@ print_host_os_of_triple() {
 			# cygwin1.dll
 			echo "cygwin"
 			;;
-		*-linux )
+		*-linux-gnu )
 			echo "linux"
 			;;
 		* )
-			echo "${host_triple##*-}"
+			echo "unknown host : ${host_triple}"
+			return 1
 			;;
 	esac
 }
@@ -578,9 +579,7 @@ gcc_pushd_and_configure() {
 	# --disable-fixincludes
 	# make[2]: *** No rule to make target '../build-x86_64-pc-cygwin/fixincludes/fixinc.sh', needed by 'stmp-fixinc'.  Stop.
 
-	# do not use the host triple passed in
-	local build_triple="$(~/config.guess)"
-	local build_fixincludes_dir="build-${build_triple}/fixincludes"
+	local build_fixincludes_dir="build-${host_triple}/fixincludes"
 
 	local install_prefix="$(pwd)/${install_dir}"
 

@@ -41,8 +41,8 @@ print_host_triple() {
 					echo "x86_64-pc-cygwin"
 					return 0
 					;;
-				*Linux )
-					echo "x86_64-pc-linux"
+				GNU/Linux )
+					echo "x86_64-pc-linux-gnu"
 					return 0
 					;;
 				Msys )
@@ -104,11 +104,11 @@ set_environment_variables_at_bash_startup() {
 	esac
 
 	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux )
+		x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux-gnu )
 			local packages_dir="$(print_packages_dir "${HOST_TRIPLE}")"
 			local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
 			case "${HOST_TRIPLE}" in
-				*-linux )
+				*-linux-gnu )
 					packages+=( qemu )
 					;;
 			esac
@@ -152,7 +152,7 @@ set_environment_variables_at_bash_startup() {
 	esac
 
 	case "${HOST_TRIPLE}" in
-		*-linux )
+		*-linux-gnu )
 			# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
 			case "${DESKTOP_SESSION}" in
 				*plasma* )
@@ -279,7 +279,7 @@ print_packages_dir() {
 					;;
 			esac
 			;;
-		*-linux )
+		*-linux-gnu )
 			echo "/mnt/work/packages"
 			;;
 		* )

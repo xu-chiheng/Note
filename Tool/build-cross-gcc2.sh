@@ -50,13 +50,13 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 	TARGETS=(
 		x86_64-pc-cygwin
 		x86_64-pc-mingw64
-		x86_64-pc-linux
-		aarch64-unknown-linux
-		riscv64-unknown-linux
-		ppc64le-unknown-linux
-		loongarch64-unknown-linux
-		sparc64-unknown-linux
-		mips64-unknown-linux
+		x86_64-pc-linux-gnu
+		aarch64-unknown-linux-gnu
+		riscv64-unknown-linux-gnu
+		loongarch64-unknown-linux-gnu
+		# ppc64le-unknown-linux-gnu
+		# sparc64-unknown-linux-gnu
+		# mips64-unknown-linux-gnu
 	)
 
 	# remove ${HOST_TRIPLE}

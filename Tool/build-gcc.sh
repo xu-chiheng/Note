@@ -125,6 +125,22 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 				# jit
 			)
 			;;
+		x86_64-pc-linux-gnu )
+			CONFIGURE_OPTIONS=(
+				--enable-shared
+				--enable-shared-libgcc
+				--enable-static
+				--disable-multilib
+			)
+			EXTRA_LANGUAGES+=(
+				lto
+				fortran
+				# ada
+				objc
+				obj-c++
+				# jit
+			)
+			;;
 		* )
 			echo "unknown host : ${HOST_TRIPLE}"
 			exit 1

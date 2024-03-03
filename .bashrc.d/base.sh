@@ -158,12 +158,13 @@ set_environment_variables_at_bash_startup() {
 				*plasma* )
 					FILE_EXPLORER=dolphin
 					TERMINAL_EMULATOR=konsole
-					TASK_MANAGER=ksysguard
-					;;
-				gnome | ubuntu )
-					FILE_EXPLORER=nautilus
-					TERMINAL_EMULATOR=gnome-terminal
-					TASK_MANAGER=gnome-system-monitor
+					if quiet_command which plasma-systemmonitor; then
+						TASK_MANAGER=plasma-systemmonitor
+					elif quiet_command which ksysguard; then
+						TASK_MANAGER=ksysguard
+					else
+						echo "KDE has no plasma-systemmonitor or ksysguard"
+					fi
 					;;
 				* )
 					echo "Unknown Desktop Environment ${DESKTOP_SESSION}"

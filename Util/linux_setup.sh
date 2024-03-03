@@ -222,16 +222,6 @@ install_basic_packages() {
 			packages+=()
 			;;
 	esac
-	case "${OS_NAME}" in
-		Ubuntu | Debian | Fedora | Arch | Manjaro )
-			# KDE packages are available
-			packages+=( dolphin konsole ksysguard kwrite )
-			;;
-		CentOSStream | RockyLinux )
-			# GNOME only
-			packages+=()
-			;;
-	esac
 
 	packages+=( gcc gdb clang lldb make cmake perl python3 expect bison flex m4 gettext graphviz )
 	case "${OS_NAME}" in
@@ -544,7 +534,6 @@ install_samba() {
 			;;
 		Ubuntu | Debian )
 			apt install -y samba \
-			&& ufw allow samba \
 			&& systemctl start smbd \
 			&& systemctl enable smbd \
 			&& backup_or_restore_file_or_dir /etc/samba \
@@ -571,7 +560,6 @@ time_command set_fastest_mirror_and_update \
 && time_command linux_disable_selinux \
 && time_command install_basic_packages \
 && time_command install_vs_code \
-&& time_command install_google_chrome \
 && time_command install_qemu \
 && time_command install_qemu_build_requirements \
 && time_command install_openjdk \

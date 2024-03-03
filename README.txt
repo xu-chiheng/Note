@@ -3,7 +3,7 @@ These are the scripts I used internally to build GCC/Cross-GCC, Clang/LLVM, and 
 
 The scripts are started by bash -i, they will source the ~/.bashrc file at startup, so they can use the convenient bash functions defined there.
 
-QEMU can only be built on MSYS2/MinGW-w64.
+QEMU can only be built on MSYS2/MinGW.
 
 Set the following Windows environment variables :
 CYGWIN_DIR=D:\cygwin64
@@ -15,3 +15,4 @@ HOME=%USERPROFILE%
 I also use one of the following commands to make a link, this is optional.
 ln -s ~ "$(cygpath -u 'E:\Note')"
 mklink /D E:\Note %USERPROFILE%
+ln -s ~ /mnt/work/Note

@@ -49,6 +49,7 @@ cd "$(dirname "$0")"
 if quiet_command which apt; then
 	# Debian, Ubuntu, Raspbian
 	true
+	# apt install -y lsb-release
 elif quiet_command which dnf; then
 	# Fedora, RedHat, CentOS
 	dnf install -y lsb_release
@@ -110,8 +111,11 @@ set_fastest_mirror_and_update() {
 			&& apt -y upgrade
 			;;
 		Debian )
-			# TODO
-			true
+			backup_or_restore_file_or_dir /etc/apt \
+			&& sed /etc/apt/sources.list -i -E \
+						-e 's,cdrom:\[.*\]/,https://mirrors.ustc.edu.cn/debian/,g' \
+			&& apt -y update \
+			&& apt -y upgrade
 			;;
 		Fedora )
 			# Fedora中dnf设置国内最快的mirror        https://mirrors.ustc.edu.cn/fedora
@@ -291,23 +295,23 @@ install_basic_packages() {
 	esac
 }
 
+# https://code.visualstudio.com/docs/setup/linux
 install_vs_code() {
 	case "${OS_NAME}" in
 		Ubuntu | Debian )
-			snap install --classic code
+			apt install -y wget gpg \
+			&& wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg \
+			&& install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg \
+			&& sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list' \
+			&& rm -f packages.microsoft.gpg \
+			&& apt install -y apt-transport-https \
+			&& apt update -y \
+			&& apt install -y code
 			;;
 		Fedora | CentOSStream | RockyLinux )
 			# https://computingforgeeks.com/install-visual-studio-code-on-fedora/
 			rpm --import https://packages.microsoft.com/keys/microsoft.asc \
-			&& { cat <<EOF | tee /etc/yum.repos.d/vscode.repo
-[code]
-name=Visual Studio Code
-baseurl=https://packages.microsoft.com/yumrepos/vscode
-enabled=1
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc
-EOF
-} \
+			&& sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo' \
 			&& dnf check-update \
 			&& dnf install -y code \
 			&& rpm -qi code
@@ -318,31 +322,31 @@ EOF
 	esac
 }
 
-install_google_chrome() {
-	case "${OS_NAME}" in
-		Ubuntu | Debian )
-			rm -rf google-chrome-stable_current_amd64.deb \
-			&& wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-			&& apt install -y ./google-chrome-stable_current_amd64.deb \
-			&& rm -rf google-chrome-stable_current_amd64.deb
-			;;
-		Fedora | CentOSStream | RockyLinux )
-			dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-			;;
-		Arch | Manjaro )
-			# How to Install Google Chrome in Arch-based Linux Distributions
-			# https://itsfoss.com/install-chrome-arch-linux/
-			pacman -S --needed base-devel git \
-			&& git clone https://aur.archlinux.org/google-chrome.git \
-			&& cd google-chrome \
-			&& makepkg -si
+# install_google_chrome() {
+# 	case "${OS_NAME}" in
+# 		Ubuntu | Debian )
+# 			rm -rf google-chrome-stable_current_amd64.deb \
+# 			&& wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+# 			&& apt install -y ./google-chrome-stable_current_amd64.deb \
+# 			&& rm -rf google-chrome-stable_current_amd64.deb
+# 			;;
+# 		Fedora | CentOSStream | RockyLinux )
+# 			dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+# 			;;
+# 		Arch | Manjaro )
+# 			# How to Install Google Chrome in Arch-based Linux Distributions
+# 			# https://itsfoss.com/install-chrome-arch-linux/
+# 			pacman -S --needed base-devel git \
+# 			&& git clone https://aur.archlinux.org/google-chrome.git \
+# 			&& cd google-chrome \
+# 			&& makepkg -si
 
-			# upgrade
-			# git pull
-			# makepkg -si
-			;;
-	esac
-}
+# 			# upgrade
+# 			# git pull
+# 			# makepkg -si
+# 			;;
+# 	esac
+# }
 
 install_openjdk() {
 	case "${OS_NAME}" in
@@ -371,7 +375,10 @@ install_openjdk() {
 
 install_qemu() {
 	case "${OS_NAME}" in
-		Ubuntu | Debian )
+		Debian )
+			apt install -y 'qemu-system-*'
+			;;
+		Ubuntu )
 			# https://www.unixmen.com/how-to-install-and-configure-qemu-in-ubuntu/
 			# https://ubuntu.com/server/docs/virtualization-qemu
 			# https://www.tecmint.com/install-kvm-on-ubuntu/
@@ -393,7 +400,20 @@ install_qemu() {
 install_qemu_build_requirements() {
 	# https://wiki.qemu.org/Hosts/Linux
 	case "${OS_NAME}" in
-		Ubuntu | Debian )
+		Debian )
+			apt install -y git ninja-build python3 '*libsdl2*' '*libgtk-3*' \
+						   git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev \
+						   git-email \
+						   libaio-dev libbluetooth-dev libbrlapi-dev libbz2-dev \
+						   libcap-dev libcap-ng-dev libcurl4-gnutls-dev libgtk-3-dev \
+						   libibverbs-dev libjpeg62-turbo-dev libncurses5-dev libnuma-dev \
+						   librbd-dev librdmacm-dev \
+						   libsasl2-dev libsdl1.2-dev libseccomp-dev libsnappy-dev libssh2-1-dev \
+						   libvde-dev libvdeplug-dev libvte-dev libxen-dev liblzo2-dev \
+						   valgrind xfslibs-dev \
+						   libnfs-dev libiscsi-dev
+			;;
+		Ubuntu )
 			apt install -y git ninja-build python3 '*libsdl2*' '*libgtk-3*' \
 						   git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev \
 						   git-email \
@@ -414,41 +434,6 @@ install_qemu_build_requirements() {
 			dnf install -y git glib2-devel pixman-devel zlib-devel bzip2 python3 'gtk3*'
 			;;
 		Arch | Manjaro )
-			true
-			;;
-	esac
-}
-
-disable_kde_wallet() {
-	case "${DESKTOP_SESSION}" in
-		*plasma* )
-			# https://unix.stackexchange.com/questions/450731/disable-kde-wallet-from-the-command-line
-			pkill kwallet
-			kwriteconfig5 --file kwalletrc --group 'Wallet' --key 'Enabled' 'false' \
-			&& kwriteconfig5 --file kwalletrc --group 'Wallet' --key 'First Use' 'false'
-			;;
-		gnome | ubuntu )
-			true
-			;;
-		* )
-			true
-			;;
-	esac
-}
-
-disable_kde_suspend_and_lock() {
-	case "${DESKTOP_SESSION}" in
-		*plasma* )
-			# # kwriteconfig5 --file powermanagementprofilesrc --group '[Battery][SuspendSession]' --key 'suspendType' '1'
-			# # https://askubuntu.com/questions/803629/how-do-i-programmatically-disable-the-kde-screen-locker
-			# kwriteconfig5 --file kscreenlockerrc --group 'Daemon' --key 'Autolock' 'false'
-			# # qdbus org.freedesktop.ScreenSaver /ScreenSaver configure
-			true
-			;;
-		gnome | ubuntu )
-			true
-			;;
-		* )
 			true
 			;;
 	esac
@@ -544,13 +529,8 @@ install_samba() {
 			&& echo | testparm \
 			&& systemctl reload smbd
 			;;
-		Arch )
+		Arch | Manjaro )
 			echo "don't known how to install samba"
-			exit 1
-			;;
-		Manjaro )
-			echo "don't known how to install samba"
-			exit 1
 			;;
 	esac
 }
@@ -563,8 +543,6 @@ time_command set_fastest_mirror_and_update \
 && time_command install_qemu \
 && time_command install_qemu_build_requirements \
 && time_command install_openjdk \
-&& time_command disable_kde_wallet \
-&& time_command disable_kde_suspend_and_lock \
 && time_command set_hostname \
 && time_command install_samba \
 && echo "Completed!"

@@ -385,6 +385,15 @@ git_repo_url_of_package() {
 		mingw )
 			echo "https://git.code.sf.net/p/mingw-w64/mingw-w64"
 			;;
+		musl )
+			echo "git://git.musl-libc.org/musl"
+			;;
+		glibc )
+			echo "git://sourceware.org/git/glibc.git"
+			;;
+		linux )
+			echo "git@github.com:torvalds/linux.git"
+			;;
 		* )
 			echo "unknown package : ${package}"
 			return 1

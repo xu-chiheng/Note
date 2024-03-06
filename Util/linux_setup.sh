@@ -472,29 +472,31 @@ set_hostname() {
 	# Linux samba设置时,需要将Linux放在与Windows相同的组,workgroup通常为"workgroup",而不能使用默认的"mygroup".
 	# 同时,Linux的hostname不能使用默认的"localhost.localdomain",
 	# 需要通过下面的命令,设置新的hostname,需要重新启动.
+	local hostname
 	case "${OS_NAME}" in
 		Fedora )
-			echo "fedora" >/etc/hostname
+			hostname="fedora"
 			;;
 		CentOSStream )
-			echo "centos" >/etc/hostname
+			hostname="centos"
 			;;
 		RockyLinux )
-			echo "rocky" >/etc/hostname
+			hostname="rocky"
 			;;
 		Ubuntu )
-			echo "ubuntu" >/etc/hostname
+			hostname="ubuntu"
 			;;
 		Debian )
-			echo "debian" >/etc/hostname
+			hostname="debian"
 			;;
 		Arch )
-			echo "arch" >/etc/hostname
+			hostname="arch"
 			;;
 		Manjaro )
-			echo "manjaro" >/etc/hostname
+			hostname="manjaro"
 			;;
 	esac
+	echo "${hostname}" >/etc/hostname
 }
 
 samba_write_config_file() {

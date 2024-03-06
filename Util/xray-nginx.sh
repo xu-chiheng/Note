@@ -1,11 +1,117 @@
 #!/usr/bin/env -S bash -i
 
+# Works on Debian 12, Ubuntu 22.04 LTS, Fedora 38-39, Rocky Linux 8-9 at 2024-02-07
+
 # VMess
 # https://guide.v2fly.org/basics/vmess.html
 # WebSocket + TLS + Web
 # https://guide.v2fly.org/advanced/wss_and_web.html
 
-# Works on Debian 12, Ubuntu 22.04 LTS, Fedora 38-39, Rocky Linux 8-9 at 2024-02-07
+
+# Xray core
+# https://github.com/XTLS/Xray-core
+# https://xtls.github.io
+
+# v2fly core
+# https://github.com/v2fly/v2ray-core
+# https://www.v2fly.org
+# https://www.v2ray.com
+
+# sing-box
+# The universal proxy platform.
+# https://sing-box.sagernet.org/
+# https://github.com/SagerNet/sing-box
+
+# Caddy
+# https://github.com/caddyserver/caddy
+
+# NGINX
+# https://github.com/nginx/nginx
+
+# v2rayN
+# A V2Ray client for Windows, support Xray core and v2fly core
+# https://github.com/2dust/v2rayN
+
+# v2rayNG
+# A V2Ray client for Android, support Xray core and v2fly core
+# https://github.com/2dust/v2rayNG
+
+# An ACME Shell script: acme.sh
+# https://github.com/acmesh-official/acme.sh
+
+# Automatic Certificate Management Environment
+# https://en.wikipedia.org/wiki/Automatic_Certificate_Management_Environment
+
+# What is ACME protocol and how does it work?
+# https://www.keyfactor.com/blog/what-is-acme-protocol-and-how-does-it-work/
+
+# Automated Certificate Management Environment (ACME) Explained
+# https://sectigo.com/resource-library/what-is-acme-protocol
+
+
+
+# V2ray搭建教程，操作简单！支持伪装vmess+ws+tls和vless+tcp+xtls|vps服务器搭建v2ray节点|vpn搭建方式 2022
+# https://www.youtube.com/watch?v=sovN5c7E8MY
+
+# V2Ray进阶篇2：V2Ray+Websocket+TLS+Cloudflare拯救被墙的IP/复活你的VPS/隐藏真实IP/最安全的科学上网方式/V2Ray如何套上CDN加强安全性
+# https://www.youtube.com/watch?v=-GH7DOlqe-M
+
+# V2Ray保姆级小白进阶教程 Websocket + TLS + Cloudflare CDN 免费中转拯救被墙IP
+# https://www.youtube.com/watch?v=TWJZ30L1NRk
+
+# 自建永不被墙的节点！给节点套上CDN中转、开启超强防护！Vless+WS+TLS+CDN科学上网、翻墙节点搭建保姆级教程/借助CloudFlare给节点套上CDN
+# https://www.youtube.com/watch?v=eqYL6P6T9sU
+
+# 2023年自用稳定 v2ray vless+ws+tls+nginx+website #v2ray #vless #v2ray节点
+# https://www.youtube.com/watch?v=Xbou8S70W0w
+
+# 官方脚本手动搭建 v2ray 节点 websocket + tls + web 科学上网
+# https://www.youtube.com/watch?v=KKf-3R4Hxvg
+
+# V2ray官方搭建V2ray+WS+TLS+Nginx+web前端, 特殊时期为你网络保驾护航！目前安全系数最高的配置方法，告别来路不明一键安装脚本
+# https://www.youtube.com/watch?v=JQWaZp-UbIc
+
+# V2ray官方搭建 V2ray+WS+TCP+TLS底层传输加密，谷歌云搭建纯净官方V2ray，告别一键安装脚本
+# https://www.youtube.com/watch?v=dt8Ngw2vz-g
+
+
+# v2rayN 6.29 设置
+
+# Core基础设置
+# 开启UDP      OFF
+# 开启流量探测  OFF
+
+# v2rayN设置
+# 开机启动      ON
+# 启动后隐藏窗口 ON
+
+# 启用Tun模式  ON  虚拟网卡
+
+
+# Tor Browser双重代理配置（分别以v2rayN、无界、自由门作前置代理为例）
+# https://www.youtube.com/watch?v=IKuRpKPTEHs
+
+# 2022年最新暗网进入方法！什么是暗网暗网有什么如何使用科学上网工具访问暗网暗网怎么进2022丨暗网网址丨dark web 2022丨By工具大师i
+# https://www.youtube.com/watch?v=qob8gqQ2_3k
+# 1.打开v2rayN，在“参数设置”中关闭“开启流量探测”选项
+# 2.打开Tor Browser，在“Tor Network Settings”，勾选“I use a proxy to connect to the Internet”, 
+# Proxy Type选择“HTTP/HTTPS”，Address为“127.0.0.1”，Port为“10809”。点击Connect连接。
+
+# 通过v2rayN不能使用TOR浏览器 #360
+# https://github.com/2dust/v2rayN/issues/360
+# 这是sniffing的问题，关闭sniffing即可。
+# v2ray有一个sniffing功能，它可以检测http和tls流量中的域名并把它提取出来交给vps解析，然后把这些流量的数据包的目的地址重写为解析所得的地址。其本意是解决dns污染的问题，但因为tor连接用了一些不寻常的方式(比如域名和ip不匹配等)，所以此功能反而会使连接失败。
+# 目前v2rayn还不能设置关闭sniffing,想关闭sniffing只能手动编辑配置文件。
+
+
+# 多个地点Ping服务器,网站测速 - 站长工具
+# https://ping.chinaz.com
+
+
+# VPS 需要 disable ipv6
+# "自定义反代站点"设置为 https://www.baidu.com
+
+
 
 getData() {
 	echo

@@ -25,10 +25,27 @@
 cd "$(dirname "$0")"
 
 
-# Fedora 39
-# Rocky Linux 9
-# Debian 12
-# Kubuntu 22.04
+# Fedora KDE 39             https://fedoraproject.org/spins/kde
+# Rocky Linux KDE 9         https://docs.rockylinux.org/guides/desktop/kde_installation
+# Debian KDE 12             https://www.debian.org/CD/live
+# Kubuntu 22.04             https://kubuntu.org
+
+
+# How to enable root login?
+# https://askubuntu.com/questions/44418/how-to-enable-root-login
+# Configuring Kubuntu For Root Logons
+# https://www.rcomputer.eu/index.php/blog/8-clanky/linux/52-configuring-kubuntu-for-root-logons
+# How to allow root logins?
+# https://www.kubuntuforums.net/forum/archives/eol-releases/-19-10/post-installation-av/70490-how-to-allow-root-logins
+# HOW TO ENABLE GUI ROOT LOGIN IN DEBIAN 9 – KDE5 PLASMA
+# https://economictheoryblog.com/2017/08/30/how-to-enable-gui-root-login-in-debian-9-kde5-plasma/
+
+# 1) execute "sudo passwd root" to set the root password.
+# 2) execute "sudo passwd -u root" to unlock the account.
+# 3) kwrite /etc/pam.d/sddm, comment out the line "auth required pam_success_if.so user != root quiet_success".
+# 4) logout and login as root
+
+
 
 
 # https://unix.stackexchange.com/questions/189777/how-to-launch-shell-script-with-double-click-in-centos-7

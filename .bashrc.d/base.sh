@@ -37,12 +37,12 @@ print_host_triple() {
 	case "$(uname -m)" in
 		x86_64 )
 			case "$(uname -o)" in
-				Cygwin )
-					echo "x86_64-pc-cygwin"
-					return 0
-					;;
 				GNU/Linux )
 					echo "x86_64-pc-linux-gnu"
+					return 0
+					;;
+				Cygwin )
+					echo "x86_64-pc-cygwin"
 					return 0
 					;;
 				Msys )

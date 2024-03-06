@@ -141,9 +141,8 @@ set_fastest_mirror_and_update() {
 			# https://wiki.debian.org/SourcesList
 			backup_or_restore_file_or_dir /etc/apt \
 			&& sed /etc/apt/sources.list -i -E \
-						-e 's,cdrom:\[.*\]/,https://mirrors.ustc.edu.cn/debian/,g' \
-						-e 's,http://deb.debian.org/debian/,https://mirrors.ustc.edu.cn/debian/,g' \
-						-e 's,http://deb.debian.org/debian ,https://mirrors.ustc.edu.cn/debian ,g' \
+						-e 's,cdrom:\[.*\](/| ),https://mirrors.ustc.edu.cn/debian\1,g' \
+						-e 's,http://deb.debian.org/debian(/| ),https://mirrors.ustc.edu.cn/debian\1,g' \
 			&& apt -y update \
 			&& apt -y upgrade
 			;;

@@ -733,11 +733,10 @@ build_and_install_binutils_gcc_for_target() {
 	local version="$6"
 	local extra_languages="$7"
 	local is_build_and_install_gmp_mpfr_mpc="$8"
-	local is_build_and_install_libgcc="$9"
-	local binutils_source_dir="${10}"
-	local gcc_source_dir="${11}"
-	local gmp_mpfr_mpc_install_dir="${12}"
-	local current_datetime="${13}"
+	local binutils_source_dir="${9}"
+	local gcc_source_dir="${10}"
+	local gmp_mpfr_mpc_install_dir="${11}"
+	local current_datetime="${12}"
 
 	local host_os="$(print_host_os_of_triple "${host_triple}")"
 	local gcc_install_dir="${gcc_source_dir}-${target}-${host_os}-${toolchain,,}-${build_type,,}-install"
@@ -746,6 +745,18 @@ build_and_install_binutils_gcc_for_target() {
 	local binutils_build_dir="${binutils_source_dir}-${target}-${host_os}-${toolchain,,}-${build_type,,}-build"
 
 	local install_prefix="$(pwd)/${gcc_install_dir}"
+
+	local is_build_and_install_libgcc=yes
+	case "${target}" in
+		x86_64-pc-cygwin )
+			is_build_and_install_libgcc=no
+			# --with-native-system-header-dir=dirname
+			;;
+		x86_64-pc-mingw64 )
+			is_build_and_install_libgcc=no
+			# --with-native-system-header-dir=dirname
+			;;
+	esac
 
 	local binutils_configure_options=(
 			--target="${target}"
@@ -761,7 +772,10 @@ build_and_install_binutils_gcc_for_target() {
 	)
 
 	local gcc_configure_options=(
-			--without-headers
+			# --without-headers
+			# --disable-gcov
+			--disable-shared
+			--disable-threads
 			--target="${target}"
 
 			# optional options
@@ -833,9 +847,8 @@ build_and_install_cross_gcc_for_targets() {
 	local binutils_version="$6"
 	local extra_languages="$7"
 	local is_build_and_install_gmp_mpfr_mpc="$8"
-	local is_build_and_install_libgcc="$9"
-	local current_datetime="${10}"
-	shift 10
+	local current_datetime="$9"
+	shift 9
 
 	local targets=( "$@" )
 	echo "targets :"
@@ -872,7 +885,7 @@ build_and_install_cross_gcc_for_targets() {
 	&& for target in "${targets[@]}"; do
 			time_command build_and_install_binutils_gcc_for_target \
 			"${target}" "${toolchain}" "${build_type}" "${host_triple}" "${package}" "${gcc_version}" "${extra_languages}" \
-			"${is_build_and_install_gmp_mpfr_mpc}" "${is_build_and_install_libgcc}" "${binutils_source_dir}" "${gcc_source_dir}" \
+			"${is_build_and_install_gmp_mpfr_mpc}" "${binutils_source_dir}" "${gcc_source_dir}" \
 			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
 			2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-${target}-output.txt" &
 	done \

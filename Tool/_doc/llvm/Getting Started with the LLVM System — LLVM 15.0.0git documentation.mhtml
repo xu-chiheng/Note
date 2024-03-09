@@ -1,0 +1,3028 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://llvm.org/docs/GettingStarted.html
+Subject: =?utf-8?Q?Getting=20Started=20with=20the=20LLVM=20System=20=E2=80=94=20LL?=
+ =?utf-8?Q?VM=2015.0.0git=20documentation?=
+Date: Sat, 7 May 2022 21:52:59 -0000
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--jvcMZuXSLZomLleHaBPDjASlH40PNePSsFuR19Qn4e----"
+
+
+------MultipartBoundary--jvcMZuXSLZomLleHaBPDjASlH40PNePSsFuR19Qn4e----
+Content-Type: text/html
+Content-ID: <frame-2331797445F861F04098CEE3F048294B@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/GettingStarted.html
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3.=
+org/1999/xhtml"><head><meta http-equiv=3D"Content-Type" content=3D"text/htm=
+l; charset=3DUTF-8"><link rel=3D"stylesheet" type=3D"text/css" href=3D"cid:=
+css-552b1aed-5719-488c-b5e6-1b05ebeaa630@mhtml.blink" />
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3DEdge">
+   =20
+    <title>Getting Started with the LLVM System =E2=80=94 LLVM 15.0.0git do=
+cumentation</title>
+    <link rel=3D"stylesheet" href=3D"https://llvm.org/docs/_static/llvm-the=
+me.css" type=3D"text/css">
+    <link rel=3D"stylesheet" href=3D"https://llvm.org/docs/_static/pygments=
+.css" type=3D"text/css">
+   =20
+   =20
+   =20
+   =20
+   =20
+    <link rel=3D"index" title=3D"Index" href=3D"https://llvm.org/docs/genin=
+dex.html">
+    <link rel=3D"search" title=3D"Search" href=3D"https://llvm.org/docs/sea=
+rch.html">
+    <link rel=3D"next" title=3D"Getting Started with the LLVM System using =
+Microsoft Visual Studio" href=3D"https://llvm.org/docs/GettingStartedVS.htm=
+l">
+    <link rel=3D"prev" title=3D"Performance Tips for Frontend Authors" href=
+=3D"https://llvm.org/docs/Frontend/PerformanceTips.html">
+
+
+  </head><body>
+<div class=3D"logo">
+  <a href=3D"https://llvm.org/docs/index.html">
+    <img src=3D"https://llvm.org/docs/_static/logo.png" alt=3D"LLVM Logo" w=
+idth=3D"250" height=3D"88"></a>
+</div>
+
+    <div class=3D"related" role=3D"navigation" aria-label=3D"related naviga=
+tion">
+      <h3>Navigation</h3>
+      <ul>
+        <li class=3D"right" style=3D"margin-right: 10px">
+          <a href=3D"https://llvm.org/docs/genindex.html" title=3D"General =
+Index" accesskey=3D"I">index</a></li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/GettingStartedVS.html" title=3D"=
+Getting Started with the LLVM System using Microsoft Visual Studio" accessk=
+ey=3D"N">next</a> |</li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/Frontend/PerformanceTips.html" t=
+itle=3D"Performance Tips for Frontend Authors" accesskey=3D"P">previous</a>=
+ |</li>
+  <li><a href=3D"https://llvm.org/">LLVM Home</a>&nbsp;|&nbsp;</li>
+  <li><a href=3D"https://llvm.org/docs/index.html">Documentation</a>=C2=BB<=
+/li>
+
+          <li class=3D"nav-item nav-item-1"><a href=3D"https://llvm.org/doc=
+s/GettingStartedTutorials.html" accesskey=3D"U">Getting Started/Tutorials</=
+a> =C2=BB</li>=20
+      </ul>
+    </div>
+
+      <div class=3D"sphinxsidebar" role=3D"navigation" aria-label=3D"main n=
+avigation">
+        <div class=3D"sphinxsidebarwrapper">
+
+<h3>Documentation</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/GettingStartedTutorials.html">Gett=
+ing Started/Tutorials</a></li>
+    <li><a href=3D"https://llvm.org/docs/UserGuides.html">User Guides</a></=
+li>
+    <li><a href=3D"https://llvm.org/docs/Reference.html">Reference</a></li>
+</ul>
+
+<h3>Getting Involved</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/Contributing.html">Contributing to=
+ LLVM</a></li>
+    <li><a href=3D"https://llvm.org/docs/HowToSubmitABug.html">Submitting B=
+ug Reports</a></li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#mailing-lists=
+">Mailing Lists</a></li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#irc">IRC</a><=
+/li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#meetups-and-s=
+ocial-events">Meetups and Social Events</a></li>
+</ul>
+
+<h3>Additional Links</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/FAQ.html">FAQ</a></li>
+    <li><a href=3D"https://llvm.org/docs/Lexicon.html">Glossary</a></li>
+    <li><a href=3D"https://llvm.org/pubs">Publications</a></li>
+    <li><a href=3D"https://github.com/llvm/llvm-project//">Github Repositor=
+y</a></li>
+</ul>
+  <div role=3D"note" aria-label=3D"source link">
+    <h3>This Page</h3>
+    <ul class=3D"this-page-menu">
+      <li><a href=3D"https://llvm.org/docs/_sources/GettingStarted.rst.txt"=
+ rel=3D"nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id=3D"searchbox" style=3D"" role=3D"search">
+  <h3>Quick search</h3>
+    <div class=3D"searchformwrapper">
+    <form class=3D"search" action=3D"https://llvm.org/docs/search.html" met=
+hod=3D"get">
+      <input type=3D"text" name=3D"q">
+      <input type=3D"submit" value=3D"Go">
+     =20
+     =20
+    </form>
+    </div>
+</div>
+
+        </div>
+      </div>
+
+    <div class=3D"document">
+      <div class=3D"documentwrapper">
+        <div class=3D"bodywrapper">
+          <div class=3D"body" role=3D"main">
+           =20
+  <div class=3D"section" id=3D"getting-started-with-the-llvm-system">
+<h1>Getting Started with the LLVM System<a class=3D"headerlink" href=3D"htt=
+ps://llvm.org/docs/GettingStarted.html#getting-started-with-the-llvm-system=
+" title=3D"Permalink to this headline">=C2=B6</a></h1>
+<div class=3D"contents local topic" id=3D"contents">
+<ul class=3D"simple">
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#overview" id=3D"id4">Overview</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#getting-the-source-code-and-building-llvm" id=3D"id5">Getting th=
+e Source Code and Building LLVM</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#requirements" id=3D"id6">Requirements</a><ul>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#hardware" id=3D"id7">Hardware</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#software" id=3D"id8">Software</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#host-c-toolchain-both-compiler-and-standard-library" id=3D"id9">=
+Host C++ Toolchain, both Compiler and Standard Library</a><ul>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#getting-a-modern-host-c-toolchain" id=3D"id10">Getting a Modern =
+Host C++ Toolchain</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#getting-started-with-llvm" id=3D"id11">Getting Started with LLVM=
+</a><ul>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#terminology-and-notation" id=3D"id12">Terminology and Notation</=
+a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#unpacking-the-llvm-archives" id=3D"id13">Unpacking the LLVM Arch=
+ives</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#checkout-llvm-from-git" id=3D"id14">Checkout LLVM from Git</a><u=
+l>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#sending-patches" id=3D"id15">Sending patches</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#for-developers-to-commit-changes-from-git" id=3D"id16">For devel=
+opers to commit changes from Git</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#git-pre-push-hook" id=3D"id17">Git pre-push hook</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#bisecting-commits" id=3D"id18">Bisecting commits</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#reverting-a-change" id=3D"id19">Reverting a change</a></li>
+</ul>
+</li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#local-llvm-configuration" id=3D"id20">Local LLVM Configuration</=
+a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#compiling-the-llvm-suite-source-code" id=3D"id21">Compiling the =
+LLVM Suite Source Code</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#cross-compiling-llvm" id=3D"id22">Cross-Compiling LLVM</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#the-location-of-llvm-object-files" id=3D"id23">The Location of L=
+LVM Object Files</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#optional-configuration-items" id=3D"id24">Optional Configuration=
+ Items</a></li>
+</ul>
+</li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#directory-layout" id=3D"id25">Directory Layout</a><ul>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#llvm-cmake" id=3D"id26"><code class=3D"docutils literal notransl=
+ate"><span class=3D"pre">llvm/cmake</span></code></a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#llvm-examples" id=3D"id27"><code class=3D"docutils literal notra=
+nslate"><span class=3D"pre">llvm/examples</span></code></a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#llvm-include" id=3D"id28"><code class=3D"docutils literal notran=
+slate"><span class=3D"pre">llvm/include</span></code></a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#llvm-lib" id=3D"id29"><code class=3D"docutils literal notranslat=
+e"><span class=3D"pre">llvm/lib</span></code></a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#llvm-bindings" id=3D"id30"><code class=3D"docutils literal notra=
+nslate"><span class=3D"pre">llvm/bindings</span></code></a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#llvm-projects" id=3D"id31"><code class=3D"docutils literal notra=
+nslate"><span class=3D"pre">llvm/projects</span></code></a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#llvm-test" id=3D"id32"><code class=3D"docutils literal notransla=
+te"><span class=3D"pre">llvm/test</span></code></a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#test-suite" id=3D"id33"><code class=3D"docutils literal notransl=
+ate"><span class=3D"pre">test-suite</span></code></a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#llvm-tools" id=3D"id34"><code class=3D"docutils literal notransl=
+ate"><span class=3D"pre">llvm/tools</span></code></a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#llvm-utils" id=3D"id35"><code class=3D"docutils literal notransl=
+ate"><span class=3D"pre">llvm/utils</span></code></a></li>
+</ul>
+</li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#an-example-using-the-llvm-tool-chain" id=3D"id36">An Example Usi=
+ng the LLVM Tool Chain</a><ul>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#example-with-clang" id=3D"id37">Example with clang</a></li>
+</ul>
+</li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#common-problems" id=3D"id38">Common Problems</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingSt=
+arted.html#links" id=3D"id39">Links</a></li>
+</ul>
+</div>
+<div class=3D"section" id=3D"overview">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id4">Overview</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/=
+GettingStarted.html#overview" title=3D"Permalink to this headline">=C2=B6</=
+a></h2>
+<p>Welcome to the LLVM project!</p>
+<p>The LLVM project has multiple components. The core of the project is
+itself called =E2=80=9CLLVM=E2=80=9D. This contains all of the tools, libra=
+ries, and header
+files needed to process intermediate representations and converts it into
+object files.  Tools include an assembler, disassembler, bitcode analyzer, =
+and
+bitcode optimizer.  It also contains basic regression tests.</p>
+<p>C-like languages use the <a class=3D"reference external" href=3D"https:/=
+/clang.llvm.org/">Clang</a> front end.  This
+component compiles C, C++, Objective C, and Objective C++ code into LLVM bi=
+tcode
+=E2=80=93 and from there into object files, using LLVM.</p>
+<p>Other components include:
+the <a class=3D"reference external" href=3D"https://libcxx.llvm.org/">libc+=
++ C++ standard library</a>,
+the <a class=3D"reference external" href=3D"https://lld.llvm.org/">LLD link=
+er</a>, and more.</p>
+</div>
+<div class=3D"section" id=3D"getting-the-source-code-and-building-llvm">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id5">Getting the Source Code and Building LLVM</a><a class=3D"headerlin=
+k" href=3D"https://llvm.org/docs/GettingStarted.html#getting-the-source-cod=
+e-and-building-llvm" title=3D"Permalink to this headline">=C2=B6</a></h2>
+<p>The LLVM Getting Started documentation may be out of date.  The <a class=
+=3D"reference external" href=3D"https://clang.llvm.org/get_started.html">Cl=
+ang
+Getting Started</a> page might have more
+accurate information.</p>
+<p>This is an example workflow and configuration to get and build the LLVM =
+source:</p>
+<ol class=3D"arabic">
+<li><p class=3D"first">Checkout LLVM (including related subprojects like Cl=
+ang):</p>
+<ul class=3D"simple">
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">git</s=
+pan> <span class=3D"pre">clone</span> <span class=3D"pre">https://github.co=
+m/llvm/llvm-project.git</span></code></li>
+<li>Or, on windows, <code class=3D"docutils literal notranslate"><span clas=
+s=3D"pre">git</span> <span class=3D"pre">clone</span> <span class=3D"pre">-=
+-config</span> <span class=3D"pre">core.autocrlf=3Dfalse</span>
+<span class=3D"pre">https://github.com/llvm/llvm-project.git</span></code><=
+/li>
+<li>To save storage and speed-up the checkout time, you may want to do a
+<a class=3D"reference external" href=3D"https://git-scm.com/docs/git-clone#=
+Documentation/git-clone.txt---depthltdepthgt">shallow clone</a>.
+For example, to get the latest revision of the LLVM project, use
+<code class=3D"docutils literal notranslate"><span class=3D"pre">git</span>=
+ <span class=3D"pre">clone</span> <span class=3D"pre">--depth</span> <span =
+class=3D"pre">1</span> <span class=3D"pre">https://github.com/llvm/llvm-pro=
+ject.git</span></code></li>
+</ul>
+</li>
+<li><p class=3D"first">Configure and build LLVM and Clang:</p>
+<ul>
+<li><p class=3D"first"><code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">cd</span> <span class=3D"pre">llvm-project</span></code></p>
+</li>
+<li><p class=3D"first"><code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">mkdir</span> <span class=3D"pre">build</span></code></p>
+</li>
+<li><p class=3D"first"><code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">cd</span> <span class=3D"pre">build</span></code></p>
+</li>
+<li><p class=3D"first"><code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">cmake</span> <span class=3D"pre">-G</span> <span class=3D"pre"=
+>&lt;generator&gt;</span> <span class=3D"pre">-DCMAKE_BUILD_TYPE=3D&lt;type=
+&gt;</span> <span class=3D"pre">[options]</span> <span class=3D"pre">../llv=
+m</span></code></p>
+<p>Some common build system generators are:</p>
+<ul class=3D"simple">
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">Ninja<=
+/span></code> =E2=80=94 for generating <a class=3D"reference external" href=
+=3D"https://ninja-build.org/">Ninja</a>
+build files. Most llvm developers use Ninja.</li>
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">Unix</=
+span> <span class=3D"pre">Makefiles</span></code> =E2=80=94 for generating =
+make-compatible parallel makefiles.</li>
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">Visual=
+</span> <span class=3D"pre">Studio</span></code> =E2=80=94 for generating V=
+isual Studio projects and
+solutions.</li>
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">Xcode<=
+/span></code> =E2=80=94 for generating Xcode projects.</li>
+</ul>
+<p>Some Common options:</p>
+<ul>
+<li><p class=3D"first"><code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">-DLLVM_ENABLE_PROJECTS=3D'...'</span></code> =E2=80=94 semicol=
+on-separated list of the LLVM
+subprojects you=E2=80=99d like to additionally build. Can include any of: c=
+lang,
+clang-tools-extra, lldb, compiler-rt, lld, polly, or cross-project-tests.</=
+p>
+<p>For example, to build LLVM, Clang, libcxx, and libcxxabi, use
+<code class=3D"docutils literal notranslate"><span class=3D"pre">-DLLVM_ENA=
+BLE_PROJECTS=3D"clang"</span> <span class=3D"pre">-DLLVM_ENABLE_RUNTIMES=3D=
+"libcxx;libcxxabi"</span></code>.</p>
+</li>
+<li><p class=3D"first"><code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">-DCMAKE_INSTALL_PREFIX=3Ddirectory</span></code> =E2=80=94 Spe=
+cify for <em>directory</em> the full
+pathname of where you want the LLVM tools and libraries to be installed
+(default <code class=3D"docutils literal notranslate"><span class=3D"pre">/=
+usr/local</span></code>).</p>
+</li>
+<li><p class=3D"first"><code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">-DCMAKE_BUILD_TYPE=3Dtype</span></code> =E2=80=94 Controls opt=
+imization level and debug information
+of the build. The default value is <code class=3D"docutils literal notransl=
+ate"><span class=3D"pre">Debug</span></code> which fits people who want
+to work on LLVM or its libraries. <code class=3D"docutils literal notransla=
+te"><span class=3D"pre">Release</span></code> is a better fit for most
+users of LLVM and Clang. For more detailed information see
+<a class=3D"reference internal" href=3D"https://llvm.org/docs/CMake.html#cm=
+ake-build-type"><span class=3D"std std-ref">CMAKE_BUILD_TYPE</span></a>.</p=
+>
+</li>
+<li><p class=3D"first"><code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">-DLLVM_ENABLE_ASSERTIONS=3DOn</span></code> =E2=80=94 Compile =
+with assertion checks enabled
+(default is Yes for Debug builds, No for all other build types).</p>
+</li>
+</ul>
+</li>
+<li><p class=3D"first"><code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">cmake</span> <span class=3D"pre">--build</span> <span class=3D=
+"pre">.</span> <span class=3D"pre">[--target</span> <span class=3D"pre">&lt=
+;target&gt;]</span></code> or the build system specified
+above directly.</p>
+<ul class=3D"simple">
+<li>The default target (i.e. <code class=3D"docutils literal notranslate"><=
+span class=3D"pre">cmake</span> <span class=3D"pre">--build</span> <span cl=
+ass=3D"pre">.</span></code> or <code class=3D"docutils literal notranslate"=
+><span class=3D"pre">make</span></code>) will build all of
+LLVM.</li>
+<li>The <code class=3D"docutils literal notranslate"><span class=3D"pre">ch=
+eck-all</span></code> target (i.e. <code class=3D"docutils literal notransl=
+ate"><span class=3D"pre">ninja</span> <span class=3D"pre">check-all</span><=
+/code>) will run the
+regression tests to ensure everything is in working order.</li>
+<li>CMake will generate build targets for each tool and library, and most
+LLVM sub-projects generate their own <code class=3D"docutils literal notran=
+slate"><span class=3D"pre">check-&lt;project&gt;</span></code> target.</li>
+<li>Running a serial build will be <strong>slow</strong>.  To improve speed=
+, try running a
+parallel build. That=E2=80=99s done by default in Ninja; for <code class=3D=
+"docutils literal notranslate"><span class=3D"pre">make</span></code>, use =
+the
+option <code class=3D"docutils literal notranslate"><span class=3D"pre">-j<=
+/span> <span class=3D"pre">NN</span></code>, where <code class=3D"docutils =
+literal notranslate"><span class=3D"pre">NN</span></code> is the number of =
+parallel jobs, e.g. the
+number of available CPUs.</li>
+</ul>
+</li>
+<li><p class=3D"first">For more information see <a class=3D"reference exter=
+nal" href=3D"https://llvm.org/docs/CMake.html">CMake</a></p>
+</li>
+<li><p class=3D"first">If you get an =E2=80=9Cinternal compiler error (ICE)=
+=E2=80=9D or test failures, see
+<a class=3D"reference internal" href=3D"https://llvm.org/docs/GettingStarte=
+d.html#below">below</a>.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>Consult the <a class=3D"reference internal" href=3D"https://llvm.org/doc=
+s/GettingStarted.html#getting-started-with-llvm">Getting Started with LLVM<=
+/a> section for detailed information on
+configuring and compiling LLVM.  Go to <a class=3D"reference internal" href=
+=3D"https://llvm.org/docs/GettingStarted.html#directory-layout">Directory L=
+ayout</a> to learn about the
+layout of the source code tree.</p>
+</div>
+<div class=3D"section" id=3D"requirements">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id6">Requirements</a><a class=3D"headerlink" href=3D"https://llvm.org/d=
+ocs/GettingStarted.html#requirements" title=3D"Permalink to this headline">=
+=C2=B6</a></h2>
+<p>Before you begin to use the LLVM system, review the requirements given b=
+elow.
+This may save you some trouble by knowing ahead of time what hardware and
+software you will need.</p>
+<div class=3D"section" id=3D"hardware">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id7">Hardware</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/=
+GettingStarted.html#hardware" title=3D"Permalink to this headline">=C2=B6</=
+a></h3>
+<p>LLVM is known to work on the following host platforms:</p>
+<table border=3D"1" class=3D"docutils">
+<colgroup>
+<col width=3D"35%">
+<col width=3D"40%">
+<col width=3D"25%">
+</colgroup>
+<thead valign=3D"bottom">
+<tr class=3D"row-odd"><th class=3D"head">OS</th>
+<th class=3D"head">Arch</th>
+<th class=3D"head">Compilers</th>
+</tr>
+</thead>
+<tbody valign=3D"top">
+<tr class=3D"row-even"><td>Linux</td>
+<td>x86<sup>1</sup></td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-odd"><td>Linux</td>
+<td>amd64</td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-even"><td>Linux</td>
+<td>ARM</td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-odd"><td>Linux</td>
+<td>Mips</td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-even"><td>Linux</td>
+<td>PowerPC</td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-odd"><td>Linux</td>
+<td>SystemZ</td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-even"><td>Solaris</td>
+<td>V9 (Ultrasparc)</td>
+<td>GCC</td>
+</tr>
+<tr class=3D"row-odd"><td>DragonFlyBSD</td>
+<td>amd64</td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-even"><td>FreeBSD</td>
+<td>x86<sup>1</sup></td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-odd"><td>FreeBSD</td>
+<td>amd64</td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-even"><td>NetBSD</td>
+<td>x86<sup>1</sup></td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-odd"><td>NetBSD</td>
+<td>amd64</td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-even"><td>OpenBSD</td>
+<td>x86<sup>1</sup></td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-odd"><td>OpenBSD</td>
+<td>amd64</td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-even"><td>macOS<sup>2</sup></td>
+<td>PowerPC</td>
+<td>GCC</td>
+</tr>
+<tr class=3D"row-odd"><td>macOS</td>
+<td>x86</td>
+<td>GCC, Clang</td>
+</tr>
+<tr class=3D"row-even"><td>Cygwin/Win32</td>
+<td>x86<sup>1, 3</sup></td>
+<td>GCC</td>
+</tr>
+<tr class=3D"row-odd"><td>Windows</td>
+<td>x86<sup>1</sup></td>
+<td>Visual Studio</td>
+</tr>
+<tr class=3D"row-even"><td>Windows x64</td>
+<td>x86-64</td>
+<td>Visual Studio</td>
+</tr>
+</tbody>
+</table>
+<div class=3D"admonition note">
+<p class=3D"first admonition-title">Note</p>
+<ol class=3D"last arabic simple">
+<li>Code generation supported for Pentium processors and up</li>
+<li>Code generation supported for 32-bit ABI only</li>
+<li>To use LLVM modules on Win32-based system, you may configure LLVM
+with <code class=3D"docutils literal notranslate"><span class=3D"pre">-DBUI=
+LD_SHARED_LIBS=3DOn</span></code>.</li>
+</ol>
+</div>
+<p>Note that Debug builds require a lot of time and disk space.  An LLVM-on=
+ly build
+will need about 1-3 GB of space.  A full build of LLVM and Clang will need =
+around
+15-20 GB of disk space.  The exact space requirements will vary by system. =
+ (It
+is so large because of all the debugging information and the fact that the
+libraries are statically linked into multiple tools).</p>
+<p>If you are space-constrained, you can build only selected tools or only
+selected targets.  The Release build requires considerably less space.</p>
+<p>The LLVM suite <em>may</em> compile on other platforms, but it is not gu=
+aranteed to do
+so.  If compilation is successful, the LLVM utilities should be able to
+assemble, disassemble, analyze, and optimize LLVM bitcode.  Code generation
+should work as well, although the generated native code may not work on you=
+r
+platform.</p>
+</div>
+<div class=3D"section" id=3D"software">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id8">Software</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/=
+GettingStarted.html#software" title=3D"Permalink to this headline">=C2=B6</=
+a></h3>
+<p>Compiling LLVM requires that you have several software packages installe=
+d. The
+table below lists those required packages. The Package column is the usual =
+name
+for the software package that LLVM depends on. The Version column provides
+=E2=80=9Cknown to work=E2=80=9D versions of the package. The Notes column d=
+escribes how LLVM
+uses the package and provides other details.</p>
+<table border=3D"1" class=3D"docutils">
+<colgroup>
+<col width=3D"52%">
+<col width=3D"11%">
+<col width=3D"37%">
+</colgroup>
+<thead valign=3D"bottom">
+<tr class=3D"row-odd"><th class=3D"head">Package</th>
+<th class=3D"head">Version</th>
+<th class=3D"head">Notes</th>
+</tr>
+</thead>
+<tbody valign=3D"top">
+<tr class=3D"row-even"><td><a class=3D"reference external" href=3D"http://c=
+make.org/">CMake</a></td>
+<td>&gt;=3D3.13.4</td>
+<td>Makefile/workspace generator</td>
+</tr>
+<tr class=3D"row-odd"><td><a class=3D"reference external" href=3D"http://gc=
+c.gnu.org/">GCC</a></td>
+<td>&gt;=3D7.1.0</td>
+<td>C/C++ compiler<sup>1</sup></td>
+</tr>
+<tr class=3D"row-even"><td><a class=3D"reference external" href=3D"http://w=
+ww.python.org/">python</a></td>
+<td>&gt;=3D3.6</td>
+<td>Automated test suite<sup>2</sup></td>
+</tr>
+<tr class=3D"row-odd"><td><a class=3D"reference external" href=3D"http://zl=
+ib.net/">zlib</a></td>
+<td>&gt;=3D1.2.3.4</td>
+<td>Compression library<sup>3</sup></td>
+</tr>
+<tr class=3D"row-even"><td><a class=3D"reference external" href=3D"http://s=
+avannah.gnu.org/projects/make">GNU Make</a></td>
+<td>3.79, 3.79.1</td>
+<td>Makefile/build processor<sup>4</sup></td>
+</tr>
+</tbody>
+</table>
+<div class=3D"admonition note">
+<p class=3D"first admonition-title">Note</p>
+<ol class=3D"last arabic simple">
+<li>Only the C and C++ languages are needed so there=E2=80=99s no need to b=
+uild the
+other languages for LLVM=E2=80=99s purposes. See <cite>below</cite> for spe=
+cific version
+info.</li>
+<li>Only needed if you want to run the automated test suite in the
+<code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/test<=
+/span></code> directory.</li>
+<li>Optional, adds compression / uncompression capabilities to selected LLV=
+M
+tools.</li>
+<li>Optional, you can use any other build tool supported by CMake.</li>
+</ol>
+</div>
+<p>Additionally, your compilation host is expected to have the usual pletho=
+ra of
+Unix utilities. Specifically:</p>
+<ul class=3D"simple">
+<li><strong>ar</strong> =E2=80=94 archive library builder</li>
+<li><strong>bzip2</strong> =E2=80=94 bzip2 command for distribution generat=
+ion</li>
+<li><strong>bunzip2</strong> =E2=80=94 bunzip2 command for distribution che=
+cking</li>
+<li><strong>chmod</strong> =E2=80=94 change permissions on a file</li>
+<li><strong>cat</strong> =E2=80=94 output concatenation utility</li>
+<li><strong>cp</strong> =E2=80=94 copy files</li>
+<li><strong>date</strong> =E2=80=94 print the current date/time</li>
+<li><strong>echo</strong> =E2=80=94 print to standard output</li>
+<li><strong>egrep</strong> =E2=80=94 extended regular expression search uti=
+lity</li>
+<li><strong>find</strong> =E2=80=94 find files/dirs in a file system</li>
+<li><strong>grep</strong> =E2=80=94 regular expression search utility</li>
+<li><strong>gzip</strong> =E2=80=94 gzip command for distribution generatio=
+n</li>
+<li><strong>gunzip</strong> =E2=80=94 gunzip command for distribution check=
+ing</li>
+<li><strong>install</strong> =E2=80=94 install directories/files</li>
+<li><strong>mkdir</strong> =E2=80=94 create a directory</li>
+<li><strong>mv</strong> =E2=80=94 move (rename) files</li>
+<li><strong>ranlib</strong> =E2=80=94 symbol table builder for archive libr=
+aries</li>
+<li><strong>rm</strong> =E2=80=94 remove (delete) files and directories</li=
+>
+<li><strong>sed</strong> =E2=80=94 stream editor for transforming output</l=
+i>
+<li><strong>sh</strong> =E2=80=94 Bourne shell for make build scripts</li>
+<li><strong>tar</strong> =E2=80=94 tape archive for distribution generation=
+</li>
+<li><strong>test</strong> =E2=80=94 test things in file system</li>
+<li><strong>unzip</strong> =E2=80=94 unzip command for distribution checkin=
+g</li>
+<li><strong>zip</strong> =E2=80=94 zip command for distribution generation<=
+/li>
+</ul>
+</div>
+<div class=3D"section" id=3D"host-c-toolchain-both-compiler-and-standard-li=
+brary">
+<span id=3D"check-here"></span><span id=3D"below"></span><h3><a class=3D"to=
+c-backref" href=3D"https://llvm.org/docs/GettingStarted.html#id9">Host C++ =
+Toolchain, both Compiler and Standard Library</a><a class=3D"headerlink" hr=
+ef=3D"https://llvm.org/docs/GettingStarted.html#host-c-toolchain-both-compi=
+ler-and-standard-library" title=3D"Permalink to this headline">=C2=B6</a></=
+h3>
+<p>LLVM is very demanding of the host C++ compiler, and as such tends to ex=
+pose
+bugs in the compiler. We also attempt to follow improvements and developmen=
+ts in
+the C++ language and library reasonably closely. As such, we require a mode=
+rn
+host C++ toolchain, both compiler and standard library, in order to build L=
+LVM.</p>
+<p>LLVM is written using the subset of C++ documented in <a class=3D"refere=
+nce internal" href=3D"https://llvm.org/docs/CodingStandards.html"><span cla=
+ss=3D"doc">coding
+standards</span></a>. To enforce this language version, we check the most
+popular host toolchains for specific minimum versions in our build systems:=
+</p>
+<ul class=3D"simple">
+<li>Clang 5.0</li>
+<li>Apple Clang 9.3</li>
+<li>GCC 7.1</li>
+<li>Visual Studio 2019 16.7</li>
+</ul>
+<p>Anything older than these toolchains <em>may</em> work, but will require=
+ forcing the
+build system with a special option and is not really a supported host platf=
+orm.
+Also note that older versions of these compilers have often crashed or
+miscompiled LLVM.</p>
+<p>For less widely used host toolchains such as ICC or xlC, be aware that a=
+ very
+recent version may be required to support all of the C++ features used in L=
+LVM.</p>
+<p>We track certain versions of software that are <em>known</em> to fail wh=
+en used as
+part of the host toolchain. These even include linkers at times.</p>
+<p><strong>GNU ld 2.16.X</strong>. Some 2.16.X versions of the ld linker wi=
+ll produce very long
+warning messages complaining that some =E2=80=9C<code class=3D"docutils lit=
+eral notranslate"><span class=3D"pre">.gnu.linkonce.t.*</span></code>=E2=80=
+=9D symbol was
+defined in a discarded section. You can safely ignore these messages as the=
+y are
+erroneous and the linkage is correct.  These messages disappear using ld 2.=
+17.</p>
+<p><strong>GNU binutils 2.17</strong>: Binutils 2.17 contains <a class=3D"r=
+eference external" href=3D"http://sourceware.org/bugzilla/show_bug.cgi?id=
+=3D3111">a bug</a> which causes huge link
+times (minutes instead of seconds) when building LLVM.  We recommend upgrad=
+ing
+to a newer version (2.17.50.0.4 or later).</p>
+<p><strong>GNU Binutils 2.19.1 Gold</strong>: This version of Gold containe=
+d <a class=3D"reference external" href=3D"http://sourceware.org/bugzilla/sh=
+ow_bug.cgi?id=3D9836">a bug</a> which causes
+intermittent failures when building LLVM with position independent code.  T=
+he
+symptom is an error about cyclic dependencies.  We recommend upgrading to a
+newer version of Gold.</p>
+<div class=3D"section" id=3D"getting-a-modern-host-c-toolchain">
+<h4><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id10">Getting a Modern Host C++ Toolchain</a><a class=3D"headerlink" hr=
+ef=3D"https://llvm.org/docs/GettingStarted.html#getting-a-modern-host-c-too=
+lchain" title=3D"Permalink to this headline">=C2=B6</a></h4>
+<p>This section mostly applies to Linux and older BSDs. On macOS, you shoul=
+d
+have a sufficiently modern Xcode, or you will likely need to upgrade until =
+you
+do. Windows does not have a =E2=80=9Csystem compiler=E2=80=9D, so you must =
+install either Visual
+Studio 2019 (or later), or a recent version of mingw64. FreeBSD 10.0 and ne=
+wer
+have a modern Clang as the system compiler.</p>
+<p>However, some Linux distributions and some other or older BSDs sometimes=
+ have
+extremely old versions of GCC. These steps attempt to help you upgrade you
+compiler even on such a system. However, if at all possible, we encourage y=
+ou
+to use a recent version of a distribution with a modern system compiler tha=
+t
+meets these requirements. Note that it is tempting to install a prior
+version of Clang and libc++ to be the host compiler, however libc++ was not
+well tested or set up to build on Linux until relatively recently. As
+a consequence, this guide suggests just using libstdc++ and a modern GCC as=
+ the
+initial host in a bootstrap, and then using Clang (and potentially libc++).=
+</p>
+<p>The first step is to get a recent GCC toolchain installed. The most comm=
+on
+distribution on which users have struggled with the version requirements is
+Ubuntu Precise, 12.04 LTS. For this distribution, one easy option is to ins=
+tall
+the <a class=3D"reference external" href=3D"https://launchpad.net/~ubuntu-t=
+oolchain-r/+archive/test">toolchain testing PPA</a> and use it to install a=
+ modern GCC. There is
+a really nice discussions of this on the <a class=3D"reference external" hr=
+ef=3D"https://askubuntu.com/questions/466651/how-do-i-use-the-latest-gcc-on=
+-ubuntu/581497#58149">ask ubuntu stack exchange</a> and a
+<a class=3D"reference external" href=3D"https://gist.github.com/application=
+2000/73fd6f4bf1be6600a2cf9f56315a2d91">github gist</a> with updated command=
+s. However, not all users can use PPAs and
+there are many other distributions, so it may be necessary (or just useful,=
+ if
+you=E2=80=99re here you <em>are</em> doing compiler development after all) =
+to build and install
+GCC from source. It is also quite easy to do these days.</p>
+<p>Easy steps for installing GCC 7.1.0:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span><span class=3D"nv">gcc_version</sp=
+an><span class=3D"o">=3D</span><span class=3D"m">7</span>.1.0
+<span class=3D"gp">% </span>wget https://ftp.gnu.org/gnu/gcc/gcc-<span clas=
+s=3D"si">${</span><span class=3D"nv">gcc_version</span><span class=3D"si">}=
+</span>/gcc-<span class=3D"si">${</span><span class=3D"nv">gcc_version</spa=
+n><span class=3D"si">}</span>.tar.bz2
+<span class=3D"gp">% </span>wget https://ftp.gnu.org/gnu/gcc/gcc-<span clas=
+s=3D"si">${</span><span class=3D"nv">gcc_version</span><span class=3D"si">}=
+</span>/gcc-<span class=3D"si">${</span><span class=3D"nv">gcc_version</spa=
+n><span class=3D"si">}</span>.tar.bz2.sig
+<span class=3D"gp">% </span>wget https://ftp.gnu.org/gnu/gnu-keyring.gpg
+<span class=3D"gp">% </span><span class=3D"nv">signature_invalid</span><spa=
+n class=3D"o">=3D</span><span class=3D"sb">`</span>gpg --verify --no-defaul=
+t-keyring --keyring ./gnu-keyring.gpg gcc-<span class=3D"si">${</span><span=
+ class=3D"nv">gcc_version</span><span class=3D"si">}</span>.tar.bz2.sig<spa=
+n class=3D"sb">`</span>
+<span class=3D"gp">% </span><span class=3D"k">if</span> <span class=3D"o">[=
+</span> <span class=3D"nv">$signature_invalid</span> <span class=3D"o">]</s=
+pan><span class=3D"p">;</span> <span class=3D"k">then</span> <span class=3D=
+"nb">echo</span> <span class=3D"s2">"Invalid signature"</span> <span class=
+=3D"p">;</span> <span class=3D"nb">exit</span> <span class=3D"m">1</span> <=
+span class=3D"p">;</span> <span class=3D"k">fi</span>
+<span class=3D"gp">% </span>tar -xvjf gcc-<span class=3D"si">${</span><span=
+ class=3D"nv">gcc_version</span><span class=3D"si">}</span>.tar.bz2
+<span class=3D"gp">% </span><span class=3D"nb">cd</span> gcc-<span class=3D=
+"si">${</span><span class=3D"nv">gcc_version</span><span class=3D"si">}</sp=
+an>
+<span class=3D"gp">% </span>./contrib/download_prerequisites
+<span class=3D"gp">% </span><span class=3D"nb">cd</span> ..
+<span class=3D"gp">% </span>mkdir gcc-<span class=3D"si">${</span><span cla=
+ss=3D"nv">gcc_version</span><span class=3D"si">}</span>-build
+<span class=3D"gp">% </span><span class=3D"nb">cd</span> gcc-<span class=3D=
+"si">${</span><span class=3D"nv">gcc_version</span><span class=3D"si">}</sp=
+an>-build
+<span class=3D"gp">% </span><span class=3D"nv">$PWD</span>/../gcc-<span cla=
+ss=3D"si">${</span><span class=3D"nv">gcc_version</span><span class=3D"si">=
+}</span>/configure --prefix<span class=3D"o">=3D</span><span class=3D"nv">$=
+HOME</span>/toolchains --enable-languages<span class=3D"o">=3D</span>c,c++
+<span class=3D"gp">% </span>make -j<span class=3D"k">$(</span>nproc<span cl=
+ass=3D"k">)</span>
+<span class=3D"gp">% </span>make install
+</pre></div>
+</div>
+<p>For more details, check out the excellent <a class=3D"reference external=
+" href=3D"https://gcc.gnu.org/wiki/InstallingGCC">GCC wiki entry</a>, where=
+ I got most
+of this information from.</p>
+<p>Once you have a GCC toolchain, configure your build of LLVM to use the n=
+ew
+toolchain for your host compiler and C++ standard library. Because the new
+version of libstdc++ is not on the system library search path, you need to =
+pass
+extra linker flags so that it can be found at link time (<code class=3D"doc=
+utils literal notranslate"><span class=3D"pre">-L</span></code>) and at run=
+time
+(<code class=3D"docutils literal notranslate"><span class=3D"pre">-rpath</s=
+pan></code>). If you are using CMake, this invocation should produce workin=
+g
+binaries:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>mkdir build
+<span class=3D"gp">% </span><span class=3D"nb">cd</span> build
+<span class=3D"gp">% </span><span class=3D"nv">CC</span><span class=3D"o">=
+=3D</span><span class=3D"nv">$HOME</span>/toolchains/bin/gcc <span class=3D=
+"nv">CXX</span><span class=3D"o">=3D</span><span class=3D"nv">$HOME</span>/=
+toolchains/bin/g++ <span class=3D"se">\</span>
+  cmake .. -DCMAKE_CXX_LINK_FLAGS<span class=3D"o">=3D</span><span class=3D=
+"s2">"-Wl,-rpath,</span><span class=3D"nv">$HOME</span><span class=3D"s2">/=
+toolchains/lib64 -L</span><span class=3D"nv">$HOME</span><span class=3D"s2"=
+>/toolchains/lib64"</span>
+</pre></div>
+</div>
+<p>If you fail to set rpath, most LLVM binaries will fail on startup with a=
+ message
+from the loader similar to <code class=3D"docutils literal notranslate"><sp=
+an class=3D"pre">libstdc++.so.6:</span> <span class=3D"pre">version</span> =
+<span class=3D"pre">`GLIBCXX_3.4.20'</span> <span class=3D"pre">not</span>
+<span class=3D"pre">found</span></code>. This means you need to tweak the -=
+rpath linker flag.</p>
+<p>This method will add an absolute path to the rpath of all executables. T=
+hat=E2=80=99s
+fine for local development. If you want to distribute the binaries you buil=
+d
+so that they can run on older systems, copy <code class=3D"docutils literal=
+ notranslate"><span class=3D"pre">libstdc++.so.6</span></code> into the
+<code class=3D"docutils literal notranslate"><span class=3D"pre">lib/</span=
+></code> directory.  All of LLVM=E2=80=99s shipping binaries have an rpath =
+pointing at
+<code class=3D"docutils literal notranslate"><span class=3D"pre">$ORIGIN/..=
+/lib</span></code>, so they will find <code class=3D"docutils literal notra=
+nslate"><span class=3D"pre">libstdc++.so.6</span></code> there.  Non-distri=
+buted
+binaries don=E2=80=99t have an rpath set and won=E2=80=99t find <code class=
+=3D"docutils literal notranslate"><span class=3D"pre">libstdc++.so.6</span>=
+</code>. Pass
+<code class=3D"docutils literal notranslate"><span class=3D"pre">-DLLVM_LOC=
+AL_RPATH=3D"$HOME/toolchains/lib64"</span></code> to cmake to add an absolu=
+te
+path to <code class=3D"docutils literal notranslate"><span class=3D"pre">li=
+bstdc++.so.6</span></code> as above. Since these binaries are not distribut=
+ed,
+having an absolute local path is fine for them.</p>
+<p>When you build Clang, you will need to give <em>it</em> access to modern=
+ C++
+standard library in order to use it as your new host in part of a bootstrap=
+.
+There are two easy ways to do this, either build (and install) libc++ along
+with Clang and then use it with the <code class=3D"docutils literal notrans=
+late"><span class=3D"pre">-stdlib=3Dlibc++</span></code> compile and link f=
+lag,
+or install Clang into the same prefix (<code class=3D"docutils literal notr=
+anslate"><span class=3D"pre">$HOME/toolchains</span></code> above) as GCC.
+Clang will look within its own prefix for libstdc++ and use it if found. Yo=
+u
+can also add an explicit prefix for Clang to look in for a GCC toolchain wi=
+th
+the <code class=3D"docutils literal notranslate"><span class=3D"pre">--gcc-=
+toolchain=3D/opt/my/gcc/prefix</span></code> flag, passing it to both compi=
+le and
+link commands when using your just-built-Clang to bootstrap.</p>
+</div>
+</div>
+</div>
+<div class=3D"section" id=3D"getting-started-with-llvm">
+<span id=3D"id1"></span><h2><a class=3D"toc-backref" href=3D"https://llvm.o=
+rg/docs/GettingStarted.html#id11">Getting Started with LLVM</a><a class=3D"=
+headerlink" href=3D"https://llvm.org/docs/GettingStarted.html#getting-start=
+ed-with-llvm" title=3D"Permalink to this headline">=C2=B6</a></h2>
+<p>The remainder of this guide is meant to get you up and running with LLVM=
+ and to
+give you some basic information about the LLVM environment.</p>
+<p>The later sections of this guide describe the <a class=3D"reference inte=
+rnal" href=3D"https://llvm.org/docs/GettingStarted.html#general-layout">gen=
+eral layout</a> of the LLVM
+source tree, a <a class=3D"reference internal" href=3D"https://llvm.org/doc=
+s/GettingStarted.html#simple-example">simple example</a> using the LLVM too=
+l chain, and <a class=3D"reference internal" href=3D"https://llvm.org/docs/=
+GettingStarted.html#links">links</a> to find
+more information about LLVM or to get help via e-mail.</p>
+<div class=3D"section" id=3D"terminology-and-notation">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id12">Terminology and Notation</a><a class=3D"headerlink" href=3D"https=
+://llvm.org/docs/GettingStarted.html#terminology-and-notation" title=3D"Per=
+malink to this headline">=C2=B6</a></h3>
+<p>Throughout this manual, the following names are used to denote paths spe=
+cific to
+the local system and working environment.  <em>These are not environment va=
+riables
+you need to set but just strings used in the rest of this document below</e=
+m>.  In
+any of the examples below, simply replace each of these names with the
+appropriate pathname on your local system.  All these paths are absolute:</=
+p>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">SRC_ROO=
+T</span></code></p>
+<blockquote>
+<div>This is the top level directory of the LLVM source tree.</div></blockq=
+uote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">OBJ_ROO=
+T</span></code></p>
+<blockquote>
+<div>This is the top level directory of the LLVM object tree (i.e. the tree=
+ where
+object files and compiled programs will be placed.  It can be the same as
+SRC_ROOT).</div></blockquote>
+</div>
+<div class=3D"section" id=3D"unpacking-the-llvm-archives">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id13">Unpacking the LLVM Archives</a><a class=3D"headerlink" href=3D"ht=
+tps://llvm.org/docs/GettingStarted.html#unpacking-the-llvm-archives" title=
+=3D"Permalink to this headline">=C2=B6</a></h3>
+<p>If you have the LLVM distribution, you will need to unpack it before you=
+ can
+begin to compile it.  LLVM is distributed as a number of different
+subprojects. Each one has its own download which is a TAR archive that is
+compressed with the gzip program.</p>
+<p>The files are as follows, with <em>x.y</em> marking the version number:<=
+/p>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm-x.=
+y.tar.gz</span></code></p>
+<blockquote>
+<div>Source release for the LLVM libraries and tools.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">cfe-x.y=
+.tar.gz</span></code></p>
+<blockquote>
+<div>Source release for the Clang frontend.</div></blockquote>
+</div>
+<div class=3D"section" id=3D"checkout-llvm-from-git">
+<span id=3D"checkout"></span><h3><a class=3D"toc-backref" href=3D"https://l=
+lvm.org/docs/GettingStarted.html#id14">Checkout LLVM from Git</a><a class=
+=3D"headerlink" href=3D"https://llvm.org/docs/GettingStarted.html#checkout-=
+llvm-from-git" title=3D"Permalink to this headline">=C2=B6</a></h3>
+<p>You can also checkout the source code for LLVM from Git.</p>
+<div class=3D"admonition note">
+<p class=3D"first admonition-title">Note</p>
+<p class=3D"last">Passing <code class=3D"docutils literal notranslate"><spa=
+n class=3D"pre">--config</span> <span class=3D"pre">core.autocrlf=3Dfalse</=
+span></code> should not be required in
+the future after we adjust the .gitattribute settings correctly, but
+is required for Windows users at the time of this writing.</p>
+</div>
+<p>Simply run:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>git clone https://github.com/llvm/=
+llvm-project.git
+</pre></div>
+</div>
+<p>or on Windows,</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>git clone --config core.autocrlf<s=
+pan class=3D"o">=3D</span><span class=3D"nb">false</span> https://github.co=
+m/llvm/llvm-project.git
+</pre></div>
+</div>
+<p>This will create an =E2=80=98<code class=3D"docutils literal notranslate=
+"><span class=3D"pre">llvm-project</span></code>=E2=80=99 directory in the =
+current directory and
+fully populate it with all of the source code, test directories, and local
+copies of documentation files for LLVM and all the related subprojects. Not=
+e
+that unlike the tarballs, which contain each subproject in a separate file,=
+ the
+git repository contains all of the projects together.</p>
+<p>If you want to get a specific release (as opposed to the most recent rev=
+ision),
+you can check out a tag after cloning the repository. E.g., <cite>git check=
+out
+llvmorg-6.0.1</cite> inside the <code class=3D"docutils literal notranslate=
+"><span class=3D"pre">llvm-project</span></code> directory created by the a=
+bove
+command.  Use <cite>git tag -l</cite> to list all of them.</p>
+<div class=3D"section" id=3D"sending-patches">
+<h4><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id15">Sending patches</a><a class=3D"headerlink" href=3D"https://llvm.o=
+rg/docs/GettingStarted.html#sending-patches" title=3D"Permalink to this hea=
+dline">=C2=B6</a></h4>
+<p>Please read <a class=3D"reference external" href=3D"https://llvm.org/doc=
+s/DeveloperPolicy.html#one-off-patches">Developer Policy</a>, too.</p>
+<p>We don=E2=80=99t currently accept github pull requests, so you=E2=80=99l=
+l need to send patches
+either via emailing to llvm-commits, or, preferably, via <a class=3D"refere=
+nce internal" href=3D"https://llvm.org/docs/Phabricator.html#phabricator-re=
+views"><span class=3D"std std-ref">Phabricator</span></a>.</p>
+<p>You=E2=80=99ll generally want to make sure your branch has a single comm=
+it,
+corresponding to the review you wish to send, up-to-date with the upstream
+<code class=3D"docutils literal notranslate"><span class=3D"pre">origin/mai=
+n</span></code> branch, and doesn=E2=80=99t contain merges. Once you have t=
+hat, you
+can start <a class=3D"reference external" href=3D"https://llvm.org/docs/Pha=
+bricator.html">a Phabricator review</a> (or use <code class=3D"docutils lit=
+eral notranslate"><span class=3D"pre">git</span> <span class=3D"pre">show</=
+span></code> or
+<code class=3D"docutils literal notranslate"><span class=3D"pre">git</span>=
+ <span class=3D"pre">format-patch</span></code> to output the diff, and att=
+ach it to an email message).</p>
+<p>However, using the =E2=80=9CArcanist=E2=80=9D tool is often easier. Afte=
+r <a class=3D"reference external" href=3D"https://secure.phabricator.com/bo=
+ok/phabricator/article/arcanist_quick_start/">installing arcanist</a>, you
+will also need to apply a fix to your arcanist repo in order to submit a pa=
+tch:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span><span class=3D"nb">cd</span> arcan=
+ist
+<span class=3D"gp">% </span>git fetch https://github.com/rashkov/arcanist u=
+pdate_cacerts
+<span class=3D"gp">% </span>git cherry-pick e3659d43d8911e91739f3b0c5935598=
+bceb859aa
+</pre></div>
+</div>
+<p>Once this is all done, you can upload the latest commit using:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>arc diff HEAD~1
+</pre></div>
+</div>
+<p>Additionally, before sending a patch for review, please also try to ensu=
+re it=E2=80=99s
+formatted properly. We use <code class=3D"docutils literal notranslate"><sp=
+an class=3D"pre">clang-format</span></code> for this, which has git integra=
+tion
+through the <code class=3D"docutils literal notranslate"><span class=3D"pre=
+">git-clang-format</span></code> script. On some systems, it may already be
+installed (or be installable via your package manager). If so, you can simp=
+ly
+run it =E2=80=93 the following command will format only the code changed in=
+ the most
+recent commit:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>git clang-format HEAD~1
+</pre></div>
+</div>
+<p>Note that this modifies the files, but doesn=E2=80=99t commit them =E2=
+=80=93 you=E2=80=99ll likely want
+to run</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>git commit --amend -a
+</pre></div>
+</div>
+<p>in order to update the last commit with all pending changes.</p>
+<div class=3D"admonition note">
+<p class=3D"first admonition-title">Note</p>
+<p class=3D"last">If you don=E2=80=99t already have <code class=3D"docutils=
+ literal notranslate"><span class=3D"pre">clang-format</span></code> or <co=
+de class=3D"docutils literal notranslate"><span class=3D"pre">git</span> <s=
+pan class=3D"pre">clang-format</span></code> installed
+on your system, the <code class=3D"docutils literal notranslate"><span clas=
+s=3D"pre">clang-format</span></code> binary will be built alongside clang, =
+and
+the git integration can be run from
+<code class=3D"docutils literal notranslate"><span class=3D"pre">clang/tool=
+s/clang-format/git-clang-format</span></code>.</p>
+</div>
+</div>
+<div class=3D"section" id=3D"for-developers-to-commit-changes-from-git">
+<span id=3D"commit-from-git"></span><h4><a class=3D"toc-backref" href=3D"ht=
+tps://llvm.org/docs/GettingStarted.html#id16">For developers to commit chan=
+ges from Git</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/Getti=
+ngStarted.html#for-developers-to-commit-changes-from-git" title=3D"Permalin=
+k to this headline">=C2=B6</a></h4>
+<p>Once a patch is reviewed, you should rebase it, re-test locally, and com=
+mit the
+changes to LLVM=E2=80=99s main branch. This is done using <cite>git push</c=
+ite> if you have the
+required access rights. See <a class=3D"reference external" href=3D"https:/=
+/llvm.org/docs/Phabricator.html#committing-a-change">committing a change</a=
+> for Phabricator based commits or
+<a class=3D"reference external" href=3D"https://llvm.org/docs/DeveloperPoli=
+cy.html#obtaining-commit-access">obtaining commit access</a>
+for commit access.</p>
+<p>Here is an example workflow using git. This workflow assumes you have an
+accepted commit on the branch named <cite>branch-with-change</cite>.</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp"># </span>Go to the branch with your accepte=
+d commit.
+<span class=3D"gp">% </span>git checkout branch-with-change
+<span class=3D"gp"># </span>Rebase your change onto the latest commits on G=
+ithub.
+<span class=3D"gp">% </span>git pull --rebase origin main
+<span class=3D"gp"># </span>Rerun the appropriate tests <span class=3D"k">i=
+f</span> needed.
+<span class=3D"gp">% </span>ninja check-<span class=3D"nv">$whatever</span>
+<span class=3D"gp"># </span>Check that the list of commits about to be push=
+ed is correct.
+<span class=3D"gp">% </span>git log origin/main...HEAD --oneline
+<span class=3D"gp"># </span>Push to Github.
+<span class=3D"gp">% </span>git push origin HEAD:main
+</pre></div>
+</div>
+<p>LLVM currently has a linear-history policy, which means that merge commi=
+ts are
+not allowed. The <cite>llvm-project</cite> repo on github is configured to =
+reject pushes
+that include merges, so the <cite>git rebase</cite> step above is required.=
+</p>
+<p>Please ask for help if you=E2=80=99re having trouble with your particula=
+r git workflow.</p>
+</div>
+<div class=3D"section" id=3D"git-pre-push-hook">
+<span id=3D"id2"></span><h4><a class=3D"toc-backref" href=3D"https://llvm.o=
+rg/docs/GettingStarted.html#id17">Git pre-push hook</a><a class=3D"headerli=
+nk" href=3D"https://llvm.org/docs/GettingStarted.html#git-pre-push-hook" ti=
+tle=3D"Permalink to this headline">=C2=B6</a></h4>
+<p>We include an optional pre-push hook that run some sanity checks on the =
+revisions
+you are about to push and ask confirmation if you push multiple commits at =
+once.
+You can set it up (on Unix systems) by running from the repository root:</p=
+>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>ln -sf ../../llvm/utils/git/pre-pu=
+sh.py .git/hooks/pre-push
+</pre></div>
+</div>
+</div>
+<div class=3D"section" id=3D"bisecting-commits">
+<h4><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id18">Bisecting commits</a><a class=3D"headerlink" href=3D"https://llvm=
+.org/docs/GettingStarted.html#bisecting-commits" title=3D"Permalink to this=
+ headline">=C2=B6</a></h4>
+<p>See <a class=3D"reference external" href=3D"https://llvm.org/docs/GitBis=
+ecting.html">Bisecting LLVM code</a> for how to use <code class=3D"docutils=
+ literal notranslate"><span class=3D"pre">git</span> <span class=3D"pre">bi=
+sect</span></code>
+on LLVM.</p>
+</div>
+<div class=3D"section" id=3D"reverting-a-change">
+<h4><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id19">Reverting a change</a><a class=3D"headerlink" href=3D"https://llv=
+m.org/docs/GettingStarted.html#reverting-a-change" title=3D"Permalink to th=
+is headline">=C2=B6</a></h4>
+<p>When reverting changes using git, the default message will say =E2=80=9C=
+This reverts
+commit XYZ=E2=80=9D. Leave this at the end of the commit message, but add s=
+ome details
+before it as to why the commit is being reverted. A brief explanation and/o=
+r
+links to bots that demonstrate the problem are sufficient.</p>
+</div>
+</div>
+<div class=3D"section" id=3D"local-llvm-configuration">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id20">Local LLVM Configuration</a><a class=3D"headerlink" href=3D"https=
+://llvm.org/docs/GettingStarted.html#local-llvm-configuration" title=3D"Per=
+malink to this headline">=C2=B6</a></h3>
+<p>Once checked out repository, the LLVM suite source code must be configur=
+ed
+before being built. This process uses CMake.  Unlinke the normal <code clas=
+s=3D"docutils literal notranslate"><span class=3D"pre">configure</span></co=
+de>
+script, CMake generates the build files in whatever format you request as w=
+ell
+as various <code class=3D"docutils literal notranslate"><span class=3D"pre"=
+>*.inc</span></code> files, and <code class=3D"docutils literal notranslate=
+"><span class=3D"pre">llvm/include/Config/config.h</span></code>.</p>
+<p>Variables are passed to <code class=3D"docutils literal notranslate"><sp=
+an class=3D"pre">cmake</span></code> on the command line using the format
+<code class=3D"docutils literal notranslate"><span class=3D"pre">-D&lt;vari=
+able</span> <span class=3D"pre">name&gt;=3D&lt;value&gt;</span></code>. The=
+ following variables are some common options
+used by people developing LLVM.</p>
+<table border=3D"1" class=3D"docutils">
+<colgroup>
+<col width=3D"32%">
+<col width=3D"68%">
+</colgroup>
+<thead valign=3D"bottom">
+<tr class=3D"row-odd"><th class=3D"head">Variable</th>
+<th class=3D"head">Purpose</th>
+</tr>
+</thead>
+<tbody valign=3D"top">
+<tr class=3D"row-even"><td>CMAKE_C_COMPILER</td>
+<td>Tells <code class=3D"docutils literal notranslate"><span class=3D"pre">=
+cmake</span></code> which C compiler to use. By
+default, this will be /usr/bin/cc.</td>
+</tr>
+<tr class=3D"row-odd"><td>CMAKE_CXX_COMPILER</td>
+<td>Tells <code class=3D"docutils literal notranslate"><span class=3D"pre">=
+cmake</span></code> which C++ compiler to use. By
+default, this will be /usr/bin/c++.</td>
+</tr>
+<tr class=3D"row-even"><td>CMAKE_BUILD_TYPE</td>
+<td>Tells <code class=3D"docutils literal notranslate"><span class=3D"pre">=
+cmake</span></code> what type of build you are trying
+to generate files for. Valid options are Debug,
+Release, RelWithDebInfo, and MinSizeRel. Default
+is Debug.</td>
+</tr>
+<tr class=3D"row-odd"><td>CMAKE_INSTALL_PREFIX</td>
+<td>Specifies the install directory to target when
+running the install action of the build files.</td>
+</tr>
+<tr class=3D"row-even"><td>PYTHON_EXECUTABLE</td>
+<td>Forces CMake to use a specific Python version by
+passing a path to a Python interpreter. By default
+the Python version of the interpreter in your PATH
+is used.</td>
+</tr>
+<tr class=3D"row-odd"><td>LLVM_TARGETS_TO_BUILD</td>
+<td>A semicolon delimited list controlling which
+targets will be built and linked into llvm.
+The default list is defined as
+<code class=3D"docutils literal notranslate"><span class=3D"pre">LLVM_ALL_T=
+ARGETS</span></code>, and can be set to include
+out-of-tree targets. The default value includes:
+<code class=3D"docutils literal notranslate"><span class=3D"pre">AArch64,</=
+span> <span class=3D"pre">AMDGPU,</span> <span class=3D"pre">ARM,</span> <s=
+pan class=3D"pre">AVR,</span> <span class=3D"pre">BPF,</span> <span class=
+=3D"pre">Hexagon,</span> <span class=3D"pre">Lanai,</span>
+<span class=3D"pre">Mips,</span> <span class=3D"pre">MSP430,</span> <span c=
+lass=3D"pre">NVPTX,</span> <span class=3D"pre">PowerPC,</span> <span class=
+=3D"pre">RISCV,</span> <span class=3D"pre">Sparc,</span>
+<span class=3D"pre">SystemZ,</span> <span class=3D"pre">WebAssembly,</span>=
+ <span class=3D"pre">X86,</span> <span class=3D"pre">XCore</span></code>.</=
+td>
+</tr>
+<tr class=3D"row-even"><td>LLVM_ENABLE_DOXYGEN</td>
+<td>Build doxygen-based documentation from the source
+code This is disabled by default because it is
+slow and generates a lot of output.</td>
+</tr>
+<tr class=3D"row-odd"><td>LLVM_ENABLE_PROJECTS</td>
+<td>A semicolon-delimited list selecting which of the
+other LLVM subprojects to additionally build. (Only
+effective when using a side-by-side project layout
+e.g. via git). The default list is empty. Can
+include: clang, clang-tools-extra,
+cross-project-tests, flang, libc, libclc, lld,
+lldb, mlir, openmp, polly, or pstl.</td>
+</tr>
+<tr class=3D"row-even"><td>LLVM_ENABLE_RUNTIMES</td>
+<td>A semicolon-delimited list selecting which of the
+runtimes to build. (Only effective when using the
+full monorepo layout). The default list is empty.
+Can include: compiler-rt, libc, libcxx, libcxxabi,
+libunwind, or openmp.</td>
+</tr>
+<tr class=3D"row-odd"><td>LLVM_ENABLE_SPHINX</td>
+<td>Build sphinx-based documentation from the source
+code. This is disabled by default because it is
+slow and generates a lot of output. Sphinx version
+1.5 or later recommended.</td>
+</tr>
+<tr class=3D"row-even"><td>LLVM_BUILD_LLVM_DYLIB</td>
+<td>Generate libLLVM.so. This library contains a
+default set of LLVM components that can be
+overridden with <code class=3D"docutils literal notranslate"><span class=3D=
+"pre">LLVM_DYLIB_COMPONENTS</span></code>. The
+default contains most of LLVM and is defined in
+<code class=3D"docutils literal notranslate"><span class=3D"pre">tools/llvm=
+-shlib/CMakelists.txt</span></code>. This option is
+not available on Windows.</td>
+</tr>
+<tr class=3D"row-odd"><td>LLVM_OPTIMIZED_TABLEGEN</td>
+<td>Builds a release tablegen that gets used during
+the LLVM build. This can dramatically speed up
+debug builds.</td>
+</tr>
+</tbody>
+</table>
+<p>To configure LLVM, follow these steps:</p>
+<ol class=3D"arabic">
+<li><p class=3D"first">Change directory into the object root directory:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span><span class=3D"nb">cd</span> OBJ_R=
+OOT
+</pre></div>
+</div>
+</li>
+<li><p class=3D"first">Run the <code class=3D"docutils literal notranslate"=
+><span class=3D"pre">cmake</span></code>:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>cmake -G <span class=3D"s2">"Unix =
+Makefiles"</span> -DCMAKE_BUILD_TYPE<span class=3D"o">=3D</span>&lt;type&gt=
+; -DCMAKE_INSTALL_PREFIX<span class=3D"o">=3D</span>/install/path
+<span class=3D"go">  [other options] SRC_ROOT</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class=3D"section" id=3D"compiling-the-llvm-suite-source-code">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id21">Compiling the LLVM Suite Source Code</a><a class=3D"headerlink" h=
+ref=3D"https://llvm.org/docs/GettingStarted.html#compiling-the-llvm-suite-s=
+ource-code" title=3D"Permalink to this headline">=C2=B6</a></h3>
+<p>Unlike with autotools, with CMake your build type is defined at configur=
+ation.
+If you want to change your build type, you can re-run cmake with the follow=
+ing
+invocation:</p>
+<blockquote>
+<div><div class=3D"highlight-console notranslate"><div class=3D"highlight">=
+<pre><span></span><span class=3D"gp">% </span>cmake -G <span class=3D"s2">"=
+Unix Makefiles"</span> -DCMAKE_BUILD_TYPE<span class=3D"o">=3D</span>&lt;ty=
+pe&gt; -DCMAKE_BUILD_TYPE<span class=3D"o">=3D</span><span class=3D"nb">typ=
+e</span> SRC_ROOT
+</pre></div>
+</div>
+</div></blockquote>
+<p>Between runs, CMake preserves the values set for all options. CMake has =
+the
+following build types defined:</p>
+<p>Debug</p>
+<blockquote>
+<div>These builds are the default. The build system will compile the tools =
+and
+libraries unoptimized, with debugging information, and asserts enabled.</di=
+v></blockquote>
+<p>Release</p>
+<blockquote>
+<div>For these builds, the build system will compile the tools and librarie=
+s
+with optimizations enabled and not generate debug info. CMakes default
+optimization level is -O3. This can be configured by setting the
+<code class=3D"docutils literal notranslate"><span class=3D"pre">CMAKE_CXX_=
+FLAGS_RELEASE</span></code> variable on the CMake command line.</div></bloc=
+kquote>
+<p>RelWithDebInfo</p>
+<blockquote>
+<div>These builds are useful when debugging. They generate optimized binari=
+es with
+debug information. CMakes default optimization level is -O2. This can be
+configured by setting the <code class=3D"docutils literal notranslate"><spa=
+n class=3D"pre">CMAKE_CXX_FLAGS_RELWITHDEBINFO</span></code> variable on th=
+e
+CMake command line.</div></blockquote>
+<p>Once you have LLVM configured, you can build it by entering the <em>OBJ_=
+ROOT</em>
+directory and issuing the following command:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>make
+</pre></div>
+</div>
+<p>If the build fails, please <a class=3D"reference internal" href=3D"https=
+://llvm.org/docs/GettingStarted.html#check-here">check here</a> to see if y=
+ou are using a version of
+GCC that is known not to compile LLVM.</p>
+<p>If you have multiple processors in your machine, you may wish to use som=
+e of the
+parallel build options provided by GNU Make.  For example, you could use th=
+e
+command:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>make -j2
+</pre></div>
+</div>
+<p>There are several special targets which are useful when working with the=
+ LLVM
+source code:</p>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">make</s=
+pan> <span class=3D"pre">clean</span></code></p>
+<blockquote>
+<div>Removes all files generated by the build.  This includes object files,
+generated C/C++ files, libraries, and executables.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">make</s=
+pan> <span class=3D"pre">install</span></code></p>
+<blockquote>
+<div>Installs LLVM header files, libraries, tools, and documentation in a h=
+ierarchy
+under <code class=3D"docutils literal notranslate"><span class=3D"pre">$PRE=
+FIX</span></code>, specified with <code class=3D"docutils literal notransla=
+te"><span class=3D"pre">CMAKE_INSTALL_PREFIX</span></code>, which
+defaults to <code class=3D"docutils literal notranslate"><span class=3D"pre=
+">/usr/local</span></code>.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">make</s=
+pan> <span class=3D"pre">docs-llvm-html</span></code></p>
+<blockquote>
+<div>If configured with <code class=3D"docutils literal notranslate"><span =
+class=3D"pre">-DLLVM_ENABLE_SPHINX=3DOn</span></code>, this will generate a=
+ directory
+at <code class=3D"docutils literal notranslate"><span class=3D"pre">OBJ_ROO=
+T/docs/html</span></code> which contains the HTML formatted documentation.<=
+/div></blockquote>
+</div>
+<div class=3D"section" id=3D"cross-compiling-llvm">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id22">Cross-Compiling LLVM</a><a class=3D"headerlink" href=3D"https://l=
+lvm.org/docs/GettingStarted.html#cross-compiling-llvm" title=3D"Permalink t=
+o this headline">=C2=B6</a></h3>
+<p>It is possible to cross-compile LLVM itself. That is, you can create LLV=
+M
+executables and libraries to be hosted on a platform different from the pla=
+tform
+where they are built (a Canadian Cross build). To generate build files for
+cross-compiling CMake provides a variable <code class=3D"docutils literal n=
+otranslate"><span class=3D"pre">CMAKE_TOOLCHAIN_FILE</span></code> which ca=
+n
+define compiler flags and variables used during the CMake test operations.<=
+/p>
+<p>The result of such a build is executables that are not runnable on the b=
+uild
+host but can be executed on the target. As an example the following CMake
+invocation can generate build files targeting iOS. This will work on macOS
+with the latest Xcode:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>cmake -G <span class=3D"s2">"Ninja=
+"</span> -DCMAKE_OSX_ARCHITECTURES<span class=3D"o">=3D</span><span class=
+=3D"s2">"armv7;armv7s;arm64"</span>
+<span class=3D"go">  -DCMAKE_TOOLCHAIN_FILE=3D&lt;PATH_TO_LLVM&gt;/cmake/pl=
+atforms/iOS.cmake</span>
+<span class=3D"go">  -DCMAKE_BUILD_TYPE=3DRelease -DLLVM_BUILD_RUNTIME=3DOf=
+f -DLLVM_INCLUDE_TESTS=3DOff</span>
+<span class=3D"go">  -DLLVM_INCLUDE_EXAMPLES=3DOff -DLLVM_ENABLE_BACKTRACES=
+=3DOff [options]</span>
+<span class=3D"go">  &lt;PATH_TO_LLVM&gt;</span>
+</pre></div>
+</div>
+<p>Note: There are some additional flags that need to be passed when buildi=
+ng for
+iOS due to limitations in the iOS SDK.</p>
+<p>Check <a class=3D"reference internal" href=3D"https://llvm.org/docs/HowT=
+oCrossCompileLLVM.html"><span class=3D"doc">How To Cross-Compile Clang/LLVM=
+ using Clang/LLVM</span></a> and <a class=3D"reference external" href=3D"ht=
+tps://clang.llvm.org/docs/CrossCompilation.html">Clang docs on how to cross=
+-compile in general</a> for more information
+about cross-compiling.</p>
+</div>
+<div class=3D"section" id=3D"the-location-of-llvm-object-files">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id23">The Location of LLVM Object Files</a><a class=3D"headerlink" href=
+=3D"https://llvm.org/docs/GettingStarted.html#the-location-of-llvm-object-f=
+iles" title=3D"Permalink to this headline">=C2=B6</a></h3>
+<p>The LLVM build system is capable of sharing a single LLVM source tree am=
+ong
+several LLVM builds.  Hence, it is possible to build LLVM for several diffe=
+rent
+platforms or configurations using the same source tree.</p>
+<ul>
+<li><p class=3D"first">Change directory to where the LLVM object files shou=
+ld live:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span><span class=3D"nb">cd</span> OBJ_R=
+OOT
+</pre></div>
+</div>
+</li>
+<li><p class=3D"first">Run <code class=3D"docutils literal notranslate"><sp=
+an class=3D"pre">cmake</span></code>:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>cmake -G <span class=3D"s2">"Unix =
+Makefiles"</span> -DCMAKE_BUILD_TYPE<span class=3D"o">=3D</span>Release SRC=
+_ROOT
+</pre></div>
+</div>
+</li>
+</ul>
+<p>The LLVM build will create a structure underneath <em>OBJ_ROOT</em> that=
+ matches the
+LLVM source tree. At each level where source files are present in the sourc=
+e
+tree there will be a corresponding <code class=3D"docutils literal notransl=
+ate"><span class=3D"pre">CMakeFiles</span></code> directory in the <em>OBJ_=
+ROOT</em>.
+Underneath that directory there is another directory with a name ending in
+<code class=3D"docutils literal notranslate"><span class=3D"pre">.dir</span=
+></code> under which you=E2=80=99ll find object files for each source.</p>
+<p>For example:</p>
+<blockquote>
+<div><div class=3D"highlight-console notranslate"><div class=3D"highlight">=
+<pre><span></span><span class=3D"gp">% </span><span class=3D"nb">cd</span> =
+llvm_build_dir
+<span class=3D"gp">% </span>find lib/Support/ -name APFloat*
+<span class=3D"go">lib/Support/CMakeFiles/LLVMSupport.dir/APFloat.cpp.o</sp=
+an>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class=3D"section" id=3D"optional-configuration-items">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id24">Optional Configuration Items</a><a class=3D"headerlink" href=3D"h=
+ttps://llvm.org/docs/GettingStarted.html#optional-configuration-items" titl=
+e=3D"Permalink to this headline">=C2=B6</a></h3>
+<p>If you=E2=80=99re running on a Linux system that supports the <a class=
+=3D"reference external" href=3D"http://en.wikipedia.org/wiki/binfmt_misc">b=
+infmt_misc</a>
+module, and you have root access on the system, you can set your system up =
+to
+execute LLVM bitcode files directly. To do this, use commands like this (th=
+e
+first command may not be required if you are already using the module):</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>mount -t binfmt_misc none /proc/sy=
+s/fs/binfmt_misc
+<span class=3D"gp">% </span><span class=3D"nb">echo</span> <span class=3D"s=
+1">':llvm:M::BC::/path/to/lli:'</span> &gt; /proc/sys/fs/binfmt_misc/regist=
+er
+<span class=3D"gp">% </span>chmod u+x hello.bc   <span class=3D"o">(</span>=
+<span class=3D"k">if</span> needed<span class=3D"o">)</span>
+<span class=3D"gp">% </span>./hello.bc
+</pre></div>
+</div>
+<p>This allows you to execute LLVM bitcode files directly.  On Debian, you =
+can also
+use this command instead of the =E2=80=98echo=E2=80=99 command above:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>sudo update-binfmts --install llvm=
+ /path/to/lli --magic <span class=3D"s1">'BC'</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class=3D"section" id=3D"directory-layout">
+<span id=3D"general-layout"></span><span id=3D"program-layout"></span><h2><=
+a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.html#i=
+d25">Directory Layout</a><a class=3D"headerlink" href=3D"https://llvm.org/d=
+ocs/GettingStarted.html#directory-layout" title=3D"Permalink to this headli=
+ne">=C2=B6</a></h2>
+<p>One useful source of information about the LLVM source base is the LLVM =
+<a class=3D"reference external" href=3D"http://www.doxygen.org/">doxygen</a=
+> documentation available at
+<a class=3D"reference external" href=3D"https://llvm.org/doxygen/">https://=
+llvm.org/doxygen/</a>.  The following is a brief introduction to code
+layout:</p>
+<div class=3D"section" id=3D"llvm-cmake">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id26"><code class=3D"docutils literal notranslate"><span class=3D"pre">=
+llvm/cmake</span></code></a><a class=3D"headerlink" href=3D"https://llvm.or=
+g/docs/GettingStarted.html#llvm-cmake" title=3D"Permalink to this headline"=
+>=C2=B6</a></h3>
+<p>Generates system build files.</p>
+<dl class=3D"docutils">
+<dt><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/c=
+make/modules</span></code></dt>
+<dd>Build configuration for llvm user defined options. Checks compiler vers=
+ion and
+linker flags.</dd>
+<dt><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/c=
+make/platforms</span></code></dt>
+<dd>Toolchain configuration for Android NDK, iOS systems and non-Windows ho=
+sts to
+target MSVC.</dd>
+</dl>
+</div>
+<div class=3D"section" id=3D"llvm-examples">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id27"><code class=3D"docutils literal notranslate"><span class=3D"pre">=
+llvm/examples</span></code></a><a class=3D"headerlink" href=3D"https://llvm=
+.org/docs/GettingStarted.html#llvm-examples" title=3D"Permalink to this hea=
+dline">=C2=B6</a></h3>
+<ul class=3D"simple">
+<li>Some simple examples showing how to use LLVM as a compiler for a custom
+language - including lowering, optimization, and code generation.</li>
+<li>Kaleidoscope Tutorial: Kaleidoscope language tutorial run through the
+implementation of a nice little compiler for a non-trivial language
+including a hand-written lexer, parser, AST, as well as code generation
+support using LLVM- both static (ahead of time) and various approaches to
+Just In Time (JIT) compilation.
+<a class=3D"reference external" href=3D"https://llvm.org/docs/tutorial/MyFi=
+rstLanguageFrontend/index.html">Kaleidoscope Tutorial for complete beginner=
+</a>.</li>
+<li>BuildingAJIT: Examples of the <a class=3D"reference external" href=3D"h=
+ttps://llvm.org/docs/tutorial/BuildingAJIT1.html">BuildingAJIT tutorial</a>=
+ that shows how LLVM=E2=80=99s
+ORC JIT APIs interact with other parts of LLVM. It also, teaches how to
+recombine them to build a custom JIT that is suited to your use-case.</li>
+</ul>
+</div>
+<div class=3D"section" id=3D"llvm-include">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id28"><code class=3D"docutils literal notranslate"><span class=3D"pre">=
+llvm/include</span></code></a><a class=3D"headerlink" href=3D"https://llvm.=
+org/docs/GettingStarted.html#llvm-include" title=3D"Permalink to this headl=
+ine">=C2=B6</a></h3>
+<p>Public header files exported from the LLVM library. The three main subdi=
+rectories:</p>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/in=
+clude/llvm</span></code></p>
+<blockquote>
+<div>All LLVM-specific header files, and  subdirectories for different port=
+ions of
+LLVM: <code class=3D"docutils literal notranslate"><span class=3D"pre">Anal=
+ysis</span></code>, <code class=3D"docutils literal notranslate"><span clas=
+s=3D"pre">CodeGen</span></code>, <code class=3D"docutils literal notranslat=
+e"><span class=3D"pre">Target</span></code>, <code class=3D"docutils litera=
+l notranslate"><span class=3D"pre">Transforms</span></code>, etc=E2=80=A6</=
+div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/in=
+clude/llvm/Support</span></code></p>
+<blockquote>
+<div>Generic support libraries provided with LLVM but not necessarily speci=
+fic to
+LLVM. For example, some C++ STL utilities and a Command Line option process=
+ing
+library store header files here.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/in=
+clude/llvm/Config</span></code></p>
+<blockquote>
+<div>Header files configured by <code class=3D"docutils literal notranslate=
+"><span class=3D"pre">cmake</span></code>.  They wrap =E2=80=9Cstandard=E2=
+=80=9D UNIX and
+C header files.  Source code can include these header files which
+automatically take care of the conditional #includes that <code class=3D"do=
+cutils literal notranslate"><span class=3D"pre">cmake</span></code>
+generates.</div></blockquote>
+</div>
+<div class=3D"section" id=3D"llvm-lib">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id29"><code class=3D"docutils literal notranslate"><span class=3D"pre">=
+llvm/lib</span></code></a><a class=3D"headerlink" href=3D"https://llvm.org/=
+docs/GettingStarted.html#llvm-lib" title=3D"Permalink to this headline">=C2=
+=B6</a></h3>
+<p>Most source files are here. By putting code in libraries, LLVM makes it =
+easy to
+share code among the <a class=3D"reference internal" href=3D"https://llvm.o=
+rg/docs/GettingStarted.html#tools">tools</a>.</p>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/li=
+b/IR/</span></code></p>
+<blockquote>
+<div>Core LLVM source files that implement core classes like Instruction an=
+d
+BasicBlock.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/li=
+b/AsmParser/</span></code></p>
+<blockquote>
+<div>Source code for the LLVM assembly language parser library.</div></bloc=
+kquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/li=
+b/Bitcode/</span></code></p>
+<blockquote>
+<div>Code for reading and writing bitcode.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/li=
+b/Analysis/</span></code></p>
+<blockquote>
+<div>A variety of program analyses, such as Call Graphs, Induction Variable=
+s,
+Natural Loop Identification, etc.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/li=
+b/Transforms/</span></code></p>
+<blockquote>
+<div>IR-to-IR program transformations, such as Aggressive Dead Code Elimina=
+tion,
+Sparse Conditional Constant Propagation, Inlining, Loop Invariant Code Moti=
+on,
+Dead Global Elimination, and many others.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/li=
+b/Target/</span></code></p>
+<blockquote>
+<div>Files describing target architectures for code generation.  For exampl=
+e,
+<code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/lib/T=
+arget/X86</span></code> holds the X86 machine description.</div></blockquot=
+e>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/li=
+b/CodeGen/</span></code></p>
+<blockquote>
+<div>The major parts of the code generator: Instruction Selector, Instructi=
+on
+Scheduling, and Register Allocation.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/li=
+b/MC/</span></code></p>
+<blockquote>
+<div>The libraries represent and process code at machine code level. Handle=
+s
+assembly and object-file emission.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/li=
+b/ExecutionEngine/</span></code></p>
+<blockquote>
+<div>Libraries for directly executing bitcode at runtime in interpreted and
+JIT-compiled scenarios.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/li=
+b/Support/</span></code></p>
+<blockquote>
+<div>Source code that corresponding to the header files in <code class=3D"d=
+ocutils literal notranslate"><span class=3D"pre">llvm/include/ADT/</span></=
+code>
+and <code class=3D"docutils literal notranslate"><span class=3D"pre">llvm/i=
+nclude/Support/</span></code>.</div></blockquote>
+</div>
+<div class=3D"section" id=3D"llvm-bindings">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id30"><code class=3D"docutils literal notranslate"><span class=3D"pre">=
+llvm/bindings</span></code></a><a class=3D"headerlink" href=3D"https://llvm=
+.org/docs/GettingStarted.html#llvm-bindings" title=3D"Permalink to this hea=
+dline">=C2=B6</a></h3>
+<p>Contains bindings for the LLVM compiler infrastructure to allow
+programs written in languages other than C or C++ to take advantage of the =
+LLVM
+infrastructure.
+LLVM project provides language bindings for Go, OCaml and Python.</p>
+</div>
+<div class=3D"section" id=3D"llvm-projects">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id31"><code class=3D"docutils literal notranslate"><span class=3D"pre">=
+llvm/projects</span></code></a><a class=3D"headerlink" href=3D"https://llvm=
+.org/docs/GettingStarted.html#llvm-projects" title=3D"Permalink to this hea=
+dline">=C2=B6</a></h3>
+<p>Projects not strictly part of LLVM but shipped with LLVM. This is also t=
+he
+directory for creating your own LLVM-based projects which leverage the LLVM
+build system.</p>
+</div>
+<div class=3D"section" id=3D"llvm-test">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id32"><code class=3D"docutils literal notranslate"><span class=3D"pre">=
+llvm/test</span></code></a><a class=3D"headerlink" href=3D"https://llvm.org=
+/docs/GettingStarted.html#llvm-test" title=3D"Permalink to this headline">=
+=C2=B6</a></h3>
+<p>Feature and regression tests and other sanity checks on LLVM infrastruct=
+ure. These
+are intended to run quickly and cover a lot of territory without being exha=
+ustive.</p>
+</div>
+<div class=3D"section" id=3D"test-suite">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id33"><code class=3D"docutils literal notranslate"><span class=3D"pre">=
+test-suite</span></code></a><a class=3D"headerlink" href=3D"https://llvm.or=
+g/docs/GettingStarted.html#test-suite" title=3D"Permalink to this headline"=
+>=C2=B6</a></h3>
+<p>A comprehensive correctness, performance, and benchmarking test suite
+for LLVM.  This comes in a <code class=3D"docutils literal notranslate"><sp=
+an class=3D"pre">separate</span> <span class=3D"pre">git</span> <span class=
+=3D"pre">repository</span>
+<span class=3D"pre">&lt;https://github.com/llvm/llvm-test-suite&gt;</span><=
+/code>, because it contains a
+large amount of third-party code under a variety of licenses. For
+details see the <a class=3D"reference internal" href=3D"https://llvm.org/do=
+cs/TestingGuide.html"><span class=3D"doc">Testing Guide</span></a> document=
+.</p>
+</div>
+<div class=3D"section" id=3D"llvm-tools">
+<span id=3D"tools"></span><h3><a class=3D"toc-backref" href=3D"https://llvm=
+.org/docs/GettingStarted.html#id34"><code class=3D"docutils literal notrans=
+late"><span class=3D"pre">llvm/tools</span></code></a><a class=3D"headerlin=
+k" href=3D"https://llvm.org/docs/GettingStarted.html#llvm-tools" title=3D"P=
+ermalink to this headline">=C2=B6</a></h3>
+<p>Executables built out of the libraries
+above, which form the main part of the user interface.  You can always get =
+help
+for a tool by typing <code class=3D"docutils literal notranslate"><span cla=
+ss=3D"pre">tool_name</span> <span class=3D"pre">-help</span></code>.  The f=
+ollowing is a brief introduction
+to the most important tools.  More detailed information is in
+the <a class=3D"reference external" href=3D"https://llvm.org/docs/CommandGu=
+ide/index.html">Command Guide</a>.</p>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">bugpoin=
+t</span></code></p>
+<blockquote>
+<div><code class=3D"docutils literal notranslate"><span class=3D"pre">bugpo=
+int</span></code> is used to debug optimization passes or code generation b=
+ackends
+by narrowing down the given test case to the minimum number of passes and/o=
+r
+instructions that still cause a problem, whether it is a crash or
+miscompilation. See <a class=3D"reference external" href=3D"https://llvm.or=
+g/docs/HowToSubmitABug.html">HowToSubmitABug.html</a> for more information =
+on using
+<code class=3D"docutils literal notranslate"><span class=3D"pre">bugpoint</=
+span></code>.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm-ar=
+</span></code></p>
+<blockquote>
+<div>The archiver produces an archive containing the given LLVM bitcode fil=
+es,
+optionally with an index for faster lookup.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm-as=
+</span></code></p>
+<blockquote>
+<div>The assembler transforms the human readable LLVM assembly to LLVM bitc=
+ode.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm-di=
+s</span></code></p>
+<blockquote>
+<div>The disassembler transforms the LLVM bitcode to human readable LLVM as=
+sembly.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm-li=
+nk</span></code></p>
+<blockquote>
+<div><code class=3D"docutils literal notranslate"><span class=3D"pre">llvm-=
+link</span></code>, not surprisingly, links multiple LLVM modules into a si=
+ngle
+program.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">lli</sp=
+an></code></p>
+<blockquote>
+<div><code class=3D"docutils literal notranslate"><span class=3D"pre">lli</=
+span></code> is the LLVM interpreter, which can directly execute LLVM bitco=
+de
+(although very slowly=E2=80=A6). For architectures that support it (current=
+ly x86,
+Sparc, and PowerPC), by default, <code class=3D"docutils literal notranslat=
+e"><span class=3D"pre">lli</span></code> will function as a Just-In-Time
+compiler (if the functionality was compiled in), and will execute the code
+<em>much</em> faster than the interpreter.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llc</sp=
+an></code></p>
+<blockquote>
+<div><code class=3D"docutils literal notranslate"><span class=3D"pre">llc</=
+span></code> is the LLVM backend compiler, which translates LLVM bitcode to=
+ a
+native code assembly file.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">opt</sp=
+an></code></p>
+<blockquote>
+<div><p><code class=3D"docutils literal notranslate"><span class=3D"pre">op=
+t</span></code> reads LLVM bitcode, applies a series of LLVM to LLVM transf=
+ormations
+(which are specified on the command line), and outputs the resultant
+bitcode.   =E2=80=98<code class=3D"docutils literal notranslate"><span clas=
+s=3D"pre">opt</span> <span class=3D"pre">-help</span></code>=E2=80=99  is a=
+ good way to get a list of the
+program transformations available in LLVM.</p>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">opt</sp=
+an></code> can also  run a specific analysis on an input LLVM bitcode
+file and print  the results.  Primarily useful for debugging
+analyses, or familiarizing yourself with what an analysis does.</p>
+</div></blockquote>
+</div>
+<div class=3D"section" id=3D"llvm-utils">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id35"><code class=3D"docutils literal notranslate"><span class=3D"pre">=
+llvm/utils</span></code></a><a class=3D"headerlink" href=3D"https://llvm.or=
+g/docs/GettingStarted.html#llvm-utils" title=3D"Permalink to this headline"=
+>=C2=B6</a></h3>
+<p>Utilities for working with LLVM source code; some are part of the build =
+process
+because they are code generators for parts of the infrastructure.</p>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">codegen=
+-diff</span></code></p>
+<blockquote>
+<div><code class=3D"docutils literal notranslate"><span class=3D"pre">codeg=
+en-diff</span></code> finds differences between code that LLC
+generates and code that LLI generates. This is useful if you are
+debugging one of them, assuming that the other generates correct output. Fo=
+r
+the full user manual, run <code class=3D"docutils literal notranslate"><spa=
+n class=3D"pre">`perldoc</span> <span class=3D"pre">codegen-diff'</span></c=
+ode>.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">emacs/<=
+/span></code></p>
+<blockquote>
+<div>Emacs and XEmacs syntax highlighting  for LLVM   assembly files and Ta=
+bleGen
+description files.  See the <code class=3D"docutils literal notranslate"><s=
+pan class=3D"pre">README</span></code> for information on using them.</div>=
+</blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">getsrcs=
+.sh</span></code></p>
+<blockquote>
+<div>Finds and outputs all non-generated source files,
+useful if one wishes to do a lot of development across directories
+and does not want to find each file. One way to use it is to run,
+for example: <code class=3D"docutils literal notranslate"><span class=3D"pr=
+e">xemacs</span> <span class=3D"pre">`utils/getsources.sh`</span></code> fr=
+om the top of the LLVM source
+tree.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">llvmgre=
+p</span></code></p>
+<blockquote>
+<div>Performs an <code class=3D"docutils literal notranslate"><span class=
+=3D"pre">egrep</span> <span class=3D"pre">-H</span> <span class=3D"pre">-n<=
+/span></code> on each source file in LLVM and
+passes to it a regular expression provided on <code class=3D"docutils liter=
+al notranslate"><span class=3D"pre">llvmgrep</span></code>=E2=80=99s comman=
+d
+line. This is an efficient way of searching the source base for a
+particular regular expression.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">TableGe=
+n/</span></code></p>
+<blockquote>
+<div>Contains the tool used to generate register
+descriptions, instruction set descriptions, and even assemblers from common
+TableGen description files.</div></blockquote>
+<p><code class=3D"docutils literal notranslate"><span class=3D"pre">vim/</s=
+pan></code></p>
+<blockquote>
+<div>vim syntax-highlighting for LLVM assembly files
+and TableGen description files. See the    <code class=3D"docutils literal =
+notranslate"><span class=3D"pre">README</span></code> for how to use them.<=
+/div></blockquote>
+</div>
+</div>
+<div class=3D"section" id=3D"an-example-using-the-llvm-tool-chain">
+<span id=3D"simple-example"></span><h2><a class=3D"toc-backref" href=3D"htt=
+ps://llvm.org/docs/GettingStarted.html#id36">An Example Using the LLVM Tool=
+ Chain</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/GettingStar=
+ted.html#an-example-using-the-llvm-tool-chain" title=3D"Permalink to this h=
+eadline">=C2=B6</a></h2>
+<p>This section gives an example of using LLVM with the Clang front end.</p=
+>
+<div class=3D"section" id=3D"example-with-clang">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id37">Example with clang</a><a class=3D"headerlink" href=3D"https://llv=
+m.org/docs/GettingStarted.html#example-with-clang" title=3D"Permalink to th=
+is headline">=C2=B6</a></h3>
+<ol class=3D"arabic">
+<li><p class=3D"first">First, create a simple C file, name it =E2=80=98hell=
+o.c=E2=80=99:</p>
+<div class=3D"highlight-c notranslate"><div class=3D"highlight"><pre><span>=
+</span><span class=3D"cp">#include</span> <span class=3D"cpf">&lt;stdio.h&g=
+t;</span><span class=3D"cp"></span>
+
+<span class=3D"kt">int</span> <span class=3D"nf">main</span><span class=3D"=
+p">()</span> <span class=3D"p">{</span>
+  <span class=3D"n">printf</span><span class=3D"p">(</span><span class=3D"s=
+">"hello world</span><span class=3D"se">\n</span><span class=3D"s">"</span>=
+<span class=3D"p">);</span>
+  <span class=3D"k">return</span> <span class=3D"mi">0</span><span class=3D=
+"p">;</span>
+<span class=3D"p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class=3D"first">Next, compile the C file into a native executable:</=
+p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>clang hello.c -o hello
+</pre></div>
+</div>
+<div class=3D"admonition note">
+<p class=3D"first admonition-title">Note</p>
+<p class=3D"last">Clang works just like GCC by default.  The standard -S an=
+d -c arguments
+work as usual (producing a native .s or .o file, respectively).</p>
+</div>
+</li>
+<li><p class=3D"first">Next, compile the C file into an LLVM bitcode file:<=
+/p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>clang -O3 -emit-llvm hello.c -c -o=
+ hello.bc
+</pre></div>
+</div>
+<p>The -emit-llvm option can be used with the -S or -c options to emit an L=
+LVM
+<code class=3D"docutils literal notranslate"><span class=3D"pre">.ll</span>=
+</code> or <code class=3D"docutils literal notranslate"><span class=3D"pre"=
+>.bc</span></code> file (respectively) for the code.  This allows you to us=
+e
+the <a class=3D"reference external" href=3D"https://llvm.org/docs/CommandGu=
+ide/index.html">standard LLVM tools</a> on the bitcode file.</p>
+</li>
+<li><p class=3D"first">Run the program in both forms. To run the program, u=
+se:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>./hello
+</pre></div>
+</div>
+<p>and</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>lli hello.bc
+</pre></div>
+</div>
+<p>The second examples shows how to invoke the LLVM JIT, <a class=3D"refere=
+nce internal" href=3D"https://llvm.org/docs/CommandGuide/lli.html"><span cl=
+ass=3D"doc">lli</span></a>.</p>
+</li>
+<li><p class=3D"first">Use the <code class=3D"docutils literal notranslate"=
+><span class=3D"pre">llvm-dis</span></code> utility to take a look at the L=
+LVM assembly code:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>llvm-dis &lt; hello.bc <span class=
+=3D"p">|</span> less
+</pre></div>
+</div>
+</li>
+<li><p class=3D"first">Compile the program to native assembly using the LLC=
+ code generator:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>llc hello.bc -o hello.s
+</pre></div>
+</div>
+</li>
+<li><p class=3D"first">Assemble the native assembly language file into a pr=
+ogram:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>/opt/SUNWspro/bin/cc -xarch<span c=
+lass=3D"o">=3D</span>v9 hello.s -o hello.native   <span class=3D"c1"># On S=
+olaris</span>
+
+<span class=3D"gp">% </span>gcc hello.s -o hello.native                    =
+          <span class=3D"c1"># On others</span>
+</pre></div>
+</div>
+</li>
+<li><p class=3D"first">Execute the native code program:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">% </span>./hello.native
+</pre></div>
+</div>
+<p>Note that using clang to compile directly to native code (i.e. when the
+<code class=3D"docutils literal notranslate"><span class=3D"pre">-emit-llvm=
+</span></code> option is not present) does steps 6/7/8 for you.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class=3D"section" id=3D"common-problems">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml#id38">Common Problems</a><a class=3D"headerlink" href=3D"https://llvm.o=
+rg/docs/GettingStarted.html#common-problems" title=3D"Permalink to this hea=
+dline">=C2=B6</a></h2>
+<p>If you are having problems building or using LLVM, or if you have any ot=
+her
+general questions about LLVM, please consult the <a class=3D"reference exte=
+rnal" href=3D"https://llvm.org/docs/FAQ.html">Frequently Asked
+Questions</a> page.</p>
+<p>If you are having problems with limited memory and build time, please tr=
+y
+building with ninja instead of make. Please consider configuring the
+following options with cmake:</p>
+<blockquote>
+<div><ul class=3D"simple">
+<li>-G Ninja
+Setting this option will allow you to build with ninja instead of make.
+Building with ninja significantly improves your build time, especially with
+incremental builds, and improves your memory usage.</li>
+<li>-DLLVM_USE_LINKER
+Setting this option to lld will significantly reduce linking time for LLVM
+executables on ELF-based platforms, such as Linux. If you are building LLVM
+for the first time and lld is not available to you as a binary package, the=
+n
+you may want to use the gold linker as a faster alternative to GNU ld.</li>
+<li>-DCMAKE_BUILD_TYPE
+Controls optimization level and debug information of the build.  This setti=
+ng
+can affect RAM and disk usage, see <a class=3D"reference internal" href=3D"=
+https://llvm.org/docs/CMake.html#cmake-build-type"><span class=3D"std std-r=
+ef">CMAKE_BUILD_TYPE</span></a>
+for more information.</li>
+<li>-DLLVM_ENABLE_ASSERTIONS
+This option defaults to ON for Debug builds and defaults to OFF for Release
+builds. As mentioned in the previous option, using the Release build type a=
+nd
+enabling assertions may be a good alternative to using the Debug build type=
+.</li>
+<li>-DLLVM_PARALLEL_LINK_JOBS
+Set this equal to number of jobs you wish to run simultaneously. This is
+similar to the -j option used with make, but only for link jobs. This optio=
+n
+can only be used with ninja. You may wish to use a very low number of jobs,
+as this will greatly reduce the amount of memory used during the build
+process. If you have limited memory, you may wish to set this to 1.</li>
+<li>-DLLVM_TARGETS_TO_BUILD
+Set this equal to the target you wish to build. You may wish to set this to
+X86; however, you will find a full list of targets within the
+llvm-project/llvm/lib/Target directory.</li>
+<li>-DLLVM_OPTIMIZED_TABLEGEN
+Set this to ON to generate a fully optimized tablegen during your build. Th=
+is
+will significantly improve your build time. This is only useful if you are
+using the Debug build type.</li>
+<li>-DLLVM_ENABLE_PROJECTS
+Set this equal to the projects you wish to compile (e.g. clang, lld, etc.) =
+If
+compiling more than one project, separate the items with a semicolon. Shoul=
+d
+you run into issues with the semicolon, try surrounding it with single quot=
+es.</li>
+<li>-DLLVM_ENABLE_RUNTIMES
+Set this equal to the runtimes you wish to compile (e.g. libcxx, libcxxabi,=
+ etc.)
+If compiling more than one runtime, separate the items with a semicolon. Sh=
+ould
+you run into issues with the semicolon, try surrounding it with single quot=
+es.</li>
+<li>-DCLANG_ENABLE_STATIC_ANALYZER
+Set this option to OFF if you do not require the clang static analyzer. Thi=
+s
+should improve your build time slightly.</li>
+<li>-DLLVM_USE_SPLIT_DWARF
+Consider setting this to ON if you require a debug build, as this will ease
+memory pressure on the linker. This will make linking much faster, as the
+binaries will not contain any of the debug information; however, this will
+generate the debug information in the form of a DWARF object file (with the
+extension .dwo). This only applies to host platforms using ELF, such as Lin=
+ux.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class=3D"section" id=3D"links">
+<span id=3D"id3"></span><h2><a class=3D"toc-backref" href=3D"https://llvm.o=
+rg/docs/GettingStarted.html#id39">Links</a><a class=3D"headerlink" href=3D"=
+https://llvm.org/docs/GettingStarted.html#links" title=3D"Permalink to this=
+ headline">=C2=B6</a></h2>
+<p>This document is just an <strong>introduction</strong> on how to use LLV=
+M to do some simple
+things=E2=80=A6 there are many more interesting and complicated things that=
+ you can do
+that aren=E2=80=99t documented here (but we=E2=80=99ll gladly accept a patc=
+h if you want to
+write something up!).  For more information about LLVM, check out:</p>
+<ul class=3D"simple">
+<li><a class=3D"reference external" href=3D"https://llvm.org/">LLVM Homepag=
+e</a></li>
+<li><a class=3D"reference external" href=3D"https://llvm.org/doxygen/">LLVM=
+ Doxygen Tree</a></li>
+<li><a class=3D"reference external" href=3D"https://llvm.org/docs/Projects.=
+html">Starting a Project that Uses LLVM</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class=3D"clearer"></div>
+    </div>
+    <div class=3D"related" role=3D"navigation" aria-label=3D"related naviga=
+tion">
+      <h3>Navigation</h3>
+      <ul>
+        <li class=3D"right" style=3D"margin-right: 10px">
+          <a href=3D"https://llvm.org/docs/genindex.html" title=3D"General =
+Index">index</a></li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/GettingStartedVS.html" title=3D"=
+Getting Started with the LLVM System using Microsoft Visual Studio">next</a=
+> |</li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/Frontend/PerformanceTips.html" t=
+itle=3D"Performance Tips for Frontend Authors">previous</a> |</li>
+  <li><a href=3D"https://llvm.org/">LLVM Home</a>&nbsp;|&nbsp;</li>
+  <li><a href=3D"https://llvm.org/docs/index.html">Documentation</a>=C2=BB<=
+/li>
+
+          <li class=3D"nav-item nav-item-1"><a href=3D"https://llvm.org/doc=
+s/GettingStartedTutorials.html">Getting Started/Tutorials</a> =C2=BB</li>=
+=20
+      </ul>
+    </div>
+    <div class=3D"footer" role=3D"contentinfo">
+        =C2=A9 Copyright 2003-2022, LLVM Project.
+      Last updated on 2022-05-07.
+      Created using <a href=3D"http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+ =20
+</body></html>
+------MultipartBoundary--jvcMZuXSLZomLleHaBPDjASlH40PNePSsFuR19Qn4e----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-552b1aed-5719-488c-b5e6-1b05ebeaa630@mhtml.blink
+
+@charset "utf-8";
+
+table.right { float: right; margin-left: 20px; }
+
+table.right td { border: 1px solid rgb(204, 204, 204); }
+------MultipartBoundary--jvcMZuXSLZomLleHaBPDjASlH40PNePSsFuR19Qn4e----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/llvm-theme.css
+
+@charset "utf-8";
+
+@import url("basic.css");
+
+body { font-family: "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana=
+, sans-serif; font-size: 14px; line-height: 150%; text-align: center; backg=
+round-color: rgb(191, 209, 212); color: black; padding: 0px; border: 1px so=
+lid rgb(170, 170, 170); margin: 0px 80px; min-width: 740px; }
+
+div.logo { background-color: white; text-align: left; padding: 10px 10px 15=
+px 15px; }
+
+div.document { background-color: white; text-align: left; background-image:=
+ url("contents.png"); background-repeat: repeat-x; }
+
+div.bodywrapper { margin: 0px 240px 0px 0px; border-right: 1px solid rgb(20=
+4, 204, 204); }
+
+div.body { margin: 0px; padding: 0.5em 20px 20px; max-width: 1000px; }
+
+div.related { font-size: 1em; }
+
+div.related ul { background-image: url("navigation.png"); height: 2em; bord=
+er-top: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221=
+, 221); }
+
+div.related ul li { margin: 0px; padding: 0px; height: 2em; float: left; }
+
+div.related ul li.right { float: right; margin-right: 5px; }
+
+div.related ul li a { margin: 0px; padding: 0px 5px; line-height: 1.75em; c=
+olor: rgb(238, 152, 22); }
+
+div.related ul li a:hover { color: rgb(60, 168, 231); }
+
+div.sphinxsidebarwrapper { padding: 0px; }
+
+div.sphinxsidebar { margin: 0px; padding: 0.5em 15px 15px 0px; width: 210px=
+; float: right; font-size: 1em; text-align: left; }
+
+div.sphinxsidebar h3, div.sphinxsidebar h4 { margin: 1em 0px 0.5em; font-si=
+ze: 1em; padding: 0.1em 0px 0.1em 0.5em; color: white; border: 1px solid rg=
+b(134, 152, 155); background-color: rgb(175, 193, 196); }
+
+div.sphinxsidebar h3 a { color: white; }
+
+div.sphinxsidebar ul { margin-top: 7px; padding: 0px; line-height: 130%; }
+
+div.sphinxsidebar ul ul { margin-left: 20px; }
+
+div.footer { background-color: rgb(227, 239, 241); color: rgb(134, 152, 155=
+); padding: 3px 8px 3px 0px; clear: both; font-size: 0.8em; text-align: rig=
+ht; }
+
+div.footer a { color: rgb(134, 152, 155); text-decoration: underline; }
+
+p { margin: 0.8em 0px 0.5em; }
+
+a { color: rgb(202, 121, 0); text-decoration: none; }
+
+a:hover { color: rgb(36, 145, 207); }
+
+div.body p a { text-decoration: underline; }
+
+h1 { margin: 0px; padding: 0.7em 0px 0.3em; font-size: 1.5em; color: rgb(17=
+, 85, 124); }
+
+h2 { margin: 1.3em 0px 0.2em; font-size: 1.35em; padding: 0px; }
+
+h3 { margin: 1em 0px -0.3em; font-size: 1.2em; }
+
+h3 a:hover { text-decoration: underline; }
+
+div.body h1 a, div.body h2 a, div.body h3 a, div.body h4 a, div.body h5 a, =
+div.body h6 a { color: black !important; }
+
+div.body h1, div.body h2, div.body h3, div.body h4, div.body h5, div.body h=
+6 { background-color: rgb(242, 242, 242); font-weight: normal; color: rgb(3=
+2, 67, 92); border-bottom: 1px solid rgb(204, 204, 204); margin: 20px -20px=
+ 10px; padding: 3px 0px 3px 10px; }
+
+div.body h1 { margin-top: 0px; font-size: 200%; }
+
+div.body h2 { font-size: 160%; }
+
+div.body h3 { font-size: 140%; }
+
+div.body h4 { font-size: 120%; }
+
+div.body h5 { font-size: 110%; }
+
+div.body h6 { font-size: 100%; }
+
+h1 a.anchor, h2 a.anchor, h3 a.anchor, h4 a.anchor, h5 a.anchor, h6 a.ancho=
+r { display: none; margin: 0px 0px 0px 0.3em; padding: 0px 0.2em; color: rg=
+b(170, 170, 170) !important; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor,=
+ h5:hover a.anchor, h6:hover a.anchor { display: inline; }
+
+h1 a.anchor:hover, h2 a.anchor:hover, h3 a.anchor:hover, h4 a.anchor:hover,=
+ h5 a.anchor:hover, h6 a.anchor:hover { color: rgb(119, 119, 119); backgrou=
+nd-color: rgb(238, 238, 238); }
+
+a.headerlink { font-size: 1em; margin-left: 6px; padding: 0px 4px; color: r=
+gb(198, 15, 15) !important; text-decoration: none !important; }
+
+a.headerlink:hover { background-color: rgb(204, 204, 204); color: white !im=
+portant; }
+
+cite, code, tt { font-family: Consolas, "Deja Vu Sans Mono", "Bitstream Ver=
+a Sans Mono", monospace; font-size: 0.95em; }
+
+:not(a.reference) > tt { background-color: rgb(242, 242, 242); border-botto=
+m: 1px solid rgb(221, 221, 221); color: rgb(51, 51, 51); }
+
+tt.descname, tt.descclassname, tt.xref { border: 0px; }
+
+hr { border: 1px solid rgb(170, 187, 204); margin: 2em; }
+
+p a tt { border: 0px; color: rgb(202, 121, 0); }
+
+p a tt:hover { color: rgb(36, 145, 207); }
+
+a tt { border: none; }
+
+pre { font-family: Consolas, "Deja Vu Sans Mono", "Bitstream Vera Sans Mono=
+", monospace; font-size: 0.95em; line-height: 120%; padding: 0.5em; border:=
+ 1px solid rgb(204, 204, 204); background-color: rgb(248, 248, 248); }
+
+pre a { color: inherit; text-decoration: underline; }
+
+td.linenos pre { padding: 0.5em 0px; }
+
+div.quotebar { background-color: rgb(248, 248, 248); max-width: 250px; floa=
+t: right; padding: 2px 7px; border: 1px solid rgb(204, 204, 204); }
+
+div.topic { background-color: rgb(248, 248, 248); }
+
+table { border-collapse: collapse; margin: 0px -0.5em; }
+
+table td, table th { padding: 0.2em 0.5em; }
+
+div.admonition, div.warning { font-size: 0.9em; margin: 1em 0px; border: 1p=
+x solid rgb(134, 152, 155); background-color: rgb(247, 247, 247); padding: =
+0px; }
+
+div.admonition p, div.warning p { margin: 0.5em 1em; padding: 0px; }
+
+div.admonition pre, div.warning pre { margin: 0.4em 1em; }
+
+div.admonition p.admonition-title, div.warning p.admonition-title { margin:=
+ 0px; padding: 0.1em 0px 0.1em 0.5em; color: white; border-bottom: 1px soli=
+d rgb(134, 152, 155); font-weight: bold; background-color: rgb(175, 193, 19=
+6); }
+
+div.warning { border: 1px solid rgb(148, 0, 0); }
+
+div.warning p.admonition-title { background-color: rgb(207, 0, 0); border-b=
+ottom-color: rgb(148, 0, 0); }
+
+div.admonition ul, div.admonition ol, div.warning ul, div.warning ol { marg=
+in: 0.1em 0.5em 0.5em 3em; padding: 0px; }
+
+div.versioninfo { margin: 1em 0px 0px; border: 1px solid rgb(204, 204, 204)=
+; background-color: rgb(221, 234, 240); padding: 8px; line-height: 1.3em; f=
+ont-size: 0.9em; }
+
+.viewcode-back { font-family: "Lucida Grande", "Lucida Sans Unicode", Genev=
+a, Verdana, sans-serif; }
+
+div.viewcode-block:target { background-color: rgb(244, 222, 191); border-to=
+p: 1px solid rgb(170, 204, 153); border-bottom: 1px solid rgb(170, 204, 153=
+); }
+------MultipartBoundary--jvcMZuXSLZomLleHaBPDjASlH40PNePSsFuR19Qn4e----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/basic.css
+
+@charset "utf-8";
+
+div.clearer { clear: both; }
+
+div.related { width: 100%; font-size: 90%; }
+
+div.related h3 { display: none; }
+
+div.related ul { margin: 0px; padding: 0px 0px 0px 10px; list-style: none; =
+}
+
+div.related li { display: inline; }
+
+div.related li.right { float: right; margin-right: 5px; }
+
+div.sphinxsidebarwrapper { padding: 10px 5px 0px 10px; }
+
+div.sphinxsidebar { float: left; width: 230px; margin-left: -100%; font-siz=
+e: 90%; overflow-wrap: break-word; }
+
+div.sphinxsidebar ul { list-style: none; }
+
+div.sphinxsidebar ul ul, div.sphinxsidebar ul.want-points { margin-left: 20=
+px; list-style: square; }
+
+div.sphinxsidebar ul ul { margin-top: 0px; margin-bottom: 0px; }
+
+div.sphinxsidebar form { margin-top: 10px; }
+
+div.sphinxsidebar input { border: 1px solid rgb(152, 219, 204); font-family=
+: sans-serif; font-size: 1em; }
+
+div.sphinxsidebar #searchbox form.search { overflow: hidden; }
+
+div.sphinxsidebar #searchbox input[type=3D"text"] { float: left; width: 80%=
+; padding: 0.25em; box-sizing: border-box; }
+
+div.sphinxsidebar #searchbox input[type=3D"submit"] { float: left; width: 2=
+0%; border-left: none; padding: 0.25em; box-sizing: border-box; }
+
+img { border: 0px; max-width: 100%; }
+
+ul.search { margin: 10px 0px 0px 20px; padding: 0px; }
+
+ul.search li { padding: 5px 0px 5px 20px; background-image: url("file.png")=
+; background-repeat: no-repeat; background-position: 0px 7px; }
+
+ul.search li a { font-weight: bold; }
+
+ul.search li div.context { color: rgb(136, 136, 136); margin: 2px 0px 0px 3=
+0px; text-align: left; }
+
+ul.keywordmatches li.goodmatch a { font-weight: bold; }
+
+table.contentstable { width: 90%; margin-left: auto; margin-right: auto; }
+
+table.contentstable p.biglink { line-height: 150%; }
+
+a.biglink { font-size: 1.3em; }
+
+span.linkdescr { font-style: italic; padding-top: 5px; font-size: 90%; }
+
+table.indextable { width: 100%; }
+
+table.indextable td { text-align: left; vertical-align: top; }
+
+table.indextable ul { margin-top: 0px; margin-bottom: 0px; list-style-type:=
+ none; }
+
+table.indextable > tbody > tr > td > ul { padding-left: 0em; }
+
+table.indextable tr.pcap { height: 10px; }
+
+table.indextable tr.cap { margin-top: 10px; background-color: rgb(242, 242,=
+ 242); }
+
+img.toggler { margin-right: 3px; margin-top: 3px; cursor: pointer; }
+
+div.modindex-jumpbox { border-top: 1px solid rgb(221, 221, 221); border-bot=
+tom: 1px solid rgb(221, 221, 221); margin: 1em 0px; padding: 0.4em; }
+
+div.genindex-jumpbox { border-top: 1px solid rgb(221, 221, 221); border-bot=
+tom: 1px solid rgb(221, 221, 221); margin: 1em 0px; padding: 0.4em; }
+
+table.modindextable td { padding: 2px; border-collapse: collapse; }
+
+div.body { min-width: 450px; max-width: 800px; }
+
+div.body p, div.body dd, div.body li, div.body blockquote { hyphens: auto; =
+}
+
+a.headerlink { visibility: hidden; }
+
+h1:hover > a.headerlink, h2:hover > a.headerlink, h3:hover > a.headerlink, =
+h4:hover > a.headerlink, h5:hover > a.headerlink, h6:hover > a.headerlink, =
+dt:hover > a.headerlink, caption:hover > a.headerlink, p.caption:hover > a.=
+headerlink, div.code-block-caption:hover > a.headerlink { visibility: visib=
+le; }
+
+div.body p.caption { text-align: inherit; }
+
+div.body td { text-align: left; }
+
+.first { margin-top: 0px !important; }
+
+p.rubric { margin-top: 30px; font-weight: bold; }
+
+img.align-left, .figure.align-left, object.align-left { clear: left; float:=
+ left; margin-right: 1em; }
+
+img.align-right, .figure.align-right, object.align-right { clear: right; fl=
+oat: right; margin-left: 1em; }
+
+img.align-center, .figure.align-center, object.align-center { display: bloc=
+k; margin-left: auto; margin-right: auto; }
+
+.align-left { text-align: left; }
+
+.align-center { text-align: center; }
+
+.align-right { text-align: right; }
+
+div.sidebar { margin: 0px 0px 0.5em 1em; border: 1px solid rgb(221, 221, 18=
+7); padding: 7px 7px 0px; background-color: rgb(255, 255, 238); width: 40%;=
+ float: right; }
+
+p.sidebar-title { font-weight: bold; }
+
+div.topic { border: 1px solid rgb(204, 204, 204); padding: 7px 7px 0px; mar=
+gin: 10px 0px; }
+
+p.topic-title { font-size: 1.1em; font-weight: bold; margin-top: 10px; }
+
+div.admonition { margin-top: 10px; margin-bottom: 10px; padding: 7px; }
+
+div.admonition dt { font-weight: bold; }
+
+div.admonition dl { margin-bottom: 0px; }
+
+p.admonition-title { margin: 0px 10px 5px 0px; font-weight: bold; }
+
+div.body p.centered { text-align: center; margin-top: 25px; }
+
+table.docutils { border: 0px; border-collapse: collapse; }
+
+table.align-center { margin-left: auto; margin-right: auto; }
+
+table caption span.caption-number { font-style: italic; }
+
+table caption span.caption-text { }
+
+table.docutils td, table.docutils th { padding: 1px 8px 1px 5px; border-wid=
+th: 0px 0px 1px; border-top-style: initial; border-top-color: initial; bord=
+er-left-style: initial; border-left-color: initial; border-right-style: ini=
+tial; border-right-color: initial; border-bottom-style: solid; border-botto=
+m-color: rgb(170, 170, 170); }
+
+table.footnote td, table.footnote th { border: 0px !important; }
+
+th { text-align: left; padding-right: 5px; }
+
+table.citation { border-left: 1px solid gray; margin-left: 1px; }
+
+table.citation td { border-bottom: none; }
+
+div.figure { margin: 0.5em; padding: 0.5em; }
+
+div.figure p.caption { padding: 0.3em; }
+
+div.figure p.caption span.caption-number { font-style: italic; }
+
+div.figure p.caption span.caption-text { }
+
+table.field-list td, table.field-list th { border: 0px !important; }
+
+.field-list ul { margin: 0px; padding-left: 1em; }
+
+.field-list p { margin: 0px; }
+
+.field-name { hyphens: manual; }
+
+table.hlist td { vertical-align: top; }
+
+ol.arabic { list-style: decimal; }
+
+ol.loweralpha { list-style: lower-alpha; }
+
+ol.upperalpha { list-style: upper-alpha; }
+
+ol.lowerroman { list-style: lower-roman; }
+
+ol.upperroman { list-style: upper-roman; }
+
+dl { margin-bottom: 15px; }
+
+dd p { margin-top: 0px; }
+
+dd ul, dd table { margin-bottom: 10px; }
+
+dd { margin-top: 3px; margin-bottom: 10px; margin-left: 30px; }
+
+dt:target, span.highlighted { background-color: rgb(251, 229, 78); }
+
+rect.highlighted { fill: rgb(251, 229, 78); }
+
+dl.glossary dt { font-weight: bold; font-size: 1.1em; }
+
+.optional { font-size: 1.3em; }
+
+.sig-paren { font-size: larger; }
+
+.versionmodified { font-style: italic; }
+
+.system-message { background-color: rgb(255, 221, 170); padding: 5px; borde=
+r: 3px solid red; }
+
+.footnote:target { background-color: rgb(255, 255, 170); }
+
+.line-block { display: block; margin-top: 1em; margin-bottom: 1em; }
+
+.line-block .line-block { margin-top: 0px; margin-bottom: 0px; margin-left:=
+ 1.5em; }
+
+.guilabel, .menuselection { font-family: sans-serif; }
+
+.accelerator { text-decoration: underline; }
+
+.classifier { font-style: oblique; }
+
+abbr, acronym { border-bottom: 1px dotted; cursor: help; }
+
+pre { overflow: auto hidden; }
+
+span.pre { hyphens: none; }
+
+td.linenos pre { padding: 5px 0px; border: 0px; background-color: transpare=
+nt; color: rgb(170, 170, 170); }
+
+table.highlighttable { margin-left: 0.5em; }
+
+table.highlighttable td { padding: 0px 0.5em; }
+
+div.code-block-caption { padding: 2px 5px; font-size: small; }
+
+div.code-block-caption code { background-color: transparent; }
+
+div.code-block-caption + div > div.highlight > pre { margin-top: 0px; }
+
+div.code-block-caption span.caption-number { padding: 0.1em 0.3em; font-sty=
+le: italic; }
+
+div.code-block-caption span.caption-text { }
+
+div.literal-block-wrapper { padding: 1em 1em 0px; }
+
+div.literal-block-wrapper div.highlight { margin: 0px; }
+
+code.descname { background-color: transparent; font-weight: bold; font-size=
+: 1.2em; }
+
+code.descclassname { background-color: transparent; }
+
+code.xref, a code { background-color: transparent; font-weight: bold; }
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code { background-color: tr=
+ansparent; }
+
+.viewcode-link { float: right; }
+
+.viewcode-back { float: right; font-family: sans-serif; }
+
+div.viewcode-block:target { margin: -1px -10px; padding: 0px 10px; }
+
+img.math { vertical-align: middle; }
+
+div.body div.math p { text-align: center; }
+
+span.eqno { float: right; }
+
+span.eqno a.headerlink { position: relative; left: 0px; z-index: 1; }
+
+div.math:hover a.headerlink { visibility: visible; }
+
+@media print {
+  div.document, div.documentwrapper, div.bodywrapper { width: 100%; margin:=
+ 0px !important; }
+  div.sphinxsidebar, div.related, div.footer, #top-link { display: none; }
+}
+------MultipartBoundary--jvcMZuXSLZomLleHaBPDjASlH40PNePSsFuR19Qn4e----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/contents.png
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAYAAAA/tpB3AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAL
+EwAACxMBAJqcGAAAAAd0SU1FB9gBDRUWN0N7tMwAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRo
+IEdJTVBXgQ4XAAAAN0lEQVQI16WNOQ4AIADCWv7/XhMnXdR4jC4kQAOUWlsAghIaBCECozhFHMie
+Latv9sOdbxfsXOngpgVLkKkPEQAAAABJRU5ErkJggg==
+
+------MultipartBoundary--jvcMZuXSLZomLleHaBPDjASlH40PNePSsFuR19Qn4e----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/navigation.png
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAA8CAYAAACn8dD6AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAL
+EwAACxMBAJqcGAAAAAd0SU1FB9gBDRUOAHndiZoAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRo
+IEdJTVBXgQ4XAAAAR0lEQVQY072NwRHAMAzCBPtP6wFCH6mddIF+OBlxZ6oqBrBtLKkJMBLWERJ7
+LJpChsAEzHSX2DZvnC6ZcfpcWR+bfnSNf48HN9YiTAPwk98AAAAASUVORK5CYII=
+
+------MultipartBoundary--jvcMZuXSLZomLleHaBPDjASlH40PNePSsFuR19Qn4e----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/pygments.css
+
+@charset "utf-8";
+
+pre { line-height: 125%; }
+
+td.linenos pre { color: rgb(0, 0, 0); background-color: rgb(240, 240, 240);=
+ padding-left: 5px; padding-right: 5px; }
+
+span.linenos { color: rgb(0, 0, 0); background-color: rgb(240, 240, 240); p=
+adding-left: 5px; padding-right: 5px; }
+
+td.linenos pre.special { color: rgb(0, 0, 0); background-color: rgb(255, 25=
+5, 192); padding-left: 5px; padding-right: 5px; }
+
+span.linenos.special { color: rgb(0, 0, 0); background-color: rgb(255, 255,=
+ 192); padding-left: 5px; padding-right: 5px; }
+
+.highlight .hll { background-color: rgb(255, 255, 204); }
+
+.highlight { background: rgb(240, 240, 240); }
+
+.highlight .c { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .err { border: 1px solid rgb(255, 0, 0); }
+
+.highlight .k { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .o { color: rgb(102, 102, 102); }
+
+.highlight .ch { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cm { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cp { color: rgb(0, 112, 32); }
+
+.highlight .cpf { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .c1 { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cs { color: rgb(96, 160, 176); background-color: rgb(255, 240, =
+240); }
+
+.highlight .gd { color: rgb(160, 0, 0); }
+
+.highlight .ge { font-style: italic; }
+
+.highlight .gr { color: rgb(255, 0, 0); }
+
+.highlight .gh { color: rgb(0, 0, 128); font-weight: bold; }
+
+.highlight .gi { color: rgb(0, 160, 0); }
+
+.highlight .go { color: rgb(136, 136, 136); }
+
+.highlight .gp { color: rgb(198, 93, 9); font-weight: bold; }
+
+.highlight .gs { font-weight: bold; }
+
+.highlight .gu { color: rgb(128, 0, 128); font-weight: bold; }
+
+.highlight .gt { color: rgb(0, 68, 221); }
+
+.highlight .kc { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kd { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kn { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kp { color: rgb(0, 112, 32); }
+
+.highlight .kr { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kt { color: rgb(144, 32, 0); }
+
+.highlight .m { color: rgb(64, 160, 112); }
+
+.highlight .s { color: rgb(64, 112, 160); }
+
+.highlight .na { color: rgb(64, 112, 160); }
+
+.highlight .nb { color: rgb(0, 112, 32); }
+
+.highlight .nc { color: rgb(14, 132, 181); font-weight: bold; }
+
+.highlight .no { color: rgb(96, 173, 213); }
+
+.highlight .nd { color: rgb(85, 85, 85); font-weight: bold; }
+
+.highlight .ni { color: rgb(213, 85, 55); font-weight: bold; }
+
+.highlight .ne { color: rgb(0, 112, 32); }
+
+.highlight .nf { color: rgb(6, 40, 126); }
+
+.highlight .nl { color: rgb(0, 32, 112); font-weight: bold; }
+
+.highlight .nn { color: rgb(14, 132, 181); font-weight: bold; }
+
+.highlight .nt { color: rgb(6, 40, 115); font-weight: bold; }
+
+.highlight .nv { color: rgb(187, 96, 213); }
+
+.highlight .ow { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .w { color: rgb(187, 187, 187); }
+
+.highlight .mb { color: rgb(64, 160, 112); }
+
+.highlight .mf { color: rgb(64, 160, 112); }
+
+.highlight .mh { color: rgb(64, 160, 112); }
+
+.highlight .mi { color: rgb(64, 160, 112); }
+
+.highlight .mo { color: rgb(64, 160, 112); }
+
+.highlight .sa { color: rgb(64, 112, 160); }
+
+.highlight .sb { color: rgb(64, 112, 160); }
+
+.highlight .sc { color: rgb(64, 112, 160); }
+
+.highlight .dl { color: rgb(64, 112, 160); }
+
+.highlight .sd { color: rgb(64, 112, 160); font-style: italic; }
+
+.highlight .s2 { color: rgb(64, 112, 160); }
+
+.highlight .se { color: rgb(64, 112, 160); font-weight: bold; }
+
+.highlight .sh { color: rgb(64, 112, 160); }
+
+.highlight .si { color: rgb(112, 160, 208); font-style: italic; }
+
+.highlight .sx { color: rgb(198, 93, 9); }
+
+.highlight .sr { color: rgb(35, 83, 136); }
+
+.highlight .s1 { color: rgb(64, 112, 160); }
+
+.highlight .ss { color: rgb(81, 121, 24); }
+
+.highlight .bp { color: rgb(0, 112, 32); }
+
+.highlight .fm { color: rgb(6, 40, 126); }
+
+.highlight .vc { color: rgb(187, 96, 213); }
+
+.highlight .vg { color: rgb(187, 96, 213); }
+
+.highlight .vi { color: rgb(187, 96, 213); }
+
+.highlight .vm { color: rgb(187, 96, 213); }
+
+.highlight .il { color: rgb(64, 160, 112); }
+------MultipartBoundary--jvcMZuXSLZomLleHaBPDjASlH40PNePSsFuR19Qn4e----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/logo.png
+
+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
+YAAAOpgAABdvkl/FRgAAAwBQTFRFXF1f9fX1iYuOvL7An6GkKzJYanah+fn6gImurK6wY2NlfH6B
+JSYnlZ27wMHBoKfC0NDRaWpt5eXl7e3tdYCm8fHyUlRV6enpWmeSNTY33d3ePURkbG1vharW2dna
+1dXWWlpcpKWoREVGlJaZtLa4c3Z5zM3OnJ6hR26oqrDJdXh7jI2QpqiqxcbIFxgYjpCTwcLEubu9
+hIaJzs7QSktMyMnKsbGy1tbXxMXGgoOD4ODgrrCy9PX4cnR1eHp9////5ebnlpea/Pz8qKqsmJqd
+ycrM3t7fsLK0tLrQfn+DoKKlfKjZbnBygIKFTU5Qscjovby+hoiLtLW3c3uYcHJ0wsTGoaKiZGVo
+PlSMX2BiYGyaqayusrS2tri7TlFTipO0anSduLm72trbkZKUkJCRvsDCa2Vl0tLTgoSHhZCnbZ/U
+4uLjeXR1enx+VFZYkpSXury+Y15eZ2hqfIOdcGpqiYSFqqip2uT1lJWX4uPkyszOyMXGmZWWgHt8
+oqSnVIrFWlRVV1hanZ2fGiErmpuefH1/xsfJz8/RZmqEz83O19jZr6yscHFzeHl7u7m5x9fv1NPU
+cHeKraqr1NTWS1eC3t/gdHV4j4yMSERF8PDxUUxMlrfg29zdnJqa3NvcdnFxwL/A3uDlkZSil5mc
+uLe4eXZ6RUdIqKam2NfYpaWmgYmZpaGi4uHi1NLSLisryMfI4OLifXh44N/gxMHClZKSr62v0tTh
+hIeHhoGCoJ2epqOk2NbW4+Tlsa+wRklL0s/Q6urrMTl+6Ojos7KyISY7PTs9y8nK4+Ljko+QkZes
+4eDht7W129rax8vbzMvMv76/397fmpeYFR0ni4+bvLu8hY6vTEdIjIeIHhscJCAhQEBB1NjkBQcI
+7+/w6uvxv8TW3+Hrys7d5OPk7Ovs5+fo+/v7m6Cxw8PE8O/w9PT0+Pf47Ozs6+rrl5SU/f39n5uc
+5+bnTX66pMDkg39/Mi8w/Pv7UVBR8/P28/T38/Pzw8bUo5+gl5yrdG5vVWKT////em8aCAAAAQB0
+Uk5T////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////AFP3ByUAABebSURBVHja7Jt/XFNHtsBJQElC
+iJdf0dA8klwgKSQQfgVIQkAMkJIF1qDAkgAWIj+2NolS20XaUmkDVJZ0aalYW4tuca3ddWVrf7f+
+QBTtqov2rasJSRAVZcXWulvLe76+3nl/3Py4CQlose/T2s4fkXvPzGS+c86cOXMm+oCfbPH5Gf1n
+9J/Rf0afX0k//hNFH4SNRTvtD2azOQN4fJhVPG42mx3vx83mMWcdR/0McwYwm80Yodcybnb5ou8L
+nbH3XN27kiO2J8StmF0rexMvdHsf6LFBzLjLk4fBxGDkD33f6Gm31n21/oud2gj0cREBS0FY5KYh
+b+JFBBfG0Av2Btj6oRfHAjH1CB5Gs8opDRz7ntF3Dxu++HD7V+/0lm1w2OjCGdPuYvNexBeU9lG7
+zlfGhYUIgiDKCzYDNofa62XM6HvMJlFe/P7Xeufwyic+e/zR7U/SV3bNsDovbbyJzd6QLiIIohx3
+zoXS69Tau77w/bu5iNG2sy99ef7tupEyDT0bO1QvBjmrONDzwIHZbWHbjX7hjB4WevYw3wM6BH8w
+cvq9j7Y8vf5QeWZm44ir+ryhexXbzXWV2/tFCKLM8IA+Y44uIP9f6Kph/qlNOw588+lX33YzMzNj
+C8Lmh+5Qe8YMXbp4cwd6qBelf9/og4aqHUN9m9458qd3P9y+2yczM1Oinye62eMiHnefjFBE6RHR
+jNgF9wx9KyNRnN0vTp/AvMPxqE3W24vDD71z8uOnHt8yEJSZmZlJr5kfOgj1pM1FmG3ettevCvTU
+BwFRxtxL9AiVIlrSazBoNJpM/Wb03VQJntR/OevK7cEzh9JPvvnZ+XdXx8bGxsZGJ80T3b5Yx93M
+eNwNPcbsoeI4gsTcO/StUYpYg6GtQcHnZ2dHNqm5yysTK9X5muwnL+OWZV25dvnMn5/c+cTrW75o
+jEXZ6+eHbt+3Al2rh7qHhDH2ZR3o4imUGfcKfY801pCpaHrW71m9Xp+Tk9Pfnx255MXSI+mbdu+5
+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
+QmCC
+
+------MultipartBoundary--jvcMZuXSLZomLleHaBPDjASlH40PNePSsFuR19Qn4e------

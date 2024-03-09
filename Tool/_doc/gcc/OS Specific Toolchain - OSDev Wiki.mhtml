@@ -1,0 +1,2909 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://wiki.osdev.org/OS_Specific_Toolchain
+Subject: OS Specific Toolchain - OSDev Wiki
+Date: Fri, 14 May 2021 01:39:59 -0000
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----"
+
+
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/html
+Content-ID: <frame-CAA232C4A1BA575FBF440540B06A598B@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.osdev.org/OS_Specific_Toolchain
+
+<!DOCTYPE html><html lang=3D"en" dir=3D"ltr" class=3D"client-js"><head><met=
+a http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8"><link =
+rel=3D"stylesheet" type=3D"text/css" href=3D"cid:css-d502ebcf-7497-4dcf-aed=
+8-1d9b79148e4d@mhtml.blink" /><link rel=3D"stylesheet" type=3D"text/css" hr=
+ef=3D"cid:css-a79e4c4d-1c69-4586-88dd-bd9c591e59cc@mhtml.blink" /><link rel=
+=3D"stylesheet" type=3D"text/css" href=3D"cid:css-002b4977-99a5-47bb-b130-3=
+04acb2e2308@mhtml.blink" /><link rel=3D"stylesheet" type=3D"text/css" href=
+=3D"cid:css-72432710-b4ce-4467-9f14-19c836630dfe@mhtml.blink" /><link rel=
+=3D"stylesheet" type=3D"text/css" href=3D"cid:css-0e4f8e5b-a405-4056-b9c7-4=
+c99cadd06e9@mhtml.blink" /><link rel=3D"stylesheet" type=3D"text/css" href=
+=3D"cid:css-538fdbda-38ae-45c0-afa3-1e2a072d2fdd@mhtml.blink" /><link rel=
+=3D"stylesheet" type=3D"text/css" href=3D"cid:css-79699930-6ff3-4f52-b242-7=
+22578410430@mhtml.blink" /><link rel=3D"stylesheet" type=3D"text/css" href=
+=3D"cid:css-deac0e58-812c-4540-8a2d-191ec58cc6d9@mhtml.blink" /><link rel=
+=3D"stylesheet" type=3D"text/css" href=3D"cid:css-3a4da5d0-b373-40cb-a98a-7=
+28a03890b79@mhtml.blink" /><link rel=3D"stylesheet" type=3D"text/css" href=
+=3D"cid:css-a7651af4-218e-400f-98cb-3d6c6ef3b723@mhtml.blink" /><link rel=
+=3D"stylesheet" type=3D"text/css" href=3D"cid:css-7ac96456-96cd-4856-9fab-5=
+c8a0eca5b6a@mhtml.blink" />
+<title>OS Specific Toolchain - OSDev Wiki</title>
+
+<meta name=3D"generator" content=3D"MediaWiki 1.18.0">
+<link rel=3D"shortcut icon" href=3D"https://wiki.osdev.org/favicon.ico">
+<link rel=3D"search" type=3D"application/opensearchdescription+xml" href=3D=
+"https://wiki.osdev.org/opensearch_desc.php" title=3D"OSDev Wiki (en)">
+<link rel=3D"EditURI" type=3D"application/rsd+xml" href=3D"https://wiki.osd=
+ev.org/api.php?action=3Drsd">
+<link rel=3D"alternate" type=3D"application/atom+xml" title=3D"OSDev Wiki A=
+tom feed" href=3D"https://wiki.osdev.org/index.php?title=3DSpecial:RecentCh=
+anges&amp;feed=3Datom">
+<link rel=3D"stylesheet" href=3D"https://wiki.osdev.org/load.php?debug=3Dfa=
+lse&amp;lang=3Den&amp;modules=3Dmediawiki.legacy.commonPrint%2Cshared%7Cski=
+ns.vector&amp;only=3Dstyles&amp;skin=3Dvector&amp;*">
+<meta name=3D"ResourceLoaderDynamicStyles" content=3D"">
+<link rel=3D"stylesheet" href=3D"https://wiki.osdev.org/load.php?debug=3Dfa=
+lse&amp;lang=3Den&amp;modules=3Dsite&amp;only=3Dstyles&amp;skin=3Dvector&am=
+p;*">
+
+
+
+
+
+
+
+<!--[if lt IE 7]><style type=3D"text/css">body{behavior:url("/skins/vector/=
+csshover.min.htc")}</style><![endif]--></head>
+<body class=3D"mediawiki ltr sitedir-ltr ns-0 ns-subject page-OS_Specific_T=
+oolchain action-view skin-vector">
+		<div id=3D"mw-page-base" class=3D"noprint"></div>
+		<div id=3D"mw-head-base" class=3D"noprint"></div>
+		<!-- content -->
+		<div id=3D"content">
+			<a id=3D"top"></a>
+			<div id=3D"mw-js-message" style=3D"display:none;" class=3D"js-messagebox=
+"></div>
+						<!-- firstHeading -->
+			<h1 id=3D"firstHeading" class=3D"firstHeading">OS Specific Toolchain</h1=
+>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id=3D"bodyContent">
+								<!-- tagline -->
+				<div id=3D"siteSub">From OSDev Wiki</div>
+				<!-- /tagline -->
+								<!-- subtitle -->
+				<div id=3D"contentSub"></div>
+				<!-- /subtitle -->
+																<!-- jumpto -->
+				<div id=3D"jump-to-nav">
+					Jump to: <a href=3D"https://wiki.osdev.org/OS_Specific_Toolchain#mw-he=
+ad">navigation</a>,
+					<a href=3D"https://wiki.osdev.org/OS_Specific_Toolchain#p-search">sear=
+ch</a>
+				</div>
+				<!-- /jumpto -->
+								<!-- bodycontent -->
+				<div lang=3D"en" dir=3D"ltr" class=3D"mw-content-ltr"><table style=3D"f=
+ont-size:95%; line-height:1.5em; padding:0.25em; float:right; margin: 0 0 8=
+px 15px; clear:right; border:1px solid #aaaaaa; background:#eee; text-align=
+:center;;"><tbody><tr><th>Difficulty level</th></tr><tr><td><a href=3D"http=
+s://wiki.osdev.org/File:Difficulty_3.png" class=3D"image"><img alt=3D"Diffi=
+culty 3.png" src=3D"https://wiki.osdev.org/images/c/c1/Difficulty_3.png" wi=
+dth=3D"46" height=3D"14"></a><br>Advanced</td></tr></tbody></table>
+<p>This tutorial will guide you through creating a toolchain comprising Bin=
+utils and GCC that specifically targets your operating system. The instruct=
+ions below teach Binutils and GCC how to create programs for a hypothetical=
+ OS named 'MyOS'.=20
+</p><p>Until now you have been using a <a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler" title=3D"GCC Cross-Compiler">cross-compiler</a> configure=
+d to use an existing generic bare target. This is very convenient when star=
+ting out as you get a reliable target and the compiler doesn't make any bad=
+ assumptions because it thinks it is targeting an existing operating system=
+. However, when you proceed it becomes useful if the compiler knows it is t=
+argeting your operating system and what its customs are. For instance, you =
+can make the compiler define a <tt>__myos__</tt> preprocessor macro, know w=
+hich directories to search for include files in, what special <tt>crt*.o</t=
+t> files are used when linking against libc, and so on. It also becomes muc=
+h easier to cross-compile software to your OS when you simply have to invok=
+e <tt>x86_64-myos-gcc hello.c -o hello</tt> to cross-compile a program. Add=
+itionally part of the instructions here can be applied to other software pa=
+ckages that also use the GNU build system, which will help you <a href=3D"h=
+ttps://wiki.osdev.org/Cross-Porting_Software" title=3D"Cross-Porting Softwa=
+re">port existing software</a>.
+</p><p>This tutorial teaches you how to set up a cross-compiler that specif=
+ically targets your OS. This is actually the first step of <i>porting Binut=
+ils and GCC to your operating system</i>: Any information you give GCC abou=
+t your OS will help it run on your OS. Once your OS Specific Toolchain has =
+been set up and you have built your OS with it, you can continue by using t=
+he cross-compiler to cross-compile the compiler itself to your OS, assuming=
+ your libc and kernel is powerful enough. For more information see <a href=
+=3D"https://wiki.osdev.org/Porting_GCC_to_your_OS" title=3D"Porting GCC to =
+your OS">Porting GCC to your OS</a>.
+</p>
+<table id=3D"toc" class=3D"toc"><tbody><tr><td><div id=3D"toctitle"><h2>Con=
+tents</h2><span class=3D"toctoggle">&nbsp;[<a href=3D"https://wiki.osdev.or=
+g/OS_Specific_Toolchain#" class=3D"internal" id=3D"togglelink">hide</a>]&nb=
+sp;</span></div>
+<ul>
+<li class=3D"toclevel-1 tocsection-1"><a href=3D"https://wiki.osdev.org/OS_=
+Specific_Toolchain#Introduction"><span class=3D"tocnumber">1</span> <span c=
+lass=3D"toctext">Introduction</span></a></li>
+<li class=3D"toclevel-1 tocsection-2"><a href=3D"https://wiki.osdev.org/OS_=
+Specific_Toolchain#Modifying_Binutils"><span class=3D"tocnumber">2</span> <=
+span class=3D"toctext">Modifying Binutils</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-3"><a href=3D"https://wiki.osdev.org/OS_=
+Specific_Toolchain#config.sub"><span class=3D"tocnumber">2.1</span> <span c=
+lass=3D"toctext">config.sub</span></a></li>
+<li class=3D"toclevel-2 tocsection-4"><a href=3D"https://wiki.osdev.org/OS_=
+Specific_Toolchain#bfd.2Fconfig.bfd"><span class=3D"tocnumber">2.2</span> <=
+span class=3D"toctext">bfd/config.bfd</span></a></li>
+<li class=3D"toclevel-2 tocsection-5"><a href=3D"https://wiki.osdev.org/OS_=
+Specific_Toolchain#gas.2Fconfigure.tgt"><span class=3D"tocnumber">2.3</span=
+> <span class=3D"toctext">gas/configure.tgt</span></a></li>
+<li class=3D"toclevel-2 tocsection-6"><a href=3D"https://wiki.osdev.org/OS_=
+Specific_Toolchain#ld.2Fconfigure.tgt"><span class=3D"tocnumber">2.4</span>=
+ <span class=3D"toctext">ld/configure.tgt</span></a></li>
+<li class=3D"toclevel-2 tocsection-7"><a href=3D"https://wiki.osdev.org/OS_=
+Specific_Toolchain#ld.2Femulparams.2Felf_i386_myos.sh"><span class=3D"tocnu=
+mber">2.5</span> <span class=3D"toctext">ld/emulparams/elf_i386_myos.sh</sp=
+an></a></li>
+<li class=3D"toclevel-2 tocsection-8"><a href=3D"https://wiki.osdev.org/OS_=
+Specific_Toolchain#ld.2Femulparams.2Felf_x86_64_myos.sh"><span class=3D"toc=
+number">2.6</span> <span class=3D"toctext">ld/emulparams/elf_x86_64_myos.sh=
+</span></a></li>
+<li class=3D"toclevel-2 tocsection-9"><a href=3D"https://wiki.osdev.org/OS_=
+Specific_Toolchain#ld.2FMakefile.am"><span class=3D"tocnumber">2.7</span> <=
+span class=3D"toctext">ld/Makefile.am</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-10"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Modifying_GCC"><span class=3D"tocnumber">3</span> <span=
+ class=3D"toctext">Modifying GCC</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-11"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#config.sub_2"><span class=3D"tocnumber">3.1</span> <spa=
+n class=3D"toctext">config.sub</span></a></li>
+<li class=3D"toclevel-2 tocsection-12"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#gcc.2Fconfig.gcc"><span class=3D"tocnumber">3.2</span> =
+<span class=3D"toctext">gcc/config.gcc</span></a></li>
+<li class=3D"toclevel-2 tocsection-13"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#gcc.2Fconfig.2Fmyos.h"><span class=3D"tocnumber">3.3</s=
+pan> <span class=3D"toctext">gcc/config/myos.h</span></a></li>
+<li class=3D"toclevel-2 tocsection-14"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#libstdc.2B.2B-v3.2Fcrossconfig.m4"><span class=3D"tocnu=
+mber">3.4</span> <span class=3D"toctext">libstdc++-v3/crossconfig.m4</span>=
+</a></li>
+<li class=3D"toclevel-2 tocsection-15"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#libgcc.2Fconfig.host"><span class=3D"tocnumber">3.5</sp=
+an> <span class=3D"toctext">libgcc/config.host</span></a></li>
+<li class=3D"toclevel-2 tocsection-16"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#fixincludes.2Fmkfixinc.sh"><span class=3D"tocnumber">3.=
+6</span> <span class=3D"toctext">fixincludes/mkfixinc.sh</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-17"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Further_Customization"><span class=3D"tocnumber">4</spa=
+n> <span class=3D"toctext">Further Customization</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-18"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Changing_the_Default_Include_Directory"><span class=3D"=
+tocnumber">4.1</span> <span class=3D"toctext">Changing the Default Include =
+Directory</span></a></li>
+<li class=3D"toclevel-2 tocsection-19"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Changing_the_Default_Library_Directory"><span class=3D"=
+tocnumber">4.2</span> <span class=3D"toctext">Changing the Default Library =
+Directory</span></a></li>
+<li class=3D"toclevel-2 tocsection-20"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Start_Files_Directory"><span class=3D"tocnumber">4.3</s=
+pan> <span class=3D"toctext">Start Files Directory</span></a></li>
+<li class=3D"toclevel-2 tocsection-21"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Dynamic_linking"><span class=3D"tocnumber">4.4</span> <=
+span class=3D"toctext">Dynamic linking</span></a></li>
+<li class=3D"toclevel-2 tocsection-22"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Linker_Options"><span class=3D"tocnumber">4.5</span> <s=
+pan class=3D"toctext">Linker Options</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-23"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Selecting_a_C_Library"><span class=3D"tocnumber">5</spa=
+n> <span class=3D"toctext">Selecting a C Library</span></a></li>
+<li class=3D"toclevel-1 tocsection-24"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Building"><span class=3D"tocnumber">6</span> <span clas=
+s=3D"toctext">Building</span></a></li>
+<li class=3D"toclevel-1 tocsection-25"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Conclusion"><span class=3D"tocnumber">7</span> <span cl=
+ass=3D"toctext">Conclusion</span></a></li>
+<li class=3D"toclevel-1 tocsection-26"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Common_errors"><span class=3D"tocnumber">8</span> <span=
+ class=3D"toctext">Common errors</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-27"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Whitespaces"><span class=3D"tocnumber">8.1</span> <span=
+ class=3D"toctext">Whitespaces</span></a></li>
+<li class=3D"toclevel-2 tocsection-28"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Autoconf"><span class=3D"tocnumber">8.2</span> <span cl=
+ass=3D"toctext">Autoconf</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-29"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#See_Also"><span class=3D"tocnumber">9</span> <span clas=
+s=3D"toctext">See Also</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-30"><a href=3D"https://wiki.osdev.org/OS=
+_Specific_Toolchain#Articles"><span class=3D"tocnumber">9.1</span> <span cl=
+ass=3D"toctext">Articles</span></a></li>
+</ul>
+</li>
+</ul>
+</td></tr></tbody></table>
+<h2> <span class=3D"mw-headline" id=3D"Introduction"> Introduction </span><=
+/h2>
+<p>You need the following before you get started:
+</p>
+<ul><li> A build environment that can successfully build a <a href=3D"https=
+://wiki.osdev.org/GCC_Cross-Compiler" title=3D"GCC Cross-Compiler">GCC Cros=
+s-Compiler</a>.
+</li><li> autoconf (exactly version 2.64)
+</li><li> automake (exactly version 1.11 or 1.11.6)
+</li><li> libtool
+</li><li> The latest Binutils source code.
+</li><li> The latest GCC source code.
+</li><li> Knowledge of the internals of Binutils and GCC.
+</li><li> Knowledge of autoconf and automake.
+</li><li> The dependencies of Binutils and GCC as detailed in <a href=3D"ht=
+tps://wiki.osdev.org/GCC_Cross-Compiler" title=3D"GCC Cross-Compiler">GCC C=
+ross-Compiler</a>.
+</li></ul>
+<p>Additionally you will need a <a href=3D"https://wiki.osdev.org/C_Library=
+" title=3D"C Library">C Library</a> as described in a later section. As det=
+ailed in <a href=3D"https://wiki.osdev.org/Hosted_GCC_Cross-Compiler" title=
+=3D"Hosted GCC Cross-Compiler">Hosted GCC Cross-Compiler</a>, it doesn't ne=
+ed to support much and the functionality can be stubbed, but libgcc will ne=
+ed to believe you have a libc.
+</p><p>You should decide exactly what targets you'll add to Binutils and GC=
+C. If you have been using a generic <tt>i686-elf</tt> or <tt>x86_64-elf</tt=
+> or such target, you'll simply want to swap <tt>-elf</tt> with <tt>-myos</=
+tt> and get <tt>i686-myos</tt> and <tt>x86_64-myos</tt>. Naturally, don't a=
+ctually write myos, but rather use the name of your OS converted to lower c=
+ase. See <a href=3D"https://wiki.osdev.org/Target_Triplet" title=3D"Target =
+Triplet">Target Triplet</a>.
+</p><p>This tutorial currently only have instructions for adding a new x86 =
+and x86_64 target for myos, but it serves as a good enough example that it =
+should be trivial to add more processors by basing it on these instructions=
+ and what other operating systems have done.
+</p>
+<h2> <span class=3D"mw-headline" id=3D"Modifying_Binutils"> Modifying Binut=
+ils </span></h2>
+<h3> <span class=3D"mw-headline" id=3D"config.sub"> config.sub </span></h3>
+<p>This is a file you will modify in the same way for each package.  It is =
+a GNU standard file produced by including the line 'AC_CANONICAL_SYSTEM' in=
+ a configure.ac that is processed by autoconf, and is designed to convert a=
+ canonical name of the form <tt>i686-pc-myos</tt> into separate variables f=
+or the processor, vendor and OS, and also rejects systems it doesn't know a=
+bout.  We simply need to add 'myos' to the list of acceptable operating sys=
+tems.  Find the section that begins with the comment "<tt>First accept the =
+basic system types</tt>" (it begins '<tt>-gnu*</tt>') and add '<tt>-myos*</=
+tt>' to the list.  Find a line with some free room and add your entry there=
+.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"bfd.2Fconfig.bfd"> bfd/config.bfd </=
+span></h3>
+<p>This file is part of the configuration for libbfd, the back-end to Binut=
+ils which provides a consistent interface for many object file formats.  Ge=
+nerally, each platform-specific version of Binutils contains a libbfd which=
+ only supports the object files normally in use on that system, as otherwis=
+e the library would be massive (libbfd can support a _lot_ of object types)=
+.  We need to associate our os with some particular object types.  There is=
+ a long list starting 'WHEN ADDING ENTRIES TO THIS MATRIX' with the first l=
+ine as 'case "${targ}" in'.  We need to add our full canonical name to this=
+ list, by adding some cases such as:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1">  i<span class=3D"br0">[</span><sp=
+an class=3D"nu0">3</span>-<span class=3D"nu0">7</span><span class=3D"br0">]=
+</span><span class=3D"nu0">86</span>-<span class=3D"sy0">*</span>-myos<span=
+ class=3D"sy0">*</span><span class=3D"br0">)</span>
+    <span class=3D"re2">targ_defvec</span>=3Di386_elf32_vec
+    <span class=3D"re2">targ_selvecs</span>=3D
+    <span class=3D"re2">targ64_selvecs</span>=3Dx86_64_elf64_vec
+    <span class=3D"sy0">;;</span>
+<span class=3D"co0">#ifdef BFD64</span>
+  x86_64-<span class=3D"sy0">*</span>-myos<span class=3D"sy0">*</span><span=
+ class=3D"br0">)</span>
+    <span class=3D"re2">targ_defvec</span>=3Dx86_64_elf64_vec
+    <span class=3D"re2">targ_selvecs</span>=3Di386_elf32_vec
+    <span class=3D"re2">want64</span>=3D<span class=3D"kw2">true</span>
+    <span class=3D"sy0">;;</span>
+<span class=3D"co0">#endif</span></pre></div></div>
+<p><b>Note:</b> If using binutils-2.24 or older, change <i>i386_elf32_vec</=
+i> to <i>bfd_elf32_i386_vec</i> and <i>x86_64_elf64_vec</i> to <i>bfd_elf64=
+_x86_64_vec</i>.
+</p><p>Be sure to follow the instructions in the comment block above the li=
+st and add your entry beneath the comment "<tt>#START OF targmatch.h</tt>".=
+ If you like, you could support different object formats (look at other ent=
+ries in the list, and the contents of 'bfd' for hints) and also provide mor=
+e than one to the <tt>targ_selvecs</tt> line. For instance, you can support=
+ coff object files if you add <tt>i386coff_vec</tt> to the <tt>targ_selvecs=
+</tt> list. For some reason, all the <tt>x86_64</tt> entries in the file fi=
+le are wrapped in <tt>#ifdef BFD64</tt>, it's probably prudent to do it you=
+rself as well.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"gas.2Fconfigure.tgt"> gas/configure.=
+tgt </span></h3>
+<p>This file tells the gnu assembler what type of output to generate for ea=
+ch target.  It automatically matches the i686 part of your target and gener=
+ates the correct output for that.  We just need to tell it what type of obj=
+ect file to generate for myos.  In the section starting '<tt>Assign object =
+format ... case ${generic_target} in</tt>' you need to add a line like
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1">  i386-<span class=3D"sy0">*</span=
+>-myos<span class=3D"sy0">*</span><span class=3D"br0">)</span>    <span cla=
+ss=3D"re2">fmt</span>=3Delf <span class=3D"sy0">;;</span></pre></div></div>
+<p>You should use '<tt>i386</tt>' in this line even if you are targeting x8=
+6_64.  This is the only file where you should do it.  It is basically becau=
+se the variable 'generic_target' is not your canonical target name, but rat=
+her a variable generated further up in the configure.tgt file, and it sets =
+the first part to <tt>i386</tt> for any <tt>i[3-7]86</tt> or <tt>x86_64</tt=
+>.
+</p><p>Note: this will use the 'generic' emulation. One side-effect is that=
+ gas will interpret slash ('/') as a comment, not as a division operator. T=
+his will break any code like "<tt>movl $(ADDRESS/PAGE_SIZE),&nbsp;%eax</tt>=
+". Using "<tt>fmt=3Delf em=3Dgnu&nbsp;;;</tt>" or "<tt>fmt=3Delf em=3Dlinux=
+&nbsp;;;</tt>" will disable slash as a comment character.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"ld.2Fconfigure.tgt"> ld/configure.tg=
+t </span></h3>
+<p>This file tells the gnu linker what 'emulation' to use for each target. =
+ An emulation is basically a combination of linker script and executable fi=
+le format.  We are going to define our own emulation called <tt>elf_i386_my=
+os</tt>.  We need to add an entry to the case statement here after '<tt>Ple=
+ase try to keep this table in alphabetical order ... case "${targ}</tt>" in=
+':
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1">i<span class=3D"br0">[</span><span=
+ class=3D"nu0">3</span>-<span class=3D"nu0">7</span><span class=3D"br0">]</=
+span><span class=3D"nu0">86</span>-<span class=3D"sy0">*</span>-myos<span c=
+lass=3D"sy0">*</span><span class=3D"br0">)</span>
+			<span class=3D"re2">targ_emul</span>=3Delf_i386_myos
+			<span class=3D"re2">targ_extra_emuls</span>=3Delf_i386
+			<span class=3D"re2">targ64_extra_emuls</span>=3D<span class=3D"st0">"elf=
+_x86_64_myos elf_x86_64"</span>
+			<span class=3D"sy0">;;</span>
+x86_64-<span class=3D"sy0">*</span>-myos<span class=3D"sy0">*</span><span c=
+lass=3D"br0">)</span>
+			<span class=3D"re2">targ_emul</span>=3Delf_x86_64_myos
+			<span class=3D"re2">targ_extra_emuls</span>=3D<span class=3D"st0">"elf_i=
+386_myos elf_x86_64 elf_i386"</span>
+			<span class=3D"sy0">;;</span></pre></div></div>
+<ul><li> <b>elf_i386_myos</b> is a 32-bit target for your OS.
+</li><li> <b>elf_x86_64_myos</b> is a 64-bit target for your OS.
+</li><li> <b>elf_i386</b> is a bare 32-bit target as you had with <tt>i686-=
+elf</tt>.
+</li><li> <b>elf_x86_64</b> is a bare 64-bit target for your OS as you had =
+with <tt>x86_64-elf</tt>.
+</li></ul>
+<p>This setup provides you with a 32-bit toolchain that also can produce 64=
+-bit executables, and a 64-bit toolchain that can also produce 64-bit execu=
+tables. This comes in handy if you use objcopy, for instance. You can also =
+add <tt>targ_extra_emuls</tt> entries to specify other targets ld should su=
+pport. See the <tt>ld/configure.tgt</tt> file for examples.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"ld.2Femulparams.2Felf_i386_myos.sh">=
+ ld/emulparams/elf_i386_myos.sh </span></h3>
+<p>Now we need to actually define our emulation. There is a generic file ca=
+lled <tt>ld/genscripts.sh</tt> which creates the required linker scripts fo=
+r our target (you need more than one, depending on shared object usage and =
+the like: I have 13 for a single target). It uses a linker script template =
+(from the ld/scripttempl directory) to do this, and it creates the actual e=
+mulation C file from an emulation template (from the ld/emultempl directory=
+). These templates are customised by running a script in the ld/emulparams =
+directory which sets various variables. You are welcome to define your own =
+emulation and linker templates, but I find the ELF ones adequate, given tha=
+t they can be customised by simply adding a file to the emulparams director=
+y. This is what we are going to do now. The content of the file could be so=
+mething like:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1">. <span class=3D"co1">${srcdir}</s=
+pan><span class=3D"sy0">/</span>emulparams<span class=3D"sy0">/</span>elf_i=
+386.sh
+<span class=3D"re2">GENERATE_SHLIB_SCRIPT</span>=3D<span class=3D"kw2">yes<=
+/span>
+<span class=3D"re2">GENERATE_PIE_SCRIPT</span>=3D<span class=3D"kw2">yes</s=
+pan></pre></div></div>
+<p>This script is included by <tt>ld/genscripts.sh</tt> to customize its be=
+havior through shell variables. We include the base <tt>elf_i386.sh</tt> sc=
+ript as it sets reasonable defaults. Finally, we override the variables who=
+se defaults we disagree with.
+</p><p>There are a large number of variables that can be set here to custom=
+ize your toolchain. Read the documentation and look at existing emulations =
+for further information. These are some of the variables that can be set:
+</p>
+<ul><li> <b>GENERATE_SHLIB_SCRIPT</b>=3D<i>yes|no</i> Whether to generate a=
+ linker script for shared libraries. We enable this as you might want it la=
+ter. The base 32-bit elf script defaults this to disabled for some reason.
+</li><li> <b>GENERATE_PIE_SCRIPT</b>=3D<i>yes|no</i> Whether to generate a =
+linker script for position independent executables. We enable this as you m=
+ight want it later. The base 32-bit elf script defaults this to disabled fo=
+r some reason.
+</li><li> <b>SCRIPT_NAME</b>=3D<i>name</i> Controls which ld/scripttempl/<i=
+>name</i>.sc script generates our linker scripts.
+</li><li> <b>TEMPLATE_NAME</b>=3D<i>name</i> Controls which ld/emultempl/<i=
+>name</i>.em script generates our bfd emulation C implementation.
+</li><li> <b>OUTPUT_FORMAT</b>=3D<i>name</i> The name of the BFD output tar=
+get we use.
+</li><li> <b>TEXT_START_ADDR</b>=3D0x<i>value</i> Controls where the execut=
+able begins in memory.
+</li></ul>
+<p>You can read the base <tt>elf_i386.sh</tt> script for the defaults of th=
+ese variables, you can then decide for yourself if you wish to override the=
+m for your operating system.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"ld.2Femulparams.2Felf_x86_64_myos.sh=
+"> ld/emulparams/elf_x86_64_myos.sh </span></h3>
+<p>This file is just like the above <tt>ld/emulparams/elf_i386_myos.sh</tt>=
+ but for x86_64.
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1">. <span class=3D"co1">${srcdir}</s=
+pan><span class=3D"sy0">/</span>emulparams<span class=3D"sy0">/</span>elf_x=
+86_64.sh</pre></div></div>
+<p>There is no reason to set <tt>GENERATE_SHLIB_SCRIPT</tt> and <tt>GENERAT=
+E_PIE_SCRIPT</tt> here as the x86_64 base script enables them by default.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"ld.2FMakefile.am"> ld/Makefile.am </=
+span></h3>
+<p>We now just need to tell make how to produce the emulation C file for ou=
+r specific emulation. Putting the '<tt>targ_emul=3Delf_i386_myos</tt>' line=
+ into <tt>ld/configure.tgt</tt> above implies that your host linker will tr=
+y to link your target ld executable with an object file called <tt>eelf_i38=
+6_myos.o</tt>. There is a default rule to generate this from <tt>eelf_i386_=
+myos.c</tt>, so we just need to tell it how to make this <tt>eelf_i386_myos=
+.c</tt> file.  As stated above, we let the genscripts.sh file do the hard w=
+ork. You need to add makefile rules:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"make source-make"><pre class=3D"de1"><span class=3D"co1"># Add this aft=
+er eelf_i386.c:</span>
+eelf_i386_myos<span class=3D"sy0">.</span>c<span class=3D"sy0">:</span> <sp=
+an class=3D"sy0">$</span><span class=3D"br0">(</span><span class=3D"re2">sr=
+cdir</span><span class=3D"br0">)</span><span class=3D"sy0">/</span>emulpara=
+ms<span class=3D"sy0">/</span>elf_i386_myos<span class=3D"sy0">.</span>sh \
+  <span class=3D"sy0">$</span><span class=3D"br0">(</span><span class=3D"re=
+2">ELF_DEPS</span><span class=3D"br0">)</span> <span class=3D"sy0">$</span>=
+<span class=3D"br0">(</span><span class=3D"re2">srcdir</span><span class=3D=
+"br0">)</span><span class=3D"sy0">/</span>scripttempl<span class=3D"sy0">/<=
+/span>elf<span class=3D"sy0">.</span>sc <span class=3D"sy0">$</span><span c=
+lass=3D"br0">{</span><span class=3D"re2">GEN_DEPENDS</span><span class=3D"b=
+r0">}</span>
+       <span class=3D"sy0">$</span><span class=3D"br0">{</span><span class=
+=3D"re2">GENSCRIPTS</span><span class=3D"br0">}</span> elf_i386_myos <span =
+class=3D"st0">"$(tdir_elf_i386_myos)"</span>
+&nbsp;
+<span class=3D"co1"># Add this after eelf_x86_64.c:</span>
+eelf_x86_64_myos<span class=3D"sy0">.</span>c<span class=3D"sy0">:</span> <=
+span class=3D"sy0">$</span><span class=3D"br0">(</span><span class=3D"re2">=
+srcdir</span><span class=3D"br0">)</span><span class=3D"sy0">/</span>emulpa=
+rams<span class=3D"sy0">/</span>elf_x86_64_myos<span class=3D"sy0">.</span>=
+sh \
+  <span class=3D"sy0">$</span><span class=3D"br0">(</span><span class=3D"re=
+2">ELF_DEPS</span><span class=3D"br0">)</span> <span class=3D"sy0">$</span>=
+<span class=3D"br0">(</span><span class=3D"re2">srcdir</span><span class=3D=
+"br0">)</span><span class=3D"sy0">/</span>scripttempl<span class=3D"sy0">/<=
+/span>elf<span class=3D"sy0">.</span>sc <span class=3D"sy0">$</span><span c=
+lass=3D"br0">{</span><span class=3D"re2">GEN_DEPENDS</span><span class=3D"b=
+r0">}</span>
+       <span class=3D"sy0">$</span><span class=3D"br0">{</span><span class=
+=3D"re2">GENSCRIPTS</span><span class=3D"br0">}</span> elf_x86_64_myos <spa=
+n class=3D"st0">"$(tdir_elf_x86_64_myos)"</span></pre></div></div>
+<p><b>Note</b>: Some parts of the line use normal brackets () whereas other=
+ parts use curly braces {}.
+</p><p><b>Note</b>: The third line must start with single <i>tab</i>, not s=
+paces, as this is a <a href=3D"https://wiki.osdev.org/Makefile" title=3D"Ma=
+kefile">Makefile</a>.
+</p><p>You also need to add <tt>eelf_i386_myos.c</tt> to the <tt>ALL_EMULAT=
+ION_SOURCES</tt> list; and you also need to add <tt>eelf_x86_64_myos.c</tt>=
+ to the <tt>ALL_64_EMULATION_SOURCES</tt> list.
+</p><p><b>Note</b>: You <i>must</i> run <tt>automake</tt> in the <tt>ld</tt=
+> directory after you modify <tt>Makefile.am</tt> to regenerate <tt>Makefil=
+e.in</tt>.
+</p>
+<h2> <span class=3D"mw-headline" id=3D"Modifying_GCC"> Modifying GCC </span=
+></h2>
+<h3> <span class=3D"mw-headline" id=3D"config.sub_2"> config.sub </span></h=
+3>
+<p>Similar modification to config.sub in Binutils.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"gcc.2Fconfig.gcc"> gcc/config.gcc </=
+span></h3>
+<p>This file defines what needs to be built for each particular target and =
+what to include in the final executable.  There are two main sections: one =
+which defines generic options for your operating system, and those which de=
+fine options specific to your operating system on each individual machine t=
+ype.=20
+</p><p>For the first part, find the '<tt>case ${target} in</tt>' line just =
+after '<tt># Common parts for widely ported systems</tt>' (around line 617)=
+ and add something like:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"sy0">*</span>-<span=
+ class=3D"sy0">*</span>-myos<span class=3D"sy0">*</span><span class=3D"br0"=
+>)</span>
+  <span class=3D"re2">gas</span>=3D<span class=3D"kw2">yes</span>
+  <span class=3D"re2">gnu_ld</span>=3D<span class=3D"kw2">yes</span>
+  <span class=3D"re2">default_use_cxa_atexit</span>=3D<span class=3D"kw2">y=
+es</span>
+  <span class=3D"re2">use_gcc_stdint</span>=3Dwrap
+  <span class=3D"sy0">;;</span></pre></div></div>
+<ul><li> <b>gas=3Dyes</b> our operating system by default uses the GNU asse=
+mbler
+</li><li> <b>gnu_ld=3Dyes</b> out operating system by default uses the GNU =
+linker
+</li><li> <b>default_use_cxa_atexit=3Dyes</b> We will provide <i>__cxa_atex=
+it</i> (You will need to provide this in your standard library)
+</li><li> <b>use_gcc_stdint=3Dwrap</b>  This instructs gcc to provide you w=
+ith a <i>stdint.h</i> appropiate for your target
+</li></ul>
+<p>The second section we need to add to is the architecture-specific one. F=
+ind the '<tt>case ${target} in</tt>' line just before '<tt>tm_file=3D"${tm_=
+file} dbxelf.h elfos.h newlib-stdint.h"</tt>' (around line 886) and add som=
+ething like:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1">i<span class=3D"br0">[</span><span=
+ class=3D"nu0">34567</span><span class=3D"br0">]</span><span class=3D"nu0">=
+86</span>-<span class=3D"sy0">*</span>-myos<span class=3D"sy0">*</span><spa=
+n class=3D"br0">)</span>
+    <span class=3D"re2">tm_file</span>=3D<span class=3D"st0">"<span class=
+=3D"es3">${tm_file}</span> i386/unix.h i386/att.h dbxelf.h elfos.h glibc-st=
+dint.h i386/i386elf.h myos.h"</span>
+    <span class=3D"sy0">;;</span>
+x86_64-<span class=3D"sy0">*</span>-myos<span class=3D"sy0">*</span><span c=
+lass=3D"br0">)</span>
+    <span class=3D"re2">tm_file</span>=3D<span class=3D"st0">"<span class=
+=3D"es3">${tm_file}</span> i386/unix.h i386/att.h dbxelf.h elfos.h glibc-st=
+dint.h i386/i386elf.h i386/x86-64.h myos.h"</span>
+    <span class=3D"sy0">;;</span></pre></div></div>
+<p>This defines which target configuration header files gets used. You can =
+make <tt>i386/myos32.h</tt> and <tt>i386/myos64.h</tt> files if desired.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"gcc.2Fconfig.2Fmyos.h"> gcc/config/m=
+yos.h </span></h3>
+<p>This header allows you to customize your toolchain using preprocessor ma=
+cros. The relevant parts of GCC will include this header (as controlled by =
+<tt>gcc/config.gcc</tt>) and modify the behavior according to your customiz=
+ations.=20
+</p><p>You can explore <tt>gcc/defaults.h</tt> for a full list of things yo=
+u can modify, and more importantly, the assumptions GCC will make about var=
+ious aspects of your target. For instance, if <tt>PID_TYPE</tt> is not defi=
+ned in <tt>myos.h</tt>, then GCC will default it to <tt>int</tt>, which can=
+ be problematic if that's not what your <tt>pid_t</tt> is defined as.
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"c source-c"><pre class=3D"de1"><span class=3D"coMULTI">/* Useful if you=
+ wish to make target-specific GCC changes. */</span>
+<span class=3D"co2">#undef TARGET_MYOS</span>
+<span class=3D"co2">#define TARGET_MYOS 1</span>
+&nbsp;
+<span class=3D"coMULTI">/* Default arguments you want when running your
+   i686-myos-gcc/x86_64-myos-gcc toolchain */</span>
+<span class=3D"co2">#undef LIB_SPEC</span>
+<span class=3D"co2">#define LIB_SPEC "-lc" /* link against C standard libra=
+ry */</span>
+&nbsp;
+<span class=3D"coMULTI">/* Files that are linked before user code.
+   The&nbsp;%s tells GCC to look for these files in the library directory. =
+*/</span>
+<span class=3D"co2">#undef STARTFILE_SPEC</span>
+<span class=3D"co2">#define STARTFILE_SPEC "crt0.o%s crti.o%s crtbegin.o%s"=
+</span>
+&nbsp;
+<span class=3D"coMULTI">/* Files that are linked after user code. */</span>
+<span class=3D"co2">#undef ENDFILE_SPEC</span>
+<span class=3D"co2">#define ENDFILE_SPEC "crtend.o%s crtn.o%s"</span>
+&nbsp;
+<span class=3D"coMULTI">/* Additional predefined macros. */</span>
+<span class=3D"co2">#undef TARGET_OS_CPP_BUILTINS</span>
+<span class=3D"co2">#define TARGET_OS_CPP_BUILTINS()      \
+  do {                                \
+    builtin_define ("__myos__");      \
+    builtin_define ("__unix__");      \
+    builtin_assert ("system=3Dmyos");   \
+    builtin_assert ("system=3Dunix");   \
+    builtin_assert ("system=3Dposix");   \
+  } while(0);</span></pre></div></div>
+<h3> <span class=3D"mw-headline" id=3D"libstdc.2B.2B-v3.2Fcrossconfig.m4"> =
+libstdc++-v3/crossconfig.m4 </span></h3>
+<p>This file describes how the libstdc++ configure file will examine your o=
+perating system and adjust the provided features of libstdc++ accordingly. =
+Add a case similar to
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"autoconf source-autoconf"><pre class=3D"de1">  <span class=3D"sy0">*</s=
+pan>-myos<span class=3D"sy0">*</span><span class=3D"br0">)</span>
+    GLIBCXX_CHECK_COMPILER_FEATURES
+    GLIBCXX_CHECK_LINKER_FEATURES
+    GLIBCXX_CHECK_MATH_SUPPORT
+    GLIBCXX_CHECK_STDLIB_SUPPORT
+    <span class=3D"sy0">;;</span></pre></div></div>
+<p><b>TODO</b>: Examine this design and find out what actually needs to be =
+done here.
+</p><p><b>Note</b>: You need to run <tt>autoconf</tt> in the <tt>libstdc++-=
+v3</tt> directory.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"libgcc.2Fconfig.host"> libgcc/config=
+.host </span></h3>
+<p>Find the '<tt>case ${host} in</tt>' just prior to '<tt>extra_parts=3D"$e=
+xtra_parts crtbegin.o crtend.o crti.o crtn.o"</tt>' (around line 318) and a=
+dd the cases:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1">i<span class=3D"br0">[</span><span=
+ class=3D"nu0">34567</span><span class=3D"br0">]</span><span class=3D"nu0">=
+86</span>-<span class=3D"sy0">*</span>-myos<span class=3D"sy0">*</span><spa=
+n class=3D"br0">)</span>
+	<span class=3D"re2">extra_parts</span>=3D<span class=3D"st0">"<span class=
+=3D"es2">$extra_parts</span> crti.o crtbegin.o crtend.o crtn.o"</span>
+	<span class=3D"re2">tmake_file</span>=3D<span class=3D"st0">"<span class=
+=3D"es2">$tmake_file</span> i386/t-crtstuff t-crtstuff-pic t-libgcc-pic"</s=
+pan>
+	<span class=3D"sy0">;;</span>
+x86_64-<span class=3D"sy0">*</span>-myos<span class=3D"sy0">*</span><span c=
+lass=3D"br0">)</span>
+	<span class=3D"re2">extra_parts</span>=3D<span class=3D"st0">"<span class=
+=3D"es2">$extra_parts</span> crti.o crtbegin.o crtend.o crtn.o"</span>
+	<span class=3D"re2">tmake_file</span>=3D<span class=3D"st0">"<span class=
+=3D"es2">$tmake_file</span> i386/t-crtstuff t-crtstuff-pic t-libgcc-pic"</s=
+pan>
+	<span class=3D"sy0">;;</span></pre></div></div>
+<h3> <span class=3D"mw-headline" id=3D"fixincludes.2Fmkfixinc.sh"> fixinclu=
+des/mkfixinc.sh </span></h3>
+<p>You should disable fixincludes for your operating system. Find the case =
+statement and add a pattern for your operating system. For instance:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"co0"># Check for sp=
+ecial fix rules for particular targets</span>
+<span class=3D"kw1">case</span> <span class=3D"re1">$machine</span> <span c=
+lass=3D"kw1">in</span>
+    <span class=3D"sy0">*</span>-myos<span class=3D"sy0">*</span> <span cla=
+ss=3D"sy0">|</span> \
+    i?<span class=3D"nu0">86</span>-<span class=3D"sy0">*</span>-cygwin<spa=
+n class=3D"sy0">*</span> <span class=3D"sy0">|</span> \
+	<span class=3D"co0"># (... snip ...)</span>
+    powerpcle-<span class=3D"sy0">*</span>-eabi<span class=3D"sy0">*</span>=
+ <span class=3D"br0">)</span>
+	<span class=3D"co0">#  IF there is no include fixing,</span>
+	<span class=3D"co0">#  THEN create a no-op fixer and exit</span>
+	<span class=3D"br0">(</span><span class=3D"kw3">echo</span> <span class=3D=
+"st0">"#! /bin/sh"</span>&nbsp;; <span class=3D"kw3">echo</span> <span clas=
+s=3D"st0">"exit 0"</span> <span class=3D"br0">)</span> <span class=3D"sy0">=
+&gt;</span> <span class=3D"co1">${target}</span>
+        <span class=3D"sy0">;;</span></pre></div></div>
+<p>A number of operating systems (especially older and obscure ones) provid=
+e troublesome systems headers that fail to strictly comply with various sta=
+ndards. The GCC developers consider it their job to fix these headers. GCC =
+will look into your system root, apply a bunch of patterns to detect header=
+s it doesn't like, then it copies that header into a private GCC system dir=
+ectory (that overrides your standard system directory) and attempts to fix =
+the header. Sometimes fixincludes even break working headers (some people r=
+efer to it as breakincludes).
+</p><p>This is rather inconvenient as your libc will likely happen to trigg=
+er these patterns (and false positives often happens). Any time you change =
+your system headers, you have to rebuild your compiler so the fixed version=
+s get updated. The first time you encounter this, it will show up as a syst=
+em header that does nothing different even though you edit it.
+</p><p>This addition to the <tt>mkfixinc.sh</tt> file forcefully disables f=
+ixincludes for your operating system. It's your job to provide working syst=
+em headers, not the compiler developers'.
+</p>
+<h2> <span class=3D"mw-headline" id=3D"Further_Customization"> Further Cust=
+omization </span></h2>
+<p><b>TODO</b>: Document more various tips and tricks for further customiza=
+tion of OS specific toolchains.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Changing_the_Default_Include_Directo=
+ry"> Changing the Default Include Directory </span></h3>
+<p>If you wish to change the default include directory from <tt>/usr/includ=
+e</tt>, you can override the <tt>native_system_header_dir</tt> variable in =
+<tt>gcc/config.gcc</tt> in the case for your OS.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Changing_the_Default_Library_Directo=
+ry"> Changing the Default Library Directory </span></h3>
+<p>If you wish to change the default library directory from <tt>/usr/lib</t=
+t>, you can change it to <tt>/lib</tt> by adding the following block of cod=
+e to the case just below the declaration of <tt>NATIVE_LIB_DIRS</tt> in <tt=
+>binutils/ld/configure.tgt</tt> (around line 785).
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"c source-c"><pre class=3D"de1"><span class=3D"sy0">*-*-</span>myos<span=
+ class=3D"sy0">*</span><span class=3D"br0">)</span>
+  NATIVE_LIB_DIRS<span class=3D"sy0">=3D</span><span class=3D"st0">'/lib /l=
+ocal/lib'</span>
+  <span class=3D"sy0">;;</span></pre></div></div>
+<h3> <span class=3D"mw-headline" id=3D"Start_Files_Directory"> Start Files =
+Directory </span></h3>
+<p>You can modify which directory GCC looks for the crt0.o, crti.o and crtn=
+.o in. The path to that directory is stored in <tt>STANDARD_STARTFILE_PREFI=
+X</tt>. For instance, if you change the library directory to <tt>/lib</tt> =
+in Binutils and want GCC to match, you can add the following to <tt>gcc/con=
+fig/myos.h</tt>:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"c source-c"><pre class=3D"de1"><span class=3D"co2">#undef STANDARD_STAR=
+TFILE_PREFIX</span>
+<span class=3D"co2">#define STANDARD_STARTFILE_PREFIX "/lib/"</span></pre><=
+/div></div>
+<p>Note that the trailing slash is important as the raw crt*.o names are ap=
+pended without first adding a slash.
+</p><p><br>
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Dynamic_linking"> Dynamic linking </=
+span></h3>
+<p>If you want to support dynamic linking with your toolchain, you need to.=
+..
+</p>
+<ul><li> Pass the <tt>"--enable-shared"</tt> flag to the <tt>./configure</t=
+t> scripts of both binutils and gcc
+</li><li> Set <tt>LINK_SPEC</tt> in your "gcc/config/myos.h" so the gcc dri=
+ver will pass the correct flags to the linker:
+</li></ul>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"c source-c"><pre class=3D"de1"><span class=3D"co2">#undef LINK_SPEC</sp=
+an>
+<span class=3D"co2">#define LINK_SPEC "%{shared:-shared}&nbsp;%{static:-sta=
+tic}&nbsp;%{!shared:&nbsp;%{!static:&nbsp;%{rdynamic:-export-dynamic}}}"</s=
+pan></pre></div></div>
+<h3> <span class=3D"mw-headline" id=3D"Linker_Options"> Linker Options </sp=
+an></h3>
+<p>You can modify the arguments passed to the linker using <tt>LINK_SPEC</t=
+t>. This can be used to force 4KB alignment of sections on 64 bit systems, =
+as ld defaults to 2MB alignment.
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"c source-c"><pre class=3D"de1"><span class=3D"coMULTI">/* Tell ld to fo=
+rce 4KB pages*/</span>
+<span class=3D"co2">#undef LINK_SPEC</span>
+<span class=3D"co2">#define LINK_SPEC "-z max-page-size=3D4096"</span></pre=
+></div></div>
+<h2> <span class=3D"mw-headline" id=3D"Selecting_a_C_Library"> Selecting a =
+C Library </span></h2>
+<dl><dd><i>Main article:</i> <a href=3D"https://wiki.osdev.org/C_Library" t=
+itle=3D"C Library">C Library</a>
+</dd></dl>
+<p>At this point, you have to decide which <a href=3D"https://wiki.osdev.or=
+g/C_Library" title=3D"C Library">C Library</a> to use. You have options:
+</p>
+<ul><li> <a href=3D"https://wiki.osdev.org/Creating_a_C_Library" title=3D"C=
+reating a C Library">Create your own C library</a>.
+</li><li> Pick an existing <a href=3D"https://wiki.osdev.org/C_Library" tit=
+le=3D"C Library">C Library</a> such as <a href=3D"https://wiki.osdev.org/Po=
+rting_Newlib" title=3D"Porting Newlib">Newlib</a>.
+</li></ul>
+<h2> <span class=3D"mw-headline" id=3D"Building"> Building </span></h2>
+<dl><dd><i>Main article:</i> <a href=3D"https://wiki.osdev.org/Hosted_GCC_C=
+ross-Compiler" title=3D"Hosted GCC Cross-Compiler">Hosted GCC Cross-Compile=
+r</a>
+</dd></dl>
+<p>Your OS specific toolchain is built differently from the introductory <t=
+t>i686-elf</tt> toolchain as it has a user-space and standard library. In p=
+articular, you need to ensure your libc meets the minimum requirements for =
+libgcc. You need to install the standard library headers into your <a href=
+=3D"https://wiki.osdev.org/Meaty_Skeleton#System_Root" title=3D"Meaty Skele=
+ton">System Root</a> before building the cross-compiler. You need to tell t=
+he cross-binutils and cross-gcc where the system root is via the configure =
+option <tt>--with-sysroot=3D/path/to/sysroot</tt>. You can then build your =
+libc with your cross-compiler and then finally libstdc++ if desired.
+</p>
+<h2> <span class=3D"mw-headline" id=3D"Conclusion"> Conclusion </span></h2>
+<p>You now have a <tt>i686-myos</tt> toolchain that can be used instead of =
+your old <tt>i686-elf</tt> toolchain. Your new toolchain is effectively jus=
+t a renamed <tt>i686-elf</tt> with customizations. You should switch all yo=
+ur operating system build scripts to use this new compiler, even the kernel=
+ and libk, as your new compiler is capable of providing a freestanding envi=
+ronment.
+</p><p>You will certainly wish to package up your custom toolchain (and be =
+able to create a diff between the upstream version and your custom version =
+for others to audit). Contributors should be able to download tarballs of y=
+our myos-binutils and myos-gcc packages, so they can build themselves your =
+custom toolchain.=20
+</p>
+<h2> <span class=3D"mw-headline" id=3D"Common_errors"> Common errors </span=
+></h2>
+<h3> <span class=3D"mw-headline" id=3D"Whitespaces"> Whitespaces </span></h=
+3>
+<p>Some files need tabs, some files need spaces and some files accept happi=
+ly any mixture. Use an editor that can display special chars such as tabs a=
+nd spaces, to be sure you use the right form. Whitespace errors may result =
+in 'make' reporting missing separators. Some editors will replace a tab wit=
+h four spaces, which will also cause invalid separator issues.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Autoconf"> Autoconf </span></h3>
+<p>There are several steps that conclude in running '<tt>autoconf</tt>' or =
+'<tt>automake</tt>', '<tt>autoreconf</tt>', be sure you did not miss them. =
+The order of autoconf/-reconf calls in a package is important. These errors=
+ may result in missing subdirectories of the build-* directory and/or 'make=
+' reporting missing targets.
+</p>
+<h2> <span class=3D"mw-headline" id=3D"See_Also"> See Also </span></h2>
+<h3> <span class=3D"mw-headline" id=3D"Articles"> Articles </span></h3>
+<ul><li> <a href=3D"https://wiki.osdev.org/GCC" title=3D"GCC">GCC</a>
+</li></ul>
+
+<!--=20
+NewPP limit report
+Preprocessor node count: 449/1000000
+Post-expand include size: 452/2097152 bytes
+Template argument size: 118/2097152 bytes
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key wikidb:pcache:idhash:2164-0!*!0!!en!2!*=
+ and timestamp 20210512232208 -->
+</div>				<!-- /bodycontent -->
+								<!-- printfooter -->
+				<div class=3D"printfooter">
+				Retrieved from "<a href=3D"https://wiki.osdev.org/index.php?title=3DOS_=
+Specific_Toolchain&amp;oldid=3D23757">https://wiki.osdev.org/index.php?titl=
+e=3DOS_Specific_Toolchain&amp;oldid=3D23757</a>"				</div>
+				<!-- /printfooter -->
+												<!-- catlinks -->
+				<div id=3D"catlinks" class=3D"catlinks"><div id=3D"mw-normal-catlinks">=
+<a href=3D"https://wiki.osdev.org/Special:Categories" title=3D"Special:Cate=
+gories">Categories</a>: <ul><li><a href=3D"https://wiki.osdev.org/Category:=
+Level_3_Tutorials" title=3D"Category:Level 3 Tutorials">Level 3 Tutorials</=
+a></li><li><a href=3D"https://wiki.osdev.org/Category:Tools" title=3D"Categ=
+ory:Tools">Tools</a></li><li><a href=3D"https://wiki.osdev.org/Category:Tut=
+orials" title=3D"Category:Tutorials">Tutorials</a></li></ul></div></div>			=
+	<!-- /catlinks -->
+												<div class=3D"visualClear"></div>
+				<!-- debughtml -->
+								<!-- /debughtml -->
+			</div>
+			<!-- /bodyContent -->
+		</div>
+		<!-- /content -->
+		<!-- header -->
+		<div id=3D"mw-head" class=3D"noprint">
+		=09
+<!-- 0 -->
+<div id=3D"p-personal" class=3D"">
+	<h5>Personal tools</h5>
+	<ul>
+		<li id=3D"pt-login"><a href=3D"https://wiki.osdev.org/index.php?title=3DS=
+pecial:UserLogin&amp;returnto=3DOS_Specific_Toolchain" title=3D"You are enc=
+ouraged to log in; however, it is not mandatory [alt-o]" accesskey=3D"o">Lo=
+g in</a></li>
+	</ul>
+</div>
+
+<!-- /0 -->
+			<div id=3D"left-navigation">
+			=09
+<!-- 0 -->
+<div id=3D"p-namespaces" class=3D"vectorTabs">
+	<h5>Namespaces</h5>
+	<ul>
+					<li id=3D"ca-nstab-main" class=3D"selected"><span><a href=3D"https://w=
+iki.osdev.org/OS_Specific_Toolchain" title=3D"View the content page [alt-c]=
+" accesskey=3D"c">Page</a></span></li>
+					<li id=3D"ca-talk"><span><a href=3D"https://wiki.osdev.org/Talk:OS_Spe=
+cific_Toolchain" title=3D"Discussion about the content page [alt-t]" access=
+key=3D"t">Discussion</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id=3D"p-variants" class=3D"vectorMenu emptyPortlet">
+		<h5><span>Variants</span><a href=3D"https://wiki.osdev.org/OS_Specific_To=
+olchain#"></a></h5>
+	<div class=3D"menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+			</div>
+			<div id=3D"right-navigation">
+			=09
+<!-- 0 -->
+<div id=3D"p-views" class=3D"vectorTabs">
+	<h5>Views</h5>
+	<ul>
+					<li id=3D"ca-view" class=3D"selected"><span><a href=3D"https://wiki.os=
+dev.org/OS_Specific_Toolchain">Read</a></span></li>
+					<li id=3D"ca-viewsource"><span><a href=3D"https://wiki.osdev.org/index=
+.php?title=3DOS_Specific_Toolchain&amp;action=3Dedit" title=3D"This page is=
+ protected.
+You can view its source [alt-e]" accesskey=3D"e">View source</a></span></li=
+>
+					<li id=3D"ca-history" class=3D"collapsible"><span><a href=3D"https://w=
+iki.osdev.org/index.php?title=3DOS_Specific_Toolchain&amp;action=3Dhistory"=
+ title=3D"Past revisions of this page [alt-h]" accesskey=3D"h">View history=
+</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id=3D"p-cactions" class=3D"vectorMenu emptyPortlet">
+	<h5><span>Actions</span><a href=3D"https://wiki.osdev.org/OS_Specific_Tool=
+chain#"></a></h5>
+	<div class=3D"menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+
+<!-- 2 -->
+<div id=3D"p-search">
+	<h5><label for=3D"searchInput">Search</label></h5>
+	<form action=3D"https://wiki.osdev.org/index.php" id=3D"searchform">
+	=09
+				<input type=3D"search" name=3D"search" title=3D"Search OSDev Wiki [alt-=
+f]" accesskey=3D"f" id=3D"searchInput">		<input type=3D"submit" name=3D"go"=
+ value=3D"Go" title=3D"Go to a page with this exact name if exists" id=3D"s=
+earchGoButton" class=3D"searchButton">		<input type=3D"submit" name=3D"full=
+text" value=3D"Search" title=3D"Search the pages for this text" id=3D"mw-se=
+archButton" class=3D"searchButton">			</form>
+</div>
+
+<!-- /2 -->
+			</div>
+		</div>
+		<!-- /header -->
+		<!-- panel -->
+			<div id=3D"mw-panel" class=3D"noprint">
+				<!-- logo -->
+					<div id=3D"p-logo"><a style=3D"background-image: url(/skins/common/ima=
+ges/osdev.png);" href=3D"https://wiki.osdev.org/Main_Page" title=3D"Visit t=
+he main page"></a></div>
+				<!-- /logo -->
+			=09
+<!-- navigation -->
+<div class=3D"portal" id=3D"p-navigation">
+	<h5>Navigation</h5>
+	<div class=3D"body">
+		<ul>
+			<li id=3D"n-mainpage"><a href=3D"https://wiki.osdev.org/Main_Page" title=
+=3D"Visit the main page [alt-z]" accesskey=3D"z">Main Page</a></li>
+			<li id=3D"n-portal"><a href=3D"http://forum.osdev.org/" rel=3D"nofollow"=
+ title=3D"About the project, what you can do, where to find things">Forums<=
+/a></li>
+			<li id=3D"n-FAQ"><a href=3D"https://wiki.osdev.org/Category:FAQ">FAQ</a>=
+</li>
+			<li id=3D"n-OS-Projects"><a href=3D"https://wiki.osdev.org/Projects">OS =
+Projects</a></li>
+			<li id=3D"n-randompage"><a href=3D"https://wiki.osdev.org/Special:Random=
+" title=3D"Load a random page [alt-x]" accesskey=3D"x">Random page</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /navigation -->
+
+<!-- about -->
+<div class=3D"portal" id=3D"p-about">
+	<h5>About</h5>
+	<div class=3D"body">
+		<ul>
+			<li id=3D"n-This-site"><a href=3D"https://wiki.osdev.org/OSDevWiki:About=
+">This site</a></li>
+			<li id=3D"n-Joining"><a href=3D"https://wiki.osdev.org/OSDevWiki:Joining=
+">Joining</a></li>
+			<li id=3D"n-Editing-help"><a href=3D"https://wiki.osdev.org/OSDevWiki:Ed=
+iting">Editing help</a></li>
+			<li id=3D"n-recentchanges"><a href=3D"https://wiki.osdev.org/Special:Rec=
+entChanges" title=3D"A list of recent changes in the wiki [alt-r]" accesske=
+y=3D"r">Recent changes</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /about -->
+
+<!-- SEARCH -->
+
+<!-- /SEARCH -->
+
+<!-- TOOLBOX -->
+<div class=3D"portal" id=3D"p-tb">
+	<h5>Toolbox</h5>
+	<div class=3D"body">
+		<ul>
+			<li id=3D"t-whatlinkshere"><a href=3D"https://wiki.osdev.org/Special:Wha=
+tLinksHere/OS_Specific_Toolchain" title=3D"A list of all wiki pages that li=
+nk here [alt-j]" accesskey=3D"j">What links here</a></li>
+			<li id=3D"t-recentchangeslinked"><a href=3D"https://wiki.osdev.org/Speci=
+al:RecentChangesLinked/OS_Specific_Toolchain" title=3D"Recent changes in pa=
+ges linked from this page [alt-k]" accesskey=3D"k">Related changes</a></li>
+			<li id=3D"t-specialpages"><a href=3D"https://wiki.osdev.org/Special:Spec=
+ialPages" title=3D"A list of all special pages [alt-q]" accesskey=3D"q">Spe=
+cial pages</a></li>
+			<li><a href=3D"https://wiki.osdev.org/index.php?title=3DOS_Specific_Tool=
+chain&amp;printable=3Dyes" rel=3D"alternate">Printable version</a></li>
+			<li id=3D"t-permalink"><a href=3D"https://wiki.osdev.org/index.php?title=
+=3DOS_Specific_Toolchain&amp;oldid=3D23757" title=3D"Permanent link to this=
+ revision of the page">Permanent link</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /TOOLBOX -->
+
+<!-- LANGUAGES -->
+
+<!-- /LANGUAGES -->
+			</div>
+		<!-- /panel -->
+		<!-- footer -->
+		<div id=3D"footer">
+							<ul id=3D"footer-info">
+											<li id=3D"footer-info-lastmod"> This page was last modified on 1=
+5 July 2019, at 04:29.</li>
+											<li id=3D"footer-info-viewcount">This page has been accessed 155=
+,477 times.</li>
+									</ul>
+							<ul id=3D"footer-places">
+											<li id=3D"footer-places-privacy"><a href=3D"https://wiki.osdev.o=
+rg/OSDev_Wiki:Privacy_policy" title=3D"OSDev Wiki:Privacy policy">Privacy p=
+olicy</a></li>
+											<li id=3D"footer-places-about"><a href=3D"https://wiki.osdev.org=
+/OSDev_Wiki:About" title=3D"OSDev Wiki:About">About OSDev Wiki</a></li>
+											<li id=3D"footer-places-disclaimer"><a href=3D"https://wiki.osde=
+v.org/OSDev_Wiki:General_disclaimer" title=3D"OSDev Wiki:General disclaimer=
+">Disclaimers</a></li>
+									</ul>
+										<ul id=3D"footer-icons" class=3D"noprint">
+					<li id=3D"footer-poweredbyico">
+						<a href=3D"http://www.mediawiki.org/"><img src=3D"https://wiki.osdev.=
+org/skins/common/images/poweredby_mediawiki_88x31.png" alt=3D"Powered by Me=
+diaWiki" width=3D"88" height=3D"31"></a>
+					</li>
+				</ul>
+						<div style=3D"clear:both"></div>
+		</div>
+		<!-- /footer -->
+		<!-- fixalpha -->
+	=09
+		<!-- /fixalpha -->
+	=09
+
+
+<!-- Served in 0.041 secs. -->
+=09
+
+</body></html>
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-d502ebcf-7497-4dcf-aed8-1d9b79148e4d@mhtml.blink
+
+@charset "utf-8";
+
+.mw-collapsible-toggle { float: right; }
+
+li .mw-collapsible-toggle { float: none; }
+
+.mw-collapsible-toggle-li { list-style: none; }
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-a79e4c4d-1c69-4586-88dd-bd9c591e59cc@mhtml.blink
+
+@charset "utf-8";
+
+.js-messagebox { margin: 1em 5%; padding: 0.5em 2.5%; border: 1px solid rgb=
+(204, 204, 204); background-color: rgb(252, 252, 252); font-size: 0.8em; }
+
+.js-messagebox .js-messagebox-group { margin: 1px; padding: 0.5em 2.5%; bor=
+der-bottom: 1px solid rgb(221, 221, 221); }
+
+.js-messagebox .js-messagebox-group:last-child { border-bottom: thin none t=
+ransparent; }
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-002b4977-99a5-47bb-b130-304acb2e2308@mhtml.blink
+
+@charset "utf-8";
+
+a:lang(ar), a:lang(ckb), a:lang(fa), a:lang(kk-arab), a:lang(mzn), a:lang(p=
+s), a:lang(ur) { text-decoration: none; }
+
+a.new, #quickbar a.new { color: rgb(186, 0, 0); }
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-72432710-b4ce-4467-9f14-19c836630dfe@mhtml.blink
+
+@charset "utf-8";
+
+.source-bash { line-height: normal; }
+
+.source-bash li, .source-bash pre { line-height: normal; border: 0px none w=
+hite; }
+
+.bash.source-bash .de1, .bash.source-bash .de2 { font: 1em / 1.2em monospac=
+e; margin: 0px; padding: 0px; background: none; vertical-align: top; }
+
+.bash.source-bash { font-family: monospace; }
+
+.bash.source-bash .imp { font-weight: bold; color: red; }
+
+.bash.source-bash li, .bash.source-bash .li1 { font-weight: normal; vertica=
+l-align: top; }
+
+.bash.source-bash .ln { width: 1px; text-align: right; margin: 0px; padding=
+: 0px 2px; vertical-align: top; }
+
+.bash.source-bash .li2 { font-weight: bold; vertical-align: top; }
+
+.bash.source-bash .kw1 { color: rgb(0, 0, 0); font-weight: bold; }
+
+.bash.source-bash .kw2 { color: rgb(194, 12, 185); font-weight: bold; }
+
+.bash.source-bash .kw3 { color: rgb(122, 8, 116); font-weight: bold; }
+
+.bash.source-bash .co0 { color: rgb(102, 102, 102); font-style: italic; }
+
+.bash.source-bash .co1 { color: rgb(128, 0, 0); }
+
+.bash.source-bash .co2 { color: rgb(204, 0, 0); font-style: italic; }
+
+.bash.source-bash .co3 { color: rgb(0, 0, 0); font-weight: bold; }
+
+.bash.source-bash .co4 { color: rgb(102, 102, 102); }
+
+.bash.source-bash .es1 { color: rgb(0, 0, 153); font-weight: bold; }
+
+.bash.source-bash .es2 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .es3 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .es4 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .es5 { color: rgb(120, 0, 120); }
+
+.bash.source-bash .es_h { color: rgb(0, 0, 153); font-weight: bold; }
+
+.bash.source-bash .br0 { color: rgb(122, 8, 116); font-weight: bold; }
+
+.bash.source-bash .sy0 { color: rgb(0, 0, 0); font-weight: bold; }
+
+.bash.source-bash .st0 { color: rgb(255, 0, 0); }
+
+.bash.source-bash .st_h { color: rgb(255, 0, 0); }
+
+.bash.source-bash .nu0 { color: rgb(0, 0, 0); }
+
+.bash.source-bash .re0 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .re1 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .re2 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .re4 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .re5 { color: rgb(102, 0, 51); }
+
+.bash.source-bash .ln-xtra, .bash.source-bash li.ln-xtra, .bash.source-bash=
+ div.ln-xtra { background-color: rgb(255, 255, 204); }
+
+.bash.source-bash span.xtra { display: block; }
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-0e4f8e5b-a405-4056-b9c7-4c99cadd06e9@mhtml.blink
+
+@charset "utf-8";
+
+@import url("/index.php?title=3DMediaWiki:Geshi.css&usemsgcache=3Dyes&actio=
+n=3Draw&ctype=3Dtext/css&smaxage=3D18000");
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.osdev.org/index.php?title=MediaWiki:Geshi.css&usemsgcache=yes&action=raw&ctype=text/css&smaxage=18000
+
+@charset "utf-8";
+
+div.mw-geshi { padding: 1em; margin: 1em 0px; border: 1px dashed rgb(47, 11=
+1, 171); background-color: rgb(249, 249, 249); }
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-538fdbda-38ae-45c0-afa3-1e2a072d2fdd@mhtml.blink
+
+@charset "utf-8";
+
+.source-make { line-height: normal; }
+
+.source-make li, .source-make pre { line-height: normal; border: 0px none w=
+hite; }
+
+.make.source-make .de1, .make.source-make .de2 { font: 1em / 1.2em monospac=
+e; margin: 0px; padding: 0px; background: none; vertical-align: top; }
+
+.make.source-make { font-family: monospace; }
+
+.make.source-make .imp { font-weight: bold; color: red; }
+
+.make.source-make li, .make.source-make .li1 { font-weight: normal; vertica=
+l-align: top; }
+
+.make.source-make .ln { width: 1px; text-align: right; margin: 0px; padding=
+: 0px 2px; vertical-align: top; }
+
+.make.source-make .li2 { font-weight: bold; vertical-align: top; }
+
+.make.source-make .kw1 { color: rgb(102, 102, 34); font-weight: bold; }
+
+.make.source-make .kw2 { color: rgb(153, 0, 0); }
+
+.make.source-make .co1 { color: rgb(51, 153, 0); font-style: italic; }
+
+.make.source-make .co2 { color: rgb(0, 0, 153); font-weight: bold; }
+
+.make.source-make .es0 { color: rgb(0, 0, 153); font-weight: bold; }
+
+.make.source-make .br0 { color: rgb(0, 68, 0); }
+
+.make.source-make .sy0 { color: rgb(0, 68, 0); }
+
+.make.source-make .st0 { color: rgb(204, 34, 0); }
+
+.make.source-make .nu0 { color: rgb(204, 34, 0); }
+
+.make.source-make .re0 { color: rgb(0, 0, 136); font-weight: bold; }
+
+.make.source-make .re1 { color: rgb(0, 0, 204); font-weight: bold; }
+
+.make.source-make .re2 { color: rgb(0, 0, 136); }
+
+.make.source-make .ln-xtra, .make.source-make li.ln-xtra, .make.source-make=
+ div.ln-xtra { background-color: rgb(255, 255, 204); }
+
+.make.source-make span.xtra { display: block; }
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-79699930-6ff3-4f52-b242-722578410430@mhtml.blink
+
+@charset "utf-8";
+
+@import url("/index.php?title=3DMediaWiki:Geshi.css&usemsgcache=3Dyes&actio=
+n=3Draw&ctype=3Dtext/css&smaxage=3D18000");
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-deac0e58-812c-4540-8a2d-191ec58cc6d9@mhtml.blink
+
+@charset "utf-8";
+
+.source-c { line-height: normal; }
+
+.source-c li, .source-c pre { line-height: normal; border: 0px none white; =
+}
+
+.c.source-c .de1, .c.source-c .de2 { font: 1em / 1.2em monospace; margin: 0=
+px; padding: 0px; background: none; vertical-align: top; }
+
+.c.source-c { font-family: monospace; }
+
+.c.source-c .imp { font-weight: bold; color: red; }
+
+.c.source-c li, .c.source-c .li1 { font-weight: normal; vertical-align: top=
+; }
+
+.c.source-c .ln { width: 1px; text-align: right; margin: 0px; padding: 0px =
+2px; vertical-align: top; }
+
+.c.source-c .li2 { font-weight: bold; vertical-align: top; }
+
+.c.source-c .kw1 { color: rgb(177, 177, 0); }
+
+.c.source-c .kw2 { color: rgb(0, 0, 0); font-weight: bold; }
+
+.c.source-c .kw3 { color: rgb(0, 0, 102); }
+
+.c.source-c .kw4 { color: rgb(153, 51, 51); }
+
+.c.source-c .co1 { color: rgb(102, 102, 102); font-style: italic; }
+
+.c.source-c .co2 { color: rgb(51, 153, 51); }
+
+.c.source-c .coMULTI { color: rgb(128, 128, 128); font-style: italic; }
+
+.c.source-c .es0 { color: rgb(0, 0, 153); font-weight: bold; }
+
+.c.source-c .es1 { color: rgb(0, 0, 153); font-weight: bold; }
+
+.c.source-c .es2 { color: rgb(102, 0, 153); font-weight: bold; }
+
+.c.source-c .es3 { color: rgb(102, 0, 153); font-weight: bold; }
+
+.c.source-c .es4 { color: rgb(102, 0, 153); font-weight: bold; }
+
+.c.source-c .es5 { color: rgb(0, 102, 153); font-weight: bold; }
+
+.c.source-c .br0 { color: rgb(0, 153, 0); }
+
+.c.source-c .sy0 { color: rgb(51, 153, 51); }
+
+.c.source-c .st0 { color: rgb(255, 0, 0); }
+
+.c.source-c .nu0 { color: rgb(0, 0, 221); }
+
+.c.source-c .nu6 { color: rgb(32, 128, 128); }
+
+.c.source-c .nu8 { color: rgb(32, 128, 128); }
+
+.c.source-c .nu12 { color: rgb(32, 128, 128); }
+
+.c.source-c .nu16 { color: rgb(128, 0, 128); }
+
+.c.source-c .nu17 { color: rgb(128, 0, 128); }
+
+.c.source-c .nu18 { color: rgb(128, 0, 128); }
+
+.c.source-c .nu19 { color: rgb(128, 0, 128); }
+
+.c.source-c .me1 { color: rgb(32, 32, 32); }
+
+.c.source-c .me2 { color: rgb(32, 32, 32); }
+
+.c.source-c .ln-xtra, .c.source-c li.ln-xtra, .c.source-c div.ln-xtra { bac=
+kground-color: rgb(255, 255, 204); }
+
+.c.source-c span.xtra { display: block; }
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-3a4da5d0-b373-40cb-a98a-728a03890b79@mhtml.blink
+
+@charset "utf-8";
+
+@import url("/index.php?title=3DMediaWiki:Geshi.css&usemsgcache=3Dyes&actio=
+n=3Draw&ctype=3Dtext/css&smaxage=3D18000");
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-a7651af4-218e-400f-98cb-3d6c6ef3b723@mhtml.blink
+
+@charset "utf-8";
+
+.source-autoconf { line-height: normal; }
+
+.source-autoconf li, .source-autoconf pre { line-height: normal; border: 0p=
+x none white; }
+
+.autoconf.source-autoconf .de1, .autoconf.source-autoconf .de2 { font: 1em =
+/ 1.2em monospace; margin: 0px; padding: 0px; background: none; vertical-al=
+ign: top; }
+
+.autoconf.source-autoconf { font-family: monospace; }
+
+.autoconf.source-autoconf .imp { font-weight: bold; color: red; }
+
+.autoconf.source-autoconf li, .autoconf.source-autoconf .li1 { font-weight:=
+ normal; vertical-align: top; }
+
+.autoconf.source-autoconf .ln { width: 1px; text-align: right; margin: 0px;=
+ padding: 0px 2px; vertical-align: top; }
+
+.autoconf.source-autoconf .li2 { font-weight: bold; vertical-align: top; }
+
+.autoconf.source-autoconf .kw1 { color: rgb(0, 255, 255); }
+
+.autoconf.source-autoconf .co1 { color: rgb(102, 102, 102); }
+
+.autoconf.source-autoconf .co2 { color: rgb(51, 153, 0); }
+
+.autoconf.source-autoconf .co3 { color: rgb(102, 102, 102); }
+
+.autoconf.source-autoconf .coMULTI { color: rgb(255, 0, 0); font-style: ita=
+lic; }
+
+.autoconf.source-autoconf .es0 { color: rgb(0, 0, 153); }
+
+.autoconf.source-autoconf .es1 { color: rgb(0, 0, 153); }
+
+.autoconf.source-autoconf .es2 { color: rgb(102, 0, 153); }
+
+.autoconf.source-autoconf .es3 { color: rgb(102, 0, 153); }
+
+.autoconf.source-autoconf .es4 { color: rgb(102, 0, 153); }
+
+.autoconf.source-autoconf .es5 { color: rgb(0, 102, 153); }
+
+.autoconf.source-autoconf .br0 { color: rgb(0, 128, 0); }
+
+.autoconf.source-autoconf .sy0 { color: rgb(0, 128, 0); }
+
+.autoconf.source-autoconf .sy1 { color: rgb(0, 0, 128); }
+
+.autoconf.source-autoconf .sy2 { color: rgb(0, 0, 64); }
+
+.autoconf.source-autoconf .sy3 { color: rgb(0, 0, 64); }
+
+.autoconf.source-autoconf .sy4 { color: rgb(0, 128, 128); }
+
+.autoconf.source-autoconf .st0 { color: rgb(153, 102, 0); }
+
+.autoconf.source-autoconf .nu0 { color: rgb(0, 0, 221); }
+
+.autoconf.source-autoconf .nu6 { color: rgb(32, 128, 128); }
+
+.autoconf.source-autoconf .nu8 { color: rgb(32, 128, 128); }
+
+.autoconf.source-autoconf .nu12 { color: rgb(32, 128, 128); }
+
+.autoconf.source-autoconf .nu16 { color: rgb(128, 0, 128); }
+
+.autoconf.source-autoconf .nu17 { color: rgb(128, 0, 128); }
+
+.autoconf.source-autoconf .nu18 { color: rgb(128, 0, 128); }
+
+.autoconf.source-autoconf .nu19 { color: rgb(128, 0, 128); }
+
+.autoconf.source-autoconf .me1 { color: rgb(32, 32, 32); }
+
+.autoconf.source-autoconf .me2 { color: rgb(32, 32, 32); }
+
+.autoconf.source-autoconf .ln-xtra, .autoconf.source-autoconf li.ln-xtra, .=
+autoconf.source-autoconf div.ln-xtra { background-color: rgb(255, 255, 204)=
+; }
+
+.autoconf.source-autoconf span.xtra { display: block; }
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-7ac96456-96cd-4856-9fab-5c8a0eca5b6a@mhtml.blink
+
+@charset "utf-8";
+
+@import url("/index.php?title=3DMediaWiki:Geshi.css&usemsgcache=3Dyes&actio=
+n=3Draw&ctype=3Dtext/css&smaxage=3D18000");
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.osdev.org/load.php?debug=false&lang=en&modules=mediawiki.legacy.commonPrint%2Cshared%7Cskins.vector&only=styles&skin=vector&*
+
+@charset "utf-8";
+
+@media print {
+  a.stub, a.new { color: rgb(186, 0, 0); text-decoration: none; }
+  #toc { border: 1px solid rgb(170, 170, 170); background-color: rgb(249, 2=
+49, 249); padding: 5px; }
+  .tocindent { margin-left: 2em; }
+  .tocline { margin-bottom: 0px; }
+  div.floatright { float: right; clear: right; position: relative; margin: =
+0.5em 0px 0.8em 1.4em; }
+  div.floatright p { font-style: italic; }
+  div.floatleft { float: left; clear: left; position: relative; margin: 0.5=
+em 1.4em 0.8em 0px; }
+  div.floatleft p { font-style: italic; }
+  div.center { text-align: center; }
+  div.thumb { border: none; width: auto; margin-top: 0.5em; margin-bottom: =
+0.8em; background-color: transparent; }
+  div.thumbinner { border: 1px solid rgb(204, 204, 204); background-color: =
+white; font-size: 94%; text-align: center; overflow: hidden; padding: 3px !=
+important; }
+  html .thumbimage { border: 1px solid rgb(204, 204, 204); }
+  html .thumbcaption { border: none; text-align: left; line-height: 1.4em; =
+font-size: 94%; padding: 3px !important; }
+  div.magnify { display: none; }
+  div.tright { float: right; clear: right; margin: 0.5em 0px 0.8em 1.4em; }
+  div.tleft { float: left; clear: left; margin: 0.5em 1.4em 0.8em 0px; }
+  img.thumbborder { border: 1px solid rgb(221, 221, 221); }
+  table.rimage { float: right; width: 1pt; position: relative; margin-left:=
+ 1em; margin-bottom: 1em; text-align: center; }
+  body { background: white; color: black; margin: 0px; padding: 0px; }
+  .noprint, div#jump-to-nav, div.top, div#column-one, #colophon, .editsecti=
+on, .toctoggle, .tochidden, div#f-poweredbyico, div#f-copyrightico, li#view=
+count, li#about, li#disclaimer, li#privacy, #footer-places, #mw-hidden-catl=
+inks { display: none; }
+  ul { list-style-type: square; }
+  #content { background: none; direction: ltr; border: none !important; pad=
+ding: 0px !important; margin: 0px !important; }
+  #footer { background: white; color: black; margin-top: 1em; border-top: 1=
+px solid rgb(170, 170, 170); direction: ltr; }
+  h1, h2, h3, h4, h5, h6 { font-weight: bold; }
+  p, .documentDescription { line-height: 1.2em; margin: 1em 0px !important;=
+ }
+  .tocindent p { margin: 0px !important; }
+  pre { border: 1pt dashed black; white-space: pre; font-size: 8pt; overflo=
+w: auto; padding: 1em 0px; background: white; color: black; }
+  table.listing, table.listing td { border: 1pt solid black; border-collaps=
+e: collapse; }
+  a { color: black !important; background: none !important; padding: 0px !i=
+mportant; }
+  a:link, a:visited { color: rgb(85, 34, 0); background: transparent; text-=
+decoration: underline; }
+  #content a.external.text::after, #content a.external.autonumber::after { =
+content: " (" attr(href) ") "; }
+  #globalWrapper { width: 100% !important; min-width: 0px !important; }
+  #content { background: white; color: black; }
+  #column-content { margin: 0px !important; }
+  #column-content #content { padding: 1em; margin: 0px !important; }
+  a, a.external, a.new, a.stub { color: black !important; text-decoration: =
+none !important; }
+  a, a.external, a.new, a.stub { color: inherit !important; text-decoration=
+: inherit !important; }
+  img { border: none; vertical-align: middle; }
+  span.texhtml { font-family: serif; }
+  #siteNotice { display: none; }
+  li.gallerybox { vertical-align: top; border: 2px solid white; display: in=
+line-block; }
+  ul.gallery, li.gallerybox { zoom: 1; }
+  ul.gallery { margin: 2px; padding: 2px; display: block; }
+  li.gallerycaption { font-weight: bold; text-align: center; display: block=
+; overflow-wrap: break-word; }
+  li.gallerybox div.thumb { text-align: center; border: 1px solid rgb(204, =
+204, 204); margin: 2px; }
+  div.gallerytext { overflow: hidden; font-size: 94%; padding: 2px 4px; ove=
+rflow-wrap: break-word; }
+  table.diff { background: white; }
+  td.diff-otitle { background: rgb(255, 255, 255); }
+  td.diff-ntitle { background: rgb(255, 255, 255); }
+  td.diff-addedline { background: rgb(204, 255, 204); font-size: smaller; b=
+order: 2px solid black; }
+  td.diff-deletedline { background: rgb(255, 255, 170); font-size: smaller;=
+ border: 2px dotted black; }
+  td.diff-context { background: rgb(238, 238, 238); font-size: smaller; }
+  .diffchange { color: silver; font-weight: bold; text-decoration: underlin=
+e; }
+  table.wikitable { margin: 1em 1em 1em 0px; border: 1px solid rgb(170, 170=
+, 170); background: white; border-collapse: collapse; }
+  .wikitable th, .wikitable td { border: 1px solid rgb(170, 170, 170); padd=
+ing: 0.2em; }
+  .wikitable th { text-align: center; background: white; font-weight: bold;=
+ }
+  .wikitable caption { font-weight: bold; }
+  a.sortheader { margin: 0px 0.3em; }
+  .wikitable, .thumb, img { break-inside: avoid; }
+  h2, h3, h4, h5, h6, h7 { break-after: avoid; }
+  p { widows: 3; orphans: 3; }
+  .catlinks ul { display: inline; margin: 0px; list-style: none none; }
+  .catlinks li { display: inline-block; line-height: 1.15em; padding: 0px 0=
+.4em; border-left: 1px solid rgb(170, 170, 170); margin: 0.1em 0px; zoom: 1=
+; }
+  .catlinks li:first-child { padding-left: 0.2em; border-left: none; }
+}
+
+@media screen {
+  .mw-content-ltr { direction: ltr; }
+  .mw-content-rtl { direction: rtl; }
+  .sitedir-ltr textarea, .sitedir-ltr input { direction: ltr; }
+  .sitedir-rtl textarea, .sitedir-rtl input { direction: rtl; }
+  input[type=3D"submit"], input[type=3D"button"], input[type=3D"reset"], in=
+put[type=3D"file"] { direction: ltr; }
+  textarea[dir=3D"ltr"], input[dir=3D"ltr"] { direction: ltr; }
+  textarea[dir=3D"rtl"], input[dir=3D"rtl"] { direction: rtl; }
+  abbr, acronym, .explain { border-bottom: 1px dotted black; cursor: help; =
+}
+  .mw-plusminus-pos { color: rgb(0, 100, 0); }
+  .mw-plusminus-neg { color: rgb(139, 0, 0); }
+  .mw-plusminus-null { color: rgb(170, 170, 170); }
+  .allpagesredirect, .redirect-in-category, .watchlistredir { font-style: i=
+talic; }
+  span.comment { font-style: italic; }
+  span.changedby { font-size: 95%; }
+  .texvc { direction: ltr; unicode-bidi: embed; }
+  img.tex { vertical-align: middle; }
+  span.texhtml { font-family: serif; }
+  #wikiPreview.ontop { margin-bottom: 1em; }
+  #editform, #toolbar, #wpTextbox1 { clear: both; }
+  #toolbar img { cursor: pointer; }
+  div#mw-js-message { margin: 1em 5%; padding: 0.5em 2.5%; border: 1px soli=
+d rgb(221, 221, 221); background-color: rgb(252, 252, 252); }
+  .editsection { float: right; margin-left: 5px; }
+  .mw-content-ltr .editsection, .mw-content-rtl .mw-content-ltr .editsectio=
+n { float: right; }
+  .mw-content-rtl .editsection, .mw-content-ltr .mw-content-rtl .editsectio=
+n { float: left; }
+  h2#filehistory { clear: both; }
+  table.filehistory th, table.filehistory td { vertical-align: top; }
+  table.filehistory th { text-align: left; }
+  table.filehistory td.mw-imagepage-filesize, table.filehistory th.mw-image=
+page-filesize { white-space: nowrap; }
+  table.filehistory td.filehistory-selected { font-weight: bold; }
+  li span.deleted, span.history-deleted { text-decoration: line-through; co=
+lor: rgb(136, 136, 136); font-style: italic; }
+  .not-patrolled { background-color: rgb(255, 255, 170); }
+  .unpatrolled { font-weight: bold; color: red; }
+  div.patrollink { font-size: 75%; text-align: right; }
+  td.mw-label { text-align: right; }
+  td.mw-input { text-align: left; }
+  td.mw-submit { text-align: left; }
+  td.mw-label { vertical-align: top; }
+  .prefsection td.mw-label { width: 20%; }
+  .prefsection table { width: 100%; }
+  td.mw-submit { white-space: nowrap; }
+  table.mw-htmlform-nolabel td.mw-label { width: 0px !important; }
+  tr.mw-htmlform-vertical-label td.mw-label { text-align: left !important; =
+}
+  .mw-htmlform-invalid-input td.mw-input input { border-color: red; }
+  .mw-htmlform-multiselect-flatlist div.mw-htmlform-multiselect-item { disp=
+lay: inline; margin-right: 1em; white-space: nowrap; }
+  input#wpSummary { width: 80%; }
+  .thumbcaption { text-align: left; }
+  .magnify { float: right; }
+  #catlinks { text-align: left; }
+  #catlinks ul { display: inline; margin: 0px; padding: 0px; list-style: no=
+ne none; }
+  #catlinks li { display: inline-block; line-height: 1.35em; padding: 0px 0=
+.7em; border-left: 1px solid rgb(170, 170, 170); margin: 0.3em 0px; zoom: 1=
+; }
+  #catlinks li:first-child { padding-left: 0.4em; border-left: none; }
+  .mw-hidden-cats-hidden { display: none; }
+  .catlinks-allhidden { display: none; }
+  p.mw-ipb-conveniencelinks, p.mw-protect-editreasons, p.mw-filedelete-edit=
+reasons, p.mw-delete-editreasons, p.mw-revdel-editreasons { font-size: 90%;=
+ text-align: right; }
+  .os-suggest { overflow: hidden auto; position: absolute; top: 0px; left: =
+0px; width: 0px; background-color: window; border-style: solid; border-colo=
+r: rgb(170, 170, 170); border-width: 1px; z-index: 99; font-size: 95%; }
+  table.os-suggest-results { font-size: 95%; cursor: pointer; border: 0px; =
+border-collapse: collapse; width: 100%; }
+  .os-suggest-result, .os-suggest-result-hl { white-space: nowrap; backgrou=
+nd-color: window; color: windowtext; padding: 2px; }
+  .os-suggest-result-hl, .os-suggest-result-hl-webkit { background-color: r=
+gb(76, 89, 166); color: white; }
+  .os-suggest-result-hl { background-color: highlight; color: highlighttext=
+; }
+  .os-suggest-toggle { position: relative; left: 1ex; font-size: 65%; }
+  .os-suggest-toggle-def { position: absolute; top: 0px; left: 0px; font-si=
+ze: 65%; visibility: hidden; }
+  .autocomment { color: gray; }
+  #pagehistory .history-user { margin-left: 0.4em; margin-right: 0.2em; }
+  #pagehistory span.minor { font-weight: bold; }
+  #pagehistory li { border: 1px solid white; }
+  #pagehistory li.selected { background-color: rgb(249, 249, 249); border: =
+1px dashed rgb(170, 170, 170); }
+  .mw-history-revisiondelete-button, #mw-fileduplicatesearch-icon { float: =
+right; }
+  .newpage, .minor, .bot { font-weight: bold; }
+  #shared-image-dup, #shared-image-conflict { font-style: italic; }
+  div.mw-warning-with-logexcerpt { padding: 3px; margin-bottom: 3px; border=
+: 2px solid rgb(47, 111, 171); clear: both; }
+  div.mw-warning-with-logexcerpt ul li { font-size: 90%; }
+  span.mw-revdelundel-link, strong.mw-revdelundel-link { font-size: 90%; }
+  span.mw-revdelundel-hidden, input.mw-revdelundel-hidden { visibility: hid=
+den; }
+  td.mw-revdel-checkbox, th.mw-revdel-checkbox { padding-right: 10px; text-=
+align: center; }
+  a.feedlink { background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEU=
+gAAAAwAAAAMCAYAAABWdVznAAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH2AkOCjkSL9xYhAAA=
+Ac9JREFUKJE90LFrU1EYQPHzffe+l/iSVkXTmNiANBU7iE5OLrbSVYKIiy5dnARB3FwEB5dOOhQ=
+KuthJEEHRsUXBoosO0lKKEYRa29LWQk3S5L53r0PVv+D8OPJlolrrr1ZmI7F1BFEjqBXECGJAjS=
+BCaLddc7u5Mmb7q5U5007rWh5E9rYR/xsTBBXBWMVEglqRpGiGhcE5G6kdyugxcGsGyRdJ15ZwC=
+29IF55jNEWt8K+aFOMhc+dC7Z6SITjC7ga2MkI8cpH41Dhh7RPa20Gt4toZac+IqhFMTpG0hVt8=
+RetJg967SaTvGLnGNKZ0EtfOcB1P5jyqVjCRkIzfpnjtMYXrT2FrCff6JqhFRx/gnCXtZHgXUFH=
+QSGg/u4Gbf4T2lYkvTaFGce8fIgePY09fwXU8Pg3sk2JFu5v4lQ+4FxPge+j5u3Q+v8TvrBKfbZ=
+B1PT4LqJh9Uv7yFLmrM2i+gPs4jRyqIaUz7C2+xZZOEA4cJaSgaAhqhbC1DK0N3K9NusvzAHB4G=
+Lf+HQBJBsiCD7J6/9zXI2VbVyv/b6Sdv1e6nrTryboB7wVbyjXt1rcfo0Frs4UkqvtUJHMBjyVE=
+AcSjFiQJwRvf3F3/OfYH/dDFWrCooaIAAAAASUVORK5CYII=3D") left center no-repeat;=
+ padding-left: 16px; }
+  .plainlinks a { background: none !important; padding: 0px !important; }
+  .rtl a.external.free, .rtl a.external.autonumber { direction: ltr; unicod=
+e-bidi: embed; }
+  table.wikitable { margin: 1em 1em 1em 0px; background: rgb(249, 249, 249)=
+; border: 1px solid rgb(170, 170, 170); border-collapse: collapse; color: b=
+lack; }
+  .wikitable th, .wikitable td { border: 1px solid rgb(170, 170, 170); padd=
+ing: 0.2em; }
+  .wikitable th { background: rgb(242, 242, 242); text-align: center; }
+  .wikitable caption { font-weight: bold; }
+  table.collapsed tr.collapsable { display: none; }
+  .success { color: green; font-size: larger; }
+  .warning { color: rgb(255, 165, 0); font-size: larger; }
+  .error { color: red; font-size: larger; }
+  .errorbox, .warningbox, .successbox { font-size: larger; border: 2px soli=
+d; padding: 0.5em 1em; float: left; margin-bottom: 2em; color: rgb(0, 0, 0)=
+; }
+  .errorbox { border-color: red; background-color: rgb(255, 242, 242); }
+  .warningbox { border-color: rgb(255, 140, 0); background-color: rgb(255, =
+255, 192); }
+  .successbox { border-color: green; background-color: rgb(221, 255, 221); =
+}
+  .errorbox h2, .warningbox h2, .successbox h2 { font-size: 1em; font-weigh=
+t: bold; display: inline; margin: 0px 0.5em 0px 0px; border: none; }
+  .mw-infobox { border: 2px solid rgb(255, 127, 0); margin: 0.5em; clear: l=
+eft; overflow: hidden; }
+  .mw-infobox-left { margin: 7px; float: left; width: 35px; }
+  .mw-infobox-right { margin: 0.5em 0.5em 0.5em 49px; }
+  .previewnote { color: rgb(204, 0, 0); margin-bottom: 1em; }
+  .previewnote p { text-indent: 3em; margin: 0.8em 0px; }
+  .visualClear { clear: both; }
+  #mw_trackbacks { border: 1px solid rgb(187, 187, 255); background-color: =
+rgb(238, 238, 255); padding: 0.2em; }
+  .TablePager { min-width: 80%; border-collapse: collapse; }
+  .TablePager_nav { margin: 0px auto; }
+  .TablePager_nav td { padding: 3px; text-align: center; }
+  .TablePager_nav a { text-decoration: none; }
+  .TablePager, .TablePager td, .TablePager th { border: 1px solid rgb(170, =
+170, 170); padding: 0px 0.15em; }
+  .TablePager th { background-color: rgb(238, 238, 255); }
+  .TablePager td { background-color: rgb(255, 255, 255); }
+  .TablePager tr:hover td { background-color: rgb(238, 238, 255); }
+  .imagelist td, .imagelist th { white-space: nowrap; }
+  .imagelist .TablePager_col_links { background-color: rgb(238, 238, 255); =
+}
+  .imagelist .TablePager_col_img_description { white-space: normal; }
+  .imagelist th.TablePager_sort { background-color: rgb(204, 204, 255); }
+  ul#filetoc { text-align: center; border: 1px solid rgb(170, 170, 170); ba=
+ckground-color: rgb(249, 249, 249); padding: 5px; font-size: 95%; margin-bo=
+ttom: 0.5em; margin-left: 0px; margin-right: 0px; }
+  #filetoc li { display: inline; list-style-type: none; padding-right: 2em;=
+ }
+  table.mw_metadata { font-size: 0.8em; margin-left: 0.5em; margin-bottom: =
+0.5em; width: 400px; }
+  table.mw_metadata caption { font-weight: bold; }
+  table.mw_metadata th { font-weight: normal; }
+  table.mw_metadata td { padding: 0.1em; }
+  table.mw_metadata { border: none; border-collapse: collapse; }
+  table.mw_metadata td, table.mw_metadata th { text-align: center; border: =
+1px solid rgb(170, 170, 170); padding-left: 5px; padding-right: 5px; }
+  table.mw_metadata th { background-color: rgb(249, 249, 249); }
+  table.mw_metadata td { background-color: rgb(252, 252, 252); }
+  table.mw_metadata ul.metadata-langlist { list-style-type: none; list-styl=
+e-image: none; padding-right: 5px; padding-left: 5px; margin: 0px; }
+  .mw-content-ltr ul, .mw-content-rtl .mw-content-ltr ul { margin: 0.3em 0p=
+x 0px 1.5em; padding: 0px; }
+  .mw-content-rtl ul, .mw-content-ltr .mw-content-rtl ul { margin: 0.3em 1.=
+5em 0px 0px; padding: 0px; }
+  .mw-content-ltr ol, .mw-content-rtl .mw-content-ltr ol { margin: 0.3em 0p=
+x 0px 3.2em; padding: 0px; }
+  .mw-content-rtl ol, .mw-content-ltr .mw-content-rtl ol { margin: 0.3em 3.=
+2em 0px 0px; padding: 0px; }
+  .mw-content-ltr ul, .mw-content-rtl .mw-content-ltr ul { margin: 0.3em 0p=
+x 0px 1.5em; }
+  .mw-content-rtl ul, .mw-content-ltr .mw-content-rtl ul { margin: 0.3em 1.=
+5em 0px 0px; }
+  .mw-content-ltr ol, .mw-content-rtl .mw-content-ltr ol { margin: 0.3em 0p=
+x 0px 3.2em; }
+  .mw-content-rtl ol, .mw-content-ltr .mw-content-rtl ol { margin: 0.3em 3.=
+2em 0px 0px; }
+  li.gallerybox { vertical-align: top; border: 2px solid white; display: in=
+line-block; }
+  ul.gallery, li.gallerybox { zoom: 1; }
+  ul.gallery { margin: 2px; padding: 2px; display: block; }
+  li.gallerycaption { font-weight: bold; text-align: center; display: block=
+; overflow-wrap: break-word; }
+  li.gallerybox div.thumb { text-align: center; border: 1px solid rgb(204, =
+204, 204); background-color: rgb(249, 249, 249); margin: 2px; }
+  li.gallerybox div.thumb img { display: block; margin: 0px auto; }
+  div.gallerytext { overflow: hidden; font-size: 94%; padding: 2px 4px; ove=
+rflow-wrap: break-word; }
+  .mw-ajax-loader { background-image: url("data:image/gif;base64,R0lGODlhIA=
+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3D=3D"=
+); background-position: center center; background-repeat: no-repeat; paddin=
+g: 16px; position: relative; top: -16px; }
+  .mw-small-spinner { margin-right: 0.6em; background-image: url("data:imag=
+e/gif;base64,R0lGODlhFAAUAPUyAAEBAQICAgMDAwQEBAcHBwkJCSIiIigoKCwsLDQ0ND8/P0=
+REREVFRU1NTVJSUlVVVVZWVl1dXWNjY25ubnBwcHR0dHh4eISEhIWFhYeHh4mJiZKSkpaWlpubm=
+6Wlpaqqqra2tre3t7i4uLm5ubq6uru7u7+/v8DAwMLCwsPDw8TExMbGxsfHx8jIyMnJycrKys7O=
+ztDQ0P///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkKADIAIf4=
+aQ3JlYXRlZCB3aXRoIGFqYXhsb2FkLmluZm8AIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAFAAUAA=
+AGlUCZcDhMOIhIImcyJBSEqVRy6EBUhIGADEYyTYcHhZCgTZG+w4fBIgsQZCSp8Cx8NIYKCbElX=
+JFIMXUMDBEeX38pMEgPDBRfKytfG2hJHxoXGRmUIJwgKx2ZmJudipSmfXxTfolEMGZ0U69yMX+R=
+MqlCLbAmcnBDZjKcMn62aHHBIFCwUyYkisJbf2hRQtAygadbxUlBACH5BAkKADcALAAAAAAUABQ=
+AhRISEhQUFBYWFh0dHR4eHiEhISIiIiMjIykpKSwsLC0tLS8vLzY2Njo6Oj8/P0FBQUhISEpKSl=
+RUVFdXV2RkZGZmZm1tbW9vb3Nzc35+fn9/f4eHh4mJiYyMjJGRkZSUlJiYmJ2dnZ6enqOjo6Skp=
+La2tre3t7i4uLm5ubq6uru7u7y8vL+/v8DAwMLCwsPDw8TExMbGxsfHx8jIyMrKys7OztDQ0P//=
+/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaQwJtwOIxciEhiKDMsFISLRXJYeTBvBIIQgJgOHxJ=
+h9rYAeKmNDbZwCTCGqiHIM5RgiBFhTKWyCUkdHCExXnwvNUgfHSNeMy+FZ0k1KiWVkZWVMTGYJZ=
+eYiJGhQi8zXnuHRDUvKitnqyuPN5MqhDelQ3tDsHBDqzeWe7VnrL+dN76uKoiWsnyutcw3fqKyw=
+klBACH5BAkKADkALAAAAAAUABQAhQoKChAQEBERESgoKCoqKiwsLC4uLjU1NTY2Njc3Nzo6Ojw8=
+PD09PT4+PkBAQENDQ0RERElJSVBQUFlZWWFhYWJiYmVlZXx8fIKCgoaGhoqKioyMjI+Pj5GRkZW=
+VlZiYmJ6enqSkpKenp7Ozs7a2tre3t7i4uLm5ubq6uru7u7y8vL+/v8DAwMLCwsPDw8TExMXFxc=
+bGxsfHx8jIyMrKys7OztDQ0NTU1NnZ2f///wAAAAAAAAAAAAAAAAAAAAAAAAaZwJxwOKRciEgib=
+DRUMIQRSHII4pSEiYSw8JwKNR2sllHwDkMaZkLBOUSGDoywtRp6QsSJJ8cQCChzKSkwOF4EAAQW=
+SC0pM14QgFM3Zkk1JZdXZpglMDCblJgpNZSkQy2OUzApK6NDNYx1XowpLUI2gjBCqLopQyu1Qr2=
+BOZc5qrmUq8SZK8JezaPFObfOSS3AKZnTpUI1yFNBACH5BAkKADoALAAAAAAUABQAhQAAAAICAg=
+MDAwQEBAcHBwkJCSIiIigoKCsrKzQ0ND4+Pj8/P0REREVFRU1NTVJSUlNTU1RUVFVVVVZWVlxcX=
+GNjY25ubnFxcXR0dHh4eIODg4SEhIWFhYeHh4mJiZGRkZaWlpubm6Wlpaqqqra2tre3t7i4uLm5=
+ubq6uru7u7y8vL+/v8DAwMLCwsPDw8TExMbGxsfHx8jIyMrKys7Ozs/Pz9DQ0NTU1NfX19nZ2f/=
+//wAAAAAAAAAAAAAAAAAAAAaZQJ1wOAyNiEhizjbseIQSSXLYSjF1Go2Q4ZgOUythp6OTMLxDWI=
+qG7XwYlKEEJGyFhasZ8SIqHxAWdSkpMDheCwYMF0hVMF4VGV6GaEg0JJcklAEDnAkwmJloAaMFD=
+5SnaY5TM2BsQzYtJHdTVSktQjaDqnppKUMrt0K+gjqXOmqqaGDFoVWUK2vMQjSDaC3BKaE6V6g0=
+yUlBACH5BAkKADoALAAAAAAUABQAhRISEhQUFBYWFhwcHB0dHR4eHiEhISIiIiMjIysrKy8vLzc=
+3Nzo6Oj8/P0FBQUhISFJSUlZWVldXV2VlZW1tbX9/f4KCgoeHh4mJiYuLi4yMjJCQkJSUlJiYmJ=
+mZmZqampycnJ2dnZ6enqOjo7CwsLa2tre3t7i4uLm5ubq6uru7u7y8vL+/v8DAwMLCwsPDw8TEx=
+MbGxsfHx8jIyMrKys7OztDQ0NTU1NfX19nZ2f///wAAAAAAAAAAAAAAAAAAAAaaQJ1wOCSViEhi=
+rjYMfYSfZ1LoUjF1UWFGMx2qXNAnJ9MdxqzYj0oTGk7aOhdryKIRRzHdxNGwUFUqMThdEAwRFUh=
+VeVMUF12DZUg1JZRHZQMImA8xlZZdmZgUkUh+UzGLSQ4CChFENS4lc10LAAAKQjaAi3ZmKkMIt0=
+K+fzqUOmeoXSpzxnHDXSxozTWAZS5gOiqeNqNDNclIQQAh+QQJCgBFACwAAAAAFAAUAIYKCgoQE=
+BAREREnJycqKiosLCwuLi40NDQ1NTU2NjY3Nzc5OTk6Ojo8PDw9PT0+Pj4/Pz9ERERJSUlRUVFY=
+WFhhYWFlZWVmZmZvb298fHyCgoKGhoaHh4eKioqNjY2SkpKVlZWenp6fn5+hoaGioqKjo6Onp6e=
+pqamrq6usrKyurq6vr6+xsbGzs7O2tra3t7e4uLi5ubm6urq7u7u8vLy/v7/AwMDCwsLDw8PExM=
+TFxcXGxsbHx8fIyMjKysrOzs7Q0NDU1NTV1dXX19fZ2dn///8AAAAAAAAAAAAAAAAAAAAAAAAAA=
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHqYBFgoODOz+EiIREh4=
+IvL4IqKomDNzOMjoIkKJODMzeNjyginIWWRY47JJKCIjuCNzWDNT6EN0NFIhsdq5UzO7eTIBsfL=
+YiVrpMmxZPApIQ/jpikBwvUFTvRj6TVBxAZzogenDe0kxQGEBjPNy+xkyQTBAYSgkAzvoLlghEE=
+gxARnSjNOPXIAoAF4GbEkkZAgLMapqRZEACB1I1PRWZoK1JBAzhBP5BNCgQAIfkECQoAOgAsAAA=
+AABQAFACFAQEBAgICAwMDBAQEBwcHCQkJIiIiKCgoLCwsNDQ0Pz8/RERERUVFTU1NUlJSVVVVVl=
+ZWXV1dY2Njbm5ucHBwdHR0eHh4gICAg4ODhISEhYWFh4eHiYmJkpKSlpaWm5ubpaWlqqqqtra2t=
+7e3uLi4ubm5urq6u7u7vLy8v7+/wMDAwsLCw8PDxMTExsbGx8fHyMjIysrKy8vLzs7Oz8/P0NDQ=
+1NTU1dXV19fX2dnZ////AAAAAAAAAAAAAAAAAAAABptAnXA4dM2ISGLuKByNhKtVcrg61ZpP3Uk=
+6FW6xumq3ODo6cScXNQdNDVMxYgync52s0LuLPk2NVkxUaV0xgUh8Y0QzTk6JGBuPHy6MWV0bkB=
+whiUgdXStxUxQMDxiKKyNuUyARDKNCNXpCoEISCkMND0MngjoDAToWBrmJJ24BA0IKB4kpJ0cBv=
+zoVCA5jUUIFBUMTHptCDgljQQAh+QQJCgA9ACwAAAAAFAAUAIUSEhIUFBQVFRUdHR0eHh4fHx8h=
+ISEiIiIjIyMpKSksLCwtLS0vLy82NjY6Ojo/Pz9BQUFISEhUVFRWVlZkZGRmZmZtbW1xcXFzc3N=
+8fHx/f3+Hh4eJiYmLi4uMjIyQkJCUlJSYmJidnZ2enp6jo6Orq6u2tra3t7e4uLi5ubm6urq7u7=
+u8vLy/v7/AwMDCwsLDw8PExMTGxsbHx8fIyMjKysrLy8vOzs7Q0NDU1NTV1dXX19fZ2dn///8AA=
+AAAAAAGmsCecDiU3YhIIu8oPJ2Er1dy+Frhms/eSjoVbrG9ard4Ojp3KxmVB20NWzVibdeTrazQ=
+u4w+bZ1eTFRpXTWBSHxjRDdOTomMJzIyj45OK4aJWl0vcVMkHh8lii8nblMyIh0dIUI4ekIQRBg=
+SQx+rXkMNARgHAz0bDhWYAAo9A709E7BjCQFCvEIaD8FdCsQ9CAdDGiKYQhYRY0EAIfkECQoAPQ=
+AsAAAAABQAFACFCgoKEBAQERERKCgoKioqLCwsLi4uNTU1NjY2Nzc3Ojo6PDw8PT09Pj4+QEBAQ=
+0NDRERESUlJUVFRWlpaW1tbYWFhYmJiZWVlfHx8goKChoaGh4eHioqKjIyMlZWVmZmZnp6en5+f=
+oaGhp6enr6+vsrKys7Oztra2t7e3uLi4ubm5urq6u7u7v7+/wMDAwsLCw8PDxMTExcXFxsbGyMj=
+IysrKy8vLzs7O0NDQ1NTU1dXV19fX2dnZ////AAAAAAAABpjAnnA4nN2ISCLvKEShhK9Xcvhi4Z=
+rPHks6FW6xvWq3iDo6d6wZlQdtDVs1Ym3Xm7Gs0PuMPm2hXkxUaV01gUh8Y0Q3Tk6JjCgzM4+Oj=
+IaJPYhIFg+EW4YXAwADXTt2Xz0UAgIKPSITRCMeb1wZnEISBh0KBz0mGiGXBg09B7w9HxqJDQZC=
+xU0cwF0QEUINrEIkapc9GK9dQQAh+QQJCgA8ACwAAAAAFAAUAIUCAgIDAwMEBAQGBgYHBwcJCQk=
+iIiIoKCgrKys0NDQ+Pj4/Pz9ERERFRUVNTU1SUlJTU1NUVFRVVVVWVlZcXFxjY2Nubm5xcXF0dH=
+R4eHiDg4OEhISFhYWHh4eJiYmRkZGWlpabm5ulpaWqqqq2tra3t7e4uLi5ubm6urq7u7u/v7/Aw=
+MDCwsLDw8PExMTFxcXGxsbIyMjKysrLy8vOzs7Pz8/Q0NDU1NTV1dXX19fY2NjZ2dn///8AAAAA=
+AAAAAAAGlUCecDiE0YhI4u4oLJWELFZyyErZmk9eSjoVbrG8ardYOjpzKRh1B1UNVTKiLMeDpaz=
+QO4w+VZVYTFRpXTKBSGxjSBAFAAADiU5OMAkDA42QkYaJPHxJGRWEW4YYCwYLXTl2XzwWCAcRPC=
+IXcm5CKlwgEEMUDR8dGjw0g4kNsL95iQ4NQsfBq1MRsDweHkM2iJsjIWNBACH5BAkKADkALAAAA=
+AAUABQAhQICAgMDAwQEBAcHBwgICAkJCRISEhQUFBYWFiIiIisrKy8vLzQ0NDU1NTo6Oj8/P0FB=
+QVJSUldXV2VlZW1tbX9/f4ODg4iIiImJiYyMjJGRkZSUlJWVlZeXl52dnZ6enqOjo7a2tre3t7i=
+4uLm5ubq6uru7u7+/v8DAwMLCwsPDw8TExMXFxcbGxsfHx8jIyMrKysvLy87OztDQ0NTU1NXV1d=
+fX19jY2NnZ2f///wAAAAAAAAAAAAAAAAAAAAAAAAaYwJxwOGzJiEgi7igUiYQoVHKIOs2az9xIO=
+hVusblqtzg6Om2nVhEnXCSGJxgRZsu1RqNrbnEwNDhdJ1t6Q3wQXTBMSRZjSREEAgIEjU5OLQ2R=
+AgCUTnmNSHVTFxSIW4o5FhIOEV04dydcFQ8QE3YgcydUXB+1Qh8ZeE8yI2qNF4BOUCONGhlgOTO=
+wYx23OclCM2yfOTLFU0EAIfkECQoAPgAsAAAAABQAFACFCgoKEBAQERERJycnKioqLCwsLi4uND=
+Q0NTU1NjY2Nzc3OTk5Ojo6PDw8PT09Pj4+Pz8/Q0NDRERESUlJUVFRWFhYYWFhYmJiZWVlfHx8g=
+oKChoaGioqKi4uLjY2NkZGRlZWVnp6eoaGhp6enr6+vsbGxs7Oztra2t7e3uLi4ubm5urq6u7u7=
+v7+/wMDAwsLCw8PDxMTExcXFxsbGyMjIysrKy8vLzs7O0NDQ1NTU1dXV19fX2NjY2dnZ////AAA=
+ABplAn3A4nN2ISKLmMkShhDBYcvgIYIRO4ao1HQYI2Cds1R0yAEznbjUbwnpCCWM4kBBrO99stT=
+r6JgYGFCJdLSgwflQGFV01iUgeZUkZDwcMc2VOTjMXDAefkpooj5I+eVMmI40riEQmHxsgXTt7r=
+EIkHBwhpjV3XEItUnq7Qns7WTdspbZZPi1kZc9hQji2XVHT1HClPjdtXUEAOw=3D=3D"); back=
+ground-position: center center; background-repeat: no-repeat; padding: 10px=
+ !important; }
+  ol:lang(bcc) li, ol:lang(bqi) li, ol:lang(fa) li, ol:lang(glk) li, ol:lan=
+g(kk-arab) li, ol:lang(mzn) li { list-style-type: persian; }
+  ol:lang(ckb) li { list-style-type: arabic-indic; }
+  ol:lang(as) li, ol:lang(bn) li { list-style-type: bengali; }
+  ol:lang(or) li { list-style-type: oriya; }
+  #toc ul, .toc ul { margin: 0.3em 0px; }
+  .mw-content-ltr .toc ul, .mw-content-ltr #toc ul, .mw-content-rtl .mw-con=
+tent-ltr .toc ul, .mw-content-rtl .mw-content-ltr #toc ul { text-align: lef=
+t; }
+  .mw-content-rtl .toc ul, .mw-content-rtl #toc ul, .mw-content-ltr .mw-con=
+tent-rtl .toc ul, .mw-content-ltr .mw-content-rtl #toc ul { text-align: rig=
+ht; }
+  .mw-content-ltr .toc ul ul, .mw-content-ltr #toc ul ul, .mw-content-rtl .=
+mw-content-ltr .toc ul ul, .mw-content-rtl .mw-content-ltr #toc ul ul { mar=
+gin: 0px 0px 0px 2em; }
+  .mw-content-rtl .toc ul ul, .mw-content-rtl #toc ul ul, .mw-content-ltr .=
+mw-content-rtl .toc ul ul, .mw-content-ltr .mw-content-rtl #toc ul ul { mar=
+gin: 0px 2em 0px 0px; }
+  #toc #toctitle, .toc #toctitle, #toc .toctitle, .toc .toctitle { directio=
+n: ltr; }
+  .mw-help-field-hint { display: none; margin-left: 2px; margin-bottom: -8p=
+x; padding: 0px 0px 0px 15px; background-image: url("data:image/gif;base64,=
+R0lGODlhCwALALMAAP///01NTZOTk1lZWefn57i4uJSUlPPz82VlZdDQ0HFxcaysrNvb28TExAA=
+AAAAAACH5BAAAAAAALAAAAAALAAsAAAQrUIRJqQQ455nNNBgHJANBDAwgZsVwqIG2IEQYYwXy2l=
+q/Kg3NqqeSVCqCCAA7"); background-position: left center; background-repeat: =
+no-repeat; cursor: pointer; font-size: 0.8em; text-decoration: underline; c=
+olor: rgb(6, 69, 173); }
+  .mw-help-field-hint:hover { background-image: url("data:image/gif;base64,=
+R0lGODlhCwALALMAAAtop+7z+GCWwpW51oStz8rb6yZzrafF3bnR5Nzn8QBcoD91oABQmf///wA=
+AAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSH=
+pyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4b=
+XB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMy=
+OjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTk=
+vMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bW=
+xuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9I=
+mh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnht=
+cD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudEl=
+EPSJ4bXAuZGlkOjAyODAxMTc0MDcyMDY4MTE5NkQ0QUQzRjI0NzRCNUQwIiB4bXBNTTpEb2N1bW=
+VudElEPSJ4bXAuZGlkOjJBN0FFQTQwQjlGQzExREY5RDlBQTRBODQyMkJCMkFDIiB4bXBNTTpJb=
+nN0YW5jZUlEPSJ4bXAuaWlkOjJBN0FFQTNGQjlGQzExREY5RDlBQTRBODQyMkJCMkFDIiB4bXA6=
+Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzUgTWFjaW50b3NoIj4gPHhtcE1NOkRlcml=
+2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RkM3RjExNzQwNzIwNjgxMTk1RkVBQ0=
+ZBOEQxNTU5MkUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDI4MDExNzQwNzIwNjgxMTk2R=
+DRBRDNGMjQ3NEI1RDAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1l=
+dGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eD=
+f3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqK=
+empaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb=
+25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3=
+NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAA=
+h+QQAAAAAACwAAAAACwALAAAEK3CxSalsOOeZxRQY1yBKkihFI2aDEqiMRgBJGGMD8NpavxoHza=
+qnklQqiwgAOw=3D=3D"); }
+  .mw-help-field-data { display: block; background-color: rgb(214, 243, 255=
+); padding: 5px 8px 4px; border: 1px solid rgb(93, 201, 244); margin-left: =
+20px; }
+  .tipsy { padding: 5px 5px 10px; font-size: 12px; position: absolute; z-in=
+dex: 100000; overflow: visible; }
+  .tipsy-inner { padding: 5px 8px 4px; background-color: rgb(214, 243, 255)=
+; color: black; border: 1px solid rgb(93, 201, 244); max-width: 300px; text=
+-align: left; }
+  .tipsy-arrow { position: absolute; background: url("data:image/gif;base64=
+,R0lGODlhDQANAMQAAPf399bz/9vu9m/O9NXy/8Pm9svp9pfd+YLW943X9LTn++z093XQ9WnM9O=
+Lw9p/c9YTU9InY9/T292DK9Jre+afj+rvq/Nzv9rjk9brl9cPt/ZLb+GbL9MLs/ZHb+KLh+iH5B=
+AAAAAAALAAAAAANAA0AAAVK4BGMZBkcg2WW1lBEKxkVAFTFFQQAwkSYhIlgB3hQTJQHEbBodEia=
+xmIJyHhIGwwVIGEoAgqGZAswIAIIA3mX+CTWOwfHAd9dtiEAOw=3D=3D") left top no-repe=
+at; width: 13px; height: 13px; }
+  .tipsy-se .tipsy-arrow { bottom: -2px; right: 10px; background-position: =
+0% 100%; }
+  table.sortable th.headerSort { background-image: url("images/sort_both.gi=
+f"); cursor: pointer; background-repeat: no-repeat; background-position: ri=
+ght center; padding-right: 21px; }
+  table.sortable th.headerSortUp { background-image: url("images/sort_up.gi=
+f"); }
+  table.sortable th.headerSortDown { background-image: url("images/sort_dow=
+n.gif"); }
+  .ltr { direction: ltr; unicode-bidi: embed; }
+  #mw-clearyourcache, #mw-sitecsspreview, #mw-sitejspreview, #mw-usercsspre=
+view, #mw-userjspreview { direction: ltr; unicode-bidi: embed; }
+  .diff-currentversion-title, .diff { direction: ltr; unicode-bidi: embed; =
+}
+  .diff-contentalign-right td { direction: rtl; unicode-bidi: embed; }
+  .diff-contentalign-left td { direction: ltr; unicode-bidi: embed; }
+  .diff-otitle, .diff-ntitle, .diff-lineno { unicode-bidi: embed; direction=
+: ltr !important; }
+  #mw-revision-info, #mw-revision-nav { direction: ltr; }
+  div.tright, div.floatright, table.floatright { clear: right; float: right=
+; }
+  div.tleft, div.floatleft, table.floatleft { float: left; clear: left; }
+  div.floatright, table.floatright, div.floatleft, table.floatleft { positi=
+on: relative; }
+  #mw-credits a { unicode-bidi: embed; }
+}
+
+@media screen {
+  html, body { height: 100%; margin: 0px; padding: 0px; font-family: sans-s=
+erif; font-size: 1em; }
+  body { background-color: rgb(243, 243, 243); background-image: url("data:=
+image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAAGXRFWHRTb2=
+Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABRJREFUeF4FwTEBAAAAwJD1D+weGQD4APc0a=
+6VeAAAAAElFTkSuQmCC"); }
+  div#content { margin-left: 10em; padding: 1em; background-image: url("dat=
+a:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRT=
+b2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABhJREFUeF4FwTEBAAAAgjD7FzESWfjYdgw=
+EoAJ4lTsaxgAAAABJRU5ErkJggg=3D=3D"); background-position: left top; backgro=
+und-repeat: repeat-y; background-color: white; color: black; direction: ltr=
+; }
+  #mw-page-base { height: 5em; background-color: white; background-image: u=
+rl("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAsCAIAAAArRUU2AAAAG=
+XRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADpJREFUeF5VjUkOAEAIwoD//7lz=
+GJd4MJHGSoBImkFETP67CdLldUd7KC6f8fv3+psd8znbtU5x354HaWQjOx76v7MAAAAASUVORK5=
+CYII=3D"); background-position: left bottom; background-repeat: repeat-x; }
+  #mw-head-base { margin-top: -5em; margin-left: 10em; height: 5em; backgro=
+und-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAA=
+ACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABhJREFUeF4FwTEB=
+AAAAgjD7FzESWfjYdgwEoAJ4lTsaxgAAAABJRU5ErkJggg=3D=3D"); background-position=
+: left bottom; background-repeat: repeat-x; }
+  div#mw-head { position: absolute; top: 0px; right: 0px; width: 100%; }
+  div#mw-head h5 { margin: 0px; padding: 0px; }
+  div.emptyPortlet { display: none; }
+  #p-personal { position: absolute; top: 0px; right: 0.75em; }
+  #p-personal h5 { display: none; }
+  #p-personal ul { list-style: none; margin: 0px; padding-left: 10em; }
+  #p-personal li { line-height: 1.125em; float: left; }
+  #p-personal li { margin-left: 0.75em; margin-top: 0.5em; font-size: 0.75e=
+m; white-space: nowrap; }
+  #left-navigation { position: absolute; left: 10em; top: 2.5em; }
+  #right-navigation { float: right; margin-top: 2.5em; }
+  div.vectorTabs h5, div.vectorMenu h5 span { display: none; }
+  div.vectorTabs { float: left; height: 2.5em; }
+  div.vectorTabs { background-image: url("data:image/png;base64,iVBORw0KGgo=
+AAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYW=
+R5ccllPAAAAERJREFUeF5lTtEKgEAMMv//j/O0IxlH9CA6N2WURAA/OHl5GeWAwUUHBcKV795Ft=
+TePxpmV3t9uv8Z3/cmvM88vzbbrAV/dQdX+eas3AAAAAElFTkSuQmCC"); background-posit=
+ion: left bottom; background-repeat: no-repeat; padding-left: 1px; }
+  div.vectorTabs ul { float: left; }
+  div.vectorTabs ul { height: 100%; list-style: none; margin: 0px; padding:=
+ 0px; }
+  div.vectorTabs ul li { float: left; }
+  div.vectorTabs ul li { line-height: 1.125em; display: inline-block; heigh=
+t: 100%; margin: 0px; padding: 0px; background-color: rgb(243, 243, 243); b=
+ackground-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAB=
+kCAIAAADITs03AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADxJREFUeF=
+7litsRACAMwrD77+Q0rtGoV98r+MEFchhgkr4NnZyb3bk/LM/yMCjiH4wots/++hYR3iXLJVWUB=
+S1AtOi2fwAAAABJRU5ErkJggg=3D=3D"); background-position: left bottom; backgr=
+ound-repeat: repeat-x; white-space: nowrap; }
+  div.vectorTabs ul > li { display: block; }
+  div.vectorTabs li.selected { background-image: url("data:image/png;base64=
+,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkAQAAAABvV2fNAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZS=
+BJbWFnZVJlYWR5ccllPAAAABVJREFUeF7dwQEBAAAAQCDTTfdD4WOJ5TIB3ib9EgAAAABJRU5Er=
+kJggg=3D=3D"); }
+  div.vectorTabs li a { display: inline-block; height: 1.9em; padding-left:=
+ 0.5em; padding-right: 0.5em; color: rgb(6, 69, 173); cursor: pointer; font=
+-size: 0.8em; }
+  div.vectorTabs li > a { display: block; }
+  div.vectorTabs li.icon a { background-position: right bottom; background-=
+repeat: no-repeat; }
+  div.vectorTabs span a { display: inline-block; padding-top: 1.25em; }
+  div.vectorTabs span > a { float: left; display: block; }
+  div.vectorTabs span { display: inline-block; background-image: url("data:=
+image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAGXRFWHRTb2=
+Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAERJREFUeF5lTtEKgEAMMv//j/O0IxlH9CA6N=
+2WURAA/OHl5GeWAwUUHBcKV795FtTePxpmV3t9uv8Z3/cmvM88vzbbrAV/dQdX+eas3AAAAAElF=
+TkSuQmCC"); background-position: right bottom; background-repeat: no-repeat=
+; }
+  div.vectorTabs li.selected a, div.vectorTabs li.selected a:visited { colo=
+r: rgb(51, 51, 51); text-decoration: none; }
+  div.vectorTabs li.new a, div.vectorTabs li.new a:visited { color: rgb(165=
+, 88, 88); }
+  div.vectorMenu { direction: ltr; float: left; background-image: url("data=
+:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAQBAMAAACfEoDkAAAAAXNSR0IAr=
+s4c6QAAABtQTFRFAAAAeXl5kpKSmpqara2tsbGxv7+/3d3d4+Pj/0BzBAAAAAF0Uk5TAEDm2GYA=
+AAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH2wQZDQ02HnCAHgAAAEJ=
+JREFUGNNjYBhEgN1QUFDQHMzkcFJSUvKAihcLCgoXQJgtSkoqDQjl5lAmULkH3JhimGKgcrhioP=
+JwOJMjY6C8CAC3YAg/E2WR5gAAAABJRU5ErkJggg=3D=3D"); background-position: 0px =
+60%; background-repeat: no-repeat; cursor: pointer; }
+  div.vectorMenuFocus { background-image: url("images/arrow-down-focus-icon=
+.png"); background-position: 100% 60%; }
+  body.rtl div.vectorMenu { direction: rtl; }
+  div#mw-head div.vectorMenu h5 { float: left; background-image: url("data:=
+image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAGXRFWHRTb2=
+Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAERJREFUeF5lTtEKgEAMMv//j/O0IxlH9CA6N=
+2WURAA/OHl5GeWAwUUHBcKV795FtTePxpmV3t9uv8Z3/cmvM88vzbbrAV/dQdX+eas3AAAAAElF=
+TkSuQmCC"); background-repeat: no-repeat; }
+  div#mw-head div.vectorMenu h5 { background-position: left bottom; margin-=
+left: -1px; }
+  div#mw-head div.vectorMenu > h5 { background-image: none; }
+  div#mw-head div.vectorMenu h4 { display: inline-block; float: left; font-=
+size: 0.8em; padding-left: 0.5em; padding-top: 1.375em; font-weight: normal=
+; border: none; }
+  div.vectorMenu h5 a { display: inline-block; width: 24px; height: 2.5em; =
+text-decoration: none; background-image: url("data:image/png;base64,iVBORw0=
+KGgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZV=
+JlYWR5ccllPAAAAERJREFUeF5lTtEKgEAMMv//j/O0IxlH9CA6N2WURAA/OHl5GeWAwUUHBcKV7=
+95FtTePxpmV3t9uv8Z3/cmvM88vzbbrAV/dQdX+eas3AAAAAElFTkSuQmCC"); background-r=
+epeat: no-repeat; }
+  div.vectorMenu h5 a { background-position: right bottom; }
+  div.vectorMenu h5 > a { display: block; }
+  div.vectorMenu div.menu { position: relative; display: none; clear: both;=
+ text-align: left; }
+  body.rtl div.vectorMenu div.menu { margin-left: 24px; }
+  body.rtl div.vectorMenu > div.menu { margin-left: auto; }
+  div.vectorMenu:hover div.menu, div.vectorMenu div.menuForceShow { display=
+: block; }
+  div.vectorMenu ul { position: absolute; background-color: white; border-w=
+idth: 0px 1px 1px; border-style: solid; border-color: silver; border-image:=
+ initial; list-style: none none; padding: 0px; margin: 0px 0px 0px -1px; te=
+xt-align: left; }
+  div.vectorMenu li { padding: 0px; margin: 0px; text-align: left; line-hei=
+ght: 1em; }
+  div.vectorMenu li a { display: inline-block; padding: 0.5em; white-space:=
+ nowrap; color: rgb(6, 69, 173); cursor: pointer; font-size: 0.8em; }
+  div.vectorMenu li > a { display: block; }
+  div.vectorMenu li.selected a, div.vectorMenu li.selected a:visited { colo=
+r: rgb(51, 51, 51); text-decoration: none; }
+  #p-search h5 { display: none; }
+  #p-search { float: left; }
+  #p-search { margin-right: 0.5em; margin-left: 0.5em; }
+  #p-search form, #p-search input { margin: 0.4em 0px 0px; }
+  div#simpleSearch { display: block; width: 14em; height: 1.4em; margin-top=
+: 0.65em; position: relative; min-height: 1px; border: 1px solid rgb(170, 1=
+70, 170); color: black; background-color: white; background-image: url("dat=
+a:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAQCAIAAABY/YLgAAAAGXRFWHRT=
+b2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACZJREFUeF5diqERACAQgID95/3s+cFg4CD=
+QzASkXl4jidvrCPzfA7puAx52W1pnAAAAAElFTkSuQmCC"); background-position: left =
+top; background-repeat: repeat-x; }
+  div#simpleSearch label { font-size: 13px; top: 0.25em; direction: ltr; }
+  div#simpleSearch input { color: black; direction: ltr; }
+  div#simpleSearch input:focus { outline: none; }
+  div#simpleSearch input.placeholder { color: rgb(153, 153, 153); }
+  div#simpleSearch input::-webkit-input-placeholder { color: rgb(153, 153, =
+153); }
+  div#simpleSearch input#searchInput { position: absolute; top: 0px; left: =
+0px; width: 90%; margin: 0px; padding: 0.2em 0px 0.2em 0.2em; outline: none=
+; border: none; font-size: 13px; background-color: transparent; direction: =
+ltr; }
+  div#simpleSearch button#searchButton { position: absolute; width: 10%; ri=
+ght: 0px; top: 0px; padding: 0.3em 0.4em 0.2em 0px; margin: 0px; border: no=
+ne; cursor: pointer; background-color: transparent; background-image: none;=
+ }
+  div#simpleSearch button#searchButton img { border: none; margin: -3px 0px=
+ 0px; padding: 0px; }
+  div#simpleSearch button#searchButton > img { margin: 0px; }
+  div#mw-panel { position: absolute; top: 160px; padding-top: 1em; width: 1=
+0em; left: 0px; }
+  div#mw-panel div.portal { padding-bottom: 1.5em; direction: ltr; }
+  div#mw-panel div.portal h5 { font-weight: normal; color: rgb(68, 68, 68);=
+ padding: 0px 0.25em 0.25em 1.75em; cursor: default; border: none; font-siz=
+e: 0.75em; }
+  div#mw-panel div.portal div.body { margin: 0px 0px 0px 1.25em; padding-to=
+p: 0.5em; background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhE=
+UgAAAIwAAAABCAAAAAAphRnkAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAA=
+AAClJREFUeF61yMEJACAQxMCN/Xfr/yIsaAfOJxC2UTPWS6f5gABhUTedBz7fGPSonIP/AAAAAE=
+lFTkSuQmCC"); background-repeat: no-repeat; background-position: left top; =
+}
+  div#mw-panel div.portal div.body ul { list-style: none none; padding: 0px=
+; margin: 0px; }
+  div#mw-panel div.portal div.body ul li { line-height: 1.125em; padding: 0=
+px 0px 0.5em; margin: 0px; overflow: hidden; font-size: 0.75em; }
+  div#mw-panel div.portal div.body ul li a { color: rgb(6, 69, 173); }
+  div#mw-panel div.portal div.body ul li a:visited { color: rgb(11, 0, 128)=
+; }
+  div#footer { margin-left: 10em; margin-top: 0px; padding: 0.75em; backgro=
+und-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAA=
+ACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABhJREFUeF4FwTEB=
+AAAAgjD7FzESWfjYdgwEoAJ4lTsaxgAAAABJRU5ErkJggg=3D=3D"); background-position=
+: left top; background-repeat: repeat-x; direction: ltr; }
+  div#footer ul { list-style: none none; margin: 0px; padding: 0px; }
+  div#footer ul li { margin: 0px; padding: 0.5em 0px; color: rgb(51, 51, 51=
+); font-size: 0.7em; }
+  div#footer #footer-icons { float: right; }
+  body.ltr div#footer #footer-places { float: left; }
+  div#footer #footer-info li { line-height: 1.4em; }
+  div#footer #footer-icons li { float: left; margin-left: 0.5em; line-heigh=
+t: 2em; text-align: right; }
+  div#footer #footer-places li { float: left; margin-right: 1em; line-heigh=
+t: 2em; }
+  #p-logo { position: absolute; top: -160px; left: 0px; width: 10em; height=
+: 160px; }
+  #p-logo a { display: block; width: 10em; height: 160px; background-repeat=
+: no-repeat; background-position: center center; text-decoration: none; }
+  #preftoc { width: 100%; float: left; clear: both; background-image: url("=
+data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAhCAQAAACysAk0AAAACXBIW=
+XMAAABIAAAASABGyWs+AAAACXZwQWcAAAABAAAAIQBSEXtPAAAAAmJLR0QA/vCI/CkAAAAmSURB=
+VAjXY2BgYPj3n+k/AwL9g5Fwxl8GJgYGpr+ogmgITQuSgQA1QiAL/go8LAAAACV0RVh0Y3JlYXR=
+lLWRhdGUAMjAwOS0wOC0wOVQxOTowNTo0MSswMDowMCYO2tEAAAAldEVYdG1vZGlmeS1kYXRlAD=
+IwMDktMDgtMDlUMTk6MDU6NDErMDA6MDB5v6zlAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZ=
+VJlYWR5ccllPAAAAABJRU5ErkJggg=3D=3D"); background-position: left bottom; ba=
+ckground-repeat: no-repeat; margin: 0px !important; padding: 0px !important=
+; }
+  #preftoc li { float: left; margin: 0px; padding: 0px 1px 0px 0px; height:=
+ 2.25em; white-space: nowrap; list-style-type: none; list-style-image: none=
+; background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEA=
+AAAhCAQAAACysAk0AAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAABAAAAIQBSEXtPAAA=
+AAmJLR0QA/vCI/CkAAAAmSURBVAjXY2BgYPj3n+k/AwL9g5Fwxl8GJgYGpr+ogmgITQuSgQA1Qi=
+AL/go8LAAAACV0RVh0Y3JlYXRlLWRhdGUAMjAwOS0wOC0wOVQxOTowNTo0MSswMDowMCYO2tEAA=
+AAldEVYdG1vZGlmeS1kYXRlADIwMDktMDgtMDlUMTk6MDU6NDErMDA6MDB5v6zlAAAAGXRFWHRT=
+b2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAABJRU5ErkJggg=3D=3D"); background-=
+position: right bottom; background-repeat: no-repeat; }
+  #preftoc li:first-child { margin-left: 1px; }
+  #preftoc a, #preftoc a:active { display: inline-block; position: relative=
+; color: rgb(6, 69, 173); padding: 0.5em; text-decoration: none; background=
+-image: none; font-size: 0.9em; }
+  #preftoc a:hover, #preftoc a:focus { text-decoration: underline; }
+  #preftoc li.selected a { background-image: url("data:image/png;base64,iVB=
+ORw0KGgoAAAANSUhEUgAAAAEAAAAhCAQAAACysAk0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbW=
+FnZVJlYWR5ccllPAAAACBJREFUeF5twskJAAAMAjD3H7mXfYogCQiQeun68Z2WPk0SQHDa/pxXA=
+AAAAElFTkSuQmCC"); background-position: center bottom; background-repeat: r=
+epeat-x; color: rgb(51, 51, 51); text-decoration: none; }
+  #preferences { float: left; width: 100%; margin: -2px 0px 0px; clear: bot=
+h; border: 1px solid rgb(204, 204, 204); background-color: rgb(249, 249, 24=
+9); background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA=
+EAAAABCAAAAAA6fptVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABRJR=
+EFUeF4FwTEBAAAAwJD1j+waGQD8APvyfoZlAAAAAElFTkSuQmCC"); }
+  #preferences fieldset { border-right: none; border-bottom: none; border-l=
+eft: none; border-image: initial; border-top: 1px solid rgb(204, 204, 204);=
+ }
+  #preferences fieldset.prefsection { border: none; padding: 0px; margin: 1=
+em; }
+  #preferences legend { color: rgb(102, 102, 102); }
+  #preferences fieldset.prefsection legend.mainLegend { display: none; }
+  #preferences td { padding-left: 0.5em; padding-right: 0.5em; }
+  #preferences td.htmlform-tip { font-size: x-small; padding: 0.2em 2em; co=
+lor: rgb(102, 102, 102); }
+  #preferences div.mw-prefs-buttons { padding: 1em; }
+  #preferences div.mw-prefs-buttons input { margin-right: 0.25em; }
+  #userlogin, #userloginForm { border: 1px solid rgb(204, 204, 204); paddin=
+g: 1.2em; margin: 0.5em; float: left; }
+  #userlogin { min-width: 20em; max-width: 90%; width: 40em; }
+  div#content { line-height: 1.5em; }
+  #bodyContent { font-size: 0.8em; }
+  a { text-decoration: none; color: rgb(6, 69, 173); background: none; }
+  a:visited { color: rgb(11, 0, 128); }
+  a:active { color: rgb(250, 167, 0); }
+  a:hover, a:focus { text-decoration: underline; }
+  a.stub { color: rgb(119, 34, 51); }
+  a.new, #p-personal a.new { color: rgb(186, 0, 0); }
+  a.new:visited, #p-personal a.new:visited { color: rgb(165, 88, 88); }
+  img { border: none; vertical-align: middle; }
+  hr { height: 1px; color: rgb(170, 170, 170); background-color: rgb(170, 1=
+70, 170); border: 0px; margin: 0.2em 0px; }
+  h1, h2, h3, h4, h5, h6 { color: black; background: none; font-weight: nor=
+mal; margin: 0px; overflow: hidden; padding-top: 0.5em; padding-bottom: 0.1=
+7em; border-bottom: 1px solid rgb(170, 170, 170); width: auto; }
+  h1 { font-size: 188%; }
+  h1 .editsection { font-size: 53%; }
+  h2 { font-size: 150%; }
+  h2 .editsection { font-size: 67%; }
+  h3, h4, h5, h6 { border-bottom: none; font-weight: bold; }
+  h3 { font-size: 132%; }
+  h3 .editsection { font-size: 76%; font-weight: normal; }
+  h4 { font-size: 116%; }
+  h4 .editsection { font-size: 86%; font-weight: normal; }
+  h5 { font-size: 100%; }
+  h5 .editsection { font-weight: normal; }
+  h6 { font-size: 80%; }
+  h6 .editsection { font-size: 125%; font-weight: normal; }
+  .editsection { float: right; }
+  p { margin: 0.4em 0px 0.5em; line-height: 1.5em; }
+  p img { margin: 0px; }
+  q { font-family: Times, "Times New Roman", serif; font-style: italic; }
+  pre, code, tt, kbd, samp { font-family: monospace, "Courier New"; }
+  code { background-color: rgb(249, 249, 249); }
+  pre { padding: 1em; border: 1px dashed rgb(47, 111, 171); color: black; b=
+ackground-color: rgb(249, 249, 249); line-height: 1.3em; }
+  ul { line-height: 1.5em; list-style-type: square; margin: 0.3em 0px 0px 1=
+.5em; padding: 0px; list-style-image: url("data:image/png;base64,iVBORw0KGg=
+oAAAANSUhEUgAAAAUAAAANCAMAAABW4lS6AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlY=
+WR5ccllPAAAAAZQTFRFAFKM////QIUK9QAAAAJ0Uk5T/wDltzBKAAAAGklEQVR42mJgBAEGokgG=
+BjBGBxBxsBqAAAMACHwALd5r8ygAAAAASUVORK5CYII=3D"); }
+  ol { line-height: 1.5em; margin: 0.3em 0px 0px 3.2em; padding: 0px; list-=
+style-image: none; }
+  li { margin-bottom: 0.1em; }
+  dt { font-weight: bold; margin-bottom: 0.1em; }
+  dl { margin-top: 0.2em; margin-bottom: 0.5em; }
+  dd { line-height: 1.5em; margin-left: 2em; margin-bottom: 0.1em; }
+  table { font-size: 100%; }
+  fieldset { border: 1px solid rgb(47, 111, 171); margin: 1em 0px; padding:=
+ 0px 1em 1em; line-height: 1.5em; }
+  fieldset.nested { margin: 0px 0px 0.5em; padding: 0px 0.5em 0.5em; }
+  legend { padding: 0.5em; font-size: 95%; }
+  form { border: none; margin: 0px; }
+  textarea { width: 100%; padding: 0.1em; }
+  select { vertical-align: top; }
+  #toc, .toc, .mw-warning { border: 1px solid rgb(170, 170, 170); backgroun=
+d-color: rgb(249, 249, 249); padding: 5px; font-size: 95%; }
+  #toc h2, .toc h2 { display: inline; border: none; padding: 0px; font-size=
+: 100%; font-weight: bold; }
+  #toc #toctitle, .toc #toctitle, #toc .toctitle, .toc .toctitle { text-ali=
+gn: center; }
+  #toc ul, .toc ul { list-style-type: none; list-style-image: none; margin-=
+left: 0px; padding: 0px; text-align: left; }
+  #toc ul ul, .toc ul ul { margin: 0px 0px 0px 2em; }
+  #toc .toctoggle, .toc .toctoggle { font-size: 94%; }
+  div.floatright, table.floatright { margin: 0px 0px 0.5em 0.5em; border: 0=
+px; }
+  div.floatright p { font-style: italic; }
+  div.floatleft, table.floatleft { margin: 0px 0.5em 0.5em 0px; border: 0px=
+; }
+  div.floatleft p { font-style: italic; }
+  div.thumb { margin-bottom: 0.5em; width: auto; background-color: transpar=
+ent; }
+  div.thumbinner { border: 1px solid rgb(204, 204, 204); background-color: =
+rgb(249, 249, 249); font-size: 94%; text-align: center; overflow: hidden; p=
+adding: 3px !important; }
+  html .thumbimage { border: 1px solid rgb(204, 204, 204); }
+  html .thumbcaption { border: none; text-align: left; line-height: 1.4em; =
+font-size: 94%; padding: 3px !important; }
+  div.magnify { float: right; border: none !important; background: none !im=
+portant; }
+  div.magnify a, div.magnify img { display: block; border: none !important;=
+ background: none !important; }
+  div.tright { margin: 0.5em 0px 1.3em 1.4em; }
+  div.tleft { margin: 0.5em 1.4em 1.3em 0px; }
+  img.thumbborder { border: 1px solid rgb(221, 221, 221); }
+  .mw-warning { margin-left: 50px; margin-right: 50px; text-align: center; =
+}
+  .usermessage { background-color: rgb(255, 206, 123); border: 1px solid rg=
+b(255, 165, 0); color: black; font-weight: bold; margin: 2em 0px 1em; paddi=
+ng: 0.5em 1em; vertical-align: middle; }
+  #siteNotice { position: relative; text-align: center; font-size: 0.8em; m=
+argin: 0px; }
+  #localNotice { margin-bottom: 0.9em; }
+  .catlinks { border: 1px solid rgb(170, 170, 170); background-color: rgb(2=
+49, 249, 249); padding: 5px; margin-top: 1em; clear: both; }
+  #siteSub { display: none; }
+  #jump-to-nav { display: none; }
+  #contentSub, #contentSub2 { font-size: 84%; line-height: 1.2em; margin: 0=
+px 0px 1.4em 1em; color: rgb(125, 125, 125); width: auto; }
+  span.subpages { display: block; }
+  .center { width: 100%; text-align: center; }
+  .center * { margin-left: auto; margin-right: auto; }
+  .small { font-size: 94%; }
+  table.small { font-size: 100%; }
+  h1, h2 { margin-bottom: 0.6em; }
+  h3, h4, h5 { margin-bottom: 0.3em; }
+  #firstHeading { margin-top: 0px; padding-top: 0px; margin-bottom: 0.1em; =
+line-height: 1.2em; font-size: 1.6em; padding-bottom: 0px; }
+  div#content a.external, div#content a.external[href^=3D"gopher://"] { bac=
+kground: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAAC=
+NMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFZJREFUeF59z4EJAD=
+EIQ1F36k7u5E7ZKXeUQPACJ3wK7UNokVxVk9kHnQH7bY9hbDyDhNXgjpRLqFlo4M2GgfyJHhjq8=
+V4agfrgPQX3JtJQGbofmCHgA/nAKks+JAjFAAAAAElFTkSuQmCC") right center no-repea=
+t; padding-right: 13px; }
+  div#content a.external[href^=3D"https://"], .link-https { background: url=
+("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXR=
+FWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIVJREFUeF6tjzsKg0AQhi09mimsFJ=
+LCzpNYCGKbK3gAtfUIljaCoKCCZIs8MMV2v+yCg8siWlh8zOtjhjEAEFmeIopDQtTrTJNEZIxhW=
+ysiNfULJFJjDzGnba/aBt4+wAuBzD+tg6a8SVkXf4GET96xmDxNzP39IvE/PPDtXIyVpYinv14A=
+5F0laJ8oYFgAAAAASUVORK5CYII=3D") right center no-repeat; padding-right: 13p=
+x; }
+  div#content a.external[href^=3D"mailto:"], .link-mailto { background: url=
+("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAGXR=
+FWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADBQTFRF////////iIqF9vb26urpyc=
+fDvb275eXj2djV+/v4srKy6efio6GcqKejsa6q8fDtVM9qIQAAAAF0Uk5TAEDm2GYAAABOSURBV=
+HheBcExDkAwGIDRL43NpJOt6a9hMdVilP8gklqsHMJmt4qeyeI03oNSNkCrAIU/7YTWbwp0zz4r=
+TXZHxF/9YA15HTG4+4NFRNofUBMMOBBNZngAAAAASUVORK5CYII=3D") right center no-re=
+peat; padding-right: 13px; }
+  div#content a.external[href^=3D"news://"] { background: url("data:image/p=
+ng;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZ=
+QBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHtJREFUeF6NkEEKgCAQRT2w1wiiUxgk0SKiTe6i9oKe=
+QXDhKSZmYAJRKeHh4j//DIp+6OAPJH6cXJRSZqSUQClViBjUKER8zXAbUhev+6Q7hMA0G1msNtI=
+o5zxhrX3xzlNG4ravYMwBMUZsKsBsXjQIABCTHlsfTXuj8wCN3T2QBjtcwQAAAABJRU5ErkJggg=
+=3D=3D") right center no-repeat; padding-right: 13px; }
+  div#content a.external[href^=3D"ftp://"], .link-ftp { background: url("da=
+ta:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAGXRFWHR=
+Tb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAExJREFUeF5VyEEKwCAMAMH83o/0LT6kFH=
+qQYqkevG1jIITs3kaQgn+A7A29ujnw5NKrsaPCrTegBBrRMzYeXkbGzsdkZRwsPWMUmEd+CkSgV=
+eVp2OkAAAAASUVORK5CYII=3D") right center no-repeat; padding-right: 13px; }
+  div#content a.external[href^=3D"irc://"], div#content a.external[href^=3D=
+"ircs://"], .link-irc { background: url("data:image/png;base64,iVBORw0KGgoA=
+AAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR=
+5ccllPAAAAHRJREFUeF590E0KgCAQBWAvH0TXigI3ZccQ/8H91ExqKNrAW8j7kFG27SvMyzQM9s=
+8whuBnENdQSllFKdWFWFC01pQQwhASMMaAtXYIMQScc/0dxSXyIaPq1ZzzF6JOsKBTHOC9hxgjo=
+QLbf2tRgekWKka5AShBSepvauUSAAAAAElFTkSuQmCC") right center no-repeat; paddi=
+ng-right: 13px; }
+  div#content a.external[href$=3D".ogg"], div#content a.external[href$=3D".=
+OGG"], div#content a.external[href$=3D".mid"], div#content a.external[href$=
+=3D".MID"], div#content a.external[href$=3D".midi"], div#content a.external=
+[href$=3D".MIDI"], div#content a.external[href$=3D".mp3"], div#content a.ex=
+ternal[href$=3D".MP3"], div#content a.external[href$=3D".wav"], div#content=
+ a.external[href$=3D".WAV"], div#content a.external[href$=3D".wma"], div#co=
+ntent a.external[href$=3D".WMA"], .link-audio { background: url("data:image=
+/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAGXRFWHRTb2Z0d2F=
+yZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADBQTFRF////dX8qyNF7eYMzwsxrsr9G8PHrm6Jrt7=
+uakJVmn6OB1duat8NQi5YzhI4ykZR07gQraQAAAAF0Uk5TAEDm2GYAAABJSURBVHheNcSxDUBQF=
+IbR727glxvKl3dHsIHCGESrNIIR7KE1hQ1MoDSCiMhJDixSDWVEhuZbei/sf/Jqbdn28+jxYe4u=
+7CaND+p5C05J6bE1AAAAAElFTkSuQmCC") right center no-repeat; padding-right: 1=
+3px; }
+  div#content a.external[href$=3D".ogm"], div#content a.external[href$=3D".=
+OGM"], div#content a.external[href$=3D".avi"], div#content a.external[href$=
+=3D".AVI"], div#content a.external[href$=3D".mpeg"], div#content a.external=
+[href$=3D".MPEG"], div#content a.external[href$=3D".mpg"], div#content a.ex=
+ternal[href$=3D".MPG"], .link-video { background: url("data:image/png;base6=
+4,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZ=
+SBJbWFnZVJlYWR5ccllPAAAAAJ0Uk5TAP9bkSK1AAAAXElEQVR4Xi2NMQoFMQgFvbpgHUj5LvF6=
+K7sFQXKFsOew2G/xuylmGPn62Wb76U+ayHsTbDnrQMNrHdkZRChyi730KvK1QUWVD47gzoCOMBk=
+XPSZrIuumseW/iKU/eKdG9xXBa10AAAAASUVORK5CYII=3D") right center no-repeat; p=
+adding-right: 13px; }
+  div#content a.external[href$=3D".pdf"], div#content a.external[href$=3D".=
+PDF"], div#content a.external[href*=3D".pdf#"], div#content a.external[href=
+*=3D".PDF#"], div#content a.external[href*=3D".pdf?"], div#content a.extern=
+al[href*=3D".PDF?"], .link-document { background: url("data:image/png;base6=
+4,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZ=
+SBJbWFnZVJlYWR5ccllPAAAAE5JREFUeF5lykEKgDAMBdF/+17Es/QkiosiCBURXIzJooZohmwe=
+X6gwmkCeI+Oqc2C1FnvnF2ejlQYU0tLK2NjY6f/l8V12Ti7uhFFgDj19b58EwXuqkAAAAABJRU5=
+ErkJggg=3D=3D") right center no-repeat; padding-right: 13px; }
+  div#content a.extiw, div#content a.extiw:active { color: rgb(51, 102, 187=
+); background: none; padding: 0px; }
+  div#content a.extiw:visited { color: rgb(102, 51, 102); }
+  div#content a.extiw:active { color: rgb(187, 102, 51); }
+  div#content a.external { color: rgb(51, 102, 187); }
+  div#content a.external:visited { color: rgb(102, 51, 102); }
+  div#content a.external:active { color: rgb(187, 102, 51); }
+  div#content .printfooter { display: none; }
+  #pt-userpage, #pt-anonuserpage, #pt-login { background: url("data:image/p=
+ng;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAANCAYAAACQN/8FAAAAIGNIUk0AAHolAACAg=
+wAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAACxMAAAsTAQCanBgAAAHOSURB=
+VCjPY2BAAjtLxLmPN4pFn2gSTdrfICDAgA2c65C0uznf6erT9dH/H6/0+39zut6d051SfiiK9jc=
+wsFyfa3v21Z7S/++Odf1/uSP7/6OF1v+vT9O7ub9BlAdJoajBw+W+P98crPv/8eLC/6/2lPx/vN=
+j+/705xv+PNwsHwRUerOFTvTXX9sfzjTFg056tC/v/YJbu//tzjP4eaxR3hiv8z8DAuKPF4N7Du=
+Ub/H84z/X9/hsb/BzM1/x/qMnxwJo2BFa5QP3rKpMjSiT/XtTr+vzzV+P+Vacb/N7fb/48v6fik=
+HTYhFaxII3iSr0vRmm/muZv++9du/L969Yr/Wzeu+O9Tvvq/Rcay//aZC15reHXoMtimz91ulrn=
+yv1n22v/muRv/960693/Fniv/TdKX/zdKXvDfPHX+f9PYySsYbFJnXDWIm/nfOG0pWDKkdsP/oo=
+nbgYoW/jdImPNfL2bKf+v4SRcZTCK6D5gkTAcLGibO/W+aMu+/b8mS//pxM8CKdAPr/xtFdB9lk=
+DQNszOP7r1tnTLzr03qzP/WQGyVAqRTpv+3Tprxzzi88560VZo3xNui2jxi+oFB4oYRNaL6Ic0g=
+DGEHh4HkQEoAjALoHv5slukAAAAASUVORK5CYII=3D") left top no-repeat; text-trans=
+form: none; padding-left: 15px !important; }
+  .redirectText { font-size: 140%; }
+  .redirectMsg img { vertical-align: text-bottom; }
+  .toccolours { border: 1px solid rgb(170, 170, 170); background-color: rgb=
+(249, 249, 249); padding: 5px; font-size: 95%; }
+  #bodyContent { position: relative; width: 100%; }
+  #mw-js-message { font-size: 0.8em; }
+  div#bodyContent { line-height: 1.5em; }
+  #ca-unwatch.icon a, #ca-watch.icon a { margin: 0px; padding: 3.1em 0px 0p=
+x; outline: none; display: block; width: 26px; height: 0px; overflow: hidde=
+n; background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFg=
+AAAAQCAMAAAClQEgHAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAwBQTF=
+RFoNb/+vr52tXLdcP/ltL/ysKt39rPrdz/xtDT8vLwwrJxodr/vqxjzdnr8v7+ntb/uuX/i87/y=
+tTV9fb3zuz+8eOU+fr8zvH/wuX/ecT/hbrnj7XBltb/m9T/h8z/jtH+c8H/vq53lL/Ovq109vb1=
+/v7rx8CuhcT0xLJlot3/2PL/kc//59N3s9//v7KGbL7/mNf//v395NSLmdr//Pz7ccT/wbOIZ7v=
+/ybZk6OzzpNf/icPu0cm2g8n/p9n/9fTzva1ouuL/samQwu3/scfhfrbj8e/q4+bnyLJQ6u3tqt=
+r/irbG7PH5fcz/0d7ww+r/zcuL6Obh9f7/hsv/s8+r+e2rw7J2rb3C+fj2icTy1O7/jrvO1s++v=
+MyUz8zGocna6+rn8vDtlLK8aL3/d8X///vV7fz/vraklMr039nMtNjqp97/o9362ejN4vb/zcN7=
+sN3/vfP/bsD/1dLNhK2+yLeIkrri28drz7tp5N7TiK26grXi3trTccP/vub/rd//+v//qM7fyeH=
+Mztmq5PT8u6t0/f3+/P39ksDwk8HQtMTH3fn/kdH/ltLpxb5o0dzsnND6ssXbzun5rdru2+Dh5+=
+vsz9nadrrx1eLz+fLM7/z/w71z//zPgMz/8eWrwtKT9vn8jbPCf7vs1N3pua1terXo1O3tqtfWw=
+OX51cV5dMH/vtmy28p8fLXR4efx9emq///8z9TbzrxowLOP5ea57///nq2xy7xo///5frrnwrSP=
+9PX2+vv7ztzwvd3P2vH5r9z/8/X4nMrlsN//qLq9wa5zh7fikdf/tuL9zbpo3tnQ1u/kx8rL+/z=
+8kq+6+vLGkqKq6f//oMrfxuf8xbVwqLvSh7vq8PP3ltD6d8P/v7Ngx7dqwbFt/PGyk8jv9vf3zL=
+hofqy/wdPqyeTc0vH9//3kxun5i7O/x87X09mr1sRzmK3C3dnQz9XXmLvg///6uc7ozLpq7O7u/=
+/zc7evoyfT/+/z+mtf/9e25zcJt7ezowMXGu8nM+Pn5////8/n77InDmQAAAQB0Uk5T////////=
+///////////////////////////////////////////////////////////////////////////=
+///////////////////////////////////////////////////////////////////////////=
+///////////////////////////////////////////////////////////////////////////=
+///////////////////////////////////////////////////////////////////////////=
+////////////////////////////////AFP3ByUAAAJbSURBVHjaYvgPAb+3/ccK4tKxi7+4SkA=
+9A5SWnuyJVSGXDidWcSnN6/jVQw0+s//fBWzqin9scMImvtF/62us6rfwOaEYXPLvXyM2pzn8+7=
+dGBYt4dZ5WhjA29d3i+Sowg/d4TjuX9+9fQwnH1L8oqhIrN5//909VOdPNBEXcZ8Y7CQlHEam9P=
+t/Q1O/KrXNcdhSsnuFIZ3zWpLR/QMAnkhWvJA1TxVqx0mheKkj883qjVx9LYeIukRkT2P3rCtgP=
+CGTfiLTuQKjPD3iZK1DAzv64OWD27VIG9+h/SOASB0xhwklk8XImmLilOp+IhK6XFQODrCyD+D1=
+euPoHF50FDoPFZWQKfzIx/N/9PAiuP3oKwmOMYU9hwu8tAhHiYteidO34WbRtFZg1d65DVn+6Hi=
+Jem3MrEBTGZ6taIPqDvN1RwkxxJkRcVeMLivixEwwsgpLmRfKulqjqm/jB4r08vyCp4tMhiAFPO=
+FCj2L4cIh7KhCp+UJ1bjjlZ/6Y8L5r6PmOQuGkIEzS5vV0BMWBWOKrCGlGIeCorqvhieTlm5pRV=
+kgYuaOpj5zLXmiqkLGeFGhwOTBRRl4EmJKEqVJsDdC3Q8B16qOITs4MNegS/B3OXoanf53s8JNb=
+YN0cPanDSPy3vP0JVz/4tRFVo9u+uRcwbZdF/d1DFy8S5Fz3qr5ZxdkVT/3W1Rsyp1vmFS6AGP1=
+TqAolzSK+9j6KQZ5MNiGK64sGIIr7U+gOI4pWaLoaqfjtEPRdIPdDgdiFY5hRCyaWGbDDz2CKQx=
+dv8YOb5LcCtnuE/jQBAgAEAQlFsBT+lqfQAAAAASUVORK5CYII=3D"); }
+  #ca-unwatch.icon a { background-position: -43px 60%; }
+  #ca-watch.icon a { background-position: 5px 60%; }
+  #ca-unwatch.icon a:hover, #ca-unwatch.icon a:focus { background-position:=
+ -67px 60%; }
+  #ca-watch.icon a:hover, #ca-watch.icon a:focus { background-position: -19=
+px 60%; }
+  #ca-unwatch.icon a.loading, #ca-watch.icon a.loading { background-image: =
+url("data:image/gif;base64,R0lGODlhEAAQAMQfANra2uLi4vDw8PLy8ujo6Ozs7NbW1vj4=
++Pb29s7Oztzc3NTU1O7u7uDg4NHR0erq6v39/d7e3vz8/Pv7+/7+/tPT09jY2Pr6+tnZ2efn5/X=
+19eXl5ebm5vT09P///////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJAwAfACwAAAAAEAAQAAAFa+=
+Anjl9QkShacVqabp2XuKjjecHhStrjHDdIgtORiCyWSEZwud0mg0zEUhkYnNhsY/O5OCRZrEEwg=
+vzCkgqZhGiEB1wUgRGeAFKApqcjcJ5QCx4aFQEECX1/JAlJJBsVFRMkEBkXLhyVNJkhACH5BAkD=
+AB8ALAAAAAAQABAAAAV74CeO4hUQZEoGhqGqWzQtEnlYRCYMGSB5BkTKQCgUOBGPkjBIdQDKqBL=
+haJI4D6l0gylMRg6IVkmhNBIjxWBM8XAwHNFAIdYWDA0SRhNtKy0CJAUVEAcRAQJkFikZDg4EBB=
+0RDR4dGCkIEhAjFBsBDwovKo0BoioFQiMhACH5BAkDAB8ALAAAAAAQABAAAAWB4CeO5HeU33OVl=
+5IIpYEFh/QR1rYNZSMUAYVBwfBYbKRJwwPxFDxQjAbloECvHgMEBUBgPZTApjSxeL+eQGDUsQwk=
+aGhBcUBYinGI5GBIEBwEGhxwVwwLFgoRHQwECgIADRFXBgUfEygfEBEDTmuYIxAJFAYwnyMFABV=
+bpiMYGSghACH5BAkDAB8ALAAAAAAQABAAAAV+4CdKjWieKOJs6De1U5Zhg4YcmaG0kXcElQDtEW=
+kZPMgMBGlofQDIqK9pmhAADClSEDBtAICJROvR7EQGx5LsgQAOogKm0LhQ2IDRQRJRFKIHAh4XA=
+XknEw5REQsRBgAOEigRFBQEERofAgJiKBoZAgsXTicUDgYDoygNXU4hACH5BAUDAB8ALAAAAAAQ=
+ABAAAAV54Cd+EFBNY6p+hgCssOERGwSP3eZBgUIEG0xhdGFpPMjChjNoRD6XIGBDQVo9FIcogZn=
+srlbLQNRQfMEewVN0ERAaaE9AoDoECGj76lBBTxQwDlYBEQweGwwqEDIHCwIbBgAAFioUBgUOdC=
+IaBRwrBhUHNykQY6MfIQA7"); background-position: 5px 60%; }
+  #ca-unwatch.icon a span, #ca-watch.icon a span { display: none; }
+  div.vectorTabs ul { background-image: url("data:image/png;base64,iVBORw0K=
+GgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ=
+lYWR5ccllPAAAAERJREFUeF5lTtEKgEAMMv//j/O0IxlH9CA6N2WURAA/OHl5GeWAwUUHBcKV79=
+5FtTePxpmV3t9uv8Z3/cmvM88vzbbrAV/dQdX+eas3AAAAAElFTkSuQmCC"); background-po=
+sition: right bottom; background-repeat: no-repeat; }
+  .tipsy { font-size: 0.8em; }
+}
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.osdev.org/load.php?debug=false&lang=en&modules=site&only=styles&skin=vector&*
+
+@charset "utf-8";
+
+div.mw-geshi div, div.mw-geshi div pre, span.mw-geshi, pre.source-css, pre.=
+source-javascript { font-family: monospace, Courier !important; }
+
+@media print {
+}
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://wiki.osdev.org/images/c/c1/Difficulty_3.png
+
+iVBORw0KGgoAAAANSUhEUgAAAC4AAAAOCAYAAABQFS4BAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAALEgAACxIB0t1+/AAAABh0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzT7MfTgAAABZ0RVh0
+Q3JlYXRpb24gVGltZQAxMC8yOS8wONtkcyYAAAQRdEVYdFhNTDpjb20uYWRvYmUueG1wADw/eHBh
+Y2tldCBiZWdpbj0iICAgIiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1l
+dGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDQuMS1j
+MDM0IDQ2LjI3Mjk3NiwgU2F0IEphbiAyNyAyMDA3IDIyOjM3OjM3ICAgICAgICAiPgogICA8cmRm
+OlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1u
+cyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxu
+czp4YXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iPgogICAgICAgICA8eGFwOkNyZWF0
+b3JUb29sPkFkb2JlIEZpcmV3b3JrcyBDUzM8L3hhcDpDcmVhdG9yVG9vbD4KICAgICAgICAgPHhh
+cDpDcmVhdGVEYXRlPjIwMDgtMTAtMjlUMTA6MTE6NTJaPC94YXA6Q3JlYXRlRGF0ZT4KICAgICAg
+ICAgPHhhcDpNb2RpZnlEYXRlPjIwMDgtMTAtMjlUMTA6MjM6MDlaPC94YXA6TW9kaWZ5RGF0ZT4K
+ICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0
+PSIiCiAgICAgICAgICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4x
+LyI+CiAgICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2UvcG5nPC9kYzpmb3JtYXQ+CiAgICAgIDwvcmRm
+OkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOgT66sAAAJh
+SURBVEiJtZa9axRBHIafvWw4kxhzEfQSEAkBQYOVtWijpBBtxMJShAXBIqWlpZVf5Rb6B2hhMIhI
+vhCsFBQMgsSPmCKXI5fb25vZ2d2Z/bDQSO6Ces0+3cDzDu/8GIaxPi4+Oz2//PrJu6+bY1EgkVIS
+hiGRUgRBwGQ5qE2NDV2582r1DcDK0mxhvuu6ABPAfeAiEAMWnbwEZuwX88vPj01OVG5Mn6KchSAb
+4G+QbX1jbfUzt5b0+MJKcw4YBSjaBx4BdaDiOI7Y3dh13aPAQ+Bx6cP3emV6qkp5eASGDsLACPSV
+SZKcA1bM1SOC93Vd2QkX7QNngZvdpQEcx1kHbgNnSoFsM2hbYJdhcBT695HmGWEc4YeaLDHkef4n
+XLQPJI7jbHeX3sU2gK0CBbEEux+sElkkCUULv+XjyQihOzalaL9X7MQYCBpgFOQZqVcjaNTwW02k
+iojTzkDRfs/FsyyDdh1KfZBoUq9O1NwkFC1iHZN2DaRov+fikIO/CXkKOiLz6pjmBlp4pBnkdL9H
+Rfv/JQdyO89z8GugFWhJur2Flj5xCjpjz0SK9nvFTpIEUk0eCZLARymFiBJUAmECOv11xB2K9nvA
+Aiw7jmOyyKCVQAmBF0RInSEMSAMq6UwV7fdKSQYBzZZPuy1oiJCGSmkbCBJoG9hQnYGifcByXXf/
+PzqPA1jnjh/2hvtM5VJVMmAZhAGhQRioKZhbh5JF64fIRwHOn6gW5v/+qywCErgLrAG7H8xDwAPA
+2Cer5Qtvv3hPr38y47D3vk0OUytZXN5ZF+0D14B7wMJfJj4LzPwEt7lYRL9l9LcAAAAASUVORK5C
+YII=
+
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://wiki.osdev.org/skins/common/images/osdev.png
+
+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
+
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://wiki.osdev.org/skins/common/images/poweredby_mediawiki_88x31.png
+
+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
+R4cAAAAASUVORK5CYII=
+
+------MultipartBoundary--2aLQcXAD8L1wBdMHLwkHVewPFg2INHRPPU5nmdNlzI------

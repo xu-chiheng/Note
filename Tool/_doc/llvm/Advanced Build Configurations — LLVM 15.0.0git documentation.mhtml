@@ -1,0 +1,1278 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://llvm.org/docs/AdvancedBuilds.html
+Subject: =?utf-8?Q?Advanced=20Build=20Configurations=20=E2=80=94=20LLVM=2015.0.0gi?=
+ =?utf-8?Q?t=20documentation?=
+Date: Sat, 7 May 2022 21:56:22 -0000
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--wruabpu2OWgqLs01vfjECtyBNOPBF7JKr9Mues5In5----"
+
+
+------MultipartBoundary--wruabpu2OWgqLs01vfjECtyBNOPBF7JKr9Mues5In5----
+Content-Type: text/html
+Content-ID: <frame-ECE8EECE7DC021281A95BFBE7C6C2A1C@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/AdvancedBuilds.html
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3.=
+org/1999/xhtml"><head><meta http-equiv=3D"Content-Type" content=3D"text/htm=
+l; charset=3DUTF-8"><link rel=3D"stylesheet" type=3D"text/css" href=3D"cid:=
+css-f7bbe6e2-23ba-49e4-b548-47c7ef8d414f@mhtml.blink" />
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3DEdge">
+   =20
+    <title>Advanced Build Configurations =E2=80=94 LLVM 15.0.0git documenta=
+tion</title>
+    <link rel=3D"stylesheet" href=3D"https://llvm.org/docs/_static/llvm-the=
+me.css" type=3D"text/css">
+    <link rel=3D"stylesheet" href=3D"https://llvm.org/docs/_static/pygments=
+.css" type=3D"text/css">
+   =20
+   =20
+   =20
+   =20
+   =20
+    <link rel=3D"index" title=3D"Index" href=3D"https://llvm.org/docs/genin=
+dex.html">
+    <link rel=3D"search" title=3D"Search" href=3D"https://llvm.org/docs/sea=
+rch.html">
+    <link rel=3D"next" title=3D"LLVM Alias Analysis Infrastructure" href=3D=
+"https://llvm.org/docs/AliasAnalysis.html">
+    <link rel=3D"prev" title=3D"How To Add A Constrained Floating-Point Int=
+rinsic" href=3D"https://llvm.org/docs/AddingConstrainedIntrinsics.html">
+
+
+  </head><body>
+<div class=3D"logo">
+  <a href=3D"https://llvm.org/docs/index.html">
+    <img src=3D"https://llvm.org/docs/_static/logo.png" alt=3D"LLVM Logo" w=
+idth=3D"250" height=3D"88"></a>
+</div>
+
+    <div class=3D"related" role=3D"navigation" aria-label=3D"related naviga=
+tion">
+      <h3>Navigation</h3>
+      <ul>
+        <li class=3D"right" style=3D"margin-right: 10px">
+          <a href=3D"https://llvm.org/docs/genindex.html" title=3D"General =
+Index" accesskey=3D"I">index</a></li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/AliasAnalysis.html" title=3D"LLV=
+M Alias Analysis Infrastructure" accesskey=3D"N">next</a> |</li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/AddingConstrainedIntrinsics.html=
+" title=3D"How To Add A Constrained Floating-Point Intrinsic" accesskey=3D"=
+P">previous</a> |</li>
+  <li><a href=3D"https://llvm.org/">LLVM Home</a>&nbsp;|&nbsp;</li>
+  <li><a href=3D"https://llvm.org/docs/index.html">Documentation</a>=C2=BB<=
+/li>
+
+          <li class=3D"nav-item nav-item-1"><a href=3D"https://llvm.org/doc=
+s/UserGuides.html" accesskey=3D"U">User Guides</a> =C2=BB</li>=20
+      </ul>
+    </div>
+
+      <div class=3D"sphinxsidebar" role=3D"navigation" aria-label=3D"main n=
+avigation">
+        <div class=3D"sphinxsidebarwrapper">
+
+<h3>Documentation</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/GettingStartedTutorials.html">Gett=
+ing Started/Tutorials</a></li>
+    <li><a href=3D"https://llvm.org/docs/UserGuides.html">User Guides</a></=
+li>
+    <li><a href=3D"https://llvm.org/docs/Reference.html">Reference</a></li>
+</ul>
+
+<h3>Getting Involved</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/Contributing.html">Contributing to=
+ LLVM</a></li>
+    <li><a href=3D"https://llvm.org/docs/HowToSubmitABug.html">Submitting B=
+ug Reports</a></li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#mailing-lists=
+">Mailing Lists</a></li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#irc">IRC</a><=
+/li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#meetups-and-s=
+ocial-events">Meetups and Social Events</a></li>
+</ul>
+
+<h3>Additional Links</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/FAQ.html">FAQ</a></li>
+    <li><a href=3D"https://llvm.org/docs/Lexicon.html">Glossary</a></li>
+    <li><a href=3D"https://llvm.org/pubs">Publications</a></li>
+    <li><a href=3D"https://github.com/llvm/llvm-project//">Github Repositor=
+y</a></li>
+</ul>
+  <div role=3D"note" aria-label=3D"source link">
+    <h3>This Page</h3>
+    <ul class=3D"this-page-menu">
+      <li><a href=3D"https://llvm.org/docs/_sources/AdvancedBuilds.rst.txt"=
+ rel=3D"nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id=3D"searchbox" style=3D"" role=3D"search">
+  <h3>Quick search</h3>
+    <div class=3D"searchformwrapper">
+    <form class=3D"search" action=3D"https://llvm.org/docs/search.html" met=
+hod=3D"get">
+      <input type=3D"text" name=3D"q">
+      <input type=3D"submit" value=3D"Go">
+     =20
+     =20
+    </form>
+    </div>
+</div>
+
+        </div>
+      </div>
+
+    <div class=3D"document">
+      <div class=3D"documentwrapper">
+        <div class=3D"bodywrapper">
+          <div class=3D"body" role=3D"main">
+           =20
+  <div class=3D"section" id=3D"advanced-build-configurations">
+<h1>Advanced Build Configurations<a class=3D"headerlink" href=3D"https://ll=
+vm.org/docs/AdvancedBuilds.html#advanced-build-configurations" title=3D"Per=
+malink to this headline">=C2=B6</a></h1>
+<div class=3D"contents local topic" id=3D"contents">
+<ul class=3D"simple">
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/AdvancedB=
+uilds.html#introduction" id=3D"id1">Introduction</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/AdvancedB=
+uilds.html#bootstrap-builds" id=3D"id2">Bootstrap Builds</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/AdvancedB=
+uilds.html#apple-clang-builds-a-more-complex-bootstrap" id=3D"id3">Apple Cl=
+ang Builds (A More Complex Bootstrap)</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/AdvancedB=
+uilds.html#multi-stage-pgo" id=3D"id4">Multi-stage PGO</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/AdvancedB=
+uilds.html#stage-non-determinism" id=3D"id5">3-Stage Non-Determinism</a></l=
+i>
+</ul>
+</div>
+<div class=3D"section" id=3D"introduction">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/AdvancedBuilds.h=
+tml#id1">Introduction</a><a class=3D"headerlink" href=3D"https://llvm.org/d=
+ocs/AdvancedBuilds.html#introduction" title=3D"Permalink to this headline">=
+=C2=B6</a></h2>
+<p><a class=3D"reference external" href=3D"http://www.cmake.org/">CMake</a>=
+ is a cross-platform build-generator tool. CMake
+does not build the project, it generates the files needed by your build too=
+l
+(GNU make, Visual Studio, etc.) for building LLVM.</p>
+<p>If <strong>you are a new contributor</strong>, please start with the <a =
+class=3D"reference internal" href=3D"https://llvm.org/docs/GettingStarted.h=
+tml"><span class=3D"doc">Getting Started with the LLVM System</span></a> or
+<a class=3D"reference internal" href=3D"https://llvm.org/docs/CMake.html"><=
+span class=3D"doc">Building LLVM with CMake</span></a> pages. This page is =
+intended for users doing more complex builds.</p>
+<p>Many of the examples below are written assuming specific CMake Generator=
+s.
+Unless otherwise explicitly called out these commands should work with any =
+CMake
+generator.</p>
+</div>
+<div class=3D"section" id=3D"bootstrap-builds">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/AdvancedBuilds.h=
+tml#id2">Bootstrap Builds</a><a class=3D"headerlink" href=3D"https://llvm.o=
+rg/docs/AdvancedBuilds.html#bootstrap-builds" title=3D"Permalink to this he=
+adline">=C2=B6</a></h2>
+<p>The Clang CMake build system supports bootstrap (aka multi-stage) builds=
+. At a
+high level a multi-stage build is a chain of builds that pass data from one
+stage into the next. The most common and simple version of this is a tradit=
+ional
+bootstrap build.</p>
+<p>In a simple two-stage bootstrap build, we build clang using the system c=
+ompiler,
+then use that just-built clang to build clang again. In CMake this simplest=
+ form
+of a bootstrap build can be configured with a single option,
+CLANG_ENABLE_BOOTSTRAP.</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">$ </span>cmake -G Ninja -DCMAKE_BUILD_TYPE<=
+span class=3D"o">=3D</span>Release -DCLANG_ENABLE_BOOTSTRAP<span class=3D"o=
+">=3D</span>On &lt;path to source&gt;
+<span class=3D"gp">$ </span>ninja stage2
+</pre></div>
+</div>
+<p>This command itself isn=E2=80=99t terribly useful because it assumes def=
+ault
+configurations for each stage. The next series of examples utilize CMake ca=
+che
+scripts to provide more complex options.</p>
+<p>By default, only a few CMake options will be passed between stages.
+The list, called _BOOTSTRAP_DEFAULT_PASSTHROUGH, is defined in clang/CMakeL=
+ists.txt.
+To force the passing of the variables between stages, use the -DCLANG_BOOTS=
+TRAP_PASSTHROUGH
+CMake option, each variable separated by a =E2=80=9C;=E2=80=9D. As example:=
+</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">$ </span>cmake -G Ninja -DCMAKE_BUILD_TYPE<=
+span class=3D"o">=3D</span>Release -DCLANG_ENABLE_BOOTSTRAP<span class=3D"o=
+">=3D</span>On -DCLANG_BOOTSTRAP_PASSTHROUGH<span class=3D"o">=3D</span><sp=
+an class=3D"s2">"CMAKE_INSTALL_PREFIX;CMAKE_VERBOSE_MAKEFILE"</span> &lt;pa=
+th to source&gt;
+<span class=3D"gp">$ </span>ninja stage2
+</pre></div>
+</div>
+<p>CMake options starting by <code class=3D"docutils literal notranslate"><=
+span class=3D"pre">BOOTSTRAP_</span></code> will be passed only to the stag=
+e2 build.
+This gives the opportunity to use Clang specific build flags.
+For example, the following CMake call will enabled =E2=80=98-fno-addrsig=E2=
+=80=99 only during
+the stage2 build for C and C++.</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">$ </span>cmake <span class=3D"o">[</span>..=
+<span class=3D"o">]</span>  -DBOOTSTRAP_CMAKE_CXX_FLAGS<span class=3D"o">=
+=3D</span><span class=3D"s1">'-fno-addrsig'</span> -DBOOTSTRAP_CMAKE_C_FLAG=
+S<span class=3D"o">=3D</span><span class=3D"s1">'-fno-addrsig'</span> <span=
+ class=3D"o">[</span>..<span class=3D"o">]</span>
+</pre></div>
+</div>
+<p>The clang build system refers to builds as stages. A stage1 build is a s=
+tandard
+build using the compiler installed on the host, and a stage2 build is built
+using the stage1 compiler. This nomenclature holds up to more stages too. I=
+n
+general a stage*n* build is built using the output from stage*n-1*.</p>
+</div>
+<div class=3D"section" id=3D"apple-clang-builds-a-more-complex-bootstrap">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/AdvancedBuilds.h=
+tml#id3">Apple Clang Builds (A More Complex Bootstrap)</a><a class=3D"heade=
+rlink" href=3D"https://llvm.org/docs/AdvancedBuilds.html#apple-clang-builds=
+-a-more-complex-bootstrap" title=3D"Permalink to this headline">=C2=B6</a><=
+/h2>
+<p>Apple=E2=80=99s Clang builds are a slightly more complicated example of =
+the simple
+bootstrapping scenario. Apple Clang is built using a 2-stage build.</p>
+<p>The stage1 compiler is a host-only compiler with some options set. The s=
+tage1
+compiler is a balance of optimization vs build time because it is a throwaw=
+ay.
+The stage2 compiler is the fully optimized compiler intended to ship to use=
+rs.</p>
+<p>Setting up these compilers requires a lot of options. To simplify the
+configuration the Apple Clang build settings are contained in CMake Cache f=
+iles.
+You can build an Apple Clang compiler using the following commands:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">$ </span>cmake -G Ninja -C &lt;path to sour=
+ce&gt;/clang/cmake/caches/Apple-stage1.cmake &lt;path to source&gt;
+<span class=3D"gp">$ </span>ninja stage2-distribution
+</pre></div>
+</div>
+<p>This CMake invocation configures the stage1 host compiler, and sets
+CLANG_BOOTSTRAP_CMAKE_ARGS to pass the Apple-stage2.cmake cache script to t=
+he
+stage2 configuration step.</p>
+<p>When you build the stage2-distribution target it builds the minimal stag=
+e1
+compiler and required tools, then configures and builds the stage2 compiler
+based on the settings in Apple-stage2.cmake.</p>
+<p>This pattern of using cache scripts to set complex settings, and specifi=
+cally to
+make later stage builds include cache scripts is common in our more advance=
+d
+build configurations.</p>
+</div>
+<div class=3D"section" id=3D"multi-stage-pgo">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/AdvancedBuilds.h=
+tml#id4">Multi-stage PGO</a><a class=3D"headerlink" href=3D"https://llvm.or=
+g/docs/AdvancedBuilds.html#multi-stage-pgo" title=3D"Permalink to this head=
+line">=C2=B6</a></h2>
+<p>Profile-Guided Optimizations (PGO) is a really great way to optimize the=
+ code
+clang generates. Our multi-stage PGO builds are a workflow for generating P=
+GO
+profiles that can be used to optimize clang.</p>
+<p>At a high level, the way PGO works is that you build an instrumented com=
+piler,
+then you run the instrumented compiler against sample source files. While t=
+he
+instrumented compiler runs it will output a bunch of files containing
+performance counters (.profraw files). After generating all the profraw fil=
+es
+you use llvm-profdata to merge the files into a single profdata file that y=
+ou
+can feed into the LLVM_PROFDATA_FILE option.</p>
+<p>Our PGO.cmake cache script automates that whole process. You can use it =
+by
+running:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">$ </span>cmake -G Ninja -C &lt;path to sour=
+ce&gt;/clang/cmake/caches/PGO.cmake &lt;path to source&gt;
+<span class=3D"gp">$ </span>ninja stage2-instrumented-generate-profdata
+</pre></div>
+</div>
+<p>If you let that run for a few hours or so, it will place a profdata file=
+ in your
+build directory. This takes a really long time because it builds clang twic=
+e,
+and you <em>must</em> have compiler-rt in your build tree.</p>
+<p>This process uses any source files under the perf-training directory as =
+training
+data as long as the source files are marked up with LIT-style RUN lines.</p=
+>
+<p>After it finishes you can use =E2=80=9Cfind . -name clang.profdata=E2=80=
+=9D to find it, but it
+should be at a path something like:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"go">&lt;build dir&gt;/tools/clang/stage2-instru=
+mented-bins/utils/perf-training/clang.profdata</span>
+</pre></div>
+</div>
+<p>You can feed that file into the LLVM_PROFDATA_FILE option when you build=
+ your
+optimized compiler.</p>
+<p>The PGO came cache has a slightly different stage naming scheme than oth=
+er
+multi-stage builds. It generates three stages; stage1, stage2-instrumented,=
+ and
+stage2. Both of the stage2 builds are built using the stage1 compiler.</p>
+<p>The PGO came cache generates the following additional targets:</p>
+<dl class=3D"docutils">
+<dt><strong>stage2-instrumented</strong></dt>
+<dd>Builds a stage1 x86 compiler, runtime, and required tools (llvm-config,
+llvm-profdata) then uses that compiler to build an instrumented stage2 comp=
+iler.</dd>
+<dt><strong>stage2-instrumented-generate-profdata</strong></dt>
+<dd>Depends on =E2=80=9Cstage2-instrumented=E2=80=9D and will use the instr=
+umented compiler to
+generate profdata based on the training files in clang/utils/perf-training<=
+/dd>
+<dt><strong>stage2</strong></dt>
+<dd>Depends of =E2=80=9Cstage2-instrumented-generate-profdata=E2=80=9D and =
+will use the stage1
+compiler with the stage2 profdata to build a PGO-optimized compiler.</dd>
+<dt><strong>stage2-check-llvm</strong></dt>
+<dd>Depends on stage2 and runs check-llvm using the stage2 compiler.</dd>
+<dt><strong>stage2-check-clang</strong></dt>
+<dd>Depends on stage2 and runs check-clang using the stage2 compiler.</dd>
+<dt><strong>stage2-check-all</strong></dt>
+<dd>Depends on stage2 and runs check-all using the stage2 compiler.</dd>
+<dt><strong>stage2-test-suite</strong></dt>
+<dd>Depends on stage2 and runs the test-suite using the stage3 compiler (re=
+quires
+in-tree test-suite).</dd>
+</dl>
+</div>
+<div class=3D"section" id=3D"stage-non-determinism">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/AdvancedBuilds.h=
+tml#id5">3-Stage Non-Determinism</a><a class=3D"headerlink" href=3D"https:/=
+/llvm.org/docs/AdvancedBuilds.html#stage-non-determinism" title=3D"Permalin=
+k to this headline">=C2=B6</a></h2>
+<p>In the ancient lore of compilers non-determinism is like the multi-heade=
+d hydra.
+Whenever its head pops up, terror and chaos ensue.</p>
+<p>Historically one of the tests to verify that a compiler was deterministi=
+c would
+be a three stage build. The idea of a three stage build is you take your so=
+urces
+and build a compiler (stage1), then use that compiler to rebuild the source=
+s
+(stage2), then you use that compiler to rebuild the sources a third time
+(stage3) with an identical configuration to the stage2 build. At the end of
+this, you have a stage2 and stage3 compiler that should be bit-for-bit
+identical.</p>
+<p>You can perform one of these 3-stage builds with LLVM &amp; clang using =
+the
+following commands:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">$ </span>cmake -G Ninja -C &lt;path to sour=
+ce&gt;/clang/cmake/caches/3-stage.cmake &lt;path to source&gt;
+<span class=3D"gp">$ </span>cmake --build . --target stage3 --parallel
+</pre></div>
+</div>
+<p>After the build you can compare the stage2 &amp; stage3 compilers.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class=3D"clearer"></div>
+    </div>
+    <div class=3D"related" role=3D"navigation" aria-label=3D"related naviga=
+tion">
+      <h3>Navigation</h3>
+      <ul>
+        <li class=3D"right" style=3D"margin-right: 10px">
+          <a href=3D"https://llvm.org/docs/genindex.html" title=3D"General =
+Index">index</a></li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/AliasAnalysis.html" title=3D"LLV=
+M Alias Analysis Infrastructure">next</a> |</li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/AddingConstrainedIntrinsics.html=
+" title=3D"How To Add A Constrained Floating-Point Intrinsic">previous</a> =
+|</li>
+  <li><a href=3D"https://llvm.org/">LLVM Home</a>&nbsp;|&nbsp;</li>
+  <li><a href=3D"https://llvm.org/docs/index.html">Documentation</a>=C2=BB<=
+/li>
+
+          <li class=3D"nav-item nav-item-1"><a href=3D"https://llvm.org/doc=
+s/UserGuides.html">User Guides</a> =C2=BB</li>=20
+      </ul>
+    </div>
+    <div class=3D"footer" role=3D"contentinfo">
+        =C2=A9 Copyright 2003-2022, LLVM Project.
+      Last updated on 2022-05-07.
+      Created using <a href=3D"http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+ =20
+</body></html>
+------MultipartBoundary--wruabpu2OWgqLs01vfjECtyBNOPBF7JKr9Mues5In5----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-f7bbe6e2-23ba-49e4-b548-47c7ef8d414f@mhtml.blink
+
+@charset "utf-8";
+
+table.right { float: right; margin-left: 20px; }
+
+table.right td { border: 1px solid rgb(204, 204, 204); }
+------MultipartBoundary--wruabpu2OWgqLs01vfjECtyBNOPBF7JKr9Mues5In5----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/llvm-theme.css
+
+@charset "utf-8";
+
+@import url("basic.css");
+
+body { font-family: "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana=
+, sans-serif; font-size: 14px; line-height: 150%; text-align: center; backg=
+round-color: rgb(191, 209, 212); color: black; padding: 0px; border: 1px so=
+lid rgb(170, 170, 170); margin: 0px 80px; min-width: 740px; }
+
+div.logo { background-color: white; text-align: left; padding: 10px 10px 15=
+px 15px; }
+
+div.document { background-color: white; text-align: left; background-image:=
+ url("contents.png"); background-repeat: repeat-x; }
+
+div.bodywrapper { margin: 0px 240px 0px 0px; border-right: 1px solid rgb(20=
+4, 204, 204); }
+
+div.body { margin: 0px; padding: 0.5em 20px 20px; max-width: 1000px; }
+
+div.related { font-size: 1em; }
+
+div.related ul { background-image: url("navigation.png"); height: 2em; bord=
+er-top: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221=
+, 221); }
+
+div.related ul li { margin: 0px; padding: 0px; height: 2em; float: left; }
+
+div.related ul li.right { float: right; margin-right: 5px; }
+
+div.related ul li a { margin: 0px; padding: 0px 5px; line-height: 1.75em; c=
+olor: rgb(238, 152, 22); }
+
+div.related ul li a:hover { color: rgb(60, 168, 231); }
+
+div.sphinxsidebarwrapper { padding: 0px; }
+
+div.sphinxsidebar { margin: 0px; padding: 0.5em 15px 15px 0px; width: 210px=
+; float: right; font-size: 1em; text-align: left; }
+
+div.sphinxsidebar h3, div.sphinxsidebar h4 { margin: 1em 0px 0.5em; font-si=
+ze: 1em; padding: 0.1em 0px 0.1em 0.5em; color: white; border: 1px solid rg=
+b(134, 152, 155); background-color: rgb(175, 193, 196); }
+
+div.sphinxsidebar h3 a { color: white; }
+
+div.sphinxsidebar ul { margin-top: 7px; padding: 0px; line-height: 130%; }
+
+div.sphinxsidebar ul ul { margin-left: 20px; }
+
+div.footer { background-color: rgb(227, 239, 241); color: rgb(134, 152, 155=
+); padding: 3px 8px 3px 0px; clear: both; font-size: 0.8em; text-align: rig=
+ht; }
+
+div.footer a { color: rgb(134, 152, 155); text-decoration: underline; }
+
+p { margin: 0.8em 0px 0.5em; }
+
+a { color: rgb(202, 121, 0); text-decoration: none; }
+
+a:hover { color: rgb(36, 145, 207); }
+
+div.body p a { text-decoration: underline; }
+
+h1 { margin: 0px; padding: 0.7em 0px 0.3em; font-size: 1.5em; color: rgb(17=
+, 85, 124); }
+
+h2 { margin: 1.3em 0px 0.2em; font-size: 1.35em; padding: 0px; }
+
+h3 { margin: 1em 0px -0.3em; font-size: 1.2em; }
+
+h3 a:hover { text-decoration: underline; }
+
+div.body h1 a, div.body h2 a, div.body h3 a, div.body h4 a, div.body h5 a, =
+div.body h6 a { color: black !important; }
+
+div.body h1, div.body h2, div.body h3, div.body h4, div.body h5, div.body h=
+6 { background-color: rgb(242, 242, 242); font-weight: normal; color: rgb(3=
+2, 67, 92); border-bottom: 1px solid rgb(204, 204, 204); margin: 20px -20px=
+ 10px; padding: 3px 0px 3px 10px; }
+
+div.body h1 { margin-top: 0px; font-size: 200%; }
+
+div.body h2 { font-size: 160%; }
+
+div.body h3 { font-size: 140%; }
+
+div.body h4 { font-size: 120%; }
+
+div.body h5 { font-size: 110%; }
+
+div.body h6 { font-size: 100%; }
+
+h1 a.anchor, h2 a.anchor, h3 a.anchor, h4 a.anchor, h5 a.anchor, h6 a.ancho=
+r { display: none; margin: 0px 0px 0px 0.3em; padding: 0px 0.2em; color: rg=
+b(170, 170, 170) !important; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor,=
+ h5:hover a.anchor, h6:hover a.anchor { display: inline; }
+
+h1 a.anchor:hover, h2 a.anchor:hover, h3 a.anchor:hover, h4 a.anchor:hover,=
+ h5 a.anchor:hover, h6 a.anchor:hover { color: rgb(119, 119, 119); backgrou=
+nd-color: rgb(238, 238, 238); }
+
+a.headerlink { font-size: 1em; margin-left: 6px; padding: 0px 4px; color: r=
+gb(198, 15, 15) !important; text-decoration: none !important; }
+
+a.headerlink:hover { background-color: rgb(204, 204, 204); color: white !im=
+portant; }
+
+cite, code, tt { font-family: Consolas, "Deja Vu Sans Mono", "Bitstream Ver=
+a Sans Mono", monospace; font-size: 0.95em; }
+
+:not(a.reference) > tt { background-color: rgb(242, 242, 242); border-botto=
+m: 1px solid rgb(221, 221, 221); color: rgb(51, 51, 51); }
+
+tt.descname, tt.descclassname, tt.xref { border: 0px; }
+
+hr { border: 1px solid rgb(170, 187, 204); margin: 2em; }
+
+p a tt { border: 0px; color: rgb(202, 121, 0); }
+
+p a tt:hover { color: rgb(36, 145, 207); }
+
+a tt { border: none; }
+
+pre { font-family: Consolas, "Deja Vu Sans Mono", "Bitstream Vera Sans Mono=
+", monospace; font-size: 0.95em; line-height: 120%; padding: 0.5em; border:=
+ 1px solid rgb(204, 204, 204); background-color: rgb(248, 248, 248); }
+
+pre a { color: inherit; text-decoration: underline; }
+
+td.linenos pre { padding: 0.5em 0px; }
+
+div.quotebar { background-color: rgb(248, 248, 248); max-width: 250px; floa=
+t: right; padding: 2px 7px; border: 1px solid rgb(204, 204, 204); }
+
+div.topic { background-color: rgb(248, 248, 248); }
+
+table { border-collapse: collapse; margin: 0px -0.5em; }
+
+table td, table th { padding: 0.2em 0.5em; }
+
+div.admonition, div.warning { font-size: 0.9em; margin: 1em 0px; border: 1p=
+x solid rgb(134, 152, 155); background-color: rgb(247, 247, 247); padding: =
+0px; }
+
+div.admonition p, div.warning p { margin: 0.5em 1em; padding: 0px; }
+
+div.admonition pre, div.warning pre { margin: 0.4em 1em; }
+
+div.admonition p.admonition-title, div.warning p.admonition-title { margin:=
+ 0px; padding: 0.1em 0px 0.1em 0.5em; color: white; border-bottom: 1px soli=
+d rgb(134, 152, 155); font-weight: bold; background-color: rgb(175, 193, 19=
+6); }
+
+div.warning { border: 1px solid rgb(148, 0, 0); }
+
+div.warning p.admonition-title { background-color: rgb(207, 0, 0); border-b=
+ottom-color: rgb(148, 0, 0); }
+
+div.admonition ul, div.admonition ol, div.warning ul, div.warning ol { marg=
+in: 0.1em 0.5em 0.5em 3em; padding: 0px; }
+
+div.versioninfo { margin: 1em 0px 0px; border: 1px solid rgb(204, 204, 204)=
+; background-color: rgb(221, 234, 240); padding: 8px; line-height: 1.3em; f=
+ont-size: 0.9em; }
+
+.viewcode-back { font-family: "Lucida Grande", "Lucida Sans Unicode", Genev=
+a, Verdana, sans-serif; }
+
+div.viewcode-block:target { background-color: rgb(244, 222, 191); border-to=
+p: 1px solid rgb(170, 204, 153); border-bottom: 1px solid rgb(170, 204, 153=
+); }
+------MultipartBoundary--wruabpu2OWgqLs01vfjECtyBNOPBF7JKr9Mues5In5----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/basic.css
+
+@charset "utf-8";
+
+div.clearer { clear: both; }
+
+div.related { width: 100%; font-size: 90%; }
+
+div.related h3 { display: none; }
+
+div.related ul { margin: 0px; padding: 0px 0px 0px 10px; list-style: none; =
+}
+
+div.related li { display: inline; }
+
+div.related li.right { float: right; margin-right: 5px; }
+
+div.sphinxsidebarwrapper { padding: 10px 5px 0px 10px; }
+
+div.sphinxsidebar { float: left; width: 230px; margin-left: -100%; font-siz=
+e: 90%; overflow-wrap: break-word; }
+
+div.sphinxsidebar ul { list-style: none; }
+
+div.sphinxsidebar ul ul, div.sphinxsidebar ul.want-points { margin-left: 20=
+px; list-style: square; }
+
+div.sphinxsidebar ul ul { margin-top: 0px; margin-bottom: 0px; }
+
+div.sphinxsidebar form { margin-top: 10px; }
+
+div.sphinxsidebar input { border: 1px solid rgb(152, 219, 204); font-family=
+: sans-serif; font-size: 1em; }
+
+div.sphinxsidebar #searchbox form.search { overflow: hidden; }
+
+div.sphinxsidebar #searchbox input[type=3D"text"] { float: left; width: 80%=
+; padding: 0.25em; box-sizing: border-box; }
+
+div.sphinxsidebar #searchbox input[type=3D"submit"] { float: left; width: 2=
+0%; border-left: none; padding: 0.25em; box-sizing: border-box; }
+
+img { border: 0px; max-width: 100%; }
+
+ul.search { margin: 10px 0px 0px 20px; padding: 0px; }
+
+ul.search li { padding: 5px 0px 5px 20px; background-image: url("file.png")=
+; background-repeat: no-repeat; background-position: 0px 7px; }
+
+ul.search li a { font-weight: bold; }
+
+ul.search li div.context { color: rgb(136, 136, 136); margin: 2px 0px 0px 3=
+0px; text-align: left; }
+
+ul.keywordmatches li.goodmatch a { font-weight: bold; }
+
+table.contentstable { width: 90%; margin-left: auto; margin-right: auto; }
+
+table.contentstable p.biglink { line-height: 150%; }
+
+a.biglink { font-size: 1.3em; }
+
+span.linkdescr { font-style: italic; padding-top: 5px; font-size: 90%; }
+
+table.indextable { width: 100%; }
+
+table.indextable td { text-align: left; vertical-align: top; }
+
+table.indextable ul { margin-top: 0px; margin-bottom: 0px; list-style-type:=
+ none; }
+
+table.indextable > tbody > tr > td > ul { padding-left: 0em; }
+
+table.indextable tr.pcap { height: 10px; }
+
+table.indextable tr.cap { margin-top: 10px; background-color: rgb(242, 242,=
+ 242); }
+
+img.toggler { margin-right: 3px; margin-top: 3px; cursor: pointer; }
+
+div.modindex-jumpbox { border-top: 1px solid rgb(221, 221, 221); border-bot=
+tom: 1px solid rgb(221, 221, 221); margin: 1em 0px; padding: 0.4em; }
+
+div.genindex-jumpbox { border-top: 1px solid rgb(221, 221, 221); border-bot=
+tom: 1px solid rgb(221, 221, 221); margin: 1em 0px; padding: 0.4em; }
+
+table.modindextable td { padding: 2px; border-collapse: collapse; }
+
+div.body { min-width: 450px; max-width: 800px; }
+
+div.body p, div.body dd, div.body li, div.body blockquote { hyphens: auto; =
+}
+
+a.headerlink { visibility: hidden; }
+
+h1:hover > a.headerlink, h2:hover > a.headerlink, h3:hover > a.headerlink, =
+h4:hover > a.headerlink, h5:hover > a.headerlink, h6:hover > a.headerlink, =
+dt:hover > a.headerlink, caption:hover > a.headerlink, p.caption:hover > a.=
+headerlink, div.code-block-caption:hover > a.headerlink { visibility: visib=
+le; }
+
+div.body p.caption { text-align: inherit; }
+
+div.body td { text-align: left; }
+
+.first { margin-top: 0px !important; }
+
+p.rubric { margin-top: 30px; font-weight: bold; }
+
+img.align-left, .figure.align-left, object.align-left { clear: left; float:=
+ left; margin-right: 1em; }
+
+img.align-right, .figure.align-right, object.align-right { clear: right; fl=
+oat: right; margin-left: 1em; }
+
+img.align-center, .figure.align-center, object.align-center { display: bloc=
+k; margin-left: auto; margin-right: auto; }
+
+.align-left { text-align: left; }
+
+.align-center { text-align: center; }
+
+.align-right { text-align: right; }
+
+div.sidebar { margin: 0px 0px 0.5em 1em; border: 1px solid rgb(221, 221, 18=
+7); padding: 7px 7px 0px; background-color: rgb(255, 255, 238); width: 40%;=
+ float: right; }
+
+p.sidebar-title { font-weight: bold; }
+
+div.topic { border: 1px solid rgb(204, 204, 204); padding: 7px 7px 0px; mar=
+gin: 10px 0px; }
+
+p.topic-title { font-size: 1.1em; font-weight: bold; margin-top: 10px; }
+
+div.admonition { margin-top: 10px; margin-bottom: 10px; padding: 7px; }
+
+div.admonition dt { font-weight: bold; }
+
+div.admonition dl { margin-bottom: 0px; }
+
+p.admonition-title { margin: 0px 10px 5px 0px; font-weight: bold; }
+
+div.body p.centered { text-align: center; margin-top: 25px; }
+
+table.docutils { border: 0px; border-collapse: collapse; }
+
+table.align-center { margin-left: auto; margin-right: auto; }
+
+table caption span.caption-number { font-style: italic; }
+
+table caption span.caption-text { }
+
+table.docutils td, table.docutils th { padding: 1px 8px 1px 5px; border-wid=
+th: 0px 0px 1px; border-top-style: initial; border-top-color: initial; bord=
+er-left-style: initial; border-left-color: initial; border-right-style: ini=
+tial; border-right-color: initial; border-bottom-style: solid; border-botto=
+m-color: rgb(170, 170, 170); }
+
+table.footnote td, table.footnote th { border: 0px !important; }
+
+th { text-align: left; padding-right: 5px; }
+
+table.citation { border-left: 1px solid gray; margin-left: 1px; }
+
+table.citation td { border-bottom: none; }
+
+div.figure { margin: 0.5em; padding: 0.5em; }
+
+div.figure p.caption { padding: 0.3em; }
+
+div.figure p.caption span.caption-number { font-style: italic; }
+
+div.figure p.caption span.caption-text { }
+
+table.field-list td, table.field-list th { border: 0px !important; }
+
+.field-list ul { margin: 0px; padding-left: 1em; }
+
+.field-list p { margin: 0px; }
+
+.field-name { hyphens: manual; }
+
+table.hlist td { vertical-align: top; }
+
+ol.arabic { list-style: decimal; }
+
+ol.loweralpha { list-style: lower-alpha; }
+
+ol.upperalpha { list-style: upper-alpha; }
+
+ol.lowerroman { list-style: lower-roman; }
+
+ol.upperroman { list-style: upper-roman; }
+
+dl { margin-bottom: 15px; }
+
+dd p { margin-top: 0px; }
+
+dd ul, dd table { margin-bottom: 10px; }
+
+dd { margin-top: 3px; margin-bottom: 10px; margin-left: 30px; }
+
+dt:target, span.highlighted { background-color: rgb(251, 229, 78); }
+
+rect.highlighted { fill: rgb(251, 229, 78); }
+
+dl.glossary dt { font-weight: bold; font-size: 1.1em; }
+
+.optional { font-size: 1.3em; }
+
+.sig-paren { font-size: larger; }
+
+.versionmodified { font-style: italic; }
+
+.system-message { background-color: rgb(255, 221, 170); padding: 5px; borde=
+r: 3px solid red; }
+
+.footnote:target { background-color: rgb(255, 255, 170); }
+
+.line-block { display: block; margin-top: 1em; margin-bottom: 1em; }
+
+.line-block .line-block { margin-top: 0px; margin-bottom: 0px; margin-left:=
+ 1.5em; }
+
+.guilabel, .menuselection { font-family: sans-serif; }
+
+.accelerator { text-decoration: underline; }
+
+.classifier { font-style: oblique; }
+
+abbr, acronym { border-bottom: 1px dotted; cursor: help; }
+
+pre { overflow: auto hidden; }
+
+span.pre { hyphens: none; }
+
+td.linenos pre { padding: 5px 0px; border: 0px; background-color: transpare=
+nt; color: rgb(170, 170, 170); }
+
+table.highlighttable { margin-left: 0.5em; }
+
+table.highlighttable td { padding: 0px 0.5em; }
+
+div.code-block-caption { padding: 2px 5px; font-size: small; }
+
+div.code-block-caption code { background-color: transparent; }
+
+div.code-block-caption + div > div.highlight > pre { margin-top: 0px; }
+
+div.code-block-caption span.caption-number { padding: 0.1em 0.3em; font-sty=
+le: italic; }
+
+div.code-block-caption span.caption-text { }
+
+div.literal-block-wrapper { padding: 1em 1em 0px; }
+
+div.literal-block-wrapper div.highlight { margin: 0px; }
+
+code.descname { background-color: transparent; font-weight: bold; font-size=
+: 1.2em; }
+
+code.descclassname { background-color: transparent; }
+
+code.xref, a code { background-color: transparent; font-weight: bold; }
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code { background-color: tr=
+ansparent; }
+
+.viewcode-link { float: right; }
+
+.viewcode-back { float: right; font-family: sans-serif; }
+
+div.viewcode-block:target { margin: -1px -10px; padding: 0px 10px; }
+
+img.math { vertical-align: middle; }
+
+div.body div.math p { text-align: center; }
+
+span.eqno { float: right; }
+
+span.eqno a.headerlink { position: relative; left: 0px; z-index: 1; }
+
+div.math:hover a.headerlink { visibility: visible; }
+
+@media print {
+  div.document, div.documentwrapper, div.bodywrapper { width: 100%; margin:=
+ 0px !important; }
+  div.sphinxsidebar, div.related, div.footer, #top-link { display: none; }
+}
+------MultipartBoundary--wruabpu2OWgqLs01vfjECtyBNOPBF7JKr9Mues5In5----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/contents.png
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAYAAAA/tpB3AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAL
+EwAACxMBAJqcGAAAAAd0SU1FB9gBDRUWN0N7tMwAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRo
+IEdJTVBXgQ4XAAAAN0lEQVQI16WNOQ4AIADCWv7/XhMnXdR4jC4kQAOUWlsAghIaBCECozhFHMie
+Latv9sOdbxfsXOngpgVLkKkPEQAAAABJRU5ErkJggg==
+
+------MultipartBoundary--wruabpu2OWgqLs01vfjECtyBNOPBF7JKr9Mues5In5----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/navigation.png
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAA8CAYAAACn8dD6AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAL
+EwAACxMBAJqcGAAAAAd0SU1FB9gBDRUOAHndiZoAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRo
+IEdJTVBXgQ4XAAAAR0lEQVQY072NwRHAMAzCBPtP6wFCH6mddIF+OBlxZ6oqBrBtLKkJMBLWERJ7
+LJpChsAEzHSX2DZvnC6ZcfpcWR+bfnSNf48HN9YiTAPwk98AAAAASUVORK5CYII=
+
+------MultipartBoundary--wruabpu2OWgqLs01vfjECtyBNOPBF7JKr9Mues5In5----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/pygments.css
+
+@charset "utf-8";
+
+pre { line-height: 125%; }
+
+td.linenos pre { color: rgb(0, 0, 0); background-color: rgb(240, 240, 240);=
+ padding-left: 5px; padding-right: 5px; }
+
+span.linenos { color: rgb(0, 0, 0); background-color: rgb(240, 240, 240); p=
+adding-left: 5px; padding-right: 5px; }
+
+td.linenos pre.special { color: rgb(0, 0, 0); background-color: rgb(255, 25=
+5, 192); padding-left: 5px; padding-right: 5px; }
+
+span.linenos.special { color: rgb(0, 0, 0); background-color: rgb(255, 255,=
+ 192); padding-left: 5px; padding-right: 5px; }
+
+.highlight .hll { background-color: rgb(255, 255, 204); }
+
+.highlight { background: rgb(240, 240, 240); }
+
+.highlight .c { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .err { border: 1px solid rgb(255, 0, 0); }
+
+.highlight .k { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .o { color: rgb(102, 102, 102); }
+
+.highlight .ch { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cm { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cp { color: rgb(0, 112, 32); }
+
+.highlight .cpf { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .c1 { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cs { color: rgb(96, 160, 176); background-color: rgb(255, 240, =
+240); }
+
+.highlight .gd { color: rgb(160, 0, 0); }
+
+.highlight .ge { font-style: italic; }
+
+.highlight .gr { color: rgb(255, 0, 0); }
+
+.highlight .gh { color: rgb(0, 0, 128); font-weight: bold; }
+
+.highlight .gi { color: rgb(0, 160, 0); }
+
+.highlight .go { color: rgb(136, 136, 136); }
+
+.highlight .gp { color: rgb(198, 93, 9); font-weight: bold; }
+
+.highlight .gs { font-weight: bold; }
+
+.highlight .gu { color: rgb(128, 0, 128); font-weight: bold; }
+
+.highlight .gt { color: rgb(0, 68, 221); }
+
+.highlight .kc { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kd { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kn { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kp { color: rgb(0, 112, 32); }
+
+.highlight .kr { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kt { color: rgb(144, 32, 0); }
+
+.highlight .m { color: rgb(64, 160, 112); }
+
+.highlight .s { color: rgb(64, 112, 160); }
+
+.highlight .na { color: rgb(64, 112, 160); }
+
+.highlight .nb { color: rgb(0, 112, 32); }
+
+.highlight .nc { color: rgb(14, 132, 181); font-weight: bold; }
+
+.highlight .no { color: rgb(96, 173, 213); }
+
+.highlight .nd { color: rgb(85, 85, 85); font-weight: bold; }
+
+.highlight .ni { color: rgb(213, 85, 55); font-weight: bold; }
+
+.highlight .ne { color: rgb(0, 112, 32); }
+
+.highlight .nf { color: rgb(6, 40, 126); }
+
+.highlight .nl { color: rgb(0, 32, 112); font-weight: bold; }
+
+.highlight .nn { color: rgb(14, 132, 181); font-weight: bold; }
+
+.highlight .nt { color: rgb(6, 40, 115); font-weight: bold; }
+
+.highlight .nv { color: rgb(187, 96, 213); }
+
+.highlight .ow { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .w { color: rgb(187, 187, 187); }
+
+.highlight .mb { color: rgb(64, 160, 112); }
+
+.highlight .mf { color: rgb(64, 160, 112); }
+
+.highlight .mh { color: rgb(64, 160, 112); }
+
+.highlight .mi { color: rgb(64, 160, 112); }
+
+.highlight .mo { color: rgb(64, 160, 112); }
+
+.highlight .sa { color: rgb(64, 112, 160); }
+
+.highlight .sb { color: rgb(64, 112, 160); }
+
+.highlight .sc { color: rgb(64, 112, 160); }
+
+.highlight .dl { color: rgb(64, 112, 160); }
+
+.highlight .sd { color: rgb(64, 112, 160); font-style: italic; }
+
+.highlight .s2 { color: rgb(64, 112, 160); }
+
+.highlight .se { color: rgb(64, 112, 160); font-weight: bold; }
+
+.highlight .sh { color: rgb(64, 112, 160); }
+
+.highlight .si { color: rgb(112, 160, 208); font-style: italic; }
+
+.highlight .sx { color: rgb(198, 93, 9); }
+
+.highlight .sr { color: rgb(35, 83, 136); }
+
+.highlight .s1 { color: rgb(64, 112, 160); }
+
+.highlight .ss { color: rgb(81, 121, 24); }
+
+.highlight .bp { color: rgb(0, 112, 32); }
+
+.highlight .fm { color: rgb(6, 40, 126); }
+
+.highlight .vc { color: rgb(187, 96, 213); }
+
+.highlight .vg { color: rgb(187, 96, 213); }
+
+.highlight .vi { color: rgb(187, 96, 213); }
+
+.highlight .vm { color: rgb(187, 96, 213); }
+
+.highlight .il { color: rgb(64, 160, 112); }
+------MultipartBoundary--wruabpu2OWgqLs01vfjECtyBNOPBF7JKr9Mues5In5----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/logo.png
+
+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
+YAAAOpgAABdvkl/FRgAAAwBQTFRFXF1f9fX1iYuOvL7An6GkKzJYanah+fn6gImurK6wY2NlfH6B
+JSYnlZ27wMHBoKfC0NDRaWpt5eXl7e3tdYCm8fHyUlRV6enpWmeSNTY33d3ePURkbG1vharW2dna
+1dXWWlpcpKWoREVGlJaZtLa4c3Z5zM3OnJ6hR26oqrDJdXh7jI2QpqiqxcbIFxgYjpCTwcLEubu9
+hIaJzs7QSktMyMnKsbGy1tbXxMXGgoOD4ODgrrCy9PX4cnR1eHp9////5ebnlpea/Pz8qKqsmJqd
+ycrM3t7fsLK0tLrQfn+DoKKlfKjZbnBygIKFTU5Qscjovby+hoiLtLW3c3uYcHJ0wsTGoaKiZGVo
+PlSMX2BiYGyaqayusrS2tri7TlFTipO0anSduLm72trbkZKUkJCRvsDCa2Vl0tLTgoSHhZCnbZ/U
+4uLjeXR1enx+VFZYkpSXury+Y15eZ2hqfIOdcGpqiYSFqqip2uT1lJWX4uPkyszOyMXGmZWWgHt8
+oqSnVIrFWlRVV1hanZ2fGiErmpuefH1/xsfJz8/RZmqEz83O19jZr6yscHFzeHl7u7m5x9fv1NPU
+cHeKraqr1NTWS1eC3t/gdHV4j4yMSERF8PDxUUxMlrfg29zdnJqa3NvcdnFxwL/A3uDlkZSil5mc
+uLe4eXZ6RUdIqKam2NfYpaWmgYmZpaGi4uHi1NLSLisryMfI4OLifXh44N/gxMHClZKSr62v0tTh
+hIeHhoGCoJ2epqOk2NbW4+Tlsa+wRklL0s/Q6urrMTl+6Ojos7KyISY7PTs9y8nK4+Ljko+QkZes
+4eDht7W129rax8vbzMvMv76/397fmpeYFR0ni4+bvLu8hY6vTEdIjIeIHhscJCAhQEBB1NjkBQcI
+7+/w6uvxv8TW3+Hrys7d5OPk7Ovs5+fo+/v7m6Cxw8PE8O/w9PT0+Pf47Ozs6+rrl5SU/f39n5uc
+5+bnTX66pMDkg39/Mi8w/Pv7UVBR8/P28/T38/Pzw8bUo5+gl5yrdG5vVWKT////em8aCAAAAQB0
+Uk5T////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////AFP3ByUAABebSURBVHja7Jt/XFNHtsBJQElC
+iJdf0dA8klwgKSQQfgVIQkAMkJIF1qDAkgAWIj+2NolS20XaUmkDVJZ0aalYW4tuca3ddWVrf7f+
+QBTtqov2rasJSRAVZcXWulvLe76+3nl/3Py4CQlose/T2s4fkXvPzGS+c86cOXMm+oCfbPH5Gf1n
+9J/Rf0afX0k//hNFH4SNRTvtD2azOQN4fJhVPG42mx3vx83mMWcdR/0McwYwm80Yodcybnb5ou8L
+nbH3XN27kiO2J8StmF0rexMvdHsf6LFBzLjLk4fBxGDkD33f6Gm31n21/oud2gj0cREBS0FY5KYh
+b+JFBBfG0Av2Btj6oRfHAjH1CB5Gs8opDRz7ntF3Dxu++HD7V+/0lm1w2OjCGdPuYvNexBeU9lG7
+zlfGhYUIgiDKCzYDNofa62XM6HvMJlFe/P7Xeufwyic+e/zR7U/SV3bNsDovbbyJzd6QLiIIohx3
+zoXS69Tau77w/bu5iNG2sy99ef7tupEyDT0bO1QvBjmrONDzwIHZbWHbjX7hjB4WevYw3wM6BH8w
+cvq9j7Y8vf5QeWZm44ir+ryhexXbzXWV2/tFCKLM8IA+Y44uIP9f6Kph/qlNOw588+lX33YzMzNj
+C8Lmh+5Qe8YMXbp4cwd6qBelf9/og4aqHUN9m9458qd3P9y+2yczM1Oinye62eMiHnefjFBE6RHR
+jNgF9wx9KyNRnN0vTp/AvMPxqE3W24vDD71z8uOnHt8yEJSZmZlJr5kfOgj1pM1FmG3ettevCvTU
+BwFRxtxL9AiVIlrSazBoNJpM/Wb03VQJntR/OevK7cEzh9JPvvnZ+XdXx8bGxsZGJ80T3b5Yx93M
+eNwNPcbsoeI4gsTcO/StUYpYg6GtQcHnZ2dHNqm5yysTK9X5muwnL+OWZV25dvnMn5/c+cTrW75o
+jEXZ6+eHbt+3Al2rh7qHhDH2ZR3o4imUGfcKfY801pCpaHrW71m9Xp+Tk9Pfnx255MXSI+mbdu+5
+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
+QmCC
+
+------MultipartBoundary--wruabpu2OWgqLs01vfjECtyBNOPBF7JKr9Mues5In5------

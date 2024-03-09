@@ -1,0 +1,1742 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://llvm.org/docs/CMakePrimer.html
+Subject: =?utf-8?Q?CMake=20Primer=20=E2=80=94=20LLVM=2015.0.0git=20documentation?=
+Date: Sat, 7 May 2022 21:56:09 -0000
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--Bn52iUCAcq71QD9Gzr4fSjaAKWat3Ujrs6iy8G0Qk7----"
+
+
+------MultipartBoundary--Bn52iUCAcq71QD9Gzr4fSjaAKWat3Ujrs6iy8G0Qk7----
+Content-Type: text/html
+Content-ID: <frame-3A564E87A8953AC3E85489594117207C@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/CMakePrimer.html
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3.=
+org/1999/xhtml"><head><meta http-equiv=3D"Content-Type" content=3D"text/htm=
+l; charset=3DUTF-8"><link rel=3D"stylesheet" type=3D"text/css" href=3D"cid:=
+css-ff932dcb-b6d5-45c8-9c7b-af7b69f8a0b7@mhtml.blink" />
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3DEdge">
+   =20
+    <title>CMake Primer =E2=80=94 LLVM 15.0.0git documentation</title>
+    <link rel=3D"stylesheet" href=3D"https://llvm.org/docs/_static/llvm-the=
+me.css" type=3D"text/css">
+    <link rel=3D"stylesheet" href=3D"https://llvm.org/docs/_static/pygments=
+.css" type=3D"text/css">
+   =20
+   =20
+   =20
+   =20
+   =20
+    <link rel=3D"index" title=3D"Index" href=3D"https://llvm.org/docs/genin=
+dex.html">
+    <link rel=3D"search" title=3D"Search" href=3D"https://llvm.org/docs/sea=
+rch.html">
+    <link rel=3D"next" title=3D"The LLVM Target-Independent Code Generator"=
+ href=3D"https://llvm.org/docs/CodeGenerator.html">
+    <link rel=3D"prev" title=3D"Building LLVM with CMake" href=3D"https://l=
+lvm.org/docs/CMake.html">
+
+
+  </head><body>
+<div class=3D"logo">
+  <a href=3D"https://llvm.org/docs/index.html">
+    <img src=3D"https://llvm.org/docs/_static/logo.png" alt=3D"LLVM Logo" w=
+idth=3D"250" height=3D"88"></a>
+</div>
+
+    <div class=3D"related" role=3D"navigation" aria-label=3D"related naviga=
+tion">
+      <h3>Navigation</h3>
+      <ul>
+        <li class=3D"right" style=3D"margin-right: 10px">
+          <a href=3D"https://llvm.org/docs/genindex.html" title=3D"General =
+Index" accesskey=3D"I">index</a></li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/CodeGenerator.html" title=3D"The=
+ LLVM Target-Independent Code Generator" accesskey=3D"N">next</a> |</li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/CMake.html" title=3D"Building LL=
+VM with CMake" accesskey=3D"P">previous</a> |</li>
+  <li><a href=3D"https://llvm.org/">LLVM Home</a>&nbsp;|&nbsp;</li>
+  <li><a href=3D"https://llvm.org/docs/index.html">Documentation</a>=C2=BB<=
+/li>
+
+          <li class=3D"nav-item nav-item-1"><a href=3D"https://llvm.org/doc=
+s/UserGuides.html" accesskey=3D"U">User Guides</a> =C2=BB</li>=20
+      </ul>
+    </div>
+
+      <div class=3D"sphinxsidebar" role=3D"navigation" aria-label=3D"main n=
+avigation">
+        <div class=3D"sphinxsidebarwrapper">
+
+<h3>Documentation</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/GettingStartedTutorials.html">Gett=
+ing Started/Tutorials</a></li>
+    <li><a href=3D"https://llvm.org/docs/UserGuides.html">User Guides</a></=
+li>
+    <li><a href=3D"https://llvm.org/docs/Reference.html">Reference</a></li>
+</ul>
+
+<h3>Getting Involved</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/Contributing.html">Contributing to=
+ LLVM</a></li>
+    <li><a href=3D"https://llvm.org/docs/HowToSubmitABug.html">Submitting B=
+ug Reports</a></li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#mailing-lists=
+">Mailing Lists</a></li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#irc">IRC</a><=
+/li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#meetups-and-s=
+ocial-events">Meetups and Social Events</a></li>
+</ul>
+
+<h3>Additional Links</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/FAQ.html">FAQ</a></li>
+    <li><a href=3D"https://llvm.org/docs/Lexicon.html">Glossary</a></li>
+    <li><a href=3D"https://llvm.org/pubs">Publications</a></li>
+    <li><a href=3D"https://github.com/llvm/llvm-project//">Github Repositor=
+y</a></li>
+</ul>
+  <div role=3D"note" aria-label=3D"source link">
+    <h3>This Page</h3>
+    <ul class=3D"this-page-menu">
+      <li><a href=3D"https://llvm.org/docs/_sources/CMakePrimer.rst.txt" re=
+l=3D"nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id=3D"searchbox" style=3D"" role=3D"search">
+  <h3>Quick search</h3>
+    <div class=3D"searchformwrapper">
+    <form class=3D"search" action=3D"https://llvm.org/docs/search.html" met=
+hod=3D"get">
+      <input type=3D"text" name=3D"q">
+      <input type=3D"submit" value=3D"Go">
+     =20
+     =20
+    </form>
+    </div>
+</div>
+
+        </div>
+      </div>
+
+    <div class=3D"document">
+      <div class=3D"documentwrapper">
+        <div class=3D"bodywrapper">
+          <div class=3D"body" role=3D"main">
+           =20
+  <div class=3D"section" id=3D"cmake-primer">
+<h1>CMake Primer<a class=3D"headerlink" href=3D"https://llvm.org/docs/CMake=
+Primer.html#cmake-primer" title=3D"Permalink to this headline">=C2=B6</a></=
+h1>
+<div class=3D"contents local topic" id=3D"contents">
+<ul class=3D"simple">
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#introduction" id=3D"id1">Introduction</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#ft-view" id=3D"id2">10,000 ft View</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#scripting-overview" id=3D"id3">Scripting Overview</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#variables-types-and-scope" id=3D"id4">Variables, Types, and Scope</=
+a><ul>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#dereferencing" id=3D"id5">Dereferencing</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#lists" id=3D"id6">Lists</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#lists-of-lists" id=3D"id7">Lists of Lists</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#other-types" id=3D"id8">Other Types</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#scope" id=3D"id9">Scope</a></li>
+</ul>
+</li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#control-flow" id=3D"id10">Control Flow</a><ul>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#if-elseif-else" id=3D"id11">If, ElseIf, Else</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#loops" id=3D"id12">Loops</a></li>
+</ul>
+</li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#modules-functions-and-macros" id=3D"id13">Modules, Functions and Ma=
+cros</a><ul>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#modules" id=3D"id14">Modules</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#argument-handling" id=3D"id15">Argument Handling</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#functions-vs-macros" id=3D"id16">Functions Vs Macros</a></li>
+</ul>
+</li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#llvm-project-wrappers" id=3D"id17">LLVM Project Wrappers</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/CMakePrim=
+er.html#useful-built-in-commands" id=3D"id18">Useful Built-in Commands</a><=
+/li>
+</ul>
+</div>
+<div class=3D"admonition warning">
+<p class=3D"first admonition-title">Warning</p>
+<p class=3D"last">Disclaimer: This documentation is written by LLVM project=
+ contributors <cite>not</cite>
+anyone affiliated with the CMake project. This document may contain
+inaccurate terminology, phrasing, or technical details. It is provided with
+the best intentions.</p>
+</div>
+<div class=3D"section" id=3D"introduction">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id1">Introduction</a><a class=3D"headerlink" href=3D"https://llvm.org/docs=
+/CMakePrimer.html#introduction" title=3D"Permalink to this headline">=C2=B6=
+</a></h2>
+<p>The LLVM project and many of the core projects built on LLVM build using=
+ CMake.
+This document aims to provide a brief overview of CMake for developers modi=
+fying
+LLVM projects or building their own projects on top of LLVM.</p>
+<p>The official CMake language references is available in the cmake-languag=
+e
+manpage and <a class=3D"reference external" href=3D"https://cmake.org/cmake=
+/help/v3.4/manual/cmake-language.7.html">cmake-language online documentatio=
+n</a>.</p>
+</div>
+<div class=3D"section" id=3D"ft-view">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id2">10,000 ft View</a><a class=3D"headerlink" href=3D"https://llvm.org/do=
+cs/CMakePrimer.html#ft-view" title=3D"Permalink to this headline">=C2=B6</a=
+></h2>
+<p>CMake is a tool that reads script files in its own language that describ=
+e how a
+software project builds. As CMake evaluates the scripts it constructs an
+internal representation of the software project. Once the scripts have been
+fully processed, if there are no errors, CMake will generate build files to
+actually build the project. CMake supports generating build files for a var=
+iety
+of command line build tools as well as for popular IDEs.</p>
+<p>When a user runs CMake it performs a variety of checks similar to how au=
+toconf
+worked historically. During the checks and the evaluation of the build
+description scripts CMake caches values into the CMakeCache. This is useful
+because it allows the build system to skip long-running checks during
+incremental development. CMake caching also has some drawbacks, but that wi=
+ll be
+discussed later.</p>
+</div>
+<div class=3D"section" id=3D"scripting-overview">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id3">Scripting Overview</a><a class=3D"headerlink" href=3D"https://llvm.or=
+g/docs/CMakePrimer.html#scripting-overview" title=3D"Permalink to this head=
+line">=C2=B6</a></h2>
+<p>CMake=E2=80=99s scripting language has a very simple grammar. Every lang=
+uage construct
+is a command that matches the pattern _name_(_args_). Commands come in thre=
+e
+primary types: language-defined (commands implemented in C++ in CMake), def=
+ined
+functions, and defined macros. The CMake distribution also contains a suite=
+ of
+CMake modules that contain definitions for useful functionality.</p>
+<p>The example below is the full CMake build for building a C++ =E2=80=9CHe=
+llo World=E2=80=9D
+program. The example uses only CMake language-defined functions.</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">cmake_minimum_required</span><span class=3D"p=
+">(</span><span class=3D"s">VERSION</span> <span class=3D"s">3.15</span><sp=
+an class=3D"p">)</span>
+<span class=3D"nb">project</span><span class=3D"p">(</span><span class=3D"s=
+">HelloWorld</span><span class=3D"p">)</span>
+<span class=3D"nb">add_executable</span><span class=3D"p">(</span><span cla=
+ss=3D"s">HelloWorld</span> <span class=3D"s">HelloWorld.cpp</span><span cla=
+ss=3D"p">)</span>
+</pre></div>
+</div>
+<p>The CMake language provides control flow constructs in the form of forea=
+ch loops
+and if blocks. To make the example above more complicated you could add an =
+if
+block to define =E2=80=9CAPPLE=E2=80=9D when targeting Apple platforms:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">cmake_minimum_required</span><span class=3D"p=
+">(</span><span class=3D"s">VERSION</span> <span class=3D"s">3.15</span><sp=
+an class=3D"p">)</span>
+<span class=3D"nb">project</span><span class=3D"p">(</span><span class=3D"s=
+">HelloWorld</span><span class=3D"p">)</span>
+<span class=3D"nb">add_executable</span><span class=3D"p">(</span><span cla=
+ss=3D"s">HelloWorld</span> <span class=3D"s">HelloWorld.cpp</span><span cla=
+ss=3D"p">)</span>
+<span class=3D"nb">if</span><span class=3D"p">(</span><span class=3D"s">APP=
+LE</span><span class=3D"p">)</span>
+  <span class=3D"nb">target_compile_definitions</span><span class=3D"p">(</=
+span><span class=3D"s">HelloWorld</span> <span class=3D"s">PUBLIC</span> <s=
+pan class=3D"s">APPLE</span><span class=3D"p">)</span>
+<span class=3D"nb">endif</span><span class=3D"p">()</span>
+</pre></div>
+</div>
+</div>
+<div class=3D"section" id=3D"variables-types-and-scope">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id4">Variables, Types, and Scope</a><a class=3D"headerlink" href=3D"https:=
+//llvm.org/docs/CMakePrimer.html#variables-types-and-scope" title=3D"Permal=
+ink to this headline">=C2=B6</a></h2>
+<div class=3D"section" id=3D"dereferencing">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id5">Dereferencing</a><a class=3D"headerlink" href=3D"https://llvm.org/doc=
+s/CMakePrimer.html#dereferencing" title=3D"Permalink to this headline">=C2=
+=B6</a></h3>
+<p>In CMake variables are =E2=80=9Cstringly=E2=80=9D typed. All variables a=
+re represented as
+strings throughout evaluation. Wrapping a variable in <code class=3D"docuti=
+ls literal notranslate"><span class=3D"pre">${}</span></code> dereferences =
+it
+and results in a literal substitution of the name for the value. CMake refe=
+rs to
+this as =E2=80=9Cvariable evaluation=E2=80=9D in their documentation. Deref=
+erences are performed
+<em>before</em> the command being called receives the arguments. This means
+dereferencing a list results in multiple separate arguments being passed to=
+ the
+command.</p>
+<p>Variable dereferences can be nested and be used to model complex data. F=
+or
+example:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">set</span><span class=3D"p">(</span><span cla=
+ss=3D"s">var_name</span> <span class=3D"s">var1</span><span class=3D"p">)</=
+span>
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"o">${=
+</span><span class=3D"nv">var_name</span><span class=3D"o">}</span> <span c=
+lass=3D"s">foo</span><span class=3D"p">)</span> <span class=3D"c"># same as=
+ "set(var1 foo)"</span>
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"o">${=
+</span><span class=3D"nv">${var_name</span><span class=3D"o">}</span><span =
+class=3D"s">}_var</span> <span class=3D"s">bar</span><span class=3D"p">)</s=
+pan> <span class=3D"c"># same as "set(foo_var bar)"</span>
+</pre></div>
+</div>
+<p>Dereferencing an unset variable results in an empty expansion. It is a c=
+ommon
+pattern in CMake to conditionally set variables knowing that it will be use=
+d in
+code paths that the variable isn=E2=80=99t set. There are examples of this =
+throughout
+the LLVM CMake build system.</p>
+<p>An example of variable empty expansion is:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">if</span><span class=3D"p">(</span><span clas=
+s=3D"s">APPLE</span><span class=3D"p">)</span>
+  <span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">=
+extra_sources</span> <span class=3D"s">Apple.cpp</span><span class=3D"p">)<=
+/span>
+<span class=3D"nb">endif</span><span class=3D"p">()</span>
+<span class=3D"nb">add_executable</span><span class=3D"p">(</span><span cla=
+ss=3D"s">HelloWorld</span> <span class=3D"s">HelloWorld.cpp</span> <span cl=
+ass=3D"o">${</span><span class=3D"nv">extra_sources</span><span class=3D"o"=
+>}</span><span class=3D"p">)</span>
+</pre></div>
+</div>
+<p>In this example the <code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">extra_sources</span></code> variable is only defined if you=E2=
+=80=99re
+targeting an Apple platform. For all other targets the <code class=3D"docut=
+ils literal notranslate"><span class=3D"pre">extra_sources</span></code> wi=
+ll be
+evaluated as empty before add_executable is given its arguments.</p>
+</div>
+<div class=3D"section" id=3D"lists">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id6">Lists</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/CMakeP=
+rimer.html#lists" title=3D"Permalink to this headline">=C2=B6</a></h3>
+<p>In CMake lists are semi-colon delimited strings, and it is strongly advi=
+sed that
+you avoid using semi-colons in lists; it doesn=E2=80=99t go smoothly. A few=
+ examples of
+defining lists:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"c"># Creates a list with members a, b, c, and d</=
+span>
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">my=
+_list</span> <span class=3D"s">a</span> <span class=3D"s">b</span> <span cl=
+ass=3D"s">c</span> <span class=3D"s">d</span><span class=3D"p">)</span>
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">my=
+_list</span> <span class=3D"s2">"a;b;c;d"</span><span class=3D"p">)</span>
+
+<span class=3D"c"># Creates a string "a b c d"</span>
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">my=
+_string</span> <span class=3D"s2">"a b c d"</span><span class=3D"p">)</span=
+>
+</pre></div>
+</div>
+</div>
+<div class=3D"section" id=3D"lists-of-lists">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id7">Lists of Lists</a><a class=3D"headerlink" href=3D"https://llvm.org/do=
+cs/CMakePrimer.html#lists-of-lists" title=3D"Permalink to this headline">=
+=C2=B6</a></h3>
+<p>One of the more complicated patterns in CMake is lists of lists. Because=
+ a list
+cannot contain an element with a semi-colon to construct a list of lists yo=
+u
+make a list of variable names that refer to other lists. For example:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">set</span><span class=3D"p">(</span><span cla=
+ss=3D"s">list_of_lists</span> <span class=3D"s">a</span> <span class=3D"s">=
+b</span> <span class=3D"s">c</span><span class=3D"p">)</span>
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">a<=
+/span> <span class=3D"s">1</span> <span class=3D"s">2</span> <span class=3D=
+"s">3</span><span class=3D"p">)</span>
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">b<=
+/span> <span class=3D"s">4</span> <span class=3D"s">5</span> <span class=3D=
+"s">6</span><span class=3D"p">)</span>
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">c<=
+/span> <span class=3D"s">7</span> <span class=3D"s">8</span> <span class=3D=
+"s">9</span><span class=3D"p">)</span>
+</pre></div>
+</div>
+<p>With this layout you can iterate through the list of lists printing each=
+ value
+with the following code:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">foreach</span><span class=3D"p">(</span><span=
+ class=3D"s">list_name</span> <span class=3D"s">IN</span> <span class=3D"s"=
+>LISTS</span> <span class=3D"s">list_of_lists</span><span class=3D"p">)</sp=
+an>
+  <span class=3D"nb">foreach</span><span class=3D"p">(</span><span class=3D=
+"s">value</span> <span class=3D"s">IN</span> <span class=3D"s">LISTS</span>=
+ <span class=3D"o">${</span><span class=3D"nv">list_name</span><span class=
+=3D"o">}</span><span class=3D"p">)</span>
+    <span class=3D"nb">message</span><span class=3D"p">(</span><span class=
+=3D"o">${</span><span class=3D"nv">value</span><span class=3D"o">}</span><s=
+pan class=3D"p">)</span>
+  <span class=3D"nb">endforeach</span><span class=3D"p">()</span>
+<span class=3D"nb">endforeach</span><span class=3D"p">()</span>
+</pre></div>
+</div>
+<p>You=E2=80=99ll notice that the inner foreach loop=E2=80=99s list is doub=
+ly dereferenced. This is
+because the first dereference turns <code class=3D"docutils literal notrans=
+late"><span class=3D"pre">list_name</span></code> into the name of the sub-=
+list
+(a, b, or c in the example), then the second dereference is to get the valu=
+e of
+the list.</p>
+<p>This pattern is used throughout CMake, the most common example is the co=
+mpiler
+flags options, which CMake refers to using the following variable expansion=
+s:
+CMAKE_${LANGUAGE}_FLAGS and CMAKE_${LANGUAGE}_FLAGS_${CMAKE_BUILD_TYPE}.</p=
+>
+</div>
+<div class=3D"section" id=3D"other-types">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id8">Other Types</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/=
+CMakePrimer.html#other-types" title=3D"Permalink to this headline">=C2=B6</=
+a></h3>
+<p>Variables that are cached or specified on the command line can have type=
+s
+associated with them. The variable=E2=80=99s type is used by CMake=E2=80=99=
+s UI tool to display
+the right input field. A variable=E2=80=99s type generally doesn=E2=80=99t =
+impact evaluation,
+however CMake does have special handling for some variables such as PATH.
+You can read more about the special handling in <a class=3D"reference exter=
+nal" href=3D"https://cmake.org/cmake/help/v3.5/command/set.html#set-cache-e=
+ntry">CMake=E2=80=99s set documentation</a>.</p>
+</div>
+<div class=3D"section" id=3D"scope">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id9">Scope</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/CMakeP=
+rimer.html#scope" title=3D"Permalink to this headline">=C2=B6</a></h3>
+<p>CMake inherently has a directory-based scoping. Setting a variable in a
+CMakeLists file, will set the variable for that file, and all subdirectorie=
+s.
+Variables set in a CMake module that is included in a CMakeLists file will =
+be
+set in the scope they are included from, and all subdirectories.</p>
+<p>When a variable that is already set is set again in a subdirectory it ov=
+errides
+the value in that scope and any deeper subdirectories.</p>
+<p>The CMake set command provides two scope-related options. PARENT_SCOPE s=
+ets a
+variable into the parent scope, and not the current scope. The CACHE option=
+ sets
+the variable in the CMakeCache, which results in it being set in all scopes=
+. The
+CACHE option will not set a variable that already exists in the CACHE unles=
+s the
+FORCE option is specified.</p>
+<p>In addition to directory-based scope, CMake functions also have their ow=
+n scope.
+This means variables set inside functions do not bleed into the parent scop=
+e.
+This is not true of macros, and it is for this reason LLVM prefers function=
+s
+over macros whenever reasonable.</p>
+<div class=3D"admonition note">
+<p class=3D"first admonition-title">Note</p>
+<p class=3D"last">Unlike C-based languages, CMake=E2=80=99s loop and contro=
+l flow blocks do not have
+their own scopes.</p>
+</div>
+</div>
+</div>
+<div class=3D"section" id=3D"control-flow">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id10">Control Flow</a><a class=3D"headerlink" href=3D"https://llvm.org/doc=
+s/CMakePrimer.html#control-flow" title=3D"Permalink to this headline">=C2=
+=B6</a></h2>
+<p>CMake features the same basic control flow constructs you would expect i=
+n any
+scripting language, but there are a few quirks because, as with everything =
+in
+CMake, control flow constructs are commands.</p>
+<div class=3D"section" id=3D"if-elseif-else">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id11">If, ElseIf, Else</a><a class=3D"headerlink" href=3D"https://llvm.org=
+/docs/CMakePrimer.html#if-elseif-else" title=3D"Permalink to this headline"=
+>=C2=B6</a></h3>
+<div class=3D"admonition note">
+<p class=3D"first admonition-title">Note</p>
+<p class=3D"last">For the full documentation on the CMake if command go
+<a class=3D"reference external" href=3D"https://cmake.org/cmake/help/v3.4/c=
+ommand/if.html">here</a>. That resource is
+far more complete.</p>
+</div>
+<p>In general CMake if blocks work the way you=E2=80=99d expect:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">if</span><span class=3D"p">(</span><span clas=
+s=3D"s">&lt;condition&gt;</span><span class=3D"p">)</span>
+  <span class=3D"nb">message</span><span class=3D"p">(</span><span class=3D=
+"s2">"do stuff"</span><span class=3D"p">)</span>
+<span class=3D"nb">elseif</span><span class=3D"p">(</span><span class=3D"s"=
+>&lt;condition&gt;</span><span class=3D"p">)</span>
+  <span class=3D"nb">message</span><span class=3D"p">(</span><span class=3D=
+"s2">"do other stuff"</span><span class=3D"p">)</span>
+<span class=3D"nb">else</span><span class=3D"p">()</span>
+  <span class=3D"nb">message</span><span class=3D"p">(</span><span class=3D=
+"s2">"do other other stuff"</span><span class=3D"p">)</span>
+<span class=3D"nb">endif</span><span class=3D"p">()</span>
+</pre></div>
+</div>
+<p>The single most important thing to know about CMake=E2=80=99s if blocks =
+coming from a C
+background is that they do not have their own scope. Variables set inside
+conditional blocks persist after the <code class=3D"docutils literal notran=
+slate"><span class=3D"pre">endif()</span></code>.</p>
+</div>
+<div class=3D"section" id=3D"loops">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id12">Loops</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/CMake=
+Primer.html#loops" title=3D"Permalink to this headline">=C2=B6</a></h3>
+<p>The most common form of the CMake <code class=3D"docutils literal notran=
+slate"><span class=3D"pre">foreach</span></code> block is:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">foreach</span><span class=3D"p">(</span><span=
+ class=3D"s">var</span> <span class=3D"s">...</span><span class=3D"p">)</sp=
+an>
+  <span class=3D"nb">message</span><span class=3D"p">(</span><span class=3D=
+"s2">"do stuff"</span><span class=3D"p">)</span>
+<span class=3D"nb">endforeach</span><span class=3D"p">()</span>
+</pre></div>
+</div>
+<p>The variable argument portion of the <code class=3D"docutils literal not=
+ranslate"><span class=3D"pre">foreach</span></code> block can contain deref=
+erenced
+lists, values to iterate, or a mix of both:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">foreach</span><span class=3D"p">(</span><span=
+ class=3D"s">var</span> <span class=3D"s">foo</span> <span class=3D"s">bar<=
+/span> <span class=3D"s">baz</span><span class=3D"p">)</span>
+  <span class=3D"nb">message</span><span class=3D"p">(</span><span class=3D=
+"o">${</span><span class=3D"nv">var</span><span class=3D"o">}</span><span c=
+lass=3D"p">)</span>
+<span class=3D"nb">endforeach</span><span class=3D"p">()</span>
+<span class=3D"c"># prints:</span>
+<span class=3D"c">#  foo</span>
+<span class=3D"c">#  bar</span>
+<span class=3D"c">#  baz</span>
+
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">my=
+_list</span> <span class=3D"s">1</span> <span class=3D"s">2</span> <span cl=
+ass=3D"s">3</span><span class=3D"p">)</span>
+<span class=3D"nb">foreach</span><span class=3D"p">(</span><span class=3D"s=
+">var</span> <span class=3D"o">${</span><span class=3D"nv">my_list</span><s=
+pan class=3D"o">}</span><span class=3D"p">)</span>
+  <span class=3D"nb">message</span><span class=3D"p">(</span><span class=3D=
+"o">${</span><span class=3D"nv">var</span><span class=3D"o">}</span><span c=
+lass=3D"p">)</span>
+<span class=3D"nb">endforeach</span><span class=3D"p">()</span>
+<span class=3D"c"># prints:</span>
+<span class=3D"c">#  1</span>
+<span class=3D"c">#  2</span>
+<span class=3D"c">#  3</span>
+
+<span class=3D"nb">foreach</span><span class=3D"p">(</span><span class=3D"s=
+">var</span> <span class=3D"o">${</span><span class=3D"nv">my_list</span><s=
+pan class=3D"o">}</span> <span class=3D"s">out_of_bounds</span><span class=
+=3D"p">)</span>
+  <span class=3D"nb">message</span><span class=3D"p">(</span><span class=3D=
+"o">${</span><span class=3D"nv">var</span><span class=3D"o">}</span><span c=
+lass=3D"p">)</span>
+<span class=3D"nb">endforeach</span><span class=3D"p">()</span>
+<span class=3D"c"># prints:</span>
+<span class=3D"c">#  1</span>
+<span class=3D"c">#  2</span>
+<span class=3D"c">#  3</span>
+<span class=3D"c">#  out_of_bounds</span>
+</pre></div>
+</div>
+<p>There is also a more modern CMake foreach syntax. The code below is equi=
+valent
+to the code above:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">foreach</span><span class=3D"p">(</span><span=
+ class=3D"s">var</span> <span class=3D"s">IN</span> <span class=3D"s">ITEMS=
+</span> <span class=3D"s">foo</span> <span class=3D"s">bar</span> <span cla=
+ss=3D"s">baz</span><span class=3D"p">)</span>
+  <span class=3D"nb">message</span><span class=3D"p">(</span><span class=3D=
+"o">${</span><span class=3D"nv">var</span><span class=3D"o">}</span><span c=
+lass=3D"p">)</span>
+<span class=3D"nb">endforeach</span><span class=3D"p">()</span>
+<span class=3D"c"># prints:</span>
+<span class=3D"c">#  foo</span>
+<span class=3D"c">#  bar</span>
+<span class=3D"c">#  baz</span>
+
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">my=
+_list</span> <span class=3D"s">1</span> <span class=3D"s">2</span> <span cl=
+ass=3D"s">3</span><span class=3D"p">)</span>
+<span class=3D"nb">foreach</span><span class=3D"p">(</span><span class=3D"s=
+">var</span> <span class=3D"s">IN</span> <span class=3D"s">LISTS</span> <sp=
+an class=3D"s">my_list</span><span class=3D"p">)</span>
+  <span class=3D"nb">message</span><span class=3D"p">(</span><span class=3D=
+"o">${</span><span class=3D"nv">var</span><span class=3D"o">}</span><span c=
+lass=3D"p">)</span>
+<span class=3D"nb">endforeach</span><span class=3D"p">()</span>
+<span class=3D"c"># prints:</span>
+<span class=3D"c">#  1</span>
+<span class=3D"c">#  2</span>
+<span class=3D"c">#  3</span>
+
+<span class=3D"nb">foreach</span><span class=3D"p">(</span><span class=3D"s=
+">var</span> <span class=3D"s">IN</span> <span class=3D"s">LISTS</span> <sp=
+an class=3D"s">my_list</span> <span class=3D"s">ITEMS</span> <span class=3D=
+"s">out_of_bounds</span><span class=3D"p">)</span>
+  <span class=3D"nb">message</span><span class=3D"p">(</span><span class=3D=
+"o">${</span><span class=3D"nv">var</span><span class=3D"o">}</span><span c=
+lass=3D"p">)</span>
+<span class=3D"nb">endforeach</span><span class=3D"p">()</span>
+<span class=3D"c"># prints:</span>
+<span class=3D"c">#  1</span>
+<span class=3D"c">#  2</span>
+<span class=3D"c">#  3</span>
+<span class=3D"c">#  out_of_bounds</span>
+</pre></div>
+</div>
+<p>Similar to the conditional statements, these generally behave how you wo=
+uld
+expect, and they do not have their own scope.</p>
+<p>CMake also supports <code class=3D"docutils literal notranslate"><span c=
+lass=3D"pre">while</span></code> loops, although they are not widely used i=
+n LLVM.</p>
+</div>
+</div>
+<div class=3D"section" id=3D"modules-functions-and-macros">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id13">Modules, Functions and Macros</a><a class=3D"headerlink" href=3D"htt=
+ps://llvm.org/docs/CMakePrimer.html#modules-functions-and-macros" title=3D"=
+Permalink to this headline">=C2=B6</a></h2>
+<div class=3D"section" id=3D"modules">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id14">Modules</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/CMa=
+kePrimer.html#modules" title=3D"Permalink to this headline">=C2=B6</a></h3>
+<p>Modules are CMake=E2=80=99s vehicle for enabling code reuse. CMake modul=
+es are just
+CMake script files. They can contain code to execute on include as well as
+definitions for commands.</p>
+<p>In CMake macros and functions are universally referred to as commands, a=
+nd they
+are the primary method of defining code that can be called multiple times.<=
+/p>
+<p>In LLVM we have several CMake modules that are included as part of our
+distribution for developers who don=E2=80=99t build our project from source=
+. Those
+modules are the fundamental pieces needed to build LLVM-based projects with
+CMake. We also rely on modules as a way of organizing the build system=E2=
+=80=99s
+functionality for maintainability and re-use within LLVM projects.</p>
+</div>
+<div class=3D"section" id=3D"argument-handling">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id15">Argument Handling</a><a class=3D"headerlink" href=3D"https://llvm.or=
+g/docs/CMakePrimer.html#argument-handling" title=3D"Permalink to this headl=
+ine">=C2=B6</a></h3>
+<p>When defining a CMake command handling arguments is very useful. The exa=
+mples
+in this section will all use the CMake <code class=3D"docutils literal notr=
+anslate"><span class=3D"pre">function</span></code> block, but this all app=
+lies
+to the <code class=3D"docutils literal notranslate"><span class=3D"pre">mac=
+ro</span></code> block as well.</p>
+<p>CMake commands can have named arguments that are required at every call =
+site. In
+addition, all commands will implicitly accept a variable number of extra
+arguments (In C parlance, all commands are varargs functions). When a comma=
+nd is
+invoked with extra arguments (beyond the named ones) CMake will store the f=
+ull
+list of arguments (both named and unnamed) in a list named <code class=3D"d=
+ocutils literal notranslate"><span class=3D"pre">ARGV</span></code>, and th=
+e
+sublist of unnamed arguments in <code class=3D"docutils literal notranslate=
+"><span class=3D"pre">ARGN</span></code>. Below is a trivial example of
+providing a wrapper function for CMake=E2=80=99s built in function <code cl=
+ass=3D"docutils literal notranslate"><span class=3D"pre">add_dependencies</=
+span></code>.</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">function</span><span class=3D"p">(</span><spa=
+n class=3D"s">add_deps</span> <span class=3D"s">target</span><span class=3D=
+"p">)</span>
+  <span class=3D"nb">add_dependencies</span><span class=3D"p">(</span><span=
+ class=3D"o">${</span><span class=3D"nv">target</span><span class=3D"o">}</=
+span> <span class=3D"o">${</span><span class=3D"nv">ARGN</span><span class=
+=3D"o">}</span><span class=3D"p">)</span>
+<span class=3D"nb">endfunction</span><span class=3D"p">()</span>
+</pre></div>
+</div>
+<p>This example defines a new macro named <code class=3D"docutils literal n=
+otranslate"><span class=3D"pre">add_deps</span></code> which takes a requir=
+ed first
+argument, and just calls another function passing through the first argumen=
+t and
+all trailing arguments.</p>
+<p>CMake provides a module <code class=3D"docutils literal notranslate"><sp=
+an class=3D"pre">CMakeParseArguments</span></code> which provides an implem=
+entation
+of advanced argument parsing. We use this all over LLVM, and it is recommen=
+ded
+for any function that has complex argument-based behaviors or optional
+arguments. CMake=E2=80=99s official documentation for the module is in the
+<code class=3D"docutils literal notranslate"><span class=3D"pre">cmake-modu=
+les</span></code> manpage, and is also available at the
+<a class=3D"reference external" href=3D"https://cmake.org/cmake/help/v3.4/m=
+odule/CMakeParseArguments.html">cmake-modules online documentation</a>.</p>
+<div class=3D"admonition note">
+<p class=3D"first admonition-title">Note</p>
+<p class=3D"last">As of CMake 3.5 the cmake_parse_arguments command has bec=
+ome a native command
+and the CMakeParseArguments module is empty and only left around for
+compatibility.</p>
+</div>
+</div>
+<div class=3D"section" id=3D"functions-vs-macros">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id16">Functions Vs Macros</a><a class=3D"headerlink" href=3D"https://llvm.=
+org/docs/CMakePrimer.html#functions-vs-macros" title=3D"Permalink to this h=
+eadline">=C2=B6</a></h3>
+<p>Functions and Macros look very similar in how they are used, but there i=
+s one
+fundamental difference between the two. Functions have their own scope, and
+macros don=E2=80=99t. This means variables set in macros will bleed out int=
+o the calling
+scope. That makes macros suitable for defining very small bits of functiona=
+lity
+only.</p>
+<p>The other difference between CMake functions and macros is how arguments=
+ are
+passed. Arguments to macros are not set as variables, instead dereferences =
+to
+the parameters are resolved across the macro before executing it. This can
+result in some unexpected behavior if using unreferenced variables. For exa=
+mple:</p>
+<div class=3D"highlight-cmake notranslate"><div class=3D"highlight"><pre><s=
+pan></span><span class=3D"nb">macro</span><span class=3D"p">(</span><span c=
+lass=3D"s">print_list</span> <span class=3D"s">my_list</span><span class=3D=
+"p">)</span>
+  <span class=3D"nb">foreach</span><span class=3D"p">(</span><span class=3D=
+"s">var</span> <span class=3D"s">IN</span> <span class=3D"s">LISTS</span> <=
+span class=3D"s">my_list</span><span class=3D"p">)</span>
+    <span class=3D"nb">message</span><span class=3D"p">(</span><span class=
+=3D"s2">"${var}"</span><span class=3D"p">)</span>
+  <span class=3D"nb">endforeach</span><span class=3D"p">()</span>
+<span class=3D"nb">endmacro</span><span class=3D"p">()</span>
+
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">my=
+_list</span> <span class=3D"s">a</span> <span class=3D"s">b</span> <span cl=
+ass=3D"s">c</span> <span class=3D"s">d</span><span class=3D"p">)</span>
+<span class=3D"nb">set</span><span class=3D"p">(</span><span class=3D"s">my=
+_list_of_numbers</span> <span class=3D"s">1</span> <span class=3D"s">2</spa=
+n> <span class=3D"s">3</span> <span class=3D"s">4</span><span class=3D"p">)=
+</span>
+<span class=3D"nb">print_list</span><span class=3D"p">(</span><span class=
+=3D"s">my_list_of_numbers</span><span class=3D"p">)</span>
+<span class=3D"c"># prints:</span>
+<span class=3D"c"># a</span>
+<span class=3D"c"># b</span>
+<span class=3D"c"># c</span>
+<span class=3D"c"># d</span>
+</pre></div>
+</div>
+<p>Generally speaking this issue is uncommon because it requires using
+non-dereferenced variables with names that overlap in the parent scope, but=
+ it
+is important to be aware of because it can lead to subtle bugs.</p>
+</div>
+</div>
+<div class=3D"section" id=3D"llvm-project-wrappers">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id17">LLVM Project Wrappers</a><a class=3D"headerlink" href=3D"https://llv=
+m.org/docs/CMakePrimer.html#llvm-project-wrappers" title=3D"Permalink to th=
+is headline">=C2=B6</a></h2>
+<p>LLVM projects provide lots of wrappers around critical CMake built-in co=
+mmands.
+We use these wrappers to provide consistent behaviors across LLVM component=
+s
+and to reduce code duplication.</p>
+<p>We generally (but not always) follow the convention that commands prefac=
+ed with
+<code class=3D"docutils literal notranslate"><span class=3D"pre">llvm_</spa=
+n></code> are intended to be used only as building blocks for other command=
+s.
+Wrapper commands that are intended for direct use are generally named follo=
+wing
+with the project in the middle of the command name (i.e. <code class=3D"doc=
+utils literal notranslate"><span class=3D"pre">add_llvm_executable</span></=
+code>
+is the wrapper for <code class=3D"docutils literal notranslate"><span class=
+=3D"pre">add_executable</span></code>). The LLVM <code class=3D"docutils li=
+teral notranslate"><span class=3D"pre">add_*</span></code> wrapper function=
+s are
+all defined in <code class=3D"docutils literal notranslate"><span class=3D"=
+pre">AddLLVM.cmake</span></code> which is installed as part of the LLVM
+distribution. It can be included and used by any LLVM sub-project that requ=
+ires
+LLVM.</p>
+<div class=3D"admonition note">
+<p class=3D"first admonition-title">Note</p>
+<p class=3D"last">Not all LLVM projects require LLVM for all use cases. For=
+ example compiler-rt
+can be built without LLVM, and the compiler-rt sanitizer libraries are used
+with GCC.</p>
+</div>
+</div>
+<div class=3D"section" id=3D"useful-built-in-commands">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/CMakePrimer.html=
+#id18">Useful Built-in Commands</a><a class=3D"headerlink" href=3D"https://=
+llvm.org/docs/CMakePrimer.html#useful-built-in-commands" title=3D"Permalink=
+ to this headline">=C2=B6</a></h2>
+<p>CMake has a bunch of useful built-in commands. This document isn=E2=80=
+=99t going to
+go into details about them because The CMake project has excellent
+documentation. To highlight a few useful functions see:</p>
+<ul class=3D"simple">
+<li><a class=3D"reference external" href=3D"https://cmake.org/cmake/help/v3=
+.4/command/add_custom_command.html">add_custom_command</a></li>
+<li><a class=3D"reference external" href=3D"https://cmake.org/cmake/help/v3=
+.4/command/add_custom_target.html">add_custom_target</a></li>
+<li><a class=3D"reference external" href=3D"https://cmake.org/cmake/help/v3=
+.4/command/file.html">file</a></li>
+<li><a class=3D"reference external" href=3D"https://cmake.org/cmake/help/v3=
+.4/command/list.html">list</a></li>
+<li><a class=3D"reference external" href=3D"https://cmake.org/cmake/help/v3=
+.4/command/math.html">math</a></li>
+<li><a class=3D"reference external" href=3D"https://cmake.org/cmake/help/v3=
+.4/command/string.html">string</a></li>
+</ul>
+<p>The full documentation for CMake commands is in the <code class=3D"docut=
+ils literal notranslate"><span class=3D"pre">cmake-commands</span></code> m=
+anpage
+and available on <a class=3D"reference external" href=3D"https://cmake.org/=
+cmake/help/v3.4/manual/cmake-commands.7.html">CMake=E2=80=99s website</a></=
+p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class=3D"clearer"></div>
+    </div>
+    <div class=3D"related" role=3D"navigation" aria-label=3D"related naviga=
+tion">
+      <h3>Navigation</h3>
+      <ul>
+        <li class=3D"right" style=3D"margin-right: 10px">
+          <a href=3D"https://llvm.org/docs/genindex.html" title=3D"General =
+Index">index</a></li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/CodeGenerator.html" title=3D"The=
+ LLVM Target-Independent Code Generator">next</a> |</li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/CMake.html" title=3D"Building LL=
+VM with CMake">previous</a> |</li>
+  <li><a href=3D"https://llvm.org/">LLVM Home</a>&nbsp;|&nbsp;</li>
+  <li><a href=3D"https://llvm.org/docs/index.html">Documentation</a>=C2=BB<=
+/li>
+
+          <li class=3D"nav-item nav-item-1"><a href=3D"https://llvm.org/doc=
+s/UserGuides.html">User Guides</a> =C2=BB</li>=20
+      </ul>
+    </div>
+    <div class=3D"footer" role=3D"contentinfo">
+        =C2=A9 Copyright 2003-2022, LLVM Project.
+      Last updated on 2022-05-07.
+      Created using <a href=3D"http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+ =20
+</body></html>
+------MultipartBoundary--Bn52iUCAcq71QD9Gzr4fSjaAKWat3Ujrs6iy8G0Qk7----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-ff932dcb-b6d5-45c8-9c7b-af7b69f8a0b7@mhtml.blink
+
+@charset "utf-8";
+
+table.right { float: right; margin-left: 20px; }
+
+table.right td { border: 1px solid rgb(204, 204, 204); }
+------MultipartBoundary--Bn52iUCAcq71QD9Gzr4fSjaAKWat3Ujrs6iy8G0Qk7----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/llvm-theme.css
+
+@charset "utf-8";
+
+@import url("basic.css");
+
+body { font-family: "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana=
+, sans-serif; font-size: 14px; line-height: 150%; text-align: center; backg=
+round-color: rgb(191, 209, 212); color: black; padding: 0px; border: 1px so=
+lid rgb(170, 170, 170); margin: 0px 80px; min-width: 740px; }
+
+div.logo { background-color: white; text-align: left; padding: 10px 10px 15=
+px 15px; }
+
+div.document { background-color: white; text-align: left; background-image:=
+ url("contents.png"); background-repeat: repeat-x; }
+
+div.bodywrapper { margin: 0px 240px 0px 0px; border-right: 1px solid rgb(20=
+4, 204, 204); }
+
+div.body { margin: 0px; padding: 0.5em 20px 20px; max-width: 1000px; }
+
+div.related { font-size: 1em; }
+
+div.related ul { background-image: url("navigation.png"); height: 2em; bord=
+er-top: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221=
+, 221); }
+
+div.related ul li { margin: 0px; padding: 0px; height: 2em; float: left; }
+
+div.related ul li.right { float: right; margin-right: 5px; }
+
+div.related ul li a { margin: 0px; padding: 0px 5px; line-height: 1.75em; c=
+olor: rgb(238, 152, 22); }
+
+div.related ul li a:hover { color: rgb(60, 168, 231); }
+
+div.sphinxsidebarwrapper { padding: 0px; }
+
+div.sphinxsidebar { margin: 0px; padding: 0.5em 15px 15px 0px; width: 210px=
+; float: right; font-size: 1em; text-align: left; }
+
+div.sphinxsidebar h3, div.sphinxsidebar h4 { margin: 1em 0px 0.5em; font-si=
+ze: 1em; padding: 0.1em 0px 0.1em 0.5em; color: white; border: 1px solid rg=
+b(134, 152, 155); background-color: rgb(175, 193, 196); }
+
+div.sphinxsidebar h3 a { color: white; }
+
+div.sphinxsidebar ul { margin-top: 7px; padding: 0px; line-height: 130%; }
+
+div.sphinxsidebar ul ul { margin-left: 20px; }
+
+div.footer { background-color: rgb(227, 239, 241); color: rgb(134, 152, 155=
+); padding: 3px 8px 3px 0px; clear: both; font-size: 0.8em; text-align: rig=
+ht; }
+
+div.footer a { color: rgb(134, 152, 155); text-decoration: underline; }
+
+p { margin: 0.8em 0px 0.5em; }
+
+a { color: rgb(202, 121, 0); text-decoration: none; }
+
+a:hover { color: rgb(36, 145, 207); }
+
+div.body p a { text-decoration: underline; }
+
+h1 { margin: 0px; padding: 0.7em 0px 0.3em; font-size: 1.5em; color: rgb(17=
+, 85, 124); }
+
+h2 { margin: 1.3em 0px 0.2em; font-size: 1.35em; padding: 0px; }
+
+h3 { margin: 1em 0px -0.3em; font-size: 1.2em; }
+
+h3 a:hover { text-decoration: underline; }
+
+div.body h1 a, div.body h2 a, div.body h3 a, div.body h4 a, div.body h5 a, =
+div.body h6 a { color: black !important; }
+
+div.body h1, div.body h2, div.body h3, div.body h4, div.body h5, div.body h=
+6 { background-color: rgb(242, 242, 242); font-weight: normal; color: rgb(3=
+2, 67, 92); border-bottom: 1px solid rgb(204, 204, 204); margin: 20px -20px=
+ 10px; padding: 3px 0px 3px 10px; }
+
+div.body h1 { margin-top: 0px; font-size: 200%; }
+
+div.body h2 { font-size: 160%; }
+
+div.body h3 { font-size: 140%; }
+
+div.body h4 { font-size: 120%; }
+
+div.body h5 { font-size: 110%; }
+
+div.body h6 { font-size: 100%; }
+
+h1 a.anchor, h2 a.anchor, h3 a.anchor, h4 a.anchor, h5 a.anchor, h6 a.ancho=
+r { display: none; margin: 0px 0px 0px 0.3em; padding: 0px 0.2em; color: rg=
+b(170, 170, 170) !important; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor,=
+ h5:hover a.anchor, h6:hover a.anchor { display: inline; }
+
+h1 a.anchor:hover, h2 a.anchor:hover, h3 a.anchor:hover, h4 a.anchor:hover,=
+ h5 a.anchor:hover, h6 a.anchor:hover { color: rgb(119, 119, 119); backgrou=
+nd-color: rgb(238, 238, 238); }
+
+a.headerlink { font-size: 1em; margin-left: 6px; padding: 0px 4px; color: r=
+gb(198, 15, 15) !important; text-decoration: none !important; }
+
+a.headerlink:hover { background-color: rgb(204, 204, 204); color: white !im=
+portant; }
+
+cite, code, tt { font-family: Consolas, "Deja Vu Sans Mono", "Bitstream Ver=
+a Sans Mono", monospace; font-size: 0.95em; }
+
+:not(a.reference) > tt { background-color: rgb(242, 242, 242); border-botto=
+m: 1px solid rgb(221, 221, 221); color: rgb(51, 51, 51); }
+
+tt.descname, tt.descclassname, tt.xref { border: 0px; }
+
+hr { border: 1px solid rgb(170, 187, 204); margin: 2em; }
+
+p a tt { border: 0px; color: rgb(202, 121, 0); }
+
+p a tt:hover { color: rgb(36, 145, 207); }
+
+a tt { border: none; }
+
+pre { font-family: Consolas, "Deja Vu Sans Mono", "Bitstream Vera Sans Mono=
+", monospace; font-size: 0.95em; line-height: 120%; padding: 0.5em; border:=
+ 1px solid rgb(204, 204, 204); background-color: rgb(248, 248, 248); }
+
+pre a { color: inherit; text-decoration: underline; }
+
+td.linenos pre { padding: 0.5em 0px; }
+
+div.quotebar { background-color: rgb(248, 248, 248); max-width: 250px; floa=
+t: right; padding: 2px 7px; border: 1px solid rgb(204, 204, 204); }
+
+div.topic { background-color: rgb(248, 248, 248); }
+
+table { border-collapse: collapse; margin: 0px -0.5em; }
+
+table td, table th { padding: 0.2em 0.5em; }
+
+div.admonition, div.warning { font-size: 0.9em; margin: 1em 0px; border: 1p=
+x solid rgb(134, 152, 155); background-color: rgb(247, 247, 247); padding: =
+0px; }
+
+div.admonition p, div.warning p { margin: 0.5em 1em; padding: 0px; }
+
+div.admonition pre, div.warning pre { margin: 0.4em 1em; }
+
+div.admonition p.admonition-title, div.warning p.admonition-title { margin:=
+ 0px; padding: 0.1em 0px 0.1em 0.5em; color: white; border-bottom: 1px soli=
+d rgb(134, 152, 155); font-weight: bold; background-color: rgb(175, 193, 19=
+6); }
+
+div.warning { border: 1px solid rgb(148, 0, 0); }
+
+div.warning p.admonition-title { background-color: rgb(207, 0, 0); border-b=
+ottom-color: rgb(148, 0, 0); }
+
+div.admonition ul, div.admonition ol, div.warning ul, div.warning ol { marg=
+in: 0.1em 0.5em 0.5em 3em; padding: 0px; }
+
+div.versioninfo { margin: 1em 0px 0px; border: 1px solid rgb(204, 204, 204)=
+; background-color: rgb(221, 234, 240); padding: 8px; line-height: 1.3em; f=
+ont-size: 0.9em; }
+
+.viewcode-back { font-family: "Lucida Grande", "Lucida Sans Unicode", Genev=
+a, Verdana, sans-serif; }
+
+div.viewcode-block:target { background-color: rgb(244, 222, 191); border-to=
+p: 1px solid rgb(170, 204, 153); border-bottom: 1px solid rgb(170, 204, 153=
+); }
+------MultipartBoundary--Bn52iUCAcq71QD9Gzr4fSjaAKWat3Ujrs6iy8G0Qk7----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/basic.css
+
+@charset "utf-8";
+
+div.clearer { clear: both; }
+
+div.related { width: 100%; font-size: 90%; }
+
+div.related h3 { display: none; }
+
+div.related ul { margin: 0px; padding: 0px 0px 0px 10px; list-style: none; =
+}
+
+div.related li { display: inline; }
+
+div.related li.right { float: right; margin-right: 5px; }
+
+div.sphinxsidebarwrapper { padding: 10px 5px 0px 10px; }
+
+div.sphinxsidebar { float: left; width: 230px; margin-left: -100%; font-siz=
+e: 90%; overflow-wrap: break-word; }
+
+div.sphinxsidebar ul { list-style: none; }
+
+div.sphinxsidebar ul ul, div.sphinxsidebar ul.want-points { margin-left: 20=
+px; list-style: square; }
+
+div.sphinxsidebar ul ul { margin-top: 0px; margin-bottom: 0px; }
+
+div.sphinxsidebar form { margin-top: 10px; }
+
+div.sphinxsidebar input { border: 1px solid rgb(152, 219, 204); font-family=
+: sans-serif; font-size: 1em; }
+
+div.sphinxsidebar #searchbox form.search { overflow: hidden; }
+
+div.sphinxsidebar #searchbox input[type=3D"text"] { float: left; width: 80%=
+; padding: 0.25em; box-sizing: border-box; }
+
+div.sphinxsidebar #searchbox input[type=3D"submit"] { float: left; width: 2=
+0%; border-left: none; padding: 0.25em; box-sizing: border-box; }
+
+img { border: 0px; max-width: 100%; }
+
+ul.search { margin: 10px 0px 0px 20px; padding: 0px; }
+
+ul.search li { padding: 5px 0px 5px 20px; background-image: url("file.png")=
+; background-repeat: no-repeat; background-position: 0px 7px; }
+
+ul.search li a { font-weight: bold; }
+
+ul.search li div.context { color: rgb(136, 136, 136); margin: 2px 0px 0px 3=
+0px; text-align: left; }
+
+ul.keywordmatches li.goodmatch a { font-weight: bold; }
+
+table.contentstable { width: 90%; margin-left: auto; margin-right: auto; }
+
+table.contentstable p.biglink { line-height: 150%; }
+
+a.biglink { font-size: 1.3em; }
+
+span.linkdescr { font-style: italic; padding-top: 5px; font-size: 90%; }
+
+table.indextable { width: 100%; }
+
+table.indextable td { text-align: left; vertical-align: top; }
+
+table.indextable ul { margin-top: 0px; margin-bottom: 0px; list-style-type:=
+ none; }
+
+table.indextable > tbody > tr > td > ul { padding-left: 0em; }
+
+table.indextable tr.pcap { height: 10px; }
+
+table.indextable tr.cap { margin-top: 10px; background-color: rgb(242, 242,=
+ 242); }
+
+img.toggler { margin-right: 3px; margin-top: 3px; cursor: pointer; }
+
+div.modindex-jumpbox { border-top: 1px solid rgb(221, 221, 221); border-bot=
+tom: 1px solid rgb(221, 221, 221); margin: 1em 0px; padding: 0.4em; }
+
+div.genindex-jumpbox { border-top: 1px solid rgb(221, 221, 221); border-bot=
+tom: 1px solid rgb(221, 221, 221); margin: 1em 0px; padding: 0.4em; }
+
+table.modindextable td { padding: 2px; border-collapse: collapse; }
+
+div.body { min-width: 450px; max-width: 800px; }
+
+div.body p, div.body dd, div.body li, div.body blockquote { hyphens: auto; =
+}
+
+a.headerlink { visibility: hidden; }
+
+h1:hover > a.headerlink, h2:hover > a.headerlink, h3:hover > a.headerlink, =
+h4:hover > a.headerlink, h5:hover > a.headerlink, h6:hover > a.headerlink, =
+dt:hover > a.headerlink, caption:hover > a.headerlink, p.caption:hover > a.=
+headerlink, div.code-block-caption:hover > a.headerlink { visibility: visib=
+le; }
+
+div.body p.caption { text-align: inherit; }
+
+div.body td { text-align: left; }
+
+.first { margin-top: 0px !important; }
+
+p.rubric { margin-top: 30px; font-weight: bold; }
+
+img.align-left, .figure.align-left, object.align-left { clear: left; float:=
+ left; margin-right: 1em; }
+
+img.align-right, .figure.align-right, object.align-right { clear: right; fl=
+oat: right; margin-left: 1em; }
+
+img.align-center, .figure.align-center, object.align-center { display: bloc=
+k; margin-left: auto; margin-right: auto; }
+
+.align-left { text-align: left; }
+
+.align-center { text-align: center; }
+
+.align-right { text-align: right; }
+
+div.sidebar { margin: 0px 0px 0.5em 1em; border: 1px solid rgb(221, 221, 18=
+7); padding: 7px 7px 0px; background-color: rgb(255, 255, 238); width: 40%;=
+ float: right; }
+
+p.sidebar-title { font-weight: bold; }
+
+div.topic { border: 1px solid rgb(204, 204, 204); padding: 7px 7px 0px; mar=
+gin: 10px 0px; }
+
+p.topic-title { font-size: 1.1em; font-weight: bold; margin-top: 10px; }
+
+div.admonition { margin-top: 10px; margin-bottom: 10px; padding: 7px; }
+
+div.admonition dt { font-weight: bold; }
+
+div.admonition dl { margin-bottom: 0px; }
+
+p.admonition-title { margin: 0px 10px 5px 0px; font-weight: bold; }
+
+div.body p.centered { text-align: center; margin-top: 25px; }
+
+table.docutils { border: 0px; border-collapse: collapse; }
+
+table.align-center { margin-left: auto; margin-right: auto; }
+
+table caption span.caption-number { font-style: italic; }
+
+table caption span.caption-text { }
+
+table.docutils td, table.docutils th { padding: 1px 8px 1px 5px; border-wid=
+th: 0px 0px 1px; border-top-style: initial; border-top-color: initial; bord=
+er-left-style: initial; border-left-color: initial; border-right-style: ini=
+tial; border-right-color: initial; border-bottom-style: solid; border-botto=
+m-color: rgb(170, 170, 170); }
+
+table.footnote td, table.footnote th { border: 0px !important; }
+
+th { text-align: left; padding-right: 5px; }
+
+table.citation { border-left: 1px solid gray; margin-left: 1px; }
+
+table.citation td { border-bottom: none; }
+
+div.figure { margin: 0.5em; padding: 0.5em; }
+
+div.figure p.caption { padding: 0.3em; }
+
+div.figure p.caption span.caption-number { font-style: italic; }
+
+div.figure p.caption span.caption-text { }
+
+table.field-list td, table.field-list th { border: 0px !important; }
+
+.field-list ul { margin: 0px; padding-left: 1em; }
+
+.field-list p { margin: 0px; }
+
+.field-name { hyphens: manual; }
+
+table.hlist td { vertical-align: top; }
+
+ol.arabic { list-style: decimal; }
+
+ol.loweralpha { list-style: lower-alpha; }
+
+ol.upperalpha { list-style: upper-alpha; }
+
+ol.lowerroman { list-style: lower-roman; }
+
+ol.upperroman { list-style: upper-roman; }
+
+dl { margin-bottom: 15px; }
+
+dd p { margin-top: 0px; }
+
+dd ul, dd table { margin-bottom: 10px; }
+
+dd { margin-top: 3px; margin-bottom: 10px; margin-left: 30px; }
+
+dt:target, span.highlighted { background-color: rgb(251, 229, 78); }
+
+rect.highlighted { fill: rgb(251, 229, 78); }
+
+dl.glossary dt { font-weight: bold; font-size: 1.1em; }
+
+.optional { font-size: 1.3em; }
+
+.sig-paren { font-size: larger; }
+
+.versionmodified { font-style: italic; }
+
+.system-message { background-color: rgb(255, 221, 170); padding: 5px; borde=
+r: 3px solid red; }
+
+.footnote:target { background-color: rgb(255, 255, 170); }
+
+.line-block { display: block; margin-top: 1em; margin-bottom: 1em; }
+
+.line-block .line-block { margin-top: 0px; margin-bottom: 0px; margin-left:=
+ 1.5em; }
+
+.guilabel, .menuselection { font-family: sans-serif; }
+
+.accelerator { text-decoration: underline; }
+
+.classifier { font-style: oblique; }
+
+abbr, acronym { border-bottom: 1px dotted; cursor: help; }
+
+pre { overflow: auto hidden; }
+
+span.pre { hyphens: none; }
+
+td.linenos pre { padding: 5px 0px; border: 0px; background-color: transpare=
+nt; color: rgb(170, 170, 170); }
+
+table.highlighttable { margin-left: 0.5em; }
+
+table.highlighttable td { padding: 0px 0.5em; }
+
+div.code-block-caption { padding: 2px 5px; font-size: small; }
+
+div.code-block-caption code { background-color: transparent; }
+
+div.code-block-caption + div > div.highlight > pre { margin-top: 0px; }
+
+div.code-block-caption span.caption-number { padding: 0.1em 0.3em; font-sty=
+le: italic; }
+
+div.code-block-caption span.caption-text { }
+
+div.literal-block-wrapper { padding: 1em 1em 0px; }
+
+div.literal-block-wrapper div.highlight { margin: 0px; }
+
+code.descname { background-color: transparent; font-weight: bold; font-size=
+: 1.2em; }
+
+code.descclassname { background-color: transparent; }
+
+code.xref, a code { background-color: transparent; font-weight: bold; }
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code { background-color: tr=
+ansparent; }
+
+.viewcode-link { float: right; }
+
+.viewcode-back { float: right; font-family: sans-serif; }
+
+div.viewcode-block:target { margin: -1px -10px; padding: 0px 10px; }
+
+img.math { vertical-align: middle; }
+
+div.body div.math p { text-align: center; }
+
+span.eqno { float: right; }
+
+span.eqno a.headerlink { position: relative; left: 0px; z-index: 1; }
+
+div.math:hover a.headerlink { visibility: visible; }
+
+@media print {
+  div.document, div.documentwrapper, div.bodywrapper { width: 100%; margin:=
+ 0px !important; }
+  div.sphinxsidebar, div.related, div.footer, #top-link { display: none; }
+}
+------MultipartBoundary--Bn52iUCAcq71QD9Gzr4fSjaAKWat3Ujrs6iy8G0Qk7----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/contents.png
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAYAAAA/tpB3AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAL
+EwAACxMBAJqcGAAAAAd0SU1FB9gBDRUWN0N7tMwAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRo
+IEdJTVBXgQ4XAAAAN0lEQVQI16WNOQ4AIADCWv7/XhMnXdR4jC4kQAOUWlsAghIaBCECozhFHMie
+Latv9sOdbxfsXOngpgVLkKkPEQAAAABJRU5ErkJggg==
+
+------MultipartBoundary--Bn52iUCAcq71QD9Gzr4fSjaAKWat3Ujrs6iy8G0Qk7----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/navigation.png
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAA8CAYAAACn8dD6AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAL
+EwAACxMBAJqcGAAAAAd0SU1FB9gBDRUOAHndiZoAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRo
+IEdJTVBXgQ4XAAAAR0lEQVQY072NwRHAMAzCBPtP6wFCH6mddIF+OBlxZ6oqBrBtLKkJMBLWERJ7
+LJpChsAEzHSX2DZvnC6ZcfpcWR+bfnSNf48HN9YiTAPwk98AAAAASUVORK5CYII=
+
+------MultipartBoundary--Bn52iUCAcq71QD9Gzr4fSjaAKWat3Ujrs6iy8G0Qk7----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/pygments.css
+
+@charset "utf-8";
+
+pre { line-height: 125%; }
+
+td.linenos pre { color: rgb(0, 0, 0); background-color: rgb(240, 240, 240);=
+ padding-left: 5px; padding-right: 5px; }
+
+span.linenos { color: rgb(0, 0, 0); background-color: rgb(240, 240, 240); p=
+adding-left: 5px; padding-right: 5px; }
+
+td.linenos pre.special { color: rgb(0, 0, 0); background-color: rgb(255, 25=
+5, 192); padding-left: 5px; padding-right: 5px; }
+
+span.linenos.special { color: rgb(0, 0, 0); background-color: rgb(255, 255,=
+ 192); padding-left: 5px; padding-right: 5px; }
+
+.highlight .hll { background-color: rgb(255, 255, 204); }
+
+.highlight { background: rgb(240, 240, 240); }
+
+.highlight .c { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .err { border: 1px solid rgb(255, 0, 0); }
+
+.highlight .k { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .o { color: rgb(102, 102, 102); }
+
+.highlight .ch { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cm { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cp { color: rgb(0, 112, 32); }
+
+.highlight .cpf { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .c1 { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cs { color: rgb(96, 160, 176); background-color: rgb(255, 240, =
+240); }
+
+.highlight .gd { color: rgb(160, 0, 0); }
+
+.highlight .ge { font-style: italic; }
+
+.highlight .gr { color: rgb(255, 0, 0); }
+
+.highlight .gh { color: rgb(0, 0, 128); font-weight: bold; }
+
+.highlight .gi { color: rgb(0, 160, 0); }
+
+.highlight .go { color: rgb(136, 136, 136); }
+
+.highlight .gp { color: rgb(198, 93, 9); font-weight: bold; }
+
+.highlight .gs { font-weight: bold; }
+
+.highlight .gu { color: rgb(128, 0, 128); font-weight: bold; }
+
+.highlight .gt { color: rgb(0, 68, 221); }
+
+.highlight .kc { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kd { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kn { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kp { color: rgb(0, 112, 32); }
+
+.highlight .kr { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kt { color: rgb(144, 32, 0); }
+
+.highlight .m { color: rgb(64, 160, 112); }
+
+.highlight .s { color: rgb(64, 112, 160); }
+
+.highlight .na { color: rgb(64, 112, 160); }
+
+.highlight .nb { color: rgb(0, 112, 32); }
+
+.highlight .nc { color: rgb(14, 132, 181); font-weight: bold; }
+
+.highlight .no { color: rgb(96, 173, 213); }
+
+.highlight .nd { color: rgb(85, 85, 85); font-weight: bold; }
+
+.highlight .ni { color: rgb(213, 85, 55); font-weight: bold; }
+
+.highlight .ne { color: rgb(0, 112, 32); }
+
+.highlight .nf { color: rgb(6, 40, 126); }
+
+.highlight .nl { color: rgb(0, 32, 112); font-weight: bold; }
+
+.highlight .nn { color: rgb(14, 132, 181); font-weight: bold; }
+
+.highlight .nt { color: rgb(6, 40, 115); font-weight: bold; }
+
+.highlight .nv { color: rgb(187, 96, 213); }
+
+.highlight .ow { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .w { color: rgb(187, 187, 187); }
+
+.highlight .mb { color: rgb(64, 160, 112); }
+
+.highlight .mf { color: rgb(64, 160, 112); }
+
+.highlight .mh { color: rgb(64, 160, 112); }
+
+.highlight .mi { color: rgb(64, 160, 112); }
+
+.highlight .mo { color: rgb(64, 160, 112); }
+
+.highlight .sa { color: rgb(64, 112, 160); }
+
+.highlight .sb { color: rgb(64, 112, 160); }
+
+.highlight .sc { color: rgb(64, 112, 160); }
+
+.highlight .dl { color: rgb(64, 112, 160); }
+
+.highlight .sd { color: rgb(64, 112, 160); font-style: italic; }
+
+.highlight .s2 { color: rgb(64, 112, 160); }
+
+.highlight .se { color: rgb(64, 112, 160); font-weight: bold; }
+
+.highlight .sh { color: rgb(64, 112, 160); }
+
+.highlight .si { color: rgb(112, 160, 208); font-style: italic; }
+
+.highlight .sx { color: rgb(198, 93, 9); }
+
+.highlight .sr { color: rgb(35, 83, 136); }
+
+.highlight .s1 { color: rgb(64, 112, 160); }
+
+.highlight .ss { color: rgb(81, 121, 24); }
+
+.highlight .bp { color: rgb(0, 112, 32); }
+
+.highlight .fm { color: rgb(6, 40, 126); }
+
+.highlight .vc { color: rgb(187, 96, 213); }
+
+.highlight .vg { color: rgb(187, 96, 213); }
+
+.highlight .vi { color: rgb(187, 96, 213); }
+
+.highlight .vm { color: rgb(187, 96, 213); }
+
+.highlight .il { color: rgb(64, 160, 112); }
+------MultipartBoundary--Bn52iUCAcq71QD9Gzr4fSjaAKWat3Ujrs6iy8G0Qk7----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/logo.png
+
+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
+YAAAOpgAABdvkl/FRgAAAwBQTFRFXF1f9fX1iYuOvL7An6GkKzJYanah+fn6gImurK6wY2NlfH6B
+JSYnlZ27wMHBoKfC0NDRaWpt5eXl7e3tdYCm8fHyUlRV6enpWmeSNTY33d3ePURkbG1vharW2dna
+1dXWWlpcpKWoREVGlJaZtLa4c3Z5zM3OnJ6hR26oqrDJdXh7jI2QpqiqxcbIFxgYjpCTwcLEubu9
+hIaJzs7QSktMyMnKsbGy1tbXxMXGgoOD4ODgrrCy9PX4cnR1eHp9////5ebnlpea/Pz8qKqsmJqd
+ycrM3t7fsLK0tLrQfn+DoKKlfKjZbnBygIKFTU5Qscjovby+hoiLtLW3c3uYcHJ0wsTGoaKiZGVo
+PlSMX2BiYGyaqayusrS2tri7TlFTipO0anSduLm72trbkZKUkJCRvsDCa2Vl0tLTgoSHhZCnbZ/U
+4uLjeXR1enx+VFZYkpSXury+Y15eZ2hqfIOdcGpqiYSFqqip2uT1lJWX4uPkyszOyMXGmZWWgHt8
+oqSnVIrFWlRVV1hanZ2fGiErmpuefH1/xsfJz8/RZmqEz83O19jZr6yscHFzeHl7u7m5x9fv1NPU
+cHeKraqr1NTWS1eC3t/gdHV4j4yMSERF8PDxUUxMlrfg29zdnJqa3NvcdnFxwL/A3uDlkZSil5mc
+uLe4eXZ6RUdIqKam2NfYpaWmgYmZpaGi4uHi1NLSLisryMfI4OLifXh44N/gxMHClZKSr62v0tTh
+hIeHhoGCoJ2epqOk2NbW4+Tlsa+wRklL0s/Q6urrMTl+6Ojos7KyISY7PTs9y8nK4+Ljko+QkZes
+4eDht7W129rax8vbzMvMv76/397fmpeYFR0ni4+bvLu8hY6vTEdIjIeIHhscJCAhQEBB1NjkBQcI
+7+/w6uvxv8TW3+Hrys7d5OPk7Ovs5+fo+/v7m6Cxw8PE8O/w9PT0+Pf47Ozs6+rrl5SU/f39n5uc
+5+bnTX66pMDkg39/Mi8w/Pv7UVBR8/P28/T38/Pzw8bUo5+gl5yrdG5vVWKT////em8aCAAAAQB0
+Uk5T////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////AFP3ByUAABebSURBVHja7Jt/XFNHtsBJQElC
+iJdf0dA8klwgKSQQfgVIQkAMkJIF1qDAkgAWIj+2NolS20XaUmkDVJZ0aalYW4tuca3ddWVrf7f+
+QBTtqov2rasJSRAVZcXWulvLe76+3nl/3Py4CQlose/T2s4fkXvPzGS+c86cOXMm+oCfbPH5Gf1n
+9J/Rf0afX0k//hNFH4SNRTvtD2azOQN4fJhVPG42mx3vx83mMWcdR/0McwYwm80Yodcybnb5ou8L
+nbH3XN27kiO2J8StmF0rexMvdHsf6LFBzLjLk4fBxGDkD33f6Gm31n21/oud2gj0cREBS0FY5KYh
+b+JFBBfG0Av2Btj6oRfHAjH1CB5Gs8opDRz7ntF3Dxu++HD7V+/0lm1w2OjCGdPuYvNexBeU9lG7
+zlfGhYUIgiDKCzYDNofa62XM6HvMJlFe/P7Xeufwyic+e/zR7U/SV3bNsDovbbyJzd6QLiIIohx3
+zoXS69Tau77w/bu5iNG2sy99ef7tupEyDT0bO1QvBjmrONDzwIHZbWHbjX7hjB4WevYw3wM6BH8w
+cvq9j7Y8vf5QeWZm44ir+ryhexXbzXWV2/tFCKLM8IA+Y44uIP9f6Kph/qlNOw588+lX33YzMzNj
+C8Lmh+5Qe8YMXbp4cwd6qBelf9/og4aqHUN9m9458qd3P9y+2yczM1Oinye62eMiHnefjFBE6RHR
+jNgF9wx9KyNRnN0vTp/AvMPxqE3W24vDD71z8uOnHt8yEJSZmZlJr5kfOgj1pM1FmG3ettevCvTU
+BwFRxtxL9AiVIlrSazBoNJpM/Wb03VQJntR/OevK7cEzh9JPvvnZ+XdXx8bGxsZGJ80T3b5Yx93M
+eNwNPcbsoeI4gsTcO/StUYpYg6GtQcHnZ2dHNqm5yysTK9X5muwnL+OWZV25dvnMn5/c+cTrW75o
+jEXZ6+eHbt+3Al2rh7qHhDH2ZR3o4imUGfcKfY801pCpaHrW71m9Xp+Tk9Pfnx255MXSI+mbdu+5
+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
+QmCC
+
+------MultipartBoundary--Bn52iUCAcq71QD9Gzr4fSjaAKWat3Ujrs6iy8G0Qk7------

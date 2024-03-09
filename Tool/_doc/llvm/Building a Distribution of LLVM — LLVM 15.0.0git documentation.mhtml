@@ -1,0 +1,1470 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://llvm.org/docs/BuildingADistribution.html
+Subject: =?utf-8?Q?Building=20a=20Distribution=20of=20LLVM=20=E2=80=94=20LLVM=2015?=
+ =?utf-8?Q?.0.0git=20documentation?=
+Date: Sat, 7 May 2022 21:54:34 -0000
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--sloyP1e4fSW8rsFO6FKG6PLuBjMCQ9vOgiWr8IoaQF----"
+
+
+------MultipartBoundary--sloyP1e4fSW8rsFO6FKG6PLuBjMCQ9vOgiWr8IoaQF----
+Content-Type: text/html
+Content-ID: <frame-8E1DAD64AAF1FD2DCAA7321D111726A5@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/BuildingADistribution.html
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3.=
+org/1999/xhtml"><head><meta http-equiv=3D"Content-Type" content=3D"text/htm=
+l; charset=3DUTF-8"><link rel=3D"stylesheet" type=3D"text/css" href=3D"cid:=
+css-ce2fb58c-b7a9-4e06-9310-057da91a6065@mhtml.blink" />
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3DEdge">
+   =20
+    <title>Building a Distribution of LLVM =E2=80=94 LLVM 15.0.0git documen=
+tation</title>
+    <link rel=3D"stylesheet" href=3D"https://llvm.org/docs/_static/llvm-the=
+me.css" type=3D"text/css">
+    <link rel=3D"stylesheet" href=3D"https://llvm.org/docs/_static/pygments=
+.css" type=3D"text/css">
+   =20
+   =20
+   =20
+   =20
+   =20
+    <link rel=3D"index" title=3D"Index" href=3D"https://llvm.org/docs/genin=
+dex.html">
+    <link rel=3D"search" title=3D"Search" href=3D"https://llvm.org/docs/sea=
+rch.html">
+    <link rel=3D"next" title=3D"Control Flow Verification Tool Design Docum=
+ent" href=3D"https://llvm.org/docs/CFIVerify.html">
+    <link rel=3D"prev" title=3D"Using ARM NEON instructions in big endian m=
+ode" href=3D"https://llvm.org/docs/BigEndianNEON.html">
+
+
+  </head><body>
+<div class=3D"logo">
+  <a href=3D"https://llvm.org/docs/index.html">
+    <img src=3D"https://llvm.org/docs/_static/logo.png" alt=3D"LLVM Logo" w=
+idth=3D"250" height=3D"88"></a>
+</div>
+
+    <div class=3D"related" role=3D"navigation" aria-label=3D"related naviga=
+tion">
+      <h3>Navigation</h3>
+      <ul>
+        <li class=3D"right" style=3D"margin-right: 10px">
+          <a href=3D"https://llvm.org/docs/genindex.html" title=3D"General =
+Index" accesskey=3D"I">index</a></li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/CFIVerify.html" title=3D"Control=
+ Flow Verification Tool Design Document" accesskey=3D"N">next</a> |</li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/BigEndianNEON.html" title=3D"Usi=
+ng ARM NEON instructions in big endian mode" accesskey=3D"P">previous</a> |=
+</li>
+  <li><a href=3D"https://llvm.org/">LLVM Home</a>&nbsp;|&nbsp;</li>
+  <li><a href=3D"https://llvm.org/docs/index.html">Documentation</a>=C2=BB<=
+/li>
+
+          <li class=3D"nav-item nav-item-1"><a href=3D"https://llvm.org/doc=
+s/UserGuides.html" accesskey=3D"U">User Guides</a> =C2=BB</li>=20
+      </ul>
+    </div>
+
+      <div class=3D"sphinxsidebar" role=3D"navigation" aria-label=3D"main n=
+avigation">
+        <div class=3D"sphinxsidebarwrapper">
+
+<h3>Documentation</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/GettingStartedTutorials.html">Gett=
+ing Started/Tutorials</a></li>
+    <li><a href=3D"https://llvm.org/docs/UserGuides.html">User Guides</a></=
+li>
+    <li><a href=3D"https://llvm.org/docs/Reference.html">Reference</a></li>
+</ul>
+
+<h3>Getting Involved</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/Contributing.html">Contributing to=
+ LLVM</a></li>
+    <li><a href=3D"https://llvm.org/docs/HowToSubmitABug.html">Submitting B=
+ug Reports</a></li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#mailing-lists=
+">Mailing Lists</a></li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#irc">IRC</a><=
+/li>
+    <li><a href=3D"https://llvm.org/docs/GettingInvolved.html#meetups-and-s=
+ocial-events">Meetups and Social Events</a></li>
+</ul>
+
+<h3>Additional Links</h3>
+
+<ul class=3D"want-points">
+    <li><a href=3D"https://llvm.org/docs/FAQ.html">FAQ</a></li>
+    <li><a href=3D"https://llvm.org/docs/Lexicon.html">Glossary</a></li>
+    <li><a href=3D"https://llvm.org/pubs">Publications</a></li>
+    <li><a href=3D"https://github.com/llvm/llvm-project//">Github Repositor=
+y</a></li>
+</ul>
+  <div role=3D"note" aria-label=3D"source link">
+    <h3>This Page</h3>
+    <ul class=3D"this-page-menu">
+      <li><a href=3D"https://llvm.org/docs/_sources/BuildingADistribution.r=
+st.txt" rel=3D"nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id=3D"searchbox" style=3D"" role=3D"search">
+  <h3>Quick search</h3>
+    <div class=3D"searchformwrapper">
+    <form class=3D"search" action=3D"https://llvm.org/docs/search.html" met=
+hod=3D"get">
+      <input type=3D"text" name=3D"q">
+      <input type=3D"submit" value=3D"Go">
+     =20
+     =20
+    </form>
+    </div>
+</div>
+
+        </div>
+      </div>
+
+    <div class=3D"document">
+      <div class=3D"documentwrapper">
+        <div class=3D"bodywrapper">
+          <div class=3D"body" role=3D"main">
+           =20
+  <div class=3D"section" id=3D"building-a-distribution-of-llvm">
+<h1>Building a Distribution of LLVM<a class=3D"headerlink" href=3D"https://=
+llvm.org/docs/BuildingADistribution.html#building-a-distribution-of-llvm" t=
+itle=3D"Permalink to this headline">=C2=B6</a></h1>
+<div class=3D"contents local topic" id=3D"contents">
+<ul class=3D"simple">
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/BuildingA=
+Distribution.html#introduction" id=3D"id2">Introduction</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/BuildingA=
+Distribution.html#general-distribution-guidance" id=3D"id3">General Distrib=
+ution Guidance</a><ul>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/BuildingA=
+Distribution.html#difference-between-install-and-install-distribution" id=
+=3D"id4">Difference between <code class=3D"docutils literal notranslate"><s=
+pan class=3D"pre">install</span></code> and <code class=3D"docutils literal=
+ notranslate"><span class=3D"pre">install-distribution</span></code></a></l=
+i>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/BuildingA=
+Distribution.html#multi-distribution-configurations" id=3D"id5">Multi-distr=
+ibution configurations</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/BuildingA=
+Distribution.html#special-notes-for-library-only-distributions" id=3D"id6">=
+Special Notes for Library-only Distributions</a></li>
+</ul>
+</li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/BuildingA=
+Distribution.html#options-for-optimizing-llvm" id=3D"id7">Options for Optim=
+izing LLVM</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/BuildingA=
+Distribution.html#options-for-reducing-size" id=3D"id8">Options for Reducin=
+g Size</a></li>
+<li><a class=3D"reference internal" href=3D"https://llvm.org/docs/BuildingA=
+Distribution.html#relevant-cmake-options" id=3D"id9">Relevant CMake Options=
+</a></li>
+</ul>
+</div>
+<div class=3D"section" id=3D"introduction">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/BuildingADistrib=
+ution.html#id2">Introduction</a><a class=3D"headerlink" href=3D"https://llv=
+m.org/docs/BuildingADistribution.html#introduction" title=3D"Permalink to t=
+his headline">=C2=B6</a></h2>
+<p>This document is geared toward people who want to build and package LLVM=
+ and any
+combination of LLVM sub-project tools for distribution. This document cover=
+s
+useful features of the LLVM build system as well as best practices and gene=
+ral
+information about packaging LLVM.</p>
+<p>If you are new to CMake you may find the <a class=3D"reference internal"=
+ href=3D"https://llvm.org/docs/CMake.html"><span class=3D"doc">Building LLV=
+M with CMake</span></a> or <a class=3D"reference internal" href=3D"https://=
+llvm.org/docs/CMakePrimer.html"><span class=3D"doc">CMake Primer</span></a>
+documentation useful. Some of the things covered in this document are the i=
+nner
+workings of the builds described in the <a class=3D"reference internal" hre=
+f=3D"https://llvm.org/docs/AdvancedBuilds.html"><span class=3D"doc">Advance=
+d Build Configurations</span></a> document.</p>
+</div>
+<div class=3D"section" id=3D"general-distribution-guidance">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/BuildingADistrib=
+ution.html#id3">General Distribution Guidance</a><a class=3D"headerlink" hr=
+ef=3D"https://llvm.org/docs/BuildingADistribution.html#general-distribution=
+-guidance" title=3D"Permalink to this headline">=C2=B6</a></h2>
+<p>When building a distribution of a compiler it is generally advised to pe=
+rform a
+bootstrap build of the compiler. That means building a =E2=80=9Cstage 1=E2=
+=80=9D compiler with
+your host toolchain, then building the =E2=80=9Cstage 2=E2=80=9D compiler u=
+sing the =E2=80=9Cstage 1=E2=80=9D
+compiler. This is done so that the compiler you distribute benefits from al=
+l the
+bug fixes, performance optimizations and general improvements provided by t=
+he
+new compiler.</p>
+<p>In deciding how to build your distribution there are a few trade-offs th=
+at you
+will need to evaluate. The big two are:</p>
+<ol class=3D"arabic simple">
+<li>Compile time of the distribution against performance of the built compi=
+ler</li>
+<li>Binary size of the distribution against performance of the built compil=
+er</li>
+</ol>
+<p>The guidance for maximizing performance of the generated compiler is to =
+use LTO,
+PGO, and statically link everything. This will result in an overall larger
+distribution, and it will take longer to generate, but it provides the most
+opportunity for the compiler to optimize.</p>
+<p>The guidance for minimizing distribution size is to dynamically link LLV=
+M and
+Clang libraries into the tools to reduce code duplication. This will come a=
+t a
+substantial performance penalty to the generated binary both because it red=
+uces
+optimization opportunity, and because dynamic linking requires resolving sy=
+mbols
+at process launch time, which can be very slow for C++ code.</p>
+<div class=3D"admonition warning" id=3D"shared-libs">
+<p class=3D"first admonition-title">Warning</p>
+<p class=3D"last">One very important note: Distributions should never be bu=
+ilt using the
+<em>BUILD_SHARED_LIBS</em> CMake option. That option exists for optimizing =
+developer
+workflow only. Due to design and implementation decisions, LLVM relies on
+global data which can end up being duplicated across shared libraries
+resulting in bugs. As such this is not a safe way to distribute LLVM or
+LLVM-based tools.</p>
+</div>
+<p>The simplest example of building a distribution with reasonable performa=
+nce is
+captured in the DistributionExample CMake cache file located at
+clang/cmake/caches/DistributionExample.cmake. The following command will pe=
+rform
+and install the distribution build:</p>
+<div class=3D"highlight-console notranslate"><div class=3D"highlight"><pre>=
+<span></span><span class=3D"gp">$ </span>cmake -G Ninja -C &lt;path to clan=
+g&gt;/cmake/caches/DistributionExample.cmake &lt;path to LLVM source&gt;
+<span class=3D"gp">$ </span>ninja stage2-distribution
+<span class=3D"gp">$ </span>ninja stage2-install-distribution
+</pre></div>
+</div>
+<div class=3D"section" id=3D"difference-between-install-and-install-distrib=
+ution">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/BuildingADistrib=
+ution.html#id4">Difference between <code class=3D"docutils literal notransl=
+ate"><span class=3D"pre">install</span></code> and <code class=3D"docutils =
+literal notranslate"><span class=3D"pre">install-distribution</span></code>=
+</a><a class=3D"headerlink" href=3D"https://llvm.org/docs/BuildingADistribu=
+tion.html#difference-between-install-and-install-distribution" title=3D"Per=
+malink to this headline">=C2=B6</a></h3>
+<p>One subtle but important thing to note is the difference between the <co=
+de class=3D"docutils literal notranslate"><span class=3D"pre">install</span=
+></code>
+and <code class=3D"docutils literal notranslate"><span class=3D"pre">instal=
+l-distribution</span></code> targets. The <code class=3D"docutils literal n=
+otranslate"><span class=3D"pre">install</span></code> target is expected to
+install every part of LLVM that your build is configured to generate except=
+ the
+LLVM testing tools. Alternatively the <code class=3D"docutils literal notra=
+nslate"><span class=3D"pre">install-distribution</span></code> target, whic=
+h is
+recommended for building distributions, only installs specific parts of LLV=
+M as
+specified at configuration time by <em>LLVM_DISTRIBUTION_COMPONENTS</em>.</=
+p>
+<p>Additionally by default the <code class=3D"docutils literal notranslate"=
+><span class=3D"pre">install</span></code> target will install the LLVM tes=
+ting
+tools as the public tools. This can be changed well by setting
+<em>LLVM_INSTALL_TOOLCHAIN_ONLY</em> to <code class=3D"docutils literal not=
+ranslate"><span class=3D"pre">On</span></code>. The LLVM tools are intended=
+ for
+development and testing of LLVM, and should only be included in distributio=
+ns
+that support LLVM development.</p>
+<p>When building with <em>LLVM_DISTRIBUTION_COMPONENTS</em> the build syste=
+m also
+generates a <code class=3D"docutils literal notranslate"><span class=3D"pre=
+">distribution</span></code> target which builds all the components specifi=
+ed in
+the list. This is a convenience build target to allow building just the
+distributed pieces without needing to build all configured targets.</p>
+</div>
+<div class=3D"section" id=3D"multi-distribution-configurations">
+<span id=3D"id1"></span><h3><a class=3D"toc-backref" href=3D"https://llvm.o=
+rg/docs/BuildingADistribution.html#id5">Multi-distribution configurations</=
+a><a class=3D"headerlink" href=3D"https://llvm.org/docs/BuildingADistributi=
+on.html#multi-distribution-configurations" title=3D"Permalink to this headl=
+ine">=C2=B6</a></h3>
+<p>The <code class=3D"docutils literal notranslate"><span class=3D"pre">ins=
+tall-distribution</span></code> target described above is for building a si=
+ngle
+distribution. LLVM=E2=80=99s build system also supports building multiple d=
+istributions,
+which can be used to e.g. have one distribution containing just tools and
+another for libraries (to enable development). These are configured by sett=
+ing
+the <em>LLVM_DISTRIBUTIONS</em> variable to hold a list of all distribution=
+ names
+(which conventionally start with an uppercase letter, e.g. =E2=80=9CDevelop=
+ment=E2=80=9D), and
+then setting the <em>LLVM_&lt;distribution&gt;_DISTRIBUTION_COMPONENTS</em>=
+ variable to the
+list of targets for that distribution. For each distribution, the build sys=
+tem
+generates an <code class=3D"docutils literal notranslate"><span class=3D"pr=
+e">install-${distribution}-distribution</span></code> target, where
+<code class=3D"docutils literal notranslate"><span class=3D"pre">${distribu=
+tion}</span></code> is the name of the distribution in lowercase, to instal=
+l
+that distribution.</p>
+<p>Each distribution creates its own set of CMake exports, and the target t=
+o
+install the CMake exports for a particular distribution for a project is na=
+med
+<code class=3D"docutils literal notranslate"><span class=3D"pre">${project}=
+-${distribution}-cmake-exports</span></code>, where <code class=3D"docutils=
+ literal notranslate"><span class=3D"pre">${project}</span></code> is the n=
+ame
+of the project in lowercase and <code class=3D"docutils literal notranslate=
+"><span class=3D"pre">${distribution}</span></code> is the name of the
+distribution in lowercase, unless the project is LLVM, in which case the ta=
+rget
+is just named <code class=3D"docutils literal notranslate"><span class=3D"p=
+re">${distribution}-cmake-exports</span></code>. These targets need to be
+explicitly included in the <em>LLVM_&lt;distribution&gt;_DISTRIBUTION_COMPO=
+NENTS</em>
+variable in order to be included as part of the distribution.</p>
+<p>Unlike with the single distribution setup, when building multiple distri=
+butions,
+any components specified in <em>LLVM_RUNTIME_DISTRIBUTION_COMPONENTS</em> a=
+re not
+automatically added to any distribution. Instead, you must include the targ=
+ets
+explicitly in some <em>LLVM_&lt;distribution&gt;_DISTRIBUTION_COMPONENTS</e=
+m> list.</p>
+<p>By default, each target can appear in multiple distributions; a target w=
+ill be
+installed as part of all distributions it appears in, and it=E2=80=99ll be =
+exported by
+the last distribution it appears in (the order of distributions is the orde=
+r
+they appear in <em>LLVM_DISTRIBUTIONS</em>). We also define some umbrella t=
+argets (e.g.
+<code class=3D"docutils literal notranslate"><span class=3D"pre">llvm-libra=
+ries</span></code> to install all LLVM libraries); a target can appear in a
+different distribution than its umbrella, in which case the target will be
+exported by the distribution it appears in (and not the distribution its
+umbrella appears in). Set <em>LLVM_STRICT_DISTRIBUTIONS</em> to <code class=
+=3D"docutils literal notranslate"><span class=3D"pre">On</span></code> if y=
+ou want to
+enforce a target appearing in only one distribution and umbrella distributi=
+ons
+being consistent with target distributions.</p>
+<p>We strongly encourage looking at <code class=3D"docutils literal notrans=
+late"><span class=3D"pre">clang/cmake/caches/MultiDistributionExample.cmake=
+</span></code>
+as an example of configuring multiple distributions.</p>
+</div>
+<div class=3D"section" id=3D"special-notes-for-library-only-distributions">
+<h3><a class=3D"toc-backref" href=3D"https://llvm.org/docs/BuildingADistrib=
+ution.html#id6">Special Notes for Library-only Distributions</a><a class=3D=
+"headerlink" href=3D"https://llvm.org/docs/BuildingADistribution.html#speci=
+al-notes-for-library-only-distributions" title=3D"Permalink to this headlin=
+e">=C2=B6</a></h3>
+<p>One of the most powerful features of LLVM is its library-first design me=
+ntality
+and the way you can compose a wide variety of tools using different portion=
+s of
+LLVM. Even in this situation using <em>BUILD_SHARED_LIBS</em> is not suppor=
+ted. If you
+want to distribute LLVM as a shared library for use in a tool, the recommen=
+ded
+method is using <em>LLVM_BUILD_LLVM_DYLIB</em>, and you can use <em>LLVM_DY=
+LIB_COMPONENTS</em>
+to configure which LLVM components are part of libLLVM.
+Note: <em>LLVM_BUILD_LLVM_DYLIB</em> is not available on Windows.</p>
+</div>
+</div>
+<div class=3D"section" id=3D"options-for-optimizing-llvm">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/BuildingADistrib=
+ution.html#id7">Options for Optimizing LLVM</a><a class=3D"headerlink" href=
+=3D"https://llvm.org/docs/BuildingADistribution.html#options-for-optimizing=
+-llvm" title=3D"Permalink to this headline">=C2=B6</a></h2>
+<p>There are four main build optimizations that our CMake build system supp=
+orts.
+When performing a bootstrap build it is not beneficial to do anything other=
+ than
+setting <em>CMAKE_BUILD_TYPE</em> to <code class=3D"docutils literal notran=
+slate"><span class=3D"pre">Release</span></code> for the stage-1 compiler. =
+This is
+because the more intensive optimizations are expensive to perform and the
+stage-1 compiler is thrown away. All of the further options described shoul=
+d be
+set on the stage-2 compiler either using a CMake cache file, or by prefixin=
+g the
+option with <em>BOOTSTRAP_</em>.</p>
+<p>The first and simplest to use is the compiler optimization level by sett=
+ing the
+<em>CMAKE_BUILD_TYPE</em> option. The main values of interest are <code cla=
+ss=3D"docutils literal notranslate"><span class=3D"pre">Release</span></cod=
+e> or
+<code class=3D"docutils literal notranslate"><span class=3D"pre">RelWithDeb=
+Info</span></code>. By default the <code class=3D"docutils literal notransl=
+ate"><span class=3D"pre">Release</span></code> option uses the <code class=
+=3D"docutils literal notranslate"><span class=3D"pre">-O3</span></code>
+optimization level, and <code class=3D"docutils literal notranslate"><span =
+class=3D"pre">RelWithDebInfo</span></code> uses <code class=3D"docutils lit=
+eral notranslate"><span class=3D"pre">-O2</span></code>. If you want to gen=
+erate
+debug information and use <code class=3D"docutils literal notranslate"><spa=
+n class=3D"pre">-O3</span></code> you can override the
+<em>CMAKE_&lt;LANG&gt;_FLAGS_RELWITHDEBINFO</em> option for C and CXX.
+DistributionExample.cmake does this.</p>
+<p>Another easy to use option is Link-Time-Optimization. You can set the
+<em>LLVM_ENABLE_LTO</em> option on your stage-2 build to <code class=3D"doc=
+utils literal notranslate"><span class=3D"pre">Thin</span></code> or <code =
+class=3D"docutils literal notranslate"><span class=3D"pre">Full</span></cod=
+e> to enable
+building LLVM with LTO. These options will significantly increase link time=
+ of
+the binaries in the distribution, but it will create much faster binaries. =
+This
+option should not be used if your distribution includes static archives, as=
+ the
+objects inside the archive will be LLVM bitcode, which is not portable.</p>
+<p>The <a class=3D"reference internal" href=3D"https://llvm.org/docs/Advanc=
+edBuilds.html"><span class=3D"doc">Advanced Build Configurations</span></a>=
+ documentation describes the built-in tooling for
+generating LLVM profiling information to drive Profile-Guided-Optimization.=
+ The
+in-tree profiling tests are very limited, and generating the profile takes =
+a
+significant amount of time, but it can result in a significant improvement =
+in
+the performance of the generated binaries.</p>
+<p>In addition to PGO profiling we also have limited support in-tree for ge=
+nerating
+linker order files. These files provide the linker with a suggested orderin=
+g for
+functions in the final binary layout. This can measurably speed up clang by
+physically grouping functions that are called temporally close to each othe=
+r.
+The current tooling is only available on Darwin systems with <code class=3D=
+"docutils literal notranslate"><span class=3D"pre">dtrace(1)</span></code>.=
+ It
+is worth noting that dtrace is non-deterministic, and so the order file
+generation using dtrace is also non-deterministic.</p>
+</div>
+<div class=3D"section" id=3D"options-for-reducing-size">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/BuildingADistrib=
+ution.html#id8">Options for Reducing Size</a><a class=3D"headerlink" href=
+=3D"https://llvm.org/docs/BuildingADistribution.html#options-for-reducing-s=
+ize" title=3D"Permalink to this headline">=C2=B6</a></h2>
+<div class=3D"admonition warning">
+<p class=3D"first admonition-title">Warning</p>
+<p class=3D"last">Any steps taken to reduce the binary size will come at a =
+cost of runtime
+performance in the generated binaries.</p>
+</div>
+<p>The simplest and least significant way to reduce binary size is to set t=
+he
+<em>CMAKE_BUILD_TYPE</em> variable to <code class=3D"docutils literal notra=
+nslate"><span class=3D"pre">MinSizeRel</span></code>, which will set the co=
+mpiler
+optimization level to <code class=3D"docutils literal notranslate"><span cl=
+ass=3D"pre">-Os</span></code> which optimizes for binary size. This will ha=
+ve
+both the least benefit to size and the least impact on performance.</p>
+<p>The most impactful way to reduce binary size is to dynamically link LLVM=
+ into
+all the tools. This reduces code size by decreasing duplication of common c=
+ode
+between the LLVM-based tools. This can be done by setting the following two
+CMake options to <code class=3D"docutils literal notranslate"><span class=
+=3D"pre">On</span></code>: <em>LLVM_BUILD_LLVM_DYLIB</em> and <em>LLVM_LINK=
+_LLVM_DYLIB</em>.</p>
+<div class=3D"admonition warning">
+<p class=3D"first admonition-title">Warning</p>
+<p class=3D"last">Distributions should never be built using the <em>BUILD_S=
+HARED_LIBS</em> CMake
+option. (<a class=3D"reference internal" href=3D"https://llvm.org/docs/Buil=
+dingADistribution.html#shared-libs"><span class=3D"std std-ref">See the war=
+ning above for more explanation</span></a>.).</p>
+</div>
+</div>
+<div class=3D"section" id=3D"relevant-cmake-options">
+<h2><a class=3D"toc-backref" href=3D"https://llvm.org/docs/BuildingADistrib=
+ution.html#id9">Relevant CMake Options</a><a class=3D"headerlink" href=3D"h=
+ttps://llvm.org/docs/BuildingADistribution.html#relevant-cmake-options" tit=
+le=3D"Permalink to this headline">=C2=B6</a></h2>
+<p>This section provides documentation of the CMake options that are intend=
+ed to
+help construct distributions. This is not an exhaustive list, and many
+additional options are documented in the <a class=3D"reference internal" hr=
+ef=3D"https://llvm.org/docs/CMake.html"><span class=3D"doc">Building LLVM w=
+ith CMake</span></a> page. Some key options
+that are already documented include: <em>LLVM_TARGETS_TO_BUILD</em>, <em>LL=
+VM_ENABLE_PROJECTS</em>,
+<em>LLVM_ENABLE_RUNTIMES</em>, <em>LLVM_BUILD_LLVM_DYLIB</em>, and <em>LLVM=
+_LINK_LLVM_DYLIB</em>.</p>
+<dl class=3D"docutils">
+<dt><strong>LLVM_ENABLE_RUNTIMES</strong>:STRING</dt>
+<dd>When building a distribution that includes LLVM runtime projects (i.e. =
+libcxx,
+compiler-rt, libcxxabi, libunwind=E2=80=A6), it is important to build those=
+ projects
+with the just-built compiler.</dd>
+<dt><strong>LLVM_DISTRIBUTION_COMPONENTS</strong>:STRING</dt>
+<dd>This variable can be set to a semi-colon separated list of LLVM build s=
+ystem
+components to install. All LLVM-based tools are components, as well as most
+of the libraries and runtimes. Component names match the names of the build
+system targets.</dd>
+<dt><strong>LLVM_DISTRIBUTIONS</strong>:STRING</dt>
+<dd>This variable can be set to a semi-colon separated list of distribution=
+s. See
+the <a class=3D"reference internal" href=3D"https://llvm.org/docs/BuildingA=
+Distribution.html#multi-distribution-configurations"><span class=3D"std std=
+-ref">Multi-distribution configurations</span></a> section above for detail=
+s on this
+and other CMake variables to configure multiple distributions.</dd>
+<dt><strong>LLVM_RUNTIME_DISTRIBUTION_COMPONENTS</strong>:STRING</dt>
+<dd>This variable can be set to a semi-colon separated list of runtime libr=
+ary
+components. This is used in conjunction with <em>LLVM_ENABLE_RUNTIMES</em> =
+to specify
+components of runtime libraries that you want to include in your distributi=
+on.
+Just like with <em>LLVM_DISTRIBUTION_COMPONENTS</em>, component names match=
+ the names
+of the build system targets.</dd>
+<dt><strong>LLVM_DYLIB_COMPONENTS</strong>:STRING</dt>
+<dd><p class=3D"first">This variable can be set to a semi-colon separated n=
+ame of LLVM library
+components. LLVM library components are either library names with the LLVM
+prefix removed (i.e. Support, Demangle=E2=80=A6), LLVM target names, or spe=
+cial
+purpose component names. The special purpose component names are:</p>
+<ol class=3D"last arabic simple">
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">all</s=
+pan></code> - All LLVM available component libraries</li>
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">Native=
+</span></code> - The LLVM target for the Native system</li>
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">AllTar=
+getsAsmParsers</span></code> - All the included target ASM parsers librarie=
+s</li>
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">AllTar=
+getsDescs</span></code> - All the included target descriptions libraries</l=
+i>
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">AllTar=
+getsDisassemblers</span></code> - All the included target dissassemblers li=
+braries</li>
+<li><code class=3D"docutils literal notranslate"><span class=3D"pre">AllTar=
+getsInfos</span></code> - All the included target info libraries</li>
+</ol>
+</dd>
+<dt><strong>LLVM_INSTALL_TOOLCHAIN_ONLY</strong>:BOOL</dt>
+<dd>This option defaults to <code class=3D"docutils literal notranslate"><s=
+pan class=3D"pre">Off</span></code>: when set to <code class=3D"docutils li=
+teral notranslate"><span class=3D"pre">On</span></code> it removes many of =
+the
+LLVM development and testing tools as well as component libraries from the
+default <code class=3D"docutils literal notranslate"><span class=3D"pre">in=
+stall</span></code> target. Including the development tools is not recommen=
+ded
+for distributions as many of the LLVM tools are only intended for developme=
+nt
+and testing use.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class=3D"clearer"></div>
+    </div>
+    <div class=3D"related" role=3D"navigation" aria-label=3D"related naviga=
+tion">
+      <h3>Navigation</h3>
+      <ul>
+        <li class=3D"right" style=3D"margin-right: 10px">
+          <a href=3D"https://llvm.org/docs/genindex.html" title=3D"General =
+Index">index</a></li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/CFIVerify.html" title=3D"Control=
+ Flow Verification Tool Design Document">next</a> |</li>
+        <li class=3D"right">
+          <a href=3D"https://llvm.org/docs/BigEndianNEON.html" title=3D"Usi=
+ng ARM NEON instructions in big endian mode">previous</a> |</li>
+  <li><a href=3D"https://llvm.org/">LLVM Home</a>&nbsp;|&nbsp;</li>
+  <li><a href=3D"https://llvm.org/docs/index.html">Documentation</a>=C2=BB<=
+/li>
+
+          <li class=3D"nav-item nav-item-1"><a href=3D"https://llvm.org/doc=
+s/UserGuides.html">User Guides</a> =C2=BB</li>=20
+      </ul>
+    </div>
+    <div class=3D"footer" role=3D"contentinfo">
+        =C2=A9 Copyright 2003-2022, LLVM Project.
+      Last updated on 2022-05-07.
+      Created using <a href=3D"http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+ =20
+</body></html>
+------MultipartBoundary--sloyP1e4fSW8rsFO6FKG6PLuBjMCQ9vOgiWr8IoaQF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-ce2fb58c-b7a9-4e06-9310-057da91a6065@mhtml.blink
+
+@charset "utf-8";
+
+table.right { float: right; margin-left: 20px; }
+
+table.right td { border: 1px solid rgb(204, 204, 204); }
+------MultipartBoundary--sloyP1e4fSW8rsFO6FKG6PLuBjMCQ9vOgiWr8IoaQF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/llvm-theme.css
+
+@charset "utf-8";
+
+@import url("basic.css");
+
+body { font-family: "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana=
+, sans-serif; font-size: 14px; line-height: 150%; text-align: center; backg=
+round-color: rgb(191, 209, 212); color: black; padding: 0px; border: 1px so=
+lid rgb(170, 170, 170); margin: 0px 80px; min-width: 740px; }
+
+div.logo { background-color: white; text-align: left; padding: 10px 10px 15=
+px 15px; }
+
+div.document { background-color: white; text-align: left; background-image:=
+ url("contents.png"); background-repeat: repeat-x; }
+
+div.bodywrapper { margin: 0px 240px 0px 0px; border-right: 1px solid rgb(20=
+4, 204, 204); }
+
+div.body { margin: 0px; padding: 0.5em 20px 20px; max-width: 1000px; }
+
+div.related { font-size: 1em; }
+
+div.related ul { background-image: url("navigation.png"); height: 2em; bord=
+er-top: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221=
+, 221); }
+
+div.related ul li { margin: 0px; padding: 0px; height: 2em; float: left; }
+
+div.related ul li.right { float: right; margin-right: 5px; }
+
+div.related ul li a { margin: 0px; padding: 0px 5px; line-height: 1.75em; c=
+olor: rgb(238, 152, 22); }
+
+div.related ul li a:hover { color: rgb(60, 168, 231); }
+
+div.sphinxsidebarwrapper { padding: 0px; }
+
+div.sphinxsidebar { margin: 0px; padding: 0.5em 15px 15px 0px; width: 210px=
+; float: right; font-size: 1em; text-align: left; }
+
+div.sphinxsidebar h3, div.sphinxsidebar h4 { margin: 1em 0px 0.5em; font-si=
+ze: 1em; padding: 0.1em 0px 0.1em 0.5em; color: white; border: 1px solid rg=
+b(134, 152, 155); background-color: rgb(175, 193, 196); }
+
+div.sphinxsidebar h3 a { color: white; }
+
+div.sphinxsidebar ul { margin-top: 7px; padding: 0px; line-height: 130%; }
+
+div.sphinxsidebar ul ul { margin-left: 20px; }
+
+div.footer { background-color: rgb(227, 239, 241); color: rgb(134, 152, 155=
+); padding: 3px 8px 3px 0px; clear: both; font-size: 0.8em; text-align: rig=
+ht; }
+
+div.footer a { color: rgb(134, 152, 155); text-decoration: underline; }
+
+p { margin: 0.8em 0px 0.5em; }
+
+a { color: rgb(202, 121, 0); text-decoration: none; }
+
+a:hover { color: rgb(36, 145, 207); }
+
+div.body p a { text-decoration: underline; }
+
+h1 { margin: 0px; padding: 0.7em 0px 0.3em; font-size: 1.5em; color: rgb(17=
+, 85, 124); }
+
+h2 { margin: 1.3em 0px 0.2em; font-size: 1.35em; padding: 0px; }
+
+h3 { margin: 1em 0px -0.3em; font-size: 1.2em; }
+
+h3 a:hover { text-decoration: underline; }
+
+div.body h1 a, div.body h2 a, div.body h3 a, div.body h4 a, div.body h5 a, =
+div.body h6 a { color: black !important; }
+
+div.body h1, div.body h2, div.body h3, div.body h4, div.body h5, div.body h=
+6 { background-color: rgb(242, 242, 242); font-weight: normal; color: rgb(3=
+2, 67, 92); border-bottom: 1px solid rgb(204, 204, 204); margin: 20px -20px=
+ 10px; padding: 3px 0px 3px 10px; }
+
+div.body h1 { margin-top: 0px; font-size: 200%; }
+
+div.body h2 { font-size: 160%; }
+
+div.body h3 { font-size: 140%; }
+
+div.body h4 { font-size: 120%; }
+
+div.body h5 { font-size: 110%; }
+
+div.body h6 { font-size: 100%; }
+
+h1 a.anchor, h2 a.anchor, h3 a.anchor, h4 a.anchor, h5 a.anchor, h6 a.ancho=
+r { display: none; margin: 0px 0px 0px 0.3em; padding: 0px 0.2em; color: rg=
+b(170, 170, 170) !important; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor,=
+ h5:hover a.anchor, h6:hover a.anchor { display: inline; }
+
+h1 a.anchor:hover, h2 a.anchor:hover, h3 a.anchor:hover, h4 a.anchor:hover,=
+ h5 a.anchor:hover, h6 a.anchor:hover { color: rgb(119, 119, 119); backgrou=
+nd-color: rgb(238, 238, 238); }
+
+a.headerlink { font-size: 1em; margin-left: 6px; padding: 0px 4px; color: r=
+gb(198, 15, 15) !important; text-decoration: none !important; }
+
+a.headerlink:hover { background-color: rgb(204, 204, 204); color: white !im=
+portant; }
+
+cite, code, tt { font-family: Consolas, "Deja Vu Sans Mono", "Bitstream Ver=
+a Sans Mono", monospace; font-size: 0.95em; }
+
+:not(a.reference) > tt { background-color: rgb(242, 242, 242); border-botto=
+m: 1px solid rgb(221, 221, 221); color: rgb(51, 51, 51); }
+
+tt.descname, tt.descclassname, tt.xref { border: 0px; }
+
+hr { border: 1px solid rgb(170, 187, 204); margin: 2em; }
+
+p a tt { border: 0px; color: rgb(202, 121, 0); }
+
+p a tt:hover { color: rgb(36, 145, 207); }
+
+a tt { border: none; }
+
+pre { font-family: Consolas, "Deja Vu Sans Mono", "Bitstream Vera Sans Mono=
+", monospace; font-size: 0.95em; line-height: 120%; padding: 0.5em; border:=
+ 1px solid rgb(204, 204, 204); background-color: rgb(248, 248, 248); }
+
+pre a { color: inherit; text-decoration: underline; }
+
+td.linenos pre { padding: 0.5em 0px; }
+
+div.quotebar { background-color: rgb(248, 248, 248); max-width: 250px; floa=
+t: right; padding: 2px 7px; border: 1px solid rgb(204, 204, 204); }
+
+div.topic { background-color: rgb(248, 248, 248); }
+
+table { border-collapse: collapse; margin: 0px -0.5em; }
+
+table td, table th { padding: 0.2em 0.5em; }
+
+div.admonition, div.warning { font-size: 0.9em; margin: 1em 0px; border: 1p=
+x solid rgb(134, 152, 155); background-color: rgb(247, 247, 247); padding: =
+0px; }
+
+div.admonition p, div.warning p { margin: 0.5em 1em; padding: 0px; }
+
+div.admonition pre, div.warning pre { margin: 0.4em 1em; }
+
+div.admonition p.admonition-title, div.warning p.admonition-title { margin:=
+ 0px; padding: 0.1em 0px 0.1em 0.5em; color: white; border-bottom: 1px soli=
+d rgb(134, 152, 155); font-weight: bold; background-color: rgb(175, 193, 19=
+6); }
+
+div.warning { border: 1px solid rgb(148, 0, 0); }
+
+div.warning p.admonition-title { background-color: rgb(207, 0, 0); border-b=
+ottom-color: rgb(148, 0, 0); }
+
+div.admonition ul, div.admonition ol, div.warning ul, div.warning ol { marg=
+in: 0.1em 0.5em 0.5em 3em; padding: 0px; }
+
+div.versioninfo { margin: 1em 0px 0px; border: 1px solid rgb(204, 204, 204)=
+; background-color: rgb(221, 234, 240); padding: 8px; line-height: 1.3em; f=
+ont-size: 0.9em; }
+
+.viewcode-back { font-family: "Lucida Grande", "Lucida Sans Unicode", Genev=
+a, Verdana, sans-serif; }
+
+div.viewcode-block:target { background-color: rgb(244, 222, 191); border-to=
+p: 1px solid rgb(170, 204, 153); border-bottom: 1px solid rgb(170, 204, 153=
+); }
+------MultipartBoundary--sloyP1e4fSW8rsFO6FKG6PLuBjMCQ9vOgiWr8IoaQF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/basic.css
+
+@charset "utf-8";
+
+div.clearer { clear: both; }
+
+div.related { width: 100%; font-size: 90%; }
+
+div.related h3 { display: none; }
+
+div.related ul { margin: 0px; padding: 0px 0px 0px 10px; list-style: none; =
+}
+
+div.related li { display: inline; }
+
+div.related li.right { float: right; margin-right: 5px; }
+
+div.sphinxsidebarwrapper { padding: 10px 5px 0px 10px; }
+
+div.sphinxsidebar { float: left; width: 230px; margin-left: -100%; font-siz=
+e: 90%; overflow-wrap: break-word; }
+
+div.sphinxsidebar ul { list-style: none; }
+
+div.sphinxsidebar ul ul, div.sphinxsidebar ul.want-points { margin-left: 20=
+px; list-style: square; }
+
+div.sphinxsidebar ul ul { margin-top: 0px; margin-bottom: 0px; }
+
+div.sphinxsidebar form { margin-top: 10px; }
+
+div.sphinxsidebar input { border: 1px solid rgb(152, 219, 204); font-family=
+: sans-serif; font-size: 1em; }
+
+div.sphinxsidebar #searchbox form.search { overflow: hidden; }
+
+div.sphinxsidebar #searchbox input[type=3D"text"] { float: left; width: 80%=
+; padding: 0.25em; box-sizing: border-box; }
+
+div.sphinxsidebar #searchbox input[type=3D"submit"] { float: left; width: 2=
+0%; border-left: none; padding: 0.25em; box-sizing: border-box; }
+
+img { border: 0px; max-width: 100%; }
+
+ul.search { margin: 10px 0px 0px 20px; padding: 0px; }
+
+ul.search li { padding: 5px 0px 5px 20px; background-image: url("file.png")=
+; background-repeat: no-repeat; background-position: 0px 7px; }
+
+ul.search li a { font-weight: bold; }
+
+ul.search li div.context { color: rgb(136, 136, 136); margin: 2px 0px 0px 3=
+0px; text-align: left; }
+
+ul.keywordmatches li.goodmatch a { font-weight: bold; }
+
+table.contentstable { width: 90%; margin-left: auto; margin-right: auto; }
+
+table.contentstable p.biglink { line-height: 150%; }
+
+a.biglink { font-size: 1.3em; }
+
+span.linkdescr { font-style: italic; padding-top: 5px; font-size: 90%; }
+
+table.indextable { width: 100%; }
+
+table.indextable td { text-align: left; vertical-align: top; }
+
+table.indextable ul { margin-top: 0px; margin-bottom: 0px; list-style-type:=
+ none; }
+
+table.indextable > tbody > tr > td > ul { padding-left: 0em; }
+
+table.indextable tr.pcap { height: 10px; }
+
+table.indextable tr.cap { margin-top: 10px; background-color: rgb(242, 242,=
+ 242); }
+
+img.toggler { margin-right: 3px; margin-top: 3px; cursor: pointer; }
+
+div.modindex-jumpbox { border-top: 1px solid rgb(221, 221, 221); border-bot=
+tom: 1px solid rgb(221, 221, 221); margin: 1em 0px; padding: 0.4em; }
+
+div.genindex-jumpbox { border-top: 1px solid rgb(221, 221, 221); border-bot=
+tom: 1px solid rgb(221, 221, 221); margin: 1em 0px; padding: 0.4em; }
+
+table.modindextable td { padding: 2px; border-collapse: collapse; }
+
+div.body { min-width: 450px; max-width: 800px; }
+
+div.body p, div.body dd, div.body li, div.body blockquote { hyphens: auto; =
+}
+
+a.headerlink { visibility: hidden; }
+
+h1:hover > a.headerlink, h2:hover > a.headerlink, h3:hover > a.headerlink, =
+h4:hover > a.headerlink, h5:hover > a.headerlink, h6:hover > a.headerlink, =
+dt:hover > a.headerlink, caption:hover > a.headerlink, p.caption:hover > a.=
+headerlink, div.code-block-caption:hover > a.headerlink { visibility: visib=
+le; }
+
+div.body p.caption { text-align: inherit; }
+
+div.body td { text-align: left; }
+
+.first { margin-top: 0px !important; }
+
+p.rubric { margin-top: 30px; font-weight: bold; }
+
+img.align-left, .figure.align-left, object.align-left { clear: left; float:=
+ left; margin-right: 1em; }
+
+img.align-right, .figure.align-right, object.align-right { clear: right; fl=
+oat: right; margin-left: 1em; }
+
+img.align-center, .figure.align-center, object.align-center { display: bloc=
+k; margin-left: auto; margin-right: auto; }
+
+.align-left { text-align: left; }
+
+.align-center { text-align: center; }
+
+.align-right { text-align: right; }
+
+div.sidebar { margin: 0px 0px 0.5em 1em; border: 1px solid rgb(221, 221, 18=
+7); padding: 7px 7px 0px; background-color: rgb(255, 255, 238); width: 40%;=
+ float: right; }
+
+p.sidebar-title { font-weight: bold; }
+
+div.topic { border: 1px solid rgb(204, 204, 204); padding: 7px 7px 0px; mar=
+gin: 10px 0px; }
+
+p.topic-title { font-size: 1.1em; font-weight: bold; margin-top: 10px; }
+
+div.admonition { margin-top: 10px; margin-bottom: 10px; padding: 7px; }
+
+div.admonition dt { font-weight: bold; }
+
+div.admonition dl { margin-bottom: 0px; }
+
+p.admonition-title { margin: 0px 10px 5px 0px; font-weight: bold; }
+
+div.body p.centered { text-align: center; margin-top: 25px; }
+
+table.docutils { border: 0px; border-collapse: collapse; }
+
+table.align-center { margin-left: auto; margin-right: auto; }
+
+table caption span.caption-number { font-style: italic; }
+
+table caption span.caption-text { }
+
+table.docutils td, table.docutils th { padding: 1px 8px 1px 5px; border-wid=
+th: 0px 0px 1px; border-top-style: initial; border-top-color: initial; bord=
+er-left-style: initial; border-left-color: initial; border-right-style: ini=
+tial; border-right-color: initial; border-bottom-style: solid; border-botto=
+m-color: rgb(170, 170, 170); }
+
+table.footnote td, table.footnote th { border: 0px !important; }
+
+th { text-align: left; padding-right: 5px; }
+
+table.citation { border-left: 1px solid gray; margin-left: 1px; }
+
+table.citation td { border-bottom: none; }
+
+div.figure { margin: 0.5em; padding: 0.5em; }
+
+div.figure p.caption { padding: 0.3em; }
+
+div.figure p.caption span.caption-number { font-style: italic; }
+
+div.figure p.caption span.caption-text { }
+
+table.field-list td, table.field-list th { border: 0px !important; }
+
+.field-list ul { margin: 0px; padding-left: 1em; }
+
+.field-list p { margin: 0px; }
+
+.field-name { hyphens: manual; }
+
+table.hlist td { vertical-align: top; }
+
+ol.arabic { list-style: decimal; }
+
+ol.loweralpha { list-style: lower-alpha; }
+
+ol.upperalpha { list-style: upper-alpha; }
+
+ol.lowerroman { list-style: lower-roman; }
+
+ol.upperroman { list-style: upper-roman; }
+
+dl { margin-bottom: 15px; }
+
+dd p { margin-top: 0px; }
+
+dd ul, dd table { margin-bottom: 10px; }
+
+dd { margin-top: 3px; margin-bottom: 10px; margin-left: 30px; }
+
+dt:target, span.highlighted { background-color: rgb(251, 229, 78); }
+
+rect.highlighted { fill: rgb(251, 229, 78); }
+
+dl.glossary dt { font-weight: bold; font-size: 1.1em; }
+
+.optional { font-size: 1.3em; }
+
+.sig-paren { font-size: larger; }
+
+.versionmodified { font-style: italic; }
+
+.system-message { background-color: rgb(255, 221, 170); padding: 5px; borde=
+r: 3px solid red; }
+
+.footnote:target { background-color: rgb(255, 255, 170); }
+
+.line-block { display: block; margin-top: 1em; margin-bottom: 1em; }
+
+.line-block .line-block { margin-top: 0px; margin-bottom: 0px; margin-left:=
+ 1.5em; }
+
+.guilabel, .menuselection { font-family: sans-serif; }
+
+.accelerator { text-decoration: underline; }
+
+.classifier { font-style: oblique; }
+
+abbr, acronym { border-bottom: 1px dotted; cursor: help; }
+
+pre { overflow: auto hidden; }
+
+span.pre { hyphens: none; }
+
+td.linenos pre { padding: 5px 0px; border: 0px; background-color: transpare=
+nt; color: rgb(170, 170, 170); }
+
+table.highlighttable { margin-left: 0.5em; }
+
+table.highlighttable td { padding: 0px 0.5em; }
+
+div.code-block-caption { padding: 2px 5px; font-size: small; }
+
+div.code-block-caption code { background-color: transparent; }
+
+div.code-block-caption + div > div.highlight > pre { margin-top: 0px; }
+
+div.code-block-caption span.caption-number { padding: 0.1em 0.3em; font-sty=
+le: italic; }
+
+div.code-block-caption span.caption-text { }
+
+div.literal-block-wrapper { padding: 1em 1em 0px; }
+
+div.literal-block-wrapper div.highlight { margin: 0px; }
+
+code.descname { background-color: transparent; font-weight: bold; font-size=
+: 1.2em; }
+
+code.descclassname { background-color: transparent; }
+
+code.xref, a code { background-color: transparent; font-weight: bold; }
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code { background-color: tr=
+ansparent; }
+
+.viewcode-link { float: right; }
+
+.viewcode-back { float: right; font-family: sans-serif; }
+
+div.viewcode-block:target { margin: -1px -10px; padding: 0px 10px; }
+
+img.math { vertical-align: middle; }
+
+div.body div.math p { text-align: center; }
+
+span.eqno { float: right; }
+
+span.eqno a.headerlink { position: relative; left: 0px; z-index: 1; }
+
+div.math:hover a.headerlink { visibility: visible; }
+
+@media print {
+  div.document, div.documentwrapper, div.bodywrapper { width: 100%; margin:=
+ 0px !important; }
+  div.sphinxsidebar, div.related, div.footer, #top-link { display: none; }
+}
+------MultipartBoundary--sloyP1e4fSW8rsFO6FKG6PLuBjMCQ9vOgiWr8IoaQF----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/contents.png
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAYAAAA/tpB3AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAL
+EwAACxMBAJqcGAAAAAd0SU1FB9gBDRUWN0N7tMwAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRo
+IEdJTVBXgQ4XAAAAN0lEQVQI16WNOQ4AIADCWv7/XhMnXdR4jC4kQAOUWlsAghIaBCECozhFHMie
+Latv9sOdbxfsXOngpgVLkKkPEQAAAABJRU5ErkJggg==
+
+------MultipartBoundary--sloyP1e4fSW8rsFO6FKG6PLuBjMCQ9vOgiWr8IoaQF----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/navigation.png
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAA8CAYAAACn8dD6AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAL
+EwAACxMBAJqcGAAAAAd0SU1FB9gBDRUOAHndiZoAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRo
+IEdJTVBXgQ4XAAAAR0lEQVQY072NwRHAMAzCBPtP6wFCH6mddIF+OBlxZ6oqBrBtLKkJMBLWERJ7
+LJpChsAEzHSX2DZvnC6ZcfpcWR+bfnSNf48HN9YiTAPwk98AAAAASUVORK5CYII=
+
+------MultipartBoundary--sloyP1e4fSW8rsFO6FKG6PLuBjMCQ9vOgiWr8IoaQF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://llvm.org/docs/_static/pygments.css
+
+@charset "utf-8";
+
+pre { line-height: 125%; }
+
+td.linenos pre { color: rgb(0, 0, 0); background-color: rgb(240, 240, 240);=
+ padding-left: 5px; padding-right: 5px; }
+
+span.linenos { color: rgb(0, 0, 0); background-color: rgb(240, 240, 240); p=
+adding-left: 5px; padding-right: 5px; }
+
+td.linenos pre.special { color: rgb(0, 0, 0); background-color: rgb(255, 25=
+5, 192); padding-left: 5px; padding-right: 5px; }
+
+span.linenos.special { color: rgb(0, 0, 0); background-color: rgb(255, 255,=
+ 192); padding-left: 5px; padding-right: 5px; }
+
+.highlight .hll { background-color: rgb(255, 255, 204); }
+
+.highlight { background: rgb(240, 240, 240); }
+
+.highlight .c { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .err { border: 1px solid rgb(255, 0, 0); }
+
+.highlight .k { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .o { color: rgb(102, 102, 102); }
+
+.highlight .ch { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cm { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cp { color: rgb(0, 112, 32); }
+
+.highlight .cpf { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .c1 { color: rgb(96, 160, 176); font-style: italic; }
+
+.highlight .cs { color: rgb(96, 160, 176); background-color: rgb(255, 240, =
+240); }
+
+.highlight .gd { color: rgb(160, 0, 0); }
+
+.highlight .ge { font-style: italic; }
+
+.highlight .gr { color: rgb(255, 0, 0); }
+
+.highlight .gh { color: rgb(0, 0, 128); font-weight: bold; }
+
+.highlight .gi { color: rgb(0, 160, 0); }
+
+.highlight .go { color: rgb(136, 136, 136); }
+
+.highlight .gp { color: rgb(198, 93, 9); font-weight: bold; }
+
+.highlight .gs { font-weight: bold; }
+
+.highlight .gu { color: rgb(128, 0, 128); font-weight: bold; }
+
+.highlight .gt { color: rgb(0, 68, 221); }
+
+.highlight .kc { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kd { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kn { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kp { color: rgb(0, 112, 32); }
+
+.highlight .kr { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .kt { color: rgb(144, 32, 0); }
+
+.highlight .m { color: rgb(64, 160, 112); }
+
+.highlight .s { color: rgb(64, 112, 160); }
+
+.highlight .na { color: rgb(64, 112, 160); }
+
+.highlight .nb { color: rgb(0, 112, 32); }
+
+.highlight .nc { color: rgb(14, 132, 181); font-weight: bold; }
+
+.highlight .no { color: rgb(96, 173, 213); }
+
+.highlight .nd { color: rgb(85, 85, 85); font-weight: bold; }
+
+.highlight .ni { color: rgb(213, 85, 55); font-weight: bold; }
+
+.highlight .ne { color: rgb(0, 112, 32); }
+
+.highlight .nf { color: rgb(6, 40, 126); }
+
+.highlight .nl { color: rgb(0, 32, 112); font-weight: bold; }
+
+.highlight .nn { color: rgb(14, 132, 181); font-weight: bold; }
+
+.highlight .nt { color: rgb(6, 40, 115); font-weight: bold; }
+
+.highlight .nv { color: rgb(187, 96, 213); }
+
+.highlight .ow { color: rgb(0, 112, 32); font-weight: bold; }
+
+.highlight .w { color: rgb(187, 187, 187); }
+
+.highlight .mb { color: rgb(64, 160, 112); }
+
+.highlight .mf { color: rgb(64, 160, 112); }
+
+.highlight .mh { color: rgb(64, 160, 112); }
+
+.highlight .mi { color: rgb(64, 160, 112); }
+
+.highlight .mo { color: rgb(64, 160, 112); }
+
+.highlight .sa { color: rgb(64, 112, 160); }
+
+.highlight .sb { color: rgb(64, 112, 160); }
+
+.highlight .sc { color: rgb(64, 112, 160); }
+
+.highlight .dl { color: rgb(64, 112, 160); }
+
+.highlight .sd { color: rgb(64, 112, 160); font-style: italic; }
+
+.highlight .s2 { color: rgb(64, 112, 160); }
+
+.highlight .se { color: rgb(64, 112, 160); font-weight: bold; }
+
+.highlight .sh { color: rgb(64, 112, 160); }
+
+.highlight .si { color: rgb(112, 160, 208); font-style: italic; }
+
+.highlight .sx { color: rgb(198, 93, 9); }
+
+.highlight .sr { color: rgb(35, 83, 136); }
+
+.highlight .s1 { color: rgb(64, 112, 160); }
+
+.highlight .ss { color: rgb(81, 121, 24); }
+
+.highlight .bp { color: rgb(0, 112, 32); }
+
+.highlight .fm { color: rgb(6, 40, 126); }
+
+.highlight .vc { color: rgb(187, 96, 213); }
+
+.highlight .vg { color: rgb(187, 96, 213); }
+
+.highlight .vi { color: rgb(187, 96, 213); }
+
+.highlight .vm { color: rgb(187, 96, 213); }
+
+.highlight .il { color: rgb(64, 160, 112); }
+------MultipartBoundary--sloyP1e4fSW8rsFO6FKG6PLuBjMCQ9vOgiWr8IoaQF----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://llvm.org/docs/_static/logo.png
+
+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
+YAAAOpgAABdvkl/FRgAAAwBQTFRFXF1f9fX1iYuOvL7An6GkKzJYanah+fn6gImurK6wY2NlfH6B
+JSYnlZ27wMHBoKfC0NDRaWpt5eXl7e3tdYCm8fHyUlRV6enpWmeSNTY33d3ePURkbG1vharW2dna
+1dXWWlpcpKWoREVGlJaZtLa4c3Z5zM3OnJ6hR26oqrDJdXh7jI2QpqiqxcbIFxgYjpCTwcLEubu9
+hIaJzs7QSktMyMnKsbGy1tbXxMXGgoOD4ODgrrCy9PX4cnR1eHp9////5ebnlpea/Pz8qKqsmJqd
+ycrM3t7fsLK0tLrQfn+DoKKlfKjZbnBygIKFTU5Qscjovby+hoiLtLW3c3uYcHJ0wsTGoaKiZGVo
+PlSMX2BiYGyaqayusrS2tri7TlFTipO0anSduLm72trbkZKUkJCRvsDCa2Vl0tLTgoSHhZCnbZ/U
+4uLjeXR1enx+VFZYkpSXury+Y15eZ2hqfIOdcGpqiYSFqqip2uT1lJWX4uPkyszOyMXGmZWWgHt8
+oqSnVIrFWlRVV1hanZ2fGiErmpuefH1/xsfJz8/RZmqEz83O19jZr6yscHFzeHl7u7m5x9fv1NPU
+cHeKraqr1NTWS1eC3t/gdHV4j4yMSERF8PDxUUxMlrfg29zdnJqa3NvcdnFxwL/A3uDlkZSil5mc
+uLe4eXZ6RUdIqKam2NfYpaWmgYmZpaGi4uHi1NLSLisryMfI4OLifXh44N/gxMHClZKSr62v0tTh
+hIeHhoGCoJ2epqOk2NbW4+Tlsa+wRklL0s/Q6urrMTl+6Ojos7KyISY7PTs9y8nK4+Ljko+QkZes
+4eDht7W129rax8vbzMvMv76/397fmpeYFR0ni4+bvLu8hY6vTEdIjIeIHhscJCAhQEBB1NjkBQcI
+7+/w6uvxv8TW3+Hrys7d5OPk7Ovs5+fo+/v7m6Cxw8PE8O/w9PT0+Pf47Ozs6+rrl5SU/f39n5uc
+5+bnTX66pMDkg39/Mi8w/Pv7UVBR8/P28/T38/Pzw8bUo5+gl5yrdG5vVWKT////em8aCAAAAQB0
+Uk5T////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////AFP3ByUAABebSURBVHja7Jt/XFNHtsBJQElC
+iJdf0dA8klwgKSQQfgVIQkAMkJIF1qDAkgAWIj+2NolS20XaUmkDVJZ0aalYW4tuca3ddWVrf7f+
+QBTtqov2rasJSRAVZcXWulvLe76+3nl/3Py4CQlose/T2s4fkXvPzGS+c86cOXMm+oCfbPH5Gf1n
+9J/Rf0afX0k//hNFH4SNRTvtD2azOQN4fJhVPG42mx3vx83mMWcdR/0McwYwm80Yodcybnb5ou8L
+nbH3XN27kiO2J8StmF0rexMvdHsf6LFBzLjLk4fBxGDkD33f6Gm31n21/oud2gj0cREBS0FY5KYh
+b+JFBBfG0Av2Btj6oRfHAjH1CB5Gs8opDRz7ntF3Dxu++HD7V+/0lm1w2OjCGdPuYvNexBeU9lG7
+zlfGhYUIgiDKCzYDNofa62XM6HvMJlFe/P7Xeufwyic+e/zR7U/SV3bNsDovbbyJzd6QLiIIohx3
+zoXS69Tau77w/bu5iNG2sy99ef7tupEyDT0bO1QvBjmrONDzwIHZbWHbjX7hjB4WevYw3wM6BH8w
+cvq9j7Y8vf5QeWZm44ir+ryhexXbzXWV2/tFCKLM8IA+Y44uIP9f6Kph/qlNOw588+lX33YzMzNj
+C8Lmh+5Qe8YMXbp4cwd6qBelf9/og4aqHUN9m9458qd3P9y+2yczM1Oinye62eMiHnefjFBE6RHR
+jNgF9wx9KyNRnN0vTp/AvMPxqE3W24vDD71z8uOnHt8yEJSZmZlJr5kfOgj1pM1FmG3ettevCvTU
+BwFRxtxL9AiVIlrSazBoNJpM/Wb03VQJntR/OevK7cEzh9JPvvnZ+XdXx8bGxsZGJ80T3b5Yx93M
+eNwNPcbsoeI4gsTcO/StUYpYg6GtQcHnZ2dHNqm5yysTK9X5muwnL+OWZV25dvnMn5/c+cTrW75o
+jEXZ6+eHbt+3Al2rh7qHhDH2ZR3o4imUGfcKfY801pCpaHrW71m9Xp+Tk9Pfnx255MXSI+mbdu+5
+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
+QmCC
+
+------MultipartBoundary--sloyP1e4fSW8rsFO6FKG6PLuBjMCQ9vOgiWr8IoaQF------

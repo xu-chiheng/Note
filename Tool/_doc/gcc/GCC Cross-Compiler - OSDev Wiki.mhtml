@@ -1,0 +1,3142 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://wiki.osdev.org/GCC_Cross-Compiler
+Subject: GCC Cross-Compiler - OSDev Wiki
+Date: Thu, 13 May 2021 01:46:13 -0000
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----"
+
+
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/html
+Content-ID: <frame-E4FF3CF9AD5BA850B533387FB739AD21@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.osdev.org/GCC_Cross-Compiler
+
+<!DOCTYPE html><html lang=3D"en" dir=3D"ltr" class=3D"client-js"><head><met=
+a http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8"><link =
+rel=3D"stylesheet" type=3D"text/css" href=3D"cid:css-10e2260a-62bc-495c-846=
+9-449573347b7a@mhtml.blink" /><link rel=3D"stylesheet" type=3D"text/css" hr=
+ef=3D"cid:css-6216c044-7076-42e6-ab74-d4659e1ac1b0@mhtml.blink" /><link rel=
+=3D"stylesheet" type=3D"text/css" href=3D"cid:css-b5d1078a-1325-4905-85b4-d=
+1aa03377d23@mhtml.blink" /><link rel=3D"stylesheet" type=3D"text/css" href=
+=3D"cid:css-fccd68a7-44a5-4e53-af9b-927d0cd30c1e@mhtml.blink" /><link rel=
+=3D"stylesheet" type=3D"text/css" href=3D"cid:css-68ca0685-6237-4e27-a7e9-c=
+08adfaaa60d@mhtml.blink" /><link rel=3D"stylesheet" type=3D"text/css" href=
+=3D"cid:css-9a26f29d-14be-4b36-985e-bede22413d32@mhtml.blink" /><link rel=
+=3D"stylesheet" type=3D"text/css" href=3D"cid:css-ad8ac72a-a5ff-48d1-b481-0=
+00400e5a4a8@mhtml.blink" /><link rel=3D"stylesheet" type=3D"text/css" href=
+=3D"cid:css-ca86990e-d40d-4ecc-888f-5b31b1bf573c@mhtml.blink" /><link rel=
+=3D"stylesheet" type=3D"text/css" href=3D"cid:css-945e04af-5c20-481d-bb4a-d=
+4a9ad9fee31@mhtml.blink" />
+<title>GCC Cross-Compiler - OSDev Wiki</title>
+
+<meta name=3D"generator" content=3D"MediaWiki 1.18.0">
+<link rel=3D"shortcut icon" href=3D"https://wiki.osdev.org/favicon.ico">
+<link rel=3D"search" type=3D"application/opensearchdescription+xml" href=3D=
+"https://wiki.osdev.org/opensearch_desc.php" title=3D"OSDev Wiki (en)">
+<link rel=3D"EditURI" type=3D"application/rsd+xml" href=3D"https://wiki.osd=
+ev.org/api.php?action=3Drsd">
+<link rel=3D"alternate" type=3D"application/atom+xml" title=3D"OSDev Wiki A=
+tom feed" href=3D"https://wiki.osdev.org/index.php?title=3DSpecial:RecentCh=
+anges&amp;feed=3Datom">
+<link rel=3D"stylesheet" href=3D"https://wiki.osdev.org/load.php?debug=3Dfa=
+lse&amp;lang=3Den&amp;modules=3Dmediawiki.legacy.commonPrint%2Cshared%7Cski=
+ns.vector&amp;only=3Dstyles&amp;skin=3Dvector&amp;*">
+<meta name=3D"ResourceLoaderDynamicStyles" content=3D"">
+<link rel=3D"stylesheet" href=3D"https://wiki.osdev.org/load.php?debug=3Dfa=
+lse&amp;lang=3Den&amp;modules=3Dsite&amp;only=3Dstyles&amp;skin=3Dvector&am=
+p;*">
+
+
+
+
+
+
+<!--[if lt IE 7]><style type=3D"text/css">body{behavior:url("/skins/vector/=
+csshover.min.htc")}</style><![endif]--></head>
+<body class=3D"mediawiki ltr sitedir-ltr ns-0 ns-subject page-GCC_Cross-Com=
+piler action-view skin-vector">
+		<div id=3D"mw-page-base" class=3D"noprint"></div>
+		<div id=3D"mw-head-base" class=3D"noprint"></div>
+		<!-- content -->
+		<div id=3D"content">
+			<a id=3D"top"></a>
+			<div id=3D"mw-js-message" style=3D"display:none;" class=3D"js-messagebox=
+"></div>
+						<!-- firstHeading -->
+			<h1 id=3D"firstHeading" class=3D"firstHeading">GCC Cross-Compiler</h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id=3D"bodyContent">
+								<!-- tagline -->
+				<div id=3D"siteSub">From OSDev Wiki</div>
+				<!-- /tagline -->
+								<!-- subtitle -->
+				<div id=3D"contentSub"></div>
+				<!-- /subtitle -->
+																<!-- jumpto -->
+				<div id=3D"jump-to-nav">
+					Jump to: <a href=3D"https://wiki.osdev.org/GCC_Cross-Compiler#mw-head"=
+>navigation</a>,
+					<a href=3D"https://wiki.osdev.org/GCC_Cross-Compiler#p-search">search<=
+/a>
+				</div>
+				<!-- /jumpto -->
+								<!-- bodycontent -->
+				<div lang=3D"en" dir=3D"ltr" class=3D"mw-content-ltr"><center>
+<table style=3D"border: 1px solid #cfcfbf; margin-top: 25px; margin-bottom:=
+ 25px; background-color: #f0f0ff; text-align: center;">
+<tbody><tr>
+<td>
+<p>This page or section refers to its readers or editors using <i>I</i>, <i=
+>my</i>, <i>we</i> or <i>us</i>. It should be <a rel=3D"nofollow" class=3D"=
+external text" href=3D"https://wiki.osdev.org/index.php?title=3DGCC_Cross-C=
+ompiler&amp;action=3Dedit">edited</a> to be in an encyclopedic tone.
+</p>
+</td></tr></tbody></table>
+</center><table style=3D"font-size:95%; line-height:1.5em; padding:0.25em; =
+float:right; margin: 0 0 8px 15px; clear:right; border:1px solid #aaaaaa; b=
+ackground:#eee; text-align:center;;"><tbody><tr><th>Difficulty level</th></=
+tr><tr><td><a href=3D"https://wiki.osdev.org/File:Difficulty_1.png" class=
+=3D"image"><img alt=3D"Difficulty 1.png" src=3D"https://wiki.osdev.org/imag=
+es/d/d3/Difficulty_1.png" width=3D"46" height=3D"14"></a><br>Beginner</td><=
+/tr></tbody></table>
+<p>This tutorial focuses on creating a GCC cross-compiler for your own oper=
+ating system. This compiler that we build here will have a generic target (=
+i686-elf) what allows you to leave the current operating system behind, mea=
+ning that no headers or libraries of your host operating system will be use=
+d. You <i>need</i> a cross-compiler for operating system development, other=
+wise a lot of unexpected things can happen because the compiler assumes tha=
+t your code is running on your host operating system.
+</p>
+<table id=3D"toc" class=3D"toc"><tbody><tr><td><div id=3D"toctitle"><h2>Con=
+tents</h2><span class=3D"toctoggle">&nbsp;[<a href=3D"https://wiki.osdev.or=
+g/GCC_Cross-Compiler#" class=3D"internal" id=3D"togglelink">hide</a>]&nbsp;=
+</span></div>
+<ul>
+<li class=3D"toclevel-1 tocsection-1"><a href=3D"https://wiki.osdev.org/GCC=
+_Cross-Compiler#Introduction"><span class=3D"tocnumber">1</span> <span clas=
+s=3D"toctext">Introduction</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-2"><a href=3D"https://wiki.osdev.org/GCC=
+_Cross-Compiler#Why_cross-compilers_are_necessary"><span class=3D"tocnumber=
+">1.1</span> <span class=3D"toctext">Why cross-compilers are necessary</spa=
+n></a></li>
+<li class=3D"toclevel-2 tocsection-3"><a href=3D"https://wiki.osdev.org/GCC=
+_Cross-Compiler#Which_compiler_version_to_choose"><span class=3D"tocnumber"=
+>1.2</span> <span class=3D"toctext">Which compiler version to choose</span>=
+</a></li>
+<li class=3D"toclevel-2 tocsection-4"><a href=3D"https://wiki.osdev.org/GCC=
+_Cross-Compiler#Which_binutils_version_to_choose"><span class=3D"tocnumber"=
+>1.3</span> <span class=3D"toctext">Which binutils version to choose</span>=
+</a></li>
+<li class=3D"toclevel-2 tocsection-5"><a href=3D"https://wiki.osdev.org/GCC=
+_Cross-Compiler#Deciding_on_the_target_platform"><span class=3D"tocnumber">=
+1.4</span> <span class=3D"toctext">Deciding on the target platform</span></=
+a></li>
+<li class=3D"toclevel-2 tocsection-6"><a href=3D"https://wiki.osdev.org/GCC=
+_Cross-Compiler#Note_on_arm-none-eabi-gcc"><span class=3D"tocnumber">1.5</s=
+pan> <span class=3D"toctext">Note on arm-none-eabi-gcc</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-7"><a href=3D"https://wiki.osdev.org/GCC=
+_Cross-Compiler#Preparing_for_the_build"><span class=3D"tocnumber">2</span>=
+ <span class=3D"toctext">Preparing for the build</span></a>
+<ul>
+<li class=3D"toclevel-2"><a href=3D"https://wiki.osdev.org/GCC_Cross-Compil=
+er#Installing_Dependencies"><span class=3D"tocnumber">2.1</span> <span clas=
+s=3D"toctext">Installing Dependencies</span></a></li>
+<li class=3D"toclevel-2"><a href=3D"https://wiki.osdev.org/GCC_Cross-Compil=
+er#Downloading_the_Source_Code"><span class=3D"tocnumber">2.2</span> <span =
+class=3D"toctext">Downloading the Source Code</span></a></li>
+<li class=3D"toclevel-2"><a href=3D"https://wiki.osdev.org/GCC_Cross-Compil=
+er#Linux_Users_building_a_System_Compiler"><span class=3D"tocnumber">2.3</s=
+pan> <span class=3D"toctext">Linux Users building a System Compiler</span><=
+/a></li>
+<li class=3D"toclevel-2"><a href=3D"https://wiki.osdev.org/GCC_Cross-Compil=
+er#Gentoo_Users"><span class=3D"tocnumber">2.4</span> <span class=3D"toctex=
+t">Gentoo Users</span></a></li>
+<li class=3D"toclevel-2"><a href=3D"https://wiki.osdev.org/GCC_Cross-Compil=
+er#macOS_Users"><span class=3D"tocnumber">2.5</span> <span class=3D"toctext=
+">macOS Users</span></a></li>
+<li class=3D"toclevel-2"><a href=3D"https://wiki.osdev.org/GCC_Cross-Compil=
+er#Windows_Users"><span class=3D"tocnumber">2.6</span> <span class=3D"tocte=
+xt">Windows Users</span></a></li>
+<li class=3D"toclevel-2"><a href=3D"https://wiki.osdev.org/GCC_Cross-Compil=
+er#OpenBSD_Users"><span class=3D"tocnumber">2.7</span> <span class=3D"tocte=
+xt">OpenBSD Users</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-8"><a href=3D"https://wiki.osdev.org/GCC=
+_Cross-Compiler#The_Build"><span class=3D"tocnumber">3</span> <span class=
+=3D"toctext">The Build</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-9"><a href=3D"https://wiki.osdev.org/GCC=
+_Cross-Compiler#Preparation"><span class=3D"tocnumber">3.1</span> <span cla=
+ss=3D"toctext">Preparation</span></a></li>
+<li class=3D"toclevel-2 tocsection-10"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#Binutils"><span class=3D"tocnumber">3.2</span> <span class=
+=3D"toctext">Binutils</span></a></li>
+<li class=3D"toclevel-2 tocsection-11"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#GCC"><span class=3D"tocnumber">3.3</span> <span class=3D"t=
+octext">GCC</span></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-12"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#Using_the_new_Compiler"><span class=3D"tocnumber">4</span>=
+ <span class=3D"toctext">Using the new Compiler</span></a></li>
+<li class=3D"toclevel-1 tocsection-13"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#Troubleshooting"><span class=3D"tocnumber">5</span> <span =
+class=3D"toctext">Troubleshooting</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-14"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#ld:_cannot_find_-lgcc"><span class=3D"tocnumber">5.1</span=
+> <span class=3D"toctext">ld: cannot find -lgcc</span></a></li>
+<li class=3D"toclevel-2 tocsection-15"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#Binutils_2.9"><span class=3D"tocnumber">5.2</span> <span c=
+lass=3D"toctext">Binutils 2.9</span></a></li>
+<li class=3D"toclevel-2 tocsection-16"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#Building_GCC:_the_directory_that_should_contain_system_hea=
+ders_does_not_exist"><span class=3D"tocnumber">5.3</span> <span class=3D"to=
+ctext">Building GCC: the directory that should contain system headers does =
+not exist</span></a></li>
+<li class=3D"toclevel-2 tocsection-17"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#GCC_libsanitizer_failing_to_build"><span class=3D"tocnumbe=
+r">5.4</span> <span class=3D"toctext">GCC libsanitizer failing to build</sp=
+an></a></li>
+</ul>
+</li>
+<li class=3D"toclevel-1 tocsection-18"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#More_advanced"><span class=3D"tocnumber">6</span> <span cl=
+ass=3D"toctext">More advanced</span></a></li>
+<li class=3D"toclevel-1 tocsection-19"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#See_Also"><span class=3D"tocnumber">7</span> <span class=
+=3D"toctext">See Also</span></a>
+<ul>
+<li class=3D"toclevel-2 tocsection-20"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#Articles"><span class=3D"tocnumber">7.1</span> <span class=
+=3D"toctext">Articles</span></a></li>
+<li class=3D"toclevel-2 tocsection-21"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#External_Links"><span class=3D"tocnumber">7.2</span> <span=
+ class=3D"toctext">External Links</span></a></li>
+<li class=3D"toclevel-2 tocsection-22"><a href=3D"https://wiki.osdev.org/GC=
+C_Cross-Compiler#Prebuilt_Toolchains"><span class=3D"tocnumber">7.3</span> =
+<span class=3D"toctext">Prebuilt Toolchains</span></a></li>
+</ul>
+</li>
+</ul>
+</td></tr></tbody></table>
+<h2> <span class=3D"mw-headline" id=3D"Introduction"> Introduction </span><=
+/h2>
+<p>Generally speaking, a cross-compiler is a compiler that runs on platform=
+ A (the <b>host</b>), but generates executables for platform B (the <b>targ=
+et</b>). These two platforms may (but do not need to) differ in CPU, operat=
+ing system, and/or <a href=3D"https://wiki.osdev.org/Category:Executable_Fo=
+rmats" title=3D"Category:Executable Formats">executable format</a>. In our =
+case, the host platform is your current operating system and the target pla=
+tform is the operating system you are about to make. It is important to rea=
+lize that these two platforms are not the same; the operating system you ar=
+e developing is always going to be different from the operating system you =
+currently use. This is why we need to build a cross-compiler first, you wil=
+l most certainly run into trouble otherwise.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Why_cross-compilers_are_necessary"> =
+Why cross-compilers are necessary </span></h3>
+<dl><dd><i>Main article:</i> <a href=3D"https://wiki.osdev.org/Why_do_I_nee=
+d_a_Cross_Compiler%3F" title=3D"Why do I need a Cross Compiler?">Why do I n=
+eed a Cross Compiler?</a>
+</dd></dl>
+<p>You need to use a cross-compiler <i>unless</i> you are developing on you=
+r own operating system. The compiler must know the correct target platform =
+(CPU, operating system), otherwise you will run into trouble. If you use th=
+e compiler that comes with your system, then the compiler won't know it is =
+compiling something else entirely. Some tutorials suggest using your system=
+ compiler and passing a lot of problematic options to the compiler. This wi=
+ll certainly give you a lot of problems in the future and the solution is b=
+uild a cross-compiler. If you have already attempted to make an operating s=
+ystem without using a cross-compiler, please read the article <a href=3D"ht=
+tps://wiki.osdev.org/Why_do_I_need_a_Cross_Compiler%3F" title=3D"Why do I n=
+eed a Cross Compiler?">Why do I need a Cross Compiler?</a>.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Which_compiler_version_to_choose"> W=
+hich compiler version to choose </span></h3>
+<dl><dd><i>Main article:</i> <a href=3D"https://wiki.osdev.org/Building_GCC=
+" title=3D"Building GCC">Building GCC</a>
+</dd></dl>
+<p>The newest <a href=3D"https://wiki.osdev.org/GCC" title=3D"GCC">GCC</a> =
+is recommended as it is the latest and greatest release. For instance, you =
+may run into trouble if you use GCC 4.6.3 to build a GCC 4.8.0 cross-compil=
+er. If you are not using the latest major GCC release for your system compi=
+ler, we recommend that you <a href=3D"https://wiki.osdev.org/Building_GCC" =
+title=3D"Building GCC">build the newest GCC as your system compiler</a>.
+</p><p>You can also use older releases as they are usually reasonably good.=
+ If your local system compiler isn't too terribly old (at least GCC 4.6.0),=
+ you may wish to save yourself the trouble and just pick the latest minor r=
+elease (such as 4.6.3 if your system compiler is 4.6.1) for your cross-comp=
+iler.
+</p><p>You can view your current compiler version by invoking:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"kw2">gcc</span> <sp=
+an class=3D"re5">--version</span></pre></div></div>
+<p>You may be able to use an older major GCC release to build a cross-compi=
+ler of a newer major GCC release. For instance, GCC 4.7.3 may be able to bu=
+ild a GCC 4.8.0 cross-compiler. However, if you want to use the latest and =
+greatest GCC version for your cross-compiler, we recommend that you <a href=
+=3D"https://wiki.osdev.org/Building_GCC" title=3D"Building GCC">bootstrap t=
+he newest GCC</a> as your system compiler first. Individuals using OS X 10.=
+7 or earlier might want to invest in either building a system GCC (that out=
+puts native Mach-O), or upgrading the local LLVM/Clang installation. Users =
+with 10.8 and above should install the Command Line Tools from Apple's deve=
+loper website and use Clang to cross-compile GCC.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Which_binutils_version_to_choose"> W=
+hich binutils version to choose </span></h3>
+<dl><dd><i>Main article:</i> <a href=3D"https://wiki.osdev.org/Cross-Compil=
+er_Successful_Builds" title=3D"Cross-Compiler Successful Builds">Cross-Comp=
+iler Successful Builds</a>
+</dd></dl>
+<p>We recommend that you use the latest and greatest <a href=3D"https://wik=
+i.osdev.org/Binutils" title=3D"Binutils">Binutils</a> release. Note, howeve=
+r, that not all combinations of GCC and Binutils work. If you run into trou=
+ble, use a Binutils that was released at roughly the same time as your desi=
+red compiler version. You probably need at least Binutils 2.22, or preferab=
+ly the latest 2.23.2 release. It doesn't matter what Binutils version you h=
+ave installed on your current operating system. You can find out the binuti=
+ls version for example by this command:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"kw2">ld</span> <spa=
+n class=3D"re5">--version</span></pre></div></div>
+<h3> <span class=3D"mw-headline" id=3D"Deciding_on_the_target_platform"> De=
+ciding on the target platform </span></h3>
+<dl><dd><i>Main article:</i> <a href=3D"https://wiki.osdev.org/Target_Tripl=
+et" title=3D"Target Triplet">Target Triplet</a>
+</dd></dl>
+<p>You should already know this. If you are following the <a href=3D"https:=
+//wiki.osdev.org/Bare_Bones" title=3D"Bare Bones">Bare Bones</a> tutorial, =
+you wish to build a cross-compiler for <tt>i686-elf</tt>.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Note_on_arm-none-eabi-gcc"> Note on =
+arm-none-eabi-gcc </span></h3>
+<p>There is the prebuilt package gcc-arm-none-eabi on apt-get for Debiab/Ub=
+untu, but you shouldn't use it because it neither contains a libgcc.a nor f=
+reestanding C header files like stdint.h.<br>
+Instead you should build it yourself with <tt>arm-none-eabi</tt> being the =
+$TARGET.
+</p>
+<h2> <span class=3D"mw-headline" id=3D"Preparing_for_the_build"> Preparing =
+for the build </span></h2><table style=3D"font-size:95%; line-height:1.5em;=
+ padding:0.25em; float:right; margin: 0 0 8px 15px; clear:right; border:1px=
+ solid #aaaaaa; background:#eee; text-align:center;;"><tbody><tr><th>Diffic=
+ulty level</th></tr><tr><td><a href=3D"https://wiki.osdev.org/File:Difficul=
+ty_1.png" class=3D"image"><img alt=3D"Difficulty 1.png" src=3D"https://wiki=
+.osdev.org/images/d/d3/Difficulty_1.png" width=3D"46" height=3D"14"></a><br=
+>Beginner</td></tr></tbody></table>
+<p><br>
+</p><p>The GNU Compiler Collection is an advanced piece of software with de=
+pendencies. You need the following in order to build GCC:
+</p>
+<ul><li> A Unix-like environment (Windows users can use the Windows Subsyst=
+em for Linux or Cygwin)
+</li><li> Enough memory and hard disk space (it depends, 256 MiB will not b=
+e enough).
+</li><li> GCC (existing release you wish to replace), or another system C c=
+ompiler
+</li><li> G++ (if building a version of GCC &gt;=3D 4.8.0), or another syst=
+em C++ compiler
+</li><li> Make
+</li><li> Bison
+</li><li> Flex
+</li><li> GMP
+</li><li> MPFR
+</li><li> MPC
+</li><li> Texinfo
+</li><li> ISL (optional)
+</li><li> CLooG (optional)
+</li></ul>
+<h3> <span class=3D"mw-headline" id=3D"Installing_Dependencies"> Installing=
+ Dependencies </span></h3>
+<table border=3D"2" cellpadding=3D"4" cellspacing=3D"0" style=3D"margin-top=
+:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-=
+collapse:collapse; {{{1}}}">
+
+<tbody><tr>
+<th> =E2=86=93 Dependency / OS =E2=86=92
+</th>
+<td> Source Code
+</td>
+<td> Debian (Ubuntu, Mint, WSL, ...)
+</td>
+<td> Gentoo
+</td>
+<td> Fedora
+</td>
+<td> Cygwin
+</td>
+<td> OpenBSD
+</td>
+<td> Arch
+</td></tr>
+<tr>
+<td>How to install
+</td>
+<td>Normally
+</td>
+<td><b><tt>sudo apt install</tt> <i>foo</i></b>
+</td>
+<td><b><tt>sudo emerge --ask</tt> <i>foo</i></b>
+</td>
+<td><b><tt>sudo dnf install</tt> <i>foo</i></b>
+</td>
+<td>Cygwin GUI setup
+</td>
+<td><b><tt>doas pkg_add</tt> <i>foo</i></b>
+</td>
+<td><b><tt>pacman -Syu</tt> <i>foo</i></b>
+</td></tr>
+<tr>
+<td>Compiler
+</td>
+<td>N/A
+</td>
+<td><b><tt>build-essential</tt></b>
+</td>
+<td><b><tt>sys-devel/gcc</tt></b>
+</td>
+<td><b><tt>gcc gcc-c++</tt></b>
+</td>
+<td><b><tt>mingw64-x86_64-gcc-g++</tt></b> / <b><tt>mingw64-i686-gcc-g++</t=
+t></b>
+</td>
+<td>Preinstalled
+</td>
+<td><b><tt>base-devel</tt></b>
+</td></tr>
+<tr>
+<td>Make
+</td>
+<td>N/A
+</td>
+<td><b><tt>build-essential</tt></b>
+</td>
+<td><b><tt>sys-devel/make</tt></b>
+</td>
+<td><b><tt>make</tt></b>
+</td>
+<td><b><tt>make</tt></b>
+</td>
+<td>Preinstalled
+</td>
+<td><b><tt>base-devel</tt></b>
+</td></tr>
+<tr>
+<td><a rel=3D"nofollow" class=3D"external text" href=3D"https://www.gnu.org=
+/software/bison/">Bison</a>
+</td>
+<td><a rel=3D"nofollow" class=3D"external autonumber" href=3D"https://ftp.g=
+nu.org/gnu/bison/">[1]</a>
+</td>
+<td><b><tt>bison</tt></b>
+</td>
+<td><b><tt>sys-devel/bison</tt></b>
+</td>
+<td><b><tt>bison</tt></b>
+</td>
+<td><b><tt>bison</tt></b>
+</td>
+<td>?
+</td>
+<td><b><tt>base-devel</tt></b>
+</td></tr>
+<tr>
+<td><a rel=3D"nofollow" class=3D"external text" href=3D"https://github.com/=
+westes/flex">Flex</a>
+</td>
+<td><a rel=3D"nofollow" class=3D"external autonumber" href=3D"https://githu=
+b.com/westes/flex/releases">[2]</a>
+</td>
+<td><b><tt>flex</tt></b>
+</td>
+<td><b><tt>sys-devel/flex</tt></b>
+</td>
+<td><b><tt>flex</tt></b>
+</td>
+<td><b><tt>flex</tt></b>
+</td>
+<td>?
+</td>
+<td><b><tt>base-devel</tt></b>
+</td></tr>
+<tr>
+<td><a rel=3D"nofollow" class=3D"external text" href=3D"https://gmplib.org/=
+">GMP</a>
+</td>
+<td><a rel=3D"nofollow" class=3D"external autonumber" href=3D"https://ftp.g=
+nu.org/gnu/gmp/">[3]</a>
+</td>
+<td><b><tt>libgmp3-dev</tt></b>
+</td>
+<td><b><tt>dev-libs/gmp</tt></b>
+</td>
+<td><b><tt>gmp-devel</tt></b>
+</td>
+<td><b><tt>libgmp-devel</tt></b>
+</td>
+<td><b><tt>gmp</tt></b>
+</td>
+<td><b><tt>gmp</tt></b>
+</td></tr>
+<tr>
+<td>MPC
+</td>
+<td><a rel=3D"nofollow" class=3D"external autonumber" href=3D"https://ftp.g=
+nu.org/gnu/mpc/">[4]</a>
+</td>
+<td><b><tt>libmpc-dev</tt></b>
+</td>
+<td><b><tt>dev-libs/mpc</tt></b>
+</td>
+<td><b><tt>libmpc-devel</tt></b>
+</td>
+<td><b><tt>libmpc-devel</tt></b>
+</td>
+<td><b><tt>libmpc</tt></b>
+</td>
+<td><b><tt>libmpc</tt></b>
+</td></tr>
+<tr>
+<td><a rel=3D"nofollow" class=3D"external text" href=3D"https://www.mpfr.or=
+g/">MPFR</a>
+</td>
+<td><a rel=3D"nofollow" class=3D"external autonumber" href=3D"https://ftp.g=
+nu.org/gnu/mpfr/">[5]</a>
+</td>
+<td><b><tt>libmpfr-dev</tt></b>
+</td>
+<td><b><tt>dev-libs/mpfr</tt></b>
+</td>
+<td><b><tt>mpfr-devel</tt></b>
+</td>
+<td><b><tt>libmpfr-devel</tt></b>
+</td>
+<td><b><tt>mpfr</tt></b>
+</td>
+<td><b><tt>mpfr</tt></b>
+</td></tr>
+<tr>
+<td><a rel=3D"nofollow" class=3D"external text" href=3D"https://www.gnu.org=
+/software/texinfo/">Texinfo</a>
+</td>
+<td><a rel=3D"nofollow" class=3D"external autonumber" href=3D"https://ftp.g=
+nu.org/gnu/texinfo/">[6]</a>
+</td>
+<td><b><tt>texinfo</tt></b>
+</td>
+<td><b><tt>sys-apps/texinfo</tt></b>
+</td>
+<td><b><tt>texinfo</tt></b>
+</td>
+<td><b><tt>texinfo</tt></b>
+</td>
+<td><b><tt>texinfo</tt></b>
+</td>
+<td><b><tt>base-devel</tt></b>
+</td></tr>
+<tr>
+<td><a rel=3D"nofollow" class=3D"external text" href=3D"https://www.cloog.o=
+rg/">CLooG</a> (Optional)
+</td>
+<td><a rel=3D"nofollow" class=3D"external text" href=3D"https://www.cloog.o=
+rg/">CLooG</a>
+</td>
+<td><b><tt>libcloog-isl-dev</tt></b>
+</td>
+<td><b><tt>dev--libs/cloog</tt></b>
+</td>
+<td><b><tt>cloog-devel</tt></b>
+</td>
+<td><b><tt>libcloog-isl-devel</tt></b>
+</td>
+<td>N/A
+</td>
+<td>N/A
+</td></tr>
+<tr>
+<td><a rel=3D"nofollow" class=3D"external text" href=3D"http://isl.gforge.i=
+nria.fr/">ISL</a> (Optional)
+</td>
+<td><a rel=3D"nofollow" class=3D"external autonumber" href=3D"http://isl.gf=
+orge.inria.fr/">[7]</a>
+</td>
+<td><b><tt>libisl-dev</tt></b>
+</td>
+<td><b><tt>dev-libs/isl</tt></b>
+</td>
+<td><b><tt>isl-devel</tt></b>
+</td>
+<td><b><tt>libisl-devel</tt></b>
+</td>
+<td>N/A
+</td>
+<td>N/A
+</td></tr></tbody></table>
+<p>You need to have Texinfo installed to build Binutils. You need to have G=
+MP, MPC, and MPFR installed to build GCC. GCC optionally can make use of th=
+e CLooG and ISL libraries.
+</p><p>For instance, you can install <b><tt>libgmp3-dev</tt></b> on Debian =
+by running the shell command: <b><tt>sudo apt install libgmp3-dev</tt></b>
+</p><p><b>Note:</b> Version 5.x (or later) of Texinfo is known to be incomp=
+atible with the current Binutils 2.23.2 release (and older). You can check =
+your current version using <tt>makeinfo --version</tt>. If your version is =
+too new and you encounter problems during the build, you will need to eithe=
+r use Binutils 2.24 release (or newer) or install an older version of Texin=
+fo - perhaps through building from source - and add it to your <tt>PATH</tt=
+> prior and during the Binutils build.
+</p><p><b>Note:</b> Version 0.13 (or later) of ISL is incompatible with the=
+ current CLooG 0.18.1 release (and older).  Use version 0.12.2 of ISL or th=
+e build <b>will</b> fail.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Downloading_the_Source_Code"> Downlo=
+ading the Source Code </span></h3>
+<p>Download the needed source code into a suitable directory such as <tt>$H=
+OME/src</tt>:
+</p>
+<ul><li> You can download the desired Binutils release by visiting the <a r=
+el=3D"nofollow" class=3D"external text" href=3D"https://gnu.org/software/bi=
+nutils/">Binutils website</a> or directly accessing the <a rel=3D"nofollow"=
+ class=3D"external text" href=3D"https://ftp.gnu.org/gnu/binutils/">GNU mai=
+n mirror</a>.
+</li></ul>
+<ul><li> You can download the desired GCC release by visiting the <a rel=3D=
+"nofollow" class=3D"external text" href=3D"https://gnu.org/software/gcc/">G=
+CC website</a> or directly accessing the <a rel=3D"nofollow" class=3D"exter=
+nal text" href=3D"https://ftp.gnu.org/gnu/gcc/">GNU main mirror</a>.
+</li></ul>
+<p><b>Note:</b> The versioning scheme used is that each fullstop separates =
+a full number, i.e. Binutils 2.20.0 is newer than 2.9.0. This may be confus=
+ing, if you have not encountered this (quite common) versioning scheme yet,=
+ when looking at an alphanumerically sorted list of tarballs: The file at t=
+he bottom of the list is not the latest version! An easy way of getting the=
+ latest version is to sort by the last modified date and scrolling to the b=
+ottom.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Linux_Users_building_a_System_Compil=
+er"> Linux Users building a System Compiler </span></h3>
+<p>Your distribution may ship its own patched GCC and Binutils that is cust=
+omized to work on your particular Linux distribution. You should be able to=
+ build a working cross-compiler using the above source code, but you might =
+not be able to build a new system compiler for your current Linux distribut=
+ion. In that case, try a newer GCC release or get the patched source code.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Gentoo_Users"> Gentoo Users </span><=
+/h3>
+<p>Gentoo offers <a rel=3D"nofollow" class=3D"external text" href=3D"https:=
+//wiki.gentoo.org/wiki/Crossdev">crossdev</a> to set up a cross-development=
+ toolchain:
+</p>
+<pre>   emerge -av crossdev
+   crossdev --help
+   PORTDIR_OVERLAY=3D"/usr/local/crossdev" crossdev --stage1 --binutils &lt=
+;binutils-version&gt; --gcc &lt;gcc-version&gt; --target &lt;target&gt;
+</pre>
+<p>This will install a GCC cross-compiler into a "slot", i.e. alongside alr=
+eady-existing compiler versions. You can install several cross-compilers th=
+at way, simply by changing target designations. An unfortunate downside is =
+that it will also pull in gentoo patches and pass additional configure opti=
+ons that differ from the official <strong class=3D"selflink">GCC Cross-Comp=
+iler</strong> setup, and they might behave differently.
+</p><p>After the compilation finishes successfully, your cross-compiler is =
+callable via &lt;target&gt;-gcc. You can also use gcc-config to toggle betw=
+een compiler versions should you need to do so. Don't replace your system c=
+ompiler with a cross-compiler. The package manager will also suggest update=
+s as soon as they become available.=20
+</p><p>You can uninstall the cross-compiler by calling <i>crossdev --clean =
+&lt;target&gt;</i>. Read the <a rel=3D"nofollow" class=3D"external text" hr=
+ef=3D"https://wiki.gentoo.org/wiki/Cross_build_environment">cross-developme=
+nt</a> document for additional information.
+</p><p>Note that the version numbers to binutils and gcc are <i>Gentoo pack=
+age versions</i>, i.e. there might be a suffix to the "official" (GNU) vers=
+ion that addresses additional patchsets supplied by the Gentoo maintainers.=
+ (For example, <i>--binutils 2.24-r3 --gcc 4.8.3</i> is the latest stable p=
+ackage pair at the time of this writing.) You can omit the version numbers =
+to use the latest package available.
+</p><p>Portage uses overlays to store packages that are not part of the ori=
+ginal package management. Crossdev needs one overlay where it can store its=
+ binutils and gcc packages before building them. You can configure one prop=
+erly, or you can use PORTDIR_OVERLAY to point at where it should keep its p=
+ackage manager files. Using PORTDIR_OVERLAY is not a good idea with existin=
+g overlays, but by then you should know how you have personally set them up=
+ earlier anyway and how to do it properly. See <a rel=3D"nofollow" class=3D=
+"external autonumber" href=3D"https://wiki.gentoo.org/wiki/Custom_repositor=
+y#Crossdev">[8]</a>.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"macOS_Users"> macOS Users </span></h=
+3>
+<p>macOS users need a replacement libiconv because the system libiconv is s=
+eriously out of date. macOS users can download the latest libiconv release =
+by visiting the <a rel=3D"nofollow" class=3D"external text" href=3D"https:/=
+/gnu.org/software/libiconv/">libiconv website</a> or directly accessing the=
+ <a rel=3D"nofollow" class=3D"external text" href=3D"https://ftp.gnu.org/gn=
+u/libiconv/">GNU main FTP mirror</a>. Otherwise you may  get unresolved sym=
+bol errors related to libiconv when compiling GCC 4.3 or higher on OS X 10.=
+4 and 10.5.
+</p><p>Install a new version (compile it yourself or use MacPorts) and add =
+<tt>--with-libiconv-prefix=3D/opt/local</tt> (or <tt>/usr/local</tt> if you=
+ compiled it yourself) to GCC's <tt>./configure</tt> line. Alternatively yo=
+u may place the libiconv source as gcc-x.y.z/libiconv and it will be compil=
+ed as part of the GCC compilation process. (This trick also works for MPFR,=
+ GMP, and MPC).
+</p><p>The makefiles of Binutils and GCC use the <span class=3D"mw-geshi ma=
+ke source-make"><span class=3D"sy0">$</span><span class=3D"br0">(</span><sp=
+an class=3D"re2">CC</span><span class=3D"br0">)</span></span> variable to i=
+nvoke the compiler. On OS X, this resolves to <span class=3D"mw-geshi text =
+source-text">gcc</span> by default, which is actually <span class=3D"mw-ges=
+hi bash source-bash">clang</span>. Prior to OS X 10.8, the Clang that came =
+with Xcode's Command Line Tools package was not able to build a working GCC=
+. Users running OS X 10.7 or below may need to find and install GCC, either=
+ from <a rel=3D"nofollow" class=3D"external text" href=3D"https://brew.sh/"=
+>Homebrew</a>, or from somewhere on Apple's website. You can try with the o=
+ld GCC that comes preinstalled on some macOS versions.
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"co0"># This is only=
+ necessary for OS X users running 10.7 or below.</span>
+<span class=3D"kw3">export</span> <span class=3D"re2">CC</span>=3D<span cla=
+ss=3D"sy0">/</span>usr<span class=3D"sy0">/</span>bin<span class=3D"sy0">/<=
+/span>gcc-<span class=3D"nu0">4.2</span>
+<span class=3D"kw3">export</span> <span class=3D"re2">CXX</span>=3D<span cl=
+ass=3D"sy0">/</span>usr<span class=3D"sy0">/</span>bin<span class=3D"sy0">/=
+</span>g++-<span class=3D"nu0">4.2</span>
+<span class=3D"kw3">export</span> <span class=3D"re2">CPP</span>=3D<span cl=
+ass=3D"sy0">/</span>usr<span class=3D"sy0">/</span>bin<span class=3D"sy0">/=
+</span>cpp-<span class=3D"nu0">4.2</span>
+<span class=3D"kw3">export</span> <span class=3D"re2">LD</span>=3D<span cla=
+ss=3D"sy0">/</span>usr<span class=3D"sy0">/</span>bin<span class=3D"sy0">/<=
+/span>gcc-<span class=3D"nu0">4.2</span></pre></div></div>
+<p>You will want to unset these exports once you compiled and installed the=
+ cross compiler.
+</p><p><b>Note for Lion users:</b> If you're on Lion (or above) chances are=
+ that you don't have the "real" GCC since Apple removed it from the Xcode p=
+ackage, but you can still install it. You can do it via Homebrew or by comp=
+iling from source, both are perfectly described on <a rel=3D"nofollow" clas=
+s=3D"external text" href=3D"https://apple.stackexchange.com/a/38247">a Stac=
+kExchange answer</a>.
+</p><p><b>Note for Maverick users:</b> You can build binutils-2.24 and gcc-=
+4.8.3 (possible other version) with Xcode 5.1.1. Note that building GCC wit=
+h LLVM is not officially supported and may cause interesting bugs, if you a=
+re willing to take this risk and save time building host-gcc just to compil=
+e a cross-gcc, follow this.
+Install GMP, MPFR, Mpc with <a rel=3D"nofollow" class=3D"external text" hre=
+f=3D"https://www.macports.org/">MacPorts</a>.
+</p>
+<pre>sudo port install gmp mpfr libmpc
+</pre>
+<pre>../binutils-2.24/configure --prefix=3D$PREFIX \
+--target=3D$TARGET \
+--enable-interwork --enable-multilib \
+--disable-nls --disable-werror
+</pre>
+<pre>../gcc-4.8.3/configure --prefix=3D$PREFIX \
+--target=3D$TARGET \
+--disable-nls \
+--enable-languages=3Dc,c++ --without-headers \
+--enable-interwork --enable-multilib \
+--with-gmp=3D/usr --with-mpc=3D/opt/local --with-mpfr=3D/opt/local
+</pre>
+<p><b>Note:</b> There is an issue with port's GMP, so the version from OS X=
+ from /usr is used instead.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Windows_Users"> Windows Users </span=
+></h3>
+<p>Windows users need to set up a Unix-like enviroment such as <a href=3D"h=
+ttps://wiki.osdev.org/MinGW" title=3D"MinGW">MinGW</a> or <a href=3D"https:=
+//wiki.osdev.org/Cygwin" title=3D"Cygwin">Cygwin</a>. It may well be worth =
+looking into systems such as Linux and see if they fit your needs, as you c=
+ommonly use a lot of Unix-like tools in operating systems development and t=
+his is much easier from a Unix-like operating system. <b>If you have just i=
+nstalled the basic <a href=3D"https://wiki.osdev.org/Cygwin" title=3D"Cygwi=
+n">Cygwin</a> package, you have to run the setup.exe again and install the =
+following packages:</b> GCC, G++, Make, Flex, Bison, Diffutils, libintl-dev=
+el, libgmp-devel, libmpfr-devel, libmpc-devel, Texinfo
+</p><p>MinGW + MSYS is an option, and as it addresses the native Windows AP=
+I instead of a POSIX emulation layer, results in a slightly faster toolchai=
+n. Some software packages will not build properly under MSYS as they were n=
+ot designed for use with Windows. As far as this tutorial is concerned, eve=
+rything that applies to Cygwin also applies to MSYS unless otherwise specif=
+ied. Make sure you install the C and C++ compilers, and the MSYS Basic Syst=
+em.
+</p><p>The "Windows Subsystem for Linux (Beta)", released with the Windows =
+10 Anniversary update is also an option for using a cross compiler. (Tested=
+ 08/08/2016 with GCC 6.1.0 and Binutils 2.27) This cross-compiler works rea=
+sonably fast, although being in beta state, it may not be ideal permanent d=
+evelopment platform.
+</p><p><b>Cygwin note:</b> Cygwin includes your Windows <tt>%PATH%</tt> in =
+its bash <tt>$PATH.</tt> If you were using DJGPP before, this could result =
+in confusion as e.g. calling <tt>GCC</tt> on the Cygwin bash command line w=
+ould still call the DJGPP compiler. After uninstalling DJGPP, you should de=
+lete the DJGPP environment variable and clear the <tt>C:\djgpp</tt> entry (=
+or wherever you installed it) from your <tt>%PATH%</tt>. Likewise, it might=
+ be a bad idea to mix build environments in your system PATH variable.
+</p><p><b>MinGW note:</b> Some MinGW-specific information on building a cro=
+ss-toolchain can be found on the <a rel=3D"nofollow" class=3D"external text=
+" href=3D"http://www.mingw.org/wiki/HostedCrossCompilerHOWTO">hosted cross-=
+compiler how-to page</a> on the MinGW homepage.
+</p><p><b>Windows Subsystem for Linux (Beta) Note:</b> You cannot have your=
+ cross compiler in the /mnt/c/ (or /mnt/"x") areas, as trying to compile yo=
+ur cross-compiler there will generate errors, whereas building to $HOME/opt=
+/cross works perfectly. This is fixed with Windows Update KB3176929
+</p>
+<h3> <span class=3D"mw-headline" id=3D"OpenBSD_Users"> OpenBSD Users </span=
+></h3>
+<p>OpenBSD users might need to install "gcc" package from ports because bas=
+e system's GCC is very outdated. If you want to build GCC, try to use the p=
+orts' version instead of the latest version available and apply all patches=
+ from ports to your build. Also, if the build fails during compiling lto-pl=
+ugin, a temporary solution is to disable LTO altogether during configure st=
+age of building GCC by adding <tt>--disable-lto</tt>
+</p>
+<h2> <span class=3D"mw-headline" id=3D"The_Build"> The Build </span></h2>
+<p>We build a toolset running on your host that can turn source code into o=
+bject files for your target system.
+</p><p>You need to decide where to install your new compiler. It is dangero=
+us and a very bad idea to install it into system directories. You also need=
+ to decide whether the new compiler should be installed globally or just fo=
+r you. If you want to install it just for you (recommended), installing int=
+o <tt>$HOME/opt/cross</tt> is normally a good idea. If you want to install =
+it globally, installing it into <tt>/usr/local/cross</tt> is normally a goo=
+d idea.
+</p><p>Please note that we build everything out of the source directory tre=
+e, as is considered good practice. Some packages only support building outs=
+ide, some only inside and some both (but may not offer extensive checking w=
+ith make). Building GCC inside the source directory tree fails miserably, a=
+t least for older versions.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Preparation"> Preparation </span></h=
+3>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"kw3">export</span> =
+<span class=3D"re2">PREFIX</span>=3D<span class=3D"st0">"<span class=3D"es2=
+">$HOME</span>/opt/cross"</span>
+<span class=3D"kw3">export</span> <span class=3D"re2">TARGET</span>=3Di686-=
+elf
+<span class=3D"kw3">export</span> <span class=3D"re2">PATH</span>=3D<span c=
+lass=3D"st0">"<span class=3D"es2">$PREFIX</span>/bin:<span class=3D"es2">$P=
+ATH</span>"</span></pre></div></div>
+<p>We add the installation prefix to the <tt>PATH</tt> of the current shell=
+ session. This ensures that the compiler build is able to detect our new bi=
+nutils once we have built them.
+</p><p>The prefix will configure the build process so that all the files of=
+ your cross-compiler environment end up in $HOME/opt/cross. You can change =
+that prefix to whatever you like (e.g., /opt/cross or $HOME/cross would be =
+options). If you have administrator access and wish to make the cross-compi=
+ler toolchain available to all users, you can install it into the /usr/loca=
+l prefix - or perhaps a /usr/local/cross prefix if you are willing to chang=
+e the system configuration such that this directory is in the search paths =
+for all users. Technically, you could even install directly to /usr, so tha=
+t your cross-compiler would reside alongside your system compiler, but that=
+ is not recommended for several reasons (like risking to overwrite your sys=
+tem compiler if you get TARGET wrong, or getting into conflict with your sy=
+stem's package management).
+</p>
+<h3> <span class=3D"mw-headline" id=3D"Binutils"> Binutils </span></h3>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"kw3">cd</span> <spa=
+n class=3D"re1">$HOME</span><span class=3D"sy0">/</span>src
+&nbsp;
+<span class=3D"kw2">mkdir</span> build-binutils
+<span class=3D"kw3">cd</span> build-binutils
+..<span class=3D"sy0">/</span>binutils-x.y.z<span class=3D"sy0">/</span>con=
+figure <span class=3D"re5">--target</span>=3D<span class=3D"re1">$TARGET</s=
+pan> <span class=3D"re5">--prefix</span>=3D<span class=3D"st0">"<span class=
+=3D"es2">$PREFIX</span>"</span> <span class=3D"re5">--with-sysroot</span> <=
+span class=3D"re5">--disable-nls</span> <span class=3D"re5">--disable-werro=
+r</span>
+<span class=3D"kw2">make</span>
+<span class=3D"kw2">make</span> <span class=3D"kw2">install</span></pre></d=
+iv></div>
+<p>This compiles the binutils (assembler, disassembler, and various other u=
+seful stuff), runnable on your system but handling code in the format speci=
+fied by $TARGET.
+</p><p><b>--disable-nls</b> tells binutils not to include native language s=
+upport. This is basically optional, but reduces dependencies and compile ti=
+me. It will also result in English-language diagnostics, which the people o=
+n the <a rel=3D"nofollow" class=3D"external text" href=3D"http://forum.osde=
+v.org/">Forum</a> understand when you ask your questions.&nbsp;;-)
+</p><p><b>--with-sysroot</b> tells binutils to enable sysroot support in th=
+e cross-compiler by pointing it to a default empty directory. By default, t=
+he linker refuses to use sysroots for no good technical reason, while gcc i=
+s able to handle both cases at runtime. This will be useful later on.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"GCC"> GCC </span></h3>
+<dl><dd><i>See also the <a rel=3D"nofollow" class=3D"external text" href=3D=
+"http://gcc.gnu.org/install/configure.html">offical instructions for config=
+uring gcc</a>.</i>
+</dd></dl>
+<p>Now, you can build <a href=3D"https://wiki.osdev.org/GCC" title=3D"GCC">=
+GCC</a>.
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"kw3">cd</span> <spa=
+n class=3D"re1">$HOME</span><span class=3D"sy0">/</span>src
+&nbsp;
+<span class=3D"co0"># The $PREFIX/bin dir _must_ be in the PATH. We did tha=
+t above.</span>
+<span class=3D"kw2">which</span> <span class=3D"re5">--</span> <span class=
+=3D"re1">$TARGET</span>-as <span class=3D"sy0">||</span> <span class=3D"kw3=
+">echo</span> <span class=3D"re1">$TARGET</span>-as is not <span class=3D"k=
+w1">in</span> the PATH
+&nbsp;
+<span class=3D"kw2">mkdir</span> build-gcc
+<span class=3D"kw3">cd</span> build-gcc
+..<span class=3D"sy0">/</span>gcc-x.y.z<span class=3D"sy0">/</span>configur=
+e <span class=3D"re5">--target</span>=3D<span class=3D"re1">$TARGET</span> =
+<span class=3D"re5">--prefix</span>=3D<span class=3D"st0">"<span class=3D"e=
+s2">$PREFIX</span>"</span> <span class=3D"re5">--disable-nls</span> <span c=
+lass=3D"re5">--enable-languages</span>=3Dc,<span class=3D"kw2">c++</span> <=
+span class=3D"re5">--without-headers</span>
+<span class=3D"kw2">make</span> all-gcc
+<span class=3D"kw2">make</span> all-target-libgcc
+<span class=3D"kw2">make</span> install-gcc
+<span class=3D"kw2">make</span> install-target-libgcc</pre></div></div>
+<p>We build <a href=3D"https://wiki.osdev.org/Libgcc" title=3D"Libgcc">libg=
+cc</a>, a low-level support library that the compiler expects available at =
+compile time. Linking against <a href=3D"https://wiki.osdev.org/Libgcc" tit=
+le=3D"Libgcc">libgcc</a> provides integer, floating point, decimal, stack u=
+nwinding (useful for exception handling) and other support functions. Note =
+how we are <i>not</i> simply running <tt>make &amp;&amp; make install</tt> =
+as that would build way too much, not all components of gcc are ready to ta=
+rget your unfinished operating system.
+</p><p><b>--disable-nls</b> is the same as for binutils above.
+</p><p><b>--without-headers</b> tells <a href=3D"https://wiki.osdev.org/GCC=
+" title=3D"GCC">GCC</a> not to rely on any C library (standard or runtime) =
+being present for the target.
+</p><p><b>--enable-languages</b> tells <a href=3D"https://wiki.osdev.org/GC=
+C" title=3D"GCC">GCC</a> not to compile all the other language frontends it=
+ supports, but only C (and optionally C++).
+</p><p>It will take a while to build your cross-compiler.
+</p><p>If you are building a cross compiler for x86-64, you may want to con=
+sider building Libgcc without the "red zone": <a href=3D"https://wiki.osdev=
+.org/Libgcc_without_red_zone" title=3D"Libgcc without red zone">Libgcc_with=
+out_red_zone</a>
+</p>
+<h2> <span class=3D"mw-headline" id=3D"Using_the_new_Compiler"> Using the n=
+ew Compiler </span></h2>
+<p>Now you have a "naked" cross-compiler. It does not have access to a C li=
+brary or C runtime yet, so you cannot use any of the standard includes or c=
+reate runnable binaries. But it is quite sufficient to compile the kernel y=
+ou will be making shortly. Your toolset resides in $HOME/opt/cross (or what=
+ you set <tt>$PREFIX</tt> to). For example, you have a GCC executable insta=
+lled as <tt>$HOME/opt/cross/bin/$TARGET-gcc</tt>, which creates programs fo=
+r your TARGET.=20
+</p><p>You can now run your new compiler by invoking something like:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"co4">$</span>HOME<s=
+pan class=3D"sy0">/</span>opt<span class=3D"sy0">/</span>cross<span class=
+=3D"sy0">/</span>bin<span class=3D"sy0">/</span><span class=3D"re1">$TARGET=
+</span>-gcc <span class=3D"re5">--version</span></pre></div></div>
+<p>Note how this compiler is <i>not</i> able to compile normal C programs. =
+The cross-compiler will spit errors whenever you want to #include any of th=
+e standard headers (except for a select few that actually are platform-inde=
+pendent, and generated by the compiler itself). This is quite correct - you=
+ don't have a standard library for the target system yet!
+</p><p>The C standard defines two different kinds of executing environments=
+ - "freestanding" and "hosted". While the definition might be rather fuzzy =
+for the average application programmer, it is pretty clear-cut when you're =
+doing OS development: A kernel is "freestanding", everything you do in user=
+ space is "hosted". A "freestanding" environment needs to provide only a su=
+bset of the C library: float.h, iso646.h, limits.h, stdalign.h, stdarg.h, s=
+tdbool.h, stddef.h, stdint.h and stdnoreturn.h (as of C11). All of these co=
+nsist of typedef s and #define s "only", so you can implement them without =
+a single .c file in sight.
+</p><p>To use your new compiler simply by invoking <tt>$TARGET-gcc</tt>, ad=
+d <tt>$HOME/opt/cross/bin</tt> to your <tt>$PATH</tt> by typing:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"kw3">export</span> =
+<span class=3D"re2">PATH</span>=3D<span class=3D"st0">"<span class=3D"es2">=
+$HOME</span>/opt/cross/bin:<span class=3D"es2">$PATH</span>"</span></pre></=
+div></div>
+<p>This command will add your new compiler to your PATH for this shell sess=
+ion. If you wish to use it permanently, add the PATH command to your <tt>~/=
+.profile</tt> configuration shell script or similar. Consult your shell doc=
+umentation for more information.
+</p><p>You can now move on to complete the <a href=3D"https://wiki.osdev.or=
+g/Bare_Bones" title=3D"Bare Bones">Bare Bones</a> tutorial variant that lea=
+d you here and complete it using your new cross-compiler. If you built a ne=
+w GCC version as your system compiler and used it to build the cross-compil=
+er, you can now safely uninstall it unless you wish to continue using it.
+</p>
+<h2> <span class=3D"mw-headline" id=3D"Troubleshooting"> Troubleshooting </=
+span></h2>
+<p>In general, <b>verify</b> that you read the instructions carefully and t=
+yped the commands precisely. Don't skip instructions. You will have to set =
+your PATH variable again if you use a new shell instance, if you don't make=
+ it permanent by adding it to your shell profile. If a compilation seems to=
+ have gotten really messed up, type <tt>make distclean</tt>, and then start=
+ the make process over again. Ensure your un-archiever doesn't change newli=
+ne characters.
+</p>
+<h4> <span class=3D"mw-headline" id=3D"ld:_cannot_find_-lgcc"> ld: cannot f=
+ind -lgcc </span></h4>
+<p>You specified that you want to link the GCC low-level runtime library in=
+to your executable through the <tt>-lgcc</tt>' switch, but forgot to build =
+and properly install the library.<br>
+If you got no warnings or errors while installing libgcc and you still have=
+ problems you can copy the library in your project and link it with <tt>-L.=
+ -lgcc</tt><br>
+The libgcc is at $PREFIX/lib/gcc/$TARGET/&lt;gcc-version&gt;/libgcc.a .
+</p>
+<h4> <span class=3D"mw-headline" id=3D"Binutils_2.9"> Binutils 2.9 </span><=
+/h4>
+<p>What's alphabetically on the top or bottom is not necessarily the latest=
+ version. After 2.9 comes 2.10, 2.11, 2.12 and then there are more releases=
+ that are all newer and progressively more likely to build or support your =
+choice of GCC version.
+</p>
+<h4> <span class=3D"mw-headline" id=3D"Building_GCC:_the_directory_that_sho=
+uld_contain_system_headers_does_not_exist"> Building GCC: the directory tha=
+t should contain system headers does not exist </span></h4>
+<p>You might encounter this error when building <tt>mingw32</tt> targets, f=
+or example <tt>x86_64-w64-mingw32</tt>. The offending directory that can't =
+be found is <tt>$SYSROOT/mingw/include</tt>. If you look in your sysroot, y=
+ou will, of course, realise that no such folder exists.
+</p><p>The solution is simply to create the empty folders:
+</p>
+<div dir=3D"ltr" class=3D"mw-geshi" style=3D"text-align: left;"><div class=
+=3D"bash source-bash"><pre class=3D"de1"><span class=3D"kw2">mkdir</span> <=
+span class=3D"re5">-p</span> <span class=3D"re1">$SYSROOT</span><span class=
+=3D"sy0">/</span>mingw<span class=3D"sy0">/</span>include
+<span class=3D"kw2">mkdir</span> <span class=3D"re5">-p</span> <span class=
+=3D"re1">$SYSROOT</span><span class=3D"sy0">/</span>mingw<span class=3D"sy0=
+">/</span>lib</pre></div></div>
+<p>This will allow the build to proceed. The reason this happens is that th=
+e <tt>mingw32</tt> (and mingw itself) configures <tt>INCLUDE_PATH</tt> and =
+<tt>LIBRARY_PATH</tt> to be, as can be guessed, <tt>/mingw/include</tt> and=
+ <tt>/mingw/lib</tt>, instead of the defaults <tt>/usr/include</tt> and <tt=
+>/usr/lib</tt>. Why the build fails even though nothing is required in thos=
+e folders, and why it doesn't just make them, is beyond me.
+</p>
+<h3> <span class=3D"mw-headline" id=3D"GCC_libsanitizer_failing_to_build"> =
+GCC libsanitizer failing to build </span></h3>
+<p>Sometimes GCC can't build libsanitizer, if that happens append <tt>--dis=
+able-libsanitizer</tt> to the configure command.<br>
+This only applies for building a hosted compiler.
+</p>
+<h2> <span class=3D"mw-headline" id=3D"More_advanced"> More advanced </span=
+></h2>
+<p>Using this simple cross compiler will be sufficient for quite some time,=
+ but at some point you will want the compiler to automatically include your=
+ own system headers and libraries. Building an <a href=3D"https://wiki.osde=
+v.org/OS_Specific_Toolchain" title=3D"OS Specific Toolchain">OS-specific to=
+olchain</a> for your own operating system is the way to go from here.
+</p>
+<h2> <span class=3D"mw-headline" id=3D"See_Also"> See Also </span></h2>
+<h3> <span class=3D"mw-headline" id=3D"Articles"> Articles </span></h3>
+<ul><li><a href=3D"https://wiki.osdev.org/Cross-Compiler_Successful_Builds"=
+ title=3D"Cross-Compiler Successful Builds">Cross-Compiler Successful Build=
+s</a> - combinations of GCC and Binutils which have been shown to work with=
+ this tutorial by OSDev.org members.
+</li><li><a href=3D"https://wiki.osdev.org/Target_Triplet" title=3D"Target =
+Triplet">Target Triplet</a> - on target triplets and their use
+</li><li><a href=3D"https://wiki.osdev.org/OS_Specific_Toolchain" title=3D"=
+OS Specific Toolchain">OS Specific Toolchain</a> - going a step further and=
+ adding your own target.
+</li><li><a href=3D"https://wiki.osdev.org/LLVM_Cross-Compiler" title=3D"LL=
+VM Cross-Compiler">LLVM Cross-Compiler</a> - some compilers make things muc=
+h easier.
+</li><li><a href=3D"https://wiki.osdev.org/Canadian_Cross" title=3D"Canadia=
+n Cross" class=3D"mw-redirect">Canadian Cross</a> - making things yet more =
+complicated.
+</li></ul>
+<h3> <span class=3D"mw-headline" id=3D"External_Links"> External Links </sp=
+an></h3>
+<ul><li><a rel=3D"nofollow" class=3D"external free" href=3D"http://kegel.co=
+m/crosstool">http://kegel.com/crosstool</a> has a popular example of a scri=
+pt that automatically downloads, patches, and builds binutils, gcc, and gli=
+bc for known platforms.
+</li><li><a rel=3D"nofollow" class=3D"external free" href=3D"http://gcc.gnu=
+.org/onlinedocs/gccint/Libgcc.html">http://gcc.gnu.org/onlinedocs/gccint/Li=
+bgcc.html</a> - Summary of the support functions you get when you link with=
+ libgcc.
+</li><li><a rel=3D"nofollow" class=3D"external free" href=3D"http://forums.=
+gentoo.org/viewtopic.php?t=3D66125">http://forums.gentoo.org/viewtopic.php?=
+t=3D66125</a> - Compiling Windows applications under Linux
+</li><li><a rel=3D"nofollow" class=3D"external free" href=3D"http://www.lib=
+sdl.org/extras/win32/cross/README.txt">http://www.libsdl.org/extras/win32/c=
+ross/README.txt</a> - dito
+</li><li><a rel=3D"nofollow" class=3D"external free" href=3D"https://github=
+.com/travisg/toolchains">https://github.com/travisg/toolchains</a> - Anothe=
+r script for building simple cross compilers
+</li><li><a rel=3D"nofollow" class=3D"external free" href=3D"https://www.yo=
+utube.com/watch?v=3DaESwsmnA7Ec">https://www.youtube.com/watch?v=3DaESwsmnA=
+7Ec</a> - A walkthrough of how to build a cross-compiler using Cygwin on Wi=
+ndows.
+</li><li><a rel=3D"nofollow" class=3D"external free" href=3D"https://github=
+.com/Cheapskate01/Cross-Compiler-Build-Script">https://github.com/Cheapskat=
+e01/Cross-Compiler-Build-Script</a> - A dead-simple script that Binutils an=
+d Gcc for you.
+</li></ul>
+<h3> <span class=3D"mw-headline" id=3D"Prebuilt_Toolchains"> Prebuilt Toolc=
+hains </span></h3>
+<p>These were built by people in the OSdev community for their own building=
+ needs and shared at will, without guaranteeing any support or that it will=
+ even work on your setup. YMMV.
+</p><p><b>Latests versions for Linux (many arch)</b>
+</p>
+<ul><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://www.ke=
+rnel.org/pub/tools/crosstool/">kernel.org various hosts/targets</a>
+</li></ul>
+<p><b>For Linux i686 host</b>
+</p>
+<ul><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive.=
+google.com/open?id=3D1zcFAmxi7mtOwhMaKE36IsjLRB0uEv17p">aarch64-elf 9.3.0 t=
+arget</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1uEFrOJPxy13vxWCy-5IbxCJAs5TRdtTE">arm-eabi 9.3.0 tar=
+get</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D13Kg6Xd8acUnwUoZQBTOjwAQQeGOeYzVz">i386-elf 9.3.0 tar=
+get</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1F5RsfIEfcpRYAqu5UuGTKgkMa3eBsXnP">i486-elf 9.3.0 tar=
+get</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1PdEFqMEJf_Vuf0drO1m8bjlrsudAmI5k">i586-elf 9.3.0 tar=
+get</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1g9jzEIn8CB6ZiVrc0uxbZprepcX4gYex">i686-elf 9.3.0 tar=
+get</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1xIeNJwD0Do-REFxzCLOkMIVYI3HGJUTX">mips-elf 9.3.0 tar=
+get</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D10UuOf9LW4y9WEJcTWrMZW0GAlOWh9KG7">mips64-elf 9.3.0 t=
+arget</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1oW6UWr-OY22EgtyuXovORUtHeVLkL-Tw">m64k-elf 9.3.0 tar=
+get</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1H3Cbq4D_kjROB-7Otiisa-mac_9FYUM-">powerpc-elf 9.3.0 =
+target</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1kFGNHWhcBD9cf8X2y-BW49Su04lMa1ev">sh-elf 9.3.0 targe=
+t</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1XzQDKTK35EX8b380bPRbuhX1GPKrtI77">sparc-elf 9.3.0 ta=
+rget</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1pU8bS0McTyRUTHb1b_c8ZVa2Ka_XeeEp">x86_64-elf 9.3.0 t=
+arget</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive=
+.google.com/open?id=3D1cqk9RzY3QXQuaS-YdIWtCECKL81pcsv-">xtensa-elf 9.3.0 t=
+arget</a>
+</li></ul>
+<p><b>For Linux x86_64 host</b>
+</p>
+<ul><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive.=
+google.com/file/d/0Bw6lG3Ej2746STJaM2dNbC05elE/view?usp=3Dsharing">i386-elf=
+ &amp; i686-elf 7.1.0 target uploaded by TheAlmostGenius</a>
+</li></ul>
+<ul><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos.=
+org/toolchains/i386-elf-7.5.0-Linux-x86_64.tar.xz">i386-elf 7.5.0 target</a=
+>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/x86_64-elf-7.5.0-Linux-x86_64.tar.xz">x86_64-elf 7.5.0 targ=
+et</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/aarch64-elf-7.5.0-Linux-x86_64.tar.xz">aarch64-elf 7.5.0 ta=
+rget</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/arm-eabi-7.5.0-Linux-x86_64.tar.xz">arm-eabi 7.5.0 target</=
+a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/m68k-elf-7.5.0-Linux-x86_64.tar.xz">m68k-elf 7.5.0 target</=
+a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/microblaze-elf-7.5.0-Linux-x86_64.tar.xz">microblaze-elf 7.=
+5.0 target</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/mips-elf-7.5.0-Linux-x86_64.tar.xz">mips-elf 7.5.0 target</=
+a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/nios2-elf-7.5.0-Linux-x86_64.tar.xz">nios2-elf 7.5.0 target=
+</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/powerpc-elf-7.5.0-Linux-x86_64.tar.xz">powerpc-elf 7.5.0 ta=
+rget</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/riscv32-elf-7.5.0-Linux-x86_64.tar.xz">riscv32-elf 7.5.0 ta=
+rget</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/riscv64-elf-7.5.0-Linux-x86_64.tar.xz">riscv64-elf 7.5.0 ta=
+rget</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/sh-elf-7.5.0-Linux-x86_64.tar.xz">sh-elf 7.5.0 target</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://newos=
+.org/toolchains/sparc-elf-7.5.0-Linux-x86_64.tar.xz">sparc-elf 7.5.0 target=
+</a>
+</li></ul>
+<p>The packages from phillid.tk below have been shrunk to about 10 MiB for =
+each pair of packages (GCC &amp; Binutils).
+Please note that this has been achieved by enabling only the C front-end fo=
+r GCC.
+If you're going to write your OS in any language but C or Assembly, these p=
+ackages aren't for you.
+These are actually Pacman packages, but untarring them to / and rm-ing /.MT=
+REE and other clutter dotfiles contained in the package will work the same.
+</p><p><b>For Windows host</b>
+</p>
+<ul><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://drive.=
+google.com/file/d/0B85K_c7mx3QjUnZuaFRPWlBIcXM/edit?usp=3Dsharing">i686-elf=
+ 4.8.2 target</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://mega.=
+co.nz/#F!bBxA3SKJ!TDL4i1NjaZKd4YMo9p2U7g">x86_64-elf 5.1.0 target</a>
+</li><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://githu=
+b.com/lordmilko/i686-elf-tools">i686-/x86_64-elf 7.1.0 target + GDB</a>
+</li></ul>
+<p><b>For Windows Subsystem for Linux (Beta) host</b>
+</p>
+<ul><li> <a rel=3D"nofollow" class=3D"external text" href=3D"http://www.bin=
+-os.com/i686-elf-6.1.0.tar.gz">i686-elf 6.1.0 target</a> (extracts to a dir=
+ectory called "cross", don't forget to install 'make' - I would recommend "=
+apt-get install build-essential" to also add additional useful tools)
+</li></ul>
+<p><b>For macOS host</b>
+</p><p>x86_64-elf <a rel=3D"nofollow" class=3D"external text" href=3D"https=
+://formulae.brew.sh/formula/x86_64-elf-binutils">binutils</a> and <a rel=3D=
+"nofollow" class=3D"external text" href=3D"https://formulae.brew.sh/formula=
+/x86_64-elf-gcc">gcc</a> (canonical target name x86_64-pc-elf) can be insta=
+lled from <a rel=3D"nofollow" class=3D"external text" href=3D"https://brew.=
+sh/">homebrew</a>:
+</p>
+<pre>$ brew install x86_64-elf-gcc
+</pre>
+<p>i686-elf toolchain is also <a rel=3D"nofollow" class=3D"external text" h=
+ref=3D"https://formulae.brew.sh/formula/i686-elf-gcc">available</a> in home=
+brew.
+</p><p><b>ARM prebuilt toolchains for multiple host platforms</b>
+</p><p>ARM provides it's own prebuilt toolchain based upon GNU utilities fo=
+r development targeting ARM systems.
+</p>
+<ul><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://develo=
+per.arm.com/open-source/gnu-toolchain/gnu-rm/downloads">GNU ARM Embedded To=
+olchain</a>
+</li></ul>
+<p><b>Docker image</b>
+</p>
+<ul><li> <a rel=3D"nofollow" class=3D"external text" href=3D"https://hub.do=
+cker.com/r/joshwyant/gcc-cross/">i686-elf 8.1.0 target</a>
+</li></ul>
+
+<!--=20
+NewPP limit report
+Preprocessor node count: 435/1000000
+Post-expand include size: 15734/2097152 bytes
+Template argument size: 392/2097152 bytes
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key wikidb:pcache:idhash:1448-0!*!0!!en!2!*=
+ and timestamp 20210512231250 -->
+</div>				<!-- /bodycontent -->
+								<!-- printfooter -->
+				<div class=3D"printfooter">
+				Retrieved from "<a href=3D"https://wiki.osdev.org/index.php?title=3DGCC=
+_Cross-Compiler&amp;oldid=3D25685">https://wiki.osdev.org/index.php?title=
+=3DGCC_Cross-Compiler&amp;oldid=3D25685</a>"				</div>
+				<!-- /printfooter -->
+												<!-- catlinks -->
+				<div id=3D"catlinks" class=3D"catlinks"><div id=3D"mw-normal-catlinks">=
+<a href=3D"https://wiki.osdev.org/Special:Categories" title=3D"Special:Cate=
+gories">Categories</a>: <ul><li><a href=3D"https://wiki.osdev.org/Category:=
+Articles_Written_in_First_Person" title=3D"Category:Articles Written in Fir=
+st Person">Articles Written in First Person</a></li><li><a href=3D"https://=
+wiki.osdev.org/Category:Level_1_Tutorials" title=3D"Category:Level 1 Tutori=
+als">Level 1 Tutorials</a></li><li><a href=3D"https://wiki.osdev.org/Catego=
+ry:Compilers" title=3D"Category:Compilers">Compilers</a></li><li><a href=3D=
+"https://wiki.osdev.org/Category:Tutorials" title=3D"Category:Tutorials">Tu=
+torials</a></li></ul></div></div>				<!-- /catlinks -->
+												<div class=3D"visualClear"></div>
+				<!-- debughtml -->
+								<!-- /debughtml -->
+			</div>
+			<!-- /bodyContent -->
+		</div>
+		<!-- /content -->
+		<!-- header -->
+		<div id=3D"mw-head" class=3D"noprint">
+		=09
+<!-- 0 -->
+<div id=3D"p-personal" class=3D"">
+	<h5>Personal tools</h5>
+	<ul>
+		<li id=3D"pt-login"><a href=3D"https://wiki.osdev.org/index.php?title=3DS=
+pecial:UserLogin&amp;returnto=3DGCC_Cross-Compiler" title=3D"You are encour=
+aged to log in; however, it is not mandatory [alt-o]" accesskey=3D"o">Log i=
+n</a></li>
+	</ul>
+</div>
+
+<!-- /0 -->
+			<div id=3D"left-navigation">
+			=09
+<!-- 0 -->
+<div id=3D"p-namespaces" class=3D"vectorTabs">
+	<h5>Namespaces</h5>
+	<ul>
+					<li id=3D"ca-nstab-main" class=3D"selected"><span><a href=3D"https://w=
+iki.osdev.org/GCC_Cross-Compiler" title=3D"View the content page [alt-c]" a=
+ccesskey=3D"c">Page</a></span></li>
+					<li id=3D"ca-talk"><span><a href=3D"https://wiki.osdev.org/Talk:GCC_Cr=
+oss-Compiler" title=3D"Discussion about the content page [alt-t]" accesskey=
+=3D"t">Discussion</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id=3D"p-variants" class=3D"vectorMenu emptyPortlet">
+		<h5><span>Variants</span><a href=3D"https://wiki.osdev.org/GCC_Cross-Comp=
+iler#"></a></h5>
+	<div class=3D"menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+			</div>
+			<div id=3D"right-navigation">
+			=09
+<!-- 0 -->
+<div id=3D"p-views" class=3D"vectorTabs">
+	<h5>Views</h5>
+	<ul>
+					<li id=3D"ca-view" class=3D"selected"><span><a href=3D"https://wiki.os=
+dev.org/GCC_Cross-Compiler">Read</a></span></li>
+					<li id=3D"ca-viewsource"><span><a href=3D"https://wiki.osdev.org/index=
+.php?title=3DGCC_Cross-Compiler&amp;action=3Dedit" title=3D"This page is pr=
+otected.
+You can view its source [alt-e]" accesskey=3D"e">View source</a></span></li=
+>
+					<li id=3D"ca-history" class=3D"collapsible"><span><a href=3D"https://w=
+iki.osdev.org/index.php?title=3DGCC_Cross-Compiler&amp;action=3Dhistory" ti=
+tle=3D"Past revisions of this page [alt-h]" accesskey=3D"h">View history</a=
+></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id=3D"p-cactions" class=3D"vectorMenu emptyPortlet">
+	<h5><span>Actions</span><a href=3D"https://wiki.osdev.org/GCC_Cross-Compil=
+er#"></a></h5>
+	<div class=3D"menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+
+<!-- 2 -->
+<div id=3D"p-search">
+	<h5><label for=3D"searchInput">Search</label></h5>
+	<form action=3D"https://wiki.osdev.org/index.php" id=3D"searchform">
+	=09
+				<input type=3D"search" name=3D"search" title=3D"Search OSDev Wiki [alt-=
+f]" accesskey=3D"f" id=3D"searchInput">		<input type=3D"submit" name=3D"go"=
+ value=3D"Go" title=3D"Go to a page with this exact name if exists" id=3D"s=
+earchGoButton" class=3D"searchButton">		<input type=3D"submit" name=3D"full=
+text" value=3D"Search" title=3D"Search the pages for this text" id=3D"mw-se=
+archButton" class=3D"searchButton">			</form>
+</div>
+
+<!-- /2 -->
+			</div>
+		</div>
+		<!-- /header -->
+		<!-- panel -->
+			<div id=3D"mw-panel" class=3D"noprint">
+				<!-- logo -->
+					<div id=3D"p-logo"><a style=3D"background-image: url(/skins/common/ima=
+ges/osdev.png);" href=3D"https://wiki.osdev.org/Main_Page" title=3D"Visit t=
+he main page"></a></div>
+				<!-- /logo -->
+			=09
+<!-- navigation -->
+<div class=3D"portal" id=3D"p-navigation">
+	<h5>Navigation</h5>
+	<div class=3D"body">
+		<ul>
+			<li id=3D"n-mainpage"><a href=3D"https://wiki.osdev.org/Main_Page" title=
+=3D"Visit the main page [alt-z]" accesskey=3D"z">Main Page</a></li>
+			<li id=3D"n-portal"><a href=3D"http://forum.osdev.org/" rel=3D"nofollow"=
+ title=3D"About the project, what you can do, where to find things">Forums<=
+/a></li>
+			<li id=3D"n-FAQ"><a href=3D"https://wiki.osdev.org/Category:FAQ">FAQ</a>=
+</li>
+			<li id=3D"n-OS-Projects"><a href=3D"https://wiki.osdev.org/Projects">OS =
+Projects</a></li>
+			<li id=3D"n-randompage"><a href=3D"https://wiki.osdev.org/Special:Random=
+" title=3D"Load a random page [alt-x]" accesskey=3D"x">Random page</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /navigation -->
+
+<!-- about -->
+<div class=3D"portal" id=3D"p-about">
+	<h5>About</h5>
+	<div class=3D"body">
+		<ul>
+			<li id=3D"n-This-site"><a href=3D"https://wiki.osdev.org/OSDevWiki:About=
+">This site</a></li>
+			<li id=3D"n-Joining"><a href=3D"https://wiki.osdev.org/OSDevWiki:Joining=
+">Joining</a></li>
+			<li id=3D"n-Editing-help"><a href=3D"https://wiki.osdev.org/OSDevWiki:Ed=
+iting">Editing help</a></li>
+			<li id=3D"n-recentchanges"><a href=3D"https://wiki.osdev.org/Special:Rec=
+entChanges" title=3D"A list of recent changes in the wiki [alt-r]" accesske=
+y=3D"r">Recent changes</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /about -->
+
+<!-- SEARCH -->
+
+<!-- /SEARCH -->
+
+<!-- TOOLBOX -->
+<div class=3D"portal" id=3D"p-tb">
+	<h5>Toolbox</h5>
+	<div class=3D"body">
+		<ul>
+			<li id=3D"t-whatlinkshere"><a href=3D"https://wiki.osdev.org/Special:Wha=
+tLinksHere/GCC_Cross-Compiler" title=3D"A list of all wiki pages that link =
+here [alt-j]" accesskey=3D"j">What links here</a></li>
+			<li id=3D"t-recentchangeslinked"><a href=3D"https://wiki.osdev.org/Speci=
+al:RecentChangesLinked/GCC_Cross-Compiler" title=3D"Recent changes in pages=
+ linked from this page [alt-k]" accesskey=3D"k">Related changes</a></li>
+			<li id=3D"t-specialpages"><a href=3D"https://wiki.osdev.org/Special:Spec=
+ialPages" title=3D"A list of all special pages [alt-q]" accesskey=3D"q">Spe=
+cial pages</a></li>
+			<li><a href=3D"https://wiki.osdev.org/index.php?title=3DGCC_Cross-Compil=
+er&amp;printable=3Dyes" rel=3D"alternate">Printable version</a></li>
+			<li id=3D"t-permalink"><a href=3D"https://wiki.osdev.org/index.php?title=
+=3DGCC_Cross-Compiler&amp;oldid=3D25685" title=3D"Permanent link to this re=
+vision of the page">Permanent link</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /TOOLBOX -->
+
+<!-- LANGUAGES -->
+<div class=3D"portal" id=3D"p-lang">
+	<h5>In other languages</h5>
+	<div class=3D"body">
+		<ul>
+			<li class=3D"interwiki-de"><a href=3D"http://www.lowlevel.eu/wiki/Cross-=
+Compiler" title=3D"Cross-Compiler">Deutsch</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /LANGUAGES -->
+			</div>
+		<!-- /panel -->
+		<!-- footer -->
+		<div id=3D"footer">
+							<ul id=3D"footer-info">
+											<li id=3D"footer-info-lastmod"> This page was last modified on 1=
+5 February 2021, at 22:28.</li>
+											<li id=3D"footer-info-viewcount">This page has been accessed 927=
+,508 times.</li>
+									</ul>
+							<ul id=3D"footer-places">
+											<li id=3D"footer-places-privacy"><a href=3D"https://wiki.osdev.o=
+rg/OSDev_Wiki:Privacy_policy" title=3D"OSDev Wiki:Privacy policy">Privacy p=
+olicy</a></li>
+											<li id=3D"footer-places-about"><a href=3D"https://wiki.osdev.org=
+/OSDev_Wiki:About" title=3D"OSDev Wiki:About">About OSDev Wiki</a></li>
+											<li id=3D"footer-places-disclaimer"><a href=3D"https://wiki.osde=
+v.org/OSDev_Wiki:General_disclaimer" title=3D"OSDev Wiki:General disclaimer=
+">Disclaimers</a></li>
+									</ul>
+										<ul id=3D"footer-icons" class=3D"noprint">
+					<li id=3D"footer-poweredbyico">
+						<a href=3D"http://www.mediawiki.org/"><img src=3D"https://wiki.osdev.=
+org/skins/common/images/poweredby_mediawiki_88x31.png" alt=3D"Powered by Me=
+diaWiki" width=3D"88" height=3D"31"></a>
+					</li>
+				</ul>
+						<div style=3D"clear:both"></div>
+		</div>
+		<!-- /footer -->
+		<!-- fixalpha -->
+	=09
+		<!-- /fixalpha -->
+	=09
+
+
+<!-- Served in 0.043 secs. -->
+=09
+
+</body></html>
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-10e2260a-62bc-495c-8469-449573347b7a@mhtml.blink
+
+@charset "utf-8";
+
+.mw-collapsible-toggle { float: right; }
+
+li .mw-collapsible-toggle { float: none; }
+
+.mw-collapsible-toggle-li { list-style: none; }
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-6216c044-7076-42e6-ab74-d4659e1ac1b0@mhtml.blink
+
+@charset "utf-8";
+
+.js-messagebox { margin: 1em 5%; padding: 0.5em 2.5%; border: 1px solid rgb=
+(204, 204, 204); background-color: rgb(252, 252, 252); font-size: 0.8em; }
+
+.js-messagebox .js-messagebox-group { margin: 1px; padding: 0.5em 2.5%; bor=
+der-bottom: 1px solid rgb(221, 221, 221); }
+
+.js-messagebox .js-messagebox-group:last-child { border-bottom: thin none t=
+ransparent; }
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-b5d1078a-1325-4905-85b4-d1aa03377d23@mhtml.blink
+
+@charset "utf-8";
+
+a:lang(ar), a:lang(ckb), a:lang(fa), a:lang(kk-arab), a:lang(mzn), a:lang(p=
+s), a:lang(ur) { text-decoration: none; }
+
+a.new, #quickbar a.new { color: rgb(186, 0, 0); }
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-fccd68a7-44a5-4e53-af9b-927d0cd30c1e@mhtml.blink
+
+@charset "utf-8";
+
+.source-bash { line-height: normal; }
+
+.source-bash li, .source-bash pre { line-height: normal; border: 0px none w=
+hite; }
+
+.bash.source-bash .de1, .bash.source-bash .de2 { font: 1em / 1.2em monospac=
+e; margin: 0px; padding: 0px; background: none; vertical-align: top; }
+
+.bash.source-bash { font-family: monospace; }
+
+.bash.source-bash .imp { font-weight: bold; color: red; }
+
+.bash.source-bash li, .bash.source-bash .li1 { font-weight: normal; vertica=
+l-align: top; }
+
+.bash.source-bash .ln { width: 1px; text-align: right; margin: 0px; padding=
+: 0px 2px; vertical-align: top; }
+
+.bash.source-bash .li2 { font-weight: bold; vertical-align: top; }
+
+.bash.source-bash .kw1 { color: rgb(0, 0, 0); font-weight: bold; }
+
+.bash.source-bash .kw2 { color: rgb(194, 12, 185); font-weight: bold; }
+
+.bash.source-bash .kw3 { color: rgb(122, 8, 116); font-weight: bold; }
+
+.bash.source-bash .co0 { color: rgb(102, 102, 102); font-style: italic; }
+
+.bash.source-bash .co1 { color: rgb(128, 0, 0); }
+
+.bash.source-bash .co2 { color: rgb(204, 0, 0); font-style: italic; }
+
+.bash.source-bash .co3 { color: rgb(0, 0, 0); font-weight: bold; }
+
+.bash.source-bash .co4 { color: rgb(102, 102, 102); }
+
+.bash.source-bash .es1 { color: rgb(0, 0, 153); font-weight: bold; }
+
+.bash.source-bash .es2 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .es3 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .es4 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .es5 { color: rgb(120, 0, 120); }
+
+.bash.source-bash .es_h { color: rgb(0, 0, 153); font-weight: bold; }
+
+.bash.source-bash .br0 { color: rgb(122, 8, 116); font-weight: bold; }
+
+.bash.source-bash .sy0 { color: rgb(0, 0, 0); font-weight: bold; }
+
+.bash.source-bash .st0 { color: rgb(255, 0, 0); }
+
+.bash.source-bash .st_h { color: rgb(255, 0, 0); }
+
+.bash.source-bash .nu0 { color: rgb(0, 0, 0); }
+
+.bash.source-bash .re0 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .re1 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .re2 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .re4 { color: rgb(0, 120, 0); }
+
+.bash.source-bash .re5 { color: rgb(102, 0, 51); }
+
+.bash.source-bash .ln-xtra, .bash.source-bash li.ln-xtra, .bash.source-bash=
+ div.ln-xtra { background-color: rgb(255, 255, 204); }
+
+.bash.source-bash span.xtra { display: block; }
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-68ca0685-6237-4e27-a7e9-c08adfaaa60d@mhtml.blink
+
+@charset "utf-8";
+
+@import url("/index.php?title=3DMediaWiki:Geshi.css&usemsgcache=3Dyes&actio=
+n=3Draw&ctype=3Dtext/css&smaxage=3D18000");
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.osdev.org/index.php?title=MediaWiki:Geshi.css&usemsgcache=yes&action=raw&ctype=text/css&smaxage=18000
+
+@charset "utf-8";
+
+div.mw-geshi { padding: 1em; margin: 1em 0px; border: 1px dashed rgb(47, 11=
+1, 171); background-color: rgb(249, 249, 249); }
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-9a26f29d-14be-4b36-985e-bede22413d32@mhtml.blink
+
+@charset "utf-8";
+
+.source-make { line-height: normal; }
+
+.source-make li, .source-make pre { line-height: normal; border: 0px none w=
+hite; }
+
+.make.source-make .de1, .make.source-make .de2 { font: 1em / 1.2em monospac=
+e; margin: 0px; padding: 0px; background: none; vertical-align: top; }
+
+.make.source-make { font-family: monospace; }
+
+.make.source-make .imp { font-weight: bold; color: red; }
+
+.make.source-make li, .make.source-make .li1 { font-weight: normal; vertica=
+l-align: top; }
+
+.make.source-make .ln { width: 1px; text-align: right; margin: 0px; padding=
+: 0px 2px; vertical-align: top; }
+
+.make.source-make .li2 { font-weight: bold; vertical-align: top; }
+
+.make.source-make .kw1 { color: rgb(102, 102, 34); font-weight: bold; }
+
+.make.source-make .kw2 { color: rgb(153, 0, 0); }
+
+.make.source-make .co1 { color: rgb(51, 153, 0); font-style: italic; }
+
+.make.source-make .co2 { color: rgb(0, 0, 153); font-weight: bold; }
+
+.make.source-make .es0 { color: rgb(0, 0, 153); font-weight: bold; }
+
+.make.source-make .br0 { color: rgb(0, 68, 0); }
+
+.make.source-make .sy0 { color: rgb(0, 68, 0); }
+
+.make.source-make .st0 { color: rgb(204, 34, 0); }
+
+.make.source-make .nu0 { color: rgb(204, 34, 0); }
+
+.make.source-make .re0 { color: rgb(0, 0, 136); font-weight: bold; }
+
+.make.source-make .re1 { color: rgb(0, 0, 204); font-weight: bold; }
+
+.make.source-make .re2 { color: rgb(0, 0, 136); }
+
+.make.source-make .ln-xtra, .make.source-make li.ln-xtra, .make.source-make=
+ div.ln-xtra { background-color: rgb(255, 255, 204); }
+
+.make.source-make span.xtra { display: block; }
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-ad8ac72a-a5ff-48d1-b481-000400e5a4a8@mhtml.blink
+
+@charset "utf-8";
+
+@import url("/index.php?title=3DMediaWiki:Geshi.css&usemsgcache=3Dyes&actio=
+n=3Draw&ctype=3Dtext/css&smaxage=3D18000");
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-ca86990e-d40d-4ecc-888f-5b31b1bf573c@mhtml.blink
+
+@charset "utf-8";
+
+.source-text { line-height: normal; }
+
+.source-text li, .source-text pre { line-height: normal; border: 0px none w=
+hite; }
+
+.text.source-text .de1, .text.source-text .de2 { font: 1em / 1.2em monospac=
+e; margin: 0px; padding: 0px; background: none; vertical-align: top; }
+
+.text.source-text { font-family: monospace; }
+
+.text.source-text .imp { font-weight: bold; color: red; }
+
+.text.source-text li, .text.source-text .li1 { font-weight: normal; vertica=
+l-align: top; }
+
+.text.source-text .ln { width: 1px; text-align: right; margin: 0px; padding=
+: 0px 2px; vertical-align: top; }
+
+.text.source-text .li2 { font-weight: bold; vertical-align: top; }
+
+.text.source-text .ln-xtra, .text.source-text li.ln-xtra, .text.source-text=
+ div.ln-xtra { background-color: rgb(255, 255, 204); }
+
+.text.source-text span.xtra { display: block; }
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-945e04af-5c20-481d-bb4a-d4a9ad9fee31@mhtml.blink
+
+@charset "utf-8";
+
+@import url("/index.php?title=3DMediaWiki:Geshi.css&usemsgcache=3Dyes&actio=
+n=3Draw&ctype=3Dtext/css&smaxage=3D18000");
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.osdev.org/load.php?debug=false&lang=en&modules=mediawiki.legacy.commonPrint%2Cshared%7Cskins.vector&only=styles&skin=vector&*
+
+@charset "utf-8";
+
+@media print {
+  a.stub, a.new { color: rgb(186, 0, 0); text-decoration: none; }
+  #toc { border: 1px solid rgb(170, 170, 170); background-color: rgb(249, 2=
+49, 249); padding: 5px; }
+  .tocindent { margin-left: 2em; }
+  .tocline { margin-bottom: 0px; }
+  div.floatright { float: right; clear: right; position: relative; margin: =
+0.5em 0px 0.8em 1.4em; }
+  div.floatright p { font-style: italic; }
+  div.floatleft { float: left; clear: left; position: relative; margin: 0.5=
+em 1.4em 0.8em 0px; }
+  div.floatleft p { font-style: italic; }
+  div.center { text-align: center; }
+  div.thumb { border: none; width: auto; margin-top: 0.5em; margin-bottom: =
+0.8em; background-color: transparent; }
+  div.thumbinner { border: 1px solid rgb(204, 204, 204); background-color: =
+white; font-size: 94%; text-align: center; overflow: hidden; padding: 3px !=
+important; }
+  html .thumbimage { border: 1px solid rgb(204, 204, 204); }
+  html .thumbcaption { border: none; text-align: left; line-height: 1.4em; =
+font-size: 94%; padding: 3px !important; }
+  div.magnify { display: none; }
+  div.tright { float: right; clear: right; margin: 0.5em 0px 0.8em 1.4em; }
+  div.tleft { float: left; clear: left; margin: 0.5em 1.4em 0.8em 0px; }
+  img.thumbborder { border: 1px solid rgb(221, 221, 221); }
+  table.rimage { float: right; width: 1pt; position: relative; margin-left:=
+ 1em; margin-bottom: 1em; text-align: center; }
+  body { background: white; color: black; margin: 0px; padding: 0px; }
+  .noprint, div#jump-to-nav, div.top, div#column-one, #colophon, .editsecti=
+on, .toctoggle, .tochidden, div#f-poweredbyico, div#f-copyrightico, li#view=
+count, li#about, li#disclaimer, li#privacy, #footer-places, #mw-hidden-catl=
+inks { display: none; }
+  ul { list-style-type: square; }
+  #content { background: none; direction: ltr; border: none !important; pad=
+ding: 0px !important; margin: 0px !important; }
+  #footer { background: white; color: black; margin-top: 1em; border-top: 1=
+px solid rgb(170, 170, 170); direction: ltr; }
+  h1, h2, h3, h4, h5, h6 { font-weight: bold; }
+  p, .documentDescription { line-height: 1.2em; margin: 1em 0px !important;=
+ }
+  .tocindent p { margin: 0px !important; }
+  pre { border: 1pt dashed black; white-space: pre; font-size: 8pt; overflo=
+w: auto; padding: 1em 0px; background: white; color: black; }
+  table.listing, table.listing td { border: 1pt solid black; border-collaps=
+e: collapse; }
+  a { color: black !important; background: none !important; padding: 0px !i=
+mportant; }
+  a:link, a:visited { color: rgb(85, 34, 0); background: transparent; text-=
+decoration: underline; }
+  #content a.external.text::after, #content a.external.autonumber::after { =
+content: " (" attr(href) ") "; }
+  #globalWrapper { width: 100% !important; min-width: 0px !important; }
+  #content { background: white; color: black; }
+  #column-content { margin: 0px !important; }
+  #column-content #content { padding: 1em; margin: 0px !important; }
+  a, a.external, a.new, a.stub { color: black !important; text-decoration: =
+none !important; }
+  a, a.external, a.new, a.stub { color: inherit !important; text-decoration=
+: inherit !important; }
+  img { border: none; vertical-align: middle; }
+  span.texhtml { font-family: serif; }
+  #siteNotice { display: none; }
+  li.gallerybox { vertical-align: top; border: 2px solid white; display: in=
+line-block; }
+  ul.gallery, li.gallerybox { zoom: 1; }
+  ul.gallery { margin: 2px; padding: 2px; display: block; }
+  li.gallerycaption { font-weight: bold; text-align: center; display: block=
+; overflow-wrap: break-word; }
+  li.gallerybox div.thumb { text-align: center; border: 1px solid rgb(204, =
+204, 204); margin: 2px; }
+  div.gallerytext { overflow: hidden; font-size: 94%; padding: 2px 4px; ove=
+rflow-wrap: break-word; }
+  table.diff { background: white; }
+  td.diff-otitle { background: rgb(255, 255, 255); }
+  td.diff-ntitle { background: rgb(255, 255, 255); }
+  td.diff-addedline { background: rgb(204, 255, 204); font-size: smaller; b=
+order: 2px solid black; }
+  td.diff-deletedline { background: rgb(255, 255, 170); font-size: smaller;=
+ border: 2px dotted black; }
+  td.diff-context { background: rgb(238, 238, 238); font-size: smaller; }
+  .diffchange { color: silver; font-weight: bold; text-decoration: underlin=
+e; }
+  table.wikitable { margin: 1em 1em 1em 0px; border: 1px solid rgb(170, 170=
+, 170); background: white; border-collapse: collapse; }
+  .wikitable th, .wikitable td { border: 1px solid rgb(170, 170, 170); padd=
+ing: 0.2em; }
+  .wikitable th { text-align: center; background: white; font-weight: bold;=
+ }
+  .wikitable caption { font-weight: bold; }
+  a.sortheader { margin: 0px 0.3em; }
+  .wikitable, .thumb, img { break-inside: avoid; }
+  h2, h3, h4, h5, h6, h7 { break-after: avoid; }
+  p { widows: 3; orphans: 3; }
+  .catlinks ul { display: inline; margin: 0px; list-style: none none; }
+  .catlinks li { display: inline-block; line-height: 1.15em; padding: 0px 0=
+.4em; border-left: 1px solid rgb(170, 170, 170); margin: 0.1em 0px; zoom: 1=
+; }
+  .catlinks li:first-child { padding-left: 0.2em; border-left: none; }
+}
+
+@media screen {
+  .mw-content-ltr { direction: ltr; }
+  .mw-content-rtl { direction: rtl; }
+  .sitedir-ltr textarea, .sitedir-ltr input { direction: ltr; }
+  .sitedir-rtl textarea, .sitedir-rtl input { direction: rtl; }
+  input[type=3D"submit"], input[type=3D"button"], input[type=3D"reset"], in=
+put[type=3D"file"] { direction: ltr; }
+  textarea[dir=3D"ltr"], input[dir=3D"ltr"] { direction: ltr; }
+  textarea[dir=3D"rtl"], input[dir=3D"rtl"] { direction: rtl; }
+  abbr, acronym, .explain { border-bottom: 1px dotted black; cursor: help; =
+}
+  .mw-plusminus-pos { color: rgb(0, 100, 0); }
+  .mw-plusminus-neg { color: rgb(139, 0, 0); }
+  .mw-plusminus-null { color: rgb(170, 170, 170); }
+  .allpagesredirect, .redirect-in-category, .watchlistredir { font-style: i=
+talic; }
+  span.comment { font-style: italic; }
+  span.changedby { font-size: 95%; }
+  .texvc { direction: ltr; unicode-bidi: embed; }
+  img.tex { vertical-align: middle; }
+  span.texhtml { font-family: serif; }
+  #wikiPreview.ontop { margin-bottom: 1em; }
+  #editform, #toolbar, #wpTextbox1 { clear: both; }
+  #toolbar img { cursor: pointer; }
+  div#mw-js-message { margin: 1em 5%; padding: 0.5em 2.5%; border: 1px soli=
+d rgb(221, 221, 221); background-color: rgb(252, 252, 252); }
+  .editsection { float: right; margin-left: 5px; }
+  .mw-content-ltr .editsection, .mw-content-rtl .mw-content-ltr .editsectio=
+n { float: right; }
+  .mw-content-rtl .editsection, .mw-content-ltr .mw-content-rtl .editsectio=
+n { float: left; }
+  h2#filehistory { clear: both; }
+  table.filehistory th, table.filehistory td { vertical-align: top; }
+  table.filehistory th { text-align: left; }
+  table.filehistory td.mw-imagepage-filesize, table.filehistory th.mw-image=
+page-filesize { white-space: nowrap; }
+  table.filehistory td.filehistory-selected { font-weight: bold; }
+  li span.deleted, span.history-deleted { text-decoration: line-through; co=
+lor: rgb(136, 136, 136); font-style: italic; }
+  .not-patrolled { background-color: rgb(255, 255, 170); }
+  .unpatrolled { font-weight: bold; color: red; }
+  div.patrollink { font-size: 75%; text-align: right; }
+  td.mw-label { text-align: right; }
+  td.mw-input { text-align: left; }
+  td.mw-submit { text-align: left; }
+  td.mw-label { vertical-align: top; }
+  .prefsection td.mw-label { width: 20%; }
+  .prefsection table { width: 100%; }
+  td.mw-submit { white-space: nowrap; }
+  table.mw-htmlform-nolabel td.mw-label { width: 0px !important; }
+  tr.mw-htmlform-vertical-label td.mw-label { text-align: left !important; =
+}
+  .mw-htmlform-invalid-input td.mw-input input { border-color: red; }
+  .mw-htmlform-multiselect-flatlist div.mw-htmlform-multiselect-item { disp=
+lay: inline; margin-right: 1em; white-space: nowrap; }
+  input#wpSummary { width: 80%; }
+  .thumbcaption { text-align: left; }
+  .magnify { float: right; }
+  #catlinks { text-align: left; }
+  #catlinks ul { display: inline; margin: 0px; padding: 0px; list-style: no=
+ne none; }
+  #catlinks li { display: inline-block; line-height: 1.35em; padding: 0px 0=
+.7em; border-left: 1px solid rgb(170, 170, 170); margin: 0.3em 0px; zoom: 1=
+; }
+  #catlinks li:first-child { padding-left: 0.4em; border-left: none; }
+  .mw-hidden-cats-hidden { display: none; }
+  .catlinks-allhidden { display: none; }
+  p.mw-ipb-conveniencelinks, p.mw-protect-editreasons, p.mw-filedelete-edit=
+reasons, p.mw-delete-editreasons, p.mw-revdel-editreasons { font-size: 90%;=
+ text-align: right; }
+  .os-suggest { overflow: hidden auto; position: absolute; top: 0px; left: =
+0px; width: 0px; background-color: window; border-style: solid; border-colo=
+r: rgb(170, 170, 170); border-width: 1px; z-index: 99; font-size: 95%; }
+  table.os-suggest-results { font-size: 95%; cursor: pointer; border: 0px; =
+border-collapse: collapse; width: 100%; }
+  .os-suggest-result, .os-suggest-result-hl { white-space: nowrap; backgrou=
+nd-color: window; color: windowtext; padding: 2px; }
+  .os-suggest-result-hl, .os-suggest-result-hl-webkit { background-color: r=
+gb(76, 89, 166); color: white; }
+  .os-suggest-result-hl { background-color: highlight; color: highlighttext=
+; }
+  .os-suggest-toggle { position: relative; left: 1ex; font-size: 65%; }
+  .os-suggest-toggle-def { position: absolute; top: 0px; left: 0px; font-si=
+ze: 65%; visibility: hidden; }
+  .autocomment { color: gray; }
+  #pagehistory .history-user { margin-left: 0.4em; margin-right: 0.2em; }
+  #pagehistory span.minor { font-weight: bold; }
+  #pagehistory li { border: 1px solid white; }
+  #pagehistory li.selected { background-color: rgb(249, 249, 249); border: =
+1px dashed rgb(170, 170, 170); }
+  .mw-history-revisiondelete-button, #mw-fileduplicatesearch-icon { float: =
+right; }
+  .newpage, .minor, .bot { font-weight: bold; }
+  #shared-image-dup, #shared-image-conflict { font-style: italic; }
+  div.mw-warning-with-logexcerpt { padding: 3px; margin-bottom: 3px; border=
+: 2px solid rgb(47, 111, 171); clear: both; }
+  div.mw-warning-with-logexcerpt ul li { font-size: 90%; }
+  span.mw-revdelundel-link, strong.mw-revdelundel-link { font-size: 90%; }
+  span.mw-revdelundel-hidden, input.mw-revdelundel-hidden { visibility: hid=
+den; }
+  td.mw-revdel-checkbox, th.mw-revdel-checkbox { padding-right: 10px; text-=
+align: center; }
+  a.feedlink { background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEU=
+gAAAAwAAAAMCAYAAABWdVznAAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH2AkOCjkSL9xYhAAA=
+Ac9JREFUKJE90LFrU1EYQPHzffe+l/iSVkXTmNiANBU7iE5OLrbSVYKIiy5dnARB3FwEB5dOOhQ=
+KuthJEEHRsUXBoosO0lKKEYRa29LWQk3S5L53r0PVv+D8OPJlolrrr1ZmI7F1BFEjqBXECGJAjS=
+BCaLddc7u5Mmb7q5U5007rWh5E9rYR/xsTBBXBWMVEglqRpGiGhcE5G6kdyugxcGsGyRdJ15ZwC=
+29IF55jNEWt8K+aFOMhc+dC7Z6SITjC7ga2MkI8cpH41Dhh7RPa20Gt4toZac+IqhFMTpG0hVt8=
+RetJg967SaTvGLnGNKZ0EtfOcB1P5jyqVjCRkIzfpnjtMYXrT2FrCff6JqhFRx/gnCXtZHgXUFH=
+QSGg/u4Gbf4T2lYkvTaFGce8fIgePY09fwXU8Pg3sk2JFu5v4lQ+4FxPge+j5u3Q+v8TvrBKfbZ=
+B1PT4LqJh9Uv7yFLmrM2i+gPs4jRyqIaUz7C2+xZZOEA4cJaSgaAhqhbC1DK0N3K9NusvzAHB4G=
+Lf+HQBJBsiCD7J6/9zXI2VbVyv/b6Sdv1e6nrTryboB7wVbyjXt1rcfo0Frs4UkqvtUJHMBjyVE=
+AcSjFiQJwRvf3F3/OfYH/dDFWrCooaIAAAAASUVORK5CYII=3D") left center no-repeat;=
+ padding-left: 16px; }
+  .plainlinks a { background: none !important; padding: 0px !important; }
+  .rtl a.external.free, .rtl a.external.autonumber { direction: ltr; unicod=
+e-bidi: embed; }
+  table.wikitable { margin: 1em 1em 1em 0px; background: rgb(249, 249, 249)=
+; border: 1px solid rgb(170, 170, 170); border-collapse: collapse; color: b=
+lack; }
+  .wikitable th, .wikitable td { border: 1px solid rgb(170, 170, 170); padd=
+ing: 0.2em; }
+  .wikitable th { background: rgb(242, 242, 242); text-align: center; }
+  .wikitable caption { font-weight: bold; }
+  table.collapsed tr.collapsable { display: none; }
+  .success { color: green; font-size: larger; }
+  .warning { color: rgb(255, 165, 0); font-size: larger; }
+  .error { color: red; font-size: larger; }
+  .errorbox, .warningbox, .successbox { font-size: larger; border: 2px soli=
+d; padding: 0.5em 1em; float: left; margin-bottom: 2em; color: rgb(0, 0, 0)=
+; }
+  .errorbox { border-color: red; background-color: rgb(255, 242, 242); }
+  .warningbox { border-color: rgb(255, 140, 0); background-color: rgb(255, =
+255, 192); }
+  .successbox { border-color: green; background-color: rgb(221, 255, 221); =
+}
+  .errorbox h2, .warningbox h2, .successbox h2 { font-size: 1em; font-weigh=
+t: bold; display: inline; margin: 0px 0.5em 0px 0px; border: none; }
+  .mw-infobox { border: 2px solid rgb(255, 127, 0); margin: 0.5em; clear: l=
+eft; overflow: hidden; }
+  .mw-infobox-left { margin: 7px; float: left; width: 35px; }
+  .mw-infobox-right { margin: 0.5em 0.5em 0.5em 49px; }
+  .previewnote { color: rgb(204, 0, 0); margin-bottom: 1em; }
+  .previewnote p { text-indent: 3em; margin: 0.8em 0px; }
+  .visualClear { clear: both; }
+  #mw_trackbacks { border: 1px solid rgb(187, 187, 255); background-color: =
+rgb(238, 238, 255); padding: 0.2em; }
+  .TablePager { min-width: 80%; border-collapse: collapse; }
+  .TablePager_nav { margin: 0px auto; }
+  .TablePager_nav td { padding: 3px; text-align: center; }
+  .TablePager_nav a { text-decoration: none; }
+  .TablePager, .TablePager td, .TablePager th { border: 1px solid rgb(170, =
+170, 170); padding: 0px 0.15em; }
+  .TablePager th { background-color: rgb(238, 238, 255); }
+  .TablePager td { background-color: rgb(255, 255, 255); }
+  .TablePager tr:hover td { background-color: rgb(238, 238, 255); }
+  .imagelist td, .imagelist th { white-space: nowrap; }
+  .imagelist .TablePager_col_links { background-color: rgb(238, 238, 255); =
+}
+  .imagelist .TablePager_col_img_description { white-space: normal; }
+  .imagelist th.TablePager_sort { background-color: rgb(204, 204, 255); }
+  ul#filetoc { text-align: center; border: 1px solid rgb(170, 170, 170); ba=
+ckground-color: rgb(249, 249, 249); padding: 5px; font-size: 95%; margin-bo=
+ttom: 0.5em; margin-left: 0px; margin-right: 0px; }
+  #filetoc li { display: inline; list-style-type: none; padding-right: 2em;=
+ }
+  table.mw_metadata { font-size: 0.8em; margin-left: 0.5em; margin-bottom: =
+0.5em; width: 400px; }
+  table.mw_metadata caption { font-weight: bold; }
+  table.mw_metadata th { font-weight: normal; }
+  table.mw_metadata td { padding: 0.1em; }
+  table.mw_metadata { border: none; border-collapse: collapse; }
+  table.mw_metadata td, table.mw_metadata th { text-align: center; border: =
+1px solid rgb(170, 170, 170); padding-left: 5px; padding-right: 5px; }
+  table.mw_metadata th { background-color: rgb(249, 249, 249); }
+  table.mw_metadata td { background-color: rgb(252, 252, 252); }
+  table.mw_metadata ul.metadata-langlist { list-style-type: none; list-styl=
+e-image: none; padding-right: 5px; padding-left: 5px; margin: 0px; }
+  .mw-content-ltr ul, .mw-content-rtl .mw-content-ltr ul { margin: 0.3em 0p=
+x 0px 1.5em; padding: 0px; }
+  .mw-content-rtl ul, .mw-content-ltr .mw-content-rtl ul { margin: 0.3em 1.=
+5em 0px 0px; padding: 0px; }
+  .mw-content-ltr ol, .mw-content-rtl .mw-content-ltr ol { margin: 0.3em 0p=
+x 0px 3.2em; padding: 0px; }
+  .mw-content-rtl ol, .mw-content-ltr .mw-content-rtl ol { margin: 0.3em 3.=
+2em 0px 0px; padding: 0px; }
+  .mw-content-ltr ul, .mw-content-rtl .mw-content-ltr ul { margin: 0.3em 0p=
+x 0px 1.5em; }
+  .mw-content-rtl ul, .mw-content-ltr .mw-content-rtl ul { margin: 0.3em 1.=
+5em 0px 0px; }
+  .mw-content-ltr ol, .mw-content-rtl .mw-content-ltr ol { margin: 0.3em 0p=
+x 0px 3.2em; }
+  .mw-content-rtl ol, .mw-content-ltr .mw-content-rtl ol { margin: 0.3em 3.=
+2em 0px 0px; }
+  li.gallerybox { vertical-align: top; border: 2px solid white; display: in=
+line-block; }
+  ul.gallery, li.gallerybox { zoom: 1; }
+  ul.gallery { margin: 2px; padding: 2px; display: block; }
+  li.gallerycaption { font-weight: bold; text-align: center; display: block=
+; overflow-wrap: break-word; }
+  li.gallerybox div.thumb { text-align: center; border: 1px solid rgb(204, =
+204, 204); background-color: rgb(249, 249, 249); margin: 2px; }
+  li.gallerybox div.thumb img { display: block; margin: 0px auto; }
+  div.gallerytext { overflow: hidden; font-size: 94%; padding: 2px 4px; ove=
+rflow-wrap: break-word; }
+  .mw-ajax-loader { background-image: url("data:image/gif;base64,R0lGODlhIA=
+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3D=3D"=
+); background-position: center center; background-repeat: no-repeat; paddin=
+g: 16px; position: relative; top: -16px; }
+  .mw-small-spinner { margin-right: 0.6em; background-image: url("data:imag=
+e/gif;base64,R0lGODlhFAAUAPUyAAEBAQICAgMDAwQEBAcHBwkJCSIiIigoKCwsLDQ0ND8/P0=
+REREVFRU1NTVJSUlVVVVZWVl1dXWNjY25ubnBwcHR0dHh4eISEhIWFhYeHh4mJiZKSkpaWlpubm=
+6Wlpaqqqra2tre3t7i4uLm5ubq6uru7u7+/v8DAwMLCwsPDw8TExMbGxsfHx8jIyMnJycrKys7O=
+ztDQ0P///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkKADIAIf4=
+aQ3JlYXRlZCB3aXRoIGFqYXhsb2FkLmluZm8AIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAFAAUAA=
+AGlUCZcDhMOIhIImcyJBSEqVRy6EBUhIGADEYyTYcHhZCgTZG+w4fBIgsQZCSp8Cx8NIYKCbElX=
+JFIMXUMDBEeX38pMEgPDBRfKytfG2hJHxoXGRmUIJwgKx2ZmJudipSmfXxTfolEMGZ0U69yMX+R=
+MqlCLbAmcnBDZjKcMn62aHHBIFCwUyYkisJbf2hRQtAygadbxUlBACH5BAkKADcALAAAAAAUABQ=
+AhRISEhQUFBYWFh0dHR4eHiEhISIiIiMjIykpKSwsLC0tLS8vLzY2Njo6Oj8/P0FBQUhISEpKSl=
+RUVFdXV2RkZGZmZm1tbW9vb3Nzc35+fn9/f4eHh4mJiYyMjJGRkZSUlJiYmJ2dnZ6enqOjo6Skp=
+La2tre3t7i4uLm5ubq6uru7u7y8vL+/v8DAwMLCwsPDw8TExMbGxsfHx8jIyMrKys7OztDQ0P//=
+/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaQwJtwOIxciEhiKDMsFISLRXJYeTBvBIIQgJgOHxJ=
+h9rYAeKmNDbZwCTCGqiHIM5RgiBFhTKWyCUkdHCExXnwvNUgfHSNeMy+FZ0k1KiWVkZWVMTGYJZ=
+eYiJGhQi8zXnuHRDUvKitnqyuPN5MqhDelQ3tDsHBDqzeWe7VnrL+dN76uKoiWsnyutcw3fqKyw=
+klBACH5BAkKADkALAAAAAAUABQAhQoKChAQEBERESgoKCoqKiwsLC4uLjU1NTY2Njc3Nzo6Ojw8=
+PD09PT4+PkBAQENDQ0RERElJSVBQUFlZWWFhYWJiYmVlZXx8fIKCgoaGhoqKioyMjI+Pj5GRkZW=
+VlZiYmJ6enqSkpKenp7Ozs7a2tre3t7i4uLm5ubq6uru7u7y8vL+/v8DAwMLCwsPDw8TExMXFxc=
+bGxsfHx8jIyMrKys7OztDQ0NTU1NnZ2f///wAAAAAAAAAAAAAAAAAAAAAAAAaZwJxwOKRciEgib=
+DRUMIQRSHII4pSEiYSw8JwKNR2sllHwDkMaZkLBOUSGDoywtRp6QsSJJ8cQCChzKSkwOF4EAAQW=
+SC0pM14QgFM3Zkk1JZdXZpglMDCblJgpNZSkQy2OUzApK6NDNYx1XowpLUI2gjBCqLopQyu1Qr2=
+BOZc5qrmUq8SZK8JezaPFObfOSS3AKZnTpUI1yFNBACH5BAkKADoALAAAAAAUABQAhQAAAAICAg=
+MDAwQEBAcHBwkJCSIiIigoKCsrKzQ0ND4+Pj8/P0REREVFRU1NTVJSUlNTU1RUVFVVVVZWVlxcX=
+GNjY25ubnFxcXR0dHh4eIODg4SEhIWFhYeHh4mJiZGRkZaWlpubm6Wlpaqqqra2tre3t7i4uLm5=
+ubq6uru7u7y8vL+/v8DAwMLCwsPDw8TExMbGxsfHx8jIyMrKys7Ozs/Pz9DQ0NTU1NfX19nZ2f/=
+//wAAAAAAAAAAAAAAAAAAAAaZQJ1wOAyNiEhizjbseIQSSXLYSjF1Go2Q4ZgOUythp6OTMLxDWI=
+qG7XwYlKEEJGyFhasZ8SIqHxAWdSkpMDheCwYMF0hVMF4VGV6GaEg0JJcklAEDnAkwmJloAaMFD=
+5SnaY5TM2BsQzYtJHdTVSktQjaDqnppKUMrt0K+gjqXOmqqaGDFoVWUK2vMQjSDaC3BKaE6V6g0=
+yUlBACH5BAkKADoALAAAAAAUABQAhRISEhQUFBYWFhwcHB0dHR4eHiEhISIiIiMjIysrKy8vLzc=
+3Nzo6Oj8/P0FBQUhISFJSUlZWVldXV2VlZW1tbX9/f4KCgoeHh4mJiYuLi4yMjJCQkJSUlJiYmJ=
+mZmZqampycnJ2dnZ6enqOjo7CwsLa2tre3t7i4uLm5ubq6uru7u7y8vL+/v8DAwMLCwsPDw8TEx=
+MbGxsfHx8jIyMrKys7OztDQ0NTU1NfX19nZ2f///wAAAAAAAAAAAAAAAAAAAAaaQJ1wOCSViEhi=
+rjYMfYSfZ1LoUjF1UWFGMx2qXNAnJ9MdxqzYj0oTGk7aOhdryKIRRzHdxNGwUFUqMThdEAwRFUh=
+VeVMUF12DZUg1JZRHZQMImA8xlZZdmZgUkUh+UzGLSQ4CChFENS4lc10LAAAKQjaAi3ZmKkMIt0=
+K+fzqUOmeoXSpzxnHDXSxozTWAZS5gOiqeNqNDNclIQQAh+QQJCgBFACwAAAAAFAAUAIYKCgoQE=
+BAREREnJycqKiosLCwuLi40NDQ1NTU2NjY3Nzc5OTk6Ojo8PDw9PT0+Pj4/Pz9ERERJSUlRUVFY=
+WFhhYWFlZWVmZmZvb298fHyCgoKGhoaHh4eKioqNjY2SkpKVlZWenp6fn5+hoaGioqKjo6Onp6e=
+pqamrq6usrKyurq6vr6+xsbGzs7O2tra3t7e4uLi5ubm6urq7u7u8vLy/v7/AwMDCwsLDw8PExM=
+TFxcXGxsbHx8fIyMjKysrOzs7Q0NDU1NTV1dXX19fZ2dn///8AAAAAAAAAAAAAAAAAAAAAAAAAA=
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHqYBFgoODOz+EiIREh4=
+IvL4IqKomDNzOMjoIkKJODMzeNjyginIWWRY47JJKCIjuCNzWDNT6EN0NFIhsdq5UzO7eTIBsfL=
+YiVrpMmxZPApIQ/jpikBwvUFTvRj6TVBxAZzogenDe0kxQGEBjPNy+xkyQTBAYSgkAzvoLlghEE=
+gxARnSjNOPXIAoAF4GbEkkZAgLMapqRZEACB1I1PRWZoK1JBAzhBP5BNCgQAIfkECQoAOgAsAAA=
+AABQAFACFAQEBAgICAwMDBAQEBwcHCQkJIiIiKCgoLCwsNDQ0Pz8/RERERUVFTU1NUlJSVVVVVl=
+ZWXV1dY2Njbm5ucHBwdHR0eHh4gICAg4ODhISEhYWFh4eHiYmJkpKSlpaWm5ubpaWlqqqqtra2t=
+7e3uLi4ubm5urq6u7u7vLy8v7+/wMDAwsLCw8PDxMTExsbGx8fHyMjIysrKy8vLzs7Oz8/P0NDQ=
+1NTU1dXV19fX2dnZ////AAAAAAAAAAAAAAAAAAAABptAnXA4dM2ISGLuKByNhKtVcrg61ZpP3Uk=
+6FW6xumq3ODo6cScXNQdNDVMxYgync52s0LuLPk2NVkxUaV0xgUh8Y0QzTk6JGBuPHy6MWV0bkB=
+whiUgdXStxUxQMDxiKKyNuUyARDKNCNXpCoEISCkMND0MngjoDAToWBrmJJ24BA0IKB4kpJ0cBv=
+zoVCA5jUUIFBUMTHptCDgljQQAh+QQJCgA9ACwAAAAAFAAUAIUSEhIUFBQVFRUdHR0eHh4fHx8h=
+ISEiIiIjIyMpKSksLCwtLS0vLy82NjY6Ojo/Pz9BQUFISEhUVFRWVlZkZGRmZmZtbW1xcXFzc3N=
+8fHx/f3+Hh4eJiYmLi4uMjIyQkJCUlJSYmJidnZ2enp6jo6Orq6u2tra3t7e4uLi5ubm6urq7u7=
+u8vLy/v7/AwMDCwsLDw8PExMTGxsbHx8fIyMjKysrLy8vOzs7Q0NDU1NTV1dXX19fZ2dn///8AA=
+AAAAAAGmsCecDiU3YhIIu8oPJ2Er1dy+Frhms/eSjoVbrG9ard4Ojp3KxmVB20NWzVibdeTrazQ=
+u4w+bZ1eTFRpXTWBSHxjRDdOTomMJzIyj45OK4aJWl0vcVMkHh8lii8nblMyIh0dIUI4ekIQRBg=
+SQx+rXkMNARgHAz0bDhWYAAo9A709E7BjCQFCvEIaD8FdCsQ9CAdDGiKYQhYRY0EAIfkECQoAPQ=
+AsAAAAABQAFACFCgoKEBAQERERKCgoKioqLCwsLi4uNTU1NjY2Nzc3Ojo6PDw8PT09Pj4+QEBAQ=
+0NDRERESUlJUVFRWlpaW1tbYWFhYmJiZWVlfHx8goKChoaGh4eHioqKjIyMlZWVmZmZnp6en5+f=
+oaGhp6enr6+vsrKys7Oztra2t7e3uLi4ubm5urq6u7u7v7+/wMDAwsLCw8PDxMTExcXFxsbGyMj=
+IysrKy8vLzs7O0NDQ1NTU1dXV19fX2dnZ////AAAAAAAABpjAnnA4nN2ISCLvKEShhK9Xcvhi4Z=
+rPHks6FW6xvWq3iDo6d6wZlQdtDVs1Ym3Xm7Gs0PuMPm2hXkxUaV01gUh8Y0Q3Tk6JjCgzM4+Oj=
+IaJPYhIFg+EW4YXAwADXTt2Xz0UAgIKPSITRCMeb1wZnEISBh0KBz0mGiGXBg09B7w9HxqJDQZC=
+xU0cwF0QEUINrEIkapc9GK9dQQAh+QQJCgA8ACwAAAAAFAAUAIUCAgIDAwMEBAQGBgYHBwcJCQk=
+iIiIoKCgrKys0NDQ+Pj4/Pz9ERERFRUVNTU1SUlJTU1NUVFRVVVVWVlZcXFxjY2Nubm5xcXF0dH=
+R4eHiDg4OEhISFhYWHh4eJiYmRkZGWlpabm5ulpaWqqqq2tra3t7e4uLi5ubm6urq7u7u/v7/Aw=
+MDCwsLDw8PExMTFxcXGxsbIyMjKysrLy8vOzs7Pz8/Q0NDU1NTV1dXX19fY2NjZ2dn///8AAAAA=
+AAAAAAAGlUCecDiE0YhI4u4oLJWELFZyyErZmk9eSjoVbrG8ardYOjpzKRh1B1UNVTKiLMeDpaz=
+QO4w+VZVYTFRpXTKBSGxjSBAFAAADiU5OMAkDA42QkYaJPHxJGRWEW4YYCwYLXTl2XzwWCAcRPC=
+IXcm5CKlwgEEMUDR8dGjw0g4kNsL95iQ4NQsfBq1MRsDweHkM2iJsjIWNBACH5BAkKADkALAAAA=
+AAUABQAhQICAgMDAwQEBAcHBwgICAkJCRISEhQUFBYWFiIiIisrKy8vLzQ0NDU1NTo6Oj8/P0FB=
+QVJSUldXV2VlZW1tbX9/f4ODg4iIiImJiYyMjJGRkZSUlJWVlZeXl52dnZ6enqOjo7a2tre3t7i=
+4uLm5ubq6uru7u7+/v8DAwMLCwsPDw8TExMXFxcbGxsfHx8jIyMrKysvLy87OztDQ0NTU1NXV1d=
+fX19jY2NnZ2f///wAAAAAAAAAAAAAAAAAAAAAAAAaYwJxwOGzJiEgi7igUiYQoVHKIOs2az9xIO=
+hVusblqtzg6Om2nVhEnXCSGJxgRZsu1RqNrbnEwNDhdJ1t6Q3wQXTBMSRZjSREEAgIEjU5OLQ2R=
+AgCUTnmNSHVTFxSIW4o5FhIOEV04dydcFQ8QE3YgcydUXB+1Qh8ZeE8yI2qNF4BOUCONGhlgOTO=
+wYx23OclCM2yfOTLFU0EAIfkECQoAPgAsAAAAABQAFACFCgoKEBAQERERJycnKioqLCwsLi4uND=
+Q0NTU1NjY2Nzc3OTk5Ojo6PDw8PT09Pj4+Pz8/Q0NDRERESUlJUVFRWFhYYWFhYmJiZWVlfHx8g=
+oKChoaGioqKi4uLjY2NkZGRlZWVnp6eoaGhp6enr6+vsbGxs7Oztra2t7e3uLi4ubm5urq6u7u7=
+v7+/wMDAwsLCw8PDxMTExcXFxsbGyMjIysrKy8vLzs7O0NDQ1NTU1dXV19fX2NjY2dnZ////AAA=
+ABplAn3A4nN2ISKLmMkShhDBYcvgIYIRO4ao1HQYI2Cds1R0yAEznbjUbwnpCCWM4kBBrO99stT=
+r6JgYGFCJdLSgwflQGFV01iUgeZUkZDwcMc2VOTjMXDAefkpooj5I+eVMmI40riEQmHxsgXTt7r=
+EIkHBwhpjV3XEItUnq7Qns7WTdspbZZPi1kZc9hQji2XVHT1HClPjdtXUEAOw=3D=3D"); back=
+ground-position: center center; background-repeat: no-repeat; padding: 10px=
+ !important; }
+  ol:lang(bcc) li, ol:lang(bqi) li, ol:lang(fa) li, ol:lang(glk) li, ol:lan=
+g(kk-arab) li, ol:lang(mzn) li { list-style-type: persian; }
+  ol:lang(ckb) li { list-style-type: arabic-indic; }
+  ol:lang(as) li, ol:lang(bn) li { list-style-type: bengali; }
+  ol:lang(or) li { list-style-type: oriya; }
+  #toc ul, .toc ul { margin: 0.3em 0px; }
+  .mw-content-ltr .toc ul, .mw-content-ltr #toc ul, .mw-content-rtl .mw-con=
+tent-ltr .toc ul, .mw-content-rtl .mw-content-ltr #toc ul { text-align: lef=
+t; }
+  .mw-content-rtl .toc ul, .mw-content-rtl #toc ul, .mw-content-ltr .mw-con=
+tent-rtl .toc ul, .mw-content-ltr .mw-content-rtl #toc ul { text-align: rig=
+ht; }
+  .mw-content-ltr .toc ul ul, .mw-content-ltr #toc ul ul, .mw-content-rtl .=
+mw-content-ltr .toc ul ul, .mw-content-rtl .mw-content-ltr #toc ul ul { mar=
+gin: 0px 0px 0px 2em; }
+  .mw-content-rtl .toc ul ul, .mw-content-rtl #toc ul ul, .mw-content-ltr .=
+mw-content-rtl .toc ul ul, .mw-content-ltr .mw-content-rtl #toc ul ul { mar=
+gin: 0px 2em 0px 0px; }
+  #toc #toctitle, .toc #toctitle, #toc .toctitle, .toc .toctitle { directio=
+n: ltr; }
+  .mw-help-field-hint { display: none; margin-left: 2px; margin-bottom: -8p=
+x; padding: 0px 0px 0px 15px; background-image: url("data:image/gif;base64,=
+R0lGODlhCwALALMAAP///01NTZOTk1lZWefn57i4uJSUlPPz82VlZdDQ0HFxcaysrNvb28TExAA=
+AAAAAACH5BAAAAAAALAAAAAALAAsAAAQrUIRJqQQ455nNNBgHJANBDAwgZsVwqIG2IEQYYwXy2l=
+q/Kg3NqqeSVCqCCAA7"); background-position: left center; background-repeat: =
+no-repeat; cursor: pointer; font-size: 0.8em; text-decoration: underline; c=
+olor: rgb(6, 69, 173); }
+  .mw-help-field-hint:hover { background-image: url("data:image/gif;base64,=
+R0lGODlhCwALALMAAAtop+7z+GCWwpW51oStz8rb6yZzrafF3bnR5Nzn8QBcoD91oABQmf///wA=
+AAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSH=
+pyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4b=
+XB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMy=
+OjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTk=
+vMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bW=
+xuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9I=
+mh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnht=
+cD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudEl=
+EPSJ4bXAuZGlkOjAyODAxMTc0MDcyMDY4MTE5NkQ0QUQzRjI0NzRCNUQwIiB4bXBNTTpEb2N1bW=
+VudElEPSJ4bXAuZGlkOjJBN0FFQTQwQjlGQzExREY5RDlBQTRBODQyMkJCMkFDIiB4bXBNTTpJb=
+nN0YW5jZUlEPSJ4bXAuaWlkOjJBN0FFQTNGQjlGQzExREY5RDlBQTRBODQyMkJCMkFDIiB4bXA6=
+Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzUgTWFjaW50b3NoIj4gPHhtcE1NOkRlcml=
+2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RkM3RjExNzQwNzIwNjgxMTk1RkVBQ0=
+ZBOEQxNTU5MkUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDI4MDExNzQwNzIwNjgxMTk2R=
+DRBRDNGMjQ3NEI1RDAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1l=
+dGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eD=
+f3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqK=
+empaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb=
+25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3=
+NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAA=
+h+QQAAAAAACwAAAAACwALAAAEK3CxSalsOOeZxRQY1yBKkihFI2aDEqiMRgBJGGMD8NpavxoHza=
+qnklQqiwgAOw=3D=3D"); }
+  .mw-help-field-data { display: block; background-color: rgb(214, 243, 255=
+); padding: 5px 8px 4px; border: 1px solid rgb(93, 201, 244); margin-left: =
+20px; }
+  .tipsy { padding: 5px 5px 10px; font-size: 12px; position: absolute; z-in=
+dex: 100000; overflow: visible; }
+  .tipsy-inner { padding: 5px 8px 4px; background-color: rgb(214, 243, 255)=
+; color: black; border: 1px solid rgb(93, 201, 244); max-width: 300px; text=
+-align: left; }
+  .tipsy-arrow { position: absolute; background: url("data:image/gif;base64=
+,R0lGODlhDQANAMQAAPf399bz/9vu9m/O9NXy/8Pm9svp9pfd+YLW943X9LTn++z093XQ9WnM9O=
+Lw9p/c9YTU9InY9/T292DK9Jre+afj+rvq/Nzv9rjk9brl9cPt/ZLb+GbL9MLs/ZHb+KLh+iH5B=
+AAAAAAALAAAAAANAA0AAAVK4BGMZBkcg2WW1lBEKxkVAFTFFQQAwkSYhIlgB3hQTJQHEbBodEia=
+xmIJyHhIGwwVIGEoAgqGZAswIAIIA3mX+CTWOwfHAd9dtiEAOw=3D=3D") left top no-repe=
+at; width: 13px; height: 13px; }
+  .tipsy-se .tipsy-arrow { bottom: -2px; right: 10px; background-position: =
+0% 100%; }
+  table.sortable th.headerSort { background-image: url("images/sort_both.gi=
+f"); cursor: pointer; background-repeat: no-repeat; background-position: ri=
+ght center; padding-right: 21px; }
+  table.sortable th.headerSortUp { background-image: url("images/sort_up.gi=
+f"); }
+  table.sortable th.headerSortDown { background-image: url("images/sort_dow=
+n.gif"); }
+  .ltr { direction: ltr; unicode-bidi: embed; }
+  #mw-clearyourcache, #mw-sitecsspreview, #mw-sitejspreview, #mw-usercsspre=
+view, #mw-userjspreview { direction: ltr; unicode-bidi: embed; }
+  .diff-currentversion-title, .diff { direction: ltr; unicode-bidi: embed; =
+}
+  .diff-contentalign-right td { direction: rtl; unicode-bidi: embed; }
+  .diff-contentalign-left td { direction: ltr; unicode-bidi: embed; }
+  .diff-otitle, .diff-ntitle, .diff-lineno { unicode-bidi: embed; direction=
+: ltr !important; }
+  #mw-revision-info, #mw-revision-nav { direction: ltr; }
+  div.tright, div.floatright, table.floatright { clear: right; float: right=
+; }
+  div.tleft, div.floatleft, table.floatleft { float: left; clear: left; }
+  div.floatright, table.floatright, div.floatleft, table.floatleft { positi=
+on: relative; }
+  #mw-credits a { unicode-bidi: embed; }
+}
+
+@media screen {
+  html, body { height: 100%; margin: 0px; padding: 0px; font-family: sans-s=
+erif; font-size: 1em; }
+  body { background-color: rgb(243, 243, 243); background-image: url("data:=
+image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAAGXRFWHRTb2=
+Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABRJREFUeF4FwTEBAAAAwJD1D+weGQD4APc0a=
+6VeAAAAAElFTkSuQmCC"); }
+  div#content { margin-left: 10em; padding: 1em; background-image: url("dat=
+a:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRT=
+b2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABhJREFUeF4FwTEBAAAAgjD7FzESWfjYdgw=
+EoAJ4lTsaxgAAAABJRU5ErkJggg=3D=3D"); background-position: left top; backgro=
+und-repeat: repeat-y; background-color: white; color: black; direction: ltr=
+; }
+  #mw-page-base { height: 5em; background-color: white; background-image: u=
+rl("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAsCAIAAAArRUU2AAAAG=
+XRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADpJREFUeF5VjUkOAEAIwoD//7lz=
+GJd4MJHGSoBImkFETP67CdLldUd7KC6f8fv3+psd8znbtU5x354HaWQjOx76v7MAAAAASUVORK5=
+CYII=3D"); background-position: left bottom; background-repeat: repeat-x; }
+  #mw-head-base { margin-top: -5em; margin-left: 10em; height: 5em; backgro=
+und-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAA=
+ACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABhJREFUeF4FwTEB=
+AAAAgjD7FzESWfjYdgwEoAJ4lTsaxgAAAABJRU5ErkJggg=3D=3D"); background-position=
+: left bottom; background-repeat: repeat-x; }
+  div#mw-head { position: absolute; top: 0px; right: 0px; width: 100%; }
+  div#mw-head h5 { margin: 0px; padding: 0px; }
+  div.emptyPortlet { display: none; }
+  #p-personal { position: absolute; top: 0px; right: 0.75em; }
+  #p-personal h5 { display: none; }
+  #p-personal ul { list-style: none; margin: 0px; padding-left: 10em; }
+  #p-personal li { line-height: 1.125em; float: left; }
+  #p-personal li { margin-left: 0.75em; margin-top: 0.5em; font-size: 0.75e=
+m; white-space: nowrap; }
+  #left-navigation { position: absolute; left: 10em; top: 2.5em; }
+  #right-navigation { float: right; margin-top: 2.5em; }
+  div.vectorTabs h5, div.vectorMenu h5 span { display: none; }
+  div.vectorTabs { float: left; height: 2.5em; }
+  div.vectorTabs { background-image: url("data:image/png;base64,iVBORw0KGgo=
+AAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYW=
+R5ccllPAAAAERJREFUeF5lTtEKgEAMMv//j/O0IxlH9CA6N2WURAA/OHl5GeWAwUUHBcKV795Ft=
+TePxpmV3t9uv8Z3/cmvM88vzbbrAV/dQdX+eas3AAAAAElFTkSuQmCC"); background-posit=
+ion: left bottom; background-repeat: no-repeat; padding-left: 1px; }
+  div.vectorTabs ul { float: left; }
+  div.vectorTabs ul { height: 100%; list-style: none; margin: 0px; padding:=
+ 0px; }
+  div.vectorTabs ul li { float: left; }
+  div.vectorTabs ul li { line-height: 1.125em; display: inline-block; heigh=
+t: 100%; margin: 0px; padding: 0px; background-color: rgb(243, 243, 243); b=
+ackground-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAB=
+kCAIAAADITs03AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADxJREFUeF=
+7litsRACAMwrD77+Q0rtGoV98r+MEFchhgkr4NnZyb3bk/LM/yMCjiH4wots/++hYR3iXLJVWUB=
+S1AtOi2fwAAAABJRU5ErkJggg=3D=3D"); background-position: left bottom; backgr=
+ound-repeat: repeat-x; white-space: nowrap; }
+  div.vectorTabs ul > li { display: block; }
+  div.vectorTabs li.selected { background-image: url("data:image/png;base64=
+,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkAQAAAABvV2fNAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZS=
+BJbWFnZVJlYWR5ccllPAAAABVJREFUeF7dwQEBAAAAQCDTTfdD4WOJ5TIB3ib9EgAAAABJRU5Er=
+kJggg=3D=3D"); }
+  div.vectorTabs li a { display: inline-block; height: 1.9em; padding-left:=
+ 0.5em; padding-right: 0.5em; color: rgb(6, 69, 173); cursor: pointer; font=
+-size: 0.8em; }
+  div.vectorTabs li > a { display: block; }
+  div.vectorTabs li.icon a { background-position: right bottom; background-=
+repeat: no-repeat; }
+  div.vectorTabs span a { display: inline-block; padding-top: 1.25em; }
+  div.vectorTabs span > a { float: left; display: block; }
+  div.vectorTabs span { display: inline-block; background-image: url("data:=
+image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAGXRFWHRTb2=
+Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAERJREFUeF5lTtEKgEAMMv//j/O0IxlH9CA6N=
+2WURAA/OHl5GeWAwUUHBcKV795FtTePxpmV3t9uv8Z3/cmvM88vzbbrAV/dQdX+eas3AAAAAElF=
+TkSuQmCC"); background-position: right bottom; background-repeat: no-repeat=
+; }
+  div.vectorTabs li.selected a, div.vectorTabs li.selected a:visited { colo=
+r: rgb(51, 51, 51); text-decoration: none; }
+  div.vectorTabs li.new a, div.vectorTabs li.new a:visited { color: rgb(165=
+, 88, 88); }
+  div.vectorMenu { direction: ltr; float: left; background-image: url("data=
+:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAQBAMAAACfEoDkAAAAAXNSR0IAr=
+s4c6QAAABtQTFRFAAAAeXl5kpKSmpqara2tsbGxv7+/3d3d4+Pj/0BzBAAAAAF0Uk5TAEDm2GYA=
+AAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH2wQZDQ02HnCAHgAAAEJ=
+JREFUGNNjYBhEgN1QUFDQHMzkcFJSUvKAihcLCgoXQJgtSkoqDQjl5lAmULkH3JhimGKgcrhioP=
+JwOJMjY6C8CAC3YAg/E2WR5gAAAABJRU5ErkJggg=3D=3D"); background-position: 0px =
+60%; background-repeat: no-repeat; cursor: pointer; }
+  div.vectorMenuFocus { background-image: url("images/arrow-down-focus-icon=
+.png"); background-position: 100% 60%; }
+  body.rtl div.vectorMenu { direction: rtl; }
+  div#mw-head div.vectorMenu h5 { float: left; background-image: url("data:=
+image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAGXRFWHRTb2=
+Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAERJREFUeF5lTtEKgEAMMv//j/O0IxlH9CA6N=
+2WURAA/OHl5GeWAwUUHBcKV795FtTePxpmV3t9uv8Z3/cmvM88vzbbrAV/dQdX+eas3AAAAAElF=
+TkSuQmCC"); background-repeat: no-repeat; }
+  div#mw-head div.vectorMenu h5 { background-position: left bottom; margin-=
+left: -1px; }
+  div#mw-head div.vectorMenu > h5 { background-image: none; }
+  div#mw-head div.vectorMenu h4 { display: inline-block; float: left; font-=
+size: 0.8em; padding-left: 0.5em; padding-top: 1.375em; font-weight: normal=
+; border: none; }
+  div.vectorMenu h5 a { display: inline-block; width: 24px; height: 2.5em; =
+text-decoration: none; background-image: url("data:image/png;base64,iVBORw0=
+KGgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZV=
+JlYWR5ccllPAAAAERJREFUeF5lTtEKgEAMMv//j/O0IxlH9CA6N2WURAA/OHl5GeWAwUUHBcKV7=
+95FtTePxpmV3t9uv8Z3/cmvM88vzbbrAV/dQdX+eas3AAAAAElFTkSuQmCC"); background-r=
+epeat: no-repeat; }
+  div.vectorMenu h5 a { background-position: right bottom; }
+  div.vectorMenu h5 > a { display: block; }
+  div.vectorMenu div.menu { position: relative; display: none; clear: both;=
+ text-align: left; }
+  body.rtl div.vectorMenu div.menu { margin-left: 24px; }
+  body.rtl div.vectorMenu > div.menu { margin-left: auto; }
+  div.vectorMenu:hover div.menu, div.vectorMenu div.menuForceShow { display=
+: block; }
+  div.vectorMenu ul { position: absolute; background-color: white; border-w=
+idth: 0px 1px 1px; border-style: solid; border-color: silver; border-image:=
+ initial; list-style: none none; padding: 0px; margin: 0px 0px 0px -1px; te=
+xt-align: left; }
+  div.vectorMenu li { padding: 0px; margin: 0px; text-align: left; line-hei=
+ght: 1em; }
+  div.vectorMenu li a { display: inline-block; padding: 0.5em; white-space:=
+ nowrap; color: rgb(6, 69, 173); cursor: pointer; font-size: 0.8em; }
+  div.vectorMenu li > a { display: block; }
+  div.vectorMenu li.selected a, div.vectorMenu li.selected a:visited { colo=
+r: rgb(51, 51, 51); text-decoration: none; }
+  #p-search h5 { display: none; }
+  #p-search { float: left; }
+  #p-search { margin-right: 0.5em; margin-left: 0.5em; }
+  #p-search form, #p-search input { margin: 0.4em 0px 0px; }
+  div#simpleSearch { display: block; width: 14em; height: 1.4em; margin-top=
+: 0.65em; position: relative; min-height: 1px; border: 1px solid rgb(170, 1=
+70, 170); color: black; background-color: white; background-image: url("dat=
+a:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAQCAIAAABY/YLgAAAAGXRFWHRT=
+b2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACZJREFUeF5diqERACAQgID95/3s+cFg4CD=
+QzASkXl4jidvrCPzfA7puAx52W1pnAAAAAElFTkSuQmCC"); background-position: left =
+top; background-repeat: repeat-x; }
+  div#simpleSearch label { font-size: 13px; top: 0.25em; direction: ltr; }
+  div#simpleSearch input { color: black; direction: ltr; }
+  div#simpleSearch input:focus { outline: none; }
+  div#simpleSearch input.placeholder { color: rgb(153, 153, 153); }
+  div#simpleSearch input::-webkit-input-placeholder { color: rgb(153, 153, =
+153); }
+  div#simpleSearch input#searchInput { position: absolute; top: 0px; left: =
+0px; width: 90%; margin: 0px; padding: 0.2em 0px 0.2em 0.2em; outline: none=
+; border: none; font-size: 13px; background-color: transparent; direction: =
+ltr; }
+  div#simpleSearch button#searchButton { position: absolute; width: 10%; ri=
+ght: 0px; top: 0px; padding: 0.3em 0.4em 0.2em 0px; margin: 0px; border: no=
+ne; cursor: pointer; background-color: transparent; background-image: none;=
+ }
+  div#simpleSearch button#searchButton img { border: none; margin: -3px 0px=
+ 0px; padding: 0px; }
+  div#simpleSearch button#searchButton > img { margin: 0px; }
+  div#mw-panel { position: absolute; top: 160px; padding-top: 1em; width: 1=
+0em; left: 0px; }
+  div#mw-panel div.portal { padding-bottom: 1.5em; direction: ltr; }
+  div#mw-panel div.portal h5 { font-weight: normal; color: rgb(68, 68, 68);=
+ padding: 0px 0.25em 0.25em 1.75em; cursor: default; border: none; font-siz=
+e: 0.75em; }
+  div#mw-panel div.portal div.body { margin: 0px 0px 0px 1.25em; padding-to=
+p: 0.5em; background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhE=
+UgAAAIwAAAABCAAAAAAphRnkAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAA=
+AAClJREFUeF61yMEJACAQxMCN/Xfr/yIsaAfOJxC2UTPWS6f5gABhUTedBz7fGPSonIP/AAAAAE=
+lFTkSuQmCC"); background-repeat: no-repeat; background-position: left top; =
+}
+  div#mw-panel div.portal div.body ul { list-style: none none; padding: 0px=
+; margin: 0px; }
+  div#mw-panel div.portal div.body ul li { line-height: 1.125em; padding: 0=
+px 0px 0.5em; margin: 0px; overflow: hidden; font-size: 0.75em; }
+  div#mw-panel div.portal div.body ul li a { color: rgb(6, 69, 173); }
+  div#mw-panel div.portal div.body ul li a:visited { color: rgb(11, 0, 128)=
+; }
+  div#footer { margin-left: 10em; margin-top: 0px; padding: 0.75em; backgro=
+und-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAA=
+ACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABhJREFUeF4FwTEB=
+AAAAgjD7FzESWfjYdgwEoAJ4lTsaxgAAAABJRU5ErkJggg=3D=3D"); background-position=
+: left top; background-repeat: repeat-x; direction: ltr; }
+  div#footer ul { list-style: none none; margin: 0px; padding: 0px; }
+  div#footer ul li { margin: 0px; padding: 0.5em 0px; color: rgb(51, 51, 51=
+); font-size: 0.7em; }
+  div#footer #footer-icons { float: right; }
+  body.ltr div#footer #footer-places { float: left; }
+  div#footer #footer-info li { line-height: 1.4em; }
+  div#footer #footer-icons li { float: left; margin-left: 0.5em; line-heigh=
+t: 2em; text-align: right; }
+  div#footer #footer-places li { float: left; margin-right: 1em; line-heigh=
+t: 2em; }
+  #p-logo { position: absolute; top: -160px; left: 0px; width: 10em; height=
+: 160px; }
+  #p-logo a { display: block; width: 10em; height: 160px; background-repeat=
+: no-repeat; background-position: center center; text-decoration: none; }
+  #preftoc { width: 100%; float: left; clear: both; background-image: url("=
+data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAhCAQAAACysAk0AAAACXBIW=
+XMAAABIAAAASABGyWs+AAAACXZwQWcAAAABAAAAIQBSEXtPAAAAAmJLR0QA/vCI/CkAAAAmSURB=
+VAjXY2BgYPj3n+k/AwL9g5Fwxl8GJgYGpr+ogmgITQuSgQA1QiAL/go8LAAAACV0RVh0Y3JlYXR=
+lLWRhdGUAMjAwOS0wOC0wOVQxOTowNTo0MSswMDowMCYO2tEAAAAldEVYdG1vZGlmeS1kYXRlAD=
+IwMDktMDgtMDlUMTk6MDU6NDErMDA6MDB5v6zlAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZ=
+VJlYWR5ccllPAAAAABJRU5ErkJggg=3D=3D"); background-position: left bottom; ba=
+ckground-repeat: no-repeat; margin: 0px !important; padding: 0px !important=
+; }
+  #preftoc li { float: left; margin: 0px; padding: 0px 1px 0px 0px; height:=
+ 2.25em; white-space: nowrap; list-style-type: none; list-style-image: none=
+; background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEA=
+AAAhCAQAAACysAk0AAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAABAAAAIQBSEXtPAAA=
+AAmJLR0QA/vCI/CkAAAAmSURBVAjXY2BgYPj3n+k/AwL9g5Fwxl8GJgYGpr+ogmgITQuSgQA1Qi=
+AL/go8LAAAACV0RVh0Y3JlYXRlLWRhdGUAMjAwOS0wOC0wOVQxOTowNTo0MSswMDowMCYO2tEAA=
+AAldEVYdG1vZGlmeS1kYXRlADIwMDktMDgtMDlUMTk6MDU6NDErMDA6MDB5v6zlAAAAGXRFWHRT=
+b2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAABJRU5ErkJggg=3D=3D"); background-=
+position: right bottom; background-repeat: no-repeat; }
+  #preftoc li:first-child { margin-left: 1px; }
+  #preftoc a, #preftoc a:active { display: inline-block; position: relative=
+; color: rgb(6, 69, 173); padding: 0.5em; text-decoration: none; background=
+-image: none; font-size: 0.9em; }
+  #preftoc a:hover, #preftoc a:focus { text-decoration: underline; }
+  #preftoc li.selected a { background-image: url("data:image/png;base64,iVB=
+ORw0KGgoAAAANSUhEUgAAAAEAAAAhCAQAAACysAk0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbW=
+FnZVJlYWR5ccllPAAAACBJREFUeF5twskJAAAMAjD3H7mXfYogCQiQeun68Z2WPk0SQHDa/pxXA=
+AAAAElFTkSuQmCC"); background-position: center bottom; background-repeat: r=
+epeat-x; color: rgb(51, 51, 51); text-decoration: none; }
+  #preferences { float: left; width: 100%; margin: -2px 0px 0px; clear: bot=
+h; border: 1px solid rgb(204, 204, 204); background-color: rgb(249, 249, 24=
+9); background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA=
+EAAAABCAAAAAA6fptVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABRJR=
+EFUeF4FwTEBAAAAwJD1j+waGQD8APvyfoZlAAAAAElFTkSuQmCC"); }
+  #preferences fieldset { border-right: none; border-bottom: none; border-l=
+eft: none; border-image: initial; border-top: 1px solid rgb(204, 204, 204);=
+ }
+  #preferences fieldset.prefsection { border: none; padding: 0px; margin: 1=
+em; }
+  #preferences legend { color: rgb(102, 102, 102); }
+  #preferences fieldset.prefsection legend.mainLegend { display: none; }
+  #preferences td { padding-left: 0.5em; padding-right: 0.5em; }
+  #preferences td.htmlform-tip { font-size: x-small; padding: 0.2em 2em; co=
+lor: rgb(102, 102, 102); }
+  #preferences div.mw-prefs-buttons { padding: 1em; }
+  #preferences div.mw-prefs-buttons input { margin-right: 0.25em; }
+  #userlogin, #userloginForm { border: 1px solid rgb(204, 204, 204); paddin=
+g: 1.2em; margin: 0.5em; float: left; }
+  #userlogin { min-width: 20em; max-width: 90%; width: 40em; }
+  div#content { line-height: 1.5em; }
+  #bodyContent { font-size: 0.8em; }
+  a { text-decoration: none; color: rgb(6, 69, 173); background: none; }
+  a:visited { color: rgb(11, 0, 128); }
+  a:active { color: rgb(250, 167, 0); }
+  a:hover, a:focus { text-decoration: underline; }
+  a.stub { color: rgb(119, 34, 51); }
+  a.new, #p-personal a.new { color: rgb(186, 0, 0); }
+  a.new:visited, #p-personal a.new:visited { color: rgb(165, 88, 88); }
+  img { border: none; vertical-align: middle; }
+  hr { height: 1px; color: rgb(170, 170, 170); background-color: rgb(170, 1=
+70, 170); border: 0px; margin: 0.2em 0px; }
+  h1, h2, h3, h4, h5, h6 { color: black; background: none; font-weight: nor=
+mal; margin: 0px; overflow: hidden; padding-top: 0.5em; padding-bottom: 0.1=
+7em; border-bottom: 1px solid rgb(170, 170, 170); width: auto; }
+  h1 { font-size: 188%; }
+  h1 .editsection { font-size: 53%; }
+  h2 { font-size: 150%; }
+  h2 .editsection { font-size: 67%; }
+  h3, h4, h5, h6 { border-bottom: none; font-weight: bold; }
+  h3 { font-size: 132%; }
+  h3 .editsection { font-size: 76%; font-weight: normal; }
+  h4 { font-size: 116%; }
+  h4 .editsection { font-size: 86%; font-weight: normal; }
+  h5 { font-size: 100%; }
+  h5 .editsection { font-weight: normal; }
+  h6 { font-size: 80%; }
+  h6 .editsection { font-size: 125%; font-weight: normal; }
+  .editsection { float: right; }
+  p { margin: 0.4em 0px 0.5em; line-height: 1.5em; }
+  p img { margin: 0px; }
+  q { font-family: Times, "Times New Roman", serif; font-style: italic; }
+  pre, code, tt, kbd, samp { font-family: monospace, "Courier New"; }
+  code { background-color: rgb(249, 249, 249); }
+  pre { padding: 1em; border: 1px dashed rgb(47, 111, 171); color: black; b=
+ackground-color: rgb(249, 249, 249); line-height: 1.3em; }
+  ul { line-height: 1.5em; list-style-type: square; margin: 0.3em 0px 0px 1=
+.5em; padding: 0px; list-style-image: url("data:image/png;base64,iVBORw0KGg=
+oAAAANSUhEUgAAAAUAAAANCAMAAABW4lS6AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlY=
+WR5ccllPAAAAAZQTFRFAFKM////QIUK9QAAAAJ0Uk5T/wDltzBKAAAAGklEQVR42mJgBAEGokgG=
+BjBGBxBxsBqAAAMACHwALd5r8ygAAAAASUVORK5CYII=3D"); }
+  ol { line-height: 1.5em; margin: 0.3em 0px 0px 3.2em; padding: 0px; list-=
+style-image: none; }
+  li { margin-bottom: 0.1em; }
+  dt { font-weight: bold; margin-bottom: 0.1em; }
+  dl { margin-top: 0.2em; margin-bottom: 0.5em; }
+  dd { line-height: 1.5em; margin-left: 2em; margin-bottom: 0.1em; }
+  table { font-size: 100%; }
+  fieldset { border: 1px solid rgb(47, 111, 171); margin: 1em 0px; padding:=
+ 0px 1em 1em; line-height: 1.5em; }
+  fieldset.nested { margin: 0px 0px 0.5em; padding: 0px 0.5em 0.5em; }
+  legend { padding: 0.5em; font-size: 95%; }
+  form { border: none; margin: 0px; }
+  textarea { width: 100%; padding: 0.1em; }
+  select { vertical-align: top; }
+  #toc, .toc, .mw-warning { border: 1px solid rgb(170, 170, 170); backgroun=
+d-color: rgb(249, 249, 249); padding: 5px; font-size: 95%; }
+  #toc h2, .toc h2 { display: inline; border: none; padding: 0px; font-size=
+: 100%; font-weight: bold; }
+  #toc #toctitle, .toc #toctitle, #toc .toctitle, .toc .toctitle { text-ali=
+gn: center; }
+  #toc ul, .toc ul { list-style-type: none; list-style-image: none; margin-=
+left: 0px; padding: 0px; text-align: left; }
+  #toc ul ul, .toc ul ul { margin: 0px 0px 0px 2em; }
+  #toc .toctoggle, .toc .toctoggle { font-size: 94%; }
+  div.floatright, table.floatright { margin: 0px 0px 0.5em 0.5em; border: 0=
+px; }
+  div.floatright p { font-style: italic; }
+  div.floatleft, table.floatleft { margin: 0px 0.5em 0.5em 0px; border: 0px=
+; }
+  div.floatleft p { font-style: italic; }
+  div.thumb { margin-bottom: 0.5em; width: auto; background-color: transpar=
+ent; }
+  div.thumbinner { border: 1px solid rgb(204, 204, 204); background-color: =
+rgb(249, 249, 249); font-size: 94%; text-align: center; overflow: hidden; p=
+adding: 3px !important; }
+  html .thumbimage { border: 1px solid rgb(204, 204, 204); }
+  html .thumbcaption { border: none; text-align: left; line-height: 1.4em; =
+font-size: 94%; padding: 3px !important; }
+  div.magnify { float: right; border: none !important; background: none !im=
+portant; }
+  div.magnify a, div.magnify img { display: block; border: none !important;=
+ background: none !important; }
+  div.tright { margin: 0.5em 0px 1.3em 1.4em; }
+  div.tleft { margin: 0.5em 1.4em 1.3em 0px; }
+  img.thumbborder { border: 1px solid rgb(221, 221, 221); }
+  .mw-warning { margin-left: 50px; margin-right: 50px; text-align: center; =
+}
+  .usermessage { background-color: rgb(255, 206, 123); border: 1px solid rg=
+b(255, 165, 0); color: black; font-weight: bold; margin: 2em 0px 1em; paddi=
+ng: 0.5em 1em; vertical-align: middle; }
+  #siteNotice { position: relative; text-align: center; font-size: 0.8em; m=
+argin: 0px; }
+  #localNotice { margin-bottom: 0.9em; }
+  .catlinks { border: 1px solid rgb(170, 170, 170); background-color: rgb(2=
+49, 249, 249); padding: 5px; margin-top: 1em; clear: both; }
+  #siteSub { display: none; }
+  #jump-to-nav { display: none; }
+  #contentSub, #contentSub2 { font-size: 84%; line-height: 1.2em; margin: 0=
+px 0px 1.4em 1em; color: rgb(125, 125, 125); width: auto; }
+  span.subpages { display: block; }
+  .center { width: 100%; text-align: center; }
+  .center * { margin-left: auto; margin-right: auto; }
+  .small { font-size: 94%; }
+  table.small { font-size: 100%; }
+  h1, h2 { margin-bottom: 0.6em; }
+  h3, h4, h5 { margin-bottom: 0.3em; }
+  #firstHeading { margin-top: 0px; padding-top: 0px; margin-bottom: 0.1em; =
+line-height: 1.2em; font-size: 1.6em; padding-bottom: 0px; }
+  div#content a.external, div#content a.external[href^=3D"gopher://"] { bac=
+kground: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAAC=
+NMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFZJREFUeF59z4EJAD=
+EIQ1F36k7u5E7ZKXeUQPACJ3wK7UNokVxVk9kHnQH7bY9hbDyDhNXgjpRLqFlo4M2GgfyJHhjq8=
+V4agfrgPQX3JtJQGbofmCHgA/nAKks+JAjFAAAAAElFTkSuQmCC") right center no-repea=
+t; padding-right: 13px; }
+  div#content a.external[href^=3D"https://"], .link-https { background: url=
+("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXR=
+FWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIVJREFUeF6tjzsKg0AQhi09mimsFJ=
+LCzpNYCGKbK3gAtfUIljaCoKCCZIs8MMV2v+yCg8siWlh8zOtjhjEAEFmeIopDQtTrTJNEZIxhW=
+ysiNfULJFJjDzGnba/aBt4+wAuBzD+tg6a8SVkXf4GET96xmDxNzP39IvE/PPDtXIyVpYinv14A=
+5F0laJ8oYFgAAAAASUVORK5CYII=3D") right center no-repeat; padding-right: 13p=
+x; }
+  div#content a.external[href^=3D"mailto:"], .link-mailto { background: url=
+("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAGXR=
+FWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADBQTFRF////////iIqF9vb26urpyc=
+fDvb275eXj2djV+/v4srKy6efio6GcqKejsa6q8fDtVM9qIQAAAAF0Uk5TAEDm2GYAAABOSURBV=
+HheBcExDkAwGIDRL43NpJOt6a9hMdVilP8gklqsHMJmt4qeyeI03oNSNkCrAIU/7YTWbwp0zz4r=
+TXZHxF/9YA15HTG4+4NFRNofUBMMOBBNZngAAAAASUVORK5CYII=3D") right center no-re=
+peat; padding-right: 13px; }
+  div#content a.external[href^=3D"news://"] { background: url("data:image/p=
+ng;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZ=
+QBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHtJREFUeF6NkEEKgCAQRT2w1wiiUxgk0SKiTe6i9oKe=
+QXDhKSZmYAJRKeHh4j//DIp+6OAPJH6cXJRSZqSUQClViBjUKER8zXAbUhev+6Q7hMA0G1msNtI=
+o5zxhrX3xzlNG4ravYMwBMUZsKsBsXjQIABCTHlsfTXuj8wCN3T2QBjtcwQAAAABJRU5ErkJggg=
+=3D=3D") right center no-repeat; padding-right: 13px; }
+  div#content a.external[href^=3D"ftp://"], .link-ftp { background: url("da=
+ta:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAGXRFWHR=
+Tb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAExJREFUeF5VyEEKwCAMAMH83o/0LT6kFH=
+qQYqkevG1jIITs3kaQgn+A7A29ujnw5NKrsaPCrTegBBrRMzYeXkbGzsdkZRwsPWMUmEd+CkSgV=
+eVp2OkAAAAASUVORK5CYII=3D") right center no-repeat; padding-right: 13px; }
+  div#content a.external[href^=3D"irc://"], div#content a.external[href^=3D=
+"ircs://"], .link-irc { background: url("data:image/png;base64,iVBORw0KGgoA=
+AAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR=
+5ccllPAAAAHRJREFUeF590E0KgCAQBWAvH0TXigI3ZccQ/8H91ExqKNrAW8j7kFG27SvMyzQM9s=
+8whuBnENdQSllFKdWFWFC01pQQwhASMMaAtXYIMQScc/0dxSXyIaPq1ZzzF6JOsKBTHOC9hxgjo=
+QLbf2tRgekWKka5AShBSepvauUSAAAAAElFTkSuQmCC") right center no-repeat; paddi=
+ng-right: 13px; }
+  div#content a.external[href$=3D".ogg"], div#content a.external[href$=3D".=
+OGG"], div#content a.external[href$=3D".mid"], div#content a.external[href$=
+=3D".MID"], div#content a.external[href$=3D".midi"], div#content a.external=
+[href$=3D".MIDI"], div#content a.external[href$=3D".mp3"], div#content a.ex=
+ternal[href$=3D".MP3"], div#content a.external[href$=3D".wav"], div#content=
+ a.external[href$=3D".WAV"], div#content a.external[href$=3D".wma"], div#co=
+ntent a.external[href$=3D".WMA"], .link-audio { background: url("data:image=
+/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAGXRFWHRTb2Z0d2F=
+yZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADBQTFRF////dX8qyNF7eYMzwsxrsr9G8PHrm6Jrt7=
+uakJVmn6OB1duat8NQi5YzhI4ykZR07gQraQAAAAF0Uk5TAEDm2GYAAABJSURBVHheNcSxDUBQF=
+IbR727glxvKl3dHsIHCGESrNIIR7KE1hQ1MoDSCiMhJDixSDWVEhuZbei/sf/Jqbdn28+jxYe4u=
+7CaND+p5C05J6bE1AAAAAElFTkSuQmCC") right center no-repeat; padding-right: 1=
+3px; }
+  div#content a.external[href$=3D".ogm"], div#content a.external[href$=3D".=
+OGM"], div#content a.external[href$=3D".avi"], div#content a.external[href$=
+=3D".AVI"], div#content a.external[href$=3D".mpeg"], div#content a.external=
+[href$=3D".MPEG"], div#content a.external[href$=3D".mpg"], div#content a.ex=
+ternal[href$=3D".MPG"], .link-video { background: url("data:image/png;base6=
+4,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAAAAACoWZBhAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZ=
+SBJbWFnZVJlYWR5ccllPAAAAAJ0Uk5TAP9bkSK1AAAAXElEQVR4Xi2NMQoFMQgFvbpgHUj5LvF6=
+K7sFQXKFsOew2G/xuylmGPn62Wb76U+ayHsTbDnrQMNrHdkZRChyi730KvK1QUWVD47gzoCOMBk=
+XPSZrIuumseW/iKU/eKdG9xXBa10AAAAASUVORK5CYII=3D") right center no-repeat; p=
+adding-right: 13px; }
+  div#content a.external[href$=3D".pdf"], div#content a.external[href$=3D".=
+PDF"], div#content a.external[href*=3D".pdf#"], div#content a.external[href=
+*=3D".PDF#"], div#content a.external[href*=3D".pdf?"], div#content a.extern=
+al[href*=3D".PDF?"], .link-document { background: url("data:image/png;base6=
+4,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZ=
+SBJbWFnZVJlYWR5ccllPAAAAE5JREFUeF5lykEKgDAMBdF/+17Es/QkiosiCBURXIzJooZohmwe=
+X6gwmkCeI+Oqc2C1FnvnF2ejlQYU0tLK2NjY6f/l8V12Ti7uhFFgDj19b58EwXuqkAAAAABJRU5=
+ErkJggg=3D=3D") right center no-repeat; padding-right: 13px; }
+  div#content a.extiw, div#content a.extiw:active { color: rgb(51, 102, 187=
+); background: none; padding: 0px; }
+  div#content a.extiw:visited { color: rgb(102, 51, 102); }
+  div#content a.extiw:active { color: rgb(187, 102, 51); }
+  div#content a.external { color: rgb(51, 102, 187); }
+  div#content a.external:visited { color: rgb(102, 51, 102); }
+  div#content a.external:active { color: rgb(187, 102, 51); }
+  div#content .printfooter { display: none; }
+  #pt-userpage, #pt-anonuserpage, #pt-login { background: url("data:image/p=
+ng;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAANCAYAAACQN/8FAAAAIGNIUk0AAHolAACAg=
+wAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAACxMAAAsTAQCanBgAAAHOSURB=
+VCjPY2BAAjtLxLmPN4pFn2gSTdrfICDAgA2c65C0uznf6erT9dH/H6/0+39zut6d051SfiiK9jc=
+wsFyfa3v21Z7S/++Odf1/uSP7/6OF1v+vT9O7ub9BlAdJoajBw+W+P98crPv/8eLC/6/2lPx/vN=
+j+/705xv+PNwsHwRUerOFTvTXX9sfzjTFg056tC/v/YJbu//tzjP4eaxR3hiv8z8DAuKPF4N7Du=
+Ub/H84z/X9/hsb/BzM1/x/qMnxwJo2BFa5QP3rKpMjSiT/XtTr+vzzV+P+Vacb/N7fb/48v6fik=
+HTYhFaxII3iSr0vRmm/muZv++9du/L969Yr/Wzeu+O9Tvvq/Rcay//aZC15reHXoMtimz91ulrn=
+yv1n22v/muRv/960693/Fniv/TdKX/zdKXvDfPHX+f9PYySsYbFJnXDWIm/nfOG0pWDKkdsP/oo=
+nbgYoW/jdImPNfL2bKf+v4SRcZTCK6D5gkTAcLGibO/W+aMu+/b8mS//pxM8CKdAPr/xtFdB9lk=
+DQNszOP7r1tnTLzr03qzP/WQGyVAqRTpv+3Tprxzzi88560VZo3xNui2jxi+oFB4oYRNaL6Ic0g=
+DGEHh4HkQEoAjALoHv5slukAAAAASUVORK5CYII=3D") left top no-repeat; text-trans=
+form: none; padding-left: 15px !important; }
+  .redirectText { font-size: 140%; }
+  .redirectMsg img { vertical-align: text-bottom; }
+  .toccolours { border: 1px solid rgb(170, 170, 170); background-color: rgb=
+(249, 249, 249); padding: 5px; font-size: 95%; }
+  #bodyContent { position: relative; width: 100%; }
+  #mw-js-message { font-size: 0.8em; }
+  div#bodyContent { line-height: 1.5em; }
+  #ca-unwatch.icon a, #ca-watch.icon a { margin: 0px; padding: 3.1em 0px 0p=
+x; outline: none; display: block; width: 26px; height: 0px; overflow: hidde=
+n; background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFg=
+AAAAQCAMAAAClQEgHAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAwBQTF=
+RFoNb/+vr52tXLdcP/ltL/ysKt39rPrdz/xtDT8vLwwrJxodr/vqxjzdnr8v7+ntb/uuX/i87/y=
+tTV9fb3zuz+8eOU+fr8zvH/wuX/ecT/hbrnj7XBltb/m9T/h8z/jtH+c8H/vq53lL/Ovq109vb1=
+/v7rx8CuhcT0xLJlot3/2PL/kc//59N3s9//v7KGbL7/mNf//v395NSLmdr//Pz7ccT/wbOIZ7v=
+/ybZk6OzzpNf/icPu0cm2g8n/p9n/9fTzva1ouuL/samQwu3/scfhfrbj8e/q4+bnyLJQ6u3tqt=
+r/irbG7PH5fcz/0d7ww+r/zcuL6Obh9f7/hsv/s8+r+e2rw7J2rb3C+fj2icTy1O7/jrvO1s++v=
+MyUz8zGocna6+rn8vDtlLK8aL3/d8X///vV7fz/vraklMr039nMtNjqp97/o9362ejN4vb/zcN7=
+sN3/vfP/bsD/1dLNhK2+yLeIkrri28drz7tp5N7TiK26grXi3trTccP/vub/rd//+v//qM7fyeH=
+Mztmq5PT8u6t0/f3+/P39ksDwk8HQtMTH3fn/kdH/ltLpxb5o0dzsnND6ssXbzun5rdru2+Dh5+=
+vsz9nadrrx1eLz+fLM7/z/w71z//zPgMz/8eWrwtKT9vn8jbPCf7vs1N3pua1terXo1O3tqtfWw=
+OX51cV5dMH/vtmy28p8fLXR4efx9emq///8z9TbzrxowLOP5ea57///nq2xy7xo///5frrnwrSP=
+9PX2+vv7ztzwvd3P2vH5r9z/8/X4nMrlsN//qLq9wa5zh7fikdf/tuL9zbpo3tnQ1u/kx8rL+/z=
+8kq+6+vLGkqKq6f//oMrfxuf8xbVwqLvSh7vq8PP3ltD6d8P/v7Ngx7dqwbFt/PGyk8jv9vf3zL=
+hofqy/wdPqyeTc0vH9//3kxun5i7O/x87X09mr1sRzmK3C3dnQz9XXmLvg///6uc7ozLpq7O7u/=
+/zc7evoyfT/+/z+mtf/9e25zcJt7ezowMXGu8nM+Pn5////8/n77InDmQAAAQB0Uk5T////////=
+///////////////////////////////////////////////////////////////////////////=
+///////////////////////////////////////////////////////////////////////////=
+///////////////////////////////////////////////////////////////////////////=
+///////////////////////////////////////////////////////////////////////////=
+////////////////////////////////AFP3ByUAAAJbSURBVHjaYvgPAb+3/ccK4tKxi7+4SkA=
+9A5SWnuyJVSGXDidWcSnN6/jVQw0+s//fBWzqin9scMImvtF/62us6rfwOaEYXPLvXyM2pzn8+7=
+dGBYt4dZ5WhjA29d3i+Sowg/d4TjuX9+9fQwnH1L8oqhIrN5//909VOdPNBEXcZ8Y7CQlHEam9P=
+t/Q1O/KrXNcdhSsnuFIZ3zWpLR/QMAnkhWvJA1TxVqx0mheKkj883qjVx9LYeIukRkT2P3rCtgP=
+CGTfiLTuQKjPD3iZK1DAzv64OWD27VIG9+h/SOASB0xhwklk8XImmLilOp+IhK6XFQODrCyD+D1=
+euPoHF50FDoPFZWQKfzIx/N/9PAiuP3oKwmOMYU9hwu8tAhHiYteidO34WbRtFZg1d65DVn+6Hi=
+Jem3MrEBTGZ6taIPqDvN1RwkxxJkRcVeMLivixEwwsgpLmRfKulqjqm/jB4r08vyCp4tMhiAFPO=
+FCj2L4cIh7KhCp+UJ1bjjlZ/6Y8L5r6PmOQuGkIEzS5vV0BMWBWOKrCGlGIeCorqvhieTlm5pRV=
+kgYuaOpj5zLXmiqkLGeFGhwOTBRRl4EmJKEqVJsDdC3Q8B16qOITs4MNegS/B3OXoanf53s8JNb=
+YN0cPanDSPy3vP0JVz/4tRFVo9u+uRcwbZdF/d1DFy8S5Fz3qr5ZxdkVT/3W1Rsyp1vmFS6AGP1=
+TqAolzSK+9j6KQZ5MNiGK64sGIIr7U+gOI4pWaLoaqfjtEPRdIPdDgdiFY5hRCyaWGbDDz2CKQx=
+dv8YOb5LcCtnuE/jQBAgAEAQlFsBT+lqfQAAAAASUVORK5CYII=3D"); }
+  #ca-unwatch.icon a { background-position: -43px 60%; }
+  #ca-watch.icon a { background-position: 5px 60%; }
+  #ca-unwatch.icon a:hover, #ca-unwatch.icon a:focus { background-position:=
+ -67px 60%; }
+  #ca-watch.icon a:hover, #ca-watch.icon a:focus { background-position: -19=
+px 60%; }
+  #ca-unwatch.icon a.loading, #ca-watch.icon a.loading { background-image: =
+url("data:image/gif;base64,R0lGODlhEAAQAMQfANra2uLi4vDw8PLy8ujo6Ozs7NbW1vj4=
++Pb29s7Oztzc3NTU1O7u7uDg4NHR0erq6v39/d7e3vz8/Pv7+/7+/tPT09jY2Pr6+tnZ2efn5/X=
+19eXl5ebm5vT09P///////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJAwAfACwAAAAAEAAQAAAFa+=
+Anjl9QkShacVqabp2XuKjjecHhStrjHDdIgtORiCyWSEZwud0mg0zEUhkYnNhsY/O5OCRZrEEwg=
+vzCkgqZhGiEB1wUgRGeAFKApqcjcJ5QCx4aFQEECX1/JAlJJBsVFRMkEBkXLhyVNJkhACH5BAkD=
+AB8ALAAAAAAQABAAAAV74CeO4hUQZEoGhqGqWzQtEnlYRCYMGSB5BkTKQCgUOBGPkjBIdQDKqBL=
+haJI4D6l0gylMRg6IVkmhNBIjxWBM8XAwHNFAIdYWDA0SRhNtKy0CJAUVEAcRAQJkFikZDg4EBB=
+0RDR4dGCkIEhAjFBsBDwovKo0BoioFQiMhACH5BAkDAB8ALAAAAAAQABAAAAWB4CeO5HeU33OVl=
+5IIpYEFh/QR1rYNZSMUAYVBwfBYbKRJwwPxFDxQjAbloECvHgMEBUBgPZTApjSxeL+eQGDUsQwk=
+aGhBcUBYinGI5GBIEBwEGhxwVwwLFgoRHQwECgIADRFXBgUfEygfEBEDTmuYIxAJFAYwnyMFABV=
+bpiMYGSghACH5BAkDAB8ALAAAAAAQABAAAAV+4CdKjWieKOJs6De1U5Zhg4YcmaG0kXcElQDtEW=
+kZPMgMBGlofQDIqK9pmhAADClSEDBtAICJROvR7EQGx5LsgQAOogKm0LhQ2IDRQRJRFKIHAh4XA=
+XknEw5REQsRBgAOEigRFBQEERofAgJiKBoZAgsXTicUDgYDoygNXU4hACH5BAUDAB8ALAAAAAAQ=
+ABAAAAV54Cd+EFBNY6p+hgCssOERGwSP3eZBgUIEG0xhdGFpPMjChjNoRD6XIGBDQVo9FIcogZn=
+srlbLQNRQfMEewVN0ERAaaE9AoDoECGj76lBBTxQwDlYBEQweGwwqEDIHCwIbBgAAFioUBgUOdC=
+IaBRwrBhUHNykQY6MfIQA7"); background-position: 5px 60%; }
+  #ca-unwatch.icon a span, #ca-watch.icon a span { display: none; }
+  div.vectorTabs ul { background-image: url("data:image/png;base64,iVBORw0K=
+GgoAAAANSUhEUgAAAAEAAAAuCAIAAABmjeQ9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ=
+lYWR5ccllPAAAAERJREFUeF5lTtEKgEAMMv//j/O0IxlH9CA6N2WURAA/OHl5GeWAwUUHBcKV79=
+5FtTePxpmV3t9uv8Z3/cmvM88vzbbrAV/dQdX+eas3AAAAAElFTkSuQmCC"); background-po=
+sition: right bottom; background-repeat: no-repeat; }
+  .tipsy { font-size: 0.8em; }
+}
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://wiki.osdev.org/load.php?debug=false&lang=en&modules=site&only=styles&skin=vector&*
+
+@charset "utf-8";
+
+div.mw-geshi div, div.mw-geshi div pre, span.mw-geshi, pre.source-css, pre.=
+source-javascript { font-family: monospace, Courier !important; }
+
+@media print {
+}
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://wiki.osdev.org/images/d/d3/Difficulty_1.png
+
+iVBORw0KGgoAAAANSUhEUgAAAC4AAAAOCAYAAABQFS4BAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAxMC8yOS8wONtkcyYAAAAYdEVYdFNv
+ZnR3YXJlAEFkb2JlIEZpcmV3b3Jrc0+zH04AAAJwSURBVEiJzZS9axRBGMZ/t7fhxLvIKQgG1ISA
+TfBPEAUbC4mN+AeIMEGwSGshWFr4heUUio2NacQoFqaI0UpBIVVMk0gu4bjL7e7Nft1+zFrcCZc1
+BhLz9SzDws7vffbZd2emMDU/dWHu49zrxrfGKTd0cV2XIAjwQx/P8/BGvbXyWPnG4oPFL1JKgBHg
+KTAOdIACG/UBmBRCLOf4a4DOsRkwvRPenH0/+3b43HB17PYYUSnCwaFBgxW9wsLSAtZda6g105oG
+jveKnwN1oCqEUP2uUsqzwDPgBXC5j7eAM0KI2m7xRuNHozp4ZZBKqcKJ3lWhgpEYZMcy1IQi+h5V
+++ovAXfyoQGEEL+A+8DFHC/yIf6XN5VSZEczBhigTJkiRZppEx1otKMpDBTIsqy/PhFCrOdN+5Sf
+2xPe8H2fkJCIiCJF0HTXuOMTWzGZk23hcXAyozhCoTAwCAmxU5u6V8d2bEI3JA3Tg864qUytNeus
+4+FRpIiVWtTCGq2gheoo0vSQBgdo0MDAQKOxtEUtrtGMmrTTdvdAyh94WyvrjT3lzSzLWGUVjaZD
+Byu1qEd17I4NEXA4G46ZJEk3cGbhJA6O7xCoAHwgoBt+e/uzwPb+0Y54s9PpEOsYFSmUrwitEO1q
+UIALhNuw3EcZnufhtBxUWxE0A9JmCm3Ao3tf/qumIKWsbOE5tB+86Y64djwRV/1xn+RI0u2y6o1V
+4B1wGruv8DPwSkr5GFhi4y44CTwCPuX4l1LKe8BPIUTyZ0JKOQo83Alvls6Xrlpfran4Vpz/8u7a
+HmUNg+t9T28CT4CZf3TkDTC5CT/fe/mu8L8BlUZ7tsc10w0AAAAASUVORK5CYII=
+
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://wiki.osdev.org/skins/common/images/osdev.png
+
+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
+
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF----
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: https://wiki.osdev.org/skins/common/images/poweredby_mediawiki_88x31.png
+
+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
+R4cAAAAASUVORK5CYII=
+
+------MultipartBoundary--mf7EylDO7J64NHniXpa8VlGigj1rMR7r05LIjsAvBF------

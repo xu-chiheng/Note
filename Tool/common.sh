@@ -767,7 +767,6 @@ build_and_install_binutils_gcc_for_target() {
 			--disable-gdb --disable-gdbserver --disable-gdbsupport --disable-libdecnumber --disable-readline --disable-sim
 
 			# optional options
-			--enable-interwork
 			--enable-multilib
 	)
 
@@ -779,7 +778,6 @@ build_and_install_binutils_gcc_for_target() {
 			--target="${target}"
 
 			# optional options
-			--enable-interwork
 			--enable-multilib
 	)
 

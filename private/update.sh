@@ -49,6 +49,7 @@ do_update_all_files() {
 		Tool/llvm.cygport
 
 		Tool/_doc
+		Tool/_sysroot
 		Tool/_quirk
 		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make}
 

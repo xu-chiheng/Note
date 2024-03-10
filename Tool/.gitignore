@@ -24,10 +24,11 @@
 /*.tar
 /*.bz2
 /*.gz
-/_mingw-vcrt
-/_mingw-ucrt
-/_cygwin
-/_linux
+/*.zst
+/__mingw-vcrt
+/__mingw-ucrt
+/__cygwin
+/__linux
 
 !/*.sha512
 !/*.cygport

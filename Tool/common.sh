@@ -491,7 +491,7 @@ maybe_make_tarball_and_move() {
 	fi
 
 	local host_os="$(print_host_os_of_triple "${host_triple}")"
-	local dest_dir="_${host_os}/${toolchain,,}"
+	local dest_dir="__${host_os}/${toolchain,,}"
 
 	echo_command rm -rf "${tarball}"{,.sha512} \
 	&& { echo_command pushd "${install_dir}" \
@@ -724,6 +724,32 @@ build_and_install_gmp_mpfr_mpc() {
 	&& echo "completed"
 }
 
+cross_gcc_create_target_include_dir_links() {
+	return 0
+
+	local gcc_install_dir="$1"
+	local target="$2"
+	mkdir -p "${gcc_install_dir}/${target}" \
+	&& rm -rf "${gcc_install_dir}/${target}/"{include,sys-include} \
+	&& case "${target}" in
+		x86_64-pc-cygwin | x86_64-pc-mingw64 )
+			ln -s "$(pwd)/_sysroot/cygwin/usr/include/w32api" "${gcc_install_dir}/${target}/include" \
+			&& ln -s "$(pwd)/_sysroot/cygwin/usr/include" "${gcc_install_dir}/${target}/sys-include"
+			;;
+		x86_64-pc-mingw64 )
+			ln -s "$(pwd)/_sysroot/mingw/ucrt64/include" "${gcc_install_dir}/${target}/include"
+			;;
+	esac
+}
+
+cross_gcc_remove_target_include_dir_links() {
+	return 0
+
+	local gcc_install_dir="$1"
+	local target="$2"
+	rm -rf "${gcc_install_dir}/${target}/"{include,sys-include}
+}
+
 build_and_install_binutils_gcc_for_target() {
 	local target="$1"
 	local toolchain="$2"
@@ -748,13 +774,9 @@ build_and_install_binutils_gcc_for_target() {
 
 	local is_build_and_install_libgcc=yes
 	case "${target}" in
-		x86_64-pc-cygwin )
+		x86_64-pc-cygwin | x86_64-pc-mingw64 )
+			# has problems to build target libgcc
 			is_build_and_install_libgcc=no
-			# --with-native-system-header-dir=dirname
-			;;
-		x86_64-pc-mingw64 )
-			is_build_and_install_libgcc=no
-			# --with-native-system-header-dir=dirname
 			;;
 	esac
 
@@ -765,19 +787,14 @@ build_and_install_binutils_gcc_for_target() {
 			--disable-werror
 			# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
 			--disable-gdb --disable-gdbserver --disable-gdbsupport --disable-libdecnumber --disable-readline --disable-sim
-
-			# optional options
-			--enable-multilib
 	)
 
 	local gcc_configure_options=(
+			--target="${target}"
 			# --without-headers
 			# --disable-gcov
 			--disable-shared
 			--disable-threads
-			--target="${target}"
-
-			# optional options
 			--enable-multilib
 	)
 
@@ -797,6 +814,8 @@ build_and_install_binutils_gcc_for_target() {
 	local old_path="${PATH}"
 
 	echo_command rm -rf "${gcc_install_dir}" \
+	\
+	&& echo_command cross_gcc_create_target_include_dir_links "${gcc_install_dir}" "${target}" \
 	\
 	&& echo_command export PATH="$(join_array_elements ':' "$(pwd)/${gcc_install_dir}/bin" "${PATH}" )" \
 	\
@@ -822,6 +841,8 @@ build_and_install_binutils_gcc_for_target() {
 		&& echo_command popd;} \
 		2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-${target}-gcc-output.txt" \
 	\
+	\
+	&& echo_command cross_gcc_remove_target_include_dir_links "${gcc_install_dir}" "${target}" \
 	\
 	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
 	\

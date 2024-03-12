@@ -774,7 +774,7 @@ build_and_install_binutils_gcc_for_target() {
 
 	local is_build_and_install_libgcc=yes
 	case "${target}" in
-		x86_64-pc-cygwin | x86_64-pc-mingw64 )
+		x86_64-pc-cygwin )
 			# has problems to build target libgcc
 			is_build_and_install_libgcc=no
 			;;

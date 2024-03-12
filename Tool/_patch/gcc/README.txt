@@ -7,4 +7,4 @@ https://src.fedoraproject.org/rpms/gcc.git
 
 
 
-patch_apply . ../_patch/gcc/{cygwin-ldflags,mingw-{ldflags,gethostname}}.patch
+patch_apply . ../_patch/gcc/{cygwin-ldflags,mingw-{ldflags,gethostname,libgcc-inhibit_libc}}.patch

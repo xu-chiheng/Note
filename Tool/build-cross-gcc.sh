@@ -52,6 +52,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 		aarch64-elf
 		riscv64-elf
 
+		loongarch64-elf
 		sparc64-elf
 		mips64-elf
 

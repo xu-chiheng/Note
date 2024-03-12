@@ -30,6 +30,7 @@ cd "$(dirname "$0")"
 # Debian KDE 12             https://www.debian.org/CD/live
 # Kubuntu 22.04             https://kubuntu.org
 
+# GPT(GUID Partition Table)
 # /dev/sda1      /boot/efi        EFI System              500M FAT32/ESP(EFI system partition)  flags=boot hidden
 # /dev/sda2      /                Linux root              400G xfs or ext4
 # /dev/sda3      /mnt/work        Mount Work              100G btrfs    (Windows 10/11 has driver of btrfs, but some Linux distro does not support btrfs)
@@ -70,9 +71,9 @@ cd "$(dirname "$0")"
 
 # gsettings set org.gnome.nautilus.preferences executable-text-activation 'launch'
 
-
-# 安装git redhat-lsb-core
 # https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
+
+
 if quiet_command which apt; then
 	# Debian, Ubuntu, Raspbian
 	true
@@ -351,6 +352,7 @@ install_vs_code() {
 	esac
 }
 
+# https://linuxconfig.org/how-to-install-google-chrome-browser-on-linux
 # install_google_chrome() {
 # 	case "${OS_NAME}" in
 # 		Ubuntu | Debian )
@@ -366,10 +368,9 @@ install_vs_code() {
 # 			# How to Install Google Chrome in Arch-based Linux Distributions
 # 			# https://itsfoss.com/install-chrome-arch-linux/
 # 			pacman -S --needed base-devel git \
+# 			&& rm -rf google-chrome \
 # 			&& git clone https://aur.archlinux.org/google-chrome.git \
-# 			&& cd google-chrome \
-# 			&& makepkg -si
-
+# 			&& ( cd google-chrome && makepkg -si )
 # 			# upgrade
 # 			# git pull
 # 			# makepkg -si

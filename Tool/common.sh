@@ -789,10 +789,12 @@ build_and_install_binutils_gcc_for_target() {
 			--disable-gdb --disable-gdbserver --disable-gdbsupport --disable-libdecnumber --disable-readline --disable-sim
 	)
 
+	# Installing GCC: Configuration
+	# https://gcc.gnu.org/install/configure.html
 	local gcc_configure_options=(
 			--target="${target}"
-			# --without-headers
-			# --disable-gcov
+			--without-headers
+			--disable-gcov
 			--disable-shared
 			--disable-threads
 			--enable-multilib

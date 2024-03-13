@@ -724,32 +724,6 @@ build_and_install_gmp_mpfr_mpc() {
 	&& echo "completed"
 }
 
-cross_gcc_create_target_include_dir_links() {
-	return 0
-
-	local gcc_install_dir="$1"
-	local target="$2"
-	mkdir -p "${gcc_install_dir}/${target}" \
-	&& rm -rf "${gcc_install_dir}/${target}/"{include,sys-include} \
-	&& case "${target}" in
-		x86_64-pc-cygwin | x86_64-pc-mingw64 )
-			ln -s "$(pwd)/_sysroot/cygwin/usr/include/w32api" "${gcc_install_dir}/${target}/include" \
-			&& ln -s "$(pwd)/_sysroot/cygwin/usr/include" "${gcc_install_dir}/${target}/sys-include"
-			;;
-		x86_64-pc-mingw64 )
-			ln -s "$(pwd)/_sysroot/mingw/ucrt64/include" "${gcc_install_dir}/${target}/include"
-			;;
-	esac
-}
-
-cross_gcc_remove_target_include_dir_links() {
-	return 0
-
-	local gcc_install_dir="$1"
-	local target="$2"
-	rm -rf "${gcc_install_dir}/${target}/"{include,sys-include}
-}
-
 build_and_install_binutils_gcc_for_target() {
 	local target="$1"
 	local toolchain="$2"
@@ -765,10 +739,10 @@ build_and_install_binutils_gcc_for_target() {
 	local current_datetime="${12}"
 
 	local host_os="$(print_host_os_of_triple "${host_triple}")"
-	local gcc_install_dir="${gcc_source_dir}-${target}-${host_os}-${toolchain,,}-${build_type,,}-install"
-	local gcc_build_dir="${gcc_source_dir}-${target}-${host_os}-${toolchain,,}-${build_type,,}-build"
+	local gcc_install_dir="${gcc_source_dir}-${host_os}-${toolchain,,}-${build_type,,}-${target}-install"
+	local gcc_build_dir="${gcc_source_dir}-${host_os}-${toolchain,,}-${build_type,,}-${target}-build"
 	local bin_tarball="${package}-${target}-${version}.tar"
-	local binutils_build_dir="${binutils_source_dir}-${target}-${host_os}-${toolchain,,}-${build_type,,}-build"
+	local binutils_build_dir="${binutils_source_dir}-${host_os}-${toolchain,,}-${build_type,,}-${target}-build"
 
 	local install_prefix="$(pwd)/${gcc_install_dir}"
 
@@ -809,8 +783,6 @@ build_and_install_binutils_gcc_for_target() {
 
 	echo_command rm -rf "${gcc_install_dir}" \
 	\
-	&& echo_command cross_gcc_create_target_include_dir_links "${gcc_install_dir}" "${target}" \
-	\
 	&& echo_command export PATH="$(join_array_elements ':' "$(pwd)/${gcc_install_dir}/bin" "${PATH}" )" \
 	\
 	&& { time_command pushd_and_configure "${binutils_build_dir}" "${binutils_source_dir}" \
@@ -831,8 +803,6 @@ build_and_install_binutils_gcc_for_target() {
 		&& echo_command popd;} \
 		2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-${target}-gcc-output.txt" \
 	\
-	\
-	&& echo_command cross_gcc_remove_target_include_dir_links "${gcc_install_dir}" "${target}" \
 	\
 	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
 	\

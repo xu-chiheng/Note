@@ -772,14 +772,6 @@ build_and_install_binutils_gcc_for_target() {
 
 	local install_prefix="$(pwd)/${gcc_install_dir}"
 
-	local is_build_and_install_libgcc=yes
-	case "${target}" in
-		x86_64-pc-cygwin )
-			# has problems to build target libgcc
-			is_build_and_install_libgcc=no
-			;;
-	esac
-
 	local binutils_configure_options=(
 			--target="${target}"
 			--prefix="${install_prefix}"
@@ -833,13 +825,9 @@ build_and_install_binutils_gcc_for_target() {
 			"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${host_triple}" \
 			"${gcc_configure_options[@]}" \
 		&& time_command parallel_make all-gcc \
-		&& if [ "${is_build_and_install_libgcc}" = yes ]; then
-			time_command parallel_make all-target-libgcc
-		fi \
+		&& time_command parallel_make all-target-libgcc \
 		&& time_command parallel_make install-gcc \
-		&& if [ "${is_build_and_install_libgcc}" = yes ]; then
-			time_command parallel_make install-target-libgcc
-		fi \
+		&& time_command parallel_make install-target-libgcc \
 		&& echo_command popd;} \
 		2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-${target}-gcc-output.txt" \
 	\

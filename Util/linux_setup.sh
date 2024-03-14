@@ -100,7 +100,7 @@ OS_VERSION="$(lsb_release -sr)"
 
 check_os_and_version() {
 	case "${OS_NAME}" in
-		Ubuntu | Debian | Fedora | CentOSStream | RockyLinux | Arch | Manjaro )
+		Ubuntu | Debian | Fedora | CentOSStream | RockyLinux | AlmaLinux | Arch | Manjaro )
 			true
 			;;
 		* )
@@ -169,51 +169,30 @@ set_fastest_mirror_and_update() {
 				# https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-20&arch=x86_64
 
 				# 不要注释metalink行
-				find /etc/yum.repos.d -type f -print0 | xargs -0 sed -i \
-							-e 's,^#baseurl=,baseurl=,g' \
-							-e 's,http://download.fedoraproject.org/pub/fedora/linux,http://mirrors.kernel.org/fedora-buffet/archive/fedora/linux,g' \
+				find /etc/yum.repos.d -type f -print0 | xargs -0 sed -i -E \
+							-e 's,^#\s*(baseurl=),\1,g' \
+							-e 's,http://download.fedoraproject.org/pub/fedora/linux/,http://mirrors.kernel.org/fedora-buffet/archive/fedora/linux/,g' \
 				&& dnf -y update \
 				&& dnf -y upgrade
 			else
-				find /etc/yum.repos.d -type f -print0 | xargs -0 sed -i \
-							-e 's,^#baseurl=,baseurl=,g' \
-							-e 's,^metalink=,#metalink=,g' \
-							-e 's,http://download.example/pub/fedora/linux,https://mirrors.ustc.edu.cn/fedora,g' \
+				find /etc/yum.repos.d -type f -name 'fedora*' -a ! -name 'fedora-cisco*' -print0 | xargs -0 sed -i -E \
+							-e 's,^#\s*(baseurl=),\1,g' \
+							-e 's,^(metalink=),#\1,g' \
+							-e 's,http://download.example/pub/fedora/linux/,https://mirrors.ustc.edu.cn/fedora/,g' \
+							-e 's,http://download1.rpmfusion.org/,https://mirrors.ustc.edu.cn/rpmfusion/,g' \
+				&& find /etc/yum.repos.d -type f -name 'fedora-cisco*' -print0 | xargs -0 sed -i -E \
+							-e 's,^(metalink=),#\1,g' \
+							-e 's,^(enabled=)1,\10,g' \
 				&& dnf -y update \
 				&& dnf -y upgrade
 			fi
 			;;
-		# CentOS )
-
-		#     #配置YUM使用国内快速mirror  http://ftp.sjtu.edu.cn/   http://mirrors.ustc.edu.cn/
-
-		#     find /etc/yum.conf /etc/yum.repos.d -type f
-		#     find /etc/yum.conf /etc/yum.repos.d -type f -print0 | xargs -0 cat
-
-
-		#     find /etc/yum.conf /etc/yum.repos.d -type f -print0 | xargs -0 sed -i \
-		#                 -e 's/^#baseurl=/baseurl=/g'   -e 's/^mirrorlist=/#mirrorlist=/g'  \
-		#                 -e 's,http://download.fedoraproject.org/pub/fedora/linux,http://ftp.sjtu.edu.cn/fedora/linux,g'  \
-		#                 -e 's,http://mirror.centos.org/centos,http://ftp.sjtu.edu.cn/centos,g'  \
-		#                 -e 's,http://vault.centos.org,http://ftp.sjtu.edu.cn/centos,g'  \
-		#                 -e 's,^metalink=,#metalink=,g'
-
-		#     find /etc/yum.conf /etc/yum.repos.d -type f -print0 | xargs -0 sed -i \
-		#                 -e 's/^#baseurl=/baseurl=/g'   -e 's/^mirrorlist=/#mirrorlist=/g'  \
-		#                 -e 's,http://download.fedoraproject.org/pub/fedora/linux,http://mirrors.ustc.edu.cn/fedora/linux,g'  \
-		#                 -e 's,http://mirror.centos.org/centos,http://mirrors.ustc.edu.cn/centos,g'  \
-		#                 -e 's,http://vault.centos.org,http://mirrors.ustc.edu.cn/centos,g'  \
-		#                 -e 's,^metalink=,#metalink=,g'
-
-
-		#     find /etc/yum.conf /etc/yum.repos.d -type f -print0 | xargs -0 cat
-		# 	;;
 		CentOSStream )
 			# CentOS中设置国内最快的mirror           https://mirrors.ustc.edu.cn/centos
 			backup_or_restore_file_or_dir /etc/yum.repos.d \
-			&& find /etc/yum.repos.d -type f -print0 | xargs -0 sed -i \
-						-e 's,^#baseurl=,baseurl=,g' \
-						-e 's,^mirrorlist=,#mirrorlist=,g' \
+			&& find /etc/yum.repos.d -type f -print0 | xargs -0 sed -i -E \
+						-e 's,^#\s*(baseurl=),\1,g' \
+						-e 's,^(mirrorlist=),#\1,g' \
 						-e 's,http://mirror.centos.org,https://mirrors.ustc.edu.cn,g' \
 			&& dnf -y update \
 			&& dnf -y upgrade
@@ -221,10 +200,37 @@ set_fastest_mirror_and_update() {
 		RockyLinux )
 			# should be similar to CentOSStream
 			backup_or_restore_file_or_dir /etc/yum.repos.d \
-			&& find /etc/yum.repos.d -type f -print0 | xargs -0 sed -i \
-						-e 's,^#baseurl=,baseurl=,g' \
-						-e 's,^mirrorlist=,#mirrorlist=,g' \
-						-e 's,http://dl.rockylinux.org/$contentdir,https://mirrors.ustc.edu.cn/rocky,g' \
+			&& find /etc/yum.repos.d -type f -name 'rocky*' -print0 | xargs -0 sed -i -E \
+						-e 's,^#\s*(baseurl=),\1,g' \
+						-e 's,^(mirrorlist=),#\1,g' \
+						-e 's,http://dl.rockylinux.org/$contentdir/,https://mirrors.ustc.edu.cn/rocky/,g' \
+			&& find /etc/yum.repos.d -type f -name elrepo.repo -print0 | xargs -0 sed -i -E \
+						-e 's,http://elrepo.org/linux/,https://mirrors.ustc.edu.cn/elrepo/,g' \
+			&& find /etc/yum.repos.d -type f -name 'epel*' -a ! -name 'epel-cisco*' -print0 | xargs -0 sed -i -E \
+						-e 's,^#\s*(baseurl=),\1,g' \
+						-e 's,^(metalink=),#\1,g' \
+						-e 's,https://download.example/pub/epel/,https://mirrors.ustc.edu.cn/epel/,g' \
+			&& find /etc/yum.repos.d -type f -name 'epel-cisco*' -print0 | xargs -0 sed -i -E \
+						-e 's,^(metalink=),#\1,g' \
+						-e 's,^(enabled=)1,\10,g' \
+			&& dnf -y update \
+			&& dnf -y upgrade
+			;;
+		AlmaLinux )
+			# should be similar to CentOSStream
+			backup_or_restore_file_or_dir /etc/yum.repos.d \
+			&& find /etc/yum.repos.d -type f -name 'almalinux*' -print0 | xargs -0 sed -i -E \
+						-e 's,^#\s*(baseurl=),\1,g' \
+						-e 's,^(mirrorlist=),#\1,g' \
+						-e 's,https://repo.almalinux.org/vault/,https://mirrors.cloud.tencent.com/almalinux/,g' \
+						-e 's,https://repo.almalinux.org/almalinux/,https://mirrors.cloud.tencent.com/almalinux/,g' \
+			&& find /etc/yum.repos.d -type f -name 'epel*' -a ! -name 'epel-cisco*' -print0 | xargs -0 sed -i -E \
+						-e 's,^#\s*(baseurl=),\1,g' \
+						-e 's,^(metalink=),#\1,g' \
+						-e 's,https://download.example/pub/epel/,https://mirrors.ustc.edu.cn/epel/,g' \
+			&& find /etc/yum.repos.d -type f -name 'epel-cisco*' -print0 | xargs -0 sed -i -E \
+						-e 's,^(metalink=),#\1,g' \
+						-e 's,^(enabled=)1,\10,g' \
 			&& dnf -y update \
 			&& dnf -y upgrade
 			;;
@@ -252,7 +258,7 @@ install_basic_packages() {
 			# newer packages are available
 			packages+=( htop neofetch astyle )
 			;;
-		CentOSStream | RockyLinux )
+		CentOSStream | RockyLinux | AlmaLinux )
 			packages+=()
 			;;
 	esac
@@ -269,7 +275,7 @@ install_basic_packages() {
 		Ubuntu | Debian )
 			packages+=( g++ )
 			;;
-		CentOSStream | RockyLinux )
+		CentOSStream | RockyLinux | AlmaLinux )
 			packages+=( gcc-c++ )
 			;;
 		Arch | Manjaro )
@@ -282,7 +288,7 @@ install_basic_packages() {
 		Ubuntu | Debian | Fedora )
 			packages+=( dejagnu autogen texinfo sharutils doxygen )
 			;;
-		CentOSStream | RockyLinux )
+		CentOSStream | RockyLinux | AlmaLinux )
 			packages+=()
 			;;
 		Arch | Manjaro )
@@ -294,7 +300,7 @@ install_basic_packages() {
 		Ubuntu | Debian )
 			packages+=( libgmp-dev libmpfr-dev libmpc-dev libzip-dev libppl-dev )
 			;;
-		Fedora | CentOSStream | RockyLinux )
+		Fedora | CentOSStream | RockyLinux | AlmaLinux )
 			packages+=( gmp gmp-devel mpfr mpfr-devel libmpc libzip libzip-devel )
 			case "${OS_NAME}" in
 				Fedora | CentOSStream )
@@ -316,7 +322,7 @@ install_basic_packages() {
 		Ubuntu | Debian )
 			apt install -y "${packages[@]}"
 			;;
-		Fedora | CentOSStream | RockyLinux )
+		Fedora | CentOSStream | RockyLinux | AlmaLinux )
 			dnf install -y "${packages[@]}"
 			;;
 		Arch | Manjaro )
@@ -338,7 +344,7 @@ install_vs_code() {
 			&& apt update -y \
 			&& apt install -y code
 			;;
-		Fedora | CentOSStream | RockyLinux )
+		Fedora | CentOSStream | RockyLinux | AlmaLinux )
 			# https://computingforgeeks.com/install-visual-studio-code-on-fedora/
 			rpm --import https://packages.microsoft.com/keys/microsoft.asc \
 			&& sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo' \
@@ -361,7 +367,7 @@ install_vs_code() {
 # 			&& apt install -y ./google-chrome-stable_current_amd64.deb \
 # 			&& rm -rf google-chrome-stable_current_amd64.deb
 # 			;;
-# 		Fedora | CentOSStream | RockyLinux )
+# 		Fedora | CentOSStream | RockyLinux | AlmaLinux )
 # 			dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 # 			;;
 # 		Arch | Manjaro )
@@ -392,7 +398,7 @@ install_openjdk() {
 			# dnf install -y java-1.8.0-openjdk
 			# dnf install -y java-latest-openjdk
 			;;
-		CentOSStream | RockyLinux )
+		CentOSStream | RockyLinux | AlmaLinux )
 			# dnf install -y java-11-openjdk-devel
 			dnf install -y java-17-openjdk-devel
 			# alternatives --config java
@@ -418,7 +424,7 @@ install_qemu() {
 		Fedora )
 			dnf install -y qemu qemu-kvm libvirt-daemon libvirt bridge-utils virt-manager
 			;;
-		CentOSStream | RockyLinux )
+		CentOSStream | RockyLinux | AlmaLinux )
 			dnf install -y qemu-kvm libvirt-daemon libvirt virt-manager
 			;;
 		Arch | Manjaro )
@@ -459,7 +465,7 @@ install_qemu_build_requirements() {
 		Fedora )
 			dnf install -y git glib2-devel libfdt-devel pixman-devel zlib-devel bzip2 ninja-build python3 'SDL2*' 'gtk3*'
 			;;
-		CentOSStream | RockyLinux )
+		CentOSStream | RockyLinux | AlmaLinux )
 			# no ninja-build and SDL2, QEMU cant't be built
 			dnf install -y git glib2-devel pixman-devel zlib-devel bzip2 python3 'gtk3*'
 			;;
@@ -483,6 +489,9 @@ set_hostname() {
 			;;
 		RockyLinux )
 			hostname="rocky"
+			;;
+		AlmaLinux )
+			hostname="alma"
 			;;
 		Ubuntu )
 			hostname="ubuntu"
@@ -534,7 +543,7 @@ install_samba() {
 	# CentOS 6.3下Samba服务器的安装与配置
 	# http://www.cnblogs.com/mchina/archive/2012/12/18/2816717.html
 	case "${OS_NAME}" in
-		Fedora | CentOSStream | RockyLinux )
+		Fedora | CentOSStream | RockyLinux | AlmaLinux )
 			dnf -v -y install samba samba-client \
 			&& systemctl start smb \
 			&& systemctl start nmb \

@@ -80,7 +80,9 @@ if quiet_command which apt; then
 	# apt install -y lsb-release
 elif quiet_command which dnf; then
 	# Fedora, RedHat, CentOS
-	dnf install -y lsb_release
+	if ! quiet_command which lsb_release; then
+		dnf install -y lsb_release
+	fi
 elif quiet_command which pacman; then
 	# Arch Linux, Manjaro, Parabola
 	true
@@ -159,33 +161,20 @@ set_fastest_mirror_and_update() {
 			# https://stackoverflow.com/questions/18668556/how-can-i-compare-numbers-in-bash
 			# https://tldp.org/LDP/abs/html/comparison-ops.html
 			backup_or_restore_file_or_dir /etc/yum.repos.d \
-			&& if [ "${OS_VERSION}" -le "31" ]; then
-				# https://admin.fedoraproject.org/mirrormanager/
-				# https://archives.fedoraproject.org/pub/archive/fedora/linux
-				# http://mirrors.kernel.org/fedora-buffet/archive/fedora/linux
-				# https://mirror.math.princeton.edu/pub/fedora-archive/fedora/linux
-				# https://dl.fedoraproject.org/pub/archive//fedora/linux
+			&& find /etc/yum.repos.d -type f -name 'fedora*' -a ! -name 'fedora-cisco*' -print0 | xargs -0 sed -i -E \
+						-e 's,^#\s*(baseurl=),\1,g' \
+						-e 's,^(metalink=),#\1,g' \
+						-e 's,http://download.example/pub/fedora/linux/,https://mirrors.ustc.edu.cn/fedora/,g' \
+			&& find /etc/yum.repos.d -type f -name 'fedora-cisco*' -print0 | xargs -0 sed -i -E \
+						-e 's,^(metalink=),#\1,g' \
+						-e 's,^(enabled=)1,\10,g' \
+			&& find /etc/yum.repos.d -type f -name 'rpmfusion*' -print0 | xargs -0 sed -i -E \
+						-e 's,^#\s*(baseurl=),\1,g' \
+						-e 's,^(metalink=),#\1,g' \
+						-e 's,http://download1.rpmfusion.org/,https://mirrors.ustc.edu.cn/rpmfusion/,g' \
+			&& dnf -y update \
+			&& dnf -y upgrade
 
-				# https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-20&arch=x86_64
-
-				# 不要注释metalink行
-				find /etc/yum.repos.d -type f -print0 | xargs -0 sed -i -E \
-							-e 's,^#\s*(baseurl=),\1,g' \
-							-e 's,http://download.fedoraproject.org/pub/fedora/linux/,http://mirrors.kernel.org/fedora-buffet/archive/fedora/linux/,g' \
-				&& dnf -y update \
-				&& dnf -y upgrade
-			else
-				find /etc/yum.repos.d -type f -name 'fedora*' -a ! -name 'fedora-cisco*' -print0 | xargs -0 sed -i -E \
-							-e 's,^#\s*(baseurl=),\1,g' \
-							-e 's,^(metalink=),#\1,g' \
-							-e 's,http://download.example/pub/fedora/linux/,https://mirrors.ustc.edu.cn/fedora/,g' \
-							-e 's,http://download1.rpmfusion.org/,https://mirrors.ustc.edu.cn/rpmfusion/,g' \
-				&& find /etc/yum.repos.d -type f -name 'fedora-cisco*' -print0 | xargs -0 sed -i -E \
-							-e 's,^(metalink=),#\1,g' \
-							-e 's,^(enabled=)1,\10,g' \
-				&& dnf -y update \
-				&& dnf -y upgrade
-			fi
 			;;
 		CentOSStream )
 			# CentOS中设置国内最快的mirror           https://mirrors.ustc.edu.cn/centos

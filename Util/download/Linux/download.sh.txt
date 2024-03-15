@@ -16,10 +16,13 @@ DEBIAN_KDE_VERSION_MINOR=5.0
 ROCKY_LINUX_KDE_VERSION_MAJOR=9.3
 ROCKY_LINUX_KDE_VERSION_MINOR=20240217.0
 
+ALMA_LINUX_KDE_VERSION_MAJOR=9.3
+
 
 cat <<EOF | tee thunder-urls.txt #| xargs -n1 wget --verbose
 https://mirrors.tuna.tsinghua.edu.cn/ubuntu-cdimage/kubuntu/releases/${KUBUNTU_VERSION_MAJOR}.${KUBUNTU_VERSION_MINOR}/release/kubuntu-${KUBUNTU_VERSION_MAJOR}.${KUBUNTU_VERSION_MINOR}-desktop-amd64.iso
 https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/${FEDORA_KDE_VERSION_MAJOR}/Spins/x86_64/iso/Fedora-KDE-Live-x86_64-${FEDORA_KDE_VERSION_MAJOR}-${FEDORA_KDE_VERSION_MINOR}.iso
 https://mirrors.tuna.tsinghua.edu.cn/debian-cd/${DEBIAN_KDE_VERSION_MAJOR}.${DEBIAN_KDE_VERSION_MINOR}-live/amd64/iso-hybrid/debian-live-${DEBIAN_KDE_VERSION_MAJOR}.${DEBIAN_KDE_VERSION_MINOR}-amd64-kde.iso
 https://dl.rockylinux.org/pub/rocky/${ROCKY_LINUX_KDE_VERSION_MAJOR}/live/x86_64/Rocky-${ROCKY_LINUX_KDE_VERSION_MAJOR}-KDE-x86_64-${ROCKY_LINUX_KDE_VERSION_MINOR}.iso
+https://mirrors.cloud.tencent.com/almalinux/${ALMA_LINUX_KDE_VERSION_MAJOR}/live/x86_64/AlmaLinux-${ALMA_LINUX_KDE_VERSION_MAJOR}-x86_64-Live-KDE.iso
 EOF

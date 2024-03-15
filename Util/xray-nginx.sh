@@ -111,6 +111,20 @@
 # VPS 需要 disable ipv6
 # "自定义反代站点"设置为 https://www.baidu.com
 
+how_to_use_this_script() {
+	# VPS SSH login as root
+	# git remote set-url origin git@github.com:xu-chiheng/Note.git
+	cd ~
+	rm -rf .git Note
+	git clone https://github.com/xu-chiheng/Note -b main
+	mv Note/.git ./
+	rm -rf Note
+	git reset --hard HEAD
+	Util/xray-nginx.sh
+
+	# 4. 安装Xray-VMESS+WS+TLS(推荐)
+	# 12. 卸载Xray
+}
 
 
 getData() {

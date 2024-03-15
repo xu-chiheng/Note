@@ -26,7 +26,8 @@ cd "$(dirname "$0")"
 
 
 # Fedora KDE 39             https://fedoraproject.org/spins/kde
-# Rocky Linux KDE 9         https://docs.rockylinux.org/guides/desktop/kde_installation
+# Rocky Linux KDE 9         https://docs.rockylinux.org/guides/desktop/kde_installation   https://dl.rockylinux.org/pub/rocky/9.3/live/x86_64/
+# AlmaLinux KDE 9           https://almalinux.org/get-almalinux   https://repo.almalinux.org/almalinux/9/live/x86_64/
 # Debian KDE 12             https://www.debian.org/CD/live
 # Kubuntu 22.04             https://kubuntu.org
 
@@ -36,10 +37,14 @@ cd "$(dirname "$0")"
 # /dev/sda3      /mnt/work        Mount Work              100G btrfs    (Windows 10/11 has driver of btrfs, but some Linux distro does not support btrfs)
 # /dev/sda4      /mnt/work2       Mount Work              25G fat32/vfat  optional, only for Linux distro that does not support btrfs
 
+# Debian on VMware Workstation 17
 # Debian 12中只能使用启动菜单中的“Start Installer”安装，不要使用KDE Live中的“Install Debian”程序(Calamares Installer)安装。
 # “Install Debian”这种安装方式，Partition时，只能选择Erase disk，这样虽然可以成功安装，但是无法设置/mnt/work mount point，如果Partition时，选择Manual partitioning的话，会导致无法启动，root用户被lock。
 # “Start Installer”这种安装方式，安装过程中，必须首先删除硬盘上的已有所有分区，否则，安装之后系统无法启动。
-# 启动到固件，Boot Manager -> Enter setup -> Boot from a file -> 第一项 -> EFI -> debian -> shimx64.efi
+# 启动到固件，Boot Manager -> Enter setup -> Boot from a file -> first item -> EFI -> debian -> grub64.efi
+
+# Fedora on VMware Workstation 17
+# 启动到固件，Boot Manager -> Enter setup -> Boot from a file -> first item -> EFI -> fedora -> grub64.efi
 
 
 # How to enable root login?

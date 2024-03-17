@@ -525,14 +525,26 @@ backup_or_restore_file_or_dir() {
 	local file_or_dir="$1"
 	local dir="$(dirname "${file_or_dir}")"
 	local base="$(basename "${file_or_dir}")"
+	if [ ! -d "${dir}" ]; then
+		echo "${dir} is not a directory"
+		return 1
+	fi
 
 	pushd "${dir}" \
 	&& if [ ! -f "${base}".tar ]; then
-		tar -cvf "${base}".tar "${base}" \
+		if [ ! -e "${base}" ]; then
+			echo "${base} does not exist"
+			return 1
+		fi \
+		&& tar -cvf "${base}".tar "${base}" \
 		&& sha512_calculate_file "${base}".tar
 	else
-		if ! sha512_check_file "${base}".tar.sha512; then
-			echo "${file_or_dir}.tar is corrupt"
+		if [ ! -f "${base}".tar.sha512 ]; then
+			echo "${base}.tar.sha512 does not exist"
+			return 1
+		fi \
+		&& if ! sha512_check_file "${base}".tar.sha512; then
+			echo "${base}.tar is corrupt"
 			return 1
 		fi \
 		&& rm -rf "${base}" \

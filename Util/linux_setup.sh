@@ -179,7 +179,6 @@ set_fastest_mirror_and_update() {
 						-e 's,http://download1.rpmfusion.org/,https://mirrors.ustc.edu.cn/rpmfusion/,g' \
 			&& dnf -y update \
 			&& dnf -y upgrade
-
 			;;
 		CentOSStream )
 			# CentOS中设置国内最快的mirror           https://mirrors.ustc.edu.cn/centos

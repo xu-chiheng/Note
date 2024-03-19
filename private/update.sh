@@ -74,7 +74,7 @@ do_update_all_files() {
 		&& cp -rf ~/"${path}" "${dir}"/
 	done
 
-	echo "completed"
+	echo "Completed!"
 }
 
 do_update_all_files "$@"

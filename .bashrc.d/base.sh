@@ -537,6 +537,7 @@ backup_or_restore_file_or_dir() {
 			return 1
 		fi \
 		&& tar -cvf "${base}".tar "${base}" \
+		&& rm -rf "${base}".tar.sha512 \
 		&& sha512_calculate_file "${base}".tar
 	else
 		if [ ! -f "${base}".tar.sha512 ]; then

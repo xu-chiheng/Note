@@ -1,0 +1,13 @@
+diff --git a/gdb/configure b/gdb/configure
+index e17ede5a58f..7e64e1da2c4 100755
+--- a/gdb/configure
++++ b/gdb/configure
+@@ -31422,7 +31422,7 @@ SER_HARDWIRE="ser-base.o ser-unix.o ser-pipe.o ser-tcp.o"
+ case ${host} in
+   *go32* ) SER_HARDWIRE=ser-go32.o ;;
+   *djgpp* ) SER_HARDWIRE=ser-go32.o ;;
+-  *mingw32*) SER_HARDWIRE="ser-base.o ser-tcp.o ser-mingw.o" ;;
++  *mingw32* | *mingw64*) SER_HARDWIRE="ser-base.o ser-tcp.o ser-mingw.o" ;;
+   *) SER_HARDWIRE="$SER_HARDWIRE ser-uds.o" ;;
+ esac
+ 

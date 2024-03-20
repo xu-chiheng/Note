@@ -31,15 +31,20 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 {
 	dump_toolchain_build_type_and_compiler_flags
 
-	VERSION=13.2
+	VERSION=15.0.0 # commit 1ab9eefe3cea741aba17e11ff28ed48ac3a8293a 2024-03-20
 
 	CONFIGURE_OPTIONS=(
+		--enable-targets=all
 		--disable-nls
 		--disable-werror
 		# https://sourceware.org/gdb/wiki/BuildingNatively
 		--disable-binutils --disable-ld --disable-gold --disable-gas --disable-gprof
-		--enable-targets=all
 	)
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-mingw64 )
+			CONFIGURE_OPTIONS+=( --disable-sim )
+			;;
+	esac
 
 	time_command configure_build_install_package \
 		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${CONFIGURE_OPTIONS[@]}"

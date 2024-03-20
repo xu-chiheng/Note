@@ -1,0 +1,49 @@
+diff --git a/gdb/configure b/gdb/configure
+index d0fd1760b88..e17ede5a58f 100755
+--- a/gdb/configure
++++ b/gdb/configure
+@@ -19524,7 +19524,7 @@ fi
+ 
+   WIN32APILIBS=
+   case ${host} in
+-    *mingw32*)
++    *mingw32* | *mingw64*)
+ 
+ $as_echo "#define USE_WIN32API 1" >>confdefs.h
+ 
+diff --git a/gdbserver/configure b/gdbserver/configure
+index b85db9cd49d..4c5db241bd6 100755
+--- a/gdbserver/configure
++++ b/gdbserver/configure
+@@ -8231,7 +8231,7 @@ fi
+ 
+   WIN32APILIBS=
+   case ${host} in
+-    *mingw32*)
++    *mingw32* | *mingw64* )
+ 
+ $as_echo "#define USE_WIN32API 1" >>confdefs.h
+ 
+diff --git a/gdbsupport/configure b/gdbsupport/configure
+index b45f12de45b..a1e5c7d68e1 100755
+--- a/gdbsupport/configure
++++ b/gdbsupport/configure
+@@ -11005,7 +11005,7 @@ fi
+ 
+   WIN32APILIBS=
+   case ${host} in
+-    *mingw32*)
++    *mingw32* | *mingw64*)
+ 
+ $as_echo "#define USE_WIN32API 1" >>confdefs.h
+ 
+@@ -14344,7 +14344,7 @@ $as_echo "#define DEVELOPMENT 1" >>confdefs.h
+ fi
+ 
+ case ${host} in
+-  *mingw32*)
++  *mingw32* | *mingw64*)
+ 
+ $as_echo "#define USE_WIN32API 1" >>confdefs.h
+ 
+

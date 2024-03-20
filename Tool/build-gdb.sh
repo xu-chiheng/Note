@@ -42,6 +42,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 	)
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-mingw64 )
+			# have problems to build simulators
 			CONFIGURE_OPTIONS+=( --disable-sim )
 			;;
 	esac

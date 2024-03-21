@@ -150,7 +150,7 @@ linux_enable_ip_forward() {
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
 linux_disable_selinux() {
 	if [ -f /etc/selinux/config ]; then
-		sed -i -E -e 's/^SELINUX=.*$/SELINUX=disabled/g' /etc/selinux/config
+		sed -i -E -e 's/^(SELINUX=).*$/\1disabled/g' /etc/selinux/config
 		# after reboot
 		# getenforce
 	fi

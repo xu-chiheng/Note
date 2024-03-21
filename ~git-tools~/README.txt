@@ -5,3 +5,6 @@ Rocky Linux KDE
 Fedora KDE
 Kubuntu
 Debian KDE
+
+
+Windows 10, login as Administrator

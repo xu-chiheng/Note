@@ -7,7 +7,7 @@ index d0fd1760b88..e17ede5a58f 100755
    WIN32APILIBS=
    case ${host} in
 -    *mingw32*)
-+    *mingw32* | *mingw64*)
++    *mingw*)
  
  $as_echo "#define USE_WIN32API 1" >>confdefs.h
  
@@ -20,7 +20,7 @@ index b85db9cd49d..4c5db241bd6 100755
    WIN32APILIBS=
    case ${host} in
 -    *mingw32*)
-+    *mingw32* | *mingw64* )
++    *mingw* )
  
  $as_echo "#define USE_WIN32API 1" >>confdefs.h
  
@@ -33,7 +33,7 @@ index b45f12de45b..a1e5c7d68e1 100755
    WIN32APILIBS=
    case ${host} in
 -    *mingw32*)
-+    *mingw32* | *mingw64*)
++    *mingw*)
  
  $as_echo "#define USE_WIN32API 1" >>confdefs.h
  
@@ -42,7 +42,7 @@ index b45f12de45b..a1e5c7d68e1 100755
  
  case ${host} in
 -  *mingw32*)
-+  *mingw32* | *mingw64*)
++  *mingw*)
  
  $as_echo "#define USE_WIN32API 1" >>confdefs.h
  

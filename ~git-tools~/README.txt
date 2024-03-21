@@ -2,6 +2,7 @@
 KDE environment, login as root
 
 Rocky Linux KDE
+AlmaLinux KDE
 Fedora KDE
 Kubuntu
 Debian KDE

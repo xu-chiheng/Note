@@ -29,6 +29,12 @@
 # QEMU 7.1.0 can be built by GCC 12.2.0 and Clang 15.0.4 on  msys64-2022-11-07  mingw-msvcrt
 # QEMU 7.2.1 8.0.0 can also be built, but it can not load the kernel.
 
+# Quirk : 2024-03-22, QEMU must be built in ~/Tool directory， can't be built in E:/Note/Tool directory.
+# QEMU build system does not support the directory symlink E:/Note ---> ~  .
+
+# Self-built GCC has problems to build QEMU
+# Pre-installed GCC is OK
+
 cd "$(dirname "$0")"
 . "./common.sh"
 

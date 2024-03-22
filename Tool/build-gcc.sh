@@ -89,7 +89,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 				# --target=x86_64-w64-mingw32
 				# --enable-bootstrap
 				# --enable-checking=release
-				# --with-arch=x86-64
+				--with-arch=x86-64
 				--with-tune=generic
 				# --enable-languages=c,lto,c++,fortran,ada,objc,obj-c++,jit
 				--enable-shared
@@ -103,6 +103,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 				--disable-libstdcxx-pch
 				--enable-lto
 				--enable-libgomp
+				--disable-libssp
 				--disable-multilib
 				--disable-rpath
 				# --disable-win32-registry

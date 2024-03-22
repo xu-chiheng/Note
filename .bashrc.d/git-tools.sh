@@ -330,7 +330,7 @@ do_git_misc() {
 			&& time_command sync .git
 			;;
 		git_fetch )
-			time_command git fetch \
+			time_command git fetch "$@" \
 			&& time_command sync .git
 			;;
 		git_fsck )

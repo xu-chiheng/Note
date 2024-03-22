@@ -419,7 +419,7 @@ git_clone_and_checkout_dir_revision() {
 	local revision="$3"
 	local git_repo_url="$4"
 
-	time_command git clone --no-checkout "${git_repo_url}" "${dir}" \
+	time_command git clone --origin upstream --no-checkout "${git_repo_url}" "${dir}" \
 	&& echo_command git_checkout_dir_revision "${host_triple}" "${dir}" "${revision}"
 }
 

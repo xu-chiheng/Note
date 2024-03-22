@@ -42,7 +42,7 @@ llvm_create_test_branches_for_bisect() {
 	local major_version
 	for major_version in $(seq 16 99); do
 		# echo "${major_version}"
-		local major_branch="remotes/origin/release/${major_version}.x"
+		local major_branch="remotes/upstream/release/${major_version}.x"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
 		if quiet_command git_rev_parse "${major_branch}"; then
 			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" main
@@ -66,7 +66,7 @@ gcc_create_test_branches_for_bisect() {
 	local major_version
 	for major_version in $(seq 13 99); do
 		# echo "${major_version}"
-		local major_branch="remotes/origin/releases/gcc-${major_version}"
+		local major_branch="remotes/upstream/releases/gcc-${major_version}"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
 		if quiet_command git_rev_parse "${major_branch}"; then
 			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" master
@@ -90,7 +90,7 @@ binutils_create_test_branches_for_bisect() {
 	local major_version
 	for major_version in $(seq 36 99); do
 		# echo "${major_version}"
-		local major_branch="remotes/origin/binutils-2_${major_version}-branch"
+		local major_branch="remotes/upstream/binutils-2_${major_version}-branch"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
 		if quiet_command git_rev_parse "${major_branch}"; then
 			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" master
@@ -116,7 +116,7 @@ qemu_create_test_branches_for_bisect() {
 	for major_version in $(seq 6 99); do
 		for minor_version in $(seq 0 9); do
 			# echo "${major_version}" "${minor_version}"
-			local major_minor_branch="remotes/origin/stable-${major_version}.${minor_version}"
+			local major_minor_branch="remotes/upstream/stable-${major_version}.${minor_version}"
 			local test_branch="$(printf "test%02d%1d0000\n" "${major_version}" "${minor_version}")"
 			if quiet_command git_rev_parse "${major_minor_branch}"; then
 				maybe_create_test_branch_for_bisect "${major_minor_branch}" "${test_branch}" master

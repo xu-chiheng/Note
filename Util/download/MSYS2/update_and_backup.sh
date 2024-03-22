@@ -30,72 +30,76 @@
 # pacman -Syuu --noconfirm
 
 update_and_backup_msys2() {
-    local current_datetime="$1"
+	local current_datetime="$1"
 
-    local msys_packages=(
-        # msys-2.0.dll
-        base
-        base-devel
-        compression
-        editors
-        git
-        subversion
-        mercurial
-        expect
-        python
-        ninja
-        python-setuptools
-    )
+	local msys_packages=(
+		# msys-2.0.dll
+		base
+		base-devel
+		compression
+		editors
+		VCS
+		expect
+		python
+		ninja
+		python-setuptools
+	)
 
-    local mingw_vcrt_packages=(
-        # msvcrt.dll
-        mingw-w64-x86_64-libxml2
-        mingw-w64-x86_64-gcc
-        mingw-w64-x86_64-clang
-        mingw-w64-x86_64-clang-analyzer
-        mingw-w64-x86_64-clang-tools-extra
-        mingw-w64-x86_64-cmake
-        mingw-w64-x86_64-make
-        mingw-w64-x86_64-astyle
-        mingw-w64-x86_64-glib2
-        mingw-w64-x86_64-gtk3
-        mingw-w64-x86_64-SDL2
-        mingw-w64-x86_64-connect
-    )
+	local mingw_vcrt_packages=(
+		# msvcrt.dll
+		mingw-w64-x86_64-libxml2
+
+		mingw-w64-x86_64-toolchain
+		# mingw-w64-x86_64-binutils
+		# mingw-w64-x86_64-gdb
+		# mingw-w64-x86_64-gcc
+		# mingw-w64-x86_64-make
+
+		mingw-w64-x86_64-clang
+		mingw-w64-x86_64-clang-analyzer
+		mingw-w64-x86_64-clang-tools-extra
+
+		mingw-w64-x86_64-cmake
+		mingw-w64-x86_64-astyle
+		mingw-w64-x86_64-glib2
+		mingw-w64-x86_64-gtk3
+		mingw-w64-x86_64-SDL2
+		mingw-w64-x86_64-connect
+	)
 
 
-    local mingw_ucrt_packages=(
-        # ucrtbase.dll
+	local mingw_ucrt_packages=(
+		# ucrtbase.dll
 
-    )
+	)
 
-    local package
-    for package in "${mingw_vcrt_packages[@]}"; do
-        mingw_ucrt_packages+=( "$(echo "${package}" | sed -e 's/^mingw-w64-/mingw-w64-ucrt-/g' )" )
-    done
+	local package
+	for package in "${mingw_vcrt_packages[@]}"; do
+		mingw_ucrt_packages+=( "$(echo "${package}" | sed -E -e 's/^(mingw-w64)-(x86_64-.*)$/\1-ucrt-\2/g' )" )
+	done
 
-    local all_packages=(
-        "${msys_packages[@]}"
-        "${mingw_vcrt_packages[@]}"
-        "${mingw_ucrt_packages[@]}"
-    )
-    echo "packages :"
-    print_array_elements "${all_packages[@]}"
+	local all_packages=(
+		"${msys_packages[@]}"
+		"${mingw_vcrt_packages[@]}"
+		"${mingw_ucrt_packages[@]}"
+	)
+	echo "packages :"
+	print_array_elements "${all_packages[@]}"
 
-    local msys_root_parent_dir="$(cd "$(cygpath -m "${MSYS2_DIR}")/.." && pwd)"
-    local msys_root_base_name="$(basename "$(cygpath -m "${MSYS2_DIR}")")"
-    local msys_tarball_name="${msys_root_base_name}-${current_datetime}.tar"
+	local msys_root_parent_dir="$(cd "$(cygpath -m "${MSYS2_DIR}")/.." && pwd)"
+	local msys_root_base_name="$(basename "$(cygpath -m "${MSYS2_DIR}")")"
+	local msys_tarball_name="${msys_root_base_name}-${current_datetime}.tar"
 
-    pacman -Syuu --noconfirm \
-    && time_command pacman -S --needed --noconfirm --verbose "${all_packages[@]}" --downloadonly \
-    && time_command pacman -S --needed --noconfirm --verbose "${all_packages[@]}" \
-    && { echo_command pushd "${msys_root_parent_dir}" \
+	pacman -Syuu --noconfirm \
+	&& time_command pacman -S --needed --noconfirm --verbose "${all_packages[@]}" --downloadonly \
+	&& time_command pacman -S --needed --noconfirm --verbose "${all_packages[@]}" \
+	&& { echo_command pushd "${msys_root_parent_dir}" \
 		&& time_command tar -cf "${msys_tarball_name}" "${msys_root_base_name}" \
 		&& time_command xz_compress "${msys_tarball_name}" \
 		&& time_command sha512_calculate_file "${msys_tarball_name}".xz \
 		&& time_command sync . \
 		&& echo_command popd;} \
-    && echo "completed"
+	&& echo "completed"
 }
 
 CURRENT_DATETIME="$(print_current_datetime)"

@@ -47,7 +47,7 @@ git_update_git-tools_1() {
 git_update_git-tools() {
 	find . -type d -name '.git' \
 	-print0 | xargs -0 -n1 -P0 \
-	bash -c "$(declare -f echo_command); $(declare -f git_update_git-tools_1); git_update_git-tools_1"' "$@" ;' -
+	bash -c "$(declare -f quiet_command); $(declare -f echo_command); $(declare -f git_update_git-tools_1); git_update_git-tools_1"' "$@" ;' -
 }
 
 git_diff() {

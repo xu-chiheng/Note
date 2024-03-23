@@ -31,76 +31,51 @@ maybe_create_test_branch_for_bisect() {
 	fi
 }
 
-llvm_create_test_branches_for_bisect() {
+# git remote rename origin upstream
+common_create_test_branches_for_bisect() {
+	local dir="$1"
+	local major_version_start="$2"
+	local major_branch_pattern_begin="$3"
+	local major_branch_pattern_end="$4"
+	local trunk_branch="$5"
+
 	if [ ! -d .git ]; then
 		return 1
 	fi
-	if [ ! "$(basename "$(pwd)")" = llvm ]; then
+	if [ ! "$(basename "$(pwd)")" = "${dir}" ]; then
 		return 1
 	fi
 
 	local major_version
-	for major_version in $(seq 16 99); do
+	for major_version in $(seq "${major_version_start}" 99); do
 		# echo "${major_version}"
-		local major_branch="remotes/upstream/release/${major_version}.x"
+		local major_branch="${major_branch_pattern_begin}${major_version}${major_branch_pattern_end}"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
 		if quiet_command git_rev_parse "${major_branch}"; then
-			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" main
+			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" "${trunk_branch}"
 		else
-			maybe_create_test_branch_for_bisect main "${test_branch}" main
+			maybe_create_test_branch_for_bisect "${trunk_branch}" "${test_branch}" "${trunk_branch}"
 			break
 		fi
 	done
-	echo_command git checkout -f main
+	echo_command git checkout -f "${trunk_branch}"
 	echo_command git branch
+}
+
+llvm_create_test_branches_for_bisect() {
+	common_create_test_branches_for_bisect llvm 16 "remotes/upstream/release/" ".x" main
 }
 
 gcc_create_test_branches_for_bisect() {
-	if [ ! -d .git ]; then
-		return 1
-	fi
-	if [ ! "$(basename "$(pwd)")" = gcc ]; then
-		return 1
-	fi
-
-	local major_version
-	for major_version in $(seq 13 99); do
-		# echo "${major_version}"
-		local major_branch="remotes/upstream/releases/gcc-${major_version}"
-		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
-		if quiet_command git_rev_parse "${major_branch}"; then
-			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" master
-		else
-			maybe_create_test_branch_for_bisect master "${test_branch}" master
-			break
-		fi
-	done
-	echo_command git checkout -f master
-	echo_command git branch
+	common_create_test_branches_for_bisect gcc 13 "remotes/upstream/releases/gcc-" "" master
 }
 
 binutils_create_test_branches_for_bisect() {
-	if [ ! -d .git ]; then
-		return 1
-	fi
-	if [ ! "$(basename "$(pwd)")" = binutils ]; then
-		return 1
-	fi
+	common_create_test_branches_for_bisect binutils 36 "remotes/upstream/binutils-2_" "-branch" master
+}
 
-	local major_version
-	for major_version in $(seq 36 99); do
-		# echo "${major_version}"
-		local major_branch="remotes/upstream/binutils-2_${major_version}-branch"
-		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
-		if quiet_command git_rev_parse "${major_branch}"; then
-			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" master
-		else
-			maybe_create_test_branch_for_bisect master "${test_branch}" master
-			break
-		fi
-	done
-	echo_command git checkout -f master
-	echo_command git branch
+gdb_create_test_branches_for_bisect() {
+	common_create_test_branches_for_bisect gdb 10 "remotes/upstream/gdb-" "-branch" master
 }
 
 qemu_create_test_branches_for_bisect() {

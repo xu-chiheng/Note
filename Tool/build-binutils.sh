@@ -32,7 +32,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 	dump_toolchain_build_type_and_compiler_flags
 
 	# VERSION=2.41
-	VERSION=2.43 # commit 633789901c83d6899685d9011517eb751aa31972 2024-01-19
+	VERSION=2.43 # commit 820a77554e64dd26d8ec2b03b59846268730c8be 2024-03-22
 
 	CONFIGURE_OPTIONS=(
 		--disable-nls

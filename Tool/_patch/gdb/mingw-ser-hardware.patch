@@ -7,7 +7,7 @@ index e17ede5a58f..7e64e1da2c4 100755
    *go32* ) SER_HARDWIRE=ser-go32.o ;;
    *djgpp* ) SER_HARDWIRE=ser-go32.o ;;
 -  *mingw32*) SER_HARDWIRE="ser-base.o ser-tcp.o ser-mingw.o" ;;
-+  *mingw32* | *mingw64*) SER_HARDWIRE="ser-base.o ser-tcp.o ser-mingw.o" ;;
++  *mingw*) SER_HARDWIRE="ser-base.o ser-tcp.o ser-mingw.o" ;;
    *) SER_HARDWIRE="$SER_HARDWIRE ser-uds.o" ;;
  esac
  

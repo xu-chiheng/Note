@@ -1,0 +1,17 @@
+diff --git a/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp b/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
+index aa411733f058..b81d72ac6c56 100644
+--- a/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
++++ b/llvm/lib/Target/X86/X86ISelDAGToDAG.cpp
+@@ -3202,7 +3202,11 @@ bool X86DAGToDAGISel::isSExtAbsoluteSymbolRef(unsigned Width, SDNode *N) const {
+   // space, so globals can be a sign extended 32-bit immediate.
+   // In other code models, small globals are in the low 2GB of the address
+   // space, so sign extending them is equivalent to zero extending them.
+-  return Width == 32 && !TM.isLargeGlobalValue(GV);
++  if (Subtarget->isTargetWindowsCygwin() && Subtarget->is64Bit()) {
++    return Width == 32 && TM.getCodeModel() == CodeModel::Small;
++  } else {
++    return Width == 32 && !TM.isLargeGlobalValue(GV);
++  }
+ }
+ 
+ X86::CondCode X86DAGToDAGISel::getCondFromNode(SDNode *N) const {

@@ -303,10 +303,7 @@ git_tag_of_package_version() {
 		llvm )
 			echo "llvmorg-${version}"
 			;;
-		qemu )
-			echo "v${version}"
-			;;
-		cmake )
+		qemu | cmake | perl | python | mingw )
 			echo "v${version}"
 			;;
 		bash )
@@ -315,17 +312,8 @@ git_tag_of_package_version() {
 		make )
 			echo "${version}"
 			;;
-		perl )
-			echo "v${version}"
-			;;
-		python )
-			echo "v${version}"
-			;;
 		cygwin )
 			echo "cygwin-${version}"
-			;;
-		mingw )
-			echo "v${version}"
 			;;
 		* )
 			echo "unknown package : ${package}"
@@ -419,6 +407,7 @@ git_clone_and_checkout_dir_revision() {
 	local revision="$3"
 	local git_repo_url="$4"
 
+	# git remote rename origin upstream
 	time_command git clone --origin upstream --no-checkout "${git_repo_url}" "${dir}" \
 	&& echo_command git_checkout_dir_revision "${host_triple}" "${dir}" "${revision}"
 }

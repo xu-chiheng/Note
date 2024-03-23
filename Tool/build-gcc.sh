@@ -32,7 +32,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 	dump_toolchain_build_type_and_compiler_flags
 
 	# VERSION=13.2.0
-	VERSION=14.0.0 # commit 7e949ffaafb415150047127f529377502097d897 2024-01-19
+	VERSION=14.0.0 # commit c65046ff2ef0a9a46e59bc0b3369b2d226f6a239 2024-03-22
 
 	EXTRA_LANGUAGES=()
 

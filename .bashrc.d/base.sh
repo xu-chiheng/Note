@@ -262,17 +262,17 @@ print_packages_dir() {
 	local host_triple="$1"
 	case "${host_triple}" in
 		x86_64-pc-cygwin )
-			echo "$(cygpath -u 'D:\cygwin-packages')"
+			echo "$(cygpath -u 'D:\_cygwin-packages')"
 			;;
 		x86_64-pc-mingw64 )
 			case "${MSYSTEM}" in
 				MINGW64 )
 					# msvcrt.dll
-					echo "$(cygpath -u 'D:\mingw-vcrt-packages')"
+					echo "$(cygpath -u 'D:\_mingw-vcrt-packages')"
 					;;
 				UCRT64 )
 					# ucrtbase.dll
-					echo "$(cygpath -u 'D:\mingw-ucrt-packages')"
+					echo "$(cygpath -u 'D:\_mingw-ucrt-packages')"
 					;;
 				* )
 					echo "unknown MSYSTEM : ${MSYSTEM}"
@@ -281,7 +281,7 @@ print_packages_dir() {
 			esac
 			;;
 		*-linux-gnu )
-			echo "/mnt/work/packages"
+			echo "/mnt/work/_packages"
 			;;
 		* )
 			echo "unknown host : ${host_triple}"

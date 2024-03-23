@@ -35,11 +35,11 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 	VERSION=2.43 # commit 820a77554e64dd26d8ec2b03b59846268730c8be 2024-03-22
 
 	CONFIGURE_OPTIONS=(
+		--enable-targets=all
 		--disable-nls
 		--disable-werror
 		# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
 		--disable-gdb --disable-gdbserver --disable-gdbsupport --disable-libdecnumber --disable-readline --disable-sim
-		--enable-targets=all
 	)
 
 	time_command configure_build_install_package \

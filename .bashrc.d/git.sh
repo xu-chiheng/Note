@@ -152,8 +152,8 @@ git_remove_all_files() {
 		return 1
 	fi
 
-	# find . -mindepth 1 -maxdepth 1 -regextype posix-extended ! -regex '\./(\.git|~git-tools~|patching)'
-	find . -mindepth 1 -maxdepth 1 ! -name '.git' -a ! -name '~git-tools~' -a ! -name 'patching' \
+	# find . -mindepth 1 -maxdepth 1 -regextype posix-extended ! -regex '\./(\.git|~git-tools~)'
+	find . -mindepth 1 -maxdepth 1 ! -name '.git' -a ! -name '~git-tools~' \
 	-print0 | xargs -0 -n100 \
 	rm -rf
 }

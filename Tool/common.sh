@@ -287,41 +287,6 @@ maybe_git_filemode_false() {
 	esac
 }
 
-git_tag_of_package_version() {
-	local package="$1"
-	local version="$2"
-	case "${package}" in
-		binutils )
-			echo "binutils-$(echo "${version}" | sed -e 's/\./_/g' )"
-			;;
-		gdb )
-			echo "gdb-${version}-release"
-			;;
-		gcc )
-			echo "releases/gcc-${version}"
-			;;
-		llvm )
-			echo "llvmorg-${version}"
-			;;
-		qemu | cmake | perl | python | mingw )
-			echo "v${version}"
-			;;
-		bash )
-			echo "bash-${version}"
-			;;
-		make )
-			echo "${version}"
-			;;
-		cygwin )
-			echo "cygwin-${version}"
-			;;
-		* )
-			echo "unknown package : ${package}"
-			return 1
-			;;
-	esac
-}
-
 git_repo_url_of_package() {
 	local package="$1"
 	case "${package}" in
@@ -389,49 +354,12 @@ git_repo_url_of_package() {
 	esac
 }
 
-git_checkout_dir_revision() {
-	local host_triple="$1"
-	local dir="$2"
-	local revision="$3"
+check_dir_maybe_clone_from_url() {
+	local dir="$1"
+	local git_repo_url="$2"
 
-	{ pushd "${dir}" \
-	&& echo_command maybe_git_filemode_false "${host_triple}" \
-	&& time_command git reset --hard HEAD \
-	&& time_command git checkout --detach "${revision}" \
-	&& popd;}
-}
-
-git_clone_and_checkout_dir_revision() {
-	local host_triple="$1"
-	local dir="$2"
-	local revision="$3"
-	local git_repo_url="$4"
-
-	# git remote rename origin upstream
-	time_command git clone --origin upstream --no-checkout "${git_repo_url}" "${dir}" \
-	&& echo_command git_checkout_dir_revision "${host_triple}" "${dir}" "${revision}"
-}
-
-check_dir_maybe_clone_and_checkout_tag() {
-	local host_triple="$1"
-	local dir="$2"
-	local tag="$3"
-	local git_repo_url="$4"
-
-	if [ -d "${dir}" ]; then
-		if [ -f "${dir}"/patching ]; then
-			# do nothing
-			true
-		elif [ -d "${dir}"/.git ]; then
-			echo_command git_checkout_dir_revision "${host_triple}" "${dir}" "${tag}"
-		else
-			echo "source directory ${dir} exists, but contains no patching file, or .git directory."
-			echo_command rm -rf "${dir}" \
-			&& echo_command git_clone_and_checkout_dir_revision "${host_triple}" "${dir}" "${tag}" "${git_repo_url}"
-		fi
-	else
-		echo "dir ${dir} does not exist"
-		echo_command git_clone_and_checkout_dir_revision "${host_triple}" "${dir}" "${tag}" "${git_repo_url}"
+	if [ ! -d "${dir}" ]; then
+		time_command git clone --origin upstream --no-checkout "${git_repo_url}" "${dir}"
 	fi
 }
 
@@ -910,9 +838,6 @@ build_and_install_cross_gcc_for_targets() {
 	#   .head           : { head.o (.multiboot) head.o (.*) }
 	# it can't do relocation of 32 bit code in head.o, due to commit 17c6c3b99156fe82c1e637e1a5fd9f163ac788c8
 
-	local gcc_git_tag="$(git_tag_of_package_version gcc "${gcc_version}")"
-	local binutils_git_tag="$(git_tag_of_package_version binutils "${binutils_version}")"
-
 	local gcc_git_repo_url="$(git_repo_url_of_package gcc)"
 	local binutils_git_repo_url="$(git_repo_url_of_package binutils)"
 
@@ -925,8 +850,8 @@ build_and_install_cross_gcc_for_targets() {
 		time_command build_and_install_gmp_mpfr_mpc "${package}" "${host_triple}" "${toolchain}" "${build_type}" "${gmp_mpfr_mpc_install_dir}" \
 		2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-gmp-mpfr-mpc-output.txt"
 	fi \
-	&& time_command check_dir_maybe_clone_and_checkout_tag "${host_triple}" "${binutils_source_dir}" "${binutils_git_tag}" "${binutils_git_repo_url}" \
-	&& time_command check_dir_maybe_clone_and_checkout_tag "${host_triple}" "${gcc_source_dir}" "${gcc_git_tag}" "${gcc_git_repo_url}" \
+	&& time_command check_dir_maybe_clone_from_url "${binutils_source_dir}" "${binutils_git_repo_url}" \
+	&& time_command check_dir_maybe_clone_from_url "${gcc_source_dir}" "${gcc_git_repo_url}" \
 	\
 	&& echo "building binutils and gcc ......" \
 	&& for target in "${targets[@]}"; do
@@ -989,12 +914,11 @@ generate_build_install_package() {
 	local pushd_and_generate_command="$8"
 	shift 8
 	local bin_tarball="${package}-${version}.tar"
-	local git_tag="$(git_tag_of_package_version "${package}" "${version}")"
 	local git_repo_url="$(git_repo_url_of_package "${package}")"
 
 	# https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
 
-	time_command check_dir_maybe_clone_and_checkout_tag "${host_triple}" "${source_dir}" "${git_tag}" "${git_repo_url}" \
+	time_command check_dir_maybe_clone_from_url "${source_dir}" "${git_repo_url}" \
 	&& echo_command rm -rf "${install_dir}" \
 	&& echo_command pre_generate_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 	&& { time_command "${pushd_and_generate_command}" "$@" \

@@ -37,21 +37,21 @@ patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver{,1},general{0,1,2},mac
 patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    f49e2b05bf3ececa2fe20c5d658ab92ab974dc36 2023-12-17
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp1},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104 2024-01-01
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{,2}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{1,2}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    8b4bb15f6d879fd8655f9e41fee224a8a59f238c 2024-01-19
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{,2}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{1,2}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
               ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707 2024-01-24
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{,2,3}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{1,2,3}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
               ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 19.0.0    c5f839bd58e7f888acc4cb39a18e9e5bbaa9fb0a 2024-03-22
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{,2,3}},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{1,2,3}},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
               ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
@@ -103,7 +103,7 @@ make[1]: *** [CMakeFiles/Makefile2:11468: include/llvm/IR/CMakeFiles/intrinsics_
 [  9%] Linking CXX executable ../../bin/FileCheck.exe
 
 
-cygwin-X86ISelDAGToDAG.cpp.patch
+cygwin-X86ISelDAGToDAG.cpp1.patch
 Fix the regression caused by commit ec92d74a0ef89b9dd46aee6ec8aca6bfd3c66a54 2023-12-14, that, in Cygwin, Clang can't build binutils 2.42.
 configure:4686: checking whether we are cross compiling
 configure:4694: clang -o conftest.exe -march=x86-64 -O3  -Wl,--strip-all conftest.c  >&5

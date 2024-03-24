@@ -197,42 +197,44 @@ fix_system_quirks_one_time() {
 			fi
 	esac
 
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys )
-			# Cygwin and MSYS2 has no connect command, symbolic link to MinGW's
-			local usr_bin_connect="/usr/bin/connect.exe"
-			local mingw_vcrt_connect_path="/mingw64/bin/connect.exe"
-			local mingw_ucrt_connect_path="/ucrt64/bin/connect.exe"
-			case "${HOST_TRIPLE}" in
-				x86_64-pc-cygwin )
-					local msys2_dir_cygwin_path="$(cygpath -u "${MSYS2_DIR}")"
-					mingw_vcrt_connect_path="${msys2_dir_cygwin_path}${mingw_vcrt_connect_path}"
-					mingw_ucrt_connect_path="${msys2_dir_cygwin_path}${mingw_ucrt_connect_path}"
-					;;
-			esac
-			if ! { [ -e "${usr_bin_connect}" ] && [ ! -L "${usr_bin_connect}" ] && [ -f "${usr_bin_connect}" ] ;}; then
-				# a symlink
-				if [ -e "${mingw_ucrt_connect_path}" ] || [ -e "${mingw_vcrt_connect_path}" ]; then
-					local mingw_connect_path
-					if [ -e "${mingw_ucrt_connect_path}" ]; then
-						mingw_connect_path="${mingw_ucrt_connect_path}"
-					else
-						mingw_connect_path="${mingw_vcrt_connect_path}"
-					fi
-					if ! { [ -e "${usr_bin_connect}" ] && [ "$(readlink -f "${usr_bin_connect}")" = "$(readlink -f "${mingw_connect_path}")" ] ;}; then
-						rm -rf "${usr_bin_connect}" \
-						&& ln -s "${mingw_connect_path}" "${usr_bin_connect}"
-					fi
-				else
-					echo "no MinGW connect command"
-					rm -rf "${usr_bin_connect}"
-				fi
-			else
-				# not a symlink, keep it 
-				true
-			fi
-			;;
-	esac
+	# v2rayN has Tun mode(using sing-box as virtual NIC), so SSH proxy, and proxy of all non-browser apps is not needed.
+
+	# case "${HOST_TRIPLE}" in
+	# 	x86_64-pc-cygwin | x86_64-pc-msys )
+	# 		# Cygwin and MSYS2 has no connect command, symbolic link to MinGW's
+	# 		local usr_bin_connect="/usr/bin/connect.exe"
+	# 		local mingw_vcrt_connect_path="/mingw64/bin/connect.exe"
+	# 		local mingw_ucrt_connect_path="/ucrt64/bin/connect.exe"
+	# 		case "${HOST_TRIPLE}" in
+	# 			x86_64-pc-cygwin )
+	# 				local msys2_dir_cygwin_path="$(cygpath -u "${MSYS2_DIR}")"
+	# 				mingw_vcrt_connect_path="${msys2_dir_cygwin_path}${mingw_vcrt_connect_path}"
+	# 				mingw_ucrt_connect_path="${msys2_dir_cygwin_path}${mingw_ucrt_connect_path}"
+	# 				;;
+	# 		esac
+	# 		if ! { [ -e "${usr_bin_connect}" ] && [ ! -L "${usr_bin_connect}" ] && [ -f "${usr_bin_connect}" ] ;}; then
+	# 			# a symlink
+	# 			if [ -e "${mingw_ucrt_connect_path}" ] || [ -e "${mingw_vcrt_connect_path}" ]; then
+	# 				local mingw_connect_path
+	# 				if [ -e "${mingw_ucrt_connect_path}" ]; then
+	# 					mingw_connect_path="${mingw_ucrt_connect_path}"
+	# 				else
+	# 					mingw_connect_path="${mingw_vcrt_connect_path}"
+	# 				fi
+	# 				if ! { [ -e "${usr_bin_connect}" ] && [ "$(readlink -f "${usr_bin_connect}")" = "$(readlink -f "${mingw_connect_path}")" ] ;}; then
+	# 					rm -rf "${usr_bin_connect}" \
+	# 					&& ln -s "${mingw_connect_path}" "${usr_bin_connect}"
+	# 				fi
+	# 			else
+	# 				echo "no MinGW connect command"
+	# 				rm -rf "${usr_bin_connect}"
+	# 			fi
+	# 		else
+	# 			# not a symlink, keep it 
+	# 			true
+	# 		fi
+	# 		;;
+	# esac
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
@@ -262,17 +264,17 @@ print_packages_dir() {
 	local host_triple="$1"
 	case "${host_triple}" in
 		x86_64-pc-cygwin )
-			echo "$(cygpath -u 'D:\_cygwin-packages')"
+			echo "$(cygpath -u 'D:\_cygwin')"
 			;;
 		x86_64-pc-mingw64 )
 			case "${MSYSTEM}" in
 				MINGW64 )
 					# msvcrt.dll
-					echo "$(cygpath -u 'D:\_mingw-vcrt-packages')"
+					echo "$(cygpath -u 'D:\_mingw-vcrt')"
 					;;
 				UCRT64 )
 					# ucrtbase.dll
-					echo "$(cygpath -u 'D:\_mingw-ucrt-packages')"
+					echo "$(cygpath -u 'D:\_mingw-ucrt')"
 					;;
 				* )
 					echo "unknown MSYSTEM : ${MSYSTEM}"
@@ -281,7 +283,7 @@ print_packages_dir() {
 			esac
 			;;
 		*-linux-gnu )
-			echo "/mnt/work/_packages"
+			echo "/mnt/work/_linux"
 			;;
 		* )
 			echo "unknown host : ${host_triple}"

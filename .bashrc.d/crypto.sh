@@ -193,12 +193,28 @@ sha512_check_file() {
 
 # https://stackoverflow.com/questions/29516984/how-to-find-binary-files-in-a-directory
 # https://www.baeldung.com/linux/find-binary-files
-find_binary_files_in_series_-print0() {
-	find . -type f ! -size 0 -print0 | xargs -0 -n1 grep -ILZ .
-}
+# Too slow, and not accurate
+# find_binary_files_in_series_-print0() {
+# 	find . -type f ! -size 0 -print0 | xargs -0 -n1 grep -ILZ .
+# }
 
-find_binary_files_in_parallel_-print0() {
-	find . -type f ! -size 0 -print0 | xargs -0 -n1 -P0 grep -ILZ .
+# find_binary_files_in_parallel_-print0() {
+# 	find . -type f ! -size 0 -print0 | xargs -0 -n1 -P0 grep -ILZ .
+# }
+
+find_binary_files_-print0() {
+	local find_args=(
+		-not
+		'('
+			-name '*.txt'
+			-or -name '*.sha512'
+			-or -name '*.cmd'
+			-or -name '*.sh'
+			-or -name '.*'
+		')'
+	)
+
+	find . -type f "${find_args[@]}" -print0
 }
 
 find_sha512_files_-print0() {
@@ -269,7 +285,7 @@ handle_file_operation() {
 			bash -c "$(declare -f gpg_decrypt_file); gpg_decrypt_file"' "$@" ;' -
 			;;
 		sha512_calculate_in_parallel )
-			find_binary_files_in_parallel_-print0 \
+			find_binary_files_-print0 \
 			| xargs -0 -n1 -P0 \
 			bash -c "$(declare -f sha512_calculate_file); sha512_calculate_file"' "$@" ;' -
 			;;
@@ -289,7 +305,7 @@ handle_file_operation() {
 			bash -c "$(declare -f gpg_decrypt_file); gpg_decrypt_file"' "$@" ;' -
 			;;
 		sha512_calculate_in_series )
-			find_binary_files_in_series_-print0 \
+			find_binary_files_-print0 \
 			| xargs -0 -n1 \
 			bash -c "$(declare -f sha512_calculate_file); sha512_calculate_file"' "$@" ;' -
 			;;

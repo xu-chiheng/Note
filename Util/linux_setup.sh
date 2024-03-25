@@ -37,6 +37,11 @@ cd "$(dirname "$0")"
 # /dev/sda3      /mnt/work        Mount Work              100G btrfs    (Windows 10/11 has driver of btrfs, but some Linux distro does not support btrfs)
 # /dev/sda4      /mnt/work2       Mount Work              25G fat32/vfat  optional, only for Linux distro that does not support btrfs
 
+# user     : root
+# password : 1
+# user     : user
+# password : 1
+
 # Debian on VMware Workstation 17
 # Debian 12中只能使用启动菜单中的“Start Installer”安装，不要使用KDE Live中的“Install Debian”程序(Calamares Installer)安装。
 # “Install Debian”这种安装方式，Partition时，只能选择Erase disk，这样虽然可以成功安装，但是无法设置/mnt/work mount point，如果Partition时，选择Manual partitioning的话，会导致无法启动，root用户被lock。
@@ -351,31 +356,31 @@ install_vs_code() {
 	esac
 }
 
-# https://linuxconfig.org/how-to-install-google-chrome-browser-on-linux
-# install_google_chrome() {
-# 	case "${OS_NAME}" in
-# 		Ubuntu | Debian )
-# 			rm -rf google-chrome-stable_current_amd64.deb \
-# 			&& wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-# 			&& apt install -y ./google-chrome-stable_current_amd64.deb \
-# 			&& rm -rf google-chrome-stable_current_amd64.deb
-# 			;;
-# 		Fedora | CentOSStream | RockyLinux | AlmaLinux )
-# 			dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-# 			;;
-# 		Arch | Manjaro )
-# 			# How to Install Google Chrome in Arch-based Linux Distributions
-# 			# https://itsfoss.com/install-chrome-arch-linux/
-# 			pacman -S --needed base-devel git \
-# 			&& rm -rf google-chrome \
-# 			&& git clone https://aur.archlinux.org/google-chrome.git \
-# 			&& ( cd google-chrome && makepkg -si )
-# 			# upgrade
-# 			# git pull
-# 			# makepkg -si
-# 			;;
-# 	esac
-# }
+https://linuxconfig.org/how-to-install-google-chrome-browser-on-linux
+install_google_chrome() {
+	case "${OS_NAME}" in
+		Ubuntu | Debian )
+			rm -rf google-chrome-stable_current_amd64.deb \
+			&& wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+			&& apt install -y ./google-chrome-stable_current_amd64.deb \
+			&& rm -rf google-chrome-stable_current_amd64.deb
+			;;
+		Fedora | CentOSStream | RockyLinux | AlmaLinux )
+			dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+			;;
+		Arch | Manjaro )
+			# How to Install Google Chrome in Arch-based Linux Distributions
+			# https://itsfoss.com/install-chrome-arch-linux/
+			pacman -S --needed base-devel git \
+			&& rm -rf google-chrome \
+			&& git clone https://aur.archlinux.org/google-chrome.git \
+			&& ( cd google-chrome && makepkg -si )
+			# upgrade
+			# git pull
+			# makepkg -si
+			;;
+	esac
+}
 
 install_openjdk() {
 	case "${OS_NAME}" in
@@ -574,6 +579,7 @@ time_command set_fastest_mirror_and_update \
 && time_command linux_disable_selinux \
 && time_command install_basic_packages \
 && time_command install_vs_code \
+&& time_command install_google_chrome \
 && time_command install_qemu \
 && time_command install_qemu_build_requirements \
 && time_command install_openjdk \

@@ -25,33 +25,33 @@ stage 3 : Clang 16.0.6
 
 
 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a 2023-01-24
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel0,driver0,general{0,1,2},macro},mingw-{ldflags,pthread,emutls0,findgcc0},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel0,driver0,general-{a,b,c},macro},mingw-{ldflags,pthread,emutls0,findgcc0},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7 2023-07-25
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel0,driver0,general{0,1,2},macro,CGCall.h},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel0,driver0,general-{a,b,c},macro,CGCall.h},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    6f44f87011cd52367626cac111ddbb2d25784b90 2023-10-05
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver{,1},general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver{,1},general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    f49e2b05bf3ececa2fe20c5d658ab92ab974dc36 2023-12-17
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp1},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-a},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104 2024-01-01
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{1,2}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    8b4bb15f6d879fd8655f9e41fee224a8a59f238c 2024-01-19
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{1,2}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
               ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707 2024-01-24
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{1,2,3}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls,findgcc0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
               ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 19.0.0    c5f839bd58e7f888acc4cb39a18e9e5bbaa9fb0a 2024-03-22
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general{0,1,2},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp{1,2,3}},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel,driver,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls,findgcc,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
               ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
@@ -61,7 +61,7 @@ git show -s
 
 
 
-cygwin-general0.patch
+cygwin-general-a.patch
 Fix build error by Clang due to the conflict of CIndexer.cpp and mm_malloc.h. In mm_malloc.h, _WIN32 and __CYGWIN__ can't both be defined, but CIndexer.cpp define both.
 In file included from /cygdrive/e/Note/Tool/llvm/clang/tools/libclang/CIndexer.cpp:35:
 In file included from /usr/include/w32api/windows.h:69:
@@ -80,11 +80,11 @@ In file included from /cygdrive/d/cygwin64-packages/llvm/lib/clang/18/include/xm
 [ 97%] Built target clangTidyModernizeModule
 
 
-cygwin-general1.patch
+cygwin-general-b.patch
 Remove some uses of macro __CYGWIN__ .
 
 
-cygwin-general2.patch
+cygwin-general-c.patch
 Override Cygwin's buggy getpagesize() to Win32 computePageSize().
 
 
@@ -121,7 +121,7 @@ make[1]: *** [CMakeFiles/Makefile2:11468: include/llvm/IR/CMakeFiles/intrinsics_
 [  9%] Linking CXX executable ../../bin/FileCheck.exe
 
 
-cygwin-X86ISelDAGToDAG.cpp1.patch
+cygwin-X86ISelDAGToDAG.cpp-a.patch
 Fix the regression caused by commit ec92d74a0ef89b9dd46aee6ec8aca6bfd3c66a54 2023-12-14, that, in Cygwin, Clang can't build binutils 2.42.
 configure:4686: checking whether we are cross compiling
 configure:4694: clang -o conftest.exe -march=x86-64 -O3  -Wl,--strip-all conftest.c  >&5
@@ -138,7 +138,7 @@ If you meant to cross compile, use `--host'.
 See `config.log' for more details
 
 
-cygwin-X86ISelDAGToDAG.cpp2.patch
+cygwin-X86ISelDAGToDAG.cpp-b.patch
 Fix the regression caused by commit 2366d53d8d8726b73408597b534d2f910c3d3e6d 2023-12-22, that, in Cygwin, Clang can't bootstrap.
 CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0xb9b): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
 CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o:ItaniumDemangle.cpp:(.text+0xba2): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `.rdata'
@@ -163,7 +163,7 @@ make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-release-build'
 make: *** [Makefile:156: all] Error 2
 
 
-cygwin-X86ISelDAGToDAG.cpp3.patch
+cygwin-X86ISelDAGToDAG.cpp-c.patch
 Fix the regression caused by commit 86eaf6083b2cd27b8811f4791ad2eb8dacbb0e5f 2024-01-20, that, in Cygwin, Clang can't bootstrap.
 /cygdrive/d/cygwin-packages/llvm/bin/clang++.exe -march=x86-64 -O3 -Werror=date-time -Werror=unguarded-availability-new -Wall -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -pedantic -Wno-long-long -Wc++98-compat-extra-semi -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion -Wmisleading-indentation -Wctad-maybe-unsupported -Werror=global-constructors -O3 -DNDEBUG  -Wl,-rpath-link,/cygdrive/e/Note/Tool/llvm-cygwin-clang-release-build/./lib  -Wl,--gc-sections -Wl,--strip-all -shared -Wl,--enable-auto-import -o ../../bin/cygLLVMSupport-18git.dll -Wl,--out-implib,../libLLVMSupport.dll.a -Wl,--major-image-version,18,--minor-image-version,0 CMakeFiles/LLVMSupport.dir/ABIBreak.cpp.o CMakeFiles/LLVMSupport.dir/AMDGPUMetadata.cpp.o CMakeFiles/LLVMSupport.dir/APFixedPoint.cpp.o CMakeFiles/LLVMSupport.dir/APFloat.cpp.o CMakeFiles/LLVMSupport.dir/APInt.cpp.o CMakeFiles/LLVMSupport.dir/APSInt.cpp.o CMakeFiles/LLVMSupport.dir/ARMBuildAttrs.cpp.o CMakeFiles/LLVMSupport.dir/ARMAttributeParser.cpp.o CMakeFiles/LLVMSupport.dir/ARMWinEH.cpp.o CMakeFiles/LLVMSupport.dir/Allocator.cpp.o CMakeFiles/LLVMSupport.dir/AutoConvert.cpp.o CMakeFiles/LLVMSupport.dir/Base64.cpp.o CMakeFiles/LLVMSupport.dir/BalancedPartitioning.cpp.o CMakeFiles/LLVMSupport.dir/BinaryStreamError.cpp.o CMakeFiles/LLVMSupport.dir/BinaryStreamReader.cpp.o CMakeFiles/LLVMSupport.dir/BinaryStreamRef.cpp.o CMakeFiles/LLVMSupport.dir/BinaryStreamWriter.cpp.o CMakeFiles/LLVMSupport.dir/BlockFrequency.cpp.o CMakeFiles/LLVMSupport.dir/BranchProbability.cpp.o CMakeFiles/LLVMSupport.dir/BuryPointer.cpp.o CMakeFiles/LLVMSupport.dir/CachePruning.cpp.o CMakeFiles/LLVMSupport.dir/Caching.cpp.o CMakeFiles/LLVMSupport.dir/circular_raw_ostream.cpp.o CMakeFiles/LLVMSupport.dir/Chrono.cpp.o CMakeFiles/LLVMSupport.dir/COM.cpp.o CMakeFiles/LLVMSupport.dir/CodeGenCoverage.cpp.o CMakeFiles/LLVMSupport.dir/CommandLine.cpp.o CMakeFiles/LLVMSupport.dir/Compression.cpp.o CMakeFiles/LLVMSupport.dir/CRC.cpp.o CMakeFiles/LLVMSupport.dir/ConvertUTF.cpp.o CMakeFiles/LLVMSupport.dir/ConvertEBCDIC.cpp.o CMakeFiles/LLVMSupport.dir/ConvertUTFWrapper.cpp.o CMakeFiles/LLVMSupport.dir/CrashRecoveryContext.cpp.o CMakeFiles/LLVMSupport.dir/CSKYAttributes.cpp.o CMakeFiles/LLVMSupport.dir/CSKYAttributeParser.cpp.o CMakeFiles/LLVMSupport.dir/DataExtractor.cpp.o CMakeFiles/LLVMSupport.dir/Debug.cpp.o CMakeFiles/LLVMSupport.dir/DebugCounter.cpp.o CMakeFiles/LLVMSupport.dir/DeltaAlgorithm.cpp.o CMakeFiles/LLVMSupport.dir/DivisionByConstantInfo.cpp.o CMakeFiles/LLVMSupport.dir/DAGDeltaAlgorithm.cpp.o CMakeFiles/LLVMSupport.dir/DJB.cpp.o CMakeFiles/LLVMSupport.dir/ELFAttributeParser.cpp.o CMakeFiles/LLVMSupport.dir/ELFAttributes.cpp.o CMakeFiles/LLVMSupport.dir/Error.cpp.o CMakeFiles/LLVMSupport.dir/ErrorHandling.cpp.o CMakeFiles/LLVMSupport.dir/ExtensibleRTTI.cpp.o CMakeFiles/LLVMSupport.dir/FileCollector.cpp.o CMakeFiles/LLVMSupport.dir/FileUtilities.cpp.o CMakeFiles/LLVMSupport.dir/FileOutputBuffer.cpp.o CMakeFiles/LLVMSupport.dir/FloatingPointMode.cpp.o CMakeFiles/LLVMSupport.dir/FoldingSet.cpp.o CMakeFiles/LLVMSupport.dir/FormattedStream.cpp.o CMakeFiles/LLVMSupport.dir/FormatVariadic.cpp.o CMakeFiles/LLVMSupport.dir/GlobPattern.cpp.o CMakeFiles/LLVMSupport.dir/GraphWriter.cpp.o CMakeFiles/LLVMSupport.dir/Hashing.cpp.o CMakeFiles/LLVMSupport.dir/InitLLVM.cpp.o CMakeFiles/LLVMSupport.dir/InstructionCost.cpp.o CMakeFiles/LLVMSupport.dir/IntEqClasses.cpp.o CMakeFiles/LLVMSupport.dir/IntervalMap.cpp.o CMakeFiles/LLVMSupport.dir/JSON.cpp.o CMakeFiles/LLVMSupport.dir/KnownBits.cpp.o CMakeFiles/LLVMSupport.dir/LEB128.cpp.o CMakeFiles/LLVMSupport.dir/LineIterator.cpp.o CMakeFiles/LLVMSupport.dir/Locale.cpp.o CMakeFiles/LLVMSupport.dir/LockFileManager.cpp.o CMakeFiles/LLVMSupport.dir/ManagedStatic.cpp.o CMakeFiles/LLVMSupport.dir/MathExtras.cpp.o CMakeFiles/LLVMSupport.dir/MemAlloc.cpp.o CMakeFiles/LLVMSupport.dir/MemoryBuffer.cpp.o CMakeFiles/LLVMSupport.dir/MemoryBufferRef.cpp.o CMakeFiles/LLVMSupport.dir/MD5.cpp.o CMakeFiles/LLVMSupport.dir/MSP430Attributes.cpp.o CMakeFiles/LLVMSupport.dir/MSP430AttributeParser.cpp.o CMakeFiles/LLVMSupport.dir/NativeFormatting.cpp.o CMakeFiles/LLVMSupport.dir/OptimizedStructLayout.cpp.o CMakeFiles/LLVMSupport.dir/Optional.cpp.o CMakeFiles/LLVMSupport.dir/PGOOptions.cpp.o CMakeFiles/LLVMSupport.dir/Parallel.cpp.o CMakeFiles/LLVMSupport.dir/PluginLoader.cpp.o CMakeFiles/LLVMSupport.dir/PrettyStackTrace.cpp.o CMakeFiles/LLVMSupport.dir/RandomNumberGenerator.cpp.o CMakeFiles/LLVMSupport.dir/Regex.cpp.o CMakeFiles/LLVMSupport.dir/RISCVAttributes.cpp.o CMakeFiles/LLVMSupport.dir/RISCVAttributeParser.cpp.o CMakeFiles/LLVMSupport.dir/RISCVISAInfo.cpp.o CMakeFiles/LLVMSupport.dir/ScaledNumber.cpp.o CMakeFiles/LLVMSupport.dir/ScopedPrinter.cpp.o CMakeFiles/LLVMSupport.dir/SHA1.cpp.o CMakeFiles/LLVMSupport.dir/SHA256.cpp.o CMakeFiles/LLVMSupport.dir/Signposts.cpp.o CMakeFiles/LLVMSupport.dir/SmallPtrSet.cpp.o CMakeFiles/LLVMSupport.dir/SmallVector.cpp.o CMakeFiles/LLVMSupport.dir/SourceMgr.cpp.o CMakeFiles/LLVMSupport.dir/SpecialCaseList.cpp.o CMakeFiles/LLVMSupport.dir/Statistic.cpp.o CMakeFiles/LLVMSupport.dir/StringExtras.cpp.o CMakeFiles/LLVMSupport.dir/StringMap.cpp.o CMakeFiles/LLVMSupport.dir/StringSaver.cpp.o CMakeFiles/LLVMSupport.dir/StringRef.cpp.o CMakeFiles/LLVMSupport.dir/SuffixTreeNode.cpp.o CMakeFiles/LLVMSupport.dir/SuffixTree.cpp.o CMakeFiles/LLVMSupport.dir/SystemUtils.cpp.o CMakeFiles/LLVMSupport.dir/TarWriter.cpp.o CMakeFiles/LLVMSupport.dir/ThreadPool.cpp.o CMakeFiles/LLVMSupport.dir/TimeProfiler.cpp.o CMakeFiles/LLVMSupport.dir/Timer.cpp.o CMakeFiles/LLVMSupport.dir/ToolOutputFile.cpp.o CMakeFiles/LLVMSupport.dir/Twine.cpp.o CMakeFiles/LLVMSupport.dir/TypeSize.cpp.o CMakeFiles/LLVMSupport.dir/Unicode.cpp.o CMakeFiles/LLVMSupport.dir/UnicodeCaseFold.cpp.o CMakeFiles/LLVMSupport.dir/UnicodeNameToCodepoint.cpp.o CMakeFiles/LLVMSupport.dir/UnicodeNameToCodepointGenerated.cpp.o CMakeFiles/LLVMSupport.dir/VersionTuple.cpp.o CMakeFiles/LLVMSupport.dir/VirtualFileSystem.cpp.o CMakeFiles/LLVMSupport.dir/WithColor.cpp.o CMakeFiles/LLVMSupport.dir/YAMLParser.cpp.o CMakeFiles/LLVMSupport.dir/YAMLTraits.cpp.o CMakeFiles/LLVMSupport.dir/raw_os_ostream.cpp.o CMakeFiles/LLVMSupport.dir/raw_ostream.cpp.o CMakeFiles/LLVMSupport.dir/raw_socket_stream.cpp.o CMakeFiles/LLVMSupport.dir/regcomp.c.o CMakeFiles/LLVMSupport.dir/regerror.c.o CMakeFiles/LLVMSupport.dir/regexec.c.o CMakeFiles/LLVMSupport.dir/regfree.c.o CMakeFiles/LLVMSupport.dir/regstrlcpy.c.o CMakeFiles/LLVMSupport.dir/xxhash.cpp.o CMakeFiles/LLVMSupport.dir/Z3Solver.cpp.o CMakeFiles/LLVMSupport.dir/Atomic.cpp.o CMakeFiles/LLVMSupport.dir/DynamicLibrary.cpp.o CMakeFiles/LLVMSupport.dir/Errno.cpp.o CMakeFiles/LLVMSupport.dir/Memory.cpp.o CMakeFiles/LLVMSupport.dir/Path.cpp.o CMakeFiles/LLVMSupport.dir/Process.cpp.o CMakeFiles/LLVMSupport.dir/Program.cpp.o CMakeFiles/LLVMSupport.dir/RWMutex.cpp.o CMakeFiles/LLVMSupport.dir/Signals.cpp.o CMakeFiles/LLVMSupport.dir/Threading.cpp.o CMakeFiles/LLVMSupport.dir/Valgrind.cpp.o CMakeFiles/LLVMSupport.dir/Watchdog.cpp.o BLAKE3/CMakeFiles/LLVMSupportBlake3.dir/blake3.c.o BLAKE3/CMakeFiles/LLVMSupportBlake3.dir/blake3_dispatch.c.o BLAKE3/CMakeFiles/LLVMSupportBlake3.dir/blake3_portable.c.o BLAKE3/CMakeFiles/LLVMSupportBlake3.dir/blake3_neon.c.o "BLAKE3/CMakeFiles/LLVMSupportBlake3.dir/blake3_sse2_x86-64_windows_gnu.S.o" "BLAKE3/CMakeFiles/LLVMSupportBlake3.dir/blake3_sse41_x86-64_windows_gnu.S.o" "BLAKE3/CMakeFiles/LLVMSupportBlake3.dir/blake3_avx2_x86-64_windows_gnu.S.o" "BLAKE3/CMakeFiles/LLVMSupportBlake3.dir/blake3_avx512_x86-64_windows_gnu.S.o"  -lrt -ldl -lm /usr/lib/libz.dll.a /usr/lib/libzstd.dll.a /usr/lib/libcurses.dll.a ../libLLVMDemangle.dll.a 
 CMakeFiles/LLVMSupport.dir/BalancedPartitioning.cpp.o:BalancedPartitioning.cpp:(.text+0x305): relocation truncated to fit: IMAGE_REL_AMD64_ADDR32 against `std::_Function_handler<void (), llvm::BalancedPartitioning::BPThreadPool::async<llvm::BalancedPartitioning::run(std::vector<llvm::BPFunctionNode, std::allocator<llvm::BPFunctionNode> >&) const::$_0>(llvm::BalancedPartitioning::run(std::vector<llvm::BPFunctionNode, std::allocator<llvm::BPFunctionNode> >&) const::$_0&&)::{lambda()#1}>::_M_invoke(std::_Any_data const&)'

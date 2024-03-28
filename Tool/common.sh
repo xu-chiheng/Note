@@ -754,6 +754,9 @@ build_and_install_binutils_gcc_for_target() {
 	# Installing GCC: Configuration
 	# https://gcc.gnu.org/install/configure.html
 	local gcc_configure_options=(
+			# On Linux, ${host_triple} is not the same as the output of config.guess
+			--build="${host_triple}"
+			--host="${host_triple}"
 			--target="${target}"
 			--without-headers
 			--disable-gcov

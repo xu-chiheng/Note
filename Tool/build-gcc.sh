@@ -126,8 +126,12 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 				# jit
 			)
 			;;
-		x86_64-pc-linux-gnu )
+		*-linux-gnu )
 			CONFIGURE_OPTIONS=(
+				# On Linux, ${HOST_TRIPLE} is not the same as the output of config.guess
+				--build="${HOST_TRIPLE}"
+				--host="${HOST_TRIPLE}"
+				--target="${HOST_TRIPLE}"
 				--enable-shared
 				--enable-shared-libgcc
 				--enable-static

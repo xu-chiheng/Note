@@ -33,8 +33,8 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 
 	# GCC_VERSION=12.3.0
 	# BINUTILS_VERSION=2.36
-	GCC_VERSION=14.0.0    # commit 7e949ffaafb415150047127f529377502097d897 2024-01-19
-	BINUTILS_VERSION=2.43 # commit 633789901c83d6899685d9011517eb751aa31972 2024-01-19
+	GCC_VERSION=14.0.0    # commit c65046ff2ef0a9a46e59bc0b3369b2d226f6a239 2024-03-22
+	BINUTILS_VERSION=2.43 # commit 820a77554e64dd26d8ec2b03b59846268730c8be 2024-03-22
 
 	EXTRA_LANGUAGES=()
 
@@ -50,13 +50,13 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 	TARGETS=(
 		x86_64-pc-cygwin
 		x86_64-pc-mingw64
-		x86_64-pc-linux-gnu
-		aarch64-unknown-linux-gnu
-		riscv64-unknown-linux-gnu
-		loongarch64-unknown-linux-gnu
-		# ppc64le-unknown-linux-gnu
-		# sparc64-unknown-linux-gnu
-		# mips64-unknown-linux-gnu
+		x86_64-linux-gnu
+		aarch64-linux-gnu
+		riscv64-linux-gnu
+		loongarch64-linux-gnu
+		# ppc64le-linux-gnu
+		# sparc64-linux-gnu
+		# mips64-linux-gnu
 	)
 
 	# remove ${HOST_TRIPLE}

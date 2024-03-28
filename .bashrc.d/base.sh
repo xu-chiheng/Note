@@ -65,8 +65,19 @@ print_host_triple() {
 	~/config.guess
 }
 
+print_host_triple_2() {
+	local host_triple="$(print_host_triple)"
+	case "${host_triple}" in
+		*-linux* )
+			# x86_64-pc-linux-gnu  ---> x86_64-linux-gnu
+			host_triple="$(echo "${host_triple}" | sed -E -e 's/^([^-]+)-([^-]+)-(([^-]+)(-([^-]+))?)$/\1-\3/g')"
+			;;
+	esac
+	echo "${host_triple}"
+}
+
 set_environment_variables_at_bash_startup() {
-	export HOST_TRIPLE="$(print_host_triple)"
+	export HOST_TRIPLE="$(print_host_triple_2)"
 	export TZ=Asia/Shanghai
 	export LANG=en_US.UTF-8
 	export LC_ALL=en_US.UTF-8

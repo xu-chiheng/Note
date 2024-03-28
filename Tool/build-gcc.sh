@@ -39,6 +39,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )
 			CONFIGURE_OPTIONS=(
+				# ${HOST_TRIPLE} is the same as the output of config.guess
 				# --build=x86_64-pc-cygwin
 				# --host=x86_64-pc-cygwin
 				# --target=x86_64-pc-cygwin
@@ -84,6 +85,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 			;;
 		x86_64-pc-mingw64 )
 			CONFIGURE_OPTIONS=(
+				# ${HOST_TRIPLE} is the same as the output of config.guess
 				# --build=x86_64-w64-mingw32
 				# --host=x86_64-w64-mingw32
 				# --target=x86_64-w64-mingw32

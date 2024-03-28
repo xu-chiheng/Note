@@ -277,16 +277,6 @@ mingw_gcc_remove_directory_links_0() {
 	echo_command rm -rf "${sysroot}"
 }
 
-maybe_git_filemode_false() {
-	local host_triple="$1"
-	case "${host_triple}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			# MSYS2 git seem have file mode problem. Even newly cloned repo has diff over file mode.
-			echo_command git_filemode_false
-			;;
-	esac
-}
-
 git_repo_url_of_package() {
 	local package="$1"
 	case "${package}" in

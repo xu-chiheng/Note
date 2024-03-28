@@ -78,30 +78,6 @@ gdb_create_test_branches_for_bisect() {
 	common_create_test_branches_for_bisect gdb 10 "remotes/upstream/gdb-" "-branch" master
 }
 
-qemu_create_test_branches_for_bisect() {
-	if [ ! -d .git ]; then
-		return 1
-	fi
-	if [ ! "$(basename "$(pwd)")" = qemu ]; then
-		return 1
-	fi
-
-	local major_version
-	local minor_version
-	for major_version in $(seq 6 99); do
-		for minor_version in $(seq 0 9); do
-			# echo "${major_version}" "${minor_version}"
-			local major_minor_branch="remotes/upstream/stable-${major_version}.${minor_version}"
-			local test_branch="$(printf "test%02d%1d0000\n" "${major_version}" "${minor_version}")"
-			if quiet_command git_rev_parse "${major_minor_branch}"; then
-				maybe_create_test_branch_for_bisect "${major_minor_branch}" "${test_branch}" master
-			fi
-		done
-	done
-	git_checkout_-f_cleanly master
-	echo_command git branch
-}
-
 check_compiler_existence() {
 	if [ -z "$1" ]; then
 		echo "no compiler specified"

@@ -113,27 +113,26 @@ set_environment_variables_at_bash_startup() {
 			fi
 			;;
 	esac
+	if [ "${prepend_packages_bin_dirs_to_path}" = yes ]; then
+		case "${HOST_TRIPLE}" in
+			x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux-gnu )
+				local packages_dir="$(print_packages_dir "${HOST_TRIPLE}")"
+				local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
+				case "${HOST_TRIPLE}" in
+					*-linux-gnu )
+						packages+=( qemu )
+						;;
+				esac
+				local bin_dirs=()
+				local package
+				for package in "${packages[@]}"; do
+					bin_dirs+=( "${packages_dir}/${package}/bin" )
+				done
 
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux-gnu )
-			local packages_dir="$(print_packages_dir "${HOST_TRIPLE}")"
-			local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
-			case "${HOST_TRIPLE}" in
-				*-linux-gnu )
-					packages+=( qemu )
-					;;
-			esac
-			local bin_dirs=()
-			local package
-			for package in "${packages[@]}"; do
-				bin_dirs+=( "${packages_dir}/${package}/bin" )
-			done
-
-			if [ "${prepend_packages_bin_dirs_to_path}" = yes ]; then
 				export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
-			fi
-			;;
-	esac
+				;;
+		esac
+	fi
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )

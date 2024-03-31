@@ -70,10 +70,12 @@ print_host_triple_2() {
 	case "${host_triple}" in
 		*-linux* )
 			# x86_64-pc-linux-gnu  ---> x86_64-linux-gnu
-			host_triple="$(echo "${host_triple}" | sed -E -e 's/^([^-]+)-([^-]+)-(([^-]+)(-([^-]+))?)$/\1-\3/g')"
+			echo "${host_triple}" | sed -E -e 's/^([^-]+)-([^-]+)-(([^-]+)(-([^-]+))?)$/\1-\3/g'
+			;;
+		* )
+			echo "${host_triple}"
 			;;
 	esac
-	echo "${host_triple}"
 }
 
 set_environment_variables_at_bash_startup() {
@@ -119,6 +121,10 @@ set_environment_variables_at_bash_startup() {
 				local packages_dir="$(print_packages_dir "${HOST_TRIPLE}")"
 				local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
 				case "${HOST_TRIPLE}" in
+					x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
+						# share the self built QEMU
+						true
+						;;
 					*-linux-gnu )
 						packages+=( qemu )
 						;;

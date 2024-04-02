@@ -32,15 +32,14 @@ cd "$(dirname "$0")"
 # Kubuntu 22.04             https://kubuntu.org
 
 # GPT(GUID Partition Table)
-# /dev/sda1      /boot/efi        EFI System              500M FAT32/ESP(EFI system partition)  flags=boot hidden
-# /dev/sda2      /                Linux root              400G xfs or ext4
-# /dev/sda3      /mnt/work        Mount Work              100G btrfs    (Windows 10/11 has driver of btrfs, but some Linux distro does not support btrfs)
-# /dev/sda4      /mnt/work2       Mount Work              25G fat32/vfat  optional, only for Linux distro that does not support btrfs
+# /dev/sda1      /boot/efi        EFI System        500M      FAT32/ESP(EFI System Partition)  (flags=boot hidden)
+# /dev/sda2      /                Linux Root        400G      xfs or ext4
+# /dev/sda3      /mnt/work        Work Partition    100G      btrfs       (Windows 10+ has driver of btrfs, but some Linux distro does not support btrfs)
+# /dev/sda4      /mnt/work2       Work Partition    25G       fat32/vfat  (optional, only for Linux distro that does not support btrfs)
 
-# user     : root
-# password : 1
-# user     : user
-# password : 1
+# user name | password
+# root        1
+# user        1
 
 # Debian on VMware Workstation 17
 # Debian 12中只能使用启动菜单中的“Start Installer”安装，不要使用KDE Live中的“Install Debian”程序(Calamares Installer)安装。

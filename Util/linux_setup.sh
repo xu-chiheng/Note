@@ -84,46 +84,6 @@ cd "$(dirname "$0")"
 # https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
 
 
-if quiet_command which apt; then
-	# Debian, Ubuntu, Raspbian
-	true
-	# apt install -y lsb-release
-elif quiet_command which dnf; then
-	# Fedora, RedHat, CentOS
-	if ! quiet_command which lsb_release; then
-		dnf install -y lsb_release
-	fi
-elif quiet_command which pacman; then
-	# Arch Linux, Manjaro, Parabola
-	true
-else
-	echo "Unkown system $(uname -a)"
-	exit 1
-fi
-
-if ! quiet_command which lsb_release; then
-	echo "No lsb_release command"
-	exit 1
-fi
-
-OS_NAME="$(lsb_release -si)"
-OS_VERSION="$(lsb_release -sr)"
-# https://unix.stackexchange.com/questions/6345/how-can-i-get-distribution-name-and-version-number-in-a-simple-shell-script
-
-check_os_and_version() {
-	case "${OS_NAME}" in
-		Ubuntu | Debian | Fedora | CentOSStream | RockyLinux | AlmaLinux | Arch | Manjaro )
-			true
-			;;
-		* )
-			echo "Unknown Linux distribution ${OS_NAME} ${OS_VERSION}"
-			exit 1
-			;;
-	esac
-}
-
-check_os_and_version
-
 set_fastest_mirror_and_update() {
 	case "${OS_NAME}" in
 		Ubuntu )
@@ -574,15 +534,55 @@ install_samba() {
 	esac
 }
 
-time_command set_fastest_mirror_and_update \
-&& time_command linux_uninstall_firewall \
-&& time_command linux_disable_selinux \
-&& time_command install_basic_packages \
-&& time_command install_vs_code \
-&& time_command install_google_chrome \
-&& time_command install_qemu \
-&& time_command install_qemu_build_requirements \
-&& time_command install_openjdk \
-&& time_command set_hostname \
-&& time_command install_samba \
-&& echo "Completed!"
+setup() {
+	if quiet_command which apt; then
+		# Debian, Ubuntu, Raspbian
+		true
+		# apt install -y lsb-release
+	elif quiet_command which dnf; then
+		# Fedora, RedHat, CentOS
+		if ! quiet_command which lsb_release; then
+			dnf install -y lsb_release
+		fi
+	elif quiet_command which pacman; then
+		# Arch Linux, Manjaro, Parabola
+		true
+	else
+		echo "Unkown system $(uname -a)"
+		exit 1
+	fi
+
+	if ! quiet_command which lsb_release; then
+		echo "No lsb_release command"
+		exit 1
+	fi
+
+	OS_NAME="$(lsb_release -si)"
+	OS_VERSION="$(lsb_release -sr)"
+	# https://unix.stackexchange.com/questions/6345/how-can-i-get-distribution-name-and-version-number-in-a-simple-shell-script
+
+	case "${OS_NAME}" in
+		Ubuntu | Debian | Fedora | CentOSStream | RockyLinux | AlmaLinux | Arch | Manjaro )
+			true
+			;;
+		* )
+			echo "Unknown Linux distribution ${OS_NAME} ${OS_VERSION}"
+			exit 1
+			;;
+	esac
+
+	time_command set_fastest_mirror_and_update \
+	&& time_command linux_uninstall_firewall \
+	&& time_command linux_disable_selinux \
+	&& time_command install_basic_packages \
+	&& time_command install_vs_code \
+	&& time_command install_google_chrome \
+	&& time_command install_qemu \
+	&& time_command install_qemu_build_requirements \
+	&& time_command install_openjdk \
+	&& time_command set_hostname \
+	&& time_command install_samba \
+	&& echo "Completed!"
+}
+
+setup

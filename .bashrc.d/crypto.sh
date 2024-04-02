@@ -191,17 +191,6 @@ sha512_check_file() {
 	fi
 }
 
-# https://stackoverflow.com/questions/29516984/how-to-find-binary-files-in-a-directory
-# https://www.baeldung.com/linux/find-binary-files
-# Too slow, and not accurate
-# find_binary_files_in_series_-print0() {
-# 	find . -type f ! -size 0 -print0 | xargs -0 -n1 grep -ILZ .
-# }
-
-# find_binary_files_in_parallel_-print0() {
-# 	find . -type f ! -size 0 -print0 | xargs -0 -n1 -P0 grep -ILZ .
-# }
-
 find_binary_files_-print0() {
 	local find_args=(
 		-not

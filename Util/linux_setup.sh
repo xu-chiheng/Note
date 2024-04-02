@@ -356,7 +356,7 @@ install_vs_code() {
 	esac
 }
 
-https://linuxconfig.org/how-to-install-google-chrome-browser-on-linux
+# https://linuxconfig.org/how-to-install-google-chrome-browser-on-linux
 install_google_chrome() {
 	case "${OS_NAME}" in
 		Ubuntu | Debian )

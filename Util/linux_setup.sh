@@ -60,10 +60,10 @@ cd "$(dirname "$0")"
 # HOW TO ENABLE GUI ROOT LOGIN IN DEBIAN 9 – KDE5 PLASMA
 # https://economictheoryblog.com/2017/08/30/how-to-enable-gui-root-login-in-debian-9-kde5-plasma/
 
-# 1) execute "sudo passwd root" to set the root password.
-# 2) execute "sudo passwd -u root" to unlock the account.
-# 3) kwrite /etc/pam.d/sddm, comment out the line "auth required pam_success_if.so user != root quiet_success".
-# 4) logout and login as root
+# 1. execute "sudo passwd root" to set the root password.
+# 2. execute "sudo passwd -u root" to unlock the account.
+# 3. execute "kwrite /etc/pam.d/sddm", comment out the line "auth required pam_success_if.so user != root quiet_success".
+# 4. logout and login as root
 
 
 

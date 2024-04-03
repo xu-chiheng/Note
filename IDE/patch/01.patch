@@ -1,0 +1,585 @@
+diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/UltraGDB.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/UltraGDB.java
+new file mode 100644
+index 0000000000..cd735f6c82
+--- /dev/null
++++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/UltraGDB.java
+@@ -0,0 +1,17 @@
++/********************************************************************************
++ * Copyright (c) 2022 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.core;
++
++public class UltraGDB {
++	/**
++	 *
++	 */
++	public static boolean isOn = true;
++}
+diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2.java
+new file mode 100644
+index 0000000000..33797672b7
+--- /dev/null
++++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2.java
+@@ -0,0 +1,81 @@
++/********************************************************************************
++ * Copyright (c) 2022 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.utils.pty;
++
++import java.io.BufferedReader;
++import java.io.IOException;
++import java.io.InputStream;
++import java.io.InputStreamReader;
++
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
++import org.eclipse.core.runtime.Platform;
++
++public class PTY2 {
++	private Process terminalEmulator;
++	private String slaveName;
++
++	/**
++	 *
++	 * @throws IOException
++	 */
++	public PTY2() throws IOException {
++		// launch the patched terminal emulator process, and get the pty's slave name from stdout of the
++		// terminal emulator process
++		String command = null;
++		InputStream in = null;
++		try {
++			command = PTY2Util.getTerminalEmulatorCommand();
++			// both mintty.exe and konsole support --opentty and --title option
++			String[] cmdArray;
++			if (Platform.getOS().equals(Platform.OS_WIN32)) {
++				cmdArray = new String[] { command, "--openpty", "--hold=always", //$NON-NLS-1$ //$NON-NLS-2$
++						"--title", "Terminal Emulator" }; //$NON-NLS-1$ //$NON-NLS-2$
++			} else if (Platform.getOS().equals(Platform.OS_LINUX)) {
++				cmdArray = new String[] { command, "--openpty", "--nofork", "--hold", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
++						"--title", "Terminal Emulator" }; //$NON-NLS-1$ //$NON-NLS-2$
++			} else {
++				cmdArray = new String[] { command, "--openpty", "--nofork", "--hold", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
++						"--title", "Terminal Emulator" }; //$NON-NLS-1$ //$NON-NLS-2$
++			}
++			terminalEmulator = ProcessFactory.getFactory().exec(cmdArray);
++
++			in = terminalEmulator.getInputStream();
++			InputStreamReader reader = new InputStreamReader(in);
++			BufferedReader br = new BufferedReader(reader);
++
++			String line = br.readLine();
++			if (line != null) {
++				slaveName = line;
++			}
++
++		} catch (IOException e) {
++
++		}
++		if (slaveName == null) {
++			throw new IOException("can not start terminal emulator and get pty's slave name"); //$NON-NLS-1$
++		}
++	}
++
++	/**
++	 *
++	 * @return
++	 */
++	public Process getTerminalEmulator() {
++		return this.terminalEmulator;
++	}
++
++	/**
++	 *
++	 * @return
++	 */
++	public String getSlaveName() {
++		return this.slaveName;
++	}
++}
+diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2Util.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2Util.java
+new file mode 100644
+index 0000000000..641b247c61
+--- /dev/null
++++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2Util.java
+@@ -0,0 +1,86 @@
++/********************************************************************************
++ * Copyright (c) 2022 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.utils.pty;
++
++import java.io.File;
++import java.io.IOException;
++import java.net.URL;
++
++import org.eclipse.cdt.internal.core.natives.CNativePlugin;
++import org.eclipse.core.runtime.FileLocator;
++import org.eclipse.core.runtime.IPath;
++import org.eclipse.core.runtime.Path;
++import org.eclipse.core.runtime.Platform;
++import org.osgi.framework.Bundle;
++
++public class PTY2Util {
++	/**
++	 *
++	 * @return
++	 * @throws IOException
++	 */
++	public static String getTerminalEmulatorCommand() throws IOException {
++		String command = null;
++		Bundle bundle = Platform.getBundle(CNativePlugin.PLUGIN_ID);
++
++		String terminalEmulatorExeName = "konsole"; //$NON-NLS-1$
++		if (Platform.getOS().equals(Platform.OS_WIN32)) {
++			terminalEmulatorExeName = "mintty.exe"; //$NON-NLS-1$
++		} else if (Platform.getOS().equals(Platform.OS_LINUX)) {
++			terminalEmulatorExeName = "konsole"; //$NON-NLS-1$
++		} else {
++			throw new IOException("can not find terminal emulator executable of currrent platform"); //$NON-NLS-1$
++		}
++		URL url = FileLocator.find(bundle, new Path("$os$/" + terminalEmulatorExeName), null); //$NON-NLS-1$
++		if (url != null) {
++			url = FileLocator.resolve(url);
++			String path = url.getFile();
++			File file = new File(path);
++			if (file.exists()) {
++				IPath p = Path.fromOSString(file.getCanonicalPath());
++				command = p.toPortableString();
++			}
++		}
++
++		if (command == null) {
++			throw new IOException("can not find terminal emulator executable"); //$NON-NLS-1$
++		}
++
++		return command;
++	}
++
++	/**
++	 *
++	 * @param commandArray
++	 * @return
++	 */
++	public static String[] getTerminalEmulatorCommandArray(String[] commandArray) {
++		String command = "konsole"; //$NON-NLS-1$
++		try {
++			command = PTY2Util.getTerminalEmulatorCommand();
++		} catch (IOException e) {
++		}
++		String[] terminalEmulatorCommand;
++
++		if (Platform.getOS().equals(Platform.OS_WIN32)) {
++			terminalEmulatorCommand = new String[] { command, "--hold=always", "--exec" }; //$NON-NLS-1$  //$NON-NLS-2$
++		} else if (Platform.getOS().equals(Platform.OS_LINUX)) {
++			terminalEmulatorCommand = new String[] { command, "--nofork", "--hold", "-e" }; //$NON-NLS-1$  //$NON-NLS-2$  //$NON-NLS-3$
++		} else {
++			terminalEmulatorCommand = new String[] { command, "--nofork", "--hold", "-e" }; //$NON-NLS-1$  //$NON-NLS-2$  //$NON-NLS-3$
++		}
++
++		String[] result = new String[terminalEmulatorCommand.length + commandArray.length];
++		System.arraycopy(terminalEmulatorCommand, 0, result, 0, terminalEmulatorCommand.length);
++		System.arraycopy(commandArray, 0, result, terminalEmulatorCommand.length, commandArray.length);
++
++		return result;
++	}
++}
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin1.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin1.java
+new file mode 100644
+index 0000000000..889073af35
+--- /dev/null
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin1.java
+@@ -0,0 +1,191 @@
++/********************************************************************************
++ * Copyright (c) 2022 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.internal.core;
++
++import java.io.File;
++import java.util.Map;
++
++import org.eclipse.core.runtime.IPath;
++import org.eclipse.core.runtime.Path;
++import org.eclipse.core.runtime.Platform;
++
++// A collection of Cygwin-related utilities.
++public class Cygwin1 {
++	private static boolean present;
++	private static String rootDir;
++	static {
++		initialize();
++	}
++
++	// initialize static data fields
++	private static void initialize() {
++		if (Platform.getOS().equals(Platform.OS_WIN32)) {
++			Map<String, String> environment = System.getenv();
++			rootDir = environment.get("CYGWIN_DIR"); //$NON-NLS-1$
++			if (rootDir != null) {
++				if (dirHasCygwin1Dll(rootDir)) {
++					present = true;
++					rootDir = new Path(rootDir).toPortableString();
++					return;
++				}
++			}
++			for (char drive = 'C'; drive < 'H'; drive++) {
++				StringBuilder dirStringBuilder = new StringBuilder();
++				dirStringBuilder.append(drive);
++				dirStringBuilder.append(":/cygwin64"); //$NON-NLS-1$
++				String dirString = dirStringBuilder.toString();
++				if (dirHasCygwin1Dll(dirString)) {
++					present = true;
++					rootDir = new Path(dirString).toPortableString();
++					return;
++				}
++			}
++		}
++	}
++
++	private static boolean dirHasCygwin1Dll(String dirString) {
++		IPath dirLocation = new Path(dirString);
++		File dir = dirLocation.toFile();
++		if (dir.isAbsolute() && dir.exists() && dir.isDirectory()) {
++			File file = dirLocation.append("/bin/cygwin1.dll").toFile(); //$NON-NLS-1$
++			if (file.exists() && file.isFile() && file.canRead()) {
++				return true;
++			}
++		}
++		return false;
++	}
++
++	/**
++	 *
++	 * @return
++	 */
++	public boolean isPresent() {
++		return present;
++	}
++
++	/**
++	 *
++	 * @return
++	 */
++	public String getRootDir() {
++		return rootDir;
++	}
++
++	/**
++	 * Convert Unix path to Windows path
++	 * @param unixPath
++	 * @return
++	 */
++	public static String pathToWindows(String unixPath) {
++		if (!present) {
++			return unixPath;
++		}
++		if (unixPath == null || unixPath.trim().length() == 0) {
++			return unixPath;
++		}
++
++		String windowsPath;
++		IPath path = Path.fromOSString(unixPath);
++		if (path.getDevice() != null) {
++			// already a windows absolute path
++			windowsPath = path.toPortableString();
++			return windowsPath;
++		}
++
++		if (unixPath.startsWith("/")) { //$NON-NLS-1$
++			// absolute path
++			String[] segments = path.segments();
++			if (segments.length >= 2) {
++				if (segments[0].equals("cygdrive")) { //$NON-NLS-1$
++					if (segments[1].length() == 1) {
++						char drive = segments[1].charAt(0);
++						if ((drive >= 'a' && drive <= 'z') || (drive >= 'A' && drive <= 'Z')) {
++							String device = segments[1].toUpperCase();
++							StringBuilder builder = new StringBuilder();
++							builder.append(device);
++							builder.append(':');
++							for (int i = 2; i < segments.length; i++) {
++								builder.append('/');
++								builder.append(segments[i]);
++							}
++							windowsPath = builder.toString();
++							return windowsPath;
++						}
++					}
++				}
++				if (segments[0].equals("usr") && (segments[1].equals("bin") || segments[1].equals("lib"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
++					// /usr/lib --> /lib
++					// /usr/bin --> /bin
++					// /usr/include unchanged
++					String[] newSegments = new String[segments.length - 1];
++					System.arraycopy(segments, 1, newSegments, 0, segments.length - 1);
++					segments = newSegments;
++				}
++			}
++			// unixPath.startsWith("/") && segments.length >= 0
++			StringBuilder builder = new StringBuilder();
++			builder.append(rootDir);
++			for (String s : segments) {
++				builder.append('/');
++				builder.append(s);
++			}
++			windowsPath = builder.toString();
++		} else {
++			// relative path
++			windowsPath = path.toPortableString();
++		}
++
++		return windowsPath;
++	}
++
++	/**
++	 * Convert Windows path to Unix path
++	 * @param windowsPath
++	 * @return
++	 */
++	public static String pathToUnix(String windowsPath) {
++		if (!present) {
++			return windowsPath;
++		}
++		if (windowsPath == null || windowsPath.trim().length() == 0) {
++			return windowsPath;
++		}
++
++		IPath rootDirPath = Path.fromOSString(rootDir);
++		IPath path = Path.fromOSString(windowsPath);
++		String unixPath;
++		if (!path.isAbsolute()) {
++			// relative path
++			unixPath = path.toPortableString();
++		} else if (rootDirPath.isPrefixOf(path)) {
++			int matchingFirstSegments = rootDirPath.matchingFirstSegments(path);
++			String[] segments = path.segments();
++			StringBuilder builder = new StringBuilder();
++			for (int i = matchingFirstSegments; i < segments.length; i++) {
++				builder.append('/');
++				builder.append(segments[i]);
++			}
++			unixPath = builder.toString();
++		} else {
++			String device = path.getDevice().replace(':', ' ').trim().toLowerCase();
++			String[] segments = path.segments();
++			StringBuilder builder = new StringBuilder();
++			builder.append("/cygdrive/"); //$NON-NLS-1$
++			builder.append(device);
++			for (String s : segments) {
++				builder.append('/');
++				builder.append(s);
++			}
++			unixPath = builder.toString();
++		}
++
++		return unixPath;
++	}
++}
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/MSYS2.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/MSYS2.java
+new file mode 100644
+index 0000000000..6f01d1f426
+--- /dev/null
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/MSYS2.java
+@@ -0,0 +1,180 @@
++/********************************************************************************
++ * Copyright (c) 2022 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.internal.core;
++
++import java.io.File;
++import java.util.Map;
++
++import org.eclipse.core.runtime.IPath;
++import org.eclipse.core.runtime.Path;
++import org.eclipse.core.runtime.Platform;
++
++// A collection of MSYS2-related utilities.
++public class MSYS2 {
++	public static boolean present;
++	private static String rootDir;
++	static {
++		initialize();
++	}
++
++	// initialize static data fields
++	private static void initialize() {
++		if (Platform.getOS().equals(Platform.OS_WIN32)) {
++			Map<String, String> environment = System.getenv();
++			rootDir = environment.get("MSYS2_DIR"); //$NON-NLS-1$
++			if (rootDir != null) {
++				if (dirHasMsys2Dll(rootDir)) {
++					present = true;
++					rootDir = new Path(rootDir).toPortableString();
++					return;
++				}
++			}
++			for (char drive = 'C'; drive < 'H'; drive++) {
++				StringBuilder dirStringBuilder = new StringBuilder();
++				dirStringBuilder.append(drive);
++				dirStringBuilder.append(":/msys64"); //$NON-NLS-1$
++				String dirString = dirStringBuilder.toString();
++				if (dirHasMsys2Dll(dirString)) {
++					present = true;
++					rootDir = new Path(dirString).toPortableString();
++					return;
++				}
++			}
++		}
++	}
++
++	private static boolean dirHasMsys2Dll(String dirString) {
++		IPath dirLocation = new Path(dirString);
++		File dir = dirLocation.toFile();
++		if (dir.isAbsolute() && dir.exists() && dir.isDirectory()) {
++			File file = dirLocation.append("/usr/bin/msys-2.0.dll").toFile(); //$NON-NLS-1$
++			if (file.exists() && file.isFile() && file.canRead()) {
++				return true;
++			}
++		}
++		return false;
++	}
++
++	/**
++	 *
++	 * @return
++	 */
++	public boolean isPresent() {
++		return present;
++	}
++
++	/**
++	 *
++	 * @return
++	 */
++	public String getRootDir() {
++		return rootDir;
++	}
++
++	/**
++	 * Convert Unix path to Windows path
++	 * @param unixPath
++	 * @return
++	 */
++	public static String pathToWindows(String unixPath) {
++		if (!present) {
++			return unixPath;
++		}
++		if (unixPath == null || unixPath.trim().length() == 0) {
++			return unixPath;
++		}
++
++		String windowsPath;
++		IPath path = Path.fromOSString(unixPath);
++		if (path.getDevice() != null) {
++			// already a windows absolute path
++			windowsPath = path.toPortableString();
++			return windowsPath;
++		}
++		String[] segments = path.segments();
++		if (unixPath.startsWith("/")) { //$NON-NLS-1$
++			// absolute path
++			if (segments.length >= 1) {
++				if (segments[0].length() == 1) {
++					char drive = segments[0].charAt(0);
++					if ((drive >= 'a' && drive <= 'z') || (drive >= 'A' && drive <= 'Z')) {
++						String device = segments[0].toUpperCase();
++						StringBuilder builder = new StringBuilder();
++						builder.append(device);
++						builder.append(':');
++						for (int i = 1; i < segments.length; i++) {
++							builder.append('/');
++							builder.append(segments[i]);
++						}
++						windowsPath = builder.toString();
++						return windowsPath;
++					}
++				}
++			}
++			// unixPath.startsWith("/") && segments.length >= 0
++			StringBuilder builder = new StringBuilder();
++			builder.append(rootDir);
++			for (String s : segments) {
++				builder.append('/');
++				builder.append(s);
++			}
++			windowsPath = builder.toString();
++		} else {
++			// relative path
++			windowsPath = path.toPortableString();
++		}
++
++		return windowsPath;
++	}
++
++	/**
++	 * Convert Windows path to Unix path
++	 * @param windowsPath
++	 * @return
++	 */
++	public static String pathToUnix(String windowsPath) {
++		if (!present) {
++			return windowsPath;
++		}
++		if (windowsPath == null || windowsPath.trim().length() == 0) {
++			return windowsPath;
++		}
++
++		IPath rootDirPath = Path.fromOSString(rootDir);
++		IPath path = Path.fromOSString(windowsPath);
++		String unixPath;
++		if (!path.isAbsolute()) {
++			// relative path
++			unixPath = path.toPortableString();
++		} else if (rootDirPath.isPrefixOf(path)) {
++			int matchingFirstSegments = rootDirPath.matchingFirstSegments(path);
++			String[] segments = path.segments();
++			StringBuilder builder = new StringBuilder();
++			for (int i = matchingFirstSegments; i < segments.length; i++) {
++				builder.append('/');
++				builder.append(segments[i]);
++			}
++			unixPath = builder.toString();
++		} else {
++			String device = path.getDevice().replace(':', ' ').trim().toLowerCase();
++			String[] segments = path.segments();
++			StringBuilder builder = new StringBuilder();
++			builder.append('/');
++			builder.append(device);
++			for (String s : segments) {
++				builder.append('/');
++				builder.append(s);
++			}
++			unixPath = builder.toString();
++		}
++
++		return unixPath;
++	}
++}

@@ -26,8 +26,7 @@ do_update_all_files() {
 		.gnupg/.gitignore
 		.gnupg/gpg.conf
 
-		eclipse-workspace
-		runtime-EclipseApplication
+		{eclipse-workspace,runtime-EclipseApplication}/{.gitignore,clean.cmd,clean.sh,cygwin.cmd}
 
 		IDE/{.gitignore,cygwin.cmd,README.md,remove_unneeded_plug-ins.{cmd,sh,sh.txt},patch}
 

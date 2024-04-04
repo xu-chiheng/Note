@@ -1,5 +1,5 @@
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..d9e3691c2a 100644
+index addd040267..ef882478b7 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 @@ -52,55 +52,72 @@ public class ProcessFactory {
@@ -61,8 +61,14 @@ index addd040267..d9e3691c2a 100644
  		}
 -		return environment;
 +		return envMap;
-+	}
-+
+ 	}
+ 
+-	private static void appendEnvMapComparison(StringBuilder sb, TreeMap<String, String> environmentA,
+-			TreeMap<String, String> environmentB) {
+-		TreeMap<String, String> environmentC = newEmptyEnvironment();
+-		environmentC.putAll(environmentA);
+-		environmentC.putAll(environmentB);
+-		Iterator<Entry<String, String>> iterator = environmentC.entrySet().iterator();
 +	private static String[] envMapToEnvp(TreeMap<String, String> envMap) {
 +		if (envMap == null) {
 +			envMap = getDefaultEnvMap();
@@ -78,14 +84,8 @@ index addd040267..d9e3691c2a 100644
 +		}
 +
 +		return envp;
- 	}
- 
--	private static void appendEnvMapComparison(StringBuilder sb, TreeMap<String, String> environmentA,
--			TreeMap<String, String> environmentB) {
--		TreeMap<String, String> environmentC = newEmptyEnvironment();
--		environmentC.putAll(environmentA);
--		environmentC.putAll(environmentB);
--		Iterator<Entry<String, String>> iterator = environmentC.entrySet().iterator();
++	}
++
 +	private static void appendEnvMapComparison(StringBuilder sb, TreeMap<String, String> envMapA,
 +			TreeMap<String, String> envMapB) {
 +		TreeMap<String, String> envMapC = newEmptyEnvMap();
@@ -145,21 +145,7 @@ index addd040267..d9e3691c2a 100644
  				sb.append("\n\n"); //$NON-NLS-1$
  			}
  			if (use_pty) {
-@@ -255,9 +277,10 @@ public class ProcessFactory {
- 		}
- 
- 		public Process start() throws IOException {
--			// Uncomment the next line, set a breakpoint in the last line of debug() method,
--			// when the breakpoint is triggered, inspect the sb variable to see detailed info on what is being launched.
--			// debug();
-+			if (Platform.inDebugMode()) {
-+				debug();
-+			}
-+
- 			Process p;
- 			if (hasSpawner) {
- 				if (use_pty) {
-@@ -362,7 +385,7 @@ public class ProcessFactory {
+@@ -362,7 +384,7 @@ public class ProcessFactory {
  		return p;
  	}
  
@@ -168,7 +154,7 @@ index addd040267..d9e3691c2a 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).start();
  		return p;
  	}
-@@ -370,13 +393,13 @@ public class ProcessFactory {
+@@ -370,13 +392,13 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */
@@ -184,7 +170,7 @@ index addd040267..d9e3691c2a 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).pty(pty).start();
  		return p;
  	}
-@@ -384,10 +407,48 @@ public class ProcessFactory {
+@@ -384,10 +406,48 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */

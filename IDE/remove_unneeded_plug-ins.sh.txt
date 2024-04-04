@@ -107,6 +107,7 @@ main() {
 		[org.eclipse.tools.templates.freemarker]=1
 		[org.eclipse.tools.templates.ui]=1
 	)
+
 	case "$(uname -o)" in
 		Cygwin )
 			plug_ins+=(

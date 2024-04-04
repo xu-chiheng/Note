@@ -128,7 +128,7 @@ main() {
 	esac
 
 	local find_args=(
-		-mindepth 2 -maxdepth 2 
+		-mindepth 2 -maxdepth 2
 		-type d 
 		! -wholename '*/.git/*' 
 		-a ! -wholename '*/~git-tools~/*' 
@@ -138,11 +138,13 @@ main() {
 	local plug_in_dir
 	for plug_in_dir in $(find cdt "${find_args[@]}")
 	do
-		# echo "${plug_in_dir}"
-		local plug_in="$(basename "${plug_in_dir}")"
-		if [[ ! -v plug_ins["${plug_in}"] ]]; then
-			echo "${plug_in_dir}"
-			rm -rf "${plug_in_dir}"
+		if [ -f "${plug_in_dir}"/META-INF/MANIFEST.MF ]; then
+			# echo "${plug_in_dir}"
+			local plug_in="$(basename "${plug_in_dir}")"
+			if [[ ! -v plug_ins["${plug_in}"] ]]; then
+				echo "${plug_in_dir}"
+				rm -rf "${plug_in_dir}"
+			fi
 		fi
 	done
 

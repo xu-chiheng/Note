@@ -7,6 +7,7 @@ patches=(
 	rework-ProcessFactory.java.patch
 	replace-toOSString-to-toString.patch
 	replace-Runtime-to-ProcessFactory.patch
+	replace-ProcessBuilder-to-ProcessFactory.patch
 )
 
 patches2=()

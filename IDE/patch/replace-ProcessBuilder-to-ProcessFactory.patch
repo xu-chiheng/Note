@@ -1,0 +1,254 @@
+diff --git a/build/org.eclipse.cdt.build.gcc.core/src/org/eclipse/cdt/build/gcc/core/GCCToolChain.java b/build/org.eclipse.cdt.build.gcc.core/src/org/eclipse/cdt/build/gcc/core/GCCToolChain.java
+index d4f5194f7e..d58a9fac76 100644
+--- a/build/org.eclipse.cdt.build.gcc.core/src/org/eclipse/cdt/build/gcc/core/GCCToolChain.java
++++ b/build/org.eclipse.cdt.build.gcc.core/src/org/eclipse/cdt/build/gcc/core/GCCToolChain.java
+@@ -22,6 +22,7 @@ import java.nio.file.Paths;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.HashMap;
++import java.util.TreeMap;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.Map.Entry;
+@@ -41,6 +42,7 @@ import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
+ import org.eclipse.cdt.core.model.ILanguage;
+ import org.eclipse.cdt.core.parser.ExtendedScannerInfo;
+ import org.eclipse.cdt.core.parser.IExtendedScannerInfo;
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ import org.eclipse.core.resources.IBuildConfiguration;
+ import org.eclipse.core.resources.IFile;
+ import org.eclipse.core.resources.IResource;
+@@ -471,10 +473,9 @@ public class GCCToolChain extends PlatformObject implements IToolChain {
+ 		Files.createDirectories(buildDirectory);
+ 
+ 		// Startup the command
+-		ProcessBuilder processBuilder = new ProcessBuilder(commandLine).directory(buildDirectory.toFile());
+-		CCorePlugin.getDefault().getBuildEnvironmentManager().setEnvironment(processBuilder.environment(), buildConfig,
+-				true);
+-		Process process = processBuilder.start();
++		String[] cmdarray = new String[commandLine.size()];
++		commandLine.toArray(cmdarray);
++		Process process = ProcessFactory.getFactory().exec(cmdarray, null/*envp*/, buildDirectory.toFile());
+ 
+ 		// Scan for the scanner info
+ 		Map<String, String> symbols = new HashMap<>();
+@@ -756,21 +757,22 @@ public class GCCToolChain extends PlatformObject implements IToolChain {
+ 		}
+ 
+ 		public GCCInfo(String command, Map<String, String> env) throws IOException {
+-			ProcessBuilder builder = new ProcessBuilder(new String[] { command, "-v" }).redirectErrorStream(true); //$NON-NLS-1$
++			String[] cmdarray = new String[] { command, "-v" };
++			TreeMap<String, String> envMap = ProcessFactory.getDefaultEnvMap();
+ 			if (env != null) {
+-				Map<String, String> procEnv = builder.environment();
+ 				for (Entry<String, String> entry : env.entrySet()) {
+ 					if ("PATH".equals(entry.getKey())) { //$NON-NLS-1$
+ 						// prepend the path
+-						String path = entry.getValue() + File.pathSeparator + procEnv.get("PATH"); //$NON-NLS-1$
+-						procEnv.put("PATH", path); //$NON-NLS-1$
++						String path = entry.getValue() + File.pathSeparator + envMap.get("PATH"); //$NON-NLS-1$
++						envMap.put("PATH", path); //$NON-NLS-1$
+ 					} else {
+ 						// replace
+-						procEnv.put(entry.getKey(), entry.getValue());
++						envMap.put(entry.getKey(), entry.getValue());
+ 					}
+ 				}
+ 			}
+-			Process proc = builder.start();
++			Process proc = ProcessFactory.getFactory().exec2(cmdarray, envMap);
++
+ 			try (BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()))) {
+ 				for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+ 					Matcher versionMatcher = versionPattern.matcher(line);
+diff --git a/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/launch/CoreBuildLocalRunLaunchDelegate.java b/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/launch/CoreBuildLocalRunLaunchDelegate.java
+index d754a6c6a6..ef04dfada6 100644
+--- a/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/launch/CoreBuildLocalRunLaunchDelegate.java
++++ b/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/launch/CoreBuildLocalRunLaunchDelegate.java
+@@ -18,6 +18,7 @@ import org.eclipse.cdt.core.model.IBinary;
+ import org.eclipse.cdt.debug.core.CDebugCorePlugin;
+ import org.eclipse.cdt.debug.core.launch.CoreBuildLaunchConfigDelegate;
+ import org.eclipse.cdt.debug.internal.core.InternalDebugCoreMessages;
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ import org.eclipse.core.runtime.CoreException;
+ import org.eclipse.core.runtime.IProgressMonitor;
+ import org.eclipse.core.runtime.IStatus;
+@@ -38,9 +39,9 @@ public class CoreBuildLocalRunLaunchDelegate extends CoreBuildLaunchConfigDelega
+ 		IBinary exeFile = getBinary(buildConfig);
+ 
+ 		try {
+-			ProcessBuilder builder = new ProcessBuilder(Paths.get(exeFile.getLocationURI()).toString());
+-			buildConfig.setBuildEnvironment(builder.environment());
+-			Process process = builder.start();
++			buildConfig.setBuildEnvironment(ProcessFactory.getDefaultEnvMap());
++			String[] cmdarray = new String[] { Paths.get(exeFile.getLocationURI()).toString() };
++			Process process = ProcessFactory.getFactory().exec(cmdarray, null/*envp*/);
+ 			DebugPlugin.newProcess(launch, process, exeFile.getPath().lastSegment());
+ 		} catch (IOException e) {
+ 			throw new CoreException(new Status(IStatus.ERROR, CDebugCorePlugin.PLUGIN_ID,
+diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/FindStdLibPath.java b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/FindStdLibPath.java
+index a9f356df49..e2182feda2 100644
+--- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/FindStdLibPath.java
++++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/FindStdLibPath.java
+@@ -14,9 +14,12 @@
+  *******************************************************************************/
+ package org.eclipse.cdt.managedbuilder.llvm.util;
+ 
++import java.util.ArrayList;
++import java.util.List;
+ import java.io.BufferedReader;
+ import java.io.IOException;
+ import java.io.InputStreamReader;
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ 
+ /**
+  * The purpose is to find a path where stdc++ library is located.
+@@ -37,19 +40,27 @@ public class FindStdLibPath {
+ 	 * @return Stdc++ library path.
+ 	 */
+ 	public static String find() {
+-		ProcessBuilder pb = null;
++		List<String> commandLine = new ArrayList<>();
+ 		String os = System.getProperty("os.name").toLowerCase(); //$NON-NLS-1$
+ 		if (os.indexOf("win") >= 0) { //$NON-NLS-1$
+-			pb = new ProcessBuilder("cmd", "/c", WIN_SCRIPT + " " + STD_LIB); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
++			commandLine.add("cmd"); //$NON-NLS-1$
++			commandLine.add("/c"); //$NON-NLS-1$
++			commandLine.add(WIN_SCRIPT + " " + STD_LIB);
+ 		} else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0) { //$NON-NLS-1$ //$NON-NLS-2$
+-			pb = new ProcessBuilder("bash", "-c", UNIX_SCRIPT); //$NON-NLS-1$//$NON-NLS-2$
++			commandLine.add("bash"); //$NON-NLS-1$
++			commandLine.add("-c"); //$NON-NLS-1$
++			commandLine.add(UNIX_SCRIPT);
+ 		} else if (os.indexOf("mac") >= 0) { //$NON-NLS-1$
+-			pb = new ProcessBuilder("bash", "-c", MAC_SCRIPT); //$NON-NLS-1$//$NON-NLS-2$
++			commandLine.add("bash"); //$NON-NLS-1$
++			commandLine.add("-c"); //$NON-NLS-1$
++			commandLine.add(MAC_SCRIPT);
+ 		} else {
+ 			return null;
+ 		}
+ 		try {
+-			Process p = pb.start();
++			String[] cmdarray = new String[commandLine.size()];
++			commandLine.toArray(cmdarray);
++			Process p = ProcessFactory.getFactory().exec(cmdarray, null/*envp*/);
+ 			String line;
+ 			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+ 			line = input.readLine();
+diff --git a/remote/org.eclipse.remote.proxy.server.core/src/org/eclipse/remote/internal/proxy/server/core/commands/ServerExecCommand.java b/remote/org.eclipse.remote.proxy.server.core/src/org/eclipse/remote/internal/proxy/server/core/commands/ServerExecCommand.java
+index 06ebe5e1ef..66887b4320 100644
+--- a/remote/org.eclipse.remote.proxy.server.core/src/org/eclipse/remote/internal/proxy/server/core/commands/ServerExecCommand.java
++++ b/remote/org.eclipse.remote.proxy.server.core/src/org/eclipse/remote/internal/proxy/server/core/commands/ServerExecCommand.java
+@@ -14,7 +14,9 @@ import java.io.File;
+ import java.io.IOException;
+ import java.util.List;
+ import java.util.Map;
++import java.util.TreeMap;
+ 
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ import org.eclipse.remote.proxy.protocol.core.StreamChannel;
+ 
+ /**
+@@ -29,16 +31,19 @@ public class ServerExecCommand extends AbstractServerExecCommand {
+ 			System.err.print(arg + " ");
+ 		}
+ 		System.err.println();
+-		ProcessBuilder builder = new ProcessBuilder(getCommand());
++		List<String> commandLine = getCommand();
++		String[] cmdarray = new String[commandLine.size()];
++		commandLine.toArray(cmdarray);
++		TreeMap<String, String> envMap = ProcessFactory.getDefaultEnvMap();
+ 		try {
+ 			if (!isAppendEnv()) {
+-				builder.environment().clear();
+-				builder.environment().putAll(getEnv());
++				envMap.clear();
++				envMap.putAll(getEnv());
+ 			} else {
+ 				for (Map.Entry<String, String> entry : getEnv().entrySet()) {
+-					String val = builder.environment().get(entry.getKey());
++					String val = envMap.get(entry.getKey());
+ 					if (val == null || !val.equals(entry.getValue())) {
+-						builder.environment().put(entry.getKey(), entry.getValue());
++						envMap.put(entry.getKey(), entry.getValue());
+ 					}
+ 				}
+ 			}
+@@ -46,11 +51,11 @@ public class ServerExecCommand extends AbstractServerExecCommand {
+ 			// Leave environment untouched
+ 		}
+ 		File dir = new File(getDirectory());
+-		if (dir.exists() && dir.isAbsolute()) {
+-			builder.directory(dir);
++		if (!(dir.exists() && dir.isAbsolute())) {
++			dir = null;
+ 		}
+-		builder.redirectErrorStream(isRedirect());
+-		return builder.start();
++		Process process = ProcessFactory.getFactory().exec2(cmdarray, envMap, dir);
++		return process;
+ 	}
+ 
+ 	@Override
+diff --git a/terminal/plugins/org.eclipse.tm.terminal.view.ui/META-INF/MANIFEST.MF b/terminal/plugins/org.eclipse.tm.terminal.view.ui/META-INF/MANIFEST.MF
+index 65654fb5e7..86c398c7aa 100644
+--- a/terminal/plugins/org.eclipse.tm.terminal.view.ui/META-INF/MANIFEST.MF
++++ b/terminal/plugins/org.eclipse.tm.terminal.view.ui/META-INF/MANIFEST.MF
+@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.core.expressions;bundle-version="3.4.400",
+  org.eclipse.ui;bundle-version="3.8.0",
+  org.eclipse.ui.ide;bundle-version="3.18.0";resolution:=optional,
+  org.eclipse.ui.editors;bundle-version="3.14.0";resolution:=optional,
+- org.eclipse.text;bundle-version="3.11.0";resolution:=optional
++ org.eclipse.text;bundle-version="3.11.0";resolution:=optional,
++ org.eclipse.cdt.core.native
+ Bundle-RequiredExecutionEnvironment: JavaSE-17
+ Bundle-ActivationPolicy: lazy
+ Bundle-Localization: plugin
+diff --git a/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/detectors/DetectWSL.java b/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/detectors/DetectWSL.java
+index 8d98d53f78..4fd2eea79b 100644
+--- a/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/detectors/DetectWSL.java
++++ b/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/detectors/DetectWSL.java
+@@ -24,6 +24,7 @@ import java.util.List;
+ import java.util.Map;
+ import java.util.function.Predicate;
+ 
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ import org.eclipse.core.runtime.IProgressMonitor;
+ import org.eclipse.core.runtime.IStatus;
+ import org.eclipse.core.runtime.OperationCanceledException;
+@@ -110,9 +111,9 @@ public class DetectWSL implements IDetectExternalExecutable {
+ 					return Status.OK_STATUS;
+ 				}
+ 
+-				ProcessBuilder pb = new ProcessBuilder(wsl, "--list", "--quiet"); //$NON-NLS-1$ //$NON-NLS-2$
++				String[] cmdarray = new String[] { wsl, "--list", "--quiet" }; //$NON-NLS-1$ //$NON-NLS-2$
+ 				try {
+-					Process process = pb.start();
++					Process process = ProcessFactory.getFactory().exec(cmdarray, null/*envp*/);
+ 					try (InputStream is = process.getErrorStream()) {
+ 						// drain the error stream
+ 						if (is.readAllBytes().length != 0) {
+diff --git a/windows/org.eclipse.cdt.msw.build/src/org/eclipse/cdt/internal/msw/build/ProcessOutputUtil.java b/windows/org.eclipse.cdt.msw.build/src/org/eclipse/cdt/internal/msw/build/ProcessOutputUtil.java
+index 0cce6f5b3a..118ce5abb8 100644
+--- a/windows/org.eclipse.cdt.msw.build/src/org/eclipse/cdt/internal/msw/build/ProcessOutputUtil.java
++++ b/windows/org.eclipse.cdt.msw.build/src/org/eclipse/cdt/internal/msw/build/ProcessOutputUtil.java
+@@ -16,6 +16,8 @@ import java.io.InputStreamReader;
+ import java.util.ArrayList;
+ import java.util.List;
+ 
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
++
+ /**
+  * Simple util for getting output out of a command. Only meant to be used in a few places to help detect things in the environment.
+  */
+@@ -23,7 +25,8 @@ final class ProcessOutputUtil {
+ 
+ 	static String[] getAllOutputFromCommand(String... command) {
+ 		try {
+-			Process p = new ProcessBuilder(command).start();
++			String[] cmdarray = command;
++			Process p = ProcessFactory.getFactory().exec(cmdarray, null/*envp*/);
+ 			List<String> lines = new ArrayList<>();
+ 			try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+ 				String line = input.readLine();

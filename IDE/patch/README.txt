@@ -1,6 +1,21 @@
 
 11.4.0 029e4bda78636c2049e3298cc9c972c8328a39cb 2023-11-28
-patch_apply . ../patch/{github-action-disable-some-checks,fix-cdt.target-IU-versions-11.4.0,replace-toOSString-to-toString}.patch
+
+patches=(
+	github-action-disable-some-checks.patch
+	fix-cdt.target-IU-versions-11.4.0.patch
+	rework-ProcessFactory.java.patch
+	replace-toOSString-to-toString.patch
+	replace-Runtime-to-ProcessFactory.patch
+)
+
+patches2=()
+
+for patch in "${patches[@]}"; do
+	patches2+=(  ../patch/"${patch}"  )
+done
+
+patch_apply . "${patches2[@]}"
 
 
 replace-toOSString-to-toString.patch

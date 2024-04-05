@@ -5,6 +5,7 @@ patches=(
 	github-action-disable-some-checks.patch
 	fix-cdt.target-IU-versions-11.4.0.patch
 	rework-ProcessFactory.java.patch
+	enable-ProcessFactory-debugging.patch
 	replace-toOSString-to-toString.patch
 	replace-Runtime-to-ProcessFactory.patch
 	replace-ProcessBuilder-to-ProcessFactory.patch

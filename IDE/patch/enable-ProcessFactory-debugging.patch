@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
+index ef882478b7..c14773e16c 100644
+--- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
++++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
+@@ -279,7 +279,7 @@ public class ProcessFactory {
+ 		public Process start() throws IOException {
+ 			// Uncomment the next line, set a breakpoint in the last line of debug() method,
+ 			// when the breakpoint is triggered, inspect the sb variable to see detailed info on what is being launched.
+-			// debug();
++			debug();
+ 			Process p;
+ 			if (hasSpawner) {
+ 				if (use_pty) {

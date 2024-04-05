@@ -115,7 +115,7 @@ how_to_use_this_script() {
 	# VPS SSH login as root
 	# git remote set-url origin git@github.com:xu-chiheng/Note.git
 	cd ~
-	rm -rf .git Note
+	rm -rf .git Note .bashrc.d Util
 	git clone https://github.com/xu-chiheng/Note -b main
 	mv Note/.git ./
 	rm -rf Note

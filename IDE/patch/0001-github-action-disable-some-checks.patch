@@ -1,3 +1,16 @@
+From 7ee0c06711c5add49c68e62dc4c4e2b15dfb89d4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Sat, 6 Apr 2024 14:00:07 +0800
+Subject: [PATCH 1/9] github action disable some checks
+
+---
+ releng/scripts/check_bundle_versions.sh        | 2 ++
+ releng/scripts/check_bundle_versions_report.sh | 2 ++
+ releng/scripts/check_features.sh               | 2 ++
+ releng/scripts/check_license.sh                | 2 ++
+ 4 files changed, 8 insertions(+)
+
 diff --git a/releng/scripts/check_bundle_versions.sh b/releng/scripts/check_bundle_versions.sh
 index 23867346b9..cd4c676974 100755
 --- a/releng/scripts/check_bundle_versions.sh
@@ -50,3 +63,6 @@ index 6cdeec1bcd..8d7a874319 100755
  set -u # run with unset flag error so that missing parameters cause build failure
  set -e # error out on any failed commands
  # set -x # echo all commands used for debugging purposes
+-- 
+2.42.1
+

@@ -1,0 +1,27 @@
+From d0850563766dd38b983da18b9669c1bd8afc9828 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Sat, 6 Apr 2024 20:17:26 +0800
+Subject: [PATCH] upgrade maven from 3.9.2 to 3.9.3 to fix build errors
+
+https://stackoverflow.com/questions/76355897/plugin-validation-issues-were-detected-in-plugins
+---
+ .github/workflows/build-test.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/.github/workflows/build-test.yml b/.github/workflows/build-test.yml
+index 7dcdcc0185..c80015e0b6 100644
+--- a/.github/workflows/build-test.yml
++++ b/.github/workflows/build-test.yml
+@@ -30,7 +30,7 @@ jobs:
+     - name: Set up Maven
+       uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
+       with:
+-        maven-version: 3.9.2
++        maven-version: 3.9.3
+     - name: Install GCC & GDB & other build essentials
+       run: |
+         sudo apt-get update
+-- 
+2.42.1
+

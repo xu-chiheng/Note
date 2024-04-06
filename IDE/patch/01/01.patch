@@ -1,0 +1,167 @@
+diff --git a/.github/workflows/build-test.yml b/.github/workflows/build-test.yml
+index f627d265b4..964b6b6919 100644
+--- a/.github/workflows/build-test.yml
++++ b/.github/workflows/build-test.yml
+@@ -44,11 +44,10 @@ jobs:
+         sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+         echo 0| sudo tee /proc/sys/kernel/yama/ptrace_scope
+         mvn \
+-          clean verify -B -V \
++          clean verify -e -B -V \
+           -Dmaven.plugin.validation=NONE \
+           -Dmaven.test.failure.ignore=true \
+           -DexcludedGroups=flakyTest,slowTest \
+-          -P build-standalone-debugger-rcp \
+           -Ddsf.gdb.tests.timeout.multiplier=50 \
+           -Ddsf-gdb.skip.tests=$(test ${{ steps.filter.outputs.dsf }} == 'false' && echo 'true' || echo 'false') \
+           -Dindexer.timeout=300
+diff --git a/core/org.eclipse.cdt.core.linux.aarch64/pom.xml b/core/org.eclipse.cdt.core.linux.aarch64/pom.xml
+index b4ba1c4fae..a0bb432abb 100644
+--- a/core/org.eclipse.cdt.core.linux.aarch64/pom.xml
++++ b/core/org.eclipse.cdt.core.linux.aarch64/pom.xml
+@@ -32,7 +32,6 @@
+ 				<artifactId>target-platform-configuration</artifactId>
+ 				<version>${tycho-version}</version>
+ 				<configuration>
+-					<resolver>p2</resolver>
+ 					<pomDependencies>consider</pomDependencies>
+ 					<environments>
+ 						<environment>
+diff --git a/core/org.eclipse.cdt.core.linux.ppc64le/pom.xml b/core/org.eclipse.cdt.core.linux.ppc64le/pom.xml
+index cb79302ed8..28bab90e4f 100644
+--- a/core/org.eclipse.cdt.core.linux.ppc64le/pom.xml
++++ b/core/org.eclipse.cdt.core.linux.ppc64le/pom.xml
+@@ -32,7 +32,6 @@
+ 				<artifactId>target-platform-configuration</artifactId>
+ 				<version>${tycho-version}</version>
+ 				<configuration>
+-					<resolver>p2</resolver>
+ 					<pomDependencies>consider</pomDependencies>
+ 					<environments>
+ 						<environment>
+diff --git a/core/org.eclipse.cdt.core.linux.x86_64/pom.xml b/core/org.eclipse.cdt.core.linux.x86_64/pom.xml
+index a8c23c513e..dc8645fffd 100644
+--- a/core/org.eclipse.cdt.core.linux.x86_64/pom.xml
++++ b/core/org.eclipse.cdt.core.linux.x86_64/pom.xml
+@@ -32,7 +32,6 @@
+ 				<artifactId>target-platform-configuration</artifactId>
+ 				<version>${tycho-version}</version>
+ 				<configuration>
+-					<resolver>p2</resolver>
+ 					<pomDependencies>consider</pomDependencies>
+ 					<environments>
+ 						<environment>
+diff --git a/core/org.eclipse.cdt.core.linux/pom.xml b/core/org.eclipse.cdt.core.linux/pom.xml
+index 808cbdfd41..ed66eaa9b1 100644
+--- a/core/org.eclipse.cdt.core.linux/pom.xml
++++ b/core/org.eclipse.cdt.core.linux/pom.xml
+@@ -32,7 +32,6 @@
+ 	<artifactId>target-platform-configuration</artifactId>
+ 	<version>${tycho-version}</version>
+ 	<configuration>
+-	  <resolver>p2</resolver>
+ 	  <pomDependencies>consider</pomDependencies>
+ 	  <environments>
+ 	    <environment>
+diff --git a/core/org.eclipse.cdt.core.macosx/pom.xml b/core/org.eclipse.cdt.core.macosx/pom.xml
+index 01a8629508..b3edd7ebc2 100644
+--- a/core/org.eclipse.cdt.core.macosx/pom.xml
++++ b/core/org.eclipse.cdt.core.macosx/pom.xml
+@@ -32,7 +32,6 @@
+ 				<artifactId>target-platform-configuration</artifactId>
+ 				<version>${tycho-version}</version>
+ 				<configuration>
+-					<resolver>p2</resolver>
+ 					<pomDependencies>consider</pomDependencies>
+ 					<environments>
+ 						<environment>
+diff --git a/core/org.eclipse.cdt.core.win32.x86_64/pom.xml b/core/org.eclipse.cdt.core.win32.x86_64/pom.xml
+index 08abe0acd2..6931f322d0 100644
+--- a/core/org.eclipse.cdt.core.win32.x86_64/pom.xml
++++ b/core/org.eclipse.cdt.core.win32.x86_64/pom.xml
+@@ -32,7 +32,6 @@
+ 				<artifactId>target-platform-configuration</artifactId>
+ 				<version>${tycho-version}</version>
+ 				<configuration>
+-					<resolver>p2</resolver>
+ 					<pomDependencies>consider</pomDependencies>
+ 					<environments>
+ 						<environment>
+diff --git a/core/org.eclipse.cdt.core.win32/pom.xml b/core/org.eclipse.cdt.core.win32/pom.xml
+index 4165161887..3247983433 100644
+--- a/core/org.eclipse.cdt.core.win32/pom.xml
++++ b/core/org.eclipse.cdt.core.win32/pom.xml
+@@ -32,7 +32,6 @@
+ 				<artifactId>target-platform-configuration</artifactId>
+ 				<version>${tycho-version}</version>
+ 				<configuration>
+-					<resolver>p2</resolver>
+ 					<pomDependencies>consider</pomDependencies>
+ 					<environments>
+ 						<environment>
+diff --git a/debug/org.eclipse.cdt.debug.application.product/pom.xml b/debug/org.eclipse.cdt.debug.application.product/pom.xml
+index b0ae135ba1..536543b649 100644
+--- a/debug/org.eclipse.cdt.debug.application.product/pom.xml
++++ b/debug/org.eclipse.cdt.debug.application.product/pom.xml
+@@ -67,7 +67,6 @@
+ 				<artifactId>target-platform-configuration</artifactId>
+ 				<version>${tycho-version}</version>
+ 				<configuration>
+-					<resolver>p2</resolver>
+ 					<pomDependencies>consider</pomDependencies>
+ 					<environments>
+ 						<environment>
+diff --git a/pom.xml b/pom.xml
+index 71cb7c2ff0..d2b7a2221b 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -25,7 +25,7 @@
+ 	<name>CDT Parent</name>
+ 
+ 	<properties>
+-		<required-maven-version>3.9.1</required-maven-version>
++		<required-maven-version>3.9.3</required-maven-version>
+ 		<tycho-version>4.0.1</tycho-version>
+ 		<cbi-plugins.version>1.3.4</cbi-plugins.version>
+ 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+@@ -57,12 +57,6 @@
+ 		<compare-version-with-baselines.skip>true</compare-version-with-baselines.skip>
+ 		<replace-version-with-baselines.mode>disable</replace-version-with-baselines.mode>
+ 		<replace-version-with-baselines.replace>none</replace-version-with-baselines.replace>
+-		<!--
+-			Valid options: error, warning, and ignore
+-			jgit.dirtyWorkingTree checking was added as of Tycho 0.19.0
+-			see: https://bugs.eclipse.org/419030
+-		-->
+-		<jgit.dirtyWorkingTree-cdtDefault>error</jgit.dirtyWorkingTree-cdtDefault>
+ 		<!-- By default cdt-other.skip.tests will be false as none of
+ 		     the skip-tests profiles will be activated. When one is
+ 		     activated, this allows us to skip all other cdt tests not
+@@ -679,7 +673,6 @@
+ 				<artifactId>target-platform-configuration</artifactId>
+ 				<version>${tycho-version}</version>
+ 				<configuration>
+-					<resolver>p2</resolver>
+ 					<pomDependencies>consider</pomDependencies>
+ 					<environments>
+ 						<environment>
+@@ -728,7 +721,6 @@
+ 				<groupId>org.eclipse.tycho</groupId>
+ 				<artifactId>tycho-source-plugin</artifactId>
+ 				<configuration>
+-					<encoding>UTF-8</encoding>
+ 				</configuration>
+ 				<executions>
+ 					<execution>
+@@ -848,11 +840,6 @@
+ 						<deriveHeaderFromSource>false</deriveHeaderFromSource>
+ 						<format>${qualifier.format}</format>
+ 						<timestampProvider>jgit</timestampProvider>
+-						<jgit.ignore>
+-							pom.xml
+-							.polyglot.*
+-						</jgit.ignore>
+-						<jgit.dirtyWorkingTree>${jgit.dirtyWorkingTree-cdtDefault}</jgit.dirtyWorkingTree>
+ 						<sourceReferences>
+ 							<generate>true</generate>
+ 						</sourceReferences>

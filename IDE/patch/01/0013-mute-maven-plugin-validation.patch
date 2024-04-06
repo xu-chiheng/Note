@@ -1,0 +1,26 @@
+From 009fa68709e2b80d1347fb85b744fc2e29c5edb5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Sat, 6 Apr 2024 20:32:02 +0800
+Subject: [PATCH] mute maven plugin validation
+
+https://maven.apache.org/guides/plugins/validation/index.html
+---
+ .github/workflows/build-test.yml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/.github/workflows/build-test.yml b/.github/workflows/build-test.yml
+index c80015e0b6..f627d265b4 100644
+--- a/.github/workflows/build-test.yml
++++ b/.github/workflows/build-test.yml
+@@ -45,6 +45,7 @@ jobs:
+         echo 0| sudo tee /proc/sys/kernel/yama/ptrace_scope
+         mvn \
+           clean verify -B -V \
++          -Dmaven.plugin.validation=NONE \
+           -Dmaven.test.failure.ignore=true \
+           -DexcludedGroups=flakyTest,slowTest \
+           -P build-standalone-debugger-rcp \
+-- 
+2.42.1
+

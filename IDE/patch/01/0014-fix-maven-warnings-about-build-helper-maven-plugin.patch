@@ -1,0 +1,49 @@
+From 58a070a768cbed303cc31bf19f9aa6e73906ff67 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Sat, 6 Apr 2024 20:36:53 +0800
+Subject: [PATCH] fix maven warnings about build-helper-maven-plugin
+
+https://stackoverflow.com/questions/4123044/maven-3-warnings-about-build-plugins-plugin-version
+https://github.com/oreillymedia/restful_java_jax-rs_2_0/issues/2
+---
+ pom.xml | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/pom.xml b/pom.xml
+index e36239df2d..71cb7c2ff0 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -960,6 +960,29 @@
+ 						</execution>
+ 					</executions>
+ 				</plugin>
++				<plugin>
++					<groupId>org.codehaus.mojo</groupId>
++					<artifactId>build-helper-maven-plugin</artifactId>
++					<version>3.4.0</version>
++						<executions>
++							<execution>
++								<id>attach-artifacts</id>
++								<phase>package</phase>
++								<goals>
++									<goal>attach-artifact</goal>
++								</goals>
++								<configuration>
++									<artifacts>
++										<artifact>
++											<file>cdt.target</file>
++											<type>target</type>
++											<classifier>cdt</classifier>
++										</artifact>
++									</artifacts>
++								</configuration>
++							</execution>
++						</executions>
++				</plugin>
+ 				<plugin>
+ 					<groupId>org.apache.maven.plugins</groupId>
+ 					<artifactId>maven-pmd-plugin</artifactId>
+-- 
+2.42.1
+

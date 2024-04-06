@@ -1,0 +1,148 @@
+From ebb1f9db408a592a07514f5acc154628ad5f9e14 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Sat, 6 Apr 2024 17:31:23 +0800
+Subject: [PATCH] rework CygPath.java to use new Cygwin API
+
+---
+ .../utils/org/eclipse/cdt/utils/CygPath.java  | 104 +-----------------
+ 3 files changed, 8 insertions(+), 104 deletions(-)
+
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/CygPath.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/CygPath.java
+index 8dbe18eb5d..93d7647b9b 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/CygPath.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/CygPath.java
+@@ -14,50 +14,18 @@
+  *******************************************************************************/
+ package org.eclipse.cdt.utils;
+ 
+-import java.io.BufferedReader;
+-import java.io.BufferedWriter;
+ import java.io.IOException;
+-import java.io.InputStreamReader;
+-import java.io.OutputStreamWriter;
+ 
+-import org.eclipse.cdt.internal.core.Cygwin;
+-import org.eclipse.cdt.utils.spawner.ProcessFactory;
+-import org.eclipse.core.runtime.IPath;
+-import org.eclipse.core.runtime.Path;
++import org.eclipse.cdt.core.Cygwin;
+ import org.eclipse.core.runtime.Platform;
+ 
+ /**
+  * @noextend This class is not intended to be subclassed by clients.
+  */
+ public class CygPath {
+-
+-	boolean useOldCygPath = false;
+-	private final Process cygpath;
+-	private final BufferedReader stdout;
+-	private final BufferedWriter stdin;
+-	private boolean fSpaceIsSeparator = false;
+-
+ 	public CygPath(String command) throws IOException {
+-		if (!Platform.getOS().equals(Platform.OS_WIN32))
+-			// Don't run this on non-windows platforms
+-			throw new IOException("Not Windows"); //$NON-NLS-1$
+-		String[] args = { command, "--windows", "--file", "-" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+-		cygpath = ProcessFactory.getFactory().exec(args);
+-		stdin = new BufferedWriter(new OutputStreamWriter(cygpath.getOutputStream()));
+-		stdout = new BufferedReader(new InputStreamReader(cygpath.getInputStream()));
+-		try {
+-			String test = getFileName("a b"); //$NON-NLS-1$
+-			if ("a".equals(test)) { //$NON-NLS-1$
+-				// Bug 298615: This version seems to treat space as a separator
+-				fSpaceIsSeparator = true;
+-				// Read off second part
+-				stdout.readLine();
+-			}
+-		} catch (IOException e) {
+-			// older cygwin
+-			dispose();
+-			useOldCygPath = true;
+-		}
++		if (!Cygwin.isPresent())
++			throw new IOException("No Cygwin"); //$NON-NLS-1$
+ 	}
+ 
+ 	public CygPath() throws IOException {
+@@ -66,75 +34,11 @@ public class CygPath {
+ 
+ 	/**
+ 	 * Use this method for series of translations of paths.
+-	 * If a single path needs to be translated consider {@link Cygwin#cygwinToWindowsPath(String)}.
+ 	 */
+ 	public String getFileName(String name) throws IOException {
+-		// bug 214603, empty names don't create a response
+-		if (name == null || name.length() == 0)
+-			return name;
+-
+-		if (useOldCygPath) {
+-			return internalgetFileName(name);
+-		}
+-		if (fSpaceIsSeparator && name.indexOf(' ') != -1) {
+-			return internalgetFileName(name);
+-		}
+-
+-		// Clear everything from stdout
+-		while (stdout.ready()) {
+-			stdout.read();
+-		}
+-		stdin.write(name + "\n"); //$NON-NLS-1$
+-		stdin.flush();
+-		String str = stdout.readLine();
+-		if (str != null) {
+-			return str.trim();
+-		}
+-		throw new IOException();
++		return Cygwin.pathToWindows(name);
+ 	}
+ 
+ 	public void dispose() {
+-		if (!useOldCygPath) {
+-			try {
+-				stdout.close();
+-				stdin.close();
+-				cygpath.getErrorStream().close();
+-			} catch (IOException e) {
+-			}
+-			cygpath.destroy();
+-		}
+ 	}
+-
+-	private String internalgetFileName(String path) throws IOException {
+-		Process cygPath = null;
+-		BufferedReader reader = null;
+-		try {
+-			cygPath = ProcessFactory.getFactory().exec(new String[] { "cygpath", "-w", path }); //$NON-NLS-1$ //$NON-NLS-2$
+-			reader = new BufferedReader(new InputStreamReader(cygPath.getInputStream()));
+-			String newPath = reader.readLine();
+-			IPath ipath;
+-			if (path != null && !path.isEmpty()) {
+-				ipath = new Path(newPath);
+-			} else {
+-				ipath = new Path(path);
+-			}
+-			if (ipath.isAbsolute() && !ipath.toFile().exists() && ipath.segment(0).length() == 1) {
+-				// look like it could be /c/... path
+-				StringBuilder drive = new StringBuilder(ipath.segment(0));
+-				drive.append(':');
+-				ipath = ipath.removeFirstSegments(1);
+-				ipath = ipath.makeAbsolute();
+-				ipath = ipath.setDevice(drive.toString());
+-			}
+-			return ipath.toString();
+-		} finally {
+-			if (reader != null) {
+-				reader.close();
+-			}
+-			if (cygPath != null) {
+-				cygPath.destroy();
+-			}
+-		}
+-	}
+-
+ }
+-- 
+2.42.1
+

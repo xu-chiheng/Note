@@ -2,13 +2,12 @@ From c7c221975ca24ceefd28a8d62636eb7761d9c27a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 8/9] add Cygwin.java
+Subject: add Cygwin.java
 
 ---
-
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 new file mode 100644
-index 0000000000..b454ed3e01
+index 0000000000..f20233cc50
 --- /dev/null
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 @@ -0,0 +1,191 @@

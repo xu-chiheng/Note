@@ -2,17 +2,9 @@ From a2d0c3004e0a64cfc18edb5423a41d7db7353108 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:08:15 +0800
-Subject: [PATCH 7/9] replace ProcessBuilder to ProcessFactory
+Subject: replace ProcessBuilder to ProcessFactory
 
 ---
- .../cdt/build/gcc/core/GCCToolChain.java      | 24 +++++++++++--------
- .../CoreBuildLocalRunLaunchDelegate.java      |  9 ++++---
- .../llvm/util/FindStdLibPath.java             | 21 ++++++++++++----
- .../core/commands/ServerExecCommand.java      | 23 +++++++++++-------
- .../META-INF/MANIFEST.MF                      |  3 ++-
- .../ui/local/showin/detectors/DetectWSL.java  |  5 ++--
- .../internal/msw/build/ProcessOutputUtil.java |  5 +++-
- 7 files changed, 59 insertions(+), 31 deletions(-)
 
 diff --git a/build/org.eclipse.cdt.build.gcc.core/src/org/eclipse/cdt/build/gcc/core/GCCToolChain.java b/build/org.eclipse.cdt.build.gcc.core/src/org/eclipse/cdt/build/gcc/core/GCCToolChain.java
 index d4f5194f7e..935615dd89 100644
@@ -278,6 +270,4 @@ index 0cce6f5b3a..118ce5abb8 100644
  			List<String> lines = new ArrayList<>();
  			try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
  				String line = input.readLine();
--- 
-2.42.1
 

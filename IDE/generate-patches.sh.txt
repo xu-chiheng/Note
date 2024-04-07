@@ -28,6 +28,28 @@ process_file_list() {
 	done
 }
 
+generate_git_am_patch() {
+	local order="$1"
+	local commit_message="$2"
+	shift 2
+	local patches=( "$@" )
+	local patch_file="../patch/$(printf '%04d\n' "${order}")-$(echo "${commit_message}" | head -1 | sed -E -e 's, ,-,g' ).patch"
+
+	{
+		cat <<EOF
+From c7c221975ca24ceefd28a8d62636eb7761d9c27a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Sat, 6 Apr 2024 14:09:54 +0800
+Subject: ${commit_message}
+
+---
+EOF
+		cat "${patches}"
+	} >"${patch_file}"
+}
+
+
 main() {
 	# only add and modify files, never delete files
 	cd cdt
@@ -53,6 +75,17 @@ main() {
 	process_file_list "${current_branch}" modified_non_java_files "${modified_non_java_files[@]}"
 	process_file_list "${current_branch}" added_java_files "${added_java_files[@]}"
 	process_file_list "${current_branch}" modified_java_files "${modified_java_files[@]}"
+
+	generate_git_am_patch 8 "add Cygwin.java" \
+		../patch/_added_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_core_Cygwin.java.patch
+	generate_git_am_patch 9 "add MSYS2.java" \
+		../patch/_added_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_core_MSYS2.java.patch
+	generate_git_am_patch 10 "add PTY2.java" \
+		../patch/_added_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_utils_pty_PTY2.java.patch
+	generate_git_am_patch 11 "add PTY2Util.java" \
+		../patch/_added_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_utils_pty_PTY2Util.java.patch
+
+
 
 	cd ..
 

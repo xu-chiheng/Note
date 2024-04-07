@@ -1,0 +1,13 @@
+diff --git a/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/CProjectSourceLocation.java b/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/CProjectSourceLocation.java
+index 5e4e456142..24b568f20f 100644
+--- a/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/CProjectSourceLocation.java
++++ b/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/CProjectSourceLocation.java
+@@ -162,7 +162,7 @@ public class CProjectSourceLocation implements IProjectSourceLocation {
+ 			IPath path = folders[i].getLocation();
+ 			if (path != null) {
+ 				path = path.append(fileName);
+-				File file = new File(path.toOSString());
++				File file = new File(path.toString());
+ 				if (file.exists()) {
+ 					IFile[] wsFiles = ResourceLookup.findFilesForLocation(path);
+ 					for (int j = 0; j < wsFiles.length; ++j) {

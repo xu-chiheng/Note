@@ -1,0 +1,16 @@
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/xcoff/parser/XCOFFBinaryObject.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/xcoff/parser/XCOFFBinaryObject.java
+index da955ee9fb..51ce5d083f 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/xcoff/parser/XCOFFBinaryObject.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/xcoff/parser/XCOFFBinaryObject.java
+@@ -125,9 +125,9 @@ public class XCOFFBinaryObject extends BinaryObjectAdapter {
+ 
+ 	protected XCoff32 getXCoff32() throws IOException {
+ 		if (header != null) {
+-			return new XCoff32(getPath().toOSString(), header.getObjectDataOffset());
++			return new XCoff32(getPath().toString(), header.getObjectDataOffset());
+ 		}
+-		return new XCoff32(getPath().toOSString());
++		return new XCoff32(getPath().toString());
+ 	}
+ 
+ 	protected void loadAll() throws IOException {

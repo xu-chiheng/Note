@@ -1,0 +1,22 @@
+diff --git a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/AbstractIndexerTask.java b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/AbstractIndexerTask.java
+index 5ceb609ee0..6c3bf727e2 100644
+--- a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/AbstractIndexerTask.java
++++ b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/AbstractIndexerTask.java
+@@ -1092,7 +1092,7 @@ public abstract class AbstractIndexerTask extends PDOMWriter {
+ 		Throwable th = null;
+ 		try {
+ 			if (fShowActivity) {
+-				trace("Indexer: parsing " + path.toOSString()); //$NON-NLS-1$
++				trace("Indexer: parsing " + path.toString()); //$NON-NLS-1$
+ 			}
+ 			progress.subTask(
+ 					getMessage(MessageKind.parsingFileTask, path.lastSegment(), path.removeLastSegments(1).toString()));
+@@ -1109,7 +1109,7 @@ public abstract class AbstractIndexerTask extends PDOMWriter {
+ 			}
+ 			if (fShowActivity) {
+ 				long time = System.currentTimeMillis() - start;
+-				trace("Indexer: processed " + path.toOSString() + " [" + time + " ms]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
++				trace("Indexer: processed " + path.toString() + " [" + time + " ms]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+ 			}
+ 		} catch (OperationCanceledException e) {
+ 		} catch (RuntimeException e) {

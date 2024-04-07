@@ -1,0 +1,24 @@
+diff --git a/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/detectors/DetectWSL.java b/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/detectors/DetectWSL.java
+index 8d98d53f78..4fd2eea79b 100644
+--- a/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/detectors/DetectWSL.java
++++ b/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/detectors/DetectWSL.java
+@@ -24,6 +24,7 @@ import java.util.List;
+ import java.util.Map;
+ import java.util.function.Predicate;
+ 
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ import org.eclipse.core.runtime.IProgressMonitor;
+ import org.eclipse.core.runtime.IStatus;
+ import org.eclipse.core.runtime.OperationCanceledException;
+@@ -110,9 +111,9 @@ public class DetectWSL implements IDetectExternalExecutable {
+ 					return Status.OK_STATUS;
+ 				}
+ 
+-				ProcessBuilder pb = new ProcessBuilder(wsl, "--list", "--quiet"); //$NON-NLS-1$ //$NON-NLS-2$
++				String[] cmdarray = new String[] { wsl, "--list", "--quiet" }; //$NON-NLS-1$ //$NON-NLS-2$
+ 				try {
+-					Process process = pb.start();
++					Process process = ProcessFactory.getFactory().exec(cmdarray, null/*envp*/);
+ 					try (InputStream is = process.getErrorStream()) {
+ 						// drain the error stream
+ 						if (is.readAllBytes().length != 0) {

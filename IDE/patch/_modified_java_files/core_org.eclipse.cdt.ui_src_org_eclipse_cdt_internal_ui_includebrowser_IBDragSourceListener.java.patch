@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/includebrowser/IBDragSourceListener.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/includebrowser/IBDragSourceListener.java
+index 32a070efd1..c154176914 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/includebrowser/IBDragSourceListener.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/includebrowser/IBDragSourceListener.java
+@@ -76,7 +76,7 @@ public class IBDragSourceListener implements DragSourceListener {
+ 			if (ifl != null) {
+ 				IPath location = IndexLocationFactory.getAbsolutePath(ifl);
+ 				if (location != null) {
+-					files.add(location.toOSString());
++					files.add(location.toString());
+ 				}
+ 			}
+ 		}

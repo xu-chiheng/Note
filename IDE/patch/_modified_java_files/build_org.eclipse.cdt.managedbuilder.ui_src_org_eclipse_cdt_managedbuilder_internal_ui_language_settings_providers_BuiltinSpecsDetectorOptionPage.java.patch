@@ -1,0 +1,13 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/internal/ui/language/settings/providers/BuiltinSpecsDetectorOptionPage.java b/build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/internal/ui/language/settings/providers/BuiltinSpecsDetectorOptionPage.java
+index c53b1ab99a..c03c819860 100644
+--- a/build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/internal/ui/language/settings/providers/BuiltinSpecsDetectorOptionPage.java
++++ b/build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/internal/ui/language/settings/providers/BuiltinSpecsDetectorOptionPage.java
+@@ -136,7 +136,7 @@ public final class BuiltinSpecsDetectorOptionPage extends AbstractLanguageSettin
+ 					fileName = fileName.substring(0, space);
+ 				}
+ 				IPath folder = new Path(fileName).removeLastSegments(1);
+-				dialog.setFilterPath(folder.toOSString());
++				dialog.setFilterPath(folder.toString());
+ 				String chosenFile = dialog.open();
+ 				if (chosenFile != null) {
+ 					inputCommand.insert(chosenFile);

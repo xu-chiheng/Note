@@ -1,0 +1,13 @@
+diff --git a/build/org.eclipse.cdt.make.ui/src/org/eclipse/cdt/make/ui/dialogs/GCCPerProjectSCDProfilePage.java b/build/org.eclipse.cdt.make.ui/src/org/eclipse/cdt/make/ui/dialogs/GCCPerProjectSCDProfilePage.java
+index a488728d80..90e946c024 100644
+--- a/build/org.eclipse.cdt.make.ui/src/org/eclipse/cdt/make/ui/dialogs/GCCPerProjectSCDProfilePage.java
++++ b/build/org.eclipse.cdt.make.ui/src/org/eclipse/cdt/make/ui/dialogs/GCCPerProjectSCDProfilePage.java
+@@ -144,7 +144,7 @@ public class GCCPerProjectSCDProfilePage extends AbstractDiscoveryPage {
+ 					IPath filePath = new Path(fileName);
+ 					filterPath = filePath.removeLastSegments(1).makeAbsolute();
+ 				}
+-				dialog.setFilterPath(filterPath.toOSString());
++				dialog.setFilterPath(filterPath.toString());
+ 				String res = dialog.open();
+ 				if (res == null) {
+ 					return;

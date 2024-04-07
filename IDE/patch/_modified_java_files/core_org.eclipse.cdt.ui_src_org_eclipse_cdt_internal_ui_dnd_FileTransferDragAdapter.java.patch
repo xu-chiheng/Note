@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dnd/FileTransferDragAdapter.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dnd/FileTransferDragAdapter.java
+index 4ecab539da..adec1c040b 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dnd/FileTransferDragAdapter.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dnd/FileTransferDragAdapter.java
+@@ -154,7 +154,7 @@ public class FileTransferDragAdapter implements TransferDragSourceListener {
+ 				IPath location = resource.getLocation();
+ 
+ 				if (location != null) {
+-					locations.add(location.toOSString());
++					locations.add(location.toString());
+ 				}
+ 			}
+ 

@@ -1,0 +1,13 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/CommandBuilder.java b/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/CommandBuilder.java
+index 735dd8bc9a..668c52892b 100644
+--- a/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/CommandBuilder.java
++++ b/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/CommandBuilder.java
+@@ -191,7 +191,7 @@ public class CommandBuilder implements IBuildModelBuilder {
+ 	protected String getCommandLine() {
+ 		StringBuilder buf = new StringBuilder();
+ 		if (fCmd != null) {
+-			buf.append(fCmd.getCommand().toOSString());
++			buf.append(fCmd.getCommand().toString());
+ 			String args[] = fCmd.getArgs();
+ 			for (int i = 0; i < args.length; i++) {
+ 				buf.append(' ');

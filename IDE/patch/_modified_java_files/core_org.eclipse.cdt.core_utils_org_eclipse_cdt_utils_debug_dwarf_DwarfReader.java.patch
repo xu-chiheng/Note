@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java
+index 04602d1cdf..24c4e7c6c0 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java
+@@ -694,7 +694,7 @@ public class DwarfReader extends Dwarf implements ISymbolReader, ICompileOptions
+ 
+ 		// This convert the path to canonical path (but not necessarily absolute, which
+ 		// is different from java.io.File.getCanonicalPath()).
+-		fullName = pa.toOSString();
++		fullName = pa.toString();
+ 
+ 		if (!m_fileCollection.contains(fullName))
+ 			m_fileCollection.add(fullName);

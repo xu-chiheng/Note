@@ -1,0 +1,13 @@
+diff --git a/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/breakpoints/AbstractToggleBreakpointAdapter.java b/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/breakpoints/AbstractToggleBreakpointAdapter.java
+index 9e77c4cb29..21d787a9b1 100644
+--- a/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/breakpoints/AbstractToggleBreakpointAdapter.java
++++ b/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/breakpoints/AbstractToggleBreakpointAdapter.java
+@@ -722,7 +722,7 @@ abstract public class AbstractToggleBreakpointAdapter
+ 		if (tu != null) {
+ 			IPath location = tu.getLocation();
+ 			if (location != null) {
+-				return location.toOSString();
++				return location.toString();
+ 			}
+ 		}
+ 		return ""; //$NON-NLS-1$

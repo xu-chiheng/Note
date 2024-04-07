@@ -1,0 +1,13 @@
+diff --git a/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/SourceUtils.java b/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/SourceUtils.java
+index fff66ff420..1adb403a8b 100644
+--- a/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/SourceUtils.java
++++ b/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/SourceUtils.java
+@@ -192,7 +192,7 @@ public class SourceUtils {
+ 					MappingSourceContainer mapping = new MappingSourceContainer(
+ 							InternalSourceLookupMessages.SourceUtils_0 + (++mappingCount));
+ 					mapping.addMapEntries(new MapEntrySourceContainer[] {
+-							new MapEntrySourceContainer(a.toOSString(), d.getDirectory()) });
++							new MapEntrySourceContainer(a.toString(), d.getDirectory()) });
+ 					containers.add(mapping);
+ 
+ 				}

@@ -1,0 +1,13 @@
+diff --git a/remote/org.eclipse.remote.proxy.server.core/src/org/eclipse/remote/internal/proxy/server/core/commands/ServerShellCommand.java b/remote/org.eclipse.remote.proxy.server.core/src/org/eclipse/remote/internal/proxy/server/core/commands/ServerShellCommand.java
+index eb2b93e7f7..a306a42758 100644
+--- a/remote/org.eclipse.remote.proxy.server.core/src/org/eclipse/remote/internal/proxy/server/core/commands/ServerShellCommand.java
++++ b/remote/org.eclipse.remote.proxy.server.core/src/org/eclipse/remote/internal/proxy/server/core/commands/ServerShellCommand.java
+@@ -160,7 +160,7 @@ public class ServerShellCommand extends AbstractServerExecCommand {
+ 
+ 		Process p;
+ 		try {
+-			p = Runtime.getRuntime().exec(command);
++			p = ProcessFactory.getFactory().exec(command);
+ 		} catch (Exception e) {
+ 			throw new IOException(e.getMessage());
+ 		}

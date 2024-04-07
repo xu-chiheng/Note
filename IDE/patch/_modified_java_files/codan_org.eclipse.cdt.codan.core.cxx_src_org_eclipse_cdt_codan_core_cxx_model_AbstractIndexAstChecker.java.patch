@@ -1,0 +1,13 @@
+diff --git a/codan/org.eclipse.cdt.codan.core.cxx/src/org/eclipse/cdt/codan/core/cxx/model/AbstractIndexAstChecker.java b/codan/org.eclipse.cdt.codan.core.cxx/src/org/eclipse/cdt/codan/core/cxx/model/AbstractIndexAstChecker.java
+index 7cb1f00b92..f24189403b 100644
+--- a/codan/org.eclipse.cdt.codan.core.cxx/src/org/eclipse/cdt/codan/core/cxx/model/AbstractIndexAstChecker.java
++++ b/codan/org.eclipse.cdt.codan.core.cxx/src/org/eclipse/cdt/codan/core/cxx/model/AbstractIndexAstChecker.java
+@@ -168,7 +168,7 @@ public abstract class AbstractIndexAstChecker extends AbstractCheckerWithProblem
+ 			for (IASTComment comm : commentsArray) {
+ 				IASTFileLocation fileLocation = comm.getFileLocation();
+ 				if (fileLocation.getStartingLineNumber() == loc.getLineNumber()) {
+-					String problemFile = loc.getFile().getLocation().toOSString();
++					String problemFile = loc.getFile().getLocation().toString();
+ 					String commentFile = fileLocation.getFileName();
+ 					if (problemFile.equals(commentFile)) {
+ 						lineComments.add(comm);

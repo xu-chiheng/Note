@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/resources/FileStorage.java b/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/resources/FileStorage.java
+index e215e86574..96df504668 100644
+--- a/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/resources/FileStorage.java
++++ b/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/resources/FileStorage.java
+@@ -83,7 +83,7 @@ public class FileStorage extends PlatformObject implements IStorage {
+ 	 */
+ 	@Override
+ 	public String toString() {
+-		return path.toOSString();
++		return path.toString();
+ 	}
+ 
+ 	@Override

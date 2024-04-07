@@ -1,0 +1,21 @@
+diff --git a/remote/org.eclipse.remote.proxy.tests/src/org/eclipse/remote/proxy/tests/MultiplexServerTests.java b/remote/org.eclipse.remote.proxy.tests/src/org/eclipse/remote/proxy/tests/MultiplexServerTests.java
+index 9ff7172a24..e2d1fbb80b 100644
+--- a/remote/org.eclipse.remote.proxy.tests/src/org/eclipse/remote/proxy/tests/MultiplexServerTests.java
++++ b/remote/org.eclipse.remote.proxy.tests/src/org/eclipse/remote/proxy/tests/MultiplexServerTests.java
+@@ -8,6 +8,7 @@ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.Random;
+ 
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ import org.eclipse.remote.proxy.protocol.core.StreamChannel;
+ import org.eclipse.remote.proxy.protocol.core.StreamChannelManager;
+ 
+@@ -110,7 +111,7 @@ public class MultiplexServerTests extends TestCase {
+ 				clntRecvBufs[i] = new StringBuffer();
+ 			}
+ 
+-			final Process proc = Runtime.getRuntime().exec("java -jar /Users/gw6/Desktop/Server.jar");
++			final Process proc = ProcessFactory.getFactory().exec("java -jar /Users/gw6/Desktop/Server.jar");
+ 			assertTrue(proc.isAlive());
+ 
+ 			new Thread("stderr") {

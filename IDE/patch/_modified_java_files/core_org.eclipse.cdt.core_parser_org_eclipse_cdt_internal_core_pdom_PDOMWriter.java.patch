@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/PDOMWriter.java b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/PDOMWriter.java
+index 29bcca3e41..85c056e430 100644
+--- a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/PDOMWriter.java
++++ b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/PDOMWriter.java
+@@ -651,7 +651,7 @@ public abstract class PDOMWriter implements IPDOMASTProcessor {
+ 			file.setPragmaOnceSemantics(pragmaOnce);
+ 
+ 			if (data.fReplacementHeaders != null) {
+-				String headerKey = IndexLocationFactory.getAbsolutePath(location).toOSString();
++				String headerKey = IndexLocationFactory.getAbsolutePath(location).toString();
+ 				String replacementHeader = data.fReplacementHeaders.get(headerKey);
+ 				if (replacementHeader != null)
+ 					file.setReplacementHeader(replacementHeader);

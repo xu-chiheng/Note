@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/wizards/settingswizards/SettingsImportExportTest.java b/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/wizards/settingswizards/SettingsImportExportTest.java
+index a168a126db..f625df1066 100644
+--- a/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/wizards/settingswizards/SettingsImportExportTest.java
++++ b/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/wizards/settingswizards/SettingsImportExportTest.java
+@@ -79,7 +79,7 @@ public class SettingsImportExportTest extends BaseUITestCase {
+ 
+ 	private static String getFilePath(String fileName) {
+ 		IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+-		return workspaceLocation.toOSString() + IPath.SEPARATOR + fileName;
++		return workspaceLocation.toString() + IPath.SEPARATOR + fileName;
+ 	}
+ 
+ 	private void setUpProjectSettings(ICProject cProject) throws Exception {

@@ -1,0 +1,15 @@
+diff --git a/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/scannerconfig2/DefaultRunSIProvider.java b/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/scannerconfig2/DefaultRunSIProvider.java
+index 6bc426ebaf..ac1d8189a9 100644
+--- a/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/scannerconfig2/DefaultRunSIProvider.java
++++ b/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/scannerconfig2/DefaultRunSIProvider.java
+@@ -212,8 +212,8 @@ public class DefaultRunSIProvider implements IExternalScannerInfoProvider {
+ 		Properties props = initialEnv != null ? initialEnv : launcher.getEnvironment();
+ 
+ 		if (fWorkingDirectory != null) {
+-			props.put("CWD", fWorkingDirectory.toOSString()); //$NON-NLS-1$
+-			props.put("PWD", fWorkingDirectory.toOSString()); //$NON-NLS-1$
++			props.put("CWD", fWorkingDirectory.toString()); //$NON-NLS-1$
++			props.put("PWD", fWorkingDirectory.toString()); //$NON-NLS-1$
+ 		}
+ 		// On POSIX (Linux, UNIX) systems reset LANG variable to English with
+ 		// UTF-8 encoding since GNU compilers can handle only UTF-8 characters.

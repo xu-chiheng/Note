@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java
+index 9d93a813d9..494dc73431 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java
+@@ -971,7 +971,7 @@ public class CView extends ViewPart
+ 					ICElement e = (ICElement) o;
+ 					IResource res = e.getResource();
+ 					if (res != null && res.getLocation() != null) {
+-						elementMem.putString(TAG_PATH, res.getLocation().toOSString());
++						elementMem.putString(TAG_PATH, res.getLocation().toString());
+ 					}
+ 				}
+ 			}

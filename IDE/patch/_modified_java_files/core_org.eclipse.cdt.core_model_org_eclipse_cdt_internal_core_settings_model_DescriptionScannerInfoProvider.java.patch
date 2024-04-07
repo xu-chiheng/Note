@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/settings/model/DescriptionScannerInfoProvider.java b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/settings/model/DescriptionScannerInfoProvider.java
+index d944fd9181..6f9d84c305 100644
+--- a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/settings/model/DescriptionScannerInfoProvider.java
++++ b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/settings/model/DescriptionScannerInfoProvider.java
+@@ -257,7 +257,7 @@ public class DescriptionScannerInfoProvider implements IScannerInfoProvider, ICP
+ 					path = projLocation.append(path);
+ 			}
+ 			if (path != null)
+-				values[num++] = path.toOSString();
++				values[num++] = path.toString();
+ 		}
+ 
+ 		if (num < pathEntries.length) {

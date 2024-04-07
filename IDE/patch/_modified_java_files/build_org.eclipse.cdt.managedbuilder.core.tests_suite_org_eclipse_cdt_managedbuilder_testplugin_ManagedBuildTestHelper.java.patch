@@ -1,0 +1,13 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.core.tests/suite/org/eclipse/cdt/managedbuilder/testplugin/ManagedBuildTestHelper.java b/build/org.eclipse.cdt.managedbuilder.core.tests/suite/org/eclipse/cdt/managedbuilder/testplugin/ManagedBuildTestHelper.java
+index c6df3aa9b1..d11e081bde 100644
+--- a/build/org.eclipse.cdt.managedbuilder.core.tests/suite/org/eclipse/cdt/managedbuilder/testplugin/ManagedBuildTestHelper.java
++++ b/build/org.eclipse.cdt.managedbuilder.core.tests/suite/org/eclipse/cdt/managedbuilder/testplugin/ManagedBuildTestHelper.java
+@@ -582,7 +582,7 @@ public class ManagedBuildTestHelper {
+ 
+ 					final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+ 					final IWorkspaceRoot root = workspace.getRoot();
+-					final String workspaceLocation = root.getLocation().toOSString();
++					final String workspaceLocation = root.getLocation().toString();
+ 					final String platformFileSeparator = System.getProperty("file.separator", //$NON-NLS-1$
+ 							Character.toString(IPath.SEPARATOR));
+ 

@@ -1,0 +1,14 @@
+diff --git a/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/search/SearchTestBase.java b/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/search/SearchTestBase.java
+index 356274bc60..40e4727cbe 100644
+--- a/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/search/SearchTestBase.java
++++ b/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/search/SearchTestBase.java
+@@ -110,8 +110,7 @@ public abstract class SearchTestBase extends BaseUITestCase {
+ 			CCorePlugin.getIndexManager().reindex(fReferencedCProject);
+ 			waitForIndexer(fReferencedCProject);
+ 
+-			TestScannerProvider.sIncludes = new String[] {
+-					fReferencedCProject.getProject().getLocation().toOSString() };
++			TestScannerProvider.sIncludes = new String[] { fReferencedCProject.getProject().getLocation().toString() };
+ 
+ 			fSourceContents = fTestData[1].toString();
+ 			fSourceFile = TestSourceReader.createFile(fCProject.getProject(), new Path("refs.cpp"), fSourceContents);

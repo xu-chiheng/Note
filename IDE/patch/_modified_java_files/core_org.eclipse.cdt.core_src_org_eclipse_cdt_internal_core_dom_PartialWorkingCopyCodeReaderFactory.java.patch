@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core/src/org/eclipse/cdt/internal/core/dom/PartialWorkingCopyCodeReaderFactory.java b/core/org.eclipse.cdt.core/src/org/eclipse/cdt/internal/core/dom/PartialWorkingCopyCodeReaderFactory.java
+index fecc6c1449..2409c02a13 100644
+--- a/core/org.eclipse.cdt.core/src/org/eclipse/cdt/internal/core/dom/PartialWorkingCopyCodeReaderFactory.java
++++ b/core/org.eclipse.cdt.core/src/org/eclipse/cdt/internal/core/dom/PartialWorkingCopyCodeReaderFactory.java
+@@ -52,7 +52,7 @@ public class PartialWorkingCopyCodeReaderFactory extends AbstractCodeReaderFacto
+ 	}
+ 
+ 	public CodeReader createCodeReaderForTranslationUnit(ITranslationUnit tu) {
+-		return new CodeReader(tu.getPath().toOSString(), tu.getContents());
++		return new CodeReader(tu.getPath().toString(), tu.getContents());
+ 	}
+ 
+ 	protected CodeReader checkWorkingCopyThenCache(String path) {

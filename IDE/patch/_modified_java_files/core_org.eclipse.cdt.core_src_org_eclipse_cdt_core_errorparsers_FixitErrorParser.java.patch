@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/errorparsers/FixitErrorParser.java b/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/errorparsers/FixitErrorParser.java
+index 617dd0c76f..8ad0388984 100644
+--- a/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/errorparsers/FixitErrorParser.java
++++ b/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/errorparsers/FixitErrorParser.java
+@@ -55,7 +55,7 @@ public class FixitErrorParser extends RegexErrorParser {
+ 					ProblemMarkerInfo info = ProblemMarkerFilterManager.getInstance().getLastProblemMarker(f);
+ 					String externalLocation = null;
+ 					if (info.externalPath != null && !info.externalPath.isEmpty()) {
+-						externalLocation = info.externalPath.toOSString();
++						externalLocation = info.externalPath.toString();
+ 					}
+ 
+ 					// Try to find matching marker to tie to fix-it

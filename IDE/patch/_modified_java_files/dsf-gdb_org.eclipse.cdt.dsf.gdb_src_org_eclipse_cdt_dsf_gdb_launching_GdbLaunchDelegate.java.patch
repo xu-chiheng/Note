@@ -1,0 +1,13 @@
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/launching/GdbLaunchDelegate.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/launching/GdbLaunchDelegate.java
+index bf84a51e92..739db78727 100644
+--- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/launching/GdbLaunchDelegate.java
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/launching/GdbLaunchDelegate.java
+@@ -284,7 +284,7 @@ public class GdbLaunchDelegate extends AbstractCLaunchDelegate2 {
+ 		if (gdbPath == null) {
+ 			gdbPath = LaunchUtils.getGDBPath(config);
+ 		}
+-		return gdbPath.toOSString().trim() + " (" + gdbVersion + ")"; //$NON-NLS-1$ //$NON-NLS-2$
++		return gdbPath.toString().trim() + " (" + gdbVersion + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+ 	}
+ 
+ 	/**

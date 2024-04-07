@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/parser/InternalParserUtil.java b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/parser/InternalParserUtil.java
+index 88401d7004..f174459c7a 100644
+--- a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/parser/InternalParserUtil.java
++++ b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/parser/InternalParserUtil.java
+@@ -51,7 +51,7 @@ public class InternalParserUtil extends ParserFactory {
+ 	public static String normalizePath(String path, IFile file) {
+ 		IPath loc = file.getLocation();
+ 		if (loc != null) {
+-			path = loc.toOSString();
++			path = loc.toString();
+ 		}
+ 		return path;
+ 	}

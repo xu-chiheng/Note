@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEParser64.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEParser64.java
+index acea09c599..56ecb87174 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEParser64.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEParser64.java
+@@ -55,7 +55,7 @@ public class PEParser64 extends AbstractCExtension implements IBinaryParser {
+ 			}
+ 			// the hints may have to small, keep on trying.
+ 			if (attribute == null) {
+-				attribute = PE64.getAttribute(path.toOSString());
++				attribute = PE64.getAttribute(path.toString());
+ 			}
+ 
+ 			if (attribute != null) {

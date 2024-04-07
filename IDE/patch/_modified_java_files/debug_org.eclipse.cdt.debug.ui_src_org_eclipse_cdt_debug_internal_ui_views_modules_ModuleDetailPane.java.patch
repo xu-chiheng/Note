@@ -1,0 +1,13 @@
+diff --git a/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/internal/ui/views/modules/ModuleDetailPane.java b/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/internal/ui/views/modules/ModuleDetailPane.java
+index f86aeb821c..fc40870b67 100644
+--- a/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/internal/ui/views/modules/ModuleDetailPane.java
++++ b/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/internal/ui/views/modules/ModuleDetailPane.java
+@@ -162,7 +162,7 @@ public class ModuleDetailPane extends AbstractDetailPane implements IAdaptable,
+ 
+ 		// Symbols file
+ 		sb.append(ModulesMessages.getString("ModulesView.7")); //$NON-NLS-1$
+-		sb.append(module.getSymbolsFileName().toOSString());
++		sb.append(module.getSymbolsFileName().toString());
+ 		sb.append('\n');
+ 
+ 		// CPU

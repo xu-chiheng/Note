@@ -1,0 +1,13 @@
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/internal/launching/FlatpakLaunch.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/internal/launching/FlatpakLaunch.java
+index fb7b68fc09..04e4cc0494 100644
+--- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/internal/launching/FlatpakLaunch.java
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/internal/launching/FlatpakLaunch.java
+@@ -178,7 +178,7 @@ public class FlatpakLaunch {
+ 			// if we don't have a working directory, the default is to use
+ 			// the project
+ 			if (workingDir == null && projectName != null) {
+-				workingDir = project.getLocation().toOSString();
++				workingDir = project.getLocation().toString();
+ 			}
+ 			if (workingDir != null) {
+ 				IPath workingPath = new Path(workingDir);

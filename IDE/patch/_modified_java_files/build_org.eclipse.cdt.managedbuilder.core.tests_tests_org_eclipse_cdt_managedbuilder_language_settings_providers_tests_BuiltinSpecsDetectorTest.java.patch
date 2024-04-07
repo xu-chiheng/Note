@@ -1,0 +1,29 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/managedbuilder/language/settings/providers/tests/BuiltinSpecsDetectorTest.java b/build/org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/managedbuilder/language/settings/providers/tests/BuiltinSpecsDetectorTest.java
+index c59788f7cf..d9d2fdabd3 100644
+--- a/build/org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/managedbuilder/language/settings/providers/tests/BuiltinSpecsDetectorTest.java
++++ b/build/org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/managedbuilder/language/settings/providers/tests/BuiltinSpecsDetectorTest.java
+@@ -867,7 +867,7 @@ public class BuiltinSpecsDetectorTest extends BaseTestCase {
+ 		IPath folder = ResourceHelper.createWorkspaceFolder(getName());
+ 
+ 		// Create test "compiler"
+-		java.io.File compiler = new java.io.File(folder.append("compiler").toOSString());
++		java.io.File compiler = new java.io.File(folder.append("compiler").toString());
+ 		compiler.createNewFile();
+ 		assertTrue(compiler.exists());
+ 		String compilerPath = compiler.getAbsolutePath();
+@@ -915,13 +915,13 @@ public class BuiltinSpecsDetectorTest extends BaseTestCase {
+ 
+ 		// Create test "compiler"
+ 		IPath compilerLocation = folder.append("compiler");
+-		java.io.File compiler = new java.io.File(compilerLocation.toOSString());
++		java.io.File compiler = new java.io.File(compilerLocation.toString());
+ 		compiler.createNewFile();
+ 		assertTrue(compiler.exists());
+ 		// Create symbolic link to the test compiler
+ 		IPath compilerLinkLocation = folder.append("compilerLink");
+ 		ResourceHelper.createSymbolicLink(compilerLinkLocation, compilerLocation);
+-		java.io.File compilerLink = new java.io.File(compilerLinkLocation.toOSString());
++		java.io.File compilerLink = new java.io.File(compilerLinkLocation.toString());
+ 		assertTrue(compilerLink.exists());
+ 		String compilerLinkPath = compilerLink.getAbsolutePath();
+ 

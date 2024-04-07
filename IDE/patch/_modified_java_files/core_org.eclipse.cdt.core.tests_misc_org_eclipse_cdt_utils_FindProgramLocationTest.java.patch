@@ -1,0 +1,22 @@
+diff --git a/core/org.eclipse.cdt.core.tests/misc/org/eclipse/cdt/utils/FindProgramLocationTest.java b/core/org.eclipse.cdt.core.tests/misc/org/eclipse/cdt/utils/FindProgramLocationTest.java
+index 22e57ce202..91c8b8a4b2 100644
+--- a/core/org.eclipse.cdt.core.tests/misc/org/eclipse/cdt/utils/FindProgramLocationTest.java
++++ b/core/org.eclipse.cdt.core.tests/misc/org/eclipse/cdt/utils/FindProgramLocationTest.java
+@@ -163,7 +163,7 @@ public class FindProgramLocationTest extends TestCase {
+ 		file3_exe.createNewFile();
+ 		assertTrue(file3_exe.exists());
+ 
+-		String path1 = dir1.toOSString();
++		String path1 = dir1.toString();
+ 		{
+ 			// file.com
+ 			IPath actual = PathUtil.findProgramLocation(name1, path1);
+@@ -175,7 +175,7 @@ public class FindProgramLocationTest extends TestCase {
+ 			assertEquals(filePath2_exe, actual);
+ 		}
+ 
+-		String path12 = dir1.toOSString() + PATH_SEPARATOR + dir2.toOSString();
++		String path12 = dir1.toString() + PATH_SEPARATOR + dir2.toString();
+ 		{
+ 			// dir2/file.exe is preferred to dir1/file
+ 			IPath actual = PathUtil.findProgramLocation(name3, path12);

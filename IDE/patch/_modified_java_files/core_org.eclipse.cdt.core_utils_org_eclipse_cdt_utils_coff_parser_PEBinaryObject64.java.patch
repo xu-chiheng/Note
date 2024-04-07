@@ -1,0 +1,28 @@
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEBinaryObject64.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEBinaryObject64.java
+index 00eac1cce7..49a6474365 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEBinaryObject64.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEBinaryObject64.java
+@@ -102,9 +102,9 @@ public class PEBinaryObject64 extends BinaryObjectAdapter {
+ 		if (adapter.equals(PE64.class)) {
+ 			try {
+ 				if (header != null) {
+-					return (T) new PE64(getPath().toOSString(), header.getObjectDataOffset());
++					return (T) new PE64(getPath().toString(), header.getObjectDataOffset());
+ 				}
+-				return (T) new PE64(getPath().toOSString());
++				return (T) new PE64(getPath().toString());
+ 			} catch (IOException e) {
+ 			}
+ 		}
+@@ -120,9 +120,9 @@ public class PEBinaryObject64 extends BinaryObjectAdapter {
+ 
+ 	protected PE64 getPE() throws IOException {
+ 		if (header != null) {
+-			return new PE64(getPath().toOSString(), header.getObjectDataOffset());
++			return new PE64(getPath().toString(), header.getObjectDataOffset());
+ 		}
+-		return new PE64(getPath().toOSString());
++		return new PE64(getPath().toString());
+ 	}
+ 
+ 	protected void loadAll() throws IOException {

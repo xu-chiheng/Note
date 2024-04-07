@@ -1,0 +1,22 @@
+diff --git a/core/org.eclipse.cdt.core.tests/parser/org/eclipse/cdt/internal/index/tests/IndexBugsTests.java b/core/org.eclipse.cdt.core.tests/parser/org/eclipse/cdt/internal/index/tests/IndexBugsTests.java
+index 6389b0884d..553c1de342 100644
+--- a/core/org.eclipse.cdt.core.tests/parser/org/eclipse/cdt/internal/index/tests/IndexBugsTests.java
++++ b/core/org.eclipse.cdt.core.tests/parser/org/eclipse/cdt/internal/index/tests/IndexBugsTests.java
+@@ -586,7 +586,7 @@ public class IndexBugsTests extends BaseTestCase {
+ 	public void test164360_1() throws Exception {
+ 		waitForIndexer();
+ 		IFile include = TestSourceReader.createFile(fCProject.getProject(), "test164360.h", "");
+-		TestScannerProvider.sIncludeFiles = new String[] { include.getLocation().toOSString() };
++		TestScannerProvider.sIncludeFiles = new String[] { include.getLocation().toString() };
+ 		IFile file = TestSourceReader.createFile(fCProject.getProject(), "test164360.cpp", "");
+ 		TestSourceReader.waitUntilFileIsIndexed(fIndex, file, INDEXER_TIMEOUT_SEC * 1000);
+ 
+@@ -609,7 +609,7 @@ public class IndexBugsTests extends BaseTestCase {
+ 	public void test164360_2() throws Exception {
+ 		waitForIndexer();
+ 		IFile include = TestSourceReader.createFile(fCProject.getProject(), "test164360.h", "");
+-		TestScannerProvider.sMacroFiles = new String[] { include.getLocation().toOSString() };
++		TestScannerProvider.sMacroFiles = new String[] { include.getLocation().toString() };
+ 		IFile file = TestSourceReader.createFile(fCProject.getProject(), "test164360.cpp", "");
+ 		TestSourceReader.waitUntilFileIsIndexed(fIndex, file, INDEXER_TIMEOUT_SEC * 1000);
+ 

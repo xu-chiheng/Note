@@ -1,0 +1,13 @@
+diff --git a/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/MakeRecon.java b/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/MakeRecon.java
+index 47cd129738..eb24df643f 100644
+--- a/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/MakeRecon.java
++++ b/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/MakeRecon.java
+@@ -82,7 +82,7 @@ public class MakeRecon extends OutputStream {
+ 	private void invokeMakeRecon() {
+ 		int i = 0;
+ 		String[] array = new String[args.length + 1];
+-		array[0] = make.toOSString();
++		array[0] = make.toString();
+ 		System.arraycopy(args, 0, array, 1, args.length);
+ 		Process p;
+ 		try {

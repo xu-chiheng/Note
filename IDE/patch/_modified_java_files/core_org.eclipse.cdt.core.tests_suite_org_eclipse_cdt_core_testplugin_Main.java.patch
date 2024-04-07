@@ -1,0 +1,21 @@
+diff --git a/core/org.eclipse.cdt.core.tests/suite/org/eclipse/cdt/core/testplugin/Main.java b/core/org.eclipse.cdt.core.tests/suite/org/eclipse/cdt/core/testplugin/Main.java
+index c4aa1f9c4f..3e14f34142 100644
+--- a/core/org.eclipse.cdt.core.tests/suite/org/eclipse/cdt/core/testplugin/Main.java
++++ b/core/org.eclipse.cdt.core.tests/suite/org/eclipse/cdt/core/testplugin/Main.java
+@@ -25,6 +25,7 @@ import java.net.URLClassLoader;
+ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.StringTokenizer;
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ 
+ /**
+  * Startup class for Eclipse. Creates a class loader using
+@@ -402,7 +403,7 @@ public class Main {
+ 		if (endSplash == null)
+ 			return;
+ 		try {
+-			Runtime.getRuntime().exec(endSplash);
++			ProcessFactory.getFactory().exec(endSplash);
+ 		} catch (Exception e) {
+ 		}
+ 	}

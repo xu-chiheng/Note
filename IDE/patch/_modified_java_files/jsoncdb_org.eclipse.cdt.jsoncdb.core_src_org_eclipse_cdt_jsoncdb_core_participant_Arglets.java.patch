@@ -1,0 +1,13 @@
+diff --git a/jsoncdb/org.eclipse.cdt.jsoncdb.core/src/org/eclipse/cdt/jsoncdb/core/participant/Arglets.java b/jsoncdb/org.eclipse.cdt.jsoncdb.core/src/org/eclipse/cdt/jsoncdb/core/participant/Arglets.java
+index c0ac01031f..e35c37e6c6 100644
+--- a/jsoncdb/org.eclipse.cdt.jsoncdb.core/src/org/eclipse/cdt/jsoncdb/core/participant/Arglets.java
++++ b/jsoncdb/org.eclipse.cdt.jsoncdb.core/src/org/eclipse/cdt/jsoncdb/core/participant/Arglets.java
+@@ -194,7 +194,7 @@ public final class Arglets {
+ 					IPath path = Path.fromOSString(name);
+ 					if (!path.isAbsolute()) {
+ 						// prepend CWD
+-						name = cwd.append(path).toOSString();
++						name = cwd.append(path).toString();
+ 					}
+ 					if (isSystemIncludePath) {
+ 						resultCollector.addSystemIncludePath(name);

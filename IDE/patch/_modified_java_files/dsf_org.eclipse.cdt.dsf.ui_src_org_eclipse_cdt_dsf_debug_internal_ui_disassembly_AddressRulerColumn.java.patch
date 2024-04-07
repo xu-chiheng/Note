@@ -1,0 +1,13 @@
+diff --git a/dsf/org.eclipse.cdt.dsf.ui/src/org/eclipse/cdt/dsf/debug/internal/ui/disassembly/AddressRulerColumn.java b/dsf/org.eclipse.cdt.dsf.ui/src/org/eclipse/cdt/dsf/debug/internal/ui/disassembly/AddressRulerColumn.java
+index b4c0dbeb56..a98f534ed8 100644
+--- a/dsf/org.eclipse.cdt.dsf.ui/src/org/eclipse/cdt/dsf/debug/internal/ui/disassembly/AddressRulerColumn.java
++++ b/dsf/org.eclipse.cdt.dsf.ui/src/org/eclipse/cdt/dsf/debug/internal/ui/disassembly/AddressRulerColumn.java
+@@ -175,7 +175,7 @@ public class AddressRulerColumn extends DisassemblyRulerColumn
+ 		BigInteger address = doc.getAddressOfLine(line);
+ 		SourceFileInfo info = doc.getSourceInfo(address);
+ 		if (info != null) {
+-			return info.fFile.getFullPath().toOSString();
++			return info.fFile.getFullPath().toString();
+ 		}
+ 		return null;
+ 	}

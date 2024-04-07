@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPathIncludeSymbolEntryPage.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPathIncludeSymbolEntryPage.java
+index d74d085171..d0a4a87e0a 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPathIncludeSymbolEntryPage.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPathIncludeSymbolEntryPage.java
+@@ -898,7 +898,7 @@ public class CPathIncludeSymbolEntryPage extends CPathIncludeSymbolEntryBasePage
+ 		} else {
+ 			dialog = new SelectPathInputDialog(getShell(), CPathEntryMessages.IncludeSymbolEntryPage_editExternal_title,
+ 					CPathEntryMessages.IncludeSymbolEntryPage_editExternal_message,
+-					((IPath) existing.getAttribute(CPElement.INCLUDE)).toOSString(), null);
++					((IPath) existing.getAttribute(CPElement.INCLUDE)).toString(), null);
+ 		}
+ 		String newItem = null;
+ 		if (dialog.open() == Window.OK) {

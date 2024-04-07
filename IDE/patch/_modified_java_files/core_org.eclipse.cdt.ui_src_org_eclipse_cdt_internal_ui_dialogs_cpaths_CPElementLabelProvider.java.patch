@@ -1,0 +1,48 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPElementLabelProvider.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPElementLabelProvider.java
+index 118cbc9819..2e87af228b 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPElementLabelProvider.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPElementLabelProvider.java
+@@ -281,12 +281,12 @@ class CPElementLabelProvider extends LabelProvider implements IColorProvider {
+ 				if (endPath != null) {
+ 					path = path.append(endPath);
+ 				}
+-				str.append(path.makeRelative().toOSString());
++				str.append(path.makeRelative().toString());
+ 			} else {
+ 				//				str.append("From contribution ");
+ 				IPathEntryContainer container;
+ 				if (endPath != null) {
+-					str.append(endPath.toOSString());
++					str.append(endPath.toString());
+ 				}
+ 				str.append(" - ("); //$NON-NLS-1$
+ 				try {
+@@ -304,9 +304,9 @@ class CPElementLabelProvider extends LabelProvider implements IColorProvider {
+ 				if (endPath != null) {
+ 					path = path.append(endPath);
+ 				}
+-				str.insert(0, path.toOSString());
++				str.insert(0, path.toString());
+ 			} else if (endPath != null) {
+-				str.insert(0, endPath.toOSString());
++				str.insert(0, endPath.toString());
+ 			}
+ 		}
+ 
+@@ -315,14 +315,14 @@ class CPElementLabelProvider extends LabelProvider implements IColorProvider {
+ 	private String getPathString(IPath path, boolean isExternal) {
+ 		//		if (ArchiveFileFilter.isArchivePath(path)) {
+ 		//			IPath appendedPath = path.removeLastSegments(1);
+-		//			String appended = isExternal ? appendedPath.toOSString() :
++		//			String appended = isExternal ? appendedPath.toString() :
+ 		// appendedPath.makeRelative().toString();
+ 		//			return
+ 		// CPathEntryMessages.getFormattedString("CPListLabelProvider.twopart",
+ 		// //$NON-NLS-1$
+ 		//					new String[] { path.lastSegment(), appended});
+ 		//		} else {
+-		return isExternal ? path.toOSString() : path.makeRelative().toString();
++		return isExternal ? path.toString() : path.makeRelative().toString();
+ 		//		}
+ 	}
+ 

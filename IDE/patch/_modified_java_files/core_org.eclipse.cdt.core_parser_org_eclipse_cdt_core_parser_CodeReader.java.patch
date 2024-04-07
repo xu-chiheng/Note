@@ -1,0 +1,12 @@
+diff --git a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/core/parser/CodeReader.java b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/core/parser/CodeReader.java
+index 6fc53257b3..a0338a6cca 100644
+--- a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/core/parser/CodeReader.java
++++ b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/core/parser/CodeReader.java
+@@ -28,6 +28,7 @@ import java.nio.charset.CoderResult;
+ import java.nio.charset.CodingErrorAction;
+ 
+ import org.eclipse.cdt.core.parser.util.CharArrayUtils;
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ 
+ /**
+  * Reads the content of a file into a char[] buffer.

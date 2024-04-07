@@ -1,0 +1,12 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/ui/properties/BuildBehaviourTab.java b/build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/ui/properties/BuildBehaviourTab.java
+index 2151ada3d0..7d55154c68 100644
+--- a/build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/ui/properties/BuildBehaviourTab.java
++++ b/build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/ui/properties/BuildBehaviourTab.java
+@@ -30,6 +30,7 @@ import org.eclipse.cdt.managedbuilder.internal.ui.Messages;
+ import org.eclipse.cdt.newmake.core.IMakeBuilderInfo;
+ import org.eclipse.cdt.ui.newui.AbstractCPropertyTab;
+ import org.eclipse.cdt.ui.newui.ICPropertyProvider;
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ import org.eclipse.core.runtime.CoreException;
+ import org.eclipse.swt.SWT;
+ import org.eclipse.swt.accessibility.AccessibleAdapter;

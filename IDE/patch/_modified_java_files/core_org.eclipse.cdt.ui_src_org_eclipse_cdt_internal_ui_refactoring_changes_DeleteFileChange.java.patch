@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/changes/DeleteFileChange.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/changes/DeleteFileChange.java
+index a6db7f97ca..ad3b518b8e 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/changes/DeleteFileChange.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/changes/DeleteFileChange.java
+@@ -50,7 +50,7 @@ public class DeleteFileChange extends Change {
+ 
+ 	@Override
+ 	public String getName() {
+-		return NLS.bind(Messages.DeleteFileChange_delete_file, path.toOSString());
++		return NLS.bind(Messages.DeleteFileChange_delete_file, path.toString());
+ 	}
+ 
+ 	@Override

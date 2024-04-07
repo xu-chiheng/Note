@@ -1,0 +1,13 @@
+diff --git a/remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/RemotePath.java b/remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/RemotePath.java
+index ce63b9bde3..1ee3d917bd 100644
+--- a/remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/RemotePath.java
++++ b/remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/RemotePath.java
+@@ -1089,7 +1089,7 @@ public class RemotePath implements IPath, Cloneable {
+ 	 */
+ 	@Override
+ 	public File toFile() {
+-		return new File(toOSString());
++		return new File(toString());
+ 	}
+ 
+ 	/* (Intentionally not included in javadoc)

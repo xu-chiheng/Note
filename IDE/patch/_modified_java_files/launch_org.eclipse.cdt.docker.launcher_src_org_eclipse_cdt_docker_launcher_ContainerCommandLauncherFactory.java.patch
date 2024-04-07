@@ -1,0 +1,13 @@
+diff --git a/launch/org.eclipse.cdt.docker.launcher/src/org/eclipse/cdt/docker/launcher/ContainerCommandLauncherFactory.java b/launch/org.eclipse.cdt.docker.launcher/src/org/eclipse/cdt/docker/launcher/ContainerCommandLauncherFactory.java
+index f07ed6ed9a..4a81405b2d 100644
+--- a/launch/org.eclipse.cdt.docker.launcher/src/org/eclipse/cdt/docker/launcher/ContainerCommandLauncherFactory.java
++++ b/launch/org.eclipse.cdt.docker.launcher/src/org/eclipse/cdt/docker/launcher/ContainerCommandLauncherFactory.java
+@@ -319,7 +319,7 @@ public class ContainerCommandLauncherFactory implements ICommandLauncherFactory,
+ 			for (IPath copiedVolume : copiedVolumes) {
+ 				if (copiedVolume.isPrefixOf(path)) {
+ 					IPath newPath = tpath.append(path);
+-					String newEntry = newPath.toOSString();
++					String newEntry = newPath.toString();
+ 					newEntries.add(newEntry);
+ 					found = true;
+ 					break;

@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core.tests/misc/org/eclipse/cdt/core/resources/tests/RefreshScopeTests.java b/core/org.eclipse.cdt.core.tests/misc/org/eclipse/cdt/core/resources/tests/RefreshScopeTests.java
+index a04ae546b7..cc8f969fe0 100644
+--- a/core/org.eclipse.cdt.core.tests/misc/org/eclipse/cdt/core/resources/tests/RefreshScopeTests.java
++++ b/core/org.eclipse.cdt.core.tests/misc/org/eclipse/cdt/core/resources/tests/RefreshScopeTests.java
+@@ -531,7 +531,7 @@ public class RefreshScopeTests extends BaseTestCase5 {
+ 
+ 	private void createTestFile(IPath path) {
+ 		path = path.append("foo.cpp");
+-		File file = new File(path.toOSString());
++		File file = new File(path.toString());
+ 		try {
+ 			file.createNewFile();
+ 		} catch (IOException e) {

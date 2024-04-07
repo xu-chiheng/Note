@@ -1,0 +1,13 @@
+diff --git a/dsf-gdb/org.eclipse.cdt.tests.dsf.gdb/src/org/eclipse/cdt/tests/dsf/gdb/tests/SourceLookupTest.java b/dsf-gdb/org.eclipse.cdt.tests.dsf.gdb/src/org/eclipse/cdt/tests/dsf/gdb/tests/SourceLookupTest.java
+index ce39d3c882..0d301e91e3 100644
+--- a/dsf-gdb/org.eclipse.cdt.tests.dsf.gdb/src/org/eclipse/cdt/tests/dsf/gdb/tests/SourceLookupTest.java
++++ b/dsf-gdb/org.eclipse.cdt.tests.dsf.gdb/src/org/eclipse/cdt/tests/dsf/gdb/tests/SourceLookupTest.java
+@@ -448,7 +448,7 @@ public class SourceLookupTest extends BaseParametrizedTestCase {
+ 		// insert breakpoint in source file
+ 		fBreakpointInstalledWait.waitReset();
+ 		ICLineBreakpoint bp = CDIDebugModel.createLineBreakpoint(
+-				new Path(SOURCE_ABSPATH).append(SOURCE_NAME).toOSString(), ResourcesPlugin.getWorkspace().getRoot(),
++				new Path(SOURCE_ABSPATH).append(SOURCE_NAME).toString(), ResourcesPlugin.getWorkspace().getRoot(),
+ 				ICBreakpointType.REGULAR, SOURCE_LINE, true, 0, "", true);
+ 		// The delay here is based on:
+ 		// 1) The installation of the breakpoint takes some time

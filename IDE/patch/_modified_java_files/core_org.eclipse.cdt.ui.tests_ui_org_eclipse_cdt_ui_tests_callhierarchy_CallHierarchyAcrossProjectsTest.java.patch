@@ -1,0 +1,15 @@
+diff --git a/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/callhierarchy/CallHierarchyAcrossProjectsTest.java b/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/callhierarchy/CallHierarchyAcrossProjectsTest.java
+index 1933fd6fe4..407a3d581b 100644
+--- a/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/callhierarchy/CallHierarchyAcrossProjectsTest.java
++++ b/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/callhierarchy/CallHierarchyAcrossProjectsTest.java
+@@ -48,8 +48,8 @@ public class CallHierarchyAcrossProjectsTest extends CallHierarchyBaseTest {
+ 		CCorePlugin.getIndexManager().setIndexerId(fCProject2, IPDOMManager.ID_FAST_INDEXER);
+ 		waitForIndexer(fCProject2);
+ 		fIndex = CCorePlugin.getIndexManager().getIndex(new ICProject[] { fCProject, fCProject2 });
+-		TestScannerProvider.sIncludes = new String[] { fCProject.getProject().getLocation().toOSString(),
+-				fCProject2.getProject().getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { fCProject.getProject().getLocation().toString(),
++				fCProject2.getProject().getLocation().toString() };
+ 	}
+ 
+ 	@Override

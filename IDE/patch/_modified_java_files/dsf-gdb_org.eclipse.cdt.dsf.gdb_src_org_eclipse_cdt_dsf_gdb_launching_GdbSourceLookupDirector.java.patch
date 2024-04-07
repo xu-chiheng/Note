@@ -1,0 +1,13 @@
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/launching/GdbSourceLookupDirector.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/launching/GdbSourceLookupDirector.java
+index 87af49df70..f3ed983e46 100644
+--- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/launching/GdbSourceLookupDirector.java
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/launching/GdbSourceLookupDirector.java
+@@ -106,7 +106,7 @@ public class GdbSourceLookupDirector extends DsfSourceLookupDirector {
+ 				String from = sourceSubContainer.getBackendPathStr();
+ 				IPath to = sourceSubContainer.getLocalPath();
+ 				if (from != null && to != null) {
+-					entries.put(from, to.toOSString());
++					entries.put(from, to.toString());
+ 				}
+ 			} else if (container.isComposite()) {
+ 				ISourceContainer[] childContainers;

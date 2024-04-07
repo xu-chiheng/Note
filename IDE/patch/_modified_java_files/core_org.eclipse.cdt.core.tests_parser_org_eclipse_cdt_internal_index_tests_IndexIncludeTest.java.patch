@@ -1,0 +1,94 @@
+diff --git a/core/org.eclipse.cdt.core.tests/parser/org/eclipse/cdt/internal/index/tests/IndexIncludeTest.java b/core/org.eclipse.cdt.core.tests/parser/org/eclipse/cdt/internal/index/tests/IndexIncludeTest.java
+index 98f15540e0..cbae3e1919 100644
+--- a/core/org.eclipse.cdt.core.tests/parser/org/eclipse/cdt/internal/index/tests/IndexIncludeTest.java
++++ b/core/org.eclipse.cdt.core.tests/parser/org/eclipse/cdt/internal/index/tests/IndexIncludeTest.java
+@@ -157,7 +157,7 @@ public class IndexIncludeTest extends IndexTestBase {
+ 	// #include <system20061107.h>
+ 	public void testIncludeProperties() throws Exception {
+ 		waitForIndexer();
+-		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toString() };
+ 		String content = readTaggedComment("source20061107");
+ 		TestSourceReader.createFile(fProject.getProject(), "user20061107.h", "");
+ 		TestSourceReader.createFile(fProject.getProject(), "system20061107.h", "");
+@@ -178,7 +178,7 @@ public class IndexIncludeTest extends IndexTestBase {
+ 	}
+ 
+ 	public void testIncludeProperties_2() throws Exception {
+-		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toString() };
+ 		TestSourceReader.createFile(fProject.getProject(), "header20061107.h", "");
+ 		String content = "// comment \n#include \"header20061107.h\"\n";
+ 		IFile file = TestSourceReader.createFile(fProject.getProject(), "intermed20061107.h", content);
+@@ -199,7 +199,7 @@ public class IndexIncludeTest extends IndexTestBase {
+ 	}
+ 
+ 	public void testInactiveInclude() throws Exception {
+-		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toString() };
+ 		String content = "#if 0\n#include \"inactive20070213.h\"\n#endif\n";
+ 		IFile file = TestSourceReader.createFile(fProject.getProject(), "source20070213.cpp", content);
+ 		CCorePlugin.getIndexManager().reindex(fProject);
+@@ -219,7 +219,7 @@ public class IndexIncludeTest extends IndexTestBase {
+ 	}
+ 
+ 	public void testUnresolvedInclude() throws Exception {
+-		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toString() };
+ 		String content = "#include \"unresolved20070213.h\"\n";
+ 		IFile file = TestSourceReader.createFile(fProject.getProject(), "source20070214.cpp", content);
+ 		CCorePlugin.getIndexManager().reindex(fProject);
+@@ -332,7 +332,7 @@ public class IndexIncludeTest extends IndexTestBase {
+ 
+ 	// #include "resolved20070426.h"
+ 	public void testFixedContext() throws Exception {
+-		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toString() };
+ 		String source = getContentsForTest(1)[0].toString();
+ 		IFile header = TestSourceReader.createFile(fProject.getProject(), "resolved20070426.h", "");
+ 		IFile s1 = TestSourceReader.createFile(fProject.getProject(), "s1.cpp", source);
+@@ -415,7 +415,7 @@ public class IndexIncludeTest extends IndexTestBase {
+ 	// #include "unesolved20070427.h"
+ 	public void testUpdateIncludes() throws Exception {
+ 		waitForIndexer();
+-		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toString() };
+ 		CharSequence[] source = getContentsForTest(4);
+ 		IFile header = TestSourceReader.createFile(fProject.getProject(), "resolved20070427.h", "");
+ 		IFile s1 = TestSourceReader.createFile(fProject.getProject(), "s20070427.cpp",
+@@ -482,7 +482,7 @@ public class IndexIncludeTest extends IndexTestBase {
+ 	// #include "h2.h"
+ 	public void testMultiVariantHeaderUpdate() throws Exception {
+ 		waitForIndexer();
+-		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toString() };
+ 		StringBuilder[] contents = getContentsForTest(4);
+ 		final StringBuilder h1Contents = contents[0];
+ 		final IFile h1 = TestSourceReader.createFile(fProject.getProject(), "h1.h", h1Contents.toString());
+@@ -566,7 +566,7 @@ public class IndexIncludeTest extends IndexTestBase {
+ 	// #endif // H1_H_
+ 	public void testPragmaOnceChange() throws Exception {
+ 		waitForIndexer();
+-		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { fProject.getProject().getLocation().toString() };
+ 		CharSequence[] contents = getContentsForTest(5);
+ 		final CharSequence h1Contents = contents[0];
+ 		final IFile h1 = TestSourceReader.createFile(fProject.getProject(), "h1.h", h1Contents.toString());
+@@ -658,7 +658,7 @@ public class IndexIncludeTest extends IndexTestBase {
+ 	public void testSignificantMacrosWithPragmeOnceSemantic() throws Exception {
+ 		waitForIndexer();
+ 		IProject prj = fProject.getProject();
+-		TestScannerProvider.sIncludes = new String[] { prj.getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { prj.getLocation().toString() };
+ 		CharSequence[] contents = getContentsForTest(5);
+ 
+ 		IFile b = createFile(prj, "b.hpp", contents[0].toString());
+@@ -717,7 +717,7 @@ public class IndexIncludeTest extends IndexTestBase {
+ 	public void testSignificantMacrosWithPragmeOnceFromIdxSemantic() throws Exception {
+ 		waitForIndexer();
+ 		IProject prj = fProject.getProject();
+-		TestScannerProvider.sIncludes = new String[] { prj.getLocation().toOSString() };
++		TestScannerProvider.sIncludes = new String[] { prj.getLocation().toString() };
+ 		CharSequence[] contents = getContentsForTest(7);
+ 
+ 		IFile b = createFile(prj, "b.hpp", contents[0].toString());

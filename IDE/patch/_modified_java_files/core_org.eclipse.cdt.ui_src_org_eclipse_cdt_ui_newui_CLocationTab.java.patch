@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/CLocationTab.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/CLocationTab.java
+index fc74fdf3f4..6b5993a395 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/CLocationTab.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/CLocationTab.java
+@@ -97,7 +97,7 @@ public abstract class CLocationTab extends AbstractCPropertyTab {
+ 				return new String[0];
+ 			String[] s = new String[p.length];
+ 			for (int i = 0; i < p.length; i++)
+-				s[i] = p[i].toOSString();
++				s[i] = p[i].toString();
+ 			return s;
+ 		}
+ 

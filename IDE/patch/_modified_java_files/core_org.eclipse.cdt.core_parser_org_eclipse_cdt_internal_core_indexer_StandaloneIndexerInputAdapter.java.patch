@@ -1,0 +1,28 @@
+diff --git a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/indexer/StandaloneIndexerInputAdapter.java b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/indexer/StandaloneIndexerInputAdapter.java
+index 064a34a992..0563e59a34 100644
+--- a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/indexer/StandaloneIndexerInputAdapter.java
++++ b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/indexer/StandaloneIndexerInputAdapter.java
+@@ -56,12 +56,12 @@ public class StandaloneIndexerInputAdapter extends IndexerInputAdapter {
+ 
+ 	@Override
+ 	public long getLastModified(IIndexFileLocation location) {
+-		return new File(URIUtil.toPath(location.getURI()).toOSString()).lastModified();
++		return new File(URIUtil.toPath(location.getURI()).toString()).lastModified();
+ 	}
+ 
+ 	@Override
+ 	public long getFileSize(IIndexFileLocation location) {
+-		return new File(URIUtil.toPath(location.getURI()).toOSString()).length();
++		return new File(URIUtil.toPath(location.getURI()).toString()).length();
+ 	}
+ 
+ 	@Override
+@@ -110,7 +110,7 @@ public class StandaloneIndexerInputAdapter extends IndexerInputAdapter {
+ 
+ 	@Override
+ 	public String getASTPath(IIndexFileLocation ifl) {
+-		return URIUtil.toPath(ifl.getURI()).toOSString();
++		return URIUtil.toPath(ifl.getURI()).toString();
+ 	}
+ 
+ 	@Override

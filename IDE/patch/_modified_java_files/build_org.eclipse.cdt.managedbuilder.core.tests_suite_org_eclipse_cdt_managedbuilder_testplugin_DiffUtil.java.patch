@@ -1,0 +1,20 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.core.tests/suite/org/eclipse/cdt/managedbuilder/testplugin/DiffUtil.java b/build/org.eclipse.cdt.managedbuilder.core.tests/suite/org/eclipse/cdt/managedbuilder/testplugin/DiffUtil.java
+index 1e276b7839..7be0973b35 100644
+--- a/build/org.eclipse.cdt.managedbuilder.core.tests/suite/org/eclipse/cdt/managedbuilder/testplugin/DiffUtil.java
++++ b/build/org.eclipse.cdt.managedbuilder.core.tests/suite/org/eclipse/cdt/managedbuilder/testplugin/DiffUtil.java
+@@ -17,13 +17,14 @@ import java.io.BufferedReader;
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.io.InputStreamReader;
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ 
+ public abstract class DiffUtil {
+ 	public static String diff(String location1, String location2) {
+ 		StringBuilder buf = new StringBuilder();
+ 		try {
+ 			String[] command = new String[] { "diff", "-ub", location1, location2 };
+-			Process p = Runtime.getRuntime().exec(command);
++			Process p = ProcessFactory.getFactory().exec(command);
+ 			InputStream in = p.getInputStream();
+ 			if (in == null) {
+ 				return null;

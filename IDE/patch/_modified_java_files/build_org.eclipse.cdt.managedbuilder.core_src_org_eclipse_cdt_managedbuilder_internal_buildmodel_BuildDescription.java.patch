@@ -1,0 +1,49 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/BuildDescription.java b/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/BuildDescription.java
+index f65a621e74..9b3291ec5f 100644
+--- a/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/BuildDescription.java
++++ b/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/BuildDescription.java
+@@ -1323,7 +1323,7 @@ public class BuildDescription implements IBuildDescription {
+ 						String inExt = resPath.getFileExtension();
+ 						String outExt = tool.getOutputExtension(inExt);
+ 						if (namePattern == null || namePattern.length() == 0) {
+-							namePattern = /*outDirPath.toOSString() +*/ outputPrefix
++							namePattern = /*outDirPath.toString() +*/ outputPrefix
+ 									+ IManagedBuilderMakefileGenerator.WILDCARD;
+ 							if (outExt != null && outExt.length() > 0) {
+ 								namePattern += DOT + outExt;
+@@ -1337,7 +1337,7 @@ public class BuildDescription implements IBuildDescription {
+ 							//  If only a file name is specified, add the relative path of this output directory
+ 							if (namePatternPath.segmentCount() == 1) {
+ 								namePatternPath = Path
+-										.fromOSString(/*outDirPath.toOSString() +*/ namePatternPath.toString());
++										.fromOSString(/*outDirPath.toString() +*/ namePatternPath.toString());
+ 							}
+ 						}
+ 
+@@ -1368,7 +1368,7 @@ public class BuildDescription implements IBuildDescription {
+ 			//     the output extension.
+ 
+ 			String outPrefix = tool.getOutputPrefix();
+-			IPath outFullPath = Path.fromOSString(outDirPath.toOSString() + outPrefix + WILDCARD);
++			IPath outFullPath = Path.fromOSString(outDirPath.toString() + outPrefix + WILDCARD);
+ 			IPath outLocation;
+ 			String inExt = resPath.getFileExtension();
+ 			String outExt = tool.getOutputExtension(inExt);
+@@ -1387,7 +1387,7 @@ public class BuildDescription implements IBuildDescription {
+ 				IInputType type = action.getInputType();
+ 				String ext = null;
+ 				if (type != null) {
+-					String location = buildRc.getLocation().toOSString();
++					String location = buildRc.getLocation().toString();
+ 					for (String srcExt : type.getSourceExtensions(tool)) {
+ 						if (location.endsWith(srcExt)) {
+ 							ext = srcExt;
+@@ -1446,7 +1446,7 @@ public class BuildDescription implements IBuildDescription {
+ 		//  Get the input file name
+ 		String fileName = sourceLocation.removeFileExtension().lastSegment();
+ 		//  Replace the % with the file name
+-		String outName = outPath.toOSString().replaceAll("%", fileName); //$NON-NLS-1$
++		String outName = outPath.toString().replaceAll("%", fileName); //$NON-NLS-1$
+ 		return Path.fromOSString(outName);
+ 	}
+ 

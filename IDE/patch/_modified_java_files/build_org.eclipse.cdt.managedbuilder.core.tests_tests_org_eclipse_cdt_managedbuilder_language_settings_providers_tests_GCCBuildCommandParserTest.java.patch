@@ -1,0 +1,31 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/managedbuilder/language/settings/providers/tests/GCCBuildCommandParserTest.java b/build/org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/managedbuilder/language/settings/providers/tests/GCCBuildCommandParserTest.java
+index e4b6f892b6..ba3af092c9 100644
+--- a/build/org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/managedbuilder/language/settings/providers/tests/GCCBuildCommandParserTest.java
++++ b/build/org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/managedbuilder/language/settings/providers/tests/GCCBuildCommandParserTest.java
+@@ -1031,7 +1031,7 @@ public class GCCBuildCommandParserTest extends BaseTestCase {
+ 
+ 		// parse line
+ 		parser.startup(cfgDescription, null);
+-		parser.processLine("gcc " + "-I/path0 " + "-I. " + '"' + file.getLocation().toOSString() + '"');
++		parser.processLine("gcc " + "-I/path0 " + "-I. " + '"' + file.getLocation().toString() + '"');
+ 		parser.shutdown();
+ 
+ 		// check entries
+@@ -1060,7 +1060,7 @@ public class GCCBuildCommandParserTest extends BaseTestCase {
+ 
+ 		// parse line
+ 		parser.startup(null, null);
+-		parser.processLine("gcc " + "-I/path0 " + "-I. " + '"' + file.getLocation().toOSString() + '"');
++		parser.processLine("gcc " + "-I/path0 " + "-I. " + '"' + file.getLocation().toString() + '"');
+ 		parser.shutdown();
+ 
+ 		// check entries
+@@ -1877,7 +1877,7 @@ public class GCCBuildCommandParserTest extends BaseTestCase {
+ 
+ 		// parse line
+ 		parser.startup(cfgDescription, null);
+-		parser.processLine("gcc " + "-I. " + "-Iinclude " + '"' + file.getLocation().toOSString() + '"');
++		parser.processLine("gcc " + "-I. " + "-Iinclude " + '"' + file.getLocation().toString() + '"');
+ 		parser.shutdown();
+ 
+ 		// check populated entries

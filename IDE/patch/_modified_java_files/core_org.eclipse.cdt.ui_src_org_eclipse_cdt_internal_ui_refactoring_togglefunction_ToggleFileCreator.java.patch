@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/togglefunction/ToggleFileCreator.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/togglefunction/ToggleFileCreator.java
+index e29600ad4d..ee8d829c5b 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/togglefunction/ToggleFileCreator.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/togglefunction/ToggleFileCreator.java
+@@ -79,7 +79,7 @@ public class ToggleFileCreator {
+ 	}
+ 
+ 	private String getPath() {
+-		String result = context.getSelectionFile().getFullPath().toOSString();
++		String result = context.getSelectionFile().getFullPath().toString();
+ 		return result.replaceAll("(\\w)*\\.(\\w)*", EMPTY_STRING); //$NON-NLS-1$
+ 	}
+ }

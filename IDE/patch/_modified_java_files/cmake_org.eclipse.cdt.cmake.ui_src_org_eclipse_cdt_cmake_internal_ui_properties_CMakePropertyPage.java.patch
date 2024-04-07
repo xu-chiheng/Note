@@ -1,0 +1,27 @@
+diff --git a/cmake/org.eclipse.cdt.cmake.ui/src/org/eclipse/cdt/cmake/internal/ui/properties/CMakePropertyPage.java b/cmake/org.eclipse.cdt.cmake.ui/src/org/eclipse/cdt/cmake/internal/ui/properties/CMakePropertyPage.java
+index 7829e864f7..cad9dc656a 100644
+--- a/cmake/org.eclipse.cdt.cmake.ui/src/org/eclipse/cdt/cmake/internal/ui/properties/CMakePropertyPage.java
++++ b/cmake/org.eclipse.cdt.cmake.ui/src/org/eclipse/cdt/cmake/internal/ui/properties/CMakePropertyPage.java
+@@ -36,6 +36,7 @@ import org.eclipse.cdt.core.build.ICBuildCommandLauncher;
+ import org.eclipse.cdt.core.build.ICBuildConfiguration;
+ import org.eclipse.cdt.core.build.IToolChain;
+ import org.eclipse.cdt.core.resources.IConsole;
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ import org.eclipse.core.resources.IBuildConfiguration;
+ import org.eclipse.core.resources.IProject;
+ import org.eclipse.core.runtime.CoreException;
+@@ -131,10 +132,11 @@ public class CMakePropertyPage extends PropertyPage {
+ 					IProject project = (IProject) getElement();
+ 					try {
+ 						String configName = project.getActiveBuildConfig().getName();
+-						String sourceDir = project.getLocation().toOSString();
+-						String buildDir = project.getLocation().append("build").append(configName).toOSString(); //$NON-NLS-1$
++						String sourceDir = project.getLocation().toString();
++						String buildDir = project.getLocation().append("build").append(configName).toString(); //$NON-NLS-1$
+ 
+-						Runtime.getRuntime().exec(new String[] { "cmake-gui", "-S" + sourceDir, "-B" + buildDir }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
++						ProcessFactory.getFactory()
++								.exec(new String[] { "cmake-gui", "-S" + sourceDir, "-B" + buildDir }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+ 					} catch (CoreException | IOException e1) {
+ 						MessageDialog.openError(parent.getShell(),
+ 								Messages.CMakePropertyPage_FailedToStartCMakeGui_Title,

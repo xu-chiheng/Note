@@ -1,0 +1,40 @@
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/DefaultGnuToolFactory.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/DefaultGnuToolFactory.java
+index 7f31273bba..958f3d2776 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/DefaultGnuToolFactory.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/DefaultGnuToolFactory.java
+@@ -43,7 +43,7 @@ public class DefaultGnuToolFactory implements IGnuToolFactory {
+ 		Addr2line addr2line = null;
+ 		if (addr2LinePath != null && !addr2LinePath.isEmpty()) {
+ 			try {
+-				addr2line = new Addr2line(addr2LinePath.toOSString(), new String[0], path.toOSString(), environment);
++				addr2line = new Addr2line(addr2LinePath.toString(), new String[0], path.toString(), environment);
+ 			} catch (IOException e1) {
+ 			}
+ 		}
+@@ -57,7 +57,7 @@ public class DefaultGnuToolFactory implements IGnuToolFactory {
+ 		CPPFilt cppfilt = null;
+ 		if (cppFiltPath != null && !cppFiltPath.isEmpty()) {
+ 			try {
+-				cppfilt = new CPPFilt(cppFiltPath.toOSString(), new String[0], environment);
++				cppfilt = new CPPFilt(cppFiltPath.toString(), new String[0], environment);
+ 			} catch (IOException e2) {
+ 			}
+ 		}
+@@ -72,7 +72,7 @@ public class DefaultGnuToolFactory implements IGnuToolFactory {
+ 		Objdump objdump = null;
+ 		if (objdumpPath != null && !objdumpPath.isEmpty()) {
+ 			try {
+-				objdump = new Objdump(objdumpPath.toOSString(), objdumpArgs, path.toOSString(), environment);
++				objdump = new Objdump(objdumpPath.toString(), objdumpArgs, path.toString(), environment);
+ 			} catch (IOException e1) {
+ 			}
+ 		}
+@@ -87,7 +87,7 @@ public class DefaultGnuToolFactory implements IGnuToolFactory {
+ 		NM nm = null;
+ 		if (nmPath != null && !nmPath.isEmpty()) {
+ 			try {
+-				nm = new NM(nmPath.toOSString(), nmArgs, path.toOSString(), environment);
++				nm = new NM(nmPath.toString(), nmArgs, path.toString(), environment);
+ 			} catch (IOException e1) {
+ 			}
+ 		}

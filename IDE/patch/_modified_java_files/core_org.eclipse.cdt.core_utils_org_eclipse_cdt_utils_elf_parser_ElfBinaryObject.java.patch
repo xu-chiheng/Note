@@ -1,0 +1,22 @@
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfBinaryObject.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfBinaryObject.java
+index a60d9a048d..99603f83dd 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfBinaryObject.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfBinaryObject.java
+@@ -107,7 +107,7 @@ public class ElfBinaryObject extends BinaryObjectAdapter {
+ 		if (header != null) {
+ 			return new ElfHelper(header.getArchiveName(), header.getObjectDataOffset());
+ 		}
+-		return new ElfHelper(getPath().toOSString());
++		return new ElfHelper(getPath().toString());
+ 	}
+ 
+ 	protected void loadAll() throws IOException {
+@@ -182,7 +182,7 @@ public class ElfBinaryObject extends BinaryObjectAdapter {
+ 	public <T> T getAdapter(Class<T> adapter) {
+ 		if (adapter.equals(Elf.class)) {
+ 			try {
+-				return (T) new Elf(getPath().toOSString());
++				return (T) new Elf(getPath().toString());
+ 			} catch (IOException e) {
+ 			}
+ 		}

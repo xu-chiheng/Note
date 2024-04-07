@@ -1,0 +1,22 @@
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GDBProcesses_7_0.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GDBProcesses_7_0.java
+index 1e96c870ef..ad349d14f0 100644
+--- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GDBProcesses_7_0.java
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GDBProcesses_7_0.java
+@@ -1031,7 +1031,7 @@ public class GDBProcesses_7_0 extends AbstractDsfService implements IGDBProcesse
+ 					if (name == null) {
+ 						// Should not happen, but just in case...use the
+ 						// binary file name (absolute path)
+-						name = fBackend.getProgramPath().toOSString();
++						name = fBackend.getProgramPath().toString();
+ 						fDebuggedProcessesAndNames.put(id, name);
+ 					} else if (name.isEmpty()) {
+ 						// We know of the process but haven't fetched its name yet.
+@@ -1090,7 +1090,7 @@ public class GDBProcesses_7_0 extends AbstractDsfService implements IGDBProcesse
+ 
+ 										if (name == null) {
+ 											// No way to get the name right now, so use the binary file name (absolute path)
+-											name = fBackend.getProgramPath().toOSString();
++											name = fBackend.getProgramPath().toString();
+ 											fDebuggedProcessesAndNames.put(finalPId, name);
+ 										}
+ 										rm.done(new MIThreadDMData(name, finalPId));

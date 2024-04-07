@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/search/CSearchQuery.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/search/CSearchQuery.java
+index 399c447174..a11d0ba29b 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/search/CSearchQuery.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/search/CSearchQuery.java
+@@ -466,7 +466,7 @@ public abstract class CSearchQuery implements ISearchQuery {
+ 					if (editorInput instanceof IPathEditorInput) {
+ 						IPathEditorInput pathEditorInput = (IPathEditorInput) editorInput;
+ 						IPath path = pathEditorInput.getPath();
+-						if (fullPath.equals(path.toOSString())) {
++						if (fullPath.equals(path.toString())) {
+ 							dirtyTextEditor = textEditor;
+ 							break;
+ 						}

@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/som/parser/SOMParser.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/som/parser/SOMParser.java
+index 15726fa12a..2d7abe9732 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/som/parser/SOMParser.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/som/parser/SOMParser.java
+@@ -52,7 +52,7 @@ public class SOMParser extends AbstractCExtension implements IBinaryParser {
+ 
+ 			//Take a second run at it if the data array failed.
+ 			if (attribute == null) {
+-				attribute = SOM.getAttributes(path.toOSString());
++				attribute = SOM.getAttributes(path.toString());
+ 			}
+ 
+ 			if (attribute != null) {

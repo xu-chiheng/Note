@@ -1,0 +1,13 @@
+diff --git a/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/MapEntrySourceContainer.java b/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/MapEntrySourceContainer.java
+index 50a9c4ea17..22bf88a79f 100644
+--- a/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/MapEntrySourceContainer.java
++++ b/debug/org.eclipse.cdt.debug.core/src/org/eclipse/cdt/debug/internal/core/sourcelookup/MapEntrySourceContainer.java
+@@ -199,7 +199,7 @@ public class MapEntrySourceContainer extends AbstractSourceContainer {
+ 
+ 	@Override
+ 	public String getName() {
+-		return MessageFormat.format("{0} - {1}", new Object[] { getBackendPathStr(), getLocalPath().toOSString() }); //$NON-NLS-1$
++		return MessageFormat.format("{0} - {1}", new Object[] { getBackendPathStr(), getLocalPath().toString() }); //$NON-NLS-1$
+ 	}
+ 
+ 	@Override

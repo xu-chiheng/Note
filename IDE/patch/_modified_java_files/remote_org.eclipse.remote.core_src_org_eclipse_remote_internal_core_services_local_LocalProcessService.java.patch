@@ -1,0 +1,13 @@
+diff --git a/remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/services/local/LocalProcessService.java b/remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/services/local/LocalProcessService.java
+index 7dac4f81b5..325b8767f5 100644
+--- a/remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/services/local/LocalProcessService.java
++++ b/remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/services/local/LocalProcessService.java
+@@ -61,7 +61,7 @@ public class LocalProcessService implements IRemoteProcessService {
+ 			if (workingDirectory == null) {
+ 				workingDirectory = System.getProperty("user.dir"); //$NON-NLS-1$
+ 				if (workingDirectory == null) {
+-					workingDirectory = Path.ROOT.toOSString();
++					workingDirectory = Path.ROOT.toString();
+ 				}
+ 			}
+ 		}

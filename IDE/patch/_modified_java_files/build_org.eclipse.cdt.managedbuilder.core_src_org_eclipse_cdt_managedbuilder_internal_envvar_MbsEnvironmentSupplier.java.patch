@@ -1,0 +1,16 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/envvar/MbsEnvironmentSupplier.java b/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/envvar/MbsEnvironmentSupplier.java
+index 31e8eae274..659f4a79c6 100644
+--- a/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/envvar/MbsEnvironmentSupplier.java
++++ b/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/envvar/MbsEnvironmentSupplier.java
+@@ -65,9 +65,9 @@ public class MbsEnvironmentSupplier implements IEnvironmentVariableSupplier {
+ 				//
+ 				//					IPath projectLocation = owner.getLocation();
+ 				//					IPath workingDirectory = projectLocation.append(topBuildDir);
+-				//					String value = workingDirectory.toOSString();
++				//					String value = workingDirectory.toString();
+ 				if (topBuildDir != null) {
+-					variable = new BuildEnvVar(name, topBuildDir.toOSString(), IBuildEnvironmentVariable.ENVVAR_REPLACE,
++					variable = new BuildEnvVar(name, topBuildDir.toString(), IBuildEnvironmentVariable.ENVVAR_REPLACE,
+ 							null);
+ 				}
+ 

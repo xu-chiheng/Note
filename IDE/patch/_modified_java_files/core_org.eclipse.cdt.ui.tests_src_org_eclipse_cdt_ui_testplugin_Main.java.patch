@@ -1,0 +1,21 @@
+diff --git a/core/org.eclipse.cdt.ui.tests/src/org/eclipse/cdt/ui/testplugin/Main.java b/core/org.eclipse.cdt.ui.tests/src/org/eclipse/cdt/ui/testplugin/Main.java
+index cb6818d241..545c66b1ee 100644
+--- a/core/org.eclipse.cdt.ui.tests/src/org/eclipse/cdt/ui/testplugin/Main.java
++++ b/core/org.eclipse.cdt.ui.tests/src/org/eclipse/cdt/ui/testplugin/Main.java
+@@ -25,6 +25,7 @@ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.StringTokenizer;
+ import java.util.Vector;
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ 
+ // Copied from startup.jar. planned to be removed soon
+ 
+@@ -392,7 +393,7 @@ public class Main {
+ 		if (endSplash == null)
+ 			return;
+ 		try {
+-			Runtime.getRuntime().exec(endSplash);
++			ProcessFactory.getFactory().exec(endSplash);
+ 		} catch (Exception e) {
+ 		}
+ 	}

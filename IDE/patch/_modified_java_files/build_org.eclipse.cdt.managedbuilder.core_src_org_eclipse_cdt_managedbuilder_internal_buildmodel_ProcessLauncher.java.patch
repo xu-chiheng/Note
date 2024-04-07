@@ -1,0 +1,13 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/ProcessLauncher.java b/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/ProcessLauncher.java
+index 7ff8491926..97998f042a 100644
+--- a/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/ProcessLauncher.java
++++ b/build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/internal/buildmodel/ProcessLauncher.java
+@@ -118,7 +118,7 @@ public class ProcessLauncher {
+ 	 */
+ 	public ProcessLauncher(IPath _cmd, String[] args, String[] _env, IPath _cwd, OutputStream _out, OutputStream _err,
+ 			IProgressMonitor _monitor, boolean _show) {
+-		cmd = createCmdArray(_cmd.toOSString(), args);
++		cmd = createCmdArray(_cmd.toString(), args);
+ 		env = _env;
+ 		cwd = _cwd.toFile();
+ 		out = _out;

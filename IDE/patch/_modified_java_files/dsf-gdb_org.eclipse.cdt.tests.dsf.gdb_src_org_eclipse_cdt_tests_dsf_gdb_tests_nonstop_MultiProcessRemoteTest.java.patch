@@ -1,0 +1,13 @@
+diff --git a/dsf-gdb/org.eclipse.cdt.tests.dsf.gdb/src/org/eclipse/cdt/tests/dsf/gdb/tests/nonstop/MultiProcessRemoteTest.java b/dsf-gdb/org.eclipse.cdt.tests.dsf.gdb/src/org/eclipse/cdt/tests/dsf/gdb/tests/nonstop/MultiProcessRemoteTest.java
+index 4660e3cdea..3a5eb7b55d 100644
+--- a/dsf-gdb/org.eclipse.cdt.tests.dsf.gdb/src/org/eclipse/cdt/tests/dsf/gdb/tests/nonstop/MultiProcessRemoteTest.java
++++ b/dsf-gdb/org.eclipse.cdt.tests.dsf.gdb/src/org/eclipse/cdt/tests/dsf/gdb/tests/nonstop/MultiProcessRemoteTest.java
+@@ -219,7 +219,7 @@ public class MultiProcessRemoteTest extends BaseParametrizedTestCase {
+ 		Query<IDMContext> query = new Query<>() {
+ 			@Override
+ 			protected void execute(DataRequestMonitor<IDMContext> rm) {
+-				fGdbProcesses.debugNewProcess(fCommandControl.getContext(), execPath.toOSString(), attributes, rm);
++				fGdbProcesses.debugNewProcess(fCommandControl.getContext(), execPath.toString(), attributes, rm);
+ 			}
+ 		};
+ 		fGDBBackend.getExecutor().execute(query);

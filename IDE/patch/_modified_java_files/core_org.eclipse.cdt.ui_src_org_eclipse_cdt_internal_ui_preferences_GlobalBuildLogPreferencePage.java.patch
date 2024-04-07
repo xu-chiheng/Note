@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/preferences/GlobalBuildLogPreferencePage.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/preferences/GlobalBuildLogPreferencePage.java
+index aa9e52f598..750bcc5f88 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/preferences/GlobalBuildLogPreferencePage.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/preferences/GlobalBuildLogPreferencePage.java
+@@ -51,7 +51,7 @@ public class GlobalBuildLogPreferencePage extends FieldEditorPreferencePage impl
+ 			dialog.setText(getLabelText());
+ 			String fileName = super.oldValue;
+ 			IPath logFolder = new Path(fileName).removeLastSegments(1);
+-			dialog.setFilterPath(logFolder.toOSString());
++			dialog.setFilterPath(logFolder.toString());
+ 			return dialog.open();
+ 		}
+ 	}

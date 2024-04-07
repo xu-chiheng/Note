@@ -1,0 +1,22 @@
+diff --git a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/core/parser/ICodeReaderCache.java b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/core/parser/ICodeReaderCache.java
+index aed8020d7b..0211e1eef3 100644
+--- a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/core/parser/ICodeReaderCache.java
++++ b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/core/parser/ICodeReaderCache.java
+@@ -34,7 +34,7 @@ public interface ICodeReaderCache {
+ 	 * is created for the path and then returned.
+ 	 *
+ 	 * @param key the path corresponding to the CodeReader, generally:
+-	 * fileToParse.getLocation().toOSString()
++	 * fileToParse.getLocation().toString()
+ 	 * @return the CodeReader corresponding to the path specified by the key
+ 	 */
+ 	public CodeReader get(String key);
+@@ -45,7 +45,7 @@ public interface ICodeReaderCache {
+ 	 * is created for the ifl and then returned.
+ 	 *
+ 	 * @param key the path corresponding to the CodeReader, generally:
+-	 * fileToParse.getLocation().toOSString()
++	 * fileToParse.getLocation().toString()
+ 	 * @return the CodeReader corresponding to the path specified by the key
+ 	 * @throws IOException
+ 	 * @throws CoreException

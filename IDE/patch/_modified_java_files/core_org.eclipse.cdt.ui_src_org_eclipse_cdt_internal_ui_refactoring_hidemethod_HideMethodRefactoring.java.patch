@@ -1,0 +1,22 @@
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/hidemethod/HideMethodRefactoring.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/hidemethod/HideMethodRefactoring.java
+index dc0e3078ce..0a74927a99 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/hidemethod/HideMethodRefactoring.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/hidemethod/HideMethodRefactoring.java
+@@ -204,7 +204,7 @@ public class HideMethodRefactoring extends CRefactoring {
+ 				if (editorInput instanceof ITranslationUnitEditorInput) {
+ 					ITranslationUnit tu = CModelUtil
+ 							.toWorkingCopy(((ITranslationUnitEditorInput) editorInput).getTranslationUnit());
+-					searchedFiles.add(tu.getLocation().toOSString());
++					searchedFiles.add(tu.getLocation().toString());
+ 					IASTTranslationUnit ast = getAST(tu, loopProgress.newChild(1));
+ 					for (IASTName reference : ast.getReferences(methodBinding)) {
+ 						if (!AccessContext.isAccessible(methodBinding, ICPPMember.v_private, reference)) {
+@@ -223,7 +223,7 @@ public class HideMethodRefactoring extends CRefactoring {
+ 					throw new OperationCanceledException();
+ 				}
+ 				ITranslationUnit tu = CoreModelUtil.findTranslationUnitForLocation(name.getFile().getLocation(), null);
+-				if (searchedFiles.add(tu.getLocation().toOSString())) {
++				if (searchedFiles.add(tu.getLocation().toString())) {
+ 					IASTTranslationUnit ast = getAST(tu, loopProgress.newChild(1));
+ 					for (IASTName reference : ast.getReferences(methodBinding)) {
+ 						if (!AccessContext.isAccessible(methodBinding, ICPPMember.v_private, reference)) {

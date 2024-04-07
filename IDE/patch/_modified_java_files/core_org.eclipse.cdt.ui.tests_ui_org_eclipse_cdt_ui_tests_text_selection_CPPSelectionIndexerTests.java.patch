@@ -1,0 +1,13 @@
+diff --git a/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/text/selection/CPPSelectionIndexerTests.java b/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/text/selection/CPPSelectionIndexerTests.java
+index af240ce66f..a625c0fcb9 100644
+--- a/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/text/selection/CPPSelectionIndexerTests.java
++++ b/core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/text/selection/CPPSelectionIndexerTests.java
+@@ -1281,7 +1281,7 @@ public class CPPSelectionIndexerTests extends BaseSelectionTestsIndexer {
+ 		assertTrue(def instanceof IASTName);
+ 		assertEquals("func", def.toString());
+ 		IASTFileLocation location = def.getFileLocation();
+-		assertEquals(hfile.getLocation().toOSString(), location.getFileName());
++		assertEquals(hfile.getLocation().toString(), location.getFileName());
+ 		assertEquals(hoffset, location.getNodeOffset());
+ 	}
+ 

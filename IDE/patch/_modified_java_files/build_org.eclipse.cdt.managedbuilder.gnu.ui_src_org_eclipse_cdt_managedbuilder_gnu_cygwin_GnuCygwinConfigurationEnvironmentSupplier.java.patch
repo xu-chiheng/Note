@@ -1,0 +1,13 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java
+index daa4c0404c..37fda4e164 100644
+--- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java
++++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java
+@@ -63,7 +63,7 @@ public class GnuCygwinConfigurationEnvironmentSupplier implements IConfiguration
+ 					// If the variable is not defined still show it in the environment variables list as a hint to user
+ 					home = ""; //$NON-NLS-1$
+ 				}
+-				return new BuildEnvVar(Cygwin.ENV_CYGWIN_HOME, new Path(home).toOSString());
++				return new BuildEnvVar(Cygwin.ENV_CYGWIN_HOME, new Path(home).toString());
+ 			}
+ 			return null;
+ 

@@ -1,0 +1,40 @@
+diff --git a/core/org.eclipse.cdt.core.tests/model/org/eclipse/cdt/core/language/settings/providers/LanguageSettingsPersistenceProjectTests.java b/core/org.eclipse.cdt.core.tests/model/org/eclipse/cdt/core/language/settings/providers/LanguageSettingsPersistenceProjectTests.java
+index c2825c761d..8896b4536c 100644
+--- a/core/org.eclipse.cdt.core.tests/model/org/eclipse/cdt/core/language/settings/providers/LanguageSettingsPersistenceProjectTests.java
++++ b/core/org.eclipse.cdt.core.tests/model/org/eclipse/cdt/core/language/settings/providers/LanguageSettingsPersistenceProjectTests.java
+@@ -1154,7 +1154,7 @@ public class LanguageSettingsPersistenceProjectTests extends BaseTestCase5 {
+ 		}
+ 		{
+ 			// Move storage out of the way
+-			String xmlStorageFileLocation = xmlStorageFilePrj.getLocation().toOSString();
++			String xmlStorageFileLocation = xmlStorageFilePrj.getLocation().toString();
+ 			java.io.File xmlFile = new java.io.File(xmlStorageFileLocation);
+ 			xmlPrjOutOfTheWay = xmlStorageFileLocation + ".out-of-the-way";
+ 			java.io.File xmlFileOut = new java.io.File(xmlPrjOutOfTheWay);
+@@ -1214,7 +1214,7 @@ public class LanguageSettingsPersistenceProjectTests extends BaseTestCase5 {
+ 			assertEquals(0, providers.size());
+ 
+ 			// Move storage back
+-			String xmlStorageFileLocation = xmlStorageFilePrj.getLocation().toOSString();
++			String xmlStorageFileLocation = xmlStorageFilePrj.getLocation().toString();
+ 			java.io.File xmlFile = new java.io.File(xmlStorageFileLocation);
+ 			xmlFile.delete();
+ 			assertNotExists(xmlFile);
+@@ -1400,7 +1400,7 @@ public class LanguageSettingsPersistenceProjectTests extends BaseTestCase5 {
+ 		{
+ 			// Move storages out of the way
+ 			// project storage
+-			String xmlStorageFilePrjLocation = xmlStorageFilePrj.getLocation().toOSString();
++			String xmlStorageFilePrjLocation = xmlStorageFilePrj.getLocation().toString();
+ 			java.io.File xmlFile = new java.io.File(xmlStorageFilePrjLocation);
+ 			xmlPrjOutOfTheWay = xmlStorageFilePrjLocation + ".out-of-the-way";
+ 			java.io.File xmlFileOut = new java.io.File(xmlPrjOutOfTheWay);
+@@ -1464,7 +1464,7 @@ public class LanguageSettingsPersistenceProjectTests extends BaseTestCase5 {
+ 
+ 			// Move project storage back
+ 			project.open(null);
+-			String xmlStorageFilePrjLocation = xmlStorageFilePrj.getLocation().toOSString();
++			String xmlStorageFilePrjLocation = xmlStorageFilePrj.getLocation().toString();
+ 			java.io.File xmlFile = new java.io.File(xmlStorageFilePrjLocation);
+ 			xmlFile.delete();
+ 			assertNotExists(xmlFile);

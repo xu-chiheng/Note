@@ -1,0 +1,21 @@
+diff --git a/remote/org.eclipse.remote.proxy.tests/src/org/eclipse/remote/proxy/tests/ConnectionTests.java b/remote/org.eclipse.remote.proxy.tests/src/org/eclipse/remote/proxy/tests/ConnectionTests.java
+index b1100eb7af..36fbd80ec0 100644
+--- a/remote/org.eclipse.remote.proxy.tests/src/org/eclipse/remote/proxy/tests/ConnectionTests.java
++++ b/remote/org.eclipse.remote.proxy.tests/src/org/eclipse/remote/proxy/tests/ConnectionTests.java
+@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
+ import java.util.Arrays;
+ import java.util.Base64;
+ 
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ import org.eclipse.core.runtime.NullProgressMonitor;
+ import org.eclipse.jsch.core.IJSchService;
+ import org.eclipse.jsch.ui.UserInfoPrompter;
+@@ -184,7 +185,7 @@ public class ConnectionTests extends TestCase {
+ 		}
+ 
+ 		//		try {
+-		//			final Process proc = Runtime.getRuntime().exec("java"
++		//			final Process proc = ProcessFactory.getFactory().exec("java"
+ 		//					+ " -cp /Users/gw6/Work/git/org.eclipse.remote/releng/org.eclipse.remote.proxy.server.product/target/products/proxy.server/macosx/cocoa/x86_64/Proxy.app/Contents/Eclipse/plugins/org.eclipse.equinox.launcher_1.3.200.v20160318-1642.jar"
+ 		//					+ " org.eclipse.equinox.launcher.Main"
+ 		//					+ " -application org.eclipse.remote.proxy.server.core.application"

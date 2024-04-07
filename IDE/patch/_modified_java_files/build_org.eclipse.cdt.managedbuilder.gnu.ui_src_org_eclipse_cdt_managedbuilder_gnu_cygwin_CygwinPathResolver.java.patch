@@ -1,0 +1,13 @@
+diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
+index a408bc85ea..42dcfd4df7 100644
+--- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
++++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
+@@ -189,7 +189,7 @@ public class CygwinPathResolver implements IBuildPathResolver {
+ 				envPathValue = envPathVar.getValue();
+ 				IPath progPath = PathUtil.findProgramLocation(program, envPathValue);
+ 				if (progPath != null) {
+-					program = progPath.toOSString();
++					program = progPath.toString();
+ 				}
+ 				// this resolves cygwin symbolic links
+ 				program = Cygwin.cygwinToWindowsPath(program, envPathValue);

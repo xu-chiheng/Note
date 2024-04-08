@@ -1,0 +1,225 @@
+From 431d27ae587146ac47232425da76849d439398af Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Tue, 9 Apr 2024 07:14:19 +0800
+Subject: [PATCH] fix GDB MI commands on Cygwin
+
+---
+ .../gdb/service/GdbDebugServicesFactory.java  | 35 ++++++++++++++++
+ .../command/CommandFactory_Cygwin.java        | 42 +++++++++++++++++++
+ .../cygwin/CygwinMIEnvironmentCD.java         | 20 +++++++++
+ .../cygwin/CygwinMIEnvironmentDirectory.java  | 27 ++++++++++++
+ .../cygwin/CygwinMIFileExecAndSymbols.java    | 24 +++++++++++
+ 5 files changed, 148 insertions(+)
+ create mode 100644 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/command/CommandFactory_Cygwin.java
+ create mode 100644 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentCD.java
+ create mode 100644 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java
+ create mode 100644 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java
+
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
+index 20072bceb2..f84912104f 100644
+--- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
+@@ -26,6 +26,11 @@
+  *******************************************************************************/
+ package org.eclipse.cdt.dsf.gdb.service;
+ 
++import org.eclipse.cdt.core.CCorePlugin;
++import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
++import org.eclipse.cdt.core.envvar.IEnvironmentVariableManager;
++import org.eclipse.cdt.core.model.CoreModel;
++import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
+ import org.eclipse.cdt.debug.core.CDebugCorePlugin;
+ import org.eclipse.cdt.dsf.debug.service.AbstractDsfDebugServicesFactory;
+ import org.eclipse.cdt.dsf.debug.service.IBreakpoints;
+@@ -46,6 +51,7 @@ import org.eclipse.cdt.dsf.gdb.internal.service.IGDBFocusSynchronizer;
+ import org.eclipse.cdt.dsf.gdb.launching.GdbLaunch;
+ import org.eclipse.cdt.dsf.gdb.launching.LaunchUtils;
+ import org.eclipse.cdt.dsf.gdb.service.command.CommandFactory_6_8;
++import org.eclipse.cdt.dsf.gdb.service.command.CommandFactory_Cygwin;
+ import org.eclipse.cdt.dsf.gdb.service.command.GDBControl;
+ import org.eclipse.cdt.dsf.gdb.service.command.GDBControl_7_0;
+ import org.eclipse.cdt.dsf.gdb.service.command.GDBControl_7_12;
+@@ -64,6 +70,10 @@ import org.eclipse.cdt.dsf.mi.service.MIStack;
+ import org.eclipse.cdt.dsf.mi.service.command.CommandFactory;
+ import org.eclipse.cdt.dsf.service.DsfSession;
+ import org.eclipse.cdt.dsf.service.IDsfService;
++import org.eclipse.cdt.internal.core.Cygwin;
++import org.eclipse.core.resources.IProject;
++import org.eclipse.core.resources.IWorkspace;
++import org.eclipse.core.resources.ResourcesPlugin;
+ import org.eclipse.core.runtime.IStatus;
+ import org.eclipse.core.runtime.Status;
+ import org.eclipse.debug.core.ILaunch;
+@@ -216,6 +226,31 @@ public class GdbDebugServicesFactory extends AbstractDsfDebugServicesFactory {
+ 	}
+ 
+ 	protected ICommandControl createCommandControl(DsfSession session, ILaunchConfiguration config) {
++		// Get the workspace
++		IWorkspace workspace = ResourcesPlugin.getWorkspace();
++
++		// Get the root of the workspace
++		IProject[] projects = workspace.getRoot().getProjects();
++
++		IProject activeProject = null;
++		// Loop through projects to find the active project
++		for (IProject project : projects) {
++			if (project.isOpen() && project.isAccessible()) {
++				// This project is open and accessible, so it's considered active
++				System.out.println("Active project: " + project.getName()); //$NON-NLS-1$
++				activeProject = project;
++				break;
++			}
++		}
++		// if (activeProject != null) {
++		ICConfigurationDescription cfgDes = CoreModel.getDefault().getProjectDescription(activeProject)
++				.getActiveConfiguration();
++		IEnvironmentVariableManager mngr = CCorePlugin.getDefault().getBuildEnvironmentManager();
++		IEnvironmentVariable envVar = mngr.getVariable(Cygwin.ENV_CYGWIN_HOME, cfgDes, true);
++		if (envVar != null) {
++			return new GDBControl_7_12(session, config, new CommandFactory_Cygwin());
++		}
++
+ 		if (compareVersionWith(GDB_7_12_VERSION) >= 0) {
+ 			return new GDBControl_7_12(session, config, new CommandFactory_6_8());
+ 		}
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/command/CommandFactory_Cygwin.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/command/CommandFactory_Cygwin.java
+new file mode 100644
+index 0000000000..8dc49fbf41
+--- /dev/null
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/command/CommandFactory_Cygwin.java
+@@ -0,0 +1,42 @@
++/********************************************************************************
++ * Copyright (c) 2024 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.dsf.gdb.service.command;
++
++import org.eclipse.cdt.dsf.datamodel.IDMContext;
++import org.eclipse.cdt.dsf.debug.service.command.ICommand;
++import org.eclipse.cdt.dsf.debug.service.command.ICommandControlService.ICommandControlDMContext;
++import org.eclipse.cdt.dsf.mi.service.IMIContainerDMContext;
++import org.eclipse.cdt.dsf.mi.service.command.commands.cygwin.CygwinMIEnvironmentCD;
++import org.eclipse.cdt.dsf.mi.service.command.commands.cygwin.CygwinMIEnvironmentDirectory;
++import org.eclipse.cdt.dsf.mi.service.command.commands.cygwin.CygwinMIFileExecAndSymbols;
++import org.eclipse.cdt.dsf.mi.service.command.output.MIInfo;
++
++public class CommandFactory_Cygwin extends CommandFactory_6_8 {
++
++	@Override
++	public ICommand<MIInfo> createMIEnvironmentCD(ICommandControlDMContext ctx, String path) {
++		return new CygwinMIEnvironmentCD(ctx, path);
++	}
++
++	@Override
++	public ICommand<MIInfo> createMIEnvironmentDirectory(IDMContext ctx, String[] paths, boolean reset) {
++		return new CygwinMIEnvironmentDirectory(ctx, paths, reset);
++	}
++
++	@Override
++	public ICommand<MIInfo> createMIFileExecAndSymbols(IMIContainerDMContext dmc, String file) {
++		return new CygwinMIFileExecAndSymbols(dmc, file);
++	}
++
++	@Override
++	public ICommand<MIInfo> createMIFileExecAndSymbols(IMIContainerDMContext dmc) {
++		return new CygwinMIFileExecAndSymbols(dmc);
++	}
++}
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentCD.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentCD.java
+new file mode 100644
+index 0000000000..48d234a30f
+--- /dev/null
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentCD.java
+@@ -0,0 +1,20 @@
++/********************************************************************************
++ * Copyright (c) 2024 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.dsf.mi.service.command.commands.cygwin;
++
++import org.eclipse.cdt.core.Cygwin;
++import org.eclipse.cdt.dsf.debug.service.command.ICommandControlService.ICommandControlDMContext;
++import org.eclipse.cdt.dsf.mi.service.command.commands.MIEnvironmentCD;
++
++public class CygwinMIEnvironmentCD extends MIEnvironmentCD {
++	public CygwinMIEnvironmentCD(ICommandControlDMContext ctx, String path) {
++		super(ctx, Cygwin.pathToUnix(path));
++	}
++}
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java
+new file mode 100644
+index 0000000000..52e534c98f
+--- /dev/null
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java
+@@ -0,0 +1,27 @@
++/********************************************************************************
++ * Copyright (c) 2024 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.dsf.mi.service.command.commands.cygwin;
++
++import org.eclipse.cdt.core.Cygwin;
++import org.eclipse.cdt.dsf.datamodel.IDMContext;
++import org.eclipse.cdt.dsf.mi.service.command.commands.MIEnvironmentDirectory;
++
++public class CygwinMIEnvironmentDirectory extends MIEnvironmentDirectory {
++	public CygwinMIEnvironmentDirectory(IDMContext ctx, String[] paths, boolean reset) {
++		super(ctx, paths, reset);
++		String[] newPaths = new String[paths.length];
++		for (int i = 0; i < paths.length; i++) {
++			String path = paths[i];
++			String newPath = Cygwin.pathToUnix(path);
++			newPaths[i] = newPath;
++		}
++		setParameters(newPaths);
++	}
++}
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java
+new file mode 100644
+index 0000000000..627294872d
+--- /dev/null
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java
+@@ -0,0 +1,24 @@
++/********************************************************************************
++ * Copyright (c) 2024 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.dsf.mi.service.command.commands.cygwin;
++
++import org.eclipse.cdt.core.Cygwin;
++import org.eclipse.cdt.dsf.mi.service.IMIContainerDMContext;
++import org.eclipse.cdt.dsf.mi.service.command.commands.MIFileExecAndSymbols;
++
++public class CygwinMIFileExecAndSymbols extends MIFileExecAndSymbols {
++	public CygwinMIFileExecAndSymbols(IMIContainerDMContext dmc) {
++		this(dmc, null);
++	}
++
++	public CygwinMIFileExecAndSymbols(IMIContainerDMContext dmc, String file) {
++		super(dmc, Cygwin.pathToUnix(file));
++	}
++}
+-- 
+2.42.1
+

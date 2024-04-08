@@ -1,13 +1,21 @@
 diff --git a/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/scannerconfig/util/CygpathTranslator.java b/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/scannerconfig/util/CygpathTranslator.java
-index 4ece541085..38bde97d79 100644
+index 4ece541085..73b3ce20be 100644
 --- a/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/scannerconfig/util/CygpathTranslator.java
 +++ b/build/org.eclipse.cdt.make.core/src/org/eclipse/cdt/make/internal/core/scannerconfig/util/CygpathTranslator.java
-@@ -141,7 +141,7 @@ public class CygpathTranslator {
- 						String drive = realPath.segment(1);
- 						if (drive.length() == 1) {
- 							translatedPath = realPath.removeFirstSegments(2).makeAbsolute()
--									.setDevice(drive.toUpperCase() + ':').toOSString();
-+									.setDevice(drive.toUpperCase() + ':').toString();
- 						}
+@@ -134,16 +134,6 @@ public class CygpathTranslator {
+ 					} catch (Exception e) {
+ 						MakeCorePlugin.log(e);
  					}
+-				} else if (realPath.segmentCount() >= 2) {
+-					// try default conversions
+-					//     /cygdrive/x/ --> X:\
+-					if ("cygdrive".equals(realPath.segment(0))) { //$NON-NLS-1$
+-						String drive = realPath.segment(1);
+-						if (drive.length() == 1) {
+-							translatedPath = realPath.removeFirstSegments(2).makeAbsolute()
+-									.setDevice(drive.toUpperCase() + ':').toOSString();
+-						}
+-					}
  				}
+ 				if (!translatedPath.equals(includePath)) {
+ 					// Check if the translated path exists

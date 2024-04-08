@@ -1,8 +1,16 @@
 diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
-index 15ead62025..c8b3592b5e 100644
+index 15ead62025..72121fc22d 100644
 --- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
 +++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
-@@ -48,7 +48,7 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
+@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.Path;
+  */
+ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironmentVariableSupplier {
+ 	private static final String ENV_PATH = "PATH"; //$NON-NLS-1$
+-	private static final String BACKSLASH = java.io.File.separator;
+ 	private static final String PATH_DELIMITER = EnvironmentVariableManager.getDefault().getDefaultDelimiter();
+ 
+ 	@Override
+@@ -48,7 +47,7 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
  					// If the variable is not defined still show it in the environment variables list as a hint to user
  					minGWHome = ""; //$NON-NLS-1$
  				}
@@ -11,7 +19,7 @@ index 15ead62025..c8b3592b5e 100644
  						IBuildEnvironmentVariable.ENVVAR_REPLACE);
  			}
  			return null;
-@@ -63,7 +63,7 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
+@@ -63,16 +62,15 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
  					// If the variable is not defined still show it in the environment variables list as a hint to user
  					msysHome = ""; //$NON-NLS-1$
  				}
@@ -20,3 +28,14 @@ index 15ead62025..c8b3592b5e 100644
  						IBuildEnvironmentVariable.ENVVAR_REPLACE);
  			}
  			return null;
+ 
+ 		} else if (variableName.equals(ENV_PATH)) {
+ 			@SuppressWarnings("nls")
+-			String path = "${" + MinGW.ENV_MINGW_HOME + "}" + BACKSLASH + "bin" + PATH_DELIMITER + "${"
+-					+ MinGW.ENV_MSYS_HOME + "}" + BACKSLASH + "bin" + PATH_DELIMITER + "${" + MinGW.ENV_MSYS_HOME + "}"
+-					+ BACKSLASH + "usr" + BACKSLASH + "bin";
++			String path = "${" + MinGW.ENV_MINGW_HOME + "}" + "/bin" + PATH_DELIMITER + "${" + MinGW.ENV_MSYS_HOME + "}"
++					+ "/usr/bin";
+ 			return new BuildEnvVar(ENV_PATH, path, IBuildEnvironmentVariable.ENVVAR_PREPEND);
+ 		}
+ 

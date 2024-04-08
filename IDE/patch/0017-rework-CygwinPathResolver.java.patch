@@ -1,0 +1,115 @@
+From fc4d841a0d7d2a6199c138c96c900ec01b933d4a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Mon, 8 Apr 2024 08:08:58 +0800
+Subject: [PATCH] rework CygwinPathResolver.java
+
+---
+ .../gnu/cygwin/CygwinPathResolver.java        | 52 +++----------------
+ 1 file changed, 6 insertions(+), 46 deletions(-)
+
+diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
+index 42dcfd4df7..3594354334 100644
+--- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
++++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
+@@ -30,32 +30,27 @@ import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+ import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
+ import org.eclipse.cdt.managedbuilder.gnu.ui.GnuUIPlugin;
+ import org.eclipse.cdt.utils.PathUtil;
+-import org.eclipse.cdt.utils.WindowsRegistry;
+ import org.eclipse.cdt.utils.spawner.ProcessFactory;
+ import org.eclipse.core.runtime.IPath;
+ import org.eclipse.core.runtime.IStatus;
++import org.eclipse.core.runtime.Platform;
+ import org.eclipse.core.runtime.Status;
+ 
+ /**
+  * @noextend This class is not intended to be subclassed by clients.
+  */
++@SuppressWarnings("restriction")
+ public class CygwinPathResolver implements IBuildPathResolver {
+ 	private static final String ENV_PATH = "PATH"; //$NON-NLS-1$
+ 	private static final String DELIMITER_UNIX = ":"; //$NON-NLS-1$
+ 	private static final String DELIMITER_WIN = ";"; //$NON-NLS-1$
+ 
+-	private static final String PROPERTY_OS_NAME = "os.name"; //$NON-NLS-1$
+-	private static final String OS_WINDOWS = "windows";//$NON-NLS-1$
+ 	private static final char SLASH = '/';
+ 	private static final char BACKSLASH = '\\';
+ 
+ 	private static final String CYGPATH_PATH_LIST_TO_WINDOWS = "cygpath -w -p "; //$NON-NLS-1$
+ 
+-	// note that in Cygwin 1.7 the mount point storage has been moved out of the registry
+-	private static final String REGISTRY_KEY_MOUNTS = "SOFTWARE\\Cygnus Solutions\\Cygwin\\mounts v2\\"; //$NON-NLS-1$
+-	private static final String PATH_NAME = "native"; //$NON-NLS-1$
+-	private static final String BINPATTERN = "/usr/bin"; //$NON-NLS-1$
+-	private static final String BINPATTERN_ALTERNATE = "/bin"; //$NON-NLS-1$
++	private static final String BINPATTERN = "/bin"; //$NON-NLS-1$
+ 	private static final String ETCPATTERN = "/etc"; //$NON-NLS-1$
+ 
+ 	private static final String GCC_VERSION_CMD = "gcc --version"; //$NON-NLS-1$
+@@ -89,12 +84,7 @@ public class CygwinPathResolver implements IBuildPathResolver {
+ 	 */
+ 	@Deprecated
+ 	public static String getEtcPath() {
+-		String etcCygwin = getPathFromRoot(ETCPATTERN);
+-		// Try to find the paths in SOFTWARE\\Cygnus Solutions
+-		if (etcCygwin == null) {
+-			etcCygwin = readValueFromRegistry(REGISTRY_KEY_MOUNTS + ETCPATTERN, PATH_NAME);
+-		}
+-		return etcCygwin;
++		return getPathFromRoot(ETCPATTERN);
+ 	}
+ 
+ 	/**
+@@ -106,15 +96,7 @@ public class CygwinPathResolver implements IBuildPathResolver {
+ 	 */
+ 	@Deprecated
+ 	public static String getBinPath() {
+-		String binCygwin = getPathFromRoot(BINPATTERN);
+-		if (binCygwin == null) {
+-			binCygwin = getPathFromRoot(BINPATTERN_ALTERNATE);
+-		}
+-		// Try to find the paths in SOFTWARE\\Cygnus Solutions
+-		if (binCygwin == null) {
+-			binCygwin = readValueFromRegistry(REGISTRY_KEY_MOUNTS + BINPATTERN, PATH_NAME);
+-		}
+-		return binCygwin;
++		return getPathFromRoot(BINPATTERN);
+ 	}
+ 
+ 	/**
+@@ -130,29 +112,7 @@ public class CygwinPathResolver implements IBuildPathResolver {
+ 	}
+ 
+ 	public static boolean isWindows() {
+-		return (System.getProperty(PROPERTY_OS_NAME).toLowerCase().startsWith(OS_WINDOWS));
+-	}
+-
+-	/**
+-	 * Reads required value from registry. Looks in both
+-	 * HKEY_CURRENT_USER and HKEY_LOCAL_MACHINE
+-	 *
+-	 * @param key Registry key
+-	 * @param name Registry value to read
+-	 * @return corresponding string value or null if nothing found
+-	 */
+-	private static String readValueFromRegistry(String key, String name) {
+-		WindowsRegistry registry = WindowsRegistry.getRegistry();
+-		if (registry != null) {
+-			String value = registry.getCurrentUserValue(key, name);
+-			if (value == null) {
+-				value = registry.getLocalMachineValue(key, name);
+-			}
+-			if (value != null) {
+-				return value.replace(BACKSLASH, SLASH);
+-			}
+-		}
+-		return null;
++		return Platform.getOS().equals(Platform.OS_WIN32);
+ 	}
+ 
+ 	/**
+-- 
+2.42.1
+

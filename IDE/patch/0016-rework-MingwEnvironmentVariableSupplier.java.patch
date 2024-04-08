@@ -2,8 +2,7 @@ From 3ac571ee435ec7f623650ba30c767f4ccc181d69 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Mon, 8 Apr 2024 06:53:50 +0800
-Subject: [PATCH] rework MingwEnvironmentVariableSupplier.java to not use
- backslash
+Subject: [PATCH] rework MingwEnvironmentVariableSupplier.java
 
 ---
  .../gnu/mingw/MingwEnvironmentVariableSupplier.java         | 6 ++----

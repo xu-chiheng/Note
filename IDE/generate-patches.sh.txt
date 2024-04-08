@@ -76,6 +76,9 @@ main() {
 	process_file_list "${current_branch}" added_java_files "${added_java_files[@]}"
 	process_file_list "${current_branch}" modified_java_files "${modified_java_files[@]}"
 
+	generate_git_am_patch 1 "fix cdt.target IU versions for 11.4.0" \
+		../patch/_modified_non_java_files/releng_org.eclipse.cdt.target_cdt.target.patch
+
 	generate_git_am_patch 3 "add Cygwin.java" \
 		../patch/_added_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_core_Cygwin.java.patch
 	generate_git_am_patch 4 "add MSYS2.java" \

@@ -1,10 +1,12 @@
-From a4665e9ac69240c1a6cee2ccad0aa17b18d2921a Mon Sep 17 00:00:00 2001
+From 31a5e89b9bb6f0078286da9bca6322e704753259 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 18:59:02 +0800
-Subject: rework internal Cygwin.java to use Cygwin API
+Subject: [PATCH 12/18] rework internal Cygwin.java to use Cygwin API
 
 ---
+ .../org/eclipse/cdt/internal/core/Cygwin.java | 239 +-----------------
+ 1 file changed, 7 insertions(+), 232 deletions(-)
 
 diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java
 index d4fa713b00..925a31c913 100644
@@ -311,3 +313,6 @@ index d4fa713b00..925a31c913 100644
  	}
 -
  }
+-- 
+2.42.1
+

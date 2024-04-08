@@ -1,12 +1,15 @@
-From c7c221975ca24ceefd28a8d62636eb7761d9c27a Mon Sep 17 00:00:00 2001
+From 85d9a0e935cced59b6c384b834c5f36e311a2742 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: fix cdt.target IU versions for 11.4.0
+Subject: [PATCH 01/18] fix cdt.target IU versions for 11.4.0
 
 ---
+ releng/org.eclipse.cdt.target/cdt.target | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
 diff --git a/releng/org.eclipse.cdt.target/cdt.target b/releng/org.eclipse.cdt.target/cdt.target
-index 4a2728000a..ca2c01a3bd 100644
+index 4a2728000a..bedfeece4b 100644
 --- a/releng/org.eclipse.cdt.target/cdt.target
 +++ b/releng/org.eclipse.cdt.target/cdt.target
 @@ -7,7 +7,7 @@
@@ -23,7 +26,7 @@ index 4a2728000a..ca2c01a3bd 100644
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 -			<repository location="https://download.eclipse.org/egit/updates" />
-+			<repository location="https://download.eclipse.org/egit/updates-6.8/" />
++			<repository location="https://download.eclipse.org/egit/updates-6.9/" />
  			<unit id="org.eclipse.egit.feature.group" version="0.0.0" />
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
@@ -33,13 +36,13 @@ index 4a2728000a..ca2c01a3bd 100644
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 -			<repository location="https://download.eclipse.org/lsp4e/snapshots/" />
-+			<repository location="https://download.eclipse.org/lsp4e/releases/0.24.5/" />
++			<repository location="https://download.eclipse.org/lsp4e/releases/0.25.1/" />
  			<unit id="org.eclipse.lsp4e" version="0.0.0" />
  			<unit id="org.eclipse.lsp4e.debug" version="0.0.0" />
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 -			<repository location="https://download.eclipse.org/modeling/emf/emf/builds/release/latest/" />
-+			<repository location="https://download.eclipse.org/modeling/emf/emf/builds/release/2.36.0/" />
++			<repository location="https://download.eclipse.org/modeling/emf/emf/builds/release/2.37.0/" />
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 -			<repository location="https://download.eclipse.org/technology/swtbot/releases/latest" />
@@ -50,7 +53,7 @@ index 4a2728000a..ca2c01a3bd 100644
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 -			<repository location="https://download.eclipse.org/tm4e/snapshots/" />
-+			<repository location="https://download.eclipse.org/tm4e/releases/0.9.0/" />
++			<repository location="https://download.eclipse.org/tm4e/releases/0.10.3/" />
  			<unit id="org.eclipse.tm4e.feature.feature.group" version="0.0.0" />
  			<unit id="org.eclipse.tm4e.language_pack.feature.feature.group" version="0.0.0" />
  		</location>
@@ -63,3 +66,6 @@ index 4a2728000a..ca2c01a3bd 100644
  		</location>
  		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" label="DirectFromMaven" missingManifest="error" type="Maven">
  			<dependencies>
+-- 
+2.42.1
+

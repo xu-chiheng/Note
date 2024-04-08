@@ -1,10 +1,14 @@
-From c7c221975ca24ceefd28a8d62636eb7761d9c27a Mon Sep 17 00:00:00 2001
+From 553b8f57b436876e33dbdf2b14db99e308fbee77 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: add PTY2Util.java
+Subject: [PATCH 06/18] add PTY2Util.java
 
 ---
+ .../org/eclipse/cdt/utils/pty/PTY2Util.java   | 86 +++++++++++++++++++
+ 1 file changed, 86 insertions(+)
+ create mode 100644 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2Util.java
+
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2Util.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2Util.java
 new file mode 100644
 index 0000000000..641b247c61
@@ -97,3 +101,6 @@ index 0000000000..641b247c61
 +		return result;
 +	}
 +}
+-- 
+2.42.1
+

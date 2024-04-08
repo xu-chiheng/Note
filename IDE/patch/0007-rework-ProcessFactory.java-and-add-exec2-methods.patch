@@ -1,13 +1,15 @@
-From 10b2bd13ded5c3478968daf0cece41ac9ebb543e Mon Sep 17 00:00:00 2001
+From e1bc2af0eadbc16db9a979c5702c6ae56f10fc57 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
-Date: Sat, 6 Apr 2024 14:03:08 +0800
-Subject: rework ProcessFactory.java and add exec2() methods
+Date: Sat, 6 Apr 2024 14:09:54 +0800
+Subject: [PATCH 07/18] rework ProcessFactory.java and add exec2 methods
 
 ---
+ .../cdt/utils/spawner/ProcessFactory.java     | 144 +++++++++++++-----
+ 1 file changed, 102 insertions(+), 42 deletions(-)
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..ef882478b7 100644
+index addd040267..c14773e16c 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 @@ -52,55 +52,72 @@ public class ProcessFactory {
@@ -153,6 +155,15 @@ index addd040267..ef882478b7 100644
  				sb.append("\n\n"); //$NON-NLS-1$
  			}
  			if (use_pty) {
+@@ -257,7 +279,7 @@ public class ProcessFactory {
+ 		public Process start() throws IOException {
+ 			// Uncomment the next line, set a breakpoint in the last line of debug() method,
+ 			// when the breakpoint is triggered, inspect the sb variable to see detailed info on what is being launched.
+-			// debug();
++			debug();
+ 			Process p;
+ 			if (hasSpawner) {
+ 				if (use_pty) {
 @@ -362,7 +384,7 @@ public class ProcessFactory {
  		return p;
  	}
@@ -228,4 +239,6 @@ index addd040267..ef882478b7 100644
 +		return p;
 +	}
  }
+-- 
+2.42.1
 

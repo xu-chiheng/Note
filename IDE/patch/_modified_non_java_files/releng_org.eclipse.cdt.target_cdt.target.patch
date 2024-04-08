@@ -1,5 +1,5 @@
 diff --git a/releng/org.eclipse.cdt.target/cdt.target b/releng/org.eclipse.cdt.target/cdt.target
-index 4a2728000a..ca2c01a3bd 100644
+index 4a2728000a..bedfeece4b 100644
 --- a/releng/org.eclipse.cdt.target/cdt.target
 +++ b/releng/org.eclipse.cdt.target/cdt.target
 @@ -7,7 +7,7 @@
@@ -16,7 +16,7 @@ index 4a2728000a..ca2c01a3bd 100644
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 -			<repository location="https://download.eclipse.org/egit/updates" />
-+			<repository location="https://download.eclipse.org/egit/updates-6.8/" />
++			<repository location="https://download.eclipse.org/egit/updates-6.9/" />
  			<unit id="org.eclipse.egit.feature.group" version="0.0.0" />
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
@@ -26,13 +26,13 @@ index 4a2728000a..ca2c01a3bd 100644
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 -			<repository location="https://download.eclipse.org/lsp4e/snapshots/" />
-+			<repository location="https://download.eclipse.org/lsp4e/releases/0.24.5/" />
++			<repository location="https://download.eclipse.org/lsp4e/releases/0.25.1/" />
  			<unit id="org.eclipse.lsp4e" version="0.0.0" />
  			<unit id="org.eclipse.lsp4e.debug" version="0.0.0" />
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 -			<repository location="https://download.eclipse.org/modeling/emf/emf/builds/release/latest/" />
-+			<repository location="https://download.eclipse.org/modeling/emf/emf/builds/release/2.36.0/" />
++			<repository location="https://download.eclipse.org/modeling/emf/emf/builds/release/2.37.0/" />
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 -			<repository location="https://download.eclipse.org/technology/swtbot/releases/latest" />
@@ -43,7 +43,7 @@ index 4a2728000a..ca2c01a3bd 100644
  		</location>
  		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 -			<repository location="https://download.eclipse.org/tm4e/snapshots/" />
-+			<repository location="https://download.eclipse.org/tm4e/releases/0.9.0/" />
++			<repository location="https://download.eclipse.org/tm4e/releases/0.10.3/" />
  			<unit id="org.eclipse.tm4e.feature.feature.group" version="0.0.0" />
  			<unit id="org.eclipse.tm4e.language_pack.feature.feature.group" version="0.0.0" />
  		</location>

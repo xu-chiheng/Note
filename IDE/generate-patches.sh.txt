@@ -9,9 +9,8 @@
 #  ********************************************************************************/
 
 process_file_list() {
-	local current_branch="$1"
-	local file_list_name="$2"
-	shift 2
+	local file_list_name="$1"
+	shift 1
 	local file_list=( "$@" )
 
 	echo "${file_list_name}"
@@ -24,7 +23,7 @@ process_file_list() {
 	local file_name
 	for file_name in "${file_list[@]}"; do
 		local patch_file="${patch_dir}/$(echo "${file_name}" | sed -E -e 's,/,_,g').patch"
-		git diff main..."${current_branch}" -- "${file_name}" > "${patch_file}"
+		git diff main...HEAD -- "${file_name}" > "${patch_file}"
 	done
 }
 
@@ -54,27 +53,23 @@ main() {
 	# only add and modify files, never delete files
 	cd cdt
 
-	local current_branch="$(git branch --show-current)"
-
 	local added_non_java_files=(
-		$(git diff --diff-filter=A --name-only main..."${current_branch}" | grep -v '\.java$')
+		$(git diff --diff-filter=A --name-only main...HEAD | grep -v '\.java$')
 	)
 	local modified_non_java_files=(
-		$(git diff --diff-filter=M --name-only main..."${current_branch}" | grep -v '\.java$')
+		$(git diff --diff-filter=M --name-only main...HEAD | grep -v '\.java$')
 	)
-
 	local added_java_files=(
-		$(git diff --diff-filter=A --name-only main..."${current_branch}" | grep '\.java$')
+		$(git diff --diff-filter=A --name-only main...HEAD | grep '\.java$')
 	)
-
 	local modified_java_files=(
-		$(git diff --diff-filter=M --name-only main..."${current_branch}" | grep '\.java$')
+		$(git diff --diff-filter=M --name-only main...HEAD | grep '\.java$')
 	)
 
-	process_file_list "${current_branch}" added_non_java_files "${added_non_java_files[@]}"
-	process_file_list "${current_branch}" modified_non_java_files "${modified_non_java_files[@]}"
-	process_file_list "${current_branch}" added_java_files "${added_java_files[@]}"
-	process_file_list "${current_branch}" modified_java_files "${modified_java_files[@]}"
+	process_file_list added_non_java_files    "${added_non_java_files[@]}"
+	process_file_list modified_non_java_files "${modified_non_java_files[@]}"
+	process_file_list added_java_files        "${added_java_files[@]}"
+	process_file_list modified_java_files     "${modified_java_files[@]}"
 
 	generate_git_am_patch 1 "fix cdt.target IU versions for 11.4.0" \
 		../patch/_modified_non_java_files/releng_org.eclipse.cdt.target_cdt.target.patch
@@ -88,6 +83,8 @@ main() {
 	generate_git_am_patch 6 "add PTY2Util.java" \
 		../patch/_added_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_utils_pty_PTY2Util.java.patch
 
+	generate_git_am_patch 7 "rework ProcessFactory.java and add exec2 methods" \
+		../patch/_modified_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_utils_spawner_ProcessFactory.java.patch
 
 
 	cd ..

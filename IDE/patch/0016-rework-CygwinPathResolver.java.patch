@@ -1,8 +1,8 @@
-From fc4d841a0d7d2a6199c138c96c900ec01b933d4a Mon Sep 17 00:00:00 2001
+From 17ebf3e3fb859220e304bba543226f0f684be86c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Mon, 8 Apr 2024 08:08:58 +0800
-Subject: [PATCH] rework CygwinPathResolver.java
+Subject: [PATCH 16/18] rework CygwinPathResolver.java
 
 ---
  .../gnu/cygwin/CygwinPathResolver.java        | 52 +++----------------

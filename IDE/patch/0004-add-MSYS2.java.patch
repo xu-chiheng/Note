@@ -1,17 +1,13 @@
-From 394c0feaba197f2c28a257340c99b085fc354da9 Mon Sep 17 00:00:00 2001
+From c7c221975ca24ceefd28a8d62636eb7761d9c27a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 04/18] add MSYS2.java
+Subject: add MSYS2.java
 
 ---
- .../src/org/eclipse/cdt/core/MSYS2.java       | 180 ++++++++++++++++++
- 1 file changed, 180 insertions(+)
- create mode 100644 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
-
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 new file mode 100644
-index 0000000000..9ee8d822e8
+index 0000000000..b5ee63ef0d
 --- /dev/null
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 @@ -0,0 +1,180 @@
@@ -49,18 +45,18 @@ index 0000000000..9ee8d822e8
 +			if (rootDir != null) {
 +				if (dirHasMsys2Dll(rootDir)) {
 +					present = true;
-+					rootDir = new Path(rootDir).toPortableString();
++					rootDir = new Path(rootDir).toString();
 +					return;
 +				}
 +			}
-+			for (char drive = 'C'; drive < 'H'; drive++) {
++			for (char drive = 'A'; drive <= 'Z'; drive++) {
 +				StringBuilder dirStringBuilder = new StringBuilder();
 +				dirStringBuilder.append(drive);
 +				dirStringBuilder.append(":/msys64"); //$NON-NLS-1$
 +				String dirString = dirStringBuilder.toString();
 +				if (dirHasMsys2Dll(dirString)) {
 +					present = true;
-+					rootDir = new Path(dirString).toPortableString();
++					rootDir = new Path(dirString).toString();
 +					return;
 +				}
 +			}
@@ -112,7 +108,7 @@ index 0000000000..9ee8d822e8
 +		IPath path = Path.fromOSString(unixPath);
 +		if (path.getDevice() != null) {
 +			// already a windows absolute path
-+			windowsPath = path.toPortableString();
++			windowsPath = path.toString();
 +			return windowsPath;
 +		}
 +		String[] segments = path.segments();
@@ -145,7 +141,7 @@ index 0000000000..9ee8d822e8
 +			windowsPath = builder.toString();
 +		} else {
 +			// relative path
-+			windowsPath = path.toPortableString();
++			windowsPath = path.toString();
 +		}
 +
 +		return windowsPath;
@@ -169,7 +165,7 @@ index 0000000000..9ee8d822e8
 +		String unixPath;
 +		if (!path.isAbsolute()) {
 +			// relative path
-+			unixPath = path.toPortableString();
++			unixPath = path.toString();
 +		} else if (rootDirPath.isPrefixOf(path)) {
 +			int matchingFirstSegments = rootDirPath.matchingFirstSegments(path);
 +			String[] segments = path.segments();
@@ -195,6 +191,3 @@ index 0000000000..9ee8d822e8
 +		return unixPath;
 +	}
 +}
--- 
-2.42.1
-

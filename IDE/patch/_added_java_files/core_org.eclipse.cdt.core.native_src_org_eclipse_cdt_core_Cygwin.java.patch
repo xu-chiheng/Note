@@ -1,6 +1,6 @@
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 new file mode 100644
-index 0000000000..f20233cc50
+index 0000000000..0418546007
 --- /dev/null
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 @@ -0,0 +1,191 @@
@@ -38,18 +38,18 @@ index 0000000000..f20233cc50
 +			if (rootDir != null) {
 +				if (dirHasCygwin1Dll(rootDir)) {
 +					present = true;
-+					rootDir = new Path(rootDir).toPortableString();
++					rootDir = new Path(rootDir).toString();
 +					return;
 +				}
 +			}
-+			for (char drive = 'C'; drive < 'H'; drive++) {
++			for (char drive = 'A'; drive <= 'Z'; drive++) {
 +				StringBuilder dirStringBuilder = new StringBuilder();
 +				dirStringBuilder.append(drive);
 +				dirStringBuilder.append(":/cygwin64"); //$NON-NLS-1$
 +				String dirString = dirStringBuilder.toString();
 +				if (dirHasCygwin1Dll(dirString)) {
 +					present = true;
-+					rootDir = new Path(dirString).toPortableString();
++					rootDir = new Path(dirString).toString();
 +					return;
 +				}
 +			}
@@ -101,7 +101,7 @@ index 0000000000..f20233cc50
 +		IPath path = Path.fromOSString(unixPath);
 +		if (path.getDevice() != null) {
 +			// already a windows absolute path
-+			windowsPath = path.toPortableString();
++			windowsPath = path.toString();
 +			return windowsPath;
 +		}
 +
@@ -145,7 +145,7 @@ index 0000000000..f20233cc50
 +			windowsPath = builder.toString();
 +		} else {
 +			// relative path
-+			windowsPath = path.toPortableString();
++			windowsPath = path.toString();
 +		}
 +
 +		return windowsPath;
@@ -169,7 +169,7 @@ index 0000000000..f20233cc50
 +		String unixPath;
 +		if (!path.isAbsolute()) {
 +			// relative path
-+			unixPath = path.toPortableString();
++			unixPath = path.toString();
 +		} else if (rootDirPath.isPrefixOf(path)) {
 +			int matchingFirstSegments = rootDirPath.matchingFirstSegments(path);
 +			String[] segments = path.segments();

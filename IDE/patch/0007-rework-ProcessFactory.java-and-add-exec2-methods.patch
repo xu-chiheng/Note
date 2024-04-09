@@ -1,15 +1,12 @@
-From 10dbb20a8c3306fe8ffbe0c347d2cf2389dc29a3 Mon Sep 17 00:00:00 2001
+From c7c221975ca24ceefd28a8d62636eb7761d9c27a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 07/18] rework ProcessFactory.java and add exec2 methods
+Subject: rework ProcessFactory.java and add exec2 methods
 
 ---
- .../cdt/utils/spawner/ProcessFactory.java     | 146 ++++++++++++------
- 1 file changed, 103 insertions(+), 43 deletions(-)
-
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..4a2cb3d80c 100644
+index addd040267..81d170b5d3 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 @@ -52,55 +52,72 @@ public class ProcessFactory {
@@ -33,11 +30,12 @@ index addd040267..4a2cb3d80c 100644
  
 -	private static TreeMap<String, String> getDefaultEnvironment() {
 -		TreeMap<String, String> environment = newEmptyEnvironment();
-+	public static TreeMap<String, String> getDefaultEnvMap() {
-+		TreeMap<String, String> envMap = newEmptyEnvMap();
- 		Map<String, String> env = new ProcessBuilder().environment();
+-		Map<String, String> env = new ProcessBuilder().environment();
 -		environment.putAll(env);
 -		return environment;
++	public static TreeMap<String, String> getDefaultEnvMap() {
++		TreeMap<String, String> envMap = newEmptyEnvMap();
++		Map<String, String> env = System.getenv();
 +		envMap.putAll(env);
 +		return envMap;
  	}
@@ -129,19 +127,29 @@ index addd040267..4a2cb3d80c 100644
  				// added
  				sb.append('+');
  				sb.append(key);
-@@ -176,6 +193,11 @@ public class ProcessFactory {
- 			return this;
- 		}
+@@ -146,6 +163,7 @@ public class ProcessFactory {
+ 	private class Builder {
+ 		String[] cmdarray;
+ 		String[] envp;
++		TreeMap<String, String> envMap;
+ 		File dir;
+ 		boolean use_pty;
+ 		PTY pty;
+@@ -173,6 +191,13 @@ public class ProcessFactory {
  
-+		public Builder environment(TreeMap<String, String> envMap) {
-+			this.envp = envMapToEnvp(envMap);
+ 		public Builder environment(String[] envp) {
+ 			this.envp = envp;
++			this.envMap = envpToEnvMap(envp);
 +			return this;
 +		}
 +
- 		public Builder directory(File directory) {
- 			this.dir = directory;
++		public Builder environment(TreeMap<String, String> envMap) {
++			this.envMap = envMap;
++			this.envp = envMapToEnvp(envMap);
  			return this;
-@@ -232,11 +254,11 @@ public class ProcessFactory {
+ 		}
+ 
+@@ -232,11 +257,11 @@ public class ProcessFactory {
  			sb.append("\n\n"); //$NON-NLS-1$
  
  			{
@@ -156,7 +164,15 @@ index addd040267..4a2cb3d80c 100644
  				sb.append("\n\n"); //$NON-NLS-1$
  			}
  			if (use_pty) {
-@@ -257,7 +279,7 @@ public class ProcessFactory {
+@@ -250,14 +275,14 @@ public class ProcessFactory {
+ 				sb.append("\n\n"); //$NON-NLS-1$
+ 			}
+ 			// set breakpoint on next line to inspect sb when debugging, to see the
+-			// ultimate parameters of ProcessBuilder
++			// ultimate parameters of exec() or exec2()
+ 			return sb;
+ 		}
+ 
  		public Process start() throws IOException {
  			// Uncomment the next line, set a breakpoint in the last line of debug() method,
  			// when the breakpoint is triggered, inspect the sb variable to see detailed info on what is being launched.
@@ -165,7 +181,7 @@ index addd040267..4a2cb3d80c 100644
  			Process p;
  			if (hasSpawner) {
  				if (use_pty) {
-@@ -362,7 +384,7 @@ public class ProcessFactory {
+@@ -362,7 +387,7 @@ public class ProcessFactory {
  		return p;
  	}
  
@@ -174,7 +190,7 @@ index addd040267..4a2cb3d80c 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).start();
  		return p;
  	}
-@@ -370,13 +392,13 @@ public class ProcessFactory {
+@@ -370,13 +395,13 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */
@@ -190,7 +206,7 @@ index addd040267..4a2cb3d80c 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).pty(pty).start();
  		return p;
  	}
-@@ -384,10 +406,48 @@ public class ProcessFactory {
+@@ -384,10 +409,48 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */
@@ -240,6 +256,3 @@ index addd040267..4a2cb3d80c 100644
 +		return p;
 +	}
  }
--- 
-2.42.1
-

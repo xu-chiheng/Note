@@ -1,38 +1,20 @@
-From 431d27ae587146ac47232425da76849d439398af Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
- <chiheng.xu@gmail.com>
-Date: Tue, 9 Apr 2024 07:14:19 +0800
-Subject: [PATCH] fix GDB MI commands on Cygwin
-
----
- .../gdb/service/GdbDebugServicesFactory.java  | 35 ++++++++++++++++
- .../command/CommandFactory_Cygwin.java        | 42 +++++++++++++++++++
- .../cygwin/CygwinMIEnvironmentCD.java         | 20 +++++++++
- .../cygwin/CygwinMIEnvironmentDirectory.java  | 27 ++++++++++++
- .../cygwin/CygwinMIFileExecAndSymbols.java    | 24 +++++++++++
- 5 files changed, 148 insertions(+)
- create mode 100644 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/command/CommandFactory_Cygwin.java
- create mode 100644 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentCD.java
- create mode 100644 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java
- create mode 100644 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java
-
 diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
-index 20072bceb2..f84912104f 100644
+index 20072bceb2..7eba1d1838 100644
 --- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
 +++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
-@@ -26,6 +26,11 @@
+@@ -26,7 +26,11 @@
   *******************************************************************************/
  package org.eclipse.cdt.dsf.gdb.service;
  
-+import org.eclipse.cdt.core.CCorePlugin;
-+import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
-+import org.eclipse.cdt.core.envvar.IEnvironmentVariableManager;
-+import org.eclipse.cdt.core.model.CoreModel;
-+import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
++import java.util.Map;
++import java.util.TreeMap;
++
  import org.eclipse.cdt.debug.core.CDebugCorePlugin;
++import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants;
  import org.eclipse.cdt.dsf.debug.service.AbstractDsfDebugServicesFactory;
  import org.eclipse.cdt.dsf.debug.service.IBreakpoints;
-@@ -46,6 +51,7 @@ import org.eclipse.cdt.dsf.gdb.internal.service.IGDBFocusSynchronizer;
+ import org.eclipse.cdt.dsf.debug.service.IDisassembly;
+@@ -46,6 +50,7 @@ import org.eclipse.cdt.dsf.gdb.internal.service.IGDBFocusSynchronizer;
  import org.eclipse.cdt.dsf.gdb.launching.GdbLaunch;
  import org.eclipse.cdt.dsf.gdb.launching.LaunchUtils;
  import org.eclipse.cdt.dsf.gdb.service.command.CommandFactory_6_8;
@@ -40,43 +22,61 @@ index 20072bceb2..f84912104f 100644
  import org.eclipse.cdt.dsf.gdb.service.command.GDBControl;
  import org.eclipse.cdt.dsf.gdb.service.command.GDBControl_7_0;
  import org.eclipse.cdt.dsf.gdb.service.command.GDBControl_7_12;
-@@ -64,6 +70,10 @@ import org.eclipse.cdt.dsf.mi.service.MIStack;
+@@ -64,8 +69,13 @@ import org.eclipse.cdt.dsf.mi.service.MIStack;
  import org.eclipse.cdt.dsf.mi.service.command.CommandFactory;
  import org.eclipse.cdt.dsf.service.DsfSession;
  import org.eclipse.cdt.dsf.service.IDsfService;
 +import org.eclipse.cdt.internal.core.Cygwin;
-+import org.eclipse.core.resources.IProject;
-+import org.eclipse.core.resources.IWorkspace;
-+import org.eclipse.core.resources.ResourcesPlugin;
++import org.eclipse.cdt.utils.spawner.ProcessFactory;
++import org.eclipse.core.runtime.CoreException;
  import org.eclipse.core.runtime.IStatus;
++import org.eclipse.core.runtime.Platform;
  import org.eclipse.core.runtime.Status;
++import org.eclipse.debug.core.DebugPlugin;
  import org.eclipse.debug.core.ILaunch;
-@@ -216,6 +226,31 @@ public class GdbDebugServicesFactory extends AbstractDsfDebugServicesFactory {
+ import org.eclipse.debug.core.ILaunchConfiguration;
+ import org.eclipse.osgi.util.NLS;
+@@ -215,7 +225,46 @@ public class GdbDebugServicesFactory extends AbstractDsfDebugServicesFactory {
+ 		return new MIBreakpoints(session);
  	}
  
- 	protected ICommandControl createCommandControl(DsfSession session, ILaunchConfiguration config) {
-+		// Get the workspace
-+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
++	private static boolean isCygwin(ILaunchConfiguration config) {
++		if (Platform.getOS().equals(Platform.OS_WIN32)) {
++			String[] envp = null;
++			try {
++				envp = DebugPlugin.getDefault().getLaunchManager().getEnvironment(config);
++			} catch (CoreException e) {
++				// TODO Auto-generated catch block
++				e.printStackTrace();
++			}
 +
-+		// Get the root of the workspace
-+		IProject[] projects = workspace.getRoot().getProjects();
-+
-+		IProject activeProject = null;
-+		// Loop through projects to find the active project
-+		for (IProject project : projects) {
-+			if (project.isOpen() && project.isAccessible()) {
-+				// This project is open and accessible, so it's considered active
-+				System.out.println("Active project: " + project.getName()); //$NON-NLS-1$
-+				activeProject = project;
-+				break;
++			TreeMap<String, String> envMap = ProcessFactory.envpToEnvMap(envp);
++			if (envMap.containsKey(Cygwin.ENV_CYGWIN_HOME)) {
++				return true;
 +			}
 +		}
-+		// if (activeProject != null) {
-+		ICConfigurationDescription cfgDes = CoreModel.getDefault().getProjectDescription(activeProject)
-+				.getActiveConfiguration();
-+		IEnvironmentVariableManager mngr = CCorePlugin.getDefault().getBuildEnvironmentManager();
-+		IEnvironmentVariable envVar = mngr.getVariable(Cygwin.ENV_CYGWIN_HOME, cfgDes, true);
-+		if (envVar != null) {
++		if (Platform.getOS().equals(Platform.OS_WIN32)) {
++			Map<String, Object> attrs = null;
++			try {
++				attrs = config.getAttributes();
++			} catch (CoreException e) {
++				// TODO Auto-generated catch block
++				e.printStackTrace();
++			}
++			String key = ICDTLaunchConfigurationConstants.ATTR_PROJECT_BUILD_CONFIG_ID;
++			if (attrs != null && attrs.containsKey(key)) {
++				Object value = attrs.get(key);
++				String valueString = value.toString();
++				if (valueString.startsWith("cdt.managedbuild.config.gnu.cygwin.")) { //$NON-NLS-1$
++					return true;
++				}
++			}
++		}
++		return false;
++	}
++
+ 	protected ICommandControl createCommandControl(DsfSession session, ILaunchConfiguration config) {
++		if (isCygwin(config)) {
 +			return new GDBControl_7_12(session, config, new CommandFactory_Cygwin());
 +		}
 +
@@ -131,6 +131,54 @@ index 0000000000..8dc49fbf41
 +		return new CygwinMIFileExecAndSymbols(dmc);
 +	}
 +}
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/MIStack.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/MIStack.java
+index ae8580abde..deed34ef93 100644
+--- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/MIStack.java
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/MIStack.java
+@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
+ import java.util.List;
+ import java.util.Map;
+ 
++import org.eclipse.cdt.core.Cygwin;
+ import org.eclipse.cdt.core.IAddress;
+ import org.eclipse.cdt.dsf.concurrent.CountingRequestMonitor;
+ import org.eclipse.cdt.dsf.concurrent.DataRequestMonitor;
+@@ -64,6 +65,7 @@ import org.eclipse.cdt.dsf.service.DsfSession;
+ import org.eclipse.cdt.utils.Addr32;
+ import org.eclipse.cdt.utils.Addr64;
+ import org.eclipse.core.runtime.IStatus;
++import org.eclipse.core.runtime.Platform;
+ import org.eclipse.core.runtime.Status;
+ import org.osgi.framework.BundleContext;
+ 
+@@ -383,8 +385,17 @@ public class MIStack extends AbstractDsfService implements IStack, ICachingServi
+ 		}
+ 
+ 		@Override
++		/**
++		 * @return the host source path of this frame, not the debugger source path
++		 */
+ 		public String getFile() {
+-			return getMIFrame().getFile();
++			//translate debugger path to host source path
++			String debuggerPath = getMIFrame().getFile();
++			String sourcePath = debuggerPath;
++			if (Platform.getOS().equals(Platform.OS_WIN32)) {
++				sourcePath = Cygwin.pathToWindows(debuggerPath);
++			}
++			return sourcePath;
+ 		}
+ 
+ 		@Override
+@@ -470,7 +481,7 @@ public class MIStack extends AbstractDsfService implements IStack, ICachingServi
+ 		fCommandFactory = getServicesTracker().getService(IMICommandControl.class).getCommandFactory();
+ 
+ 		getSession().addServiceEventListener(this, null);
+-		register(new String[] { IStack.class.getName(), MIStack.class.getName() }, new Hashtable<String, String>());
++		register(new String[] { IStack.class.getName(), MIStack.class.getName() }, new Hashtable<>());
+ 		rm.done();
+ 	}
+ 
 diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentCD.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentCD.java
 new file mode 100644
 index 0000000000..48d234a30f
@@ -159,10 +207,10 @@ index 0000000000..48d234a30f
 +}
 diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java
 new file mode 100644
-index 0000000000..52e534c98f
+index 0000000000..c37321f1bc
 --- /dev/null
 +++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java
-@@ -0,0 +1,27 @@
+@@ -0,0 +1,30 @@
 +/********************************************************************************
 + * Copyright (c) 2024 徐持恒 Xu Chiheng
 + *
@@ -180,14 +228,17 @@ index 0000000000..52e534c98f
 +
 +public class CygwinMIEnvironmentDirectory extends MIEnvironmentDirectory {
 +	public CygwinMIEnvironmentDirectory(IDMContext ctx, String[] paths, boolean reset) {
-+		super(ctx, paths, reset);
++		super(ctx, convertPaths(paths), reset);
++	}
++
++	private static String[] convertPaths(String[] paths) {
 +		String[] newPaths = new String[paths.length];
 +		for (int i = 0; i < paths.length; i++) {
 +			String path = paths[i];
 +			String newPath = Cygwin.pathToUnix(path);
 +			newPaths[i] = newPath;
 +		}
-+		setParameters(newPaths);
++		return newPaths;
 +	}
 +}
 diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java
@@ -220,6 +271,3 @@ index 0000000000..627294872d
 +		super(dmc, Cygwin.pathToUnix(file));
 +	}
 +}
--- 
-2.42.1
-

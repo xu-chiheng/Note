@@ -1,15 +1,15 @@
-From e1bc2af0eadbc16db9a979c5702c6ae56f10fc57 Mon Sep 17 00:00:00 2001
+From 10dbb20a8c3306fe8ffbe0c347d2cf2389dc29a3 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
 Subject: [PATCH 07/18] rework ProcessFactory.java and add exec2 methods
 
 ---
- .../cdt/utils/spawner/ProcessFactory.java     | 144 +++++++++++++-----
- 1 file changed, 102 insertions(+), 42 deletions(-)
+ .../cdt/utils/spawner/ProcessFactory.java     | 146 ++++++++++++------
+ 1 file changed, 103 insertions(+), 43 deletions(-)
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..c14773e16c 100644
+index addd040267..4a2cb3d80c 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 @@ -52,55 +52,72 @@ public class ProcessFactory {
@@ -42,7 +42,7 @@ index addd040267..c14773e16c 100644
 +		return envMap;
  	}
  
- 	private static TreeMap<String, String> envpToEnvMap(String[] envp) {
+-	private static TreeMap<String, String> envpToEnvMap(String[] envp) {
 -		TreeMap<String, String> environment;
 -		if (envp != null) {
 -			environment = newEmptyEnvironment();
@@ -53,6 +53,7 @@ index addd040267..c14773e16c 100644
 -				} else {
 -					// Silently ignore envstrings lacking the required `='.
 -				}
++	public static TreeMap<String, String> envpToEnvMap(String[] envp) {
 +		if (envp == null) {
 +			return getDefaultEnvMap();
 +		}

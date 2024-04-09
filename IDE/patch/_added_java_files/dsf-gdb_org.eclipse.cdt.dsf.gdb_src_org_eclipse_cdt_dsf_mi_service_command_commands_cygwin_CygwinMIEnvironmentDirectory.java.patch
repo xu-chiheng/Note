@@ -1,0 +1,36 @@
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java
+new file mode 100644
+index 0000000000..c37321f1bc
+--- /dev/null
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIEnvironmentDirectory.java
+@@ -0,0 +1,30 @@
++/********************************************************************************
++ * Copyright (c) 2024 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.dsf.mi.service.command.commands.cygwin;
++
++import org.eclipse.cdt.core.Cygwin;
++import org.eclipse.cdt.dsf.datamodel.IDMContext;
++import org.eclipse.cdt.dsf.mi.service.command.commands.MIEnvironmentDirectory;
++
++public class CygwinMIEnvironmentDirectory extends MIEnvironmentDirectory {
++	public CygwinMIEnvironmentDirectory(IDMContext ctx, String[] paths, boolean reset) {
++		super(ctx, convertPaths(paths), reset);
++	}
++
++	private static String[] convertPaths(String[] paths) {
++		String[] newPaths = new String[paths.length];
++		for (int i = 0; i < paths.length; i++) {
++			String path = paths[i];
++			String newPath = Cygwin.pathToUnix(path);
++			newPaths[i] = newPath;
++		}
++		return newPaths;
++	}
++}

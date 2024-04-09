@@ -1,5 +1,5 @@
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..c14773e16c 100644
+index addd040267..4a2cb3d80c 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 @@ -52,55 +52,72 @@ public class ProcessFactory {
@@ -32,7 +32,7 @@ index addd040267..c14773e16c 100644
 +		return envMap;
  	}
  
- 	private static TreeMap<String, String> envpToEnvMap(String[] envp) {
+-	private static TreeMap<String, String> envpToEnvMap(String[] envp) {
 -		TreeMap<String, String> environment;
 -		if (envp != null) {
 -			environment = newEmptyEnvironment();
@@ -43,6 +43,7 @@ index addd040267..c14773e16c 100644
 -				} else {
 -					// Silently ignore envstrings lacking the required `='.
 -				}
++	public static TreeMap<String, String> envpToEnvMap(String[] envp) {
 +		if (envp == null) {
 +			return getDefaultEnvMap();
 +		}

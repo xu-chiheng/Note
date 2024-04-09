@@ -1,8 +1,8 @@
-From 1d75210b6d3bd5ff0bf811e0488a0e8009d762f4 Mon Sep 17 00:00:00 2001
+From a531db16cd864a8dee707920075aa7c0a1b5d8a9 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Mon, 8 Apr 2024 08:33:54 +0800
-Subject: [PATCH 17/18] rework GnuCygwinConfigurationEnvironmentSupplier.java
+Subject: [PATCH 17/19] rework GnuCygwinConfigurationEnvironmentSupplier.java
 
 ---
  ...ygwinConfigurationEnvironmentSupplier.java | 34 +++++--------------

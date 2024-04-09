@@ -1,10 +1,13 @@
-From c7c221975ca24ceefd28a8d62636eb7761d9c27a Mon Sep 17 00:00:00 2001
+From 8a376b4945ded108b6c62fae9f16cb4bd36a9324 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: rework ProcessFactory.java and add exec2 methods
+Subject: [PATCH 07/19] rework ProcessFactory.java and add exec2 methods
 
 ---
+ .../cdt/utils/spawner/ProcessFactory.java     | 153 ++++++++++++------
+ 1 file changed, 108 insertions(+), 45 deletions(-)
+
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 index addd040267..81d170b5d3 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
@@ -256,3 +259,6 @@ index addd040267..81d170b5d3 100644
 +		return p;
 +	}
  }
+-- 
+2.42.1
+

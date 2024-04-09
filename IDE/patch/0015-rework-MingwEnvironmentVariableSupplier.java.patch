@@ -1,8 +1,8 @@
-From 4e965e55e5dbe3dd6bded4ba4f08e8c99f9bde6e Mon Sep 17 00:00:00 2001
+From ec5a4c22e21aee82b71257db221bea6fb3d3f2b4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Mon, 8 Apr 2024 06:53:50 +0800
-Subject: [PATCH 15/18] rework MingwEnvironmentVariableSupplier.java
+Subject: [PATCH 15/19] rework MingwEnvironmentVariableSupplier.java
 
 ---
  .../gnu/mingw/MingwEnvironmentVariableSupplier.java         | 6 ++----

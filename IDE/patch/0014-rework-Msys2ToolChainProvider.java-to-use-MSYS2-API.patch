@@ -1,8 +1,8 @@
-From cc42df39158852900c239d1dde5963506d7c1d34 Mon Sep 17 00:00:00 2001
+From c65d303ecfef78c359aa57f20086caebb086eb5d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Mon, 8 Apr 2024 06:27:14 +0800
-Subject: [PATCH 14/18] rework Msys2ToolChainProvider.java to use MSYS2 API
+Subject: [PATCH 14/19] rework Msys2ToolChainProvider.java to use MSYS2 API
 
 ---
  .../core/internal/Msys2ToolChainProvider.java | 93 ++-----------------

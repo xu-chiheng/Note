@@ -1,0 +1,6 @@
+releng/org.eclipse.cdt.target/cdt.target
+releng/scripts/check_bundle_versions.sh
+releng/scripts/check_bundle_versions_report.sh
+releng/scripts/check_features.sh
+releng/scripts/check_license.sh
+terminal/plugins/org.eclipse.tm.terminal.view.ui/META-INF/MANIFEST.MF

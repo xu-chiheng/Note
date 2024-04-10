@@ -1,0 +1,26 @@
+# /********************************************************************************
+#  * Copyright (c) 2022 徐持恒 Xu Chiheng
+#  *
+#  * This program and the accompanying materials are made available under the
+#  * terms of the Eclipse Public License 2.0 which is available at
+#  * http://www.eclipse.org/legal/epl-2.0.
+#  *
+#  * SPDX-License-Identifier: EPL-2.0
+#  ********************************************************************************/
+
+main() {
+	# only add and modify files, never delete files
+	cd cdt
+
+	git diff --diff-filter=A --name-only main...HEAD | grep -v '\.java$' | tee ../list_of_non_java_files_added.txt
+	git diff --diff-filter=M --name-only main...HEAD | grep -v '\.java$' | tee ../list_of_non_java_files_modified.txt
+	git diff --diff-filter=A --name-only main...HEAD | grep '\.java$'    | tee ../list_of_java_files_added.txt
+	git diff --diff-filter=M --name-only main...HEAD | grep '\.java$'    | tee ../list_of_java_files_modified.txt
+
+	cd ..
+
+	echo Completed!
+	read
+}
+
+main

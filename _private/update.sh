@@ -28,7 +28,9 @@ do_update_all_files() {
 
 		{eclipse-workspace,runtime-EclipseApplication}/{.gitignore,clean.cmd,clean.sh,cygwin.cmd}
 
-		IDE/{.gitignore,cygwin.cmd,README.md,{remove_unneeded_plug-ins,generate-patches}.{cmd,sh,sh.txt},patch}
+		IDE/{.gitignore,cygwin.cmd,README.md,patch}
+		IDE/{remove_unneeded_plug-ins,generate_list_of_changed_files}.{cmd,sh,sh.txt}
+		IDE/list_of{,_non}_java_files_{added,modified}.txt
 
 		Tool/README.txt
 		Tool/.gitignore

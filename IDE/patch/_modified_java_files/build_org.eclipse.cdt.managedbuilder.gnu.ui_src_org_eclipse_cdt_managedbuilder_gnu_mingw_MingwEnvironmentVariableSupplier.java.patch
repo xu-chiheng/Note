@@ -1,16 +1,22 @@
 diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
-index 15ead62025..72121fc22d 100644
+index 15ead62025..cd8ba5c7a5 100644
 --- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
 +++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
-@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.Path;
+@@ -30,11 +30,12 @@ import org.eclipse.core.runtime.Path;
+ /**
+  * @noextend This class is not intended to be subclassed by clients.
   */
++@SuppressWarnings("restriction")
  public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironmentVariableSupplier {
  	private static final String ENV_PATH = "PATH"; //$NON-NLS-1$
 -	private static final String BACKSLASH = java.io.File.separator;
  	private static final String PATH_DELIMITER = EnvironmentVariableManager.getDefault().getDefaultDelimiter();
  
++	@SuppressWarnings("nls")
  	@Override
-@@ -48,7 +47,7 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
+ 	public IBuildEnvironmentVariable getVariable(String variableName, IConfiguration configuration,
+ 			IEnvironmentVariableProvider provider) {
+@@ -48,7 +49,7 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
  					// If the variable is not defined still show it in the environment variables list as a hint to user
  					minGWHome = ""; //$NON-NLS-1$
  				}
@@ -19,7 +25,7 @@ index 15ead62025..72121fc22d 100644
  						IBuildEnvironmentVariable.ENVVAR_REPLACE);
  			}
  			return null;
-@@ -63,16 +62,15 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
+@@ -63,16 +64,17 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
  					// If the variable is not defined still show it in the environment variables list as a hint to user
  					msysHome = ""; //$NON-NLS-1$
  				}
@@ -29,6 +35,8 @@ index 15ead62025..72121fc22d 100644
  			}
  			return null;
  
++		} else if (variableName.equals(MinGW.ENV_MSYSTEM)) {
++			return new BuildEnvVar(MinGW.ENV_MSYSTEM, "UCRT64", IBuildEnvironmentVariable.ENVVAR_REPLACE);
  		} else if (variableName.equals(ENV_PATH)) {
  			@SuppressWarnings("nls")
 -			String path = "${" + MinGW.ENV_MINGW_HOME + "}" + BACKSLASH + "bin" + PATH_DELIMITER + "${"
@@ -38,4 +46,12 @@ index 15ead62025..72121fc22d 100644
 +					+ "/usr/bin";
  			return new BuildEnvVar(ENV_PATH, path, IBuildEnvironmentVariable.ENVVAR_PREPEND);
  		}
+ 
+@@ -84,6 +86,7 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
+ 			IEnvironmentVariableProvider provider) {
+ 		return new IBuildEnvironmentVariable[] { getVariable(MinGW.ENV_MINGW_HOME, configuration, provider),
+ 				getVariable(MinGW.ENV_MSYS_HOME, configuration, provider),
++				getVariable(MinGW.ENV_MSYSTEM, configuration, provider),
+ 				getVariable(ENV_PATH, configuration, provider), };
+ 	}
  

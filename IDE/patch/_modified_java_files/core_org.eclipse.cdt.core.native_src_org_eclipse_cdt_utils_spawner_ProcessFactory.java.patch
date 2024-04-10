@@ -1,5 +1,5 @@
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..de4e2107e2 100644
+index addd040267..c7e31634dc 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 @@ -24,6 +24,8 @@ import java.util.Map.Entry;
@@ -11,7 +11,27 @@ index addd040267..de4e2107e2 100644
  import org.eclipse.cdt.internal.core.natives.CNativePlugin;
  import org.eclipse.cdt.internal.core.natives.Messages;
  import org.eclipse.cdt.utils.pty.PTY;
-@@ -52,55 +54,72 @@ public class ProcessFactory {
+@@ -40,67 +42,86 @@ public class ProcessFactory {
+ 	private boolean hasSpawner;
+ 	private Runtime runtime;
+ 
++	@SuppressWarnings("nls")
+ 	private String[] modifyCmdArrayIfFlatpak(String[] cmdarray) {
+-		if (System.getenv("FLATPAK_SANDBOX_DIR") != null) { //$NON-NLS-1$
+-			String[] newArray = new String[cmdarray.length + 3];
+-			System.arraycopy(cmdarray, 0, newArray, 3, cmdarray.length);
+-			newArray[0] = "flatpak-spawn"; //$NON-NLS-1$
+-			newArray[1] = "--host"; //$NON-NLS-1$
+-			newArray[2] = "--watch-bus"; //$NON-NLS-1$
++		if (System.getenv("FLATPAK_SANDBOX_DIR") != null) {
++			String[] cmdarray0 = new String[] { "flatpak-spawn", "--host", "--watch-bus" };
++			int len0 = cmdarray0.length;
++			int len1 = cmdarray.length;
++			String[] newArray = new String[len0 + len1];
++			System.arraycopy(cmdarray0, 0, newArray, 0, len0);
++			System.arraycopy(cmdarray, 0, newArray, len0, len1);
+ 			cmdarray = newArray;
+ 		}
  		return cmdarray;
  	}
  
@@ -72,14 +92,8 @@ index addd040267..de4e2107e2 100644
  		}
 -		return environment;
 +		return envMap;
- 	}
- 
--	private static void appendEnvMapComparison(StringBuilder sb, TreeMap<String, String> environmentA,
--			TreeMap<String, String> environmentB) {
--		TreeMap<String, String> environmentC = newEmptyEnvironment();
--		environmentC.putAll(environmentA);
--		environmentC.putAll(environmentB);
--		Iterator<Entry<String, String>> iterator = environmentC.entrySet().iterator();
++	}
++
 +	private static String[] envMapToEnvp(TreeMap<String, String> envMap) {
 +		if (envMap == null) {
 +			envMap = getDefaultEnvMap();
@@ -91,12 +105,18 @@ index addd040267..de4e2107e2 100644
 +			Map.Entry<String, String> entry = iterator.next();
 +			String key = entry.getKey();
 +			String value = entry.getValue();
-+			envp[index++] = key + "=" + value;
++			envp[index++] = key + '=' + value;
 +		}
 +
 +		return envp;
-+	}
-+
+ 	}
+ 
+-	private static void appendEnvMapComparison(StringBuilder sb, TreeMap<String, String> environmentA,
+-			TreeMap<String, String> environmentB) {
+-		TreeMap<String, String> environmentC = newEmptyEnvironment();
+-		environmentC.putAll(environmentA);
+-		environmentC.putAll(environmentB);
+-		Iterator<Entry<String, String>> iterator = environmentC.entrySet().iterator();
 +	private static void appendEnvMapComparison(StringBuilder sb, TreeMap<String, String> envMapA,
 +			TreeMap<String, String> envMapB) {
 +		TreeMap<String, String> envMapC = newEmptyEnvMap();
@@ -118,7 +138,7 @@ index addd040267..de4e2107e2 100644
  					int result = valueA.compareTo(valueB);
  					if (result == 0) {
  						// not changed
-@@ -131,8 +150,8 @@ public class ProcessFactory {
+@@ -131,8 +152,8 @@ public class ProcessFactory {
  					sb.append('\n');
  				}
  			} else {
@@ -129,7 +149,7 @@ index addd040267..de4e2107e2 100644
  				// added
  				sb.append('+');
  				sb.append(key);
-@@ -146,6 +165,7 @@ public class ProcessFactory {
+@@ -146,6 +167,7 @@ public class ProcessFactory {
  	private class Builder {
  		String[] cmdarray;
  		String[] envp;
@@ -137,22 +157,82 @@ index addd040267..de4e2107e2 100644
  		File dir;
  		boolean use_pty;
  		PTY pty;
-@@ -173,6 +193,13 @@ public class ProcessFactory {
+@@ -172,7 +194,23 @@ public class ProcessFactory {
+ 		}
  
  		public Builder environment(String[] envp) {
- 			this.envp = envp;
-+			this.envMap = envpToEnvMap(envp);
+-			this.envp = envp;
++			if (envp == null) {
++				this.envMap = getDefaultEnvMap();
++				this.envp = envMapToEnvp(this.envMap);
++			} else {
++				this.envp = envp;
++				this.envMap = envpToEnvMap(envp);
++			}
 +			return this;
 +		}
 +
 +		public Builder environment(TreeMap<String, String> envMap) {
-+			this.envMap = envMap;
++			if (envMap == null) {
++				this.envMap = getDefaultEnvMap();
++			} else {
++				this.envMap = envMap;
++			}
 +			this.envp = envMapToEnvp(envMap);
  			return this;
  		}
  
-@@ -232,11 +259,11 @@ public class ProcessFactory {
- 			sb.append("\n\n"); //$NON-NLS-1$
+@@ -193,20 +231,21 @@ public class ProcessFactory {
+ 			return this;
+ 		}
+ 
++		@SuppressWarnings("nls")
+ 		private StringBuilder debug() {
+ 			// for debug purpose
+ 			StringBuilder sb = new StringBuilder();
+ 
+-			sb.append("command :\n"); //$NON-NLS-1$
++			sb.append("command :\n");
+ 			for (int i = 0; i < cmdarray.length; i++) {
+ 				sb.append(i);
+-				sb.append(" : \""); //$NON-NLS-1$
++				sb.append(" : \"");
+ 				sb.append(cmdarray[i]);
+-				sb.append("\"\n"); //$NON-NLS-1$
++				sb.append("\"\n");
+ 			}
+-			sb.append("\n\n"); //$NON-NLS-1$
++			sb.append("\n\n");
+ 
+-			sb.append("directory :\n"); //$NON-NLS-1$
++			sb.append("directory :\n");
+ 			if (dir != null) {
+ 				String pathString = dir.toString();
+ 				sb.append(pathString);
+@@ -215,50 +254,72 @@ public class ProcessFactory {
+ 				String pathDevice = path.getDevice();
+ 				String[] pathSegments = path.segments();
+ 				if (pathDevice != null) {
+-					sb.append("device : "); //$NON-NLS-1$
++					sb.append("device : ");
+ 					sb.append(pathDevice);
+ 					sb.append('\n');
+ 				}
+-				sb.append("segments : \n"); //$NON-NLS-1$
++				sb.append("segments : \n");
+ 				for (int i = 0; i < pathSegments.length; i++) {
+ 					sb.append(i);
+-					sb.append(" : "); //$NON-NLS-1$
++					sb.append(" : ");
+ 					sb.append(pathSegments[i]);
+ 					sb.append('\n');
+ 				}
+ 			} else {
+-				sb.append("not specified\n"); //$NON-NLS-1$
++				sb.append("not specified\n");
+ 			}
+-			sb.append("\n\n"); //$NON-NLS-1$
++			sb.append("\n\n");
  
  			{
 -				TreeMap<String, String> environmentA = getDefaultEnvironment();
@@ -160,14 +240,26 @@ index addd040267..de4e2107e2 100644
 +				TreeMap<String, String> envMapA = getDefaultEnvMap();
 +				TreeMap<String, String> envMapB = envpToEnvMap(envp);
  
- 				sb.append("environment :\n"); //$NON-NLS-1$
+-				sb.append("environment :\n"); //$NON-NLS-1$
 -				appendEnvMapComparison(sb, environmentA, environmentB);
+-				sb.append("\n\n"); //$NON-NLS-1$
++				sb.append("environment :\n");
 +				appendEnvMapComparison(sb, envMapA, envMapB);
- 				sb.append("\n\n"); //$NON-NLS-1$
++				sb.append("\n\n");
  			}
  			if (use_pty) {
-@@ -250,15 +277,37 @@ public class ProcessFactory {
- 				sb.append("\n\n"); //$NON-NLS-1$
+-				sb.append("use pty : "); //$NON-NLS-1$
++				sb.append("use pty : ");
+ 				sb.append(pty.toString());
+-				sb.append("\n\n"); //$NON-NLS-1$
++				sb.append("\n\n");
+ 			}
+ 			if (has_gracefulExitTimeMs) {
+-				sb.append("has gracefulExitTimeMs : "); //$NON-NLS-1$
++				sb.append("has gracefulExitTimeMs : ");
+ 				sb.append(gracefulExitTimeMs);
+-				sb.append("\n\n"); //$NON-NLS-1$
++				sb.append("\n\n");
  			}
  			// set breakpoint on next line to inspect sb when debugging, to see the
 -			// ultimate parameters of ProcessBuilder
@@ -206,7 +298,7 @@ index addd040267..de4e2107e2 100644
  			if (hasSpawner) {
  				if (use_pty) {
  					if (has_gracefulExitTimeMs) {
-@@ -362,7 +411,7 @@ public class ProcessFactory {
+@@ -362,7 +423,7 @@ public class ProcessFactory {
  		return p;
  	}
  
@@ -215,7 +307,7 @@ index addd040267..de4e2107e2 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).start();
  		return p;
  	}
-@@ -370,13 +419,13 @@ public class ProcessFactory {
+@@ -370,13 +431,13 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */
@@ -231,7 +323,7 @@ index addd040267..de4e2107e2 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).pty(pty).start();
  		return p;
  	}
-@@ -384,10 +433,48 @@ public class ProcessFactory {
+@@ -384,10 +445,48 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */

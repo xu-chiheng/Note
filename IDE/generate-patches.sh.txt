@@ -71,22 +71,6 @@ main() {
 	process_file_list added_java_files        "${added_java_files[@]}"
 	process_file_list modified_java_files     "${modified_java_files[@]}"
 
-	generate_git_am_patch 1 "fix cdt.target IU versions for 11.4.0" \
-		../patch/_modified_non_java_files/releng_org.eclipse.cdt.target_cdt.target.patch
-
-	generate_git_am_patch 3 "add Cygwin.java" \
-		../patch/_added_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_core_Cygwin.java.patch
-	generate_git_am_patch 4 "add MSYS2.java" \
-		../patch/_added_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_core_MSYS2.java.patch
-	generate_git_am_patch 5 "add PTY2.java" \
-		../patch/_added_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_utils_pty_PTY2.java.patch
-	generate_git_am_patch 6 "add PTY2Util.java" \
-		../patch/_added_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_utils_pty_PTY2Util.java.patch
-
-	generate_git_am_patch 7 "rework ProcessFactory.java and add exec2 methods" \
-		../patch/_modified_java_files/core_org.eclipse.cdt.core.native_src_org_eclipse_cdt_utils_spawner_ProcessFactory.java.patch
-
-
 	cd ..
 
 	echo Completed!

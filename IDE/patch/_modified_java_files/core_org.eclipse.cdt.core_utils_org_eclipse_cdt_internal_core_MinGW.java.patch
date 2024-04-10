@@ -1,8 +1,8 @@
 diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/MinGW.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/MinGW.java
-index 7d516ee7df..18c252486c 100644
+index 7d516ee7df..721a51eba3 100644
 --- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/MinGW.java
 +++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/MinGW.java
-@@ -15,274 +15,14 @@
+@@ -15,274 +15,15 @@
   *******************************************************************************/
  package org.eclipse.cdt.internal.core;
  
@@ -275,12 +275,13 @@ index 7d516ee7df..18c252486c 100644
 -		}
 -		return msysHome;
 -	}
-+	public static final String ENV_MINGW_HOME = MSYS2.ENV_MINGW_HOME; //$NON-NLS-1$
-+	public static final String ENV_MSYS_HOME = MSYS2.ENV_MSYS_HOME; //$NON-NLS-1$
++	public static final String ENV_MINGW_HOME = MSYS2.ENV_MINGW_HOME;
++	public static final String ENV_MSYS_HOME = MSYS2.ENV_MSYS_HOME;
++	public static final String ENV_MSYSTEM = MSYS2.ENV_MSYSTEM;
  
  	/**
  	 * Find location where MinGW is installed. A number of locations is being
-@@ -295,30 +35,10 @@ public class MinGW {
+@@ -295,30 +36,10 @@ public class MinGW {
  	 * @return MinGW root ("/") path in Windows format.
  	 */
  	public static String getMinGWHome() {
@@ -313,7 +314,7 @@ index 7d516ee7df..18c252486c 100644
  	}
  
  	/**
-@@ -331,31 +51,10 @@ public class MinGW {
+@@ -331,31 +52,10 @@ public class MinGW {
  	 * @return MSys root ("/") path in Windows format.
  	 */
  	public static String getMSysHome() {
@@ -347,7 +348,7 @@ index 7d516ee7df..18c252486c 100644
  	}
  
  	/**
-@@ -368,7 +67,7 @@ public class MinGW {
+@@ -368,7 +68,7 @@ public class MinGW {
  	 * @return {@code true} if MinGW is available, {@code false} otherwise.
  	 */
  	public static boolean isAvailable(String envPath) {
@@ -356,7 +357,7 @@ index 7d516ee7df..18c252486c 100644
  	}
  
  	/**
-@@ -377,6 +76,6 @@ public class MinGW {
+@@ -377,6 +77,6 @@ public class MinGW {
  	 * @return {@code true} if MinGW is available, {@code false} otherwise.
  	 */
  	public static boolean isAvailable() {

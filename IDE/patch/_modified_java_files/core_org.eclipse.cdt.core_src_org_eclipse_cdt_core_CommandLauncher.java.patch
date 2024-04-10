@@ -1,13 +1,42 @@
 diff --git a/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/CommandLauncher.java b/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/CommandLauncher.java
-index 0f7984a6e1..5d90b3dead 100644
+index 0f7984a6e1..32d02c3379 100644
 --- a/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/CommandLauncher.java
 +++ b/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/CommandLauncher.java
-@@ -164,7 +164,7 @@ public class CommandLauncher implements ICommandLauncher {
+@@ -20,7 +20,6 @@ import java.util.Arrays;
+ import java.util.ConcurrentModificationException;
+ import java.util.Properties;
+ 
+-import org.eclipse.cdt.internal.core.Cygwin;
+ import org.eclipse.cdt.internal.core.Messages;
+ import org.eclipse.cdt.internal.core.ProcessClosure;
+ import org.eclipse.cdt.utils.PathUtil;
+@@ -31,7 +30,6 @@ import org.eclipse.core.runtime.CoreException;
+ import org.eclipse.core.runtime.IPath;
+ import org.eclipse.core.runtime.IProgressMonitor;
+ import org.eclipse.core.runtime.IStatus;
+-import org.eclipse.core.runtime.Platform;
+ import org.eclipse.osgi.util.NLS;
+ 
+ /**
+@@ -164,20 +162,8 @@ public class CommandLauncher implements ICommandLauncher {
  		String envPathValue = getEnvironmentProperty(PATH_ENV);
  
  		Boolean isFound = null;
 -		String command = commandPath.toOSString();
 +		String command = commandPath.toString();
  		fCommandArgs = constructCommandArray(command, args);
- 		if (Platform.getOS().equals(Platform.OS_WIN32)) {
- 			// Handle cygwin link
+-		if (Platform.getOS().equals(Platform.OS_WIN32)) {
+-			// Handle cygwin link
+-			IPath location = PathUtil.findProgramLocation(command, envPathValue);
+-			isFound = location != null;
+-			if (location != null) {
+-				try {
+-					fCommandArgs[0] = Cygwin.cygwinToWindowsPath(location.toString(), envPathValue);
+-				} catch (Exception e) {
+-					// if no cygwin nothing to worry about
+-				}
+-			}
+-		}
+ 
+ 		File dir = workingDirectory != null ? workingDirectory.toFile() : null;
+ 		if (dir != null && !dir.isDirectory()) {

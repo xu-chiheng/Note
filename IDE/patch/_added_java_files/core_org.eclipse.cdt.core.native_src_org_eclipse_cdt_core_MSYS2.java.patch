@@ -1,9 +1,9 @@
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 new file mode 100644
-index 0000000000..b5ee63ef0d
+index 0000000000..b21135c6a5
 --- /dev/null
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
-@@ -0,0 +1,180 @@
+@@ -0,0 +1,183 @@
 +/********************************************************************************
 + * Copyright (c) 2022 徐持恒 Xu Chiheng
 + *
@@ -24,6 +24,9 @@ index 0000000000..b5ee63ef0d
 +
 +// A collection of MSYS2-related utilities.
 +public class MSYS2 {
++	public static final String ENV_MINGW_HOME = "MINGW_HOME"; //$NON-NLS-1$
++	public static final String ENV_MSYS_HOME = "MSYS_HOME"; //$NON-NLS-1$
++
 +	private static boolean present;
 +	private static String rootDir;
 +	static {

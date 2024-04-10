@@ -1,18 +1,27 @@
-From 8a376b4945ded108b6c62fae9f16cb4bd36a9324 Mon Sep 17 00:00:00 2001
+From a763aaae9c8dc6a0a877e9ff1703ac88e59a1639 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 07/19] rework ProcessFactory.java and add exec2 methods
+Subject: [PATCH 07/20] rework ProcessFactory.java and add exec2 methods
 
 ---
- .../cdt/utils/spawner/ProcessFactory.java     | 153 ++++++++++++------
- 1 file changed, 108 insertions(+), 45 deletions(-)
+ .../cdt/utils/spawner/ProcessFactory.java     | 188 +++++++++++++-----
+ 1 file changed, 142 insertions(+), 46 deletions(-)
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..81d170b5d3 100644
+index addd040267..176ab5a34f 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-@@ -52,55 +52,72 @@ public class ProcessFactory {
+@@ -24,6 +24,8 @@ import java.util.Map.Entry;
+ import java.util.StringTokenizer;
+ import java.util.TreeMap;
+ 
++import org.eclipse.cdt.core.Cygwin;
++import org.eclipse.cdt.core.MSYS2;
+ import org.eclipse.cdt.internal.core.natives.CNativePlugin;
+ import org.eclipse.cdt.internal.core.natives.Messages;
+ import org.eclipse.cdt.utils.pty.PTY;
+@@ -52,55 +54,72 @@ public class ProcessFactory {
  		return cmdarray;
  	}
  
@@ -73,14 +82,8 @@ index addd040267..81d170b5d3 100644
  		}
 -		return environment;
 +		return envMap;
- 	}
- 
--	private static void appendEnvMapComparison(StringBuilder sb, TreeMap<String, String> environmentA,
--			TreeMap<String, String> environmentB) {
--		TreeMap<String, String> environmentC = newEmptyEnvironment();
--		environmentC.putAll(environmentA);
--		environmentC.putAll(environmentB);
--		Iterator<Entry<String, String>> iterator = environmentC.entrySet().iterator();
++	}
++
 +	private static String[] envMapToEnvp(TreeMap<String, String> envMap) {
 +		if (envMap == null) {
 +			envMap = getDefaultEnvMap();
@@ -96,8 +99,14 @@ index addd040267..81d170b5d3 100644
 +		}
 +
 +		return envp;
-+	}
-+
+ 	}
+ 
+-	private static void appendEnvMapComparison(StringBuilder sb, TreeMap<String, String> environmentA,
+-			TreeMap<String, String> environmentB) {
+-		TreeMap<String, String> environmentC = newEmptyEnvironment();
+-		environmentC.putAll(environmentA);
+-		environmentC.putAll(environmentB);
+-		Iterator<Entry<String, String>> iterator = environmentC.entrySet().iterator();
 +	private static void appendEnvMapComparison(StringBuilder sb, TreeMap<String, String> envMapA,
 +			TreeMap<String, String> envMapB) {
 +		TreeMap<String, String> envMapC = newEmptyEnvMap();
@@ -119,7 +128,7 @@ index addd040267..81d170b5d3 100644
  					int result = valueA.compareTo(valueB);
  					if (result == 0) {
  						// not changed
-@@ -131,8 +148,8 @@ public class ProcessFactory {
+@@ -131,8 +150,8 @@ public class ProcessFactory {
  					sb.append('\n');
  				}
  			} else {
@@ -130,7 +139,7 @@ index addd040267..81d170b5d3 100644
  				// added
  				sb.append('+');
  				sb.append(key);
-@@ -146,6 +163,7 @@ public class ProcessFactory {
+@@ -146,6 +165,7 @@ public class ProcessFactory {
  	private class Builder {
  		String[] cmdarray;
  		String[] envp;
@@ -138,21 +147,32 @@ index addd040267..81d170b5d3 100644
  		File dir;
  		boolean use_pty;
  		PTY pty;
-@@ -173,6 +191,13 @@ public class ProcessFactory {
+@@ -172,7 +192,23 @@ public class ProcessFactory {
+ 		}
  
  		public Builder environment(String[] envp) {
- 			this.envp = envp;
-+			this.envMap = envpToEnvMap(envp);
+-			this.envp = envp;
++			if (envp == null) {
++				this.envMap = getDefaultEnvMap();
++				this.envp = envMapToEnvp(this.envMap);
++			} else {
++				this.envp = envp;
++				this.envMap = envpToEnvMap(envp);
++			}
 +			return this;
 +		}
 +
 +		public Builder environment(TreeMap<String, String> envMap) {
-+			this.envMap = envMap;
++			if (envMap == null) {
++				this.envMap = getDefaultEnvMap();
++			} else {
++				this.envMap = envMap;
++			}
 +			this.envp = envMapToEnvp(envMap);
  			return this;
  		}
  
-@@ -232,11 +257,11 @@ public class ProcessFactory {
+@@ -232,11 +268,11 @@ public class ProcessFactory {
  			sb.append("\n\n"); //$NON-NLS-1$
  
  			{
@@ -167,7 +187,7 @@ index addd040267..81d170b5d3 100644
  				sb.append("\n\n"); //$NON-NLS-1$
  			}
  			if (use_pty) {
-@@ -250,14 +275,14 @@ public class ProcessFactory {
+@@ -250,15 +286,37 @@ public class ProcessFactory {
  				sb.append("\n\n"); //$NON-NLS-1$
  			}
  			// set breakpoint on next line to inspect sb when debugging, to see the
@@ -176,15 +196,38 @@ index addd040267..81d170b5d3 100644
  			return sb;
  		}
  
++		@SuppressWarnings("nls")
  		public Process start() throws IOException {
  			// Uncomment the next line, set a breakpoint in the last line of debug() method,
  			// when the breakpoint is triggered, inspect the sb variable to see detailed info on what is being launched.
 -			// debug();
 +			debug();
  			Process p;
++
++			if (envMap.containsKey(Cygwin.ENV_CYGWIN_HOME) || envMap.containsKey(MSYS2.ENV_MINGW_HOME)) {
++				String bashDir;
++				if (envMap.containsKey(Cygwin.ENV_CYGWIN_HOME)) {
++					bashDir = Cygwin.getRootDir() + "/bin";
++				} else {
++					bashDir = MSYS2.getRootDir() + "/usr/bin";
++				}
++				// Use ". ~/.bashrc; " to simulate -i or -l
++				// bash -i become interactive shell, which is not supported by Eclipse Console
++				// bash -l will change current directory to ~
++				String[] cmdArray0 = new String[] { bashDir + "/bash.exe", "-c",
++						"if [ -f ~/.bashrc ]; then . ~/.bashrc; fi; \"$@\" ;", "-" };
++				int len0 = cmdArray0.length;
++				int len1 = cmdarray.length;
++				String[] cmdArrayNew = new String[len0 + len1];
++				System.arraycopy(cmdArray0, 0, cmdArrayNew, 0, len0);
++				System.arraycopy(cmdarray, 0, cmdArrayNew, len0, len1);
++				cmdarray = cmdArrayNew;
++			}
++
  			if (hasSpawner) {
  				if (use_pty) {
-@@ -362,7 +387,7 @@ public class ProcessFactory {
+ 					if (has_gracefulExitTimeMs) {
+@@ -362,7 +420,7 @@ public class ProcessFactory {
  		return p;
  	}
  
@@ -193,7 +236,7 @@ index addd040267..81d170b5d3 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).start();
  		return p;
  	}
-@@ -370,13 +395,13 @@ public class ProcessFactory {
+@@ -370,13 +428,13 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */
@@ -209,7 +252,7 @@ index addd040267..81d170b5d3 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).pty(pty).start();
  		return p;
  	}
-@@ -384,10 +409,48 @@ public class ProcessFactory {
+@@ -384,10 +442,48 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */

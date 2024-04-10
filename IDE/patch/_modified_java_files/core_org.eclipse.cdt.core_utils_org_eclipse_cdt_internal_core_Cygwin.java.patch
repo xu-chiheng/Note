@@ -1,5 +1,5 @@
 diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java
-index 49f3da0bc4..925a31c913 100644
+index 49f3da0bc4..da568eaa58 100644
 --- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java
 +++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java
 @@ -13,75 +13,13 @@
@@ -27,7 +27,7 @@ index 49f3da0bc4..925a31c913 100644
   * A collection of cygwin-related utilities.
   */
  public class Cygwin {
- 	public static final String ENV_CYGWIN_HOME = "CYGWIN_HOME"; //$NON-NLS-1$
+-	public static final String ENV_CYGWIN_HOME = "CYGWIN_HOME"; //$NON-NLS-1$
 -	private static final String ENV_PATH = "PATH"; //$NON-NLS-1$
 -
 -	private static final String CYGPATH = "cygpath"; //$NON-NLS-1$
@@ -75,6 +75,7 @@ index 49f3da0bc4..925a31c913 100644
 -		}
 -		return cygpathLocation;
 -	}
++	public static final String ENV_CYGWIN_HOME = org.eclipse.cdt.core.Cygwin.ENV_CYGWIN_HOME; //$NON-NLS-1$
  
  	/**
  	 * Check if cygwin path conversion utilities are available in the path.

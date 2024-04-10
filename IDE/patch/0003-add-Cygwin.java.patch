@@ -1,20 +1,20 @@
-From 4f08c69b70cc453f037e6117e4f1305f81feed3f Mon Sep 17 00:00:00 2001
+From 42023cf6ebfb724a77566414ba3a43f4b6ba4357 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 03/19] add Cygwin.java
+Subject: [PATCH 03/20] add Cygwin.java
 
 ---
- .../src/org/eclipse/cdt/core/Cygwin.java      | 191 ++++++++++++++++++
- 1 file changed, 191 insertions(+)
+ .../src/org/eclipse/cdt/core/Cygwin.java      | 193 ++++++++++++++++++
+ 1 file changed, 193 insertions(+)
  create mode 100644 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 new file mode 100644
-index 0000000000..0418546007
+index 0000000000..099c07609e
 --- /dev/null
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
-@@ -0,0 +1,191 @@
+@@ -0,0 +1,193 @@
 +/********************************************************************************
 + * Copyright (c) 2022 徐持恒 Xu Chiheng
 + *
@@ -35,6 +35,8 @@ index 0000000000..0418546007
 +
 +// A collection of Cygwin-related utilities.
 +public class Cygwin {
++	public static final String ENV_CYGWIN_HOME = "CYGWIN_HOME"; //$NON-NLS-1$
++
 +	private static boolean present;
 +	private static String rootDir;
 +	static {

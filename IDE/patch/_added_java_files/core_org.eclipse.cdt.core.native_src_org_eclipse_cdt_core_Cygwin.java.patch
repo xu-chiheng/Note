@@ -1,9 +1,9 @@
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 new file mode 100644
-index 0000000000..0418546007
+index 0000000000..099c07609e
 --- /dev/null
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
-@@ -0,0 +1,191 @@
+@@ -0,0 +1,193 @@
 +/********************************************************************************
 + * Copyright (c) 2022 徐持恒 Xu Chiheng
 + *
@@ -24,6 +24,8 @@ index 0000000000..0418546007
 +
 +// A collection of Cygwin-related utilities.
 +public class Cygwin {
++	public static final String ENV_CYGWIN_HOME = "CYGWIN_HOME"; //$NON-NLS-1$
++
 +	private static boolean present;
 +	private static String rootDir;
 +	static {

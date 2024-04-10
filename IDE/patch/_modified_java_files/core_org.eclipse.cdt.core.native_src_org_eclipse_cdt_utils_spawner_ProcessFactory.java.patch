@@ -1,8 +1,17 @@
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..81d170b5d3 100644
+index addd040267..de4e2107e2 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-@@ -52,55 +52,72 @@ public class ProcessFactory {
+@@ -24,6 +24,8 @@ import java.util.Map.Entry;
+ import java.util.StringTokenizer;
+ import java.util.TreeMap;
+ 
++import org.eclipse.cdt.core.Cygwin;
++import org.eclipse.cdt.core.MSYS2;
+ import org.eclipse.cdt.internal.core.natives.CNativePlugin;
+ import org.eclipse.cdt.internal.core.natives.Messages;
+ import org.eclipse.cdt.utils.pty.PTY;
+@@ -52,55 +54,72 @@ public class ProcessFactory {
  		return cmdarray;
  	}
  
@@ -109,7 +118,7 @@ index addd040267..81d170b5d3 100644
  					int result = valueA.compareTo(valueB);
  					if (result == 0) {
  						// not changed
-@@ -131,8 +148,8 @@ public class ProcessFactory {
+@@ -131,8 +150,8 @@ public class ProcessFactory {
  					sb.append('\n');
  				}
  			} else {
@@ -120,7 +129,7 @@ index addd040267..81d170b5d3 100644
  				// added
  				sb.append('+');
  				sb.append(key);
-@@ -146,6 +163,7 @@ public class ProcessFactory {
+@@ -146,6 +165,7 @@ public class ProcessFactory {
  	private class Builder {
  		String[] cmdarray;
  		String[] envp;
@@ -128,7 +137,7 @@ index addd040267..81d170b5d3 100644
  		File dir;
  		boolean use_pty;
  		PTY pty;
-@@ -173,6 +191,13 @@ public class ProcessFactory {
+@@ -173,6 +193,13 @@ public class ProcessFactory {
  
  		public Builder environment(String[] envp) {
  			this.envp = envp;
@@ -142,7 +151,7 @@ index addd040267..81d170b5d3 100644
  			return this;
  		}
  
-@@ -232,11 +257,11 @@ public class ProcessFactory {
+@@ -232,11 +259,11 @@ public class ProcessFactory {
  			sb.append("\n\n"); //$NON-NLS-1$
  
  			{
@@ -157,7 +166,7 @@ index addd040267..81d170b5d3 100644
  				sb.append("\n\n"); //$NON-NLS-1$
  			}
  			if (use_pty) {
-@@ -250,14 +275,14 @@ public class ProcessFactory {
+@@ -250,15 +277,37 @@ public class ProcessFactory {
  				sb.append("\n\n"); //$NON-NLS-1$
  			}
  			// set breakpoint on next line to inspect sb when debugging, to see the
@@ -166,15 +175,38 @@ index addd040267..81d170b5d3 100644
  			return sb;
  		}
  
++		@SuppressWarnings("nls")
  		public Process start() throws IOException {
  			// Uncomment the next line, set a breakpoint in the last line of debug() method,
  			// when the breakpoint is triggered, inspect the sb variable to see detailed info on what is being launched.
 -			// debug();
 +			debug();
  			Process p;
++
++			if (envMap.containsKey(Cygwin.ENV_CYGWIN_HOME) || envMap.containsKey(MSYS2.ENV_MINGW_HOME)) {
++				String bashDir;
++				if (envMap.containsKey(Cygwin.ENV_CYGWIN_HOME)) {
++					bashDir = Cygwin.getRootDir() + "/bin";
++				} else {
++					bashDir = MSYS2.getRootDir() + "/usr/bin";
++				}
++				// Use ". ~/.bashrc; " to simulate -i or -l
++				// bash -i become interactive shell, which is not supported by Eclipse Console
++				// bash -l will change current directory to ~
++				String[] cmdArray0 = new String[] { bashDir + "/bash.exe", "-c",
++						"if [ -f ~/.bashrc ]; then . ~/.bashrc; fi; \"$@\" ;", "-" };
++				int len0 = cmdArray0.length;
++				int len1 = cmdarray.length;
++				String[] cmdArrayNew = new String[len0 + len1];
++				System.arraycopy(cmdArray0, 0, cmdArrayNew, 0, len0);
++				System.arraycopy(cmdarray, 0, cmdArrayNew, len0, len1);
++				cmdarray = cmdArrayNew;
++			}
++
  			if (hasSpawner) {
  				if (use_pty) {
-@@ -362,7 +387,7 @@ public class ProcessFactory {
+ 					if (has_gracefulExitTimeMs) {
+@@ -362,7 +411,7 @@ public class ProcessFactory {
  		return p;
  	}
  
@@ -183,7 +215,7 @@ index addd040267..81d170b5d3 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).start();
  		return p;
  	}
-@@ -370,13 +395,13 @@ public class ProcessFactory {
+@@ -370,13 +419,13 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */
@@ -199,7 +231,7 @@ index addd040267..81d170b5d3 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).pty(pty).start();
  		return p;
  	}
-@@ -384,10 +409,48 @@ public class ProcessFactory {
+@@ -384,10 +433,48 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */

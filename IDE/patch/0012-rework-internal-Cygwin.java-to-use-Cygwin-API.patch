@@ -1,15 +1,15 @@
-From ac5d7339d1b73150b7ffeb55f6791d5de18a9cb2 Mon Sep 17 00:00:00 2001
+From 1868c9caee7d07aa1b0d2e60483e005264fc2e2f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 18:59:02 +0800
-Subject: [PATCH 12/19] rework internal Cygwin.java to use Cygwin API
+Subject: [PATCH 12/20] rework internal Cygwin.java to use Cygwin API
 
 ---
- .../org/eclipse/cdt/internal/core/Cygwin.java | 239 +-----------------
- 1 file changed, 7 insertions(+), 232 deletions(-)
+ .../org/eclipse/cdt/internal/core/Cygwin.java | 241 +-----------------
+ 1 file changed, 8 insertions(+), 233 deletions(-)
 
 diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java
-index d4fa713b00..925a31c913 100644
+index d4fa713b00..da568eaa58 100644
 --- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java
 +++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java
 @@ -13,76 +13,13 @@
@@ -38,7 +38,7 @@ index d4fa713b00..925a31c913 100644
   * A collection of cygwin-related utilities.
   */
  public class Cygwin {
- 	public static final String ENV_CYGWIN_HOME = "CYGWIN_HOME"; //$NON-NLS-1$
+-	public static final String ENV_CYGWIN_HOME = "CYGWIN_HOME"; //$NON-NLS-1$
 -	private static final String ENV_PATH = "PATH"; //$NON-NLS-1$
 -
 -	private static final String CYGPATH = "cygpath"; //$NON-NLS-1$
@@ -86,6 +86,7 @@ index d4fa713b00..925a31c913 100644
 -		}
 -		return cygpathLocation;
 -	}
++	public static final String ENV_CYGWIN_HOME = org.eclipse.cdt.core.Cygwin.ENV_CYGWIN_HOME; //$NON-NLS-1$
  
  	/**
  	 * Check if cygwin path conversion utilities are available in the path.

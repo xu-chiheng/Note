@@ -1,20 +1,20 @@
-From 5ede11fc0b2745baccde6a79fbc82b5ea2b18a26 Mon Sep 17 00:00:00 2001
+From e05ed917a02ed1df6ec7ba4195676f6ac6aabe8d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 04/19] add MSYS2.java
+Subject: [PATCH 04/20] add MSYS2.java
 
 ---
- .../src/org/eclipse/cdt/core/MSYS2.java       | 180 ++++++++++++++++++
- 1 file changed, 180 insertions(+)
+ .../src/org/eclipse/cdt/core/MSYS2.java       | 184 ++++++++++++++++++
+ 1 file changed, 184 insertions(+)
  create mode 100644 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 new file mode 100644
-index 0000000000..b5ee63ef0d
+index 0000000000..842f310ad0
 --- /dev/null
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
-@@ -0,0 +1,180 @@
+@@ -0,0 +1,184 @@
 +/********************************************************************************
 + * Copyright (c) 2022 徐持恒 Xu Chiheng
 + *
@@ -35,6 +35,10 @@ index 0000000000..b5ee63ef0d
 +
 +// A collection of MSYS2-related utilities.
 +public class MSYS2 {
++	public static final String ENV_MINGW_HOME = "MINGW_HOME"; //$NON-NLS-1$
++	public static final String ENV_MSYS_HOME = "MSYS_HOME"; //$NON-NLS-1$
++	public static final String ENV_MSYSTEM = "MSYSTEM"; //$NON-NLS-1$
++
 +	private static boolean present;
 +	private static String rootDir;
 +	static {

@@ -1,8 +1,8 @@
-From 4a86c4299c2beb4cca8de56264e01e5f1c673dae Mon Sep 17 00:00:00 2001
+From 79ccc1fb865189a4530cf6947a3eaa66bdc997a6 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 19/19] fix GDB MI commands on Cygwin
+Subject: [PATCH 19/20] fix GDB MI commands on Cygwin
 
 ---
  .../gdb/service/GdbDebugServicesFactory.java  | 49 ++++++++++++++

@@ -1,0 +1,52 @@
+From 401821eec75cd9573886186693c501644440c6c8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 20/20] rework CommandLauncher.java
+
+---
+ .../src/org/eclipse/cdt/core/CommandLauncher.java  | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/CommandLauncher.java b/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/CommandLauncher.java
+index 5d90b3dead..32d02c3379 100644
+--- a/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/CommandLauncher.java
++++ b/core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/CommandLauncher.java
+@@ -20,7 +20,6 @@ import java.util.Arrays;
+ import java.util.ConcurrentModificationException;
+ import java.util.Properties;
+ 
+-import org.eclipse.cdt.internal.core.Cygwin;
+ import org.eclipse.cdt.internal.core.Messages;
+ import org.eclipse.cdt.internal.core.ProcessClosure;
+ import org.eclipse.cdt.utils.PathUtil;
+@@ -31,7 +30,6 @@ import org.eclipse.core.runtime.CoreException;
+ import org.eclipse.core.runtime.IPath;
+ import org.eclipse.core.runtime.IProgressMonitor;
+ import org.eclipse.core.runtime.IStatus;
+-import org.eclipse.core.runtime.Platform;
+ import org.eclipse.osgi.util.NLS;
+ 
+ /**
+@@ -166,18 +164,6 @@ public class CommandLauncher implements ICommandLauncher {
+ 		Boolean isFound = null;
+ 		String command = commandPath.toString();
+ 		fCommandArgs = constructCommandArray(command, args);
+-		if (Platform.getOS().equals(Platform.OS_WIN32)) {
+-			// Handle cygwin link
+-			IPath location = PathUtil.findProgramLocation(command, envPathValue);
+-			isFound = location != null;
+-			if (location != null) {
+-				try {
+-					fCommandArgs[0] = Cygwin.cygwinToWindowsPath(location.toString(), envPathValue);
+-				} catch (Exception e) {
+-					// if no cygwin nothing to worry about
+-				}
+-			}
+-		}
+ 
+ 		File dir = workingDirectory != null ? workingDirectory.toFile() : null;
+ 		if (dir != null && !dir.isDirectory()) {
+-- 
+2.42.1
+

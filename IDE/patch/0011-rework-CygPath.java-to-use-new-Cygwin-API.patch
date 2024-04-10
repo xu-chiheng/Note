@@ -1,8 +1,8 @@
-From 2da0690e5191e17c5b41aa6e083e5e23f126d91a Mon Sep 17 00:00:00 2001
+From 8853d94e36c0b50069b839b819e4775a33c15e5b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 17:31:23 +0800
-Subject: [PATCH 11/20] rework CygPath.java to use new Cygwin API
+Subject: [PATCH 11/21] rework CygPath.java to use new Cygwin API
 
 ---
  .../utils/org/eclipse/cdt/utils/CygPath.java  | 104 +-----------------

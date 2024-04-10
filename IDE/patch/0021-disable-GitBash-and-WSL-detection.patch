@@ -1,0 +1,35 @@
+From 4852bd624354c35ea5a874bc670553e81b5d0126 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 21/21] disable GitBash and WSL detection
+
+---
+ .../view/ui/local/showin/ExternalExecutablesManager.java      | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/ExternalExecutablesManager.java b/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/ExternalExecutablesManager.java
+index ca5c403a08..45bbe7731b 100644
+--- a/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/ExternalExecutablesManager.java
++++ b/terminal/plugins/org.eclipse.tm.terminal.view.ui/src/org/eclipse/tm/terminal/view/ui/local/showin/ExternalExecutablesManager.java
+@@ -30,8 +30,6 @@ import org.eclipse.core.runtime.IPath;
+ import org.eclipse.core.runtime.Platform;
+ import org.eclipse.tm.terminal.view.ui.activator.UIPlugin;
+ import org.eclipse.tm.terminal.view.ui.internal.ExternalExecutablesState;
+-import org.eclipse.tm.terminal.view.ui.local.showin.detectors.DetectGitBash;
+-import org.eclipse.tm.terminal.view.ui.local.showin.detectors.DetectWSL;
+ import org.eclipse.ui.PlatformUI;
+ import org.eclipse.ui.services.ISourceProviderService;
+ 
+@@ -40,7 +38,7 @@ import org.eclipse.ui.services.ISourceProviderService;
+  */
+ public class ExternalExecutablesManager {
+ 	// XXX: This may make a useful extension point?
+-	private static List<IDetectExternalExecutable> detectors = List.of(new DetectGitBash(), new DetectWSL());
++	private static List<IDetectExternalExecutable> detectors = new ArrayList<>();
+ 
+ 	public static boolean hasEntries() {
+ 		IPath stateLocation = UIPlugin.getDefault().getStateLocation();
+-- 
+2.42.1
+

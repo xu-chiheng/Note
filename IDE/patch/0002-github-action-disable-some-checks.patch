@@ -1,8 +1,8 @@
-From 608aae11d7100c9219b95258375e9971519a1447 Mon Sep 17 00:00:00 2001
+From addb07da58094e642680609f05a4fae3d2dad055 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:00:07 +0800
-Subject: [PATCH 02/20] github action disable some checks
+Subject: [PATCH 02/21] github action disable some checks
 
 ---
  releng/scripts/check_bundle_versions.sh        | 2 ++

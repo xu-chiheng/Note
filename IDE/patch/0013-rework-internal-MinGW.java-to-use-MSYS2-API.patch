@@ -1,8 +1,8 @@
-From 3c9a5d664ba09479ff9b202c54f448e0e6e61f51 Mon Sep 17 00:00:00 2001
+From 1a5d5c7828fa50e06e6f8ee90688f5391b2c377c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Mon, 8 Apr 2024 05:49:11 +0800
-Subject: [PATCH 13/20] rework internal MinGW.java to use MSYS2 API
+Subject: [PATCH 13/21] rework internal MinGW.java to use MSYS2 API
 
 ---
  .../org/eclipse/cdt/internal/core/MinGW.java  | 320 +-----------------

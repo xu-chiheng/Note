@@ -1,8 +1,8 @@
-From e05ed917a02ed1df6ec7ba4195676f6ac6aabe8d Mon Sep 17 00:00:00 2001
+From c30de77b30347825d451d70ba9c8a0c427185d1f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 04/20] add MSYS2.java
+Subject: [PATCH 04/21] add MSYS2.java
 
 ---
  .../src/org/eclipse/cdt/core/MSYS2.java       | 184 ++++++++++++++++++

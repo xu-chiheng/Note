@@ -1,0 +1,59 @@
+From b082bf9a37a2c998fc70fc553c09ff33e38b0f39 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 25/27] fix MIStack.java file path handling for Cygwin
+
+---
+ .../org/eclipse/cdt/dsf/mi/service/MIStack.java    | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/MIStack.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/MIStack.java
+index ae8580abde..17350d0034 100644
+--- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/MIStack.java
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/MIStack.java
+@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
+ import java.util.List;
+ import java.util.Map;
+ 
++import org.eclipse.cdt.core.Cygwin;
+ import org.eclipse.cdt.core.IAddress;
+ import org.eclipse.cdt.dsf.concurrent.CountingRequestMonitor;
+ import org.eclipse.cdt.dsf.concurrent.DataRequestMonitor;
+@@ -64,6 +65,7 @@ import org.eclipse.cdt.dsf.service.DsfSession;
+ import org.eclipse.cdt.utils.Addr32;
+ import org.eclipse.cdt.utils.Addr64;
+ import org.eclipse.core.runtime.IStatus;
++import org.eclipse.core.runtime.Platform;
+ import org.eclipse.core.runtime.Status;
+ import org.osgi.framework.BundleContext;
+ 
+@@ -384,7 +386,15 @@ public class MIStack extends AbstractDsfService implements IStack, ICachingServi
+ 
+ 		@Override
+ 		public String getFile() {
+-			return getMIFrame().getFile();
++			//translate debugger path to host source path
++			String debuggerPath = getMIFrame().getFile();
++			String sourcePath = debuggerPath;
++			if (Platform.getOS().equals(Platform.OS_WIN32)) {
++				if (debuggerPath.startsWith("/")) { //$NON-NLS-1$
++					sourcePath = Cygwin.pathToWindows(debuggerPath);
++				}
++			}
++			return sourcePath;
+ 		}
+ 
+ 		@Override
+@@ -470,7 +480,7 @@ public class MIStack extends AbstractDsfService implements IStack, ICachingServi
+ 		fCommandFactory = getServicesTracker().getService(IMICommandControl.class).getCommandFactory();
+ 
+ 		getSession().addServiceEventListener(this, null);
+-		register(new String[] { IStack.class.getName(), MIStack.class.getName() }, new Hashtable<String, String>());
++		register(new String[] { IStack.class.getName(), MIStack.class.getName() }, new Hashtable<>());
+ 		rm.done();
+ 	}
+ 
+-- 
+2.42.1
+

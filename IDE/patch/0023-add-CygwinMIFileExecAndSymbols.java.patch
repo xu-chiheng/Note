@@ -1,0 +1,44 @@
+From 093bf1dcb8df99b08a5d25a37e282ce77830efc5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 23/27] add CygwinMIFileExecAndSymbols.java
+
+---
+ .../cygwin/CygwinMIFileExecAndSymbols.java    | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java
+
+diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java
+new file mode 100644
+index 0000000000..627294872d
+--- /dev/null
++++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java
+@@ -0,0 +1,24 @@
++/********************************************************************************
++ * Copyright (c) 2024 徐持恒 Xu Chiheng
++ *
++ * This program and the accompanying materials are made available under the
++ * terms of the Eclipse Public License 2.0 which is available at
++ * http://www.eclipse.org/legal/epl-2.0.
++ *
++ * SPDX-License-Identifier: EPL-2.0
++ ********************************************************************************/
++package org.eclipse.cdt.dsf.mi.service.command.commands.cygwin;
++
++import org.eclipse.cdt.core.Cygwin;
++import org.eclipse.cdt.dsf.mi.service.IMIContainerDMContext;
++import org.eclipse.cdt.dsf.mi.service.command.commands.MIFileExecAndSymbols;
++
++public class CygwinMIFileExecAndSymbols extends MIFileExecAndSymbols {
++	public CygwinMIFileExecAndSymbols(IMIContainerDMContext dmc) {
++		this(dmc, null);
++	}
++
++	public CygwinMIFileExecAndSymbols(IMIContainerDMContext dmc, String file) {
++		super(dmc, Cygwin.pathToUnix(file));
++	}
++}
+-- 
+2.42.1
+

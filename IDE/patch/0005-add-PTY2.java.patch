@@ -1,8 +1,8 @@
-From 20d99a203cfb6daaced815082be801f8c6e1c573 Mon Sep 17 00:00:00 2001
+From 9af015abf417e2b18a6f7067795bd32b9f2ee801 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 05/21] add PTY2.java
+Subject: [PATCH 05/27] add PTY2.java
 
 ---
  .../src/org/eclipse/cdt/utils/pty/PTY2.java   | 81 +++++++++++++++++++

@@ -1,4 +1,4 @@
-From 4db7c878603d2e135d24e150582c7c12413b93d3 Mon Sep 17 00:00:00 2001
+From 8855e9e1076a48222d097bb679f3dca1d61451e4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
@@ -20,22 +20,23 @@ Subject: [PATCH 19/21] fix GDB MI commands on Cygwin
  create mode 100644 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIFileExecAndSymbols.java
 
 diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
-index 20072bceb2..7eba1d1838 100644
+index 20072bceb2..09b58d79d0 100644
 --- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
 +++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
-@@ -26,7 +26,11 @@
+@@ -26,7 +26,12 @@
   *******************************************************************************/
  package org.eclipse.cdt.dsf.gdb.service;
  
 +import java.util.Map;
 +import java.util.TreeMap;
 +
++import org.eclipse.cdt.core.Cygwin;
  import org.eclipse.cdt.debug.core.CDebugCorePlugin;
 +import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants;
  import org.eclipse.cdt.dsf.debug.service.AbstractDsfDebugServicesFactory;
  import org.eclipse.cdt.dsf.debug.service.IBreakpoints;
  import org.eclipse.cdt.dsf.debug.service.IDisassembly;
-@@ -46,6 +50,7 @@ import org.eclipse.cdt.dsf.gdb.internal.service.IGDBFocusSynchronizer;
+@@ -46,6 +51,7 @@ import org.eclipse.cdt.dsf.gdb.internal.service.IGDBFocusSynchronizer;
  import org.eclipse.cdt.dsf.gdb.launching.GdbLaunch;
  import org.eclipse.cdt.dsf.gdb.launching.LaunchUtils;
  import org.eclipse.cdt.dsf.gdb.service.command.CommandFactory_6_8;
@@ -43,11 +44,10 @@ index 20072bceb2..7eba1d1838 100644
  import org.eclipse.cdt.dsf.gdb.service.command.GDBControl;
  import org.eclipse.cdt.dsf.gdb.service.command.GDBControl_7_0;
  import org.eclipse.cdt.dsf.gdb.service.command.GDBControl_7_12;
-@@ -64,8 +69,13 @@ import org.eclipse.cdt.dsf.mi.service.MIStack;
+@@ -64,8 +70,12 @@ import org.eclipse.cdt.dsf.mi.service.MIStack;
  import org.eclipse.cdt.dsf.mi.service.command.CommandFactory;
  import org.eclipse.cdt.dsf.service.DsfSession;
  import org.eclipse.cdt.dsf.service.IDsfService;
-+import org.eclipse.cdt.internal.core.Cygwin;
 +import org.eclipse.cdt.utils.spawner.ProcessFactory;
 +import org.eclipse.core.runtime.CoreException;
  import org.eclipse.core.runtime.IStatus;

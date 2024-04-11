@@ -1,15 +1,15 @@
-From 405841be53f11f5935cea6bddb99975d3b365937 Mon Sep 17 00:00:00 2001
+From cbdf5ce00a3acb874d2f1c78962876b2439b0291 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Mon, 8 Apr 2024 08:33:54 +0800
 Subject: [PATCH 17/21] rework GnuCygwinConfigurationEnvironmentSupplier.java
 
 ---
- ...ygwinConfigurationEnvironmentSupplier.java | 72 +++++--------------
- 1 file changed, 17 insertions(+), 55 deletions(-)
+ ...ygwinConfigurationEnvironmentSupplier.java | 74 +++++--------------
+ 1 file changed, 18 insertions(+), 56 deletions(-)
 
 diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java
-index 37fda4e164..3e6c44dd7a 100644
+index 37fda4e164..ad9a8d184c 100644
 --- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java
 +++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java
 @@ -14,88 +14,50 @@
@@ -19,7 +19,8 @@ index 37fda4e164..3e6c44dd7a 100644
 -import org.eclipse.cdt.core.CCorePlugin;
 -import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
 -import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
- import org.eclipse.cdt.internal.core.Cygwin;
+-import org.eclipse.cdt.internal.core.Cygwin;
++import org.eclipse.cdt.core.Cygwin;
  import org.eclipse.cdt.managedbuilder.core.IConfiguration;
  import org.eclipse.cdt.managedbuilder.envvar.IBuildEnvironmentVariable;
  import org.eclipse.cdt.managedbuilder.envvar.IConfigurationEnvironmentVariableSupplier;
@@ -50,7 +51,7 @@ index 37fda4e164..3e6c44dd7a 100644
  		}
 -
 -		if (!System.getProperty(PROPERTY_OSNAME).toLowerCase().startsWith("windows ")) { //$NON-NLS-1$
-+		if (!Platform.getOS().equals(Platform.OS_WIN32) || !Cygwin.isAvailable()) {
++		if (!Platform.getOS().equals(Platform.OS_WIN32) || !org.eclipse.cdt.internal.core.Cygwin.isAvailable()) {
  			return null;
  		}
 -
@@ -73,10 +74,10 @@ index 37fda4e164..3e6c44dd7a 100644
 -			}
 +		switch (variableName) {
 +		case Cygwin.ENV_CYGWIN_HOME:
-+			String home = Cygwin.getCygwinHome();
++			String home = org.eclipse.cdt.internal.core.Cygwin.getCygwinHome();
 +			return new BuildEnvVar(variableName, home, IBuildEnvironmentVariable.ENVVAR_REPLACE);
 +		case ENV_PATH:
-+			String path = "${" + Cygwin.ENV_CYGWIN_HOME + "}" + "/bin";
++			String path = org.eclipse.cdt.internal.core.Cygwin.getCygwinHome() + "/bin";
 +			return new BuildEnvVar(variableName, path, IBuildEnvironmentVariable.ENVVAR_PREPEND);
 +		default:
  			return null;

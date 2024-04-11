@@ -1,4 +1,4 @@
-From 6444050e2415225d350a959303f116364f62cc3b Mon Sep 17 00:00:00 2001
+From 35f6b14b58dcbe35dff47adb1ed239ccfba5b62b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
@@ -11,7 +11,7 @@ Subject: [PATCH 04/21] add MSYS2.java
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 new file mode 100644
-index 0000000000..b21135c6a5
+index 0000000000..62e3993e62
 --- /dev/null
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 @@ -0,0 +1,183 @@
@@ -36,7 +36,7 @@ index 0000000000..b21135c6a5
 +// A collection of MSYS2-related utilities.
 +public class MSYS2 {
 +	public static final String ENV_MINGW_HOME = "MINGW_HOME"; //$NON-NLS-1$
-+	public static final String ENV_MSYS_HOME = "MSYS_HOME"; //$NON-NLS-1$
++	public static final String ENV_MSYSTEM = "MSYSTEM"; //$NON-NLS-1$
 +
 +	private static boolean present;
 +	private static String rootDir;

@@ -1,28 +1,29 @@
-From b2c8225b4cd5ba395098f7e7ac0d2e3f02874d4a Mon Sep 17 00:00:00 2001
+From 303f6ab4de00754ef42646eacc523a315b50478a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Mon, 8 Apr 2024 06:53:50 +0800
 Subject: [PATCH 15/21] rework MingwEnvironmentVariableSupplier.java
 
 ---
- .../MingwEnvironmentVariableSupplier.java     | 69 +++++++------------
- 1 file changed, 25 insertions(+), 44 deletions(-)
+ .../MingwEnvironmentVariableSupplier.java     | 71 +++++++------------
+ 1 file changed, 26 insertions(+), 45 deletions(-)
 
 diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
-index c8b3592b5e..2e6167ddea 100644
+index c8b3592b5e..a3b4e0aaec 100644
 --- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
 +++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
-@@ -15,9 +15,6 @@
+@@ -15,9 +15,7 @@
  
  package org.eclipse.cdt.managedbuilder.gnu.mingw;
  
 -import org.eclipse.cdt.core.CCorePlugin;
 -import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
 -import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
++import org.eclipse.cdt.core.MSYS2;
  import org.eclipse.cdt.internal.core.MinGW;
  import org.eclipse.cdt.internal.core.envvar.EnvironmentVariableManager;
  import org.eclipse.cdt.managedbuilder.core.IConfiguration;
-@@ -25,66 +22,50 @@ import org.eclipse.cdt.managedbuilder.envvar.IBuildEnvironmentVariable;
+@@ -25,66 +23,49 @@ import org.eclipse.cdt.managedbuilder.envvar.IBuildEnvironmentVariable;
  import org.eclipse.cdt.managedbuilder.envvar.IConfigurationEnvironmentVariableSupplier;
  import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
  import org.eclipse.cdt.managedbuilder.internal.envvar.BuildEnvVar;
@@ -76,15 +77,14 @@ index c8b3592b5e..2e6167ddea 100644
 +			return null;
 +		}
 +		switch (variableName) {
-+		case MinGW.ENV_MINGW_HOME:
-+			String minGWHome = MinGW.getMinGWHome();
-+			return new BuildEnvVar(variableName, minGWHome, IBuildEnvironmentVariable.ENVVAR_REPLACE);
-+		case MinGW.ENV_MSYS_HOME:
-+			String msysHome = MinGW.getMSysHome();
-+			return new BuildEnvVar(variableName, msysHome, IBuildEnvironmentVariable.ENVVAR_REPLACE);
++		case MSYS2.ENV_MINGW_HOME:
++			String home = MinGW.getMinGWHome();
++			return new BuildEnvVar(variableName, home, IBuildEnvironmentVariable.ENVVAR_REPLACE);
++		case MSYS2.ENV_MSYSTEM:
++			// must be set, so ~/.bashrc can run correctly
++			return new BuildEnvVar(variableName, "UCRT64", IBuildEnvironmentVariable.ENVVAR_REPLACE);
 +		case ENV_PATH:
-+			String path = "${" + MinGW.ENV_MINGW_HOME + "}" + "/bin" + PATH_DELIMITER + "${" + MinGW.ENV_MSYS_HOME + "}"
-+					+ "/usr/bin";
++			String path = MinGW.getMinGWHome() + "/bin" + PATH_DELIMITER + MinGW.getMSysHome() + "/usr/bin";
 +			return new BuildEnvVar(variableName, path, IBuildEnvironmentVariable.ENVVAR_PREPEND);
 +		default:
  			return null;
@@ -104,11 +104,12 @@ index c8b3592b5e..2e6167ddea 100644
  	public IBuildEnvironmentVariable[] getVariables(IConfiguration configuration,
  			IEnvironmentVariableProvider provider) {
 -		return new IBuildEnvironmentVariable[] { getVariable(MinGW.ENV_MINGW_HOME, configuration, provider),
+-				getVariable(MinGW.ENV_MSYS_HOME, configuration, provider),
+-				getVariable(ENV_PATH, configuration, provider), };
 +		//@formatter:off
 +		return new IBuildEnvironmentVariable[] {
-+				getVariable(MinGW.ENV_MINGW_HOME, configuration, provider),
- 				getVariable(MinGW.ENV_MSYS_HOME, configuration, provider),
--				getVariable(ENV_PATH, configuration, provider), };
++				getVariable(MSYS2.ENV_MINGW_HOME, configuration, provider),
++				getVariable(MSYS2.ENV_MSYSTEM, configuration, provider),
 +				getVariable(ENV_PATH, configuration, provider),
 +			};
  	}

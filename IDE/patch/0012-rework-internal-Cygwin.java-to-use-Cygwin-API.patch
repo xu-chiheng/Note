@@ -1,4 +1,4 @@
-From 27b2a5f8851e67ede73fa2793de6603abd9a150a Mon Sep 17 00:00:00 2001
+From 02847a6359584fece4d1b009a947db0cec8b8520 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 18:59:02 +0800
@@ -6,13 +6,13 @@ Subject: [PATCH 12/21] rework internal Cygwin.java to use Cygwin API
 
 ---
  .../org/eclipse/cdt/internal/core/Cygwin.java | 241 +-----------------
- 1 file changed, 8 insertions(+), 233 deletions(-)
+ 1 file changed, 7 insertions(+), 234 deletions(-)
 
 diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java
-index d4fa713b00..2d4280b2f3 100644
+index d4fa713b00..45b699d039 100644
 --- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java
 +++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/internal/core/Cygwin.java
-@@ -13,76 +13,13 @@
+@@ -13,77 +13,12 @@
   *******************************************************************************/
  package org.eclipse.cdt.internal.core;
  
@@ -86,11 +86,11 @@ index d4fa713b00..2d4280b2f3 100644
 -		}
 -		return cygpathLocation;
 -	}
-+	public static final String ENV_CYGWIN_HOME = org.eclipse.cdt.core.Cygwin.ENV_CYGWIN_HOME;
- 
+-
  	/**
  	 * Check if cygwin path conversion utilities are available in the path.
-@@ -94,7 +31,7 @@ public class Cygwin {
+ 	 * Tells whether cygwin is installed in the path.
+@@ -94,7 +29,7 @@ public class Cygwin {
  	 * @return {@code true} if cygwin is available, {@code false} otherwise.
  	 */
  	public static boolean isAvailable(String envPath) {
@@ -99,7 +99,7 @@ index d4fa713b00..2d4280b2f3 100644
  	}
  
  	/**
-@@ -104,43 +41,7 @@ public class Cygwin {
+@@ -104,43 +39,7 @@ public class Cygwin {
  	 * @return {@code true} if cygwin is available, {@code false} otherwise.
  	 */
  	public static boolean isAvailable() {
@@ -144,7 +144,7 @@ index d4fa713b00..2d4280b2f3 100644
  	}
  
  	/**
-@@ -157,20 +58,7 @@ public class Cygwin {
+@@ -157,20 +56,7 @@ public class Cygwin {
  	 */
  	public static String cygwinToWindowsPath(String cygwinPath, String envPath)
  			throws IOException, UnsupportedOperationException {
@@ -166,7 +166,7 @@ index d4fa713b00..2d4280b2f3 100644
  	}
  
  	/**
-@@ -184,7 +72,7 @@ public class Cygwin {
+@@ -184,7 +70,7 @@ public class Cygwin {
  	 * @throws IOException on IO problem.
  	 */
  	public static String cygwinToWindowsPath(String cygwinPath) throws IOException, UnsupportedOperationException {
@@ -175,7 +175,7 @@ index d4fa713b00..2d4280b2f3 100644
  	}
  
  	/**
-@@ -200,20 +88,7 @@ public class Cygwin {
+@@ -200,20 +86,7 @@ public class Cygwin {
  	 */
  	public static String windowsToCygwinPath(String windowsPath, String envPath)
  			throws IOException, UnsupportedOperationException {
@@ -197,7 +197,7 @@ index d4fa713b00..2d4280b2f3 100644
  	}
  
  	/**
-@@ -227,7 +102,7 @@ public class Cygwin {
+@@ -227,7 +100,7 @@ public class Cygwin {
  	 * @throws IOException on IO problem.
  	 */
  	public static String windowsToCygwinPath(String windowsPath) throws IOException, UnsupportedOperationException {
@@ -206,7 +206,7 @@ index d4fa713b00..2d4280b2f3 100644
  	}
  
  	/**
-@@ -240,106 +115,6 @@ public class Cygwin {
+@@ -240,106 +113,6 @@ public class Cygwin {
  	 * @return Location of Cygwin root folder "/" on file system in Windows format.
  	 */
  	public static String getCygwinHome() {
@@ -234,7 +234,8 @@ index d4fa713b00..2d4280b2f3 100644
 -		isCygwinLocationCached = true;
 -
 -		return cygwinLocation;
--	}
++		return org.eclipse.cdt.core.Cygwin.getRootDir();
+ 	}
 -
 -	/**
 -	 * Reads required value from registry. Looks in both
@@ -310,8 +311,7 @@ index d4fa713b00..2d4280b2f3 100644
 -		}
 -
 -		return rootValue;
-+		return org.eclipse.cdt.core.Cygwin.getRootDir();
- 	}
+-	}
 -
  }
 -- 

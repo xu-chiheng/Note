@@ -1,6 +1,9 @@
 
+# regenerate patches :
+rm -rf ../patch/*.patch
 git format-patch -o ../patch main..HEAD
 
+# apply patches :
 git am ../patch/*.patch
 
 

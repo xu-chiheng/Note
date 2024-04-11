@@ -1,15 +1,15 @@
-From 27ffd077444d2b4fe942030600383abbaba052bf Mon Sep 17 00:00:00 2001
+From 0516455be62456632ee71d12c2091c0ed33654b5 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
 Subject: [PATCH 07/27] ProcessFactory.java : rework and add exec2 methods
 
 ---
- .../cdt/utils/spawner/ProcessFactory.java     | 236 +++++++++++++-----
- 1 file changed, 167 insertions(+), 69 deletions(-)
+ .../cdt/utils/spawner/ProcessFactory.java     | 246 +++++++++++++-----
+ 1 file changed, 177 insertions(+), 69 deletions(-)
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..d476e9fc31 100644
+index addd040267..328112353c 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 @@ -24,6 +24,8 @@ import java.util.Map.Entry;
@@ -21,10 +21,19 @@ index addd040267..d476e9fc31 100644
  import org.eclipse.cdt.internal.core.natives.CNativePlugin;
  import org.eclipse.cdt.internal.core.natives.Messages;
  import org.eclipse.cdt.utils.pty.PTY;
-@@ -40,67 +42,86 @@ public class ProcessFactory {
+@@ -40,67 +42,101 @@ public class ProcessFactory {
  	private boolean hasSpawner;
  	private Runtime runtime;
  
++	private String[] prependArgsToCmdArray(String[] args, String[] cmdarray) {
++		int len0 = args.length;
++		int len1 = cmdarray.length;
++		String[] cmdArrayNew = new String[len0 + len1];
++		System.arraycopy(args, 0, cmdArrayNew, 0, len0);
++		System.arraycopy(cmdarray, 0, cmdArrayNew, len0, len1);
++		return cmdArrayNew;
++	}
++
 +	@SuppressWarnings("nls")
  	private String[] modifyCmdArrayIfFlatpak(String[] cmdarray) {
 -		if (System.getenv("FLATPAK_SANDBOX_DIR") != null) { //$NON-NLS-1$
@@ -33,14 +42,10 @@ index addd040267..d476e9fc31 100644
 -			newArray[0] = "flatpak-spawn"; //$NON-NLS-1$
 -			newArray[1] = "--host"; //$NON-NLS-1$
 -			newArray[2] = "--watch-bus"; //$NON-NLS-1$
+-			cmdarray = newArray;
 +		if (System.getenv("FLATPAK_SANDBOX_DIR") != null) {
-+			String[] cmdarray0 = new String[] { "flatpak-spawn", "--host", "--watch-bus" };
-+			int len0 = cmdarray0.length;
-+			int len1 = cmdarray.length;
-+			String[] newArray = new String[len0 + len1];
-+			System.arraycopy(cmdarray0, 0, newArray, 0, len0);
-+			System.arraycopy(cmdarray, 0, newArray, len0, len1);
- 			cmdarray = newArray;
++			String[] args = new String[] { "flatpak-spawn", "--host", "--watch-bus" };
++			cmdarray = prependArgsToCmdArray(args, cmdarray);
  		}
  		return cmdarray;
  	}
@@ -82,13 +87,25 @@ index addd040267..d476e9fc31 100644
 -					environment.put(envstring.substring(0, eqlsign), envstring.substring(eqlsign + 1));
 -				} else {
 -					// Silently ignore envstrings lacking the required `='.
--				}
 +	public static TreeMap<String, String> envpToEnvMap(String[] envp) {
 +		if (envp == null) {
 +			return getDefaultEnvMap();
 +		}
 +		TreeMap<String, String> envMap = newEmptyEnvMap();
 +		for (String envstring : envp) {
++			if (Platform.getOS().equals(Platform.OS_WIN32)) {
++				if (envstring.startsWith("=::=")) { //$NON-NLS-1$
++					// key     =::
++					// value   ::\
++					// envstring =::=::\
++					String key = envstring.substring(0, 3);
++					String value = envstring.substring(4);
++					envMap.put(key, value);
++					continue;
+ 				}
+ 			}
+-		} else {
+-			environment = getDefaultEnvironment();
 +			int eqlsign = envstring.indexOf('=');
 +			if (eqlsign != -1) {
 +				String key = envstring.substring(0, eqlsign);
@@ -96,11 +113,8 @@ index addd040267..d476e9fc31 100644
 +				envMap.put(key, value);
 +			} else {
 +				// Silently ignore envstrings lacking the required `='.
- 			}
--		} else {
--			environment = getDefaultEnvironment();
- 		}
--		return environment;
++			}
++		}
 +		return envMap;
 +	}
 +
@@ -116,7 +130,8 @@ index addd040267..d476e9fc31 100644
 +			String key = entry.getKey();
 +			String value = entry.getValue();
 +			envp[index++] = key + '=' + value;
-+		}
+ 		}
+-		return environment;
 +
 +		return envp;
  	}
@@ -148,7 +163,7 @@ index addd040267..d476e9fc31 100644
  					int result = valueA.compareTo(valueB);
  					if (result == 0) {
  						// not changed
-@@ -131,8 +152,8 @@ public class ProcessFactory {
+@@ -131,8 +167,8 @@ public class ProcessFactory {
  					sb.append('\n');
  				}
  			} else {
@@ -159,7 +174,7 @@ index addd040267..d476e9fc31 100644
  				// added
  				sb.append('+');
  				sb.append(key);
-@@ -146,6 +167,7 @@ public class ProcessFactory {
+@@ -146,6 +182,7 @@ public class ProcessFactory {
  	private class Builder {
  		String[] cmdarray;
  		String[] envp;
@@ -167,7 +182,7 @@ index addd040267..d476e9fc31 100644
  		File dir;
  		boolean use_pty;
  		PTY pty;
-@@ -172,7 +194,23 @@ public class ProcessFactory {
+@@ -172,7 +209,23 @@ public class ProcessFactory {
  		}
  
  		public Builder environment(String[] envp) {
@@ -192,7 +207,7 @@ index addd040267..d476e9fc31 100644
  			return this;
  		}
  
-@@ -193,20 +231,21 @@ public class ProcessFactory {
+@@ -193,20 +246,21 @@ public class ProcessFactory {
  			return this;
  		}
  
@@ -219,7 +234,7 @@ index addd040267..d476e9fc31 100644
  			if (dir != null) {
  				String pathString = dir.toString();
  				sb.append(pathString);
-@@ -215,50 +254,71 @@ public class ProcessFactory {
+@@ -215,50 +269,66 @@ public class ProcessFactory {
  				String pathDevice = path.getDevice();
  				String[] pathSegments = path.segments();
  				if (pathDevice != null) {
@@ -295,20 +310,15 @@ index addd040267..d476e9fc31 100644
 +				// Use ". ~/.bashrc; " to simulate -i or -l
 +				// bash -i become interactive shell, which is not supported by Eclipse Console
 +				// bash -l will change current directory to ~
-+				String[] cmdArray0 = new String[] { bashDir + "/bash.exe", "-c",
++				String[] args = new String[] { bashDir + "/bash.exe", "-c",
 +						"if [ -f ~/.bashrc ]; then . ~/.bashrc; fi; \"$@\" ;", "-" };
-+				int len0 = cmdArray0.length;
-+				int len1 = cmdarray.length;
-+				String[] cmdArrayNew = new String[len0 + len1];
-+				System.arraycopy(cmdArray0, 0, cmdArrayNew, 0, len0);
-+				System.arraycopy(cmdarray, 0, cmdArrayNew, len0, len1);
-+				cmdarray = cmdArrayNew;
++				cmdarray = prependArgsToCmdArray(args, cmdarray);
 +			}
 +
  			if (hasSpawner) {
  				if (use_pty) {
  					if (has_gracefulExitTimeMs) {
-@@ -362,7 +422,7 @@ public class ProcessFactory {
+@@ -362,7 +432,7 @@ public class ProcessFactory {
  		return p;
  	}
  
@@ -317,7 +327,7 @@ index addd040267..d476e9fc31 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).start();
  		return p;
  	}
-@@ -370,13 +430,13 @@ public class ProcessFactory {
+@@ -370,13 +440,13 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */
@@ -333,7 +343,7 @@ index addd040267..d476e9fc31 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).pty(pty).start();
  		return p;
  	}
-@@ -384,10 +444,48 @@ public class ProcessFactory {
+@@ -384,10 +454,48 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */

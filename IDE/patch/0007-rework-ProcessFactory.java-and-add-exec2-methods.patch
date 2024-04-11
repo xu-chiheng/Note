@@ -1,15 +1,15 @@
-From 18e4ba09b4a03211fe9b5c79780c5e728cec2598 Mon Sep 17 00:00:00 2001
+From 26f48ed6f5c974fb6fbff2093edb0448604f0607 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
 Subject: [PATCH 07/21] rework ProcessFactory.java and add exec2 methods
 
 ---
- .../cdt/utils/spawner/ProcessFactory.java     | 235 +++++++++++++-----
- 1 file changed, 167 insertions(+), 68 deletions(-)
+ .../cdt/utils/spawner/ProcessFactory.java     | 236 +++++++++++++-----
+ 1 file changed, 167 insertions(+), 69 deletions(-)
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..c7e31634dc 100644
+index addd040267..d476e9fc31 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 @@ -24,6 +24,8 @@ import java.util.Map.Entry;
@@ -219,7 +219,7 @@ index addd040267..c7e31634dc 100644
  			if (dir != null) {
  				String pathString = dir.toString();
  				sb.append(pathString);
-@@ -215,50 +254,72 @@ public class ProcessFactory {
+@@ -215,50 +254,71 @@ public class ProcessFactory {
  				String pathDevice = path.getDevice();
  				String[] pathSegments = path.segments();
  				if (pathDevice != null) {
@@ -248,7 +248,7 @@ index addd040267..c7e31634dc 100644
 -				TreeMap<String, String> environmentA = getDefaultEnvironment();
 -				TreeMap<String, String> environmentB = envpToEnvMap(envp);
 +				TreeMap<String, String> envMapA = getDefaultEnvMap();
-+				TreeMap<String, String> envMapB = envpToEnvMap(envp);
++				TreeMap<String, String> envMapB = envMap;
  
 -				sb.append("environment :\n"); //$NON-NLS-1$
 -				appendEnvMapComparison(sb, environmentA, environmentB);
@@ -271,9 +271,9 @@ index addd040267..c7e31634dc 100644
 -				sb.append("\n\n"); //$NON-NLS-1$
 +				sb.append("\n\n");
  			}
- 			// set breakpoint on next line to inspect sb when debugging, to see the
+-			// set breakpoint on next line to inspect sb when debugging, to see the
 -			// ultimate parameters of ProcessBuilder
-+			// ultimate parameters of exec() or exec2()
++			// set breakpoint on next line to inspect sb when debugging
  			return sb;
  		}
  
@@ -308,7 +308,7 @@ index addd040267..c7e31634dc 100644
  			if (hasSpawner) {
  				if (use_pty) {
  					if (has_gracefulExitTimeMs) {
-@@ -362,7 +423,7 @@ public class ProcessFactory {
+@@ -362,7 +422,7 @@ public class ProcessFactory {
  		return p;
  	}
  
@@ -317,7 +317,7 @@ index addd040267..c7e31634dc 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).start();
  		return p;
  	}
-@@ -370,13 +431,13 @@ public class ProcessFactory {
+@@ -370,13 +430,13 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */
@@ -333,7 +333,7 @@ index addd040267..c7e31634dc 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).pty(pty).start();
  		return p;
  	}
-@@ -384,10 +445,48 @@ public class ProcessFactory {
+@@ -384,10 +444,48 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */

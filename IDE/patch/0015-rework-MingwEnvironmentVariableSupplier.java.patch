@@ -1,18 +1,34 @@
-From 7b767ae499080e959c26858768808676783e2e59 Mon Sep 17 00:00:00 2001
+From b2c8225b4cd5ba395098f7e7ac0d2e3f02874d4a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Mon, 8 Apr 2024 06:53:50 +0800
 Subject: [PATCH 15/21] rework MingwEnvironmentVariableSupplier.java
 
 ---
- .../gnu/mingw/MingwEnvironmentVariableSupplier.java   | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ .../MingwEnvironmentVariableSupplier.java     | 69 +++++++------------
+ 1 file changed, 25 insertions(+), 44 deletions(-)
 
 diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
-index c8b3592b5e..cd8ba5c7a5 100644
+index c8b3592b5e..2e6167ddea 100644
 --- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
 +++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
-@@ -30,11 +30,12 @@ import org.eclipse.core.runtime.Path;
+@@ -15,9 +15,6 @@
+ 
+ package org.eclipse.cdt.managedbuilder.gnu.mingw;
+ 
+-import org.eclipse.cdt.core.CCorePlugin;
+-import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
+-import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
+ import org.eclipse.cdt.internal.core.MinGW;
+ import org.eclipse.cdt.internal.core.envvar.EnvironmentVariableManager;
+ import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+@@ -25,66 +22,50 @@ import org.eclipse.cdt.managedbuilder.envvar.IBuildEnvironmentVariable;
+ import org.eclipse.cdt.managedbuilder.envvar.IConfigurationEnvironmentVariableSupplier;
+ import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
+ import org.eclipse.cdt.managedbuilder.internal.envvar.BuildEnvVar;
+-import org.eclipse.core.runtime.Path;
++import org.eclipse.core.runtime.Platform;
+ 
  /**
   * @noextend This class is not intended to be subclassed by clients.
   */
@@ -26,30 +42,78 @@ index c8b3592b5e..cd8ba5c7a5 100644
  	@Override
  	public IBuildEnvironmentVariable getVariable(String variableName, IConfiguration configuration,
  			IEnvironmentVariableProvider provider) {
-@@ -68,11 +69,12 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
- 			}
+-		if (variableName.equals(MinGW.ENV_MINGW_HOME)) {
+-			IEnvironmentVariable varMinGWHome = CCorePlugin.getDefault().getBuildEnvironmentManager()
+-					.getVariable(MinGW.ENV_MINGW_HOME, (ICConfigurationDescription) null, false);
+-			if (varMinGWHome == null) {
+-				// Contribute if the variable does not already come from workspace environment
+-				String minGWHome = MinGW.getMinGWHome();
+-				if (minGWHome == null) {
+-					// If the variable is not defined still show it in the environment variables list as a hint to user
+-					minGWHome = ""; //$NON-NLS-1$
+-				}
+-				return new BuildEnvVar(MinGW.ENV_MINGW_HOME, new Path(minGWHome).toString(),
+-						IBuildEnvironmentVariable.ENVVAR_REPLACE);
+-			}
++		if (variableName == null) {
  			return null;
- 
-+		} else if (variableName.equals(MinGW.ENV_MSYSTEM)) {
-+			return new BuildEnvVar(MinGW.ENV_MSYSTEM, "UCRT64", IBuildEnvironmentVariable.ENVVAR_REPLACE);
- 		} else if (variableName.equals(ENV_PATH)) {
- 			@SuppressWarnings("nls")
+-
+-		} else if (variableName.equals(MinGW.ENV_MSYS_HOME)) {
+-			IEnvironmentVariable varMsysHome = CCorePlugin.getDefault().getBuildEnvironmentManager()
+-					.getVariable(MinGW.ENV_MSYS_HOME, (ICConfigurationDescription) null, false);
+-			if (varMsysHome == null) {
+-				// Contribute if the variable does not already come from workspace environment
+-				String msysHome = MinGW.getMSysHome();
+-				if (msysHome == null) {
+-					// If the variable is not defined still show it in the environment variables list as a hint to user
+-					msysHome = ""; //$NON-NLS-1$
+-				}
+-				return new BuildEnvVar(MinGW.ENV_MSYS_HOME, new Path(msysHome).toString(),
+-						IBuildEnvironmentVariable.ENVVAR_REPLACE);
+-			}
++		}
++		if (!Platform.getOS().equals(Platform.OS_WIN32) || !MinGW.isAvailable()) {
++			return null;
++		}
++		switch (variableName) {
++		case MinGW.ENV_MINGW_HOME:
++			String minGWHome = MinGW.getMinGWHome();
++			return new BuildEnvVar(variableName, minGWHome, IBuildEnvironmentVariable.ENVVAR_REPLACE);
++		case MinGW.ENV_MSYS_HOME:
++			String msysHome = MinGW.getMSysHome();
++			return new BuildEnvVar(variableName, msysHome, IBuildEnvironmentVariable.ENVVAR_REPLACE);
++		case ENV_PATH:
++			String path = "${" + MinGW.ENV_MINGW_HOME + "}" + "/bin" + PATH_DELIMITER + "${" + MinGW.ENV_MSYS_HOME + "}"
++					+ "/usr/bin";
++			return new BuildEnvVar(variableName, path, IBuildEnvironmentVariable.ENVVAR_PREPEND);
++		default:
+ 			return null;
+-
+-		} else if (variableName.equals(ENV_PATH)) {
+-			@SuppressWarnings("nls")
 -			String path = "${" + MinGW.ENV_MINGW_HOME + "}" + BACKSLASH + "bin" + PATH_DELIMITER + "${"
 -					+ MinGW.ENV_MSYS_HOME + "}" + BACKSLASH + "bin" + PATH_DELIMITER + "${" + MinGW.ENV_MSYS_HOME + "}"
 -					+ BACKSLASH + "usr" + BACKSLASH + "bin";
-+			String path = "${" + MinGW.ENV_MINGW_HOME + "}" + "/bin" + PATH_DELIMITER + "${" + MinGW.ENV_MSYS_HOME + "}"
-+					+ "/usr/bin";
- 			return new BuildEnvVar(ENV_PATH, path, IBuildEnvironmentVariable.ENVVAR_PREPEND);
+-			return new BuildEnvVar(ENV_PATH, path, IBuildEnvironmentVariable.ENVVAR_PREPEND);
  		}
- 
-@@ -84,6 +86,7 @@ public class MingwEnvironmentVariableSupplier implements IConfigurationEnvironme
- 			IEnvironmentVariableProvider provider) {
- 		return new IBuildEnvironmentVariable[] { getVariable(MinGW.ENV_MINGW_HOME, configuration, provider),
- 				getVariable(MinGW.ENV_MSYS_HOME, configuration, provider),
-+				getVariable(MinGW.ENV_MSYSTEM, configuration, provider),
- 				getVariable(ENV_PATH, configuration, provider), };
+-
+-		return null;
  	}
  
+ 	@Override
+ 	public IBuildEnvironmentVariable[] getVariables(IConfiguration configuration,
+ 			IEnvironmentVariableProvider provider) {
+-		return new IBuildEnvironmentVariable[] { getVariable(MinGW.ENV_MINGW_HOME, configuration, provider),
++		//@formatter:off
++		return new IBuildEnvironmentVariable[] {
++				getVariable(MinGW.ENV_MINGW_HOME, configuration, provider),
+ 				getVariable(MinGW.ENV_MSYS_HOME, configuration, provider),
+-				getVariable(ENV_PATH, configuration, provider), };
++				getVariable(ENV_PATH, configuration, provider),
++			};
+ 	}
+-
+ }
 -- 
 2.42.1
 

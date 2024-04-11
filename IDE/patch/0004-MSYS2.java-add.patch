@@ -1,4 +1,4 @@
-From 45c1a1dea3c509a5e227f6222bf5555ec9e28a33 Mon Sep 17 00:00:00 2001
+From 11ba2a77672b6449bffd5da2e0b3fc1440b77f0b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
@@ -11,7 +11,7 @@ Subject: [PATCH 04/27] MSYS2.java : add
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 new file mode 100644
-index 0000000000..62e3993e62
+index 0000000000..8ce6c94bbd
 --- /dev/null
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 @@ -0,0 +1,183 @@
@@ -119,7 +119,10 @@ index 0000000000..62e3993e62
 +			return windowsPath;
 +		}
 +		String[] segments = path.segments();
-+		if (unixPath.startsWith("/")) { //$NON-NLS-1$
++		if (!unixPath.startsWith("/")) { //$NON-NLS-1$
++			// relative path
++			windowsPath = path.toString();
++		} else {
 +			// absolute path
 +			if (segments.length >= 1) {
 +				if (segments[0].length() == 1) {
@@ -146,9 +149,6 @@ index 0000000000..62e3993e62
 +				builder.append(s);
 +			}
 +			windowsPath = builder.toString();
-+		} else {
-+			// relative path
-+			windowsPath = path.toString();
 +		}
 +
 +		return windowsPath;

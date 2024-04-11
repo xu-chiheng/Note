@@ -1,20 +1,20 @@
-From 788cb7dcee6816747668bc0fa524bab3f45c47d9 Mon Sep 17 00:00:00 2001
+From a0e06f645089574f44cc018b6e479c290328b819 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
 Subject: [PATCH 03/27] Cygwin.java : add
 
 ---
- .../src/org/eclipse/cdt/core/Cygwin.java      | 193 ++++++++++++++++++
- 1 file changed, 193 insertions(+)
+ .../src/org/eclipse/cdt/core/Cygwin.java      | 199 ++++++++++++++++++
+ 1 file changed, 199 insertions(+)
  create mode 100644 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 new file mode 100644
-index 0000000000..099c07609e
+index 0000000000..a4861fb111
 --- /dev/null
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
-@@ -0,0 +1,193 @@
+@@ -0,0 +1,199 @@
 +/********************************************************************************
 + * Copyright (c) 2022 徐持恒 Xu Chiheng
 + *
@@ -102,6 +102,7 @@ index 0000000000..099c07609e
 +	 * @param unixPath
 +	 * @return
 +	 */
++	@SuppressWarnings("nls")
 +	public static String pathToWindows(String unixPath) {
 +		if (!present) {
 +			return unixPath;
@@ -118,11 +119,15 @@ index 0000000000..099c07609e
 +			return windowsPath;
 +		}
 +
-+		if (unixPath.startsWith("/")) { //$NON-NLS-1$
++		if (!unixPath.startsWith("/")) {
++			// relative path
++			windowsPath = path.toString();
++		} else {
 +			// absolute path
 +			String[] segments = path.segments();
 +			if (segments.length >= 2) {
-+				if (segments[0].equals("cygdrive")) { //$NON-NLS-1$
++				switch (segments[0]) {
++				case "cygdrive":
 +					if (segments[1].length() == 1) {
 +						char drive = segments[1].charAt(0);
 +						if ((drive >= 'a' && drive <= 'z') || (drive >= 'A' && drive <= 'Z')) {
@@ -138,14 +143,19 @@ index 0000000000..099c07609e
 +							return windowsPath;
 +						}
 +					}
-+				}
-+				if (segments[0].equals("usr") && (segments[1].equals("bin") || segments[1].equals("lib"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-+					// /usr/lib --> /lib
-+					// /usr/bin --> /bin
-+					// /usr/include unchanged
-+					String[] newSegments = new String[segments.length - 1];
-+					System.arraycopy(segments, 1, newSegments, 0, segments.length - 1);
-+					segments = newSegments;
++					break;
++				case "usr":
++					switch (segments[1]) {
++					case "bin", "lib":
++						// /usr/lib --> /lib
++						// /usr/bin --> /bin
++						// /usr/include unchanged
++						String[] newSegments = new String[segments.length - 1];
++						System.arraycopy(segments, 1, newSegments, 0, segments.length - 1);
++						segments = newSegments;
++						break;
++					}
++					break;
 +				}
 +			}
 +			// unixPath.startsWith("/") && segments.length >= 0
@@ -156,11 +166,7 @@ index 0000000000..099c07609e
 +				builder.append(s);
 +			}
 +			windowsPath = builder.toString();
-+		} else {
-+			// relative path
-+			windowsPath = path.toString();
 +		}
-+
 +		return windowsPath;
 +	}
 +

@@ -1,15 +1,15 @@
-From ef572fc49ff87a9dbbfe10921562fcd98932548e Mon Sep 17 00:00:00 2001
+From a1b46ff570be1d021b75621b21cb753d90819be1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
 Subject: [PATCH 07/27] ProcessFactory.java : rework and add exec2 methods
 
 ---
- .../cdt/utils/spawner/ProcessFactory.java     | 246 +++++++++++++-----
- 1 file changed, 177 insertions(+), 69 deletions(-)
+ .../cdt/utils/spawner/ProcessFactory.java     | 248 +++++++++++++-----
+ 1 file changed, 179 insertions(+), 69 deletions(-)
 
 diff --git a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
-index addd040267..328112353c 100644
+index addd040267..f18dd287b6 100644
 --- a/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 +++ b/core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/spawner/ProcessFactory.java
 @@ -24,6 +24,8 @@ import java.util.Map.Entry;
@@ -21,7 +21,7 @@ index addd040267..328112353c 100644
  import org.eclipse.cdt.internal.core.natives.CNativePlugin;
  import org.eclipse.cdt.internal.core.natives.Messages;
  import org.eclipse.cdt.utils.pty.PTY;
-@@ -40,67 +42,101 @@ public class ProcessFactory {
+@@ -40,67 +42,103 @@ public class ProcessFactory {
  	private boolean hasSpawner;
  	private Runtime runtime;
  
@@ -95,6 +95,8 @@ index addd040267..328112353c 100644
 +		for (String envstring : envp) {
 +			if (Platform.getOS().equals(Platform.OS_WIN32)) {
 +				if (envstring.startsWith("=::=")) { //$NON-NLS-1$
++					// What are these strange environment variables?
++					// https://stackoverflow.com/questions/10431689/what-are-these-strange-environment-variables
 +					// key     =::
 +					// value   ::\
 +					// envstring =::=::\
@@ -163,7 +165,7 @@ index addd040267..328112353c 100644
  					int result = valueA.compareTo(valueB);
  					if (result == 0) {
  						// not changed
-@@ -131,8 +167,8 @@ public class ProcessFactory {
+@@ -131,8 +169,8 @@ public class ProcessFactory {
  					sb.append('\n');
  				}
  			} else {
@@ -174,7 +176,7 @@ index addd040267..328112353c 100644
  				// added
  				sb.append('+');
  				sb.append(key);
-@@ -146,6 +182,7 @@ public class ProcessFactory {
+@@ -146,6 +184,7 @@ public class ProcessFactory {
  	private class Builder {
  		String[] cmdarray;
  		String[] envp;
@@ -182,7 +184,7 @@ index addd040267..328112353c 100644
  		File dir;
  		boolean use_pty;
  		PTY pty;
-@@ -172,7 +209,23 @@ public class ProcessFactory {
+@@ -172,7 +211,23 @@ public class ProcessFactory {
  		}
  
  		public Builder environment(String[] envp) {
@@ -207,7 +209,7 @@ index addd040267..328112353c 100644
  			return this;
  		}
  
-@@ -193,20 +246,21 @@ public class ProcessFactory {
+@@ -193,20 +248,21 @@ public class ProcessFactory {
  			return this;
  		}
  
@@ -234,7 +236,7 @@ index addd040267..328112353c 100644
  			if (dir != null) {
  				String pathString = dir.toString();
  				sb.append(pathString);
-@@ -215,50 +269,66 @@ public class ProcessFactory {
+@@ -215,50 +271,66 @@ public class ProcessFactory {
  				String pathDevice = path.getDevice();
  				String[] pathSegments = path.segments();
  				if (pathDevice != null) {
@@ -318,7 +320,7 @@ index addd040267..328112353c 100644
  			if (hasSpawner) {
  				if (use_pty) {
  					if (has_gracefulExitTimeMs) {
-@@ -362,7 +432,7 @@ public class ProcessFactory {
+@@ -362,7 +434,7 @@ public class ProcessFactory {
  		return p;
  	}
  
@@ -327,7 +329,7 @@ index addd040267..328112353c 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).start();
  		return p;
  	}
-@@ -370,13 +440,13 @@ public class ProcessFactory {
+@@ -370,13 +442,13 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */
@@ -343,7 +345,7 @@ index addd040267..328112353c 100644
  		Process p = new Builder(cmdarray).environment(envp).directory(dir).pty(pty).start();
  		return p;
  	}
-@@ -384,10 +454,48 @@ public class ProcessFactory {
+@@ -384,10 +456,48 @@ public class ProcessFactory {
  	/**
  	 * @since 6.2
  	 */

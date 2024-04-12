@@ -1,8 +1,8 @@
-From 6a5cd16400bf107762abb6bcbb5861ef6d1c7661 Mon Sep 17 00:00:00 2001
+From fd64aabf5bff892863c61cc791f5835e2a11e5cb Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:07:10 +0800
-Subject: [PATCH 09/31] replace Runtime to ProcessFactory
+Subject: [PATCH 09/34] replace Runtime to ProcessFactory
 
 ---
  .../autotools/ui/editors/automake/Command.java      |  3 ++-

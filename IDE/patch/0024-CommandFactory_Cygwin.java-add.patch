@@ -1,8 +1,8 @@
-From 8b3315ad6aa0fa3655977d584260d637243e2d2e Mon Sep 17 00:00:00 2001
+From 14a0921d1d2f0096e66fbcc23fd8b9f6f5a337cb Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 24/31] CommandFactory_Cygwin.java : add
+Subject: [PATCH 24/34] CommandFactory_Cygwin.java : add
 
 ---
  .../command/CommandFactory_Cygwin.java        | 64 +++++++++++++++++++
@@ -11,7 +11,7 @@ Subject: [PATCH 24/31] CommandFactory_Cygwin.java : add
 
 diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/command/CommandFactory_Cygwin.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/command/CommandFactory_Cygwin.java
 new file mode 100644
-index 0000000000..a691a3b5cb
+index 0000000000..3450d8e5d1
 --- /dev/null
 +++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/command/CommandFactory_Cygwin.java
 @@ -0,0 +1,64 @@
@@ -62,13 +62,13 @@ index 0000000000..a691a3b5cb
 +
 +	@Override
 +	public ICommand<MIBreakInsertInfo> createMIBreakInsert(IBreakpointsTargetDMContext ctx, String func) {
-+		return new CygwinMIBreakInsert(ctx, func, false);
++		return new CygwinMIBreakInsert(ctx, func, true);
 +	}
 +
 +	@Override
 +	public ICommand<MIBreakInsertInfo> createMIBreakInsert(IBreakpointsTargetDMContext ctx, boolean isTemporary,
 +			boolean isHardware, String condition, int ignoreCount, String line, String tid) {
-+		return new CygwinMIBreakInsert(ctx, isTemporary, isHardware, condition, ignoreCount, line, tid, false);
++		return new CygwinMIBreakInsert(ctx, isTemporary, isHardware, condition, ignoreCount, line, tid, true);
 +	}
 +
 +	@Override
@@ -76,7 +76,7 @@ index 0000000000..a691a3b5cb
 +			boolean isHardware, String condition, int ignoreCount, String location, String tid, boolean disabled,
 +			boolean isTracepoint) {
 +		return new CygwinMIBreakInsert(ctx, isTemporary, isHardware, condition, ignoreCount, location, tid, disabled,
-+				isTracepoint, false);
++				isTracepoint, true);
 +	}
 +}
 -- 

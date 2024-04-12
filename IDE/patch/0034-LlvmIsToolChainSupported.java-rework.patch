@@ -1,0 +1,58 @@
+From a7cfd00f7dc4af42a0ac72e2d1c19e3894fbebb1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 34/34] LlvmIsToolChainSupported.java : rework
+
+---
+ .../llvm/ui/LlvmIsToolChainSupported.java     | 32 ++-----------------
+ 1 file changed, 2 insertions(+), 30 deletions(-)
+
+diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmIsToolChainSupported.java b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmIsToolChainSupported.java
+index 464124e5c9..a28226cc6c 100644
+--- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmIsToolChainSupported.java
++++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmIsToolChainSupported.java
+@@ -18,38 +18,10 @@ import org.eclipse.cdt.managedbuilder.core.IManagedIsToolChainSupported;
+ import org.eclipse.cdt.managedbuilder.core.IToolChain;
+ import org.osgi.framework.Version;
+ 
+-/**
+- * Based on MingwIsToolChainSupported.
+- *
+- */
+ public class LlvmIsToolChainSupported implements IManagedIsToolChainSupported {
+ 
+-	private final boolean supported;
+-
+-	/**
+-	 * Constructor.
+-	 * LLVM Toolchain is supported if binary path for LLVM Tools can be found.
+-	 */
+-	public LlvmIsToolChainSupported() {
+-		// Only supported if we can find the llvm tools.
+-		this.supported = LlvmEnvironmentVariableSupplier.getBinPath() != null;
+-	}
+-
+-	/* (non-Javadoc)
+-	 * @see org.eclipse.cdt.managedbuilder.core.IManagedIsToolChainSupported#isSupported(org.eclipse.cdt.managedbuilder.core.IToolChain,
+-	 * org.osgi.framework.Version, java.lang.String)
+-	 */
+-	/**
+-	 * Return a boolean value that informs if the LLVM Toolchain is supported.
+-	 */
+ 	@Override
+-	public boolean isSupported(IToolChain toolChain,
+-			/*
+-			 * Version is supported from CDT 7.1.0.
+-			 * Use org.osgi.framework.PluginVersionIdentifier with older CDT versions.
+-			 */
+-			Version version, String instance) {
+-		return this.supported;
++	public boolean isSupported(IToolChain toolChain, Version version, String instance) {
++		return true;
+ 	}
+-
+ }
+-- 
+2.42.1
+

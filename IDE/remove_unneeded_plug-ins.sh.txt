@@ -19,7 +19,8 @@ main() {
 		[org.eclipse.cdt.autotools.core]=
 		[org.eclipse.cdt.autotools.docs]=
 		[org.eclipse.cdt.autotools.ui]=
-		[org.eclipse.cdt.build.crossgcc]=
+		# Cross GCC does not work
+		# [org.eclipse.cdt.build.crossgcc]=
 		[org.eclipse.cdt.build.gcc.core]=
 		[org.eclipse.cdt.build.gcc.ui]=
 		[org.eclipse.cdt.cmake.core]=
@@ -64,7 +65,9 @@ main() {
 		[org.eclipse.cdt.make.core]=
 		[org.eclipse.cdt.make.ui]=
 		[org.eclipse.cdt.managedbuilder.core]=
+		# GNU GCC
 		[org.eclipse.cdt.managedbuilder.gnu.ui]=
+		# LLVM Clang
 		[org.eclipse.cdt.managedbuilder.llvm.ui]=
 		[org.eclipse.cdt.managedbuilder.headlessbuilderapp]=
 		[org.eclipse.cdt.managedbuilder.ui]=

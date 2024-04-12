@@ -42,7 +42,9 @@ build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/mak
 build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/templateengine/processes/CreateIncludeFolder.java
 build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
 build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java
+build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/IsGnuCygwinToolChainSupported.java
 build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
+build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwIsToolChainSupported.java
 build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/internal/ui/language/settings/providers/BuiltinSpecsDetectorOptionPage.java
 build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/internal/ui/language/settings/providers/CompilationDatabaseParserOptionPage.java
 build/org.eclipse.cdt.managedbuilder.ui/src/org/eclipse/cdt/managedbuilder/ui/properties/BuildBehaviourTab.java

@@ -1,4 +1,5 @@
 build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml
+llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties
 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
 releng/org.eclipse.cdt.target/cdt.target
 releng/scripts/check_bundle_versions.sh

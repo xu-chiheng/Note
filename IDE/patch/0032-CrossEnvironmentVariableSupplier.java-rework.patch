@@ -1,0 +1,109 @@
+From e0152589a9e83c7106476917905108348f504003 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 32/34] CrossEnvironmentVariableSupplier.java : rework
+
+---
+ .../CrossEnvironmentVariableSupplier.java     | 70 ++++---------------
+ 1 file changed, 13 insertions(+), 57 deletions(-)
+
+diff --git a/cross/org.eclipse.cdt.build.crossgcc/src/org/eclipse/cdt/internal/build/crossgcc/CrossEnvironmentVariableSupplier.java b/cross/org.eclipse.cdt.build.crossgcc/src/org/eclipse/cdt/internal/build/crossgcc/CrossEnvironmentVariableSupplier.java
+index df43d11613..52a16e86d2 100644
+--- a/cross/org.eclipse.cdt.build.crossgcc/src/org/eclipse/cdt/internal/build/crossgcc/CrossEnvironmentVariableSupplier.java
++++ b/cross/org.eclipse.cdt.build.crossgcc/src/org/eclipse/cdt/internal/build/crossgcc/CrossEnvironmentVariableSupplier.java
+@@ -13,78 +13,34 @@
+  *******************************************************************************/
+ package org.eclipse.cdt.internal.build.crossgcc;
+ 
+-import java.io.File;
+-
+ import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+-import org.eclipse.cdt.managedbuilder.core.IOption;
+-import org.eclipse.cdt.managedbuilder.core.IToolChain;
+ import org.eclipse.cdt.managedbuilder.envvar.IBuildEnvironmentVariable;
+ import org.eclipse.cdt.managedbuilder.envvar.IConfigurationEnvironmentVariableSupplier;
+ import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
+-import org.eclipse.core.runtime.Platform;
+ 
+ public class CrossEnvironmentVariableSupplier implements IConfigurationEnvironmentVariableSupplier {
++	private static final String ENV_PATH = "PATH"; //$NON-NLS-1$
+ 
+ 	@Override
+ 	public IBuildEnvironmentVariable getVariable(String variableName, IConfiguration configuration,
+ 			IEnvironmentVariableProvider provider) {
+-		if (PathEnvironmentVariable.isVar(variableName))
+-			return PathEnvironmentVariable.create(configuration);
+-		else
++		if (variableName == null) {
++			return null;
++		}
++		switch (variableName) {
++		case ENV_PATH:
+ 			return null;
++		default:
++			return null;
++		}
+ 	}
+ 
+ 	@Override
+ 	public IBuildEnvironmentVariable[] getVariables(IConfiguration configuration,
+ 			IEnvironmentVariableProvider provider) {
+-		IBuildEnvironmentVariable path = PathEnvironmentVariable.create(configuration);
+-		return path != null ? new IBuildEnvironmentVariable[] { path } : new IBuildEnvironmentVariable[0];
+-	}
+-
+-	private static class PathEnvironmentVariable implements IBuildEnvironmentVariable {
+-
+-		public static String name = "PATH"; //$NON-NLS-1$
+-
+-		private File path;
+-
+-		private PathEnvironmentVariable(File path) {
+-			this.path = path;
+-		}
+-
+-		public static PathEnvironmentVariable create(IConfiguration configuration) {
+-			IToolChain toolchain = configuration.getToolChain();
+-			IOption option = toolchain.getOptionBySuperClassId("cdt.managedbuild.option.gnu.cross.path"); //$NON-NLS-1$
+-			String path = (String) option.getValue();
+-			File sysroot = new File(path);
+-			File bin = new File(sysroot, "bin"); //$NON-NLS-1$
+-			if (bin.isDirectory())
+-				sysroot = bin;
+-			return new PathEnvironmentVariable(sysroot);
+-		}
+-
+-		public static boolean isVar(String name) {
+-			return name.equals(PathEnvironmentVariable.name);
+-		}
+-
+-		@Override
+-		public String getDelimiter() {
+-			return Platform.getOS().equals(Platform.OS_WIN32) ? ";" : ":"; //$NON-NLS-1$ //$NON-NLS-2$
+-		}
+-
+-		@Override
+-		public String getName() {
+-			return name;
+-		}
+-
+-		@Override
+-		public int getOperation() {
+-			return IBuildEnvironmentVariable.ENVVAR_PREPEND;
+-		}
+-
+-		@Override
+-		public String getValue() {
+-			return path.getPath();
+-		}
+-
++		//@formatter:off
++		return new IBuildEnvironmentVariable[] {
++			// getVariable(ENV_PATH, configuration, provider),
++		};
+ 	}
+ }
+-- 
+2.42.1
+

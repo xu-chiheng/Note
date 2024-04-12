@@ -1,0 +1,57 @@
+From 42b585612c26bb3771fb87583f96036740781f3e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 29/31] IsGnuCygwinToolChainSupported.java : rework
+
+---
+ .../cygwin/IsGnuCygwinToolChainSupported.java | 21 ++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/IsGnuCygwinToolChainSupported.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/IsGnuCygwinToolChainSupported.java
+index b948dcdd71..330ab9f351 100644
+--- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/IsGnuCygwinToolChainSupported.java
++++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/IsGnuCygwinToolChainSupported.java
+@@ -14,11 +14,11 @@
+  *******************************************************************************/
+ package org.eclipse.cdt.managedbuilder.gnu.cygwin;
+ 
+-import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
+ import org.eclipse.cdt.internal.core.Cygwin;
+ import org.eclipse.cdt.managedbuilder.core.IManagedIsToolChainSupported;
+ import org.eclipse.cdt.managedbuilder.core.IToolChain;
+-import org.eclipse.cdt.managedbuilder.internal.envvar.EnvironmentVariableManagerToolChain;
++import org.eclipse.cdt.managedbuilder.internal.core.BuildObject;
++import org.eclipse.cdt.managedbuilder.internal.core.ToolChain;
+ import org.osgi.framework.Version;
+ 
+ /**
+@@ -26,13 +26,20 @@ import org.osgi.framework.Version;
+  *
+  * @noextend This class is not intended to be subclassed by clients.
+  */
++@SuppressWarnings("restriction")
+ public class IsGnuCygwinToolChainSupported implements IManagedIsToolChainSupported {
+-	private static final String ENV_PATH = "PATH"; //$NON-NLS-1$
+-
++	@SuppressWarnings("nls")
+ 	@Override
+ 	public boolean isSupported(IToolChain toolChain, Version version, String instance) {
+-		IEnvironmentVariable var = new EnvironmentVariableManagerToolChain(toolChain).getVariable(ENV_PATH, true);
+-		String envPath = var != null ? var.getValue() : null;
+-		return Cygwin.isAvailable(envPath);
++		if (Cygwin.isAvailable() && toolChain instanceof ToolChain) {
++			// ToolChain inherit from BuildObject
++			BuildObject bo = (BuildObject) toolChain;
++			String id = bo.getId();
++			if (id.startsWith("cdt.managedbuild.toolchain.llvm.clang.win32.cygwin.")
++					|| id.startsWith("cdt.managedbuild.toolchain.gnu.cygwin.")) {
++				return true;
++			}
++		}
++		return false;
+ 	}
+ }
+-- 
+2.42.1
+

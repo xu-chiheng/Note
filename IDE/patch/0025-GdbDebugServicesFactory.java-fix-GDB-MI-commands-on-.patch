@@ -1,16 +1,16 @@
-From 369aae6158a9a21063678968c7b2ed560be57a6b Mon Sep 17 00:00:00 2001
+From 27c7f43bf59950e44104fe44f41e0b9cbc491f15 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 25/28] GdbDebugServicesFactory.java : fix GDB MI commands on
+Subject: [PATCH 25/31] GdbDebugServicesFactory.java : fix GDB MI commands on
  Cygwin
 
 ---
- .../gdb/service/GdbDebugServicesFactory.java  | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ .../gdb/service/GdbDebugServicesFactory.java  | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
 diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
-index 20072bceb2..09b58d79d0 100644
+index 20072bceb2..3a435cf431 100644
 --- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
 +++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
 @@ -26,7 +26,12 @@
@@ -47,10 +47,11 @@ index 20072bceb2..09b58d79d0 100644
  import org.eclipse.debug.core.ILaunch;
  import org.eclipse.debug.core.ILaunchConfiguration;
  import org.eclipse.osgi.util.NLS;
-@@ -215,7 +225,46 @@ public class GdbDebugServicesFactory extends AbstractDsfDebugServicesFactory {
+@@ -215,7 +225,48 @@ public class GdbDebugServicesFactory extends AbstractDsfDebugServicesFactory {
  		return new MIBreakpoints(session);
  	}
  
++	@SuppressWarnings("nls")
 +	private static boolean isCygwin(ILaunchConfiguration config) {
 +		if (Platform.getOS().equals(Platform.OS_WIN32)) {
 +			String[] envp = null;
@@ -78,7 +79,8 @@ index 20072bceb2..09b58d79d0 100644
 +			if (attrs != null && attrs.containsKey(key)) {
 +				Object value = attrs.get(key);
 +				String valueString = value.toString();
-+				if (valueString.startsWith("cdt.managedbuild.config.gnu.cygwin.")) { //$NON-NLS-1$
++				if (valueString.startsWith("cdt.managedbuild.config.gnu.cygwin.")
++						|| valueString.startsWith("cdt.managedbuild.config.llvm.clang.win32.cygwin.")) {
 +					return true;
 +				}
 +			}

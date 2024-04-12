@@ -1,0 +1,56 @@
+From 166c9f95b790065f9ec85025d75b66bb3d7a707c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 30/31] MingwIsToolChainSupported.java : rework
+
+---
+ .../gnu/mingw/MingwIsToolChainSupported.java  | 22 ++++++++++++-------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwIsToolChainSupported.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwIsToolChainSupported.java
+index d1f0e6110e..4d4af1be79 100644
+--- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwIsToolChainSupported.java
++++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwIsToolChainSupported.java
+@@ -15,24 +15,30 @@
+ 
+ package org.eclipse.cdt.managedbuilder.gnu.mingw;
+ 
+-import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
+ import org.eclipse.cdt.internal.core.MinGW;
+ import org.eclipse.cdt.managedbuilder.core.IManagedIsToolChainSupported;
+ import org.eclipse.cdt.managedbuilder.core.IToolChain;
+-import org.eclipse.cdt.managedbuilder.internal.envvar.EnvironmentVariableManagerToolChain;
++import org.eclipse.cdt.managedbuilder.internal.core.BuildObject;
++import org.eclipse.cdt.managedbuilder.internal.core.ToolChain;
+ import org.osgi.framework.Version;
+ 
+ /**
+  * @noextend This class is not intended to be subclassed by clients.
+  */
++@SuppressWarnings("restriction")
+ public class MingwIsToolChainSupported implements IManagedIsToolChainSupported {
+-	private static final String ENV_PATH = "PATH"; //$NON-NLS-1$
+-
++	@SuppressWarnings("nls")
+ 	@Override
+ 	public boolean isSupported(IToolChain toolChain, Version version, String instance) {
+-		IEnvironmentVariable var = new EnvironmentVariableManagerToolChain(toolChain).getVariable(ENV_PATH, true);
+-		String envPath = var != null ? var.getValue() : null;
+-		return MinGW.isAvailable(envPath);
++		if (MinGW.isAvailable() && toolChain instanceof ToolChain) {
++			// ToolChain inherit from BuildObject
++			BuildObject bo = (BuildObject) toolChain;
++			String id = bo.getId();
++			if (id.startsWith("cdt.managedbuild.toolchain.llvm.clang.win32.mingw.")
++					|| id.startsWith("cdt.managedbuild.toolchain.gnu.mingw.")) {
++				return true;
++			}
++		}
++		return false;
+ 	}
+-
+ }
+-- 
+2.42.1
+

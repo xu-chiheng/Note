@@ -348,7 +348,7 @@ print_current_datetime() {
 	date +"%Y-%m-%d-%H-%M-%S"
 }
 
-chmod_644_recently_modified_files() {
+chmod_644_recently_modified_files_in_current_dir() {
 	if [ ! -d .git ]; then
 		return 1
 	fi
@@ -402,7 +402,7 @@ xz_decompress() {
 }
 
 # https://stackoverflow.com/questions/4544669/batch-convert-latin-1-files-to-utf-8-using-iconv
-iconv_text_files_to_UTF-8() {
+iconv_text_files_to_UTF-8_in_current_dir() {
 	local from_encoding="$1"
 	if [ -z "${from_encoding}" ] ; then
 		echo "no from encoding"
@@ -422,13 +422,13 @@ iconv_text_files_to_UTF-8() {
 
 # https://en.wikibooks.org/wiki/Regular_Expressions/POSIX-Extended_Regular_Expressions
 # https://www.gnu.org/software/findutils/manual/html_node/find_html/posix_002dextended-regular-expression-syntax.html
-format_source_files() {
+format_source_files_in_current_dir() {
 	find . -type f -regextype posix-extended -regex '.*\.(c|h|cxx|cc|cpp|hpp)' \
 	-print0 | xargs -0 -n100 -P0 \
 	astyle --suffix=none --style=linux --indent=tab --lineend=linux
 }
 
-dos2unix_source_files() {
+dos2unix_source_files_in_current_dir() {
 	find . -type f -regextype posix-extended -regex '.*\.(txt|c|h|s|cxx|cc|cpp|hpp|java|sh|pl|py)' \
 	-print0 | xargs -0 -n100 -P0 \
 	dos2unix --keepdate

@@ -434,10 +434,14 @@ dos2unix_source_files() {
 	dos2unix --keepdate
 }
 
-remove_temp_files() {
+remove_temp_files_in_current_dir() {
 	find . -type f -regextype posix-extended -regex '.*(\.(orig|rej|bak)|output.txt)' \
 	-print0 | xargs -0 -n100 \
 	rm -rf
+}
+
+remove_all_dirs_in_current_dir() {
+	find . -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 rm -rf
 }
 
 # https://www.geeksforgeeks.org/create-a-password-generator-using-shell-scripting/

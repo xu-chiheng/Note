@@ -55,7 +55,7 @@ backup_current_directory_to_iso_file() {
 	# https://www.ezbsystems.com/ultraiso/cmdline.htm
 
 	echo "remove temp files" \
-	&& echo_command remove_temp_files \
+	&& echo_command remove_temp_files_in_current_dir \
 	&& echo "hide sha512 files" \
 	&& echo_command attrib +H '*.sha512' /S \
 	&& echo "generate tree.txt" \

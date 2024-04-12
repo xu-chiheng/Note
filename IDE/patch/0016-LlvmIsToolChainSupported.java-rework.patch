@@ -1,8 +1,8 @@
-From 1556510147586b8376759264246c0154bf8be563 Mon Sep 17 00:00:00 2001
+From ae35cdbeb46bf132ee0cdaed476e51d5034f3e0c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 16/34] LlvmIsToolChainSupported.java : rework
+Subject: [PATCH 16/35] LlvmIsToolChainSupported.java : rework
 
 ---
  .../llvm/ui/LlvmIsToolChainSupported.java     | 32 ++-----------------

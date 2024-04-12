@@ -1,0 +1,64 @@
+From 8a34a9b60e80b5294d1e2aae13b31cd5bf8434b7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 23/35] llvm.ui/plugin.xml : remove all envVarBuildPath
+ elements and references to CygwinPathResolver
+
+---
+ .../plugin.xml                                 | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
+index 8e18a2ae13..ce89cbea73 100644
+--- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
++++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
+@@ -26,10 +26,6 @@
+                </value>
+             </property>
+          </supportedProperties>
+-         <envVarBuildPath
+-               pathType="buildpathLibrary"
+-               variableList="LIBRARY_PATH">
+-         </envVarBuildPath>
+          <optionCategory
+                id="llvm.c.link.category.general"
+                name="%OptionCategory.General"
+@@ -704,10 +700,6 @@
+                </value>
+             </property>
+          </supportedProperties>
+-         <envVarBuildPath
+-               pathType="buildpathInclude"
+-               variableList="CPATH">
+-         </envVarBuildPath>
+          <optionCategory
+                id="cdt.managedbuild.tool.llvm.c_cpp.category.dialect"
+                name="%OptionCategory.Dialect"
+@@ -1057,11 +1049,6 @@
+             name="%ToolName.compiler.llvm.c.abstract"
+             natureFilter="both"
+             superClass="cdt.managedbuild.tool.llvm.c_cpp.compiler">
+-         <envVarBuildPath
+-               buildPathResolver="org.eclipse.cdt.managedbuilder.gnu.cygwin.CygwinPathResolver"
+-               pathType="buildpathInclude"
+-               variableList="CPATH,C_INCLUDE_PATH">
+-         </envVarBuildPath>
+          <option
+                category="cdt.managedbuild.tool.llvm.c_cpp.category.dialect"
+                id="cdt.managedbuild.tool.llvm.c.compiler.option.dialect.std"
+@@ -1088,11 +1075,6 @@
+             name="%ToolName.compiler.llvm.cpp.abstract"
+             natureFilter="ccnature"
+             superClass="cdt.managedbuild.tool.llvm.c_cpp.compiler">
+-         <envVarBuildPath
+-               buildPathResolver="org.eclipse.cdt.managedbuilder.gnu.cygwin.CygwinPathResolver"
+-               pathType="buildpathInclude"
+-               variableList="CPATH,CPLUS_INCLUDE_PATH">
+-         </envVarBuildPath>
+          <option
+                category="cdt.managedbuild.tool.llvm.c_cpp.category.dialect"
+                id="cdt.managedbuild.tool.llvm.cpp.compiler.option.dialect.std"
+-- 
+2.42.1
+

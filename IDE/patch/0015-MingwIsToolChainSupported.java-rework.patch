@@ -1,8 +1,8 @@
-From 001503303373bc8c521063223a9c46bbb6b3baf9 Mon Sep 17 00:00:00 2001
+From 031142ec18f114b33434879859702d6d7db45541 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 15/34] MingwIsToolChainSupported.java : rework
+Subject: [PATCH 15/35] MingwIsToolChainSupported.java : rework
 
 ---
  .../gnu/mingw/MingwIsToolChainSupported.java  | 22 ++++++++++++-------

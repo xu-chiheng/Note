@@ -1,0 +1,49 @@
+From 4a62058bbaf043839f9bc0746b5dfb3ae0fc1008 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 22/37] llvm.ui/META-INF/MANIFEST.MF : rework
+
+---
+ .../META-INF/MANIFEST.MF                      | 20 -------------------
+ 1 file changed, 20 deletions(-)
+
+diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/META-INF/MANIFEST.MF b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/META-INF/MANIFEST.MF
+index 3c7609fab8..9fbf4c0df7 100644
+--- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/META-INF/MANIFEST.MF
++++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/META-INF/MANIFEST.MF
+@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
+ Bundle-Name: %pluginName
+ Bundle-SymbolicName: org.eclipse.cdt.managedbuilder.llvm.ui;singleton:=true
+ Bundle-Version: 1.4.100.qualifier
+-Bundle-Activator: org.eclipse.cdt.managedbuilder.llvm.ui.LlvmUIPlugin
+ Bundle-Vendor: %providerName
+ Bundle-Localization: plugin
+ Require-Bundle: org.eclipse.ui,
+@@ -14,23 +13,4 @@ Require-Bundle: org.eclipse.ui,
+  org.eclipse.cdt.core
+ Bundle-RequiredExecutionEnvironment: JavaSE-17
+ Bundle-ActivationPolicy: lazy
+-Export-Package: org.eclipse.cdt.managedbuilder.llvm.makegen;
+-  uses:="org.eclipse.core.runtime,
+-   org.eclipse.cdt.managedbuilder.makegen.gnu,
+-   org.eclipse.cdt.managedbuilder.core,
+-   org.eclipse.cdt.managedbuilder.makegen,
+-   org.eclipse.core.resources",
+- org.eclipse.cdt.managedbuilder.llvm.ui;
+-  uses:="org.eclipse.core.runtime,
+-   org.eclipse.cdt.managedbuilder.core,
+-   org.eclipse.core.resources,
+-   org.eclipse.ui.plugin,
+-   org.osgi.framework,
+-   org.eclipse.cdt.managedbuilder.envvar",
+- org.eclipse.cdt.managedbuilder.llvm.ui.preferences;
+-  uses:="org.eclipse.jface.preference,
+-   org.eclipse.ui,
+-   org.eclipse.core.runtime.preferences,
+-   org.eclipse.swt.widgets",
+- org.eclipse.cdt.managedbuilder.llvm.util
+ Automatic-Module-Name: org.eclipse.cdt.managedbuilder.llvm.ui
+-- 
+2.42.1
+

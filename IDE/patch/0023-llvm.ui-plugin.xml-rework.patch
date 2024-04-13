@@ -1,0 +1,152 @@
+From ca9ca4ece435b5b133633dba3a12ef3f1b750dd6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 23/37] llvm.ui/plugin.xml : rework
+
+remove all envVarBuildPath, and references to CygwinPathResolver
+remove references to LlvmDependencyCalculator2, LlvmIsToolChainSupported, PreferenceInitializer, LlvmProjectNature
+---
+ .../plugin.xml                                | 42 -------------------
+ 1 file changed, 42 deletions(-)
+
+diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
+index 8e18a2ae13..023cea78fb 100644
+--- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
++++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
+@@ -26,10 +26,6 @@
+                </value>
+             </property>
+          </supportedProperties>
+-         <envVarBuildPath
+-               pathType="buildpathLibrary"
+-               variableList="LIBRARY_PATH">
+-         </envVarBuildPath>
+          <optionCategory
+                id="llvm.c.link.category.general"
+                name="%OptionCategory.General"
+@@ -209,7 +205,6 @@
+          </optionCategory>
+          <inputType
+                buildVariable="BCS"
+-               dependencyCalculator="org.eclipse.cdt.managedbuilder.llvm.makegen.LlvmDependencyCalculator2"
+                id="cdt.managedbuild.tool.llvm.c.linker.input"
+                multipleOfType="true"
+                primaryInput="true"
+@@ -316,7 +311,6 @@
+          </option>
+          <inputType
+                buildVariable="BCS"
+-               dependencyCalculator="org.eclipse.cdt.managedbuilder.llvm.makegen.LlvmDependencyCalculator2"
+                id="cdt.managedbuild.tool.llvm.archiver.input"
+                multipleOfType="true"
+                sourceContentType="org.eclipse.cdt.managedbuilder.llvm.ui.llvmBytecode"
+@@ -516,7 +510,6 @@
+          </option>
+          <inputType
+                buildVariable="BCS"
+-               dependencyCalculator="org.eclipse.cdt.managedbuilder.llvm.makegen.LlvmDependencyCalculator2"
+                id="cdt.managedbuild.tool.llvm.llc.input"
+                multipleOfType="true"
+                primaryInput="true"
+@@ -671,7 +664,6 @@
+          </option>
+          <inputType
+                buildVariable="BCS"
+-               dependencyCalculator="org.eclipse.cdt.managedbuilder.llvm.makegen.LlvmDependencyCalculator2"
+                id="cdt.managedbuild.tool.llvm.lli.input"
+                multipleOfType="true"
+                primaryInput="true"
+@@ -704,10 +696,6 @@
+                </value>
+             </property>
+          </supportedProperties>
+-         <envVarBuildPath
+-               pathType="buildpathInclude"
+-               variableList="CPATH">
+-         </envVarBuildPath>
+          <optionCategory
+                id="cdt.managedbuild.tool.llvm.c_cpp.category.dialect"
+                name="%OptionCategory.Dialect"
+@@ -1057,11 +1045,6 @@
+             name="%ToolName.compiler.llvm.c.abstract"
+             natureFilter="both"
+             superClass="cdt.managedbuild.tool.llvm.c_cpp.compiler">
+-         <envVarBuildPath
+-               buildPathResolver="org.eclipse.cdt.managedbuilder.gnu.cygwin.CygwinPathResolver"
+-               pathType="buildpathInclude"
+-               variableList="CPATH,C_INCLUDE_PATH">
+-         </envVarBuildPath>
+          <option
+                category="cdt.managedbuild.tool.llvm.c_cpp.category.dialect"
+                id="cdt.managedbuild.tool.llvm.c.compiler.option.dialect.std"
+@@ -1073,7 +1056,6 @@
+                superClass="gnu.c.compiler.option.dialect.flags">
+          </option>
+          <inputType
+-               dependencyCalculator="org.eclipse.cdt.managedbuilder.llvm.makegen.LlvmDependencyCalculator2"
+                dependencyContentType="org.eclipse.cdt.core.cHeader"
+                dependencyExtensions="h"
+                id="cdt.managedbuild.tool.llvm.c.compiler.input"
+@@ -1088,11 +1070,6 @@
+             name="%ToolName.compiler.llvm.cpp.abstract"
+             natureFilter="ccnature"
+             superClass="cdt.managedbuild.tool.llvm.c_cpp.compiler">
+-         <envVarBuildPath
+-               buildPathResolver="org.eclipse.cdt.managedbuilder.gnu.cygwin.CygwinPathResolver"
+-               pathType="buildpathInclude"
+-               variableList="CPATH,CPLUS_INCLUDE_PATH">
+-         </envVarBuildPath>
+          <option
+                category="cdt.managedbuild.tool.llvm.c_cpp.category.dialect"
+                id="cdt.managedbuild.tool.llvm.cpp.compiler.option.dialect.std"
+@@ -1104,7 +1081,6 @@
+                superClass="gnu.cpp.compiler.option.dialect.flags">
+          </option>
+          <inputType
+-               dependencyCalculator="org.eclipse.cdt.managedbuilder.llvm.makegen.LlvmDependencyCalculator2"
+                dependencyContentType="org.eclipse.cdt.core.cxxHeader"
+                dependencyExtensions="h,H,hpp"
+                id="cdt.managedbuild.tool.llvm.cpp.compiler.input"
+@@ -1179,10 +1155,8 @@
+       </tool>
+       <toolChain
+             archList="all"
+-            configurationEnvironmentSupplier="org.eclipse.cdt.managedbuilder.llvm.ui.LlvmEnvironmentVariableSupplier"
+             id="cdt.managedbuild.toolchain.llvm.base"
+             isAbstract="true"
+-            isToolChainSupported="org.eclipse.cdt.managedbuilder.llvm.ui.LlvmIsToolChainSupported"
+             name="%ToolChainName.llvm"
+             osList="all"
+             targetTool="cdt.managedbuild.tool.llvm.archiver">
+@@ -5211,12 +5185,6 @@
+          </configuration>
+       </projectType>
+    </extension>
+-   <extension
+-         point="org.eclipse.core.runtime.preferences">
+-      <initializer
+-            class="org.eclipse.cdt.managedbuilder.llvm.ui.preferences.PreferenceInitializer">
+-      </initializer>
+-   </extension>
+    <extension
+          id="llvm"
+          name="%ContentType.LlvmBytecodeFileName"
+@@ -5431,14 +5399,4 @@
+             primary="true">
+       </toc>
+    </extension>
+-   <extension
+-         id="llvmNature"
+-         name="%extension.name.2"
+-         point="org.eclipse.core.resources.natures">
+-      <runtime>
+-         <run
+-               class="org.eclipse.cdt.managedbuilder.llvm.ui.LlvmProjectNature">
+-         </run>
+-      </runtime>
+-   </extension>
+ </plugin>
+-- 
+2.42.1
+

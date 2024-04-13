@@ -1,4 +1,4 @@
-From a41bf485a78a70fec8c487252d2451deaa8b55a1 Mon Sep 17 00:00:00 2001
+From 1d3f1747b6683a3fa485a8357f5521cd56a7cb09 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:05:24 +0800
@@ -42,7 +42,6 @@ Subject: [PATCH 08/37] replace toOSString to toString
  .../makegen/gnu2/GnuMakefileGenerator.java    |  2 +-
  .../DefaultIndexerDependencyCalculator.java   |  2 +-
  .../processes/CreateIncludeFolder.java        |  2 +-
- .../gnu/cygwin/CygwinPathResolver.java        |  2 +-
  ...ygwinConfigurationEnvironmentSupplier.java |  2 +-
  .../MingwEnvironmentVariableSupplier.java     |  4 +-
  .../BuiltinSpecsDetectorOptionPage.java       |  2 +-
@@ -248,7 +247,7 @@ Subject: [PATCH 08/37] replace toOSString to toString
  .../showin/ExternalExecutablesDialog.java     |  4 +-
  .../view/ui/preferences/PreferencePage.java   | 22 +++---
  .../tests/MSVCBuildCommandParserTests.java    |  4 +-
- 243 files changed, 564 insertions(+), 566 deletions(-)
+ 242 files changed, 563 insertions(+), 565 deletions(-)
 
 diff --git a/build/org.eclipse.cdt.autotools.core/src/org/eclipse/cdt/internal/autotools/core/AutotoolsNewMakeGenerator.java b/build/org.eclipse.cdt.autotools.core/src/org/eclipse/cdt/internal/autotools/core/AutotoolsNewMakeGenerator.java
 index 296fbfdf69..4d7b700041 100644
@@ -1483,19 +1482,6 @@ index 4d186eb6d4..abf613fda2 100644
  				IToolChain toolChain = config.getToolChain();
  				setIncludePathOptionForConfig(path, config, toolChain.getOptions(), toolChain);
  
-diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
-index a408bc85ea..42dcfd4df7 100644
---- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
-+++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
-@@ -189,7 +189,7 @@ public class CygwinPathResolver implements IBuildPathResolver {
- 				envPathValue = envPathVar.getValue();
- 				IPath progPath = PathUtil.findProgramLocation(program, envPathValue);
- 				if (progPath != null) {
--					program = progPath.toOSString();
-+					program = progPath.toString();
- 				}
- 				// this resolves cygwin symbolic links
- 				program = Cygwin.cygwinToWindowsPath(program, envPathValue);
 diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java
 index daa4c0404c..37fda4e164 100644
 --- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java

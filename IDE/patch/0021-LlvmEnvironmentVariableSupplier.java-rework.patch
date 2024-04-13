@@ -1,8 +1,8 @@
-From edd01c9a445f56551ed13bae75b0373fb143bc94 Mon Sep 17 00:00:00 2001
+From 56dbd5ee529dd5ccd04865e42c48e3792af33979 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 21/35] LlvmEnvironmentVariableSupplier.java : rework
+Subject: [PATCH 21/37] LlvmEnvironmentVariableSupplier.java : rework
 
 ---
  .../ui/LlvmEnvironmentVariableSupplier.java   | 424 +-----------------

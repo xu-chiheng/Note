@@ -1,8 +1,8 @@
-From e2cae4aa20e29c46be5d4fdfb9ff697f9d47cc98 Mon Sep 17 00:00:00 2001
+From 58b6630e4023779bc15797057908bc2a6d9aec62 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:08:15 +0800
-Subject: [PATCH 10/35] replace ProcessBuilder to ProcessFactory
+Subject: [PATCH 10/37] replace ProcessBuilder to ProcessFactory
 
 ---
  .../cdt/build/gcc/core/GCCToolChain.java      | 24 +++++++++++--------

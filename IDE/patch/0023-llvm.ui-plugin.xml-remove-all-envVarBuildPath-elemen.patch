@@ -1,16 +1,17 @@
-From 8a34a9b60e80b5294d1e2aae13b31cd5bf8434b7 Mon Sep 17 00:00:00 2001
+From aefa2c65acd8395e3dce84fc269aa3afad12aae5 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 23/35] llvm.ui/plugin.xml : remove all envVarBuildPath
+Subject: [PATCH 23/37] llvm.ui/plugin.xml : remove all envVarBuildPath
  elements and references to CygwinPathResolver
 
+and remove the reference of LlvmIsToolChainSupported, so LLVM toolchain is always enabled.
 ---
- .../plugin.xml                                 | 18 ------------------
- 1 file changed, 18 deletions(-)
+ .../plugin.xml                                | 19 -------------------
+ 1 file changed, 19 deletions(-)
 
 diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
-index 8e18a2ae13..ce89cbea73 100644
+index 8e18a2ae13..24192d25b2 100644
 --- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
 +++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
 @@ -26,10 +26,6 @@
@@ -59,6 +60,14 @@ index 8e18a2ae13..ce89cbea73 100644
           <option
                 category="cdt.managedbuild.tool.llvm.c_cpp.category.dialect"
                 id="cdt.managedbuild.tool.llvm.cpp.compiler.option.dialect.std"
+@@ -1182,7 +1164,6 @@
+             configurationEnvironmentSupplier="org.eclipse.cdt.managedbuilder.llvm.ui.LlvmEnvironmentVariableSupplier"
+             id="cdt.managedbuild.toolchain.llvm.base"
+             isAbstract="true"
+-            isToolChainSupported="org.eclipse.cdt.managedbuilder.llvm.ui.LlvmIsToolChainSupported"
+             name="%ToolChainName.llvm"
+             osList="all"
+             targetTool="cdt.managedbuild.tool.llvm.archiver">
 -- 
 2.42.1
 

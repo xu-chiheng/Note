@@ -19,8 +19,7 @@ main() {
 		[org.eclipse.cdt.autotools.core]=
 		[org.eclipse.cdt.autotools.docs]=
 		[org.eclipse.cdt.autotools.ui]=
-		# Cross GCC does not work
-		# [org.eclipse.cdt.build.crossgcc]=
+		[org.eclipse.cdt.build.crossgcc]=
 		[org.eclipse.cdt.build.gcc.core]=
 		[org.eclipse.cdt.build.gcc.ui]=
 		[org.eclipse.cdt.cmake.core]=

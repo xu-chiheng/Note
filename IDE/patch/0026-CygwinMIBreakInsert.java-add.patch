@@ -1,8 +1,8 @@
-From a0fc55f2c07150588f6a3ddc022226482fc3f735 Mon Sep 17 00:00:00 2001
+From 863cc84dcd6e7cb8b07aee077d44bbf413bea8f1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 26/35] CygwinMIBreakInsert.java : add
+Subject: [PATCH 26/37] CygwinMIBreakInsert.java : add
 
 ---
  .../commands/cygwin/CygwinMIBreakInsert.java  | 46 +++++++++++++++++++

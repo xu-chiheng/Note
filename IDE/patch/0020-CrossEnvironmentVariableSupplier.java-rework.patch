@@ -1,8 +1,8 @@
-From bd47aac52c8158a82bfcd964fd081d267b0ec1d2 Mon Sep 17 00:00:00 2001
+From 45147355ff48ef37f8d4c4827be36c5a3f604b7b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 20/35] CrossEnvironmentVariableSupplier.java : rework
+Subject: [PATCH 20/37] CrossEnvironmentVariableSupplier.java : rework
 
 ---
  .../CrossEnvironmentVariableSupplier.java     | 70 ++++---------------

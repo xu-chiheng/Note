@@ -1,4 +1,4 @@
-From 33aac58ff992ad31f7b1b30fff3d4c1b7e15c3a3 Mon Sep 17 00:00:00 2001
+From 9818a3aa8f5d3a1c2f20391891683cb5fb96d2b4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:05:24 +0800
@@ -238,7 +238,6 @@ Subject: [PATCH 08/39] replace toOSString to toString
  .../cdt/launch/ui/CAbstractMainTab.java       |  2 +-
  .../org/eclipse/cdt/launch/ui/CMainTab2.java  |  2 +-
  .../eclipse/cdt/launch/ui/CommonTabLite.java  |  6 +-
- .../ui/LlvmEnvironmentVariableSupplier.java   |  2 +-
  .../llvm/util/LlvmToolOptionPathUtil.java     |  2 +-
  .../remote/internal/core/RemotePath.java      |  2 +-
  .../services/local/LocalProcessService.java   |  2 +-
@@ -247,7 +246,7 @@ Subject: [PATCH 08/39] replace toOSString to toString
  .../showin/ExternalExecutablesDialog.java     |  4 +-
  .../view/ui/preferences/PreferencePage.java   | 22 +++---
  .../tests/MSVCBuildCommandParserTests.java    |  4 +-
- 242 files changed, 563 insertions(+), 565 deletions(-)
+ 241 files changed, 562 insertions(+), 564 deletions(-)
 
 diff --git a/build/org.eclipse.cdt.autotools.core/src/org/eclipse/cdt/internal/autotools/core/AutotoolsNewMakeGenerator.java b/build/org.eclipse.cdt.autotools.core/src/org/eclipse/cdt/internal/autotools/core/AutotoolsNewMakeGenerator.java
 index 296fbfdf69..4d7b700041 100644
@@ -5590,19 +5589,6 @@ index d1e5557547..fc90639f61 100644
  				}
  			}
  			fSharedLocationText.setText(containerName);
-diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmEnvironmentVariableSupplier.java b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmEnvironmentVariableSupplier.java
-index 4a0aec2207..03af008e37 100644
---- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmEnvironmentVariableSupplier.java
-+++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmEnvironmentVariableSupplier.java
-@@ -324,7 +324,7 @@ public class LlvmEnvironmentVariableSupplier implements IConfigurationEnvironmen
- 		// get mingw bin path
- 		IPath mingwBinPath = getBinDir();
- 		if (mingwBinPath != null) {
--			StringBuilder sB = new StringBuilder(mingwBinPath.toOSString());
-+			StringBuilder sB = new StringBuilder(mingwBinPath.toString());
- 			// drop bin
- 			if (sB.length() >= 3) {
- 				sB.delete(sB.length() - 3, sB.length());
 diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/LlvmToolOptionPathUtil.java b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/LlvmToolOptionPathUtil.java
 index 6cbde1e50d..d57e0ad09d 100644
 --- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/LlvmToolOptionPathUtil.java

@@ -1,4 +1,4 @@
-From 66b8e1224319de9b2fca88651bda424251741ff2 Mon Sep 17 00:00:00 2001
+From 69daed17c1ba6d41cda1cd2a69aaa8b86cde887a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
@@ -8,8 +8,8 @@ Subject: [PATCH 21/39] managedbuilder.llvm.ui : remove all Java files
  .../makegen/LlvmDependencyCalculator2.java    |  42 -
  .../LlvmDependencyCalculator2Commands.java    |  59 --
  .../llvm/ui/LlvmBuildEnvironmentVariable.java |  83 --
- .../ui/LlvmEnvironmentVariableSupplier.java   | 424 +-------
- .../llvm/ui/LlvmIsToolChainSupported.java     |  32 +-
+ .../ui/LlvmEnvironmentVariableSupplier.java   | 450 --------
+ .../llvm/ui/LlvmIsToolChainSupported.java     |  55 -
  .../llvm/ui/LlvmProjectNature.java            |  67 --
  .../managedbuilder/llvm/ui/LlvmUIPlugin.java  | 157 ---
  .../ui/preferences/IncludePathListEditor.java |  99 --
@@ -26,10 +26,12 @@ Subject: [PATCH 21/39] managedbuilder.llvm.ui : remove all Java files
  .../llvm/util/LlvmToolOptionPathUtil.java     | 988 ------------------
  .../llvm/util/ProjectIndex.java               |  32 -
  .../managedbuilder/llvm/util/Separators.java  |  44 -
- 21 files changed, 16 insertions(+), 3120 deletions(-)
+ 21 files changed, 3185 deletions(-)
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/makegen/LlvmDependencyCalculator2.java
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/makegen/LlvmDependencyCalculator2Commands.java
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmBuildEnvironmentVariable.java
+ delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmEnvironmentVariableSupplier.java
+ delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmIsToolChainSupported.java
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmProjectNature.java
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmUIPlugin.java
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/preferences/IncludePathListEditor.java
@@ -251,34 +253,50 @@ index a949b505ea..0000000000
 -}
 \ No newline at end of file
 diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmEnvironmentVariableSupplier.java b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmEnvironmentVariableSupplier.java
-index 03af008e37..6c9450d3fd 100644
+deleted file mode 100644
+index 4a0aec2207..0000000000
 --- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmEnvironmentVariableSupplier.java
-+++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmEnvironmentVariableSupplier.java
-@@ -16,20 +16,10 @@
-  *******************************************************************************/
- package org.eclipse.cdt.managedbuilder.llvm.ui;
- 
++++ /dev/null
+@@ -1,450 +0,0 @@
+-/*******************************************************************************
+- * Copyright (c) 2010, 2016 Nokia Siemens Networks Oyj, Finland.
+- *
+- * This program and the accompanying materials
+- * are made available under the terms of the Eclipse Public License 2.0
+- * which accompanies this distribution, and is available at
+- * https://www.eclipse.org/legal/epl-2.0/
+- *
+- * SPDX-License-Identifier: EPL-2.0
+- *
+- * Contributors:
+- *      Nokia Siemens Networks - initial implementation
+- *      Leo Hippelainen - Initial implementation
+- *      Petri Tuononen - Initial implementation
+- *      Marc-Andre Laperle (Ericsson)
+- *******************************************************************************/
+-package org.eclipse.cdt.managedbuilder.llvm.ui;
+-
 -import java.io.File;
 -import java.util.HashMap;
 -
 -import org.eclipse.cdt.internal.core.MinGW;
- import org.eclipse.cdt.managedbuilder.core.IConfiguration;
- import org.eclipse.cdt.managedbuilder.envvar.IBuildEnvironmentVariable;
- import org.eclipse.cdt.managedbuilder.envvar.IConfigurationEnvironmentVariableSupplier;
- import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
+-import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+-import org.eclipse.cdt.managedbuilder.envvar.IBuildEnvironmentVariable;
+-import org.eclipse.cdt.managedbuilder.envvar.IConfigurationEnvironmentVariableSupplier;
+-import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
 -import org.eclipse.cdt.managedbuilder.gnu.cygwin.GnuCygwinConfigurationEnvironmentSupplier;
 -import org.eclipse.cdt.managedbuilder.gnu.mingw.MingwEnvironmentVariableSupplier;
 -import org.eclipse.cdt.managedbuilder.llvm.ui.preferences.LlvmPreferenceStore;
 -import org.eclipse.cdt.managedbuilder.llvm.util.Separators;
 -import org.eclipse.core.runtime.IPath;
 -import org.eclipse.core.runtime.Path;
- 
- /**
-  * Contains LLVM environment variables.
-@@ -37,414 +27,28 @@ import org.eclipse.core.runtime.Path;
-  * @noextend This class is not intended to be subclassed by clients.
-  */
- public class LlvmEnvironmentVariableSupplier implements IConfigurationEnvironmentVariableSupplier {
+-
+-/**
+- * Contains LLVM environment variables.
+- *
+- * @noextend This class is not intended to be subclassed by clients.
+- */
+-public class LlvmEnvironmentVariableSupplier implements IConfigurationEnvironmentVariableSupplier {
 -	// toggle for preference changes
 -	private static boolean preferencesChanged = true;
 -	// LLVM environment variable data structure
@@ -566,7 +584,7 @@ index 03af008e37..6c9450d3fd 100644
 -		// get mingw bin path
 -		IPath mingwBinPath = getBinDir();
 -		if (mingwBinPath != null) {
--			StringBuilder sB = new StringBuilder(mingwBinPath.toString());
+-			StringBuilder sB = new StringBuilder(mingwBinPath.toOSString());
 -			// drop bin
 -			if (sB.length() >= 3) {
 -				sB.delete(sB.length() - 3, sB.length());
@@ -677,47 +695,51 @@ index 03af008e37..6c9450d3fd 100644
 -		}
 -		return ""; //$NON-NLS-1$
 -	}
-+	private static final String ENV_PATH = "PATH"; //$NON-NLS-1$
- 
- 	@Override
- 	public IBuildEnvironmentVariable getVariable(String variableName, IConfiguration configuration,
- 			IEnvironmentVariableProvider provider) {
+-
+-	@Override
+-	public IBuildEnvironmentVariable getVariable(String variableName, IConfiguration configuration,
+-			IEnvironmentVariableProvider provider) {
 -		return llvmEnvironmentVariables.get(variableName);
-+		if (variableName == null) {
-+			return null;
-+		}
-+		switch (variableName) {
-+		case ENV_PATH:
-+			return null;
-+		default:
-+			return null;
-+		}
- 	}
- 
- 	@Override
- 	public IBuildEnvironmentVariable[] getVariables(IConfiguration configuration,
- 			IEnvironmentVariableProvider provider) {
+-	}
+-
+-	@Override
+-	public IBuildEnvironmentVariable[] getVariables(IConfiguration configuration,
+-			IEnvironmentVariableProvider provider) {
 -		return llvmEnvironmentVariables.values().toArray(new IBuildEnvironmentVariable[0]);
-+		//@formatter:off
-+		return new IBuildEnvironmentVariable[] {
-+			// getVariable(ENV_PATH, configuration, provider),
-+		};
- 	}
- }
+-	}
+-}
 diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmIsToolChainSupported.java b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmIsToolChainSupported.java
-index 464124e5c9..a28226cc6c 100644
+deleted file mode 100644
+index 464124e5c9..0000000000
 --- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmIsToolChainSupported.java
-+++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmIsToolChainSupported.java
-@@ -18,38 +18,10 @@ import org.eclipse.cdt.managedbuilder.core.IManagedIsToolChainSupported;
- import org.eclipse.cdt.managedbuilder.core.IToolChain;
- import org.osgi.framework.Version;
- 
++++ /dev/null
+@@ -1,55 +0,0 @@
+-/*******************************************************************************
+- * Copyright (c) 2010-2015 Nokia Siemens Networks Oyj, Finland.
+- *
+- * This program and the accompanying materials
+- * are made available under the terms of the Eclipse Public License 2.0
+- * which accompanies this distribution, and is available at
+- * https://www.eclipse.org/legal/epl-2.0/
+- *
+- * SPDX-License-Identifier: EPL-2.0
+- *
+- * Contributors:
+- *      Nokia Siemens Networks - initial implementation
+- *      Leo Hippelainen - Initial implementation
+- *******************************************************************************/
+-package org.eclipse.cdt.managedbuilder.llvm.ui;
+-
+-import org.eclipse.cdt.managedbuilder.core.IManagedIsToolChainSupported;
+-import org.eclipse.cdt.managedbuilder.core.IToolChain;
+-import org.osgi.framework.Version;
+-
 -/**
 - * Based on MingwIsToolChainSupported.
 - *
 - */
- public class LlvmIsToolChainSupported implements IManagedIsToolChainSupported {
- 
+-public class LlvmIsToolChainSupported implements IManagedIsToolChainSupported {
+-
 -	private final boolean supported;
 -
 -	/**
@@ -736,7 +758,7 @@ index 464124e5c9..a28226cc6c 100644
 -	/**
 -	 * Return a boolean value that informs if the LLVM Toolchain is supported.
 -	 */
- 	@Override
+-	@Override
 -	public boolean isSupported(IToolChain toolChain,
 -			/*
 -			 * Version is supported from CDT 7.1.0.
@@ -744,11 +766,9 @@ index 464124e5c9..a28226cc6c 100644
 -			 */
 -			Version version, String instance) {
 -		return this.supported;
-+	public boolean isSupported(IToolChain toolChain, Version version, String instance) {
-+		return true;
- 	}
+-	}
 -
- }
+-}
 diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmProjectNature.java b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmProjectNature.java
 deleted file mode 100644
 index 6d95f5144f..0000000000

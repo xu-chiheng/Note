@@ -1,10 +1,7 @@
 
 /*
-*.*
 
-!/.metadata
 !/.gitignore
 !/clean.cmd
-!/clean.sh
+!/add_prefs.cmd
 !/cygwin.cmd
-!*.prefs

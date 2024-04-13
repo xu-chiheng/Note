@@ -444,6 +444,10 @@ remove_all_dirs_in_current_dir() {
 	find . -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 rm -rf
 }
 
+add_eclipse_workspace_prefs_files_force() {
+	find .metadata -wholename '*/.settings/*.prefs' -print0 | xargs -0 bash -i -c 'print_array_elements "$@" ; time_command git add -f "$@" ;' -
+}
+
 # https://www.geeksforgeeks.org/create-a-password-generator-using-shell-scripting/
 # https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
 # https://unix.stackexchange.com/questions/230673/how-to-generate-a-random-string

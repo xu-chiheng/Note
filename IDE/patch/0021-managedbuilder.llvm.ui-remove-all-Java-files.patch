@@ -1,8 +1,8 @@
-From 04c5f4d84bf98853668f1317d2cc81d2586b403b Mon Sep 17 00:00:00 2001
+From 66b8e1224319de9b2fca88651bda424251741ff2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 21/37] managedbuilder.llvm.ui : remove all Java files
+Subject: [PATCH 21/39] managedbuilder.llvm.ui : remove all Java files
 
 ---
  .../makegen/LlvmDependencyCalculator2.java    |  42 -

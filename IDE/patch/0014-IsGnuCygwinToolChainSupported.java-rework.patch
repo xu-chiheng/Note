@@ -1,8 +1,8 @@
-From 739d28d02bc42d0bdb7927740676e82946bd8ed8 Mon Sep 17 00:00:00 2001
+From 4a3b11c43122f223be4838a364cf65fdbee7d37c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 14/37] IsGnuCygwinToolChainSupported.java : rework
+Subject: [PATCH 14/39] IsGnuCygwinToolChainSupported.java : rework
 
 ---
  .../cygwin/IsGnuCygwinToolChainSupported.java | 23 +++++++++++--------

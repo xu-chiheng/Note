@@ -1,0 +1,33 @@
+From cf28eeb738402203bb50f9bed301738fc086445d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 39/39] make.ui/plugin.xml : not reference
+ DiscoveredPathContainerPage
+
+---
+ build/org.eclipse.cdt.make.ui/plugin.xml | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/build/org.eclipse.cdt.make.ui/plugin.xml b/build/org.eclipse.cdt.make.ui/plugin.xml
+index 69eaf7532e..71d56e9fab 100644
+--- a/build/org.eclipse.cdt.make.ui/plugin.xml
++++ b/build/org.eclipse.cdt.make.ui/plugin.xml
+@@ -430,14 +430,6 @@
+    </extension>
+ 
+ 
+-   <extension
+-         point="org.eclipse.cdt.ui.PathContainerPage">
+-      <PathContainerPage
+-            class="org.eclipse.cdt.make.ui.dialogs.DiscoveredPathContainerPage"
+-            icon="icons/obj16/lib_obj.gif"
+-            id="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"
+-            name="%DiscoveredScannerInfoContainer.name"/>
+-   </extension>
+    <extension
+          point="org.eclipse.core.runtime.preferences">
+       <initializer class="org.eclipse.cdt.make.internal.ui.MakeUIPreferenceInitializer"/>
+-- 
+2.42.1
+

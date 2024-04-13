@@ -1,8 +1,8 @@
-From c5c0d98f9aca5d7e6a152ac4c8b8cef5773a6040 Mon Sep 17 00:00:00 2001
+From f226d02ae45c33c655835031ed1a4181e3894421 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Mon, 8 Apr 2024 09:14:00 +0800
-Subject: [PATCH 26/37] CygpathTranslator.java : rework
+Subject: [PATCH 26/39] CygpathTranslator.java : rework
 
 ---
  .../core/scannerconfig/util/CygpathTranslator.java     | 10 ----------

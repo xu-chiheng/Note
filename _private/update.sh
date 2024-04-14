@@ -30,7 +30,7 @@ do_update_all_files() {
 
 		IDE/{.gitignore,cygwin.cmd,README.md,patch}
 		IDE/{remove_unneeded_plug-ins,generate_list_of_changed_files}.{cmd,sh,sh.txt}
-		IDE/list_of{,_non}_java_files_{added,modified}.txt
+		IDE/list_of{,_non}_java_files_{added,modified,deleted}.txt
 
 		Tool/README.txt
 		Tool/.gitignore

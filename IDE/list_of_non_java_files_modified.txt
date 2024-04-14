@@ -1,4 +1,7 @@
+build/org.eclipse.cdt.make.ui/plugin.xml
 build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml
+cross/org.eclipse.cdt.build.crossgcc/plugin.xml
+llvm/org.eclipse.cdt.managedbuilder.llvm.ui/META-INF/MANIFEST.MF
 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties
 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
 releng/org.eclipse.cdt.target/cdt.target

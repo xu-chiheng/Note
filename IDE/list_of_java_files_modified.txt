@@ -40,7 +40,6 @@ build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/mak
 build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/makegen/gnu2/GnuMakefileGenerator.java
 build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/makegen/internal/DefaultIndexerDependencyCalculator.java
 build/org.eclipse.cdt.managedbuilder.core/src/org/eclipse/cdt/managedbuilder/templateengine/processes/CreateIncludeFolder.java
-build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
 build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/GnuCygwinConfigurationEnvironmentSupplier.java
 build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/IsGnuCygwinToolChainSupported.java
 build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwEnvironmentVariableSupplier.java
@@ -174,6 +173,7 @@ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/CLocationTab.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/StructureTreeTab.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/wizards/NewCProjectWizardPage.java
 core/org.eclipse.cdt.ui/templateengine/org/eclipse/cdt/ui/templateengine/ProjectSelectionPage.java
+cross/org.eclipse.cdt.build.crossgcc/src/org/eclipse/cdt/internal/build/crossgcc/CrossEnvironmentVariableSupplier.java
 cross/org.eclipse.cdt.launch.remote/src/org/eclipse/cdt/launch/remote/launching/RemoteRunLaunchDelegate.java
 debug/org.eclipse.cdt.debug.application.tests/src/org/eclipse/cdt/debug/application/tests/StandaloneTest.java
 debug/org.eclipse.cdt.debug.application.tests/src/org/eclipse/cdt/debug/application/tests/StandaloneTest1.java
@@ -249,9 +249,6 @@ launch/org.eclipse.cdt.launch/src/org/eclipse/cdt/launch/internal/ui/WorkingDire
 launch/org.eclipse.cdt.launch/src/org/eclipse/cdt/launch/ui/CAbstractMainTab.java
 launch/org.eclipse.cdt.launch/src/org/eclipse/cdt/launch/ui/CMainTab2.java
 launch/org.eclipse.cdt.launch/src/org/eclipse/cdt/launch/ui/CommonTabLite.java
-llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmEnvironmentVariableSupplier.java
-llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/FindStdLibPath.java
-llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/LlvmToolOptionPathUtil.java
 remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/RemotePath.java
 remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/services/local/LocalProcessBuilder.java
 remote/org.eclipse.remote.core/src/org/eclipse/remote/internal/core/services/local/LocalProcessService.java

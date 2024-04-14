@@ -1,10 +1,11 @@
-From 69daed17c1ba6d41cda1cd2a69aaa8b86cde887a Mon Sep 17 00:00:00 2001
+From f07e3b5711f28509a12b93578aca8f0dd15218a8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
 Subject: [PATCH 21/39] managedbuilder.llvm.ui : remove all Java files
 
 ---
+ .../src/README.txt                            |   3 +
  .../makegen/LlvmDependencyCalculator2.java    |  42 -
  .../LlvmDependencyCalculator2Commands.java    |  59 --
  .../llvm/ui/LlvmBuildEnvironmentVariable.java |  83 --
@@ -26,7 +27,8 @@ Subject: [PATCH 21/39] managedbuilder.llvm.ui : remove all Java files
  .../llvm/util/LlvmToolOptionPathUtil.java     | 988 ------------------
  .../llvm/util/ProjectIndex.java               |  32 -
  .../managedbuilder/llvm/util/Separators.java  |  44 -
- 21 files changed, 3185 deletions(-)
+ 22 files changed, 3 insertions(+), 3185 deletions(-)
+ create mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/README.txt
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/makegen/LlvmDependencyCalculator2.java
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/makegen/LlvmDependencyCalculator2Commands.java
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmBuildEnvironmentVariable.java
@@ -49,6 +51,15 @@ Subject: [PATCH 21/39] managedbuilder.llvm.ui : remove all Java files
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/ProjectIndex.java
  delete mode 100644 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/util/Separators.java
 
+diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/README.txt b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/README.txt
+new file mode 100644
+index 0000000000..b2c2e3ce0d
+--- /dev/null
++++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/README.txt
+@@ -0,0 +1,3 @@
++
++All Java files have been removed.
++But the "src" directory must be kept, otherwise, there are error at launching Eclipse Application.
 diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/makegen/LlvmDependencyCalculator2.java b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/makegen/LlvmDependencyCalculator2.java
 deleted file mode 100644
 index 54f801d9d3..0000000000

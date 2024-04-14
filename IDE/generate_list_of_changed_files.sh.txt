@@ -9,13 +9,15 @@
 #  ********************************************************************************/
 
 main() {
-	# only add and modify files, never delete files
+	# only add, modify, and delete files, never copy, rename files
 	cd cdt
 
 	git diff --diff-filter=A --name-only main...HEAD | grep -v '\.java$' | tee ../list_of_non_java_files_added.txt
 	git diff --diff-filter=M --name-only main...HEAD | grep -v '\.java$' | tee ../list_of_non_java_files_modified.txt
+	git diff --diff-filter=D --name-only main...HEAD | grep -v '\.java$' | tee ../list_of_non_java_files_deleted.txt
 	git diff --diff-filter=A --name-only main...HEAD | grep '\.java$'    | tee ../list_of_java_files_added.txt
 	git diff --diff-filter=M --name-only main...HEAD | grep '\.java$'    | tee ../list_of_java_files_modified.txt
+	git diff --diff-filter=D --name-only main...HEAD | grep '\.java$'    | tee ../list_of_java_files_deleted.txt
 
 	cd ..
 

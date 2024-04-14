@@ -1,4 +1,4 @@
-From b7ba7ec0c0e574771b2f4b45c1bfec440affda0c Mon Sep 17 00:00:00 2001
+From 8558fa5ca2e292227c1b4f25c1a4fedaa81e23f8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
@@ -6,24 +6,93 @@ Subject: [PATCH 24/39] managedbuilder.llvm.ui/plugin.properties : change
  Cygwin/MinGW Clang toolchain name
 
 ---
- llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../plugin.properties                         | 58 ++++++-------------
+ 1 file changed, 17 insertions(+), 41 deletions(-)
 
 diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties
-index e75ba9126a..fab18d2632 100644
+index e75ba9126a..fc43786df6 100644
 --- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties
 +++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties
-@@ -32,8 +32,8 @@ ToolChainName.llvm.jit.linux=LLVM with JIT/Interpreter (Linux)
- ToolChainName.llvm.jit.macosx=LLVM with JIT/Interpreter (MacOSX)
- ToolChainName.llvm.jit.win32=LLVM with JIT/Interpreter (Windows)
- ToolChainName.llvm.clang=LLVM with Clang
+@@ -16,31 +16,13 @@
+ pluginName=LLVM Managed Build Definitions
+ providerName=Eclipse CDT
+ 
+-# Build Model Names
+-TargetName.llvm=LLVM
+-TargetName.llvm.bitcode=LLVM bitcode
+-
+ # Tool-chain names
+-ToolChainName.llvm=LLVM
+-ToolChainName.llvm.with.linker=LLVM with C/C++ Linker
+-ToolChainName.llvm.with.static.compiler=LLVM with static compiler
+-ToolChainName.llvm.static.compiler.linux=LLVM with static compiler (Linux)
+-ToolChainName.llvm.static.compiler.macosx=LLVM with static compiler (MacOSX)
+-ToolChainName.llvm.static.compiler.win32=LLVM with static compiler (Windows)
+-ToolChainName.llvm.jit=LLVM with JIT/Interpreter
+-ToolChainName.llvm.jit.linux=LLVM with JIT/Interpreter (Linux)
+-ToolChainName.llvm.jit.macosx=LLVM with JIT/Interpreter (MacOSX)
+-ToolChainName.llvm.jit.win32=LLVM with JIT/Interpreter (Windows)
+-ToolChainName.llvm.clang=LLVM with Clang
 -ToolChainName.llvm.clang.win32.mingw=LLVM with Clang (Windows) (MinGW)\u0020
 -ToolChainName.llvm.clang.win32.cygwin=LLVM with Clang (Windows) (Cygwin)
-+ToolChainName.llvm.clang.win32.mingw=MinGW Clang
-+ToolChainName.llvm.clang.win32.cygwin=Cygwin Clang
- ToolChainName.llvm.linux=LLVM with Clang (Linux)
- ToolChainName.llvm.macosx=LLVM with Clang (MacOSX)
- ToolChainName.llvm.gnu=LLVM with GCC
+-ToolChainName.llvm.linux=LLVM with Clang (Linux)
+-ToolChainName.llvm.macosx=LLVM with Clang (MacOSX)
+-ToolChainName.llvm.gnu=LLVM with GCC
+-ToolChainName.llvm.gnu.linux=LLVM with GCC (Linux)
+-ToolChainName.llvm.gnu.macosx=LLVM with GCC (MacOSX)
+-ToolChainName.llvm.gnu.win32.cygwin=LLVM with GCC (Windows) (Cygwin)
+-ToolChainName.llvm.gnu.win32.mingw=LLVM with GCC (Windows) (MinGW)
++ToolChainName.llvm=Clang BitCode Base
++ToolChainName.llvm.clang=Clang BitCode
++ToolChainName.llvm.clang.win32.mingw=MinGW Clang BitCode
++ToolChainName.llvm.clang.win32.cygwin=Cygwin Clang BitCode
++ToolChainName.llvm.linux=Linux Clang BitCode
++ToolChainName.llvm.macosx=MacOSX Clang BitCode
+ 
+ # Default Configuration Names
+ # START NON-TRANSLATABLE
+@@ -58,23 +40,16 @@ PlatformName.Rel=Release Platform
+ PlatformName.Dbg=Debug Platform
+ 
+ # LLVM tool names
+-ToolName.archiver.llvm=LLVM archiver
+-ToolName.assembler.llvm=LLVM assembler
+-ToolName.compiler.llvm.abstract=Abstract LLVM C/C++ compiler
+-ToolName.compiler.llvm.c.abstract=Abstract LLVM C compiler
+-ToolName.compiler.llvm.cpp.abstract=Abstract LLVM C++ compiler
+-ToolName.compiler.llvm.c=LLVM Clang
+-ToolName.compiler.llvm.cpp=LLVM Clang++
+-ToolName.compiler.llvm.gcc=LLVM GCC
+-ToolName.compiler.llvm.g++=LLVM G++
+-ToolName.linker.llvm.c=LLVM Clang C linker
+-ToolName.linker.llvm.cpp=LLVM Clang C++ linker
+-ToolName.linker.llvm.gcc=LLVM GNU C linker
+-ToolName.linker.llvm.g++=LLVM GNU C++ linker
+-ToolName.llc.llvm=LLVM Static Compiler
+-ToolName.llc.llvm.c=LLVM C Static Compiler
+-ToolName.llc.llvm.cpp=LLVM C++ Static Compiler
+-ToolName.lli.llvm=LLVM JIT compiler/Interpreter
++ToolName.archiver.llvm=Clang archiver BitCode
++ToolName.assembler.llvm=Clang assembler BitCode
++ToolName.compiler.llvm.abstract=Abstract Clang C/C++ compiler BitCode
++ToolName.compiler.llvm.c.abstract=Abstract Clang C compiler BitCode
++ToolName.compiler.llvm.cpp.abstract=Abstract Clang C++ compiler BitCode
++ToolName.compiler.llvm.c=Clang C compiler BitCode
++ToolName.compiler.llvm.cpp=Clang C++ compiler BitCode
++ToolName.linker.llvm.c_cpp=Clang C/C++ linker BitCode
++ToolName.linker.llvm.c=Clang C linker BitCode
++ToolName.linker.llvm.cpp=Clang C++ linker BitCode
+ 
+ # Option Names
+ # Generic Category Names
+@@ -111,6 +86,7 @@ Option.Posix.Optimize.More=Optimize more (-O2)
+ Option.Posix.Optimize.Most=Optimize most (-O3)
+ Option.Posix.Optimize.Runtime=Optimize at run-time (-O4)
+ Option.Posix.Optimize.Flags=Other optimization flags
++Option.Emit.LLVM=Emit LLVM BitCode
+ 
+ Option.Posix.DebugLevel=Debug Level
+ Option.Posix.Debug.None=None
 -- 
 2.42.1
 

@@ -1,8 +1,8 @@
-From 6ffedfbf44c48695dbd39cf3cdf62ff543f9836c Mon Sep 17 00:00:00 2001
+From 53bef9708cfa103e522a37523d1c0cb550fb52c1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 22/39] managedbuilder.llvm.ui/META-INF/MANIFEST.MF : rework
+Subject: [PATCH 24/41] managedbuilder.llvm.ui/META-INF/MANIFEST.MF : rework
 
 ---
  .../META-INF/MANIFEST.MF                      | 20 -------------------

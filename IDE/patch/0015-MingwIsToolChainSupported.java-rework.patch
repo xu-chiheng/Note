@@ -1,15 +1,15 @@
-From 1b793fe5900d9bce910473654b8cc8e74cc079c9 Mon Sep 17 00:00:00 2001
+From a60c8ccfcd808158dffbbec5b4d527ebcd2cc22f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 15/39] MingwIsToolChainSupported.java : rework
+Subject: [PATCH 15/41] MingwIsToolChainSupported.java : rework
 
 ---
  .../gnu/mingw/MingwIsToolChainSupported.java  | 22 ++++++++++++-------
  1 file changed, 14 insertions(+), 8 deletions(-)
 
 diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwIsToolChainSupported.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwIsToolChainSupported.java
-index d1f0e6110e..4d4af1be79 100644
+index d1f0e6110e..c4095847ba 100644
 --- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwIsToolChainSupported.java
 +++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/mingw/MingwIsToolChainSupported.java
 @@ -15,24 +15,30 @@
@@ -42,7 +42,7 @@ index d1f0e6110e..4d4af1be79 100644
 +			// ToolChain inherit from BuildObject
 +			BuildObject bo = (BuildObject) toolChain;
 +			String id = bo.getId();
-+			if (id.startsWith("cdt.managedbuild.toolchain.llvm.clang.win32.mingw.")
++			if (id.startsWith("cdt.managedbuild.toolchain.llvm.mingw.")
 +					|| id.startsWith("cdt.managedbuild.toolchain.gnu.mingw.")) {
 +				return true;
 +			}

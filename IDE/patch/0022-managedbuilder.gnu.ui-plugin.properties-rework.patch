@@ -1,0 +1,34 @@
+From 0cdec6b150e136096086105d52633d21610c73d4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 22/41] managedbuilder.gnu.ui/plugin.properties : rework
+
+---
+ build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.properties | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.properties b/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.properties
+index 4681616496..65129a4bfc 100644
+--- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.properties
++++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.properties
+@@ -78,6 +78,7 @@ ToolName.windres = Resource compiler
+ # GNU tool names
+ ToolName.compiler.gnu.c = GCC C Compiler
+ ToolName.compiler.gnu.cpp = GCC C++ Compiler
++ToolName.linker.gnu = GCC C/C++ Linker
+ ToolName.linker.gnu.c = GCC C Linker
+ ToolName.linker.gnu.cpp = GCC C++ Linker
+ ToolName.archiver.gnu = GCC Archiver
+@@ -88,6 +89,8 @@ ToolName.linker.cygwin.gnu.c=Cygwin C Linker
+ ToolName.linker.cygwin.gnu.cpp=Cygwin C++ Linker
+ ToolName.compiler.cygwin.gnu.c = Cygwin C Compiler
+ ToolName.compiler.cygwin.gnu.cpp = Cygwin C++ Compiler
++ToolName.compiler.mingw.gnu.c = MinGW C Compiler
++ToolName.compiler.mingw.gnu.cpp = MinGW C++ Compiler
+ 
+ #MinGW tool names
+ ToolName.linker.mingw.gnu.c=MinGW C Linker
+-- 
+2.42.1
+

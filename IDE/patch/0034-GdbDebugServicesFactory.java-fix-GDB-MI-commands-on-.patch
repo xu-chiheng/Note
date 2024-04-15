@@ -1,8 +1,8 @@
-From c4aa7fc736a372113666d4ce99c403edfb732fc0 Mon Sep 17 00:00:00 2001
+From a8d61ef445b531fb54f1e117acb0512f71a60006 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 32/39] GdbDebugServicesFactory.java : fix GDB MI commands on
+Subject: [PATCH 34/41] GdbDebugServicesFactory.java : fix GDB MI commands on
  Cygwin
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH 32/39] GdbDebugServicesFactory.java : fix GDB MI commands on
  1 file changed, 51 insertions(+)
 
 diff --git a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
-index 20072bceb2..3a435cf431 100644
+index 20072bceb2..b596d39663 100644
 --- a/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
 +++ b/dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/GdbDebugServicesFactory.java
 @@ -26,7 +26,12 @@
@@ -80,7 +80,7 @@ index 20072bceb2..3a435cf431 100644
 +				Object value = attrs.get(key);
 +				String valueString = value.toString();
 +				if (valueString.startsWith("cdt.managedbuild.config.gnu.cygwin.")
-+						|| valueString.startsWith("cdt.managedbuild.config.llvm.clang.win32.cygwin.")) {
++						|| valueString.startsWith("cdt.managedbuild.config.llvm.cygwin.")) {
 +					return true;
 +				}
 +			}

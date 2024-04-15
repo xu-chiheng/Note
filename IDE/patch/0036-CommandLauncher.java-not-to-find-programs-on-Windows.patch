@@ -1,8 +1,8 @@
-From e3d2334629bd18c4a96150ca64ec8ab08a60a5a6 Mon Sep 17 00:00:00 2001
+From 9a0f568358b136c7aef6e2162c752206f24b98c8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 34/39] CommandLauncher.java : not to find programs on Windows
+Subject: [PATCH 36/41] CommandLauncher.java : not to find programs on Windows
 
 ---
  .../src/org/eclipse/cdt/core/CommandLauncher.java  | 14 --------------

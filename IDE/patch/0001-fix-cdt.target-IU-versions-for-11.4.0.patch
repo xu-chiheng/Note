@@ -1,8 +1,8 @@
-From f822d86c986d9bd4679418a8f852647c30be958d Mon Sep 17 00:00:00 2001
+From ddda58f9a61ded381daeee7bd8f49768f5d828e6 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 01/39] fix cdt.target IU versions for 11.4.0
+Subject: [PATCH 01/41] fix cdt.target IU versions for 11.4.0
 
 ---
  releng/org.eclipse.cdt.target/cdt.target | 16 ++++++++--------

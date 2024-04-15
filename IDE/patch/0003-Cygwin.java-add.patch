@@ -1,8 +1,8 @@
-From 0d787f78850e8f95e14836b49f9e2a6719083412 Mon Sep 17 00:00:00 2001
+From f07b1e79b8eccc11aeb3dddc1827d64dfa4df456 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 03/39] Cygwin.java : add
+Subject: [PATCH 03/41] Cygwin.java : add
 
 ---
  .../src/org/eclipse/cdt/core/Cygwin.java      | 199 ++++++++++++++++++

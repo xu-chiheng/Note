@@ -1,15 +1,15 @@
-From b66849d7a5516321a0daed38c5a0eaa67cc9fbf6 Mon Sep 17 00:00:00 2001
+From 713ec4db4febb4b1d8e6a467d6b1fbc675c10e41 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 14/39] IsGnuCygwinToolChainSupported.java : rework
+Subject: [PATCH 14/41] IsGnuCygwinToolChainSupported.java : rework
 
 ---
  .../cygwin/IsGnuCygwinToolChainSupported.java | 23 +++++++++++--------
  1 file changed, 14 insertions(+), 9 deletions(-)
 
 diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/IsGnuCygwinToolChainSupported.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/IsGnuCygwinToolChainSupported.java
-index b948dcdd71..faa8ce799f 100644
+index b948dcdd71..59ad0f4879 100644
 --- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/IsGnuCygwinToolChainSupported.java
 +++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/IsGnuCygwinToolChainSupported.java
 @@ -14,25 +14,30 @@
@@ -44,7 +44,7 @@ index b948dcdd71..faa8ce799f 100644
 +			// ToolChain inherit from BuildObject
 +			BuildObject bo = (BuildObject) toolChain;
 +			String id = bo.getId();
-+			if (id.startsWith("cdt.managedbuild.toolchain.llvm.clang.win32.cygwin.")
++			if (id.startsWith("cdt.managedbuild.toolchain.llvm.cygwin.")
 +					|| id.startsWith("cdt.managedbuild.toolchain.gnu.cygwin.")) {
 +				return true;
 +			}

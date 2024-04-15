@@ -1,3 +1,4 @@
+build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/ImpLibCommandGenerator.java
 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2.java

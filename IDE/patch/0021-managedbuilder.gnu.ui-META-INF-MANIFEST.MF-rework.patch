@@ -1,0 +1,27 @@
+From ac93840e0ed89472e6ffe892ddbaab3f7f824266 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
+ <chiheng.xu@gmail.com>
+Date: Wed, 10 Apr 2024 04:18:03 +0800
+Subject: [PATCH 21/42] managedbuilder.gnu.ui/META-INF/MANIFEST.MF : rework
+
+---
+ .../org.eclipse.cdt.managedbuilder.gnu.ui/META-INF/MANIFEST.MF | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/META-INF/MANIFEST.MF b/build/org.eclipse.cdt.managedbuilder.gnu.ui/META-INF/MANIFEST.MF
+index 3e3ce86f60..818c462d57 100644
+--- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/META-INF/MANIFEST.MF
++++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/META-INF/MANIFEST.MF
+@@ -9,7 +9,8 @@ Bundle-Localization: plugin
+ Export-Package: org.eclipse.cdt.managedbuilder.gnu.cygwin,
+  org.eclipse.cdt.managedbuilder.gnu.mingw;x-internal:=true,
+  org.eclipse.cdt.managedbuilder.gnu.templates;x-internal:=true,
+- org.eclipse.cdt.managedbuilder.gnu.ui
++ org.eclipse.cdt.managedbuilder.gnu.ui,
++ org.eclipse.cdt.managedbuilder.gnu
+ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.2.0,4.0.0)",
+  org.eclipse.cdt.managedbuilder.core;bundle-version="[9.0.0,10.0.0]",
+  org.eclipse.cdt.core;bundle-version="[8.0.0,9.0.0)",
+-- 
+2.42.1
+

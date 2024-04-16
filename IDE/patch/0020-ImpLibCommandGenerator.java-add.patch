@@ -1,20 +1,20 @@
-From f0afc2be5b92bf93a9a9d1ce2c677d8470539322 Mon Sep 17 00:00:00 2001
+From 2de6a1e6b13cd44e78eb05ad18e1671764ed2146 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 20/41] ImpLibCommandGenerator.java : add
+Subject: [PATCH 20/42] ImpLibCommandGenerator.java : add
 
 ---
- .../gnu/ImpLibCommandGenerator.java           | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ .../gnu/ImpLibCommandGenerator.java           | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
  create mode 100644 build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/ImpLibCommandGenerator.java
 
 diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/ImpLibCommandGenerator.java b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/ImpLibCommandGenerator.java
 new file mode 100644
-index 0000000000..73c3479b2d
+index 0000000000..bd350320e6
 --- /dev/null
 +++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/ImpLibCommandGenerator.java
-@@ -0,0 +1,31 @@
+@@ -0,0 +1,36 @@
 +package org.eclipse.cdt.managedbuilder.gnu;
 +
 +import org.eclipse.cdt.core.cdtvariables.CdtVariableException;
@@ -32,18 +32,23 @@ index 0000000000..73c3479b2d
 +	@Override
 +	public String generateCommand(IOption option, IVariableSubstitutor macroSubstitutor) {
 +		// TODO Auto-generated method stub
-+		String projname = null;
++		String osType = null;
++		String hostOsName = null;
++		String projName = null;
 +		try {
-+			projname = macroSubstitutor.resolveToString(CdtVariableResolver.VAR_PROJ_NAME);
++			osType = macroSubstitutor.resolveToString(CdtVariableResolver.VAR_OS_TYPE);
++			hostOsName = macroSubstitutor.resolveToString(CdtVariableResolver.VAR_HOST_OS_NAME);
++			projName = macroSubstitutor.resolveToString(CdtVariableResolver.VAR_PROJ_NAME);
 +		} catch (CdtVariableException e) {
 +			// TODO Auto-generated catch block
 +			e.printStackTrace();
 +		}
-+		if (projname != null) {
-+			return "-Wl,--out-implib,lib" + projname + ".dll.a"; //$NON-NLS-1$ //$NON-NLS-2$
-+		} else {
-+			return null;
++		if (osType != null && hostOsName != null && projName != null) {
++			if (osType == "win32") { //$NON-NLS-1$
++				return "-Wl,--out-implib,lib" + projName + ".dll.a"; //$NON-NLS-1$ //$NON-NLS-2$
++			}
 +		}
++		return null;
 +	}
 +}
 -- 

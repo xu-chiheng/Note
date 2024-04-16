@@ -1,8 +1,8 @@
-From bf5084d6ab44e921d9edce94369860258991f20b Mon Sep 17 00:00:00 2001
+From 943468a0b5af5bff0952928db14895994254c002 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 34/41] GdbDebugServicesFactory.java : fix GDB MI commands on
+Subject: [PATCH 35/42] GdbDebugServicesFactory.java : fix GDB MI commands on
  Cygwin
 
 ---

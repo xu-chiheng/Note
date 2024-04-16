@@ -1,8 +1,8 @@
-From 09ac8b6115a0f951a04f5d01cbb9e68c714aaa51 Mon Sep 17 00:00:00 2001
+From 61ef9be3440ce91acd5fe427287f6a4ed7e279c1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 31/41] CygwinMIEnvironmentDirectory.java : add
+Subject: [PATCH 32/42] CygwinMIEnvironmentDirectory.java : add
 
 ---
  .../cygwin/CygwinMIEnvironmentDirectory.java  | 30 +++++++++++++++++++

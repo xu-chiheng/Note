@@ -1,8 +1,8 @@
-From 67856fda02e98b0ea94c92fbdd1b7a11c063c58a Mon Sep 17 00:00:00 2001
+From 7cb00341ff5e197a681b2cec0c2234157a4f9a52 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 32/41] CygwinMIFileExecAndSymbols.java : add
+Subject: [PATCH 33/42] CygwinMIFileExecAndSymbols.java : add
 
 ---
  .../cygwin/CygwinMIFileExecAndSymbols.java    | 24 +++++++++++++++++++

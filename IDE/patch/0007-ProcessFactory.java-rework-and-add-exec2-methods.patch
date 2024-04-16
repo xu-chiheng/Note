@@ -1,8 +1,8 @@
-From bfa34736b4ab1a6469a72e74a4f072c9e98a216d Mon Sep 17 00:00:00 2001
+From faebd9f30194743511ac3d1597658b0fe6abc415 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:09:54 +0800
-Subject: [PATCH 07/41] ProcessFactory.java : rework and add exec2 methods
+Subject: [PATCH 07/42] ProcessFactory.java : rework and add exec2 methods
 
 ---
  .../cdt/utils/spawner/ProcessFactory.java     | 248 +++++++++++++-----

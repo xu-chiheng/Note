@@ -1,8 +1,8 @@
-From 7e8468c2ac21552f33d421c78449c72af509f727 Mon Sep 17 00:00:00 2001
+From a3db1017e1790fb4827f42e2d87dad92f0b9d07d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 37/41] ExternalExecutablesManager.java : disable GitBash and
+Subject: [PATCH 38/42] ExternalExecutablesManager.java : disable GitBash and
  WSL detection
 
 ---

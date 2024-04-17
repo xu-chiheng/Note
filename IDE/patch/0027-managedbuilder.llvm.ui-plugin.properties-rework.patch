@@ -1,15 +1,15 @@
-From bcb58091fec74489d597f9635e8c203c2225e54c Mon Sep 17 00:00:00 2001
+From 02c03047250cb94b3e1e420fc0c2dc5e046920c9 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
 Subject: [PATCH 27/42] managedbuilder.llvm.ui/plugin.properties : rework
 
 ---
- .../plugin.properties                         | 66 +++++++------------
- 1 file changed, 23 insertions(+), 43 deletions(-)
+ .../plugin.properties                         | 64 ++++++-------------
+ 1 file changed, 21 insertions(+), 43 deletions(-)
 
 diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties
-index e75ba9126a..76d261ff65 100644
+index e75ba9126a..2c15e199ea 100644
 --- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties
 +++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties
 @@ -16,31 +16,13 @@
@@ -50,7 +50,7 @@ index e75ba9126a..76d261ff65 100644
  
  # Default Configuration Names
  # START NON-TRANSLATABLE
-@@ -58,23 +40,20 @@ PlatformName.Rel=Release Platform
+@@ -58,23 +40,18 @@ PlatformName.Rel=Release Platform
  PlatformName.Dbg=Debug Platform
  
  # LLVM tool names
@@ -73,9 +73,7 @@ index e75ba9126a..76d261ff65 100644
 -ToolName.lli.llvm=LLVM JIT compiler/Interpreter
 +ToolName.archiver.llvm=Clang archiver BitCode
 +ToolName.assembler.llvm=Clang assembler BitCode
-+ToolName.compiler.llvm.abstract=Abstract Clang C/C++ compiler BitCode
-+ToolName.compiler.llvm.c.abstract=Abstract Clang C compiler BitCode
-+ToolName.compiler.llvm.cpp.abstract=Abstract Clang C++ compiler BitCode
++ToolName.compiler.llvm=Clang C/C++ compiler BitCode
 +ToolName.compiler.llvm.c=Clang C compiler BitCode
 +ToolName.compiler.llvm.cpp=Clang C++ compiler BitCode
 +ToolName.linker.llvm=Clang C/C++ linker BitCode
@@ -88,7 +86,7 @@ index e75ba9126a..76d261ff65 100644
  
  # Option Names
  # Generic Category Names
-@@ -111,6 +90,7 @@ Option.Posix.Optimize.More=Optimize more (-O2)
+@@ -111,6 +88,7 @@ Option.Posix.Optimize.More=Optimize more (-O2)
  Option.Posix.Optimize.Most=Optimize most (-O3)
  Option.Posix.Optimize.Runtime=Optimize at run-time (-O4)
  Option.Posix.Optimize.Flags=Other optimization flags
@@ -96,7 +94,7 @@ index e75ba9126a..76d261ff65 100644
  
  Option.Posix.DebugLevel=Debug Level
  Option.Posix.Debug.None=None
-@@ -163,9 +143,9 @@ Option.Posix.Linker.Flags=Linker flags
+@@ -163,9 +141,9 @@ Option.Posix.Linker.Flags=Linker flags
  Option.Posix.Libs=Libraries (-l)
  Option.Posix.Libsearch=Library search path (-L)
  Option.Posix.UserBcs=Other bytecode files

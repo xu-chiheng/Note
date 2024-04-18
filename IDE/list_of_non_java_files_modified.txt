@@ -1,4 +1,5 @@
 build/org.eclipse.cdt.make.ui/plugin.xml
+build/org.eclipse.cdt.managedbuilder.gnu.ui/META-INF/MANIFEST.MF
 build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.properties
 build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml
 cross/org.eclipse.cdt.build.crossgcc/plugin.xml

@@ -491,7 +491,7 @@ clean_or_hide_windows_home_dir_entries() {
 
 	local dir_entries_to_delete=(
 		.Xauthority .viminfo .emacs.d .bash_history .serverauth.* .cache .kde .local .mozilla .pki .pylint.d .python_history .lesshst .wget-hsts
-		ansel source .ms-ad .m2 .p2 _build .cgdb .dotnet .fltk .fvwm .ncftp .qt .source-highlight .kde4 .templateengine
+		ansel source .ms-ad _build .cgdb .dotnet .fltk .fvwm .ncftp .qt .source-highlight .kde4 .templateengine
 	)
 
 	echo_multi_line "dir entries to delete :" "${dir_entries_to_delete[@]}"

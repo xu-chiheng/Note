@@ -75,33 +75,25 @@
 # https://www.youtube.com/watch?v=dt8Ngw2vz-g
 
 
-# v2rayN 6.29 设置
+# v2rayN 6.43 2024-04-10 设置
 
-# Core基础设置
-# 开启UDP      OFF
-# 开启流量探测  OFF
+# 设置 --> 参数设置 --> v2rayN设置
+# 开机启动        ON
+# 启动后隐藏窗口   ON
 
-# v2rayN设置
-# 开机启动      ON
-# 启动后隐藏窗口 ON
-
-# 启用Tun模式  ON  虚拟网卡
+# 设置 --> 路由设置
+# 启用高级功能    OFF     否则无法成功开启Tun模式
 
 
-# Tor Browser双重代理配置（分别以v2rayN、无界、自由门作前置代理为例）
-# https://www.youtube.com/watch?v=IKuRpKPTEHs
+# 启用Tun模式    ON       需要点击“重启服务”，否则虚拟网卡(sing-box)有时无法及时启动。
 
-# 2022年最新暗网进入方法！什么是暗网暗网有什么如何使用科学上网工具访问暗网暗网怎么进2022丨暗网网址丨dark web 2022丨By工具大师i
-# https://www.youtube.com/watch?v=qob8gqQ2_3k
-# 1.打开v2rayN，在“参数设置”中关闭“开启流量探测”选项
-# 2.打开Tor Browser，在“Tor Network Settings”，勾选“I use a proxy to connect to the Internet”, 
+# 系统代理 : 自动配置系统代理
+# 路由 : V2-全局(Global)
+
+
+# Tor Browser
+# 在“Tor Network Settings”，勾选“I use a proxy to connect to the Internet”, 
 # Proxy Type选择“HTTP/HTTPS”，Address为“127.0.0.1”，Port为“10809”。点击Connect连接。
-
-# 通过v2rayN不能使用TOR浏览器 #360
-# https://github.com/2dust/v2rayN/issues/360
-# 这是sniffing的问题，关闭sniffing即可。
-# v2ray有一个sniffing功能，它可以检测http和tls流量中的域名并把它提取出来交给vps解析，然后把这些流量的数据包的目的地址重写为解析所得的地址。其本意是解决dns污染的问题，但因为tor连接用了一些不寻常的方式(比如域名和ip不匹配等)，所以此功能反而会使连接失败。
-# 目前v2rayn还不能设置关闭sniffing,想关闭sniffing只能手动编辑配置文件。
 
 
 # 多个地点Ping服务器,网站测速 - 站长工具

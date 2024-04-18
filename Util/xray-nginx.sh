@@ -75,26 +75,26 @@
 # https://www.youtube.com/watch?v=dt8Ngw2vz-g
 
 
-# v2rayN 6.43 2024-04-10 设置
+# v2rayN 6.43 2024-04-10 Settings
 
-# 设置 --> 参数设置 --> Core基础设置
-# 开启流量探测    OFF            关闭sniffing功能，使得Tor Browser可以连接
+# Settings --> Option Setting --> Core basic settings
+# Turn on Sniffing       OFF             To make Tor Browser connect
 
-# 设置 --> 参数设置 --> v2rayN设置
-# 开机启动        ON
-# 启动后隐藏窗口   ON
+# Settings --> Option Setting --> v2rayN settings
+# Start on boot          ON
+# Auto hide startup      ON
 
-# 设置 --> 路由设置
-# 启用高级功能    OFF            否则无法成功开启Tun模式
+# Settings --> Routing Setting
+# Enable advanced function    OFF        To make Tun mode work
 
-# 底部工具栏
-# 系统代理 : 自动配置系统代理
-# 启用Tun模式    ON或者OFF       控制是否开启虚拟网卡(sing-box)模式
+# Toolbar at bottom
+# System proxy : Set system proxy
+# Enable Tun     ON or OFF               Tun mode(sing-box Virtual NIC)
 
 
 # Tor Browser
-# 在“Tor Network Settings”，勾选“I use a proxy to connect to the Internet”, 
-# Proxy Type选择“HTTP/HTTPS”，Address为“127.0.0.1”，Port为“10809”。点击Connect连接。
+# "Tor Network Settings", check "I use a proxy to connect to the Internet",
+# Proxy Type "HTTP/HTTPS", Address "127.0.0.1", Port "10809".
 
 
 # 通过v2rayN不能使用TOR浏览器 #360

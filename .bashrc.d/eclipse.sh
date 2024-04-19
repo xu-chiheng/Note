@@ -58,6 +58,5 @@ download_and_backup_eclipse_platform_source() {
 	rm -rf "${eclipse_platform_source_dir}" \
 	&& time_command git clone -b master --recursive https://github.com/eclipse-platform/eclipse.platform.releng.aggregator.git "${eclipse_platform_source_dir}" \
 	&& time_command tar -cvf "${eclipse_platform_source_tarball}" "${eclipse_platform_source_dir}" \
-	&& time_command xz_compress -vv "${eclipse_platform_source_tarball}" \
-	&& time_command sha512_calculate_file "${eclipse_platform_source_tarball}".xz
+	&& time_command sha512_calculate_file "${eclipse_platform_source_tarball}"
 }

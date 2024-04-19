@@ -37,6 +37,13 @@ eclipse_workspace_backup_metadata_dir() {
 	&& time_command sha512_calculate_file "${file}"
 }
 
+# About Eclipse SDK
+# The JDT and PDE are plug-in tools for the Eclipse Platform. Together, these three pieces form the Eclipse SDK download, a complete development environment for Eclipse-based tools, and for developing Eclipse itself.
+
+# time_command download_and_backup_eclipse_platform_source
+
+# Eclipse SDK的源代码放到IDE目录中，并且加入到cdt的Source Insight Project中。
+
 # How to download Eclipse's Source code?
 # https://stackoverflow.com/questions/15654475/how-to-download-eclipses-source-code
 # Platform-releng/Platform Build
@@ -46,7 +53,7 @@ eclipse_workspace_backup_metadata_dir() {
 # On Windows, using v2rayN Tun mode(sing-box Virtual NIC), Cygwin git is slow, and has bug to finish the cloning.
 download_and_backup_eclipse_platform_source() {
 	local current_datetime="$(print_current_datetime)"
-	local eclipse_platform_source_dir=eclipse-platform
+	local eclipse_platform_source_dir=eclipse
 	local eclipse_platform_source_tarball="${eclipse_platform_source_dir}-${current_datetime}".tar
 	rm -rf "${eclipse_platform_source_dir}" \
 	&& time_command git clone -b master --recursive https://github.com/eclipse-platform/eclipse.platform.releng.aggregator.git "${eclipse_platform_source_dir}" \

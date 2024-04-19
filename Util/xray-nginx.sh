@@ -50,9 +50,6 @@
 
 
 
-# V2ray搭建教程，操作简单！支持伪装vmess+ws+tls和vless+tcp+xtls|vps服务器搭建v2ray节点|vpn搭建方式 2022
-# https://www.youtube.com/watch?v=sovN5c7E8MY
-
 # V2Ray进阶篇2：V2Ray+Websocket+TLS+Cloudflare拯救被墙的IP/复活你的VPS/隐藏真实IP/最安全的科学上网方式/V2Ray如何套上CDN加强安全性
 # https://www.youtube.com/watch?v=-GH7DOlqe-M
 
@@ -78,7 +75,7 @@
 # v2rayN 6.43 2024-04-10 Settings
 
 # Settings --> Option Setting --> Core basic settings
-# Turn on Sniffing       OFF             To make Tor Browser connect
+# Turn on Sniffing       OFF             To make "Tor Browser" to connect, but will make "Tun mode" not work
 
 # Settings --> Option Setting --> v2rayN settings
 # Start on boot          ON

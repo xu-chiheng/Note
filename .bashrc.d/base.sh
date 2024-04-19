@@ -179,11 +179,13 @@ set_environment_variables_at_bash_startup() {
 					elif quiet_command which ksysguard; then
 						TASK_MANAGER=ksysguard
 					else
-						echo "KDE has no plasma-systemmonitor or ksysguard"
+						# echo "KDE has no plasma-systemmonitor or ksysguard"
+						true
 					fi
 					;;
 				* )
-					echo "Unknown Desktop Environment ${DESKTOP_SESSION}"
+					# echo "Unknown Desktop Environment ${DESKTOP_SESSION}"
+					true
 					;;
 			esac
 			# https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux

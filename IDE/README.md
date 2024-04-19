@@ -6,6 +6,18 @@ One suggested way to handle this is to set eclipse-cdt/cdt as the upstream repo 
 
 # About Eclipse SDK
 The JDT and PDE are plug-in tools for the Eclipse Platform. Together, these three pieces form the Eclipse SDK download, a complete development environment for Eclipse-based tools, and for developing Eclipse itself.
+
+How to download Eclipse's Source code?
+https://stackoverflow.com/questions/15654475/how-to-download-eclipses-source-code
+Platform-releng/Platform Build
+https://wiki.eclipse.org/Platform-releng/Platform_Build
+
+git clone -b master --recursive \
+https://github.com/eclipse-platform/eclipse.platform.releng.aggregator.git
+
+Eexecute the above command in a Linux VPS which is fast, Cygwin git is slow, and has bug to finish the cloning.
+
+
 Eclipse SDK的源代码放到IDE目录中，并且加入到IDE_cdt和IDE_ultragdb的Source Insight Project中。
 
 

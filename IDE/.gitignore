@@ -3,3 +3,5 @@
 /konsole
 /gnome-terminal
 /eclipse.platform.releng.aggregator
+/*.xz
+/*.sha512

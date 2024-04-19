@@ -78,6 +78,7 @@ print_host_triple_2() {
 	esac
 }
 
+# Note : this function can't print any message, otherwise, FileZilla and WinSCP can't connect to this VPS through SFTP(FTP over SSH).
 set_environment_variables_at_bash_startup() {
 	export HOST_TRIPLE="$(print_host_triple_2)"
 	export TZ=Asia/Shanghai
@@ -444,23 +445,6 @@ remove_temp_files_in_current_dir() {
 
 remove_all_dirs_in_current_dir() {
 	find . -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 rm -rf
-}
-
-eclipse_workspace_git_add_-f_prefs_files() {
-	local prefs_files=(
-		.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.{editors,workbench}.prefs
-	)
-	print_array_elements "${prefs_files[@]}"
-	time_command git add -f "${prefs_files[@]}"
-}
-
-eclipse_workspace_backup_metadata_dir() {
-	local current_datetime="$(print_current_datetime)"
-	local base=".metadata"
-	local file="${base}-${current_datetime}.tar"
-
-	time_command tar -cf "${file}" "${base}" \
-	&& time_command sha512_calculate_file "${file}"
 }
 
 # https://www.geeksforgeeks.org/create-a-password-generator-using-shell-scripting/

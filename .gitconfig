@@ -10,8 +10,8 @@
 	program = gpg
 [init]
 	defaultBranch = main
-# [http]
-# 	proxy = 127.0.0.1:10809
+[http]
+	proxy = 127.0.0.1:10809
 # https://stackoverflow.com/questions/71849415/i-cannot-add-the-parent-directory-to-safe-directory-in-git
 # git config --global --add safe.directory '*'
 [safe]

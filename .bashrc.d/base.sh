@@ -201,8 +201,21 @@ fix_system_quirks_one_time() {
 		echo "host triple not equal to the output of config.guess"
 	fi
 
-	# v2rayN has Tun mode(using sing-box as virtual NIC), so, for simplisity, SSH and all non-browser apps, 
-	# which have different ways to setting sock/http proxy, does not need a proxy.
+	# v2rayN has Tun mode(using sing-box as virtual NIC), using which, SSH and all non-browser apps, 
+	# having different ways to setting Socks/HTTP proxy, does not need to set Socks/HTTP proxy in config files.
+	# But As of 2024-04-20, v2rayN Tun mode is not as stable as Socks/HTTP proxy mode.
+
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin )
+			# Cygwin has no connect.exe, use MinGW's
+			local usr_bin_connect="/usr/bin/connect.exe"
+			if [ ! -e "${usr_bin_connect}" ] && [ -v MSYS2_DIR ]; then
+				local mingw_ucrt_bin_connect="$(cygpath -u "${MSYS2_DIR}")/ucrt64/bin/connect.exe"
+				if [ -f "${mingw_ucrt_bin_connect}" ]; then
+					cp -f "${mingw_ucrt_bin_connect}" "${usr_bin_connect}"
+				fi
+			fi
+	esac
 
 	case "${HOST_TRIPLE}" in
 		x86_64-pc-cygwin )

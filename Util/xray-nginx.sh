@@ -77,13 +77,12 @@
 # having different ways to setting Socks/HTTP proxy, do not need to set Socks/HTTP proxy in config files or by some GUI configuration.
 # But As v2rayN 6.43 2024-04-10, Tun mode is not as stable as Socks/HTTP proxy mode, "Turn on Sniffing" must be ON.
 # But Tor Browser require "Turn on Sniffing" to be OFF, this conflicts with Tun mode.
-# The solution is setting "Turn on Sniffing" to be OFF, and not using Tun mode.
-
+# The solution is setting "Turn on Sniffing" to be OFF only when using Tor Browser.
 
 # v2rayN 6.43 2024-04-10 Settings
 
 # Settings --> Option Setting --> Core basic settings
-# Turn on Sniffing       OFF             To make "Tor Browser" to connect, but will make "Tun mode" not work
+# Turn on Sniffing       ON or OFF       ON to make "Tun mode" work, OFF to make "Tor Browser" to connect, no way to let them both work.
 
 # Settings --> Option Setting --> v2rayN settings
 # Start on boot          ON

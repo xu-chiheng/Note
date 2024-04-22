@@ -1,0 +1,426 @@
+git_diff_branch...HEAD  # at /cygdrive/e/Note/IDE/cdt started
+no ~commit-message.txt
+
+
+current branch  : test0004
+cat .git/branch : test0000
+branch          : test0000
+
+
+git diff test0000...HEAD
+git diff test0000...test0004
+git diff $(git merge-base test0000 test0004) test0004
+
+
+git_diff test0000...HEAD  # at /cygdrive/e/Note/IDE/cdt started
+ build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml                                                           | 47 ++++-------------------------------------------
+ core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/Binary.java                                  |  6 ++++++
+ core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/indexer/TranslationUnitCollector.java        |  2 ++
+ core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEParser64.java                                | 10 ++++++++++
+ core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java                               | 11 ++++++++++-
+ core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfParser.java                                  |  9 +++++++++
+ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java                   |  5 +++++
+ debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java | 10 +++++++++-
+ llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml                                                           | 16 ++++------------
+ 9 files changed, 59 insertions(+), 57 deletions(-)
+
+diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml b/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml
+index 7dbe4a4610..d1405e9560 100644
+--- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml
++++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml
+@@ -258,7 +258,6 @@
+ 		</tool>
+ 		<tool
+ 			natureFilter="both"
+-			isAbstract="true"
+ 			name="%ToolName.archiver.gnu"
+ 			command="ar"
+ 			id="cdt.managedbuild.tool.gnu.archiver">
+@@ -1329,7 +1328,7 @@
+ 			<outputType
+ 				outputs="exe"
+ 				superClass="cdt.managedbuild.tool.gnu.linker.output.exe"
+-				id="cdt.managedbuild.tool.gnu.c.linker.cygwin.output">
++				id="cdt.managedbuild.tool.gnu.c.linker.cygwin.output.exe">
+ 			</outputType>
+ 			<outputType
+ 				outputs="dll,dll.a"
+@@ -1346,7 +1345,7 @@
+ 			<outputType
+ 				outputs="exe"
+ 				superClass="cdt.managedbuild.tool.gnu.linker.output.exe"
+-				id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.output">
++				id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.output.exe">
+ 			</outputType>
+ 			<outputType
+ 				outputs="dll,dll.a"
+@@ -1363,7 +1362,7 @@
+ 			<outputType
+ 				outputs="exe"
+ 				superClass="cdt.managedbuild.tool.gnu.linker.output.exe"
+-				id="cdt.managedbuild.tool.gnu.c.linker.mingw.output">
++				id="cdt.managedbuild.tool.gnu.c.linker.mingw.output.exe">
+ 			</outputType>
+ 			<outputType
+ 				outputs="dll,dll.a"
+@@ -1380,7 +1379,7 @@
+ 			<outputType
+ 				outputs="exe"
+ 				superClass="cdt.managedbuild.tool.gnu.linker.output.exe"
+-				id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.output">
++				id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.output.exe">
+ 			</outputType>
+ 			<outputType
+ 				outputs="dll,dll.a"
+@@ -1411,7 +1410,6 @@
+ 			superClass="cdt.managedbuild.tool.gnu.cpp.compiler">
+ 		</tool>
+ 		<builder
+-			isAbstract="true"
+ 			id="cdt.managedbuild.target.gnu.builder"
+ 			command="make"
+ 			arguments=""
+@@ -1466,54 +1464,18 @@
+ 			<tool
+ 				id="cdt.managedbuild.tool.gnu.c.compiler.linux.base"
+ 				superClass="cdt.managedbuild.tool.gnu.c.compiler">
+-				<option
+-					category="gnu.compiler.category.other"
+-					command="-pthread"
+-					defaultValue="false"
+-					id="gnu.c.compiler.option.pthread"
+-					name="%Option.Pthread"
+-					tip="%Option.PthreadCompilerTip"
+-					valueType="boolean">
+-				</option>
+ 			</tool>
+ 			<tool
+ 				id="cdt.managedbuild.tool.gnu.cpp.compiler.linux.base"
+ 				superClass="cdt.managedbuild.tool.gnu.cpp.compiler">
+-				<option
+-					category="gnu.compiler.category.other"
+-					command="-pthread"
+-					defaultValue="false"
+-					id="gnu.cpp.compiler.option.pthread"
+-					name="%Option.Pthread"
+-					tip="%Option.PthreadCompilerTip"
+-					valueType="boolean">
+-				</option>
+ 			</tool>
+ 			<tool
+ 				id="cdt.managedbuild.tool.gnu.c.linker.linux.base"
+ 				superClass="cdt.managedbuild.tool.gnu.c.linker">
+-				<option
+-					category="gnu.link.category.general"
+-					command="-pthread"
+-					defaultValue="false"
+-					id="gnu.c.link.option.pthread"
+-					name="%Option.Pthread"
+-					tip="%Option.PthreadLinkerTip"
+-					valueType="boolean">
+-				</option>
+ 			</tool>
+ 			<tool
+ 				id="cdt.managedbuild.tool.gnu.cpp.linker.linux.base"
+ 				superClass="cdt.managedbuild.tool.gnu.cpp.linker">
+-				<option
+-					category="gnu.link.category.general"
+-					command="-pthread"
+-					defaultValue="false"
+-					id="gnu.cpp.link.option.pthread"
+-					name="%Option.Pthread"
+-					tip="%Option.PthreadLinkerTip"
+-					valueType="boolean">
+-				</option>
+ 			</tool>
+ 		</toolChain>
+ 		<toolChain
+@@ -1579,7 +1541,6 @@
+ 			</targetPlatform>
+ 			<builder
+ 				id="cdt.managedbuild.tool.gnu.builder.mingw.base"
+-				isAbstract="false"
+ 				isVariableCaseSensitive="false"
+ 				superClass="org.eclipse.cdt.build.core.internal.builder">
+ 			</builder>
+diff --git a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/Binary.java b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/Binary.java
+index 4bd564eeca..bb7a594a61 100644
+--- a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/Binary.java
++++ b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/Binary.java
+@@ -320,6 +320,12 @@ public class Binary extends Openable implements IBinary {
+ 			try {
+ 				for (String filename : sourceFiles) {
+ 
++					//filter out non-existent files
++					IPath path = Path.fromOSString(filename);
++					if (!path.toFile().exists()) {
++						continue;
++					}
++
+ 					// Find the file locally
+ 					if (srcFinder != null) {
+ 						String localPath = srcFinder.toLocalPath(filename);
+diff --git a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/indexer/TranslationUnitCollector.java b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/indexer/TranslationUnitCollector.java
+index 43d41175ea..d88045b6ee 100644
+--- a/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/indexer/TranslationUnitCollector.java
++++ b/core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/indexer/TranslationUnitCollector.java
+@@ -49,6 +49,8 @@ final public class TranslationUnitCollector implements ICElementVisitor {
+ 			return false;
+ 		case ICElement.C_CCONTAINER:
+ 		case ICElement.C_PROJECT:
++		//For imported C/C++ executable
++		case ICElement.C_BINARY:
+ 			return true;
+ 		}
+ 		return false;
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEParser64.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEParser64.java
+index 56ecb87174..409c8908f6 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEParser64.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEParser64.java
+@@ -95,6 +95,16 @@ public class PEParser64 extends AbstractCExtension implements IBinaryParser {
+ 
+ 	@Override
+ 	public boolean isBinary(byte[] array, IPath path) {
++		String baseName = path.lastSegment();
++		if (baseName.endsWith(".o") //$NON-NLS-1$
++				|| baseName.endsWith(".obj") //$NON-NLS-1$
++				|| baseName.endsWith(".a") //$NON-NLS-1$
++				|| baseName.endsWith(".lib") //$NON-NLS-1$
++				|| baseName.endsWith(".exe") //$NON-NLS-1$
++				|| baseName.endsWith(".dll") //$NON-NLS-1$
++				) {
++			return true;
++		}
+ 		boolean isBin = PE64.isExeHeader(array) || AR.isARHeader(array);
+ 		// It maybe an object file try the known machine types.
+ 		if (!isBin && array.length > 1) {
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java
+index 24c4e7c6c0..c4f8a622f6 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java
+@@ -28,8 +28,10 @@ import java.util.HashSet;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.Set;
++import java.util.TreeSet;
+ 
+ import org.eclipse.cdt.core.CCorePlugin;
++import org.eclipse.cdt.core.Cygwin;
+ import org.eclipse.cdt.core.ICompileOptionsFinder;
+ import org.eclipse.cdt.core.ISymbolReader;
+ import org.eclipse.cdt.utils.coff.Coff64.SectionHeader;
+@@ -40,6 +42,7 @@ import org.eclipse.cdt.utils.elf.Elf.Section;
+ import org.eclipse.core.runtime.IPath;
+ import org.eclipse.core.runtime.IProgressMonitor;
+ import org.eclipse.core.runtime.Path;
++import org.eclipse.core.runtime.Platform;
+ 
+ /**
+  * Light-weight parser of Dwarf2 data which is intended for getting only
+@@ -54,7 +57,8 @@ public class DwarfReader extends Dwarf implements ISymbolReader, ICompileOptions
+ 
+ 	final static String[] DWARF_ALT_SectionsToParse = { DWARF_DEBUG_STR, DWARF_DEBUG_MACRO };
+ 
+-	private final Collection<String> m_fileCollection = new HashSet<>();
++	// use TreeSet instead of HashSet to make the collection sorted by file names
++	private final Collection<String> m_fileCollection = new TreeSet<>();
+ 	private final Map<Long, String> m_stmtFileMap = new HashMap<>();
+ 	private final Map<String, ArrayList<String>> m_compileOptionsMap = new HashMap<>();
+ 	private String[] m_fileNames = null;
+@@ -695,6 +699,11 @@ public class DwarfReader extends Dwarf implements ISymbolReader, ICompileOptions
+ 		// This convert the path to canonical path (but not necessarily absolute, which
+ 		// is different from java.io.File.getCanonicalPath()).
+ 		fullName = pa.toString();
++		if (Platform.getOS().equals(Platform.OS_WIN32)) {
++			if (fullName.startsWith("/")) { //$NON-NLS-1$
++				fullName = Cygwin.pathToWindows(fullName);
++			}
++		}
+ 
+ 		if (!m_fileCollection.contains(fullName))
+ 			m_fileCollection.add(fullName);
+diff --git a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfParser.java b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfParser.java
+index c6c594303e..9e8f7fd6c6 100644
+--- a/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfParser.java
++++ b/core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfParser.java
+@@ -98,6 +98,15 @@ public class ElfParser extends AbstractCExtension implements IBinaryParser {
+ 
+ 	@Override
+ 	public boolean isBinary(byte[] array, IPath path) {
++		String baseName = path.lastSegment();
++		if (baseName.endsWith(".o") //$NON-NLS-1$
++				|| baseName.endsWith(".obj") //$NON-NLS-1$
++				|| baseName.endsWith(".a") //$NON-NLS-1$
++				|| baseName.endsWith(".lib") //$NON-NLS-1$
++				|| baseName.endsWith(".so") //$NON-NLS-1$
++				) {
++			return true;
++		}
+ 		return Elf.isElfHeader(array) || AR.isARHeader(array);
+ 	}
+ 
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java
+index 555d85ab0f..17c9b1af36 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java
+@@ -38,6 +38,7 @@ import org.eclipse.cdt.core.model.ITypeDef;
+ import org.eclipse.cdt.core.model.IVariableDeclaration;
+ import org.eclipse.cdt.core.parser.ast.ASTAccessVisibility;
+ import org.eclipse.cdt.internal.core.model.CoreModelMessages;
++import org.eclipse.cdt.internal.core.model.ExternalTranslationUnit;
+ import org.eclipse.cdt.ui.CUIPlugin;
+ import org.eclipse.cdt.ui.PreferenceConstants;
+ import org.eclipse.core.resources.IProject;
+@@ -886,6 +887,10 @@ public class CElementLabelComposer {
+ 				fBuffer.append(CElementLabels.CONCAT_STRING);
+ 				fBuffer.append(path.removeLastSegments(1).toString());
+ 			} else {
++				if (tu instanceof ExternalTranslationUnit) {
++					fBuffer.append(path.toString());
++					return;
++				}
+ 				fBuffer.append(path.lastSegment());
+ 			}
+ 		}
+diff --git a/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java b/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java
+index 7aa49bf3cb..7f510e2eb8 100644
+--- a/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java
++++ b/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java
+@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.IStatus;
+ import org.eclipse.core.runtime.NullProgressMonitor;
+ import org.eclipse.core.runtime.OperationCanceledException;
+ import org.eclipse.core.runtime.Path;
++import org.eclipse.core.runtime.Platform;
+ import org.eclipse.core.runtime.Status;
+ import org.eclipse.debug.core.ILaunchConfigurationType;
+ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+@@ -252,7 +253,14 @@ public abstract class AbstractImportExecutableWizard extends Wizard implements I
+ 		String defaultBinaryParserId = CCorePlugin.getDefault().getPluginPreferences()
+ 				.getDefaultString(CCorePlugin.PREF_BINARY_PARSER);
+ 		if (defaultBinaryParserId == null || defaultBinaryParserId.length() == 0) {
+-			defaultBinaryParserId = CCorePlugin.DEFAULT_BINARY_PARSER_UNIQ_ID;
++			if (Platform.getOS().equals(Platform.OS_WIN32)) {
++				// defaultBinaryParserId = "org.eclipse.cdt.core.GNU_PE64"; //$NON-NLS-1$
++				defaultBinaryParserId = "org.eclipse.cdt.core.Cygwin_PE64"; //$NON-NLS-1$
++			} else if (Platform.getOS().equals(Platform.OS_LINUX)) {
++				defaultBinaryParserId = "org.eclipse.cdt.core.GNU_ELF"; //$NON-NLS-1$
++			} else {
++				defaultBinaryParserId = CCorePlugin.DEFAULT_BINARY_PARSER_UNIQ_ID;
++			}
+ 		}
+ 		return new String[] { defaultBinaryParserId };
+ 	}
+diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
+index 727e400485..d9439df015 100644
+--- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
++++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
+@@ -154,7 +154,6 @@
+ 				command="-native"
+ 				defaultValue="false"
+ 				id="llvm.link.option.native"
+-				isAbstract="false"
+ 				name="%Option.Posix.Linker.native"
+ 				resourceFilter="all"
+ 				tip="%option.tip.6"
+@@ -165,7 +164,6 @@
+ 				command="-native-cbe"
+ 				defaultValue="false"
+ 				id="llvm.link.option.nativeCBackEnd"
+-				isAbstract="false"
+ 				name="%Option.Posix.Linker.nativeCBackend"
+ 				resourceFilter="all"
+ 				tip="%option.tip.7"
+@@ -260,7 +258,6 @@
+ 		<tool
+ 			command="llvm-ar"
+ 			id="cdt.managedbuild.tool.llvm.archiver"
+-			isAbstract="true"
+ 			name="%ToolName.archiver.llvm"
+ 			natureFilter="both">
+ 			<supportedProperties>
+@@ -298,7 +295,6 @@
+ 				category="llvm.lib.category.options"
+ 				command="d"
+ 				id="llvm.lib.option.delete"
+-				isAbstract="false"
+ 				name="%Option.Posix.Archiver.delete"
+ 				resourceFilter="all"
+ 				tip="%option.tip.9"
+@@ -308,7 +304,6 @@
+ 				category="llvm.lib.category.options"
+ 				command="t"
+ 				id="llvm.lib.option.print.contents"
+-				isAbstract="false"
+ 				name="%Option.Posix.Archiver.print.contents"
+ 				resourceFilter="all"
+ 				valueType="boolean">
+@@ -340,7 +335,6 @@
+ 			command="llvm-as"
+ 			errorParsers="org.eclipse.cdt.core.GASErrorParser"
+ 			id="cdt.managedbuild.tool.llvm.assembler"
+-			isAbstract="true"
+ 			name="%ToolName.assembler.llvm"
+ 			natureFilter="both"
+ 			outputFlag="-o">
+@@ -385,7 +379,6 @@
+ 		<tool
+ 			errorParsers="org.eclipse.cdt.core.GCCErrorParser"
+ 			id="cdt.managedbuild.tool.llvm.compiler"
+-			isAbstract="true"
+ 			name="%ToolName.compiler.llvm"
+ 			outputFlag="-o">
+ 			<supportedProperties>
+@@ -815,7 +808,7 @@
+ 			<outputType
+ 				outputs="exe"
+ 				superClass="cdt.managedbuild.tool.llvm.linker.output.exe"
+-				id="cdt.managedbuild.tool.llvm.c.linker.cygwin.output">
++				id="cdt.managedbuild.tool.llvm.c.linker.cygwin.output.exe">
+ 			</outputType>
+ 			<outputType
+ 				outputs="dll,dll.a"
+@@ -832,7 +825,7 @@
+ 			<outputType
+ 				outputs="exe"
+ 				superClass="cdt.managedbuild.tool.llvm.linker.output.exe"
+-				id="cdt.managedbuild.tool.llvm.cpp.linker.cygwin.output">
++				id="cdt.managedbuild.tool.llvm.cpp.linker.cygwin.output.exe">
+ 			</outputType>
+ 			<outputType
+ 				outputs="dll,dll.a"
+@@ -849,7 +842,7 @@
+ 			<outputType
+ 				outputs="exe"
+ 				superClass="cdt.managedbuild.tool.llvm.linker.output.exe"
+-				id="cdt.managedbuild.tool.llvm.c.linker.mingw.output">
++				id="cdt.managedbuild.tool.llvm.c.linker.mingw.output.exe">
+ 			</outputType>
+ 			<outputType
+ 				outputs="dll,dll.a"
+@@ -866,7 +859,7 @@
+ 			<outputType
+ 				outputs="exe"
+ 				superClass="cdt.managedbuild.tool.llvm.linker.output.exe"
+-				id="cdt.managedbuild.tool.llvm.cpp.linker.mingw.output">
++				id="cdt.managedbuild.tool.llvm.cpp.linker.mingw.output.exe">
+ 			</outputType>
+ 			<outputType
+ 				outputs="dll,dll.a"
+@@ -885,7 +878,6 @@
+ 				archList="all"
+ 				binaryParser="org.eclipse.cdt.core.ELF"
+ 				id="cdt.managedbuild.target.llvm.platform.linux.base"
+-				isAbstract="true"
+ 				name="%PlatformName.Dbg"
+ 				osList="linux,hpux,aix,qnx">
+ 			</targetPlatform>
+
+real	0m0.158s
+user	0m0.046s
+sys	0m0.125s
+git_diff test0000...HEAD  # at /cygdrive/e/Note/IDE/cdt finished
+
+real	0m0.530s
+user	0m0.092s
+sys	0m0.234s
+git_diff_branch...HEAD  # at /cygdrive/e/Note/IDE/cdt finished

@@ -1,2 +1,0 @@
-
-after downloading Cygwin and Visual Studio, backup the directory to generate ISO file.

@@ -205,10 +205,11 @@ fix_system_quirks_one_time() {
 		x86_64-pc-cygwin )
 			# Cygwin has no connect.exe, use MinGW's
 			local usr_bin_connect="/usr/bin/connect.exe"
-			if [ ! -e "${usr_bin_connect}" ] && [ -v MSYS2_DIR ]; then
+			if [ ! -f "${usr_bin_connect}" ] && [ -v MSYS2_DIR ]; then
 				local mingw_ucrt_bin_connect="$(cygpath -u "${MSYS2_DIR}")/ucrt64/bin/connect.exe"
 				if [ -f "${mingw_ucrt_bin_connect}" ]; then
-					cp -f "${mingw_ucrt_bin_connect}" "${usr_bin_connect}"
+					rm -rf "${usr_bin_connect}" \
+					&& cp -f "${mingw_ucrt_bin_connect}" "${usr_bin_connect}"
 				fi
 			fi
 	esac

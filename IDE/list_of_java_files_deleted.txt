@@ -1,6 +1,9 @@
 build/org.eclipse.cdt.make.ui/src/org/eclipse/cdt/make/ui/dialogs/DiscoveredPathContainerPage.java
 build/org.eclipse.cdt.managedbuilder.gnu.ui/src/org/eclipse/cdt/managedbuilder/gnu/cygwin/CygwinPathResolver.java
 core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/BinaryFilePresentation.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/IncludeRefContainer.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/IncludeReferenceProxy.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/LibraryRefContainer.java
 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/makegen/LlvmDependencyCalculator2.java
 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/makegen/LlvmDependencyCalculator2Commands.java
 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/src/org/eclipse/cdt/managedbuilder/llvm/ui/LlvmBuildEnvironmentVariable.java

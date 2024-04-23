@@ -150,6 +150,7 @@ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/buildconsole/BuildConsol
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/buildconsole/GlobalBuildConsoleManager.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewLabelProvider.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CopyAction.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPElementLabelProvider.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPathIncludeSymbolEntryPage.java
@@ -180,11 +181,15 @@ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/search/actions/Selection
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/util/ExternalEditorInputFactory.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/BasicElementLabels.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/IncludeFolderDecorator.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/wizards/dialogfields/LinkToFileGroup.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/workingsets/ChangeBuildConfigContribution.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementContentProvider.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementSorter.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/actions/ChangeBuildConfigActionBase.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/AbstractPage.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/CLocationTab.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/ManageConfigSelector.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/StructureTreeTab.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/wizards/NewCProjectWizardPage.java
 core/org.eclipse.cdt.ui/templateengine/org/eclipse/cdt/ui/templateengine/ProjectSelectionPage.java

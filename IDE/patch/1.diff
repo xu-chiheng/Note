@@ -1,7 +1,25 @@
+git_diff_branch...HEAD  # at /cygdrive/e/Note/IDE/cdt started
+no ~commit-message.txt
+
+
+current branch  : test0013
+cat .git/branch : test0000
+branch          : test0000
+
+
+git diff test0000...HEAD
+git diff test0000...test0013
+git diff $(git merge-base test0000 test0013) test0013
+
+
+git_diff test0000...HEAD  # at /cygdrive/e/Note/IDE/cdt started
  build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml                                                           | 47 ++++-------------------------------------------
+ core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ICProject.java                                        |  4 ++++
  core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/IIncludeReferenceContainer.java                       | 22 ++++++++++++++++++++++
  core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ILibraryReferenceContainer.java                       | 22 ++++++++++++++++++++++
  core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/Binary.java                                  |  8 ++++++++
+ core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProject.java                                | 12 ++++++++++++
+ core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProjectInfo.java                            | 18 ++++++++++++++++++
  core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/IncludeReferenceContainer.java               | 78 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/IncludeReferenceContainerInfo.java           | 30 ++++++++++++++++++++++++++++++
  core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/LibraryReferenceContainer.java               | 78 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -11,12 +29,12 @@
  core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/coff/parser/PEParser64.java                                | 10 ++++++++++
  core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java                               | 11 ++++++++++-
  core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfParser.java                                  |  9 +++++++++
- core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/BaseCElementContentProvider.java                         | 12 ++++++++++++
- core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java                          | 32 +-------------------------------
+ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/BaseCElementContentProvider.java                         | 62 ++++++++++++++++++++++++++++++++++++++++----------------------
+ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java                          | 39 ++++++++-------------------------------
  core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java                   |  5 +++++
  debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java | 10 +++++++++-
  llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml                                                           | 16 ++++------------
- 18 files changed, 336 insertions(+), 88 deletions(-)
+ 21 files changed, 405 insertions(+), 110 deletions(-)
  create mode 100644 core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/IIncludeReferenceContainer.java
  create mode 100644 core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ILibraryReferenceContainer.java
  create mode 100644 core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/IncludeReferenceContainer.java
@@ -143,6 +161,21 @@ index 7dbe4a4610..d1405e9560 100644
  				isVariableCaseSensitive="false"
  				superClass="org.eclipse.cdt.build.core.internal.builder">
  			</builder>
+diff --git a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ICProject.java b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ICProject.java
+index 2123e8e100..02e15f2e62 100644
+--- a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ICProject.java
++++ b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ICProject.java
+@@ -55,6 +55,10 @@ public interface ICProject extends IParent, IOpenable, ICElement {
+ 	 */
+ 	IBinaryContainer getBinaryContainer() throws CModelException;
+ 
++	IIncludeReferenceContainer getIncludeReferenceContainer() throws CModelException;
++
++	ILibraryReferenceContainer getLibraryReferenceContainer() throws CModelException;
++
+ 	/**
+ 	 * Returns the source root folders of the project.
+ 	 *
 diff --git a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/IIncludeReferenceContainer.java b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/IIncludeReferenceContainer.java
 new file mode 100644
 index 0000000000..a2321e88cc
@@ -229,6 +262,82 @@ index 4bd564eeca..97db4d8fb1 100644
  					// Find the file locally
  					if (srcFinder != null) {
  						String localPath = srcFinder.toLocalPath(filename);
+diff --git a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProject.java b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProject.java
+index 102c888304..0c80521f0a 100644
+--- a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProject.java
++++ b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProject.java
+@@ -41,8 +41,10 @@ import org.eclipse.cdt.core.model.ICModelStatusConstants;
+ import org.eclipse.cdt.core.model.ICProject;
+ import org.eclipse.cdt.core.model.IIncludeEntry;
+ import org.eclipse.cdt.core.model.IIncludeReference;
++import org.eclipse.cdt.core.model.IIncludeReferenceContainer;
+ import org.eclipse.cdt.core.model.ILibraryEntry;
+ import org.eclipse.cdt.core.model.ILibraryReference;
++import org.eclipse.cdt.core.model.ILibraryReferenceContainer;
+ import org.eclipse.cdt.core.model.IOutputEntry;
+ import org.eclipse.cdt.core.model.IPathEntry;
+ import org.eclipse.cdt.core.model.ISourceEntry;
+@@ -84,6 +86,16 @@ public class CProject extends Openable implements ICProject {
+ 		return ((CProjectInfo) getElementInfo()).getArchiveContainer();
+ 	}
+ 
++	@Override
++	public IIncludeReferenceContainer getIncludeReferenceContainer() throws CModelException {
++		return ((CProjectInfo) getElementInfo()).getIncludeReferenceContainer();
++	}
++
++	@Override
++	public ILibraryReferenceContainer getLibraryReferenceContainer() throws CModelException {
++		return ((CProjectInfo) getElementInfo()).getLibraryReferenceContainer();
++	}
++
+ 	@Override
+ 	public IProject getProject() {
+ 		return getUnderlyingResource().getProject();
+diff --git a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProjectInfo.java b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProjectInfo.java
+index 81e121da42..0a31562b72 100644
+--- a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProjectInfo.java
++++ b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProjectInfo.java
+@@ -23,7 +23,9 @@ import org.eclipse.cdt.core.model.IArchiveContainer;
+ import org.eclipse.cdt.core.model.IBinaryContainer;
+ import org.eclipse.cdt.core.model.ICProject;
+ import org.eclipse.cdt.core.model.IIncludeReference;
++import org.eclipse.cdt.core.model.IIncludeReferenceContainer;
+ import org.eclipse.cdt.core.model.ILibraryReference;
++import org.eclipse.cdt.core.model.ILibraryReferenceContainer;
+ import org.eclipse.cdt.core.model.IOutputEntry;
+ import org.eclipse.cdt.core.model.ISourceRoot;
+ import org.eclipse.core.resources.IContainer;
+@@ -39,6 +41,8 @@ class CProjectInfo extends OpenableInfo {
+ 
+ 	BinaryContainer vBin;
+ 	ArchiveContainer vLib;
++	IIncludeReferenceContainer includeReferenceContainer;
++	ILibraryReferenceContainer libraryReferenceContainer;
+ 	ILibraryReference[] libReferences;
+ 	IIncludeReference[] incReferences;
+ 	ISourceRoot[] sourceRoots;
+@@ -68,6 +72,20 @@ class CProjectInfo extends OpenableInfo {
+ 		return vLib;
+ 	}
+ 
++	synchronized public IIncludeReferenceContainer getIncludeReferenceContainer() {
++		if (includeReferenceContainer == null) {
++			includeReferenceContainer = new IncludeReferenceContainer((CProject) getElement());
++		}
++		return includeReferenceContainer;
++	}
++
++	synchronized public ILibraryReferenceContainer getLibraryReferenceContainer() {
++		if (libraryReferenceContainer == null) {
++			libraryReferenceContainer = new LibraryReferenceContainer((CProject) getElement());
++		}
++		return libraryReferenceContainer;
++	}
++
+ 	public Object[] getNonCResources(IResource res) {
+ 		if (nonCResources != null)
+ 			return nonCResources;
 diff --git a/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/IncludeReferenceContainer.java b/core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/IncludeReferenceContainer.java
 new file mode 100644
 index 0000000000..9ed86bf734
@@ -582,10 +691,21 @@ index c6c594303e..9e8f7fd6c6 100644
  	}
  
 diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/BaseCElementContentProvider.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/BaseCElementContentProvider.java
-index c088f2bfec..dc250b05d3 100644
+index c088f2bfec..3893b15a08 100644
 --- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/BaseCElementContentProvider.java
 +++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/BaseCElementContentProvider.java
-@@ -251,6 +251,15 @@ public class BaseCElementContentProvider implements ITreeContentProvider {
+@@ -37,6 +37,10 @@ import org.eclipse.cdt.core.model.ICElement;
+ import org.eclipse.cdt.core.model.ICModel;
+ import org.eclipse.cdt.core.model.ICProject;
+ import org.eclipse.cdt.core.model.IInclude;
++import org.eclipse.cdt.core.model.IIncludeReference;
++import org.eclipse.cdt.core.model.IIncludeReferenceContainer;
++import org.eclipse.cdt.core.model.ILibraryReference;
++import org.eclipse.cdt.core.model.ILibraryReferenceContainer;
+ import org.eclipse.cdt.core.model.IMacro;
+ import org.eclipse.cdt.core.model.IMember;
+ import org.eclipse.cdt.core.model.INamespace;
+@@ -251,6 +255,15 @@ public class BaseCElementContentProvider implements ITreeContentProvider {
  	 */
  	@Override
  	public Object[] getChildren(Object element) {
@@ -601,7 +721,7 @@ index c088f2bfec..dc250b05d3 100644
  		if (!exists(element))
  			return NO_CHILDREN;
  
-@@ -308,6 +317,9 @@ public class BaseCElementContentProvider implements ITreeContentProvider {
+@@ -308,6 +321,9 @@ public class BaseCElementContentProvider implements ITreeContentProvider {
  	 */
  	@Override
  	public boolean hasChildren(Object element) {
@@ -611,11 +731,90 @@ index c088f2bfec..dc250b05d3 100644
  		if (fProvideMembers) {
  			// assume TUs and binary files are never empty
  			if (element instanceof IBinary || element instanceof ITranslationUnit || element instanceof IArchive) {
+@@ -818,17 +834,8 @@ public class BaseCElementContentProvider implements ITreeContentProvider {
+ 	}
+ 
+ 	protected IBinary[] getBinaries(IBinaryContainer container) throws CModelException {
+-		ICElement[] celements = container.getChildren();
+-		ArrayList<IBinary> list = new ArrayList<>(celements.length);
+-		for (ICElement celement : celements) {
+-			if (celement instanceof IBinary) {
+-				IBinary bin = (IBinary) celement;
+-				list.add(bin);
+-			}
+-		}
+-		IBinary[] bins = new IBinary[list.size()];
+-		list.toArray(bins);
+-		return bins;
++		IBinary[] celements = container.getBinaries();
++		return celements;
+ 	}
+ 
+ 	protected IArchive[] getArchives(ICProject cproject) throws CModelException {
+@@ -837,17 +844,28 @@ public class BaseCElementContentProvider implements ITreeContentProvider {
+ 	}
+ 
+ 	protected IArchive[] getArchives(IArchiveContainer container) throws CModelException {
+-		ICElement[] celements = container.getChildren();
+-		ArrayList<IArchive> list = new ArrayList<>(celements.length);
+-		for (ICElement celement : celements) {
+-			if (celement instanceof IArchive) {
+-				IArchive ar = (IArchive) celement;
+-				list.add(ar);
+-			}
+-		}
+-		IArchive[] ars = new IArchive[list.size()];
+-		list.toArray(ars);
+-		return ars;
++		IArchive[] celements = container.getArchives();
++		return celements;
++	}
++
++	protected IIncludeReference[] getIncludeReferences(ICProject cproject) throws CModelException {
++		IIncludeReferenceContainer container = cproject.getIncludeReferenceContainer();
++		return getIncludeReferences(container);
++	}
++
++	protected IIncludeReference[] getIncludeReferences(IIncludeReferenceContainer container) throws CModelException {
++		IIncludeReference[] celements = container.getIncludeReferences();
++		return celements;
++	}
++
++	protected ILibraryReference[] getLibraryReferences(ICProject cproject) throws CModelException {
++		ILibraryReferenceContainer container = cproject.getLibraryReferenceContainer();
++		return getLibraryReferences(container);
++	}
++
++	protected ILibraryReference[] getLibraryReferences(ILibraryReferenceContainer container) throws CModelException {
++		ILibraryReference[] celements = container.getLibraryReferences();
++		return celements;
+ 	}
+ 
+ 	/**
 diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java
-index 0e58a5bf1c..44eb116ddd 100644
+index 0e58a5bf1c..dfd347be43 100644
 --- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java
 +++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java
-@@ -130,41 +130,11 @@ public class CViewContentProvider extends CElementContentProvider {
+@@ -25,6 +25,7 @@ import org.eclipse.cdt.core.model.ICElement;
+ import org.eclipse.cdt.core.model.ICProject;
+ import org.eclipse.cdt.core.model.IIncludeReference;
+ import org.eclipse.cdt.core.model.ILibraryReference;
++import org.eclipse.cdt.core.model.ILibraryReferenceContainer;
+ import org.eclipse.cdt.internal.ui.util.RemoteTreeContentManager;
+ import org.eclipse.cdt.internal.ui.util.RemoteTreeViewer;
+ import org.eclipse.cdt.ui.CElementContentProvider;
+@@ -99,6 +100,10 @@ public class CViewContentProvider extends CElementContentProvider {
+ 				extras = getExecutables((IBinaryContainer) element);
+ 			} else if (element instanceof IArchiveContainer) {
+ 				extras = getArchives((IArchiveContainer) element);
++			} else if (element instanceof ILibraryReferenceContainer) {
++				// extras = getArchives((ILibraryReferenceContainer) element);
++			} else if (element instanceof ILibraryReferenceContainer) {
++				// extras = getArchives((ILibraryReferenceContainer) element);
+ 			} else if (element instanceof IIncludeReference) {
+ 				extras = getIncludeReferenceChildren((IIncludeReference) element);
+ 			}
+@@ -130,41 +135,13 @@ public class CViewContentProvider extends CElementContentProvider {
  	}
  
  	private Object[] getProjectChildren(ICProject cproject) throws CModelException {
@@ -654,6 +853,8 @@ index 0e58a5bf1c..44eb116ddd 100644
 -				extras = o;
 -			}
 -		}
++		// ILibraryReferenceContainer libRefCont = cproject.getLibraryReferenceContainer();
++		// IIncludeReferenceContainer incRefCont = cproject.getIncludeReferenceContainer();
 +		Object[] extras = new Object[] { archive, bin, libRefCont, incRefCont };
  		return extras;
  	}
@@ -813,3 +1014,13 @@ index 727e400485..d9439df015 100644
  				name="%PlatformName.Dbg"
  				osList="linux,hpux,aix,qnx">
  			</targetPlatform>
+
+real	0m0.501s
+user	0m0.015s
+sys	0m0.171s
+git_diff test0000...HEAD  # at /cygdrive/e/Note/IDE/cdt finished
+
+real	0m0.861s
+user	0m0.045s
+sys	0m0.246s
+git_diff_branch...HEAD  # at /cygdrive/e/Note/IDE/cdt finished

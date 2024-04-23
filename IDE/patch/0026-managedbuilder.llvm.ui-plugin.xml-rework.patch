@@ -1,8 +1,8 @@
-From e72621046619838f20c0ee20d8ffd45da6494d8d Mon Sep 17 00:00:00 2001
+From 76d9163187dc8950f4ec0c9a118d94397f98a8b9 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 26/42] managedbuilder.llvm.ui/plugin.xml : rework
+Subject: [PATCH 26/43] managedbuilder.llvm.ui/plugin.xml : rework
 
 remove all envVarBuildPath, and references to CygwinPathResolver
 remove references to LlvmDependencyCalculator2, LlvmIsToolChainSupported, PreferenceInitializer, LlvmProjectNature

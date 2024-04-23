@@ -1,8 +1,8 @@
-From a3b1c82d9f0647628ad591b3a1343a7f365a5c15 Mon Sep 17 00:00:00 2001
+From 60d5aa8540d26327b48565cbc1a119e3e33c8c2e Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Sat, 6 Apr 2024 14:05:24 +0800
-Subject: [PATCH 08/42] replace toOSString to toString
+Subject: [PATCH 08/43] replace toOSString to toString
 
 ---
  .../core/AutotoolsNewMakeGenerator.java       |  4 +-

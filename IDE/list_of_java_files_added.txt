@@ -3,6 +3,12 @@ core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/Cygwin.java
 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/core/MSYS2.java
 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2.java
 core/org.eclipse.cdt.core.native/src/org/eclipse/cdt/utils/pty/PTY2Util.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/IIncludeReferenceContainer.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ILibraryReferenceContainer.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/IncludeReferenceContainer.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/IncludeReferenceContainerInfo.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/LibraryReferenceContainer.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/LibraryReferenceContainerInfo.java
 cross/org.eclipse.cdt.build.crossgcc/src/org/eclipse/cdt/internal/build/crossgcc/CrossGccIsToolChainSupported.java
 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/gdb/service/command/CommandFactory_Cygwin.java
 dsf-gdb/org.eclipse.cdt.dsf.gdb/src/org/eclipse/cdt/dsf/mi/service/command/commands/cygwin/CygwinMIBreakInsert.java

@@ -68,8 +68,16 @@ core/org.eclipse.cdt.core.tests/parser/org/eclipse/cdt/internal/index/tests/Inde
 core/org.eclipse.cdt.core.tests/parser/org/eclipse/cdt/internal/index/tests/IndexIncludeTest.java
 core/org.eclipse.cdt.core.tests/suite/org/eclipse/cdt/core/testplugin/Main.java
 core/org.eclipse.cdt.core.tests/suite/org/eclipse/cdt/core/testplugin/ResourceHelper.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/IBinary.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ICProject.java
 core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/language/settings/providers/LanguageSettingsScannerInfoProvider.java
 core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/language/settings/providers/PathEntryScannerInfoLanguageSettingsProvider.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/Binary.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/BinaryContainer.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CContainer.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProject.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/CProjectInfo.java
+core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/DeltaProcessor.java
 core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/PathEntryUtil.java
 core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/model/TranslationUnit.java
 core/org.eclipse.cdt.core/model/org/eclipse/cdt/internal/core/settings/model/DescriptionScannerInfoProvider.java
@@ -86,6 +94,7 @@ core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/dom/PDOMMacr
 core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/dom/PDOMName.java
 core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/indexer/PDOMUpdateTask.java
 core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/indexer/ProjectIndexerInputAdapter.java
+core/org.eclipse.cdt.core/parser/org/eclipse/cdt/internal/core/pdom/indexer/TranslationUnitCollector.java
 core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/CommandLauncher.java
 core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/build/CBuildConfiguration.java
 core/org.eclipse.cdt.core/src/org/eclipse/cdt/core/build/ScannerInfoCache.java
@@ -136,9 +145,11 @@ core/org.eclipse.cdt.ui.tests/ui/org/eclipse/cdt/ui/tests/wizards/settingswizard
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/corext/codemanipulation/InclusionContext.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/corext/template/c/FileTemplateContext.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/corext/util/Resources.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/BaseCElementContentProvider.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/buildconsole/BuildConsoleManager.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/buildconsole/GlobalBuildConsoleManager.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CopyAction.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPElementLabelProvider.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/dialogs/cpaths/CPathIncludeSymbolEntryPage.java
@@ -151,6 +162,7 @@ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/editor/CElementIncludeRe
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/editor/OrganizeIncludesAction.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/includebrowser/IBDragSourceListener.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/navigator/CNavigatorDragAdapterAssistant.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/navigator/CNavigatorLabelProvider.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/preferences/BuildLogPreferencePage.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/preferences/GlobalBuildLogPreferencePage.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/refactoring/changes/CreateFileChange.java
@@ -167,7 +179,10 @@ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/search/CSearchResult.jav
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/search/actions/SelectionParseAction.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/util/ExternalEditorInputFactory.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/BasicElementLabels.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/wizards/dialogfields/LinkToFileGroup.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementContentProvider.java
+core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementSorter.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/AbstractPage.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/CLocationTab.java
 core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/newui/StructureTreeTab.java
@@ -203,6 +218,7 @@ debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/internal/ui/views/execu
 debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/internal/ui/views/executables/SourceFilesViewer.java
 debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/internal/ui/views/modules/ModuleDetailPane.java
 debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/breakpoints/AbstractToggleBreakpointAdapter.java
+debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java
 debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/ImportExecutablePageOne.java
 dsf-gdb/org.eclipse.cdt.dsf.gdb.ui/src/org/eclipse/cdt/dsf/gdb/internal/ui/commands/GdbConnectCommand.java
 dsf-gdb/org.eclipse.cdt.dsf.gdb.ui/src/org/eclipse/cdt/dsf/gdb/internal/ui/console/GdbCliConsoleManager.java

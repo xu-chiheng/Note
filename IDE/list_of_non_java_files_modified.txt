@@ -2,6 +2,7 @@ build/org.eclipse.cdt.make.ui/plugin.xml
 build/org.eclipse.cdt.managedbuilder.gnu.ui/META-INF/MANIFEST.MF
 build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.properties
 build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml
+core/org.eclipse.cdt.core/src/org/eclipse/cdt/internal/core/CCorePluginResources.properties
 cross/org.eclipse.cdt.build.crossgcc/plugin.xml
 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/META-INF/MANIFEST.MF
 llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.properties

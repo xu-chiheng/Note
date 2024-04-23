@@ -1,19 +1,19 @@
-From 1173c8f6393044bbbbd296e41eb3618672a3f286 Mon Sep 17 00:00:00 2001
+From 72d9fd74cdb5c0f70bab7f1378f5168757a3f4f4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 22/42] managedbuilder.gnu.ui/plugin.xml : rework
+Subject: [PATCH 22/43] managedbuilder.gnu.ui/plugin.xml : rework
 
 remove all envVarBuildPath elements and references to CygwinPathResolver
 ---
- .../plugin.xml                                | 6535 ++++++-----------
- 1 file changed, 2080 insertions(+), 4455 deletions(-)
+ .../plugin.xml                                | 6496 ++++++-----------
+ 1 file changed, 2041 insertions(+), 4455 deletions(-)
 
 diff --git a/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml b/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml
-index ce11ac1764..7dbe4a4610 100644
+index ce11ac1764..d1405e9560 100644
 --- a/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml
 +++ b/build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.xml
-@@ -1,4464 +1,2089 @@
+@@ -1,4464 +1,2050 @@
  <?xml version="1.0" encoding="UTF-8"?>
  <?eclipse version="3.0"?>
  <plugin>
@@ -274,7 +274,6 @@ index ce11ac1764..7dbe4a4610 100644
 +		</tool>
 +		<tool
 +			natureFilter="both"
-+			isAbstract="true"
 +			name="%ToolName.archiver.gnu"
 +			command="ar"
 +			id="cdt.managedbuild.tool.gnu.archiver">
@@ -1345,7 +1344,7 @@ index ce11ac1764..7dbe4a4610 100644
 +			<outputType
 +				outputs="exe"
 +				superClass="cdt.managedbuild.tool.gnu.linker.output.exe"
-+				id="cdt.managedbuild.tool.gnu.c.linker.cygwin.output">
++				id="cdt.managedbuild.tool.gnu.c.linker.cygwin.output.exe">
 +			</outputType>
 +			<outputType
 +				outputs="dll,dll.a"
@@ -1362,7 +1361,7 @@ index ce11ac1764..7dbe4a4610 100644
 +			<outputType
 +				outputs="exe"
 +				superClass="cdt.managedbuild.tool.gnu.linker.output.exe"
-+				id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.output">
++				id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.output.exe">
 +			</outputType>
 +			<outputType
 +				outputs="dll,dll.a"
@@ -1379,7 +1378,7 @@ index ce11ac1764..7dbe4a4610 100644
 +			<outputType
 +				outputs="exe"
 +				superClass="cdt.managedbuild.tool.gnu.linker.output.exe"
-+				id="cdt.managedbuild.tool.gnu.c.linker.mingw.output">
++				id="cdt.managedbuild.tool.gnu.c.linker.mingw.output.exe">
 +			</outputType>
 +			<outputType
 +				outputs="dll,dll.a"
@@ -1396,7 +1395,7 @@ index ce11ac1764..7dbe4a4610 100644
 +			<outputType
 +				outputs="exe"
 +				superClass="cdt.managedbuild.tool.gnu.linker.output.exe"
-+				id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.output">
++				id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.output.exe">
 +			</outputType>
 +			<outputType
 +				outputs="dll,dll.a"
@@ -1427,7 +1426,6 @@ index ce11ac1764..7dbe4a4610 100644
 +			superClass="cdt.managedbuild.tool.gnu.cpp.compiler">
 +		</tool>
 +		<builder
-+			isAbstract="true"
 +			id="cdt.managedbuild.target.gnu.builder"
 +			command="make"
 +			arguments=""
@@ -1482,54 +1480,18 @@ index ce11ac1764..7dbe4a4610 100644
 +			<tool
 +				id="cdt.managedbuild.tool.gnu.c.compiler.linux.base"
 +				superClass="cdt.managedbuild.tool.gnu.c.compiler">
-+				<option
-+					category="gnu.compiler.category.other"
-+					command="-pthread"
-+					defaultValue="false"
-+					id="gnu.c.compiler.option.pthread"
-+					name="%Option.Pthread"
-+					tip="%Option.PthreadCompilerTip"
-+					valueType="boolean">
-+				</option>
 +			</tool>
 +			<tool
 +				id="cdt.managedbuild.tool.gnu.cpp.compiler.linux.base"
 +				superClass="cdt.managedbuild.tool.gnu.cpp.compiler">
-+				<option
-+					category="gnu.compiler.category.other"
-+					command="-pthread"
-+					defaultValue="false"
-+					id="gnu.cpp.compiler.option.pthread"
-+					name="%Option.Pthread"
-+					tip="%Option.PthreadCompilerTip"
-+					valueType="boolean">
-+				</option>
 +			</tool>
 +			<tool
 +				id="cdt.managedbuild.tool.gnu.c.linker.linux.base"
 +				superClass="cdt.managedbuild.tool.gnu.c.linker">
-+				<option
-+					category="gnu.link.category.general"
-+					command="-pthread"
-+					defaultValue="false"
-+					id="gnu.c.link.option.pthread"
-+					name="%Option.Pthread"
-+					tip="%Option.PthreadLinkerTip"
-+					valueType="boolean">
-+				</option>
 +			</tool>
 +			<tool
 +				id="cdt.managedbuild.tool.gnu.cpp.linker.linux.base"
 +				superClass="cdt.managedbuild.tool.gnu.cpp.linker">
-+				<option
-+					category="gnu.link.category.general"
-+					command="-pthread"
-+					defaultValue="false"
-+					id="gnu.cpp.link.option.pthread"
-+					name="%Option.Pthread"
-+					tip="%Option.PthreadLinkerTip"
-+					valueType="boolean">
-+				</option>
 +			</tool>
 +		</toolChain>
 +		<toolChain
@@ -1595,7 +1557,6 @@ index ce11ac1764..7dbe4a4610 100644
 +			</targetPlatform>
 +			<builder
 +				id="cdt.managedbuild.tool.gnu.builder.mingw.base"
-+				isAbstract="false"
 +				isVariableCaseSensitive="false"
 +				superClass="org.eclipse.cdt.build.core.internal.builder">
 +			</builder>

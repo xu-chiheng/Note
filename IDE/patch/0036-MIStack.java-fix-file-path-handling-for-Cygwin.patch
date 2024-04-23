@@ -1,8 +1,8 @@
-From d0974c620e34afb5e61e560ba3d278b5f05fd03f Mon Sep 17 00:00:00 2001
+From ce7f0aa2c36760eff30d565c239d7760a2198129 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 36/42] MIStack.java : fix file path handling for Cygwin
+Subject: [PATCH 36/43] MIStack.java : fix file path handling for Cygwin
 
 ---
  .../org/eclipse/cdt/dsf/mi/service/MIStack.java    | 14 ++++++++++++--

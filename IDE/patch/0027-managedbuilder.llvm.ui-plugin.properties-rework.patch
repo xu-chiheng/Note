@@ -1,8 +1,8 @@
-From 02c03047250cb94b3e1e420fc0c2dc5e046920c9 Mon Sep 17 00:00:00 2001
+From 6862661000d6d7fc717606861d5eed00135e66aa Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 27/42] managedbuilder.llvm.ui/plugin.properties : rework
+Subject: [PATCH 27/43] managedbuilder.llvm.ui/plugin.properties : rework
 
 ---
  .../plugin.properties                         | 64 ++++++-------------

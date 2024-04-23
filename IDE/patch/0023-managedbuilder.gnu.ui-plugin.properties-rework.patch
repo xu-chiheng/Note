@@ -1,8 +1,8 @@
-From f93413e3c86c5f1ef7b761fe5fadcc644dfe3b48 Mon Sep 17 00:00:00 2001
+From f04bc8e756f9a49c348bbb22ae782b5ab88d4171 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
-Subject: [PATCH 23/42] managedbuilder.gnu.ui/plugin.properties : rework
+Subject: [PATCH 23/43] managedbuilder.gnu.ui/plugin.properties : rework
 
 ---
  build/org.eclipse.cdt.managedbuilder.gnu.ui/plugin.properties | 4 ++++

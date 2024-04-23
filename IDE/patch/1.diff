@@ -2,14 +2,14 @@ git_diff_branch...HEAD  # at /cygdrive/e/Note/IDE/cdt started
 no ~commit-message.txt
 
 
-current branch  : test0018
+current branch  : test0019
 cat .git/branch : test0000
 branch          : test0000
 
 
 git diff test0000...HEAD
-git diff test0000...test0018
-git diff $(git merge-base test0000 test0018) test0018
+git diff test0000...test0019
+git diff $(git merge-base test0000 test0019) test0019
 
 
 git_diff test0000...HEAD  # at /cygdrive/e/Note/IDE/cdt started
@@ -35,12 +35,15 @@ git_diff test0000...HEAD  # at /cygdrive/e/Note/IDE/cdt started
  core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/debug/dwarf/DwarfReader.java                               |  11 ++++-
  core/org.eclipse.cdt.core/utils/org/eclipse/cdt/utils/elf/parser/ElfParser.java                                  |   9 ++++
  core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/BaseCElementContentProvider.java                         |  67 +-------------------------
+ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java                                         |  12 +++++
  core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java                          | 208 ++++++++++++++++++-------------------------------------------------------------
+ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/navigator/CNavigatorLabelProvider.java                   |  12 +++++
  core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java                   |   5 ++
- core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementContentProvider.java                                      |   2 +-
+ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementContentProvider.java                                      |   8 +++-
+ core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementSorter.java                                               |  10 ++--
  debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java |  10 +++-
  llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml                                                           |  16 ++-----
- 27 files changed, 410 insertions(+), 451 deletions(-)
+ 30 files changed, 445 insertions(+), 456 deletions(-)
  delete mode 100644 core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/BinaryFilePresentation.java
  create mode 100644 core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/IIncludeReferenceContainer.java
  create mode 100644 core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ILibraryReferenceContainer.java
@@ -1086,6 +1089,36 @@ index c088f2bfec..9ab73a02b0 100644
  	/**
  	 * Note: This method is for internal use only. Clients should not call this method.
  	 */
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java
+index 494dc73431..0c4219f508 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CView.java
+@@ -27,6 +27,8 @@ import org.eclipse.cdt.core.model.IBinaryModule;
+ import org.eclipse.cdt.core.model.ICElement;
+ import org.eclipse.cdt.core.model.ICModel;
+ import org.eclipse.cdt.core.model.ICProject;
++import org.eclipse.cdt.core.model.IIncludeReferenceContainer;
++import org.eclipse.cdt.core.model.ILibraryReferenceContainer;
+ import org.eclipse.cdt.core.model.IParent;
+ import org.eclipse.cdt.core.model.ISourceReference;
+ import org.eclipse.cdt.core.model.ITranslationUnit;
+@@ -701,6 +703,16 @@ public class CView extends ViewPart
+ 						if (cproj != null) {
+ 							return cproj.getPath() + CViewMessages.CView_archives;
+ 						}
++					} else if (celement instanceof IIncludeReferenceContainer) {
++						ICProject cproj = celement.getCProject();
++						if (cproj != null) {
++							return cproj.getPath() + CViewMessages.IncludeRefContainer_Includes;
++						}
++					} else if (celement instanceof ILibraryReferenceContainer) {
++						ICProject cproj = celement.getCProject();
++						if (cproj != null) {
++							return cproj.getPath() + CViewMessages.LibraryRefContainer_Libraries;
++						}
+ 					} else if (celement instanceof IBinaryModule) {
+ 						IBinary bin = ((IBinaryModule) celement).getBinary();
+ 						return bin.getPath() + ":" + celement.getElementName(); //$NON-NLS-1$
 diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java
 index 0e58a5bf1c..270a87b40f 100644
 --- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/cview/CViewContentProvider.java
@@ -1371,6 +1404,36 @@ index 0e58a5bf1c..270a87b40f 100644
 -	}
 -
  }
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/navigator/CNavigatorLabelProvider.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/navigator/CNavigatorLabelProvider.java
+index 34f85dbeb5..d7e5c38532 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/navigator/CNavigatorLabelProvider.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/navigator/CNavigatorLabelProvider.java
+@@ -19,6 +19,8 @@ import org.eclipse.cdt.core.model.IBinaryContainer;
+ import org.eclipse.cdt.core.model.IBinaryModule;
+ import org.eclipse.cdt.core.model.ICElement;
+ import org.eclipse.cdt.core.model.ICProject;
++import org.eclipse.cdt.core.model.IIncludeReferenceContainer;
++import org.eclipse.cdt.core.model.ILibraryReferenceContainer;
+ import org.eclipse.cdt.internal.ui.cview.CViewLabelProvider;
+ import org.eclipse.cdt.internal.ui.cview.CViewMessages;
+ import org.eclipse.cdt.internal.ui.viewsupport.AppearanceAwareLabelProvider;
+@@ -94,6 +96,16 @@ public class CNavigatorLabelProvider extends CViewLabelProvider implements IComm
+ 					if (cproj != null) {
+ 						return cproj.getPath() + CViewMessages.CView_archives;
+ 					}
++				} else if (celement instanceof IIncludeReferenceContainer) {
++					ICProject cproj = celement.getCProject();
++					if (cproj != null) {
++						return cproj.getPath() + CViewMessages.IncludeRefContainer_Includes;
++					}
++				} else if (celement instanceof ILibraryReferenceContainer) {
++					ICProject cproj = celement.getCProject();
++					if (cproj != null) {
++						return cproj.getPath() + CViewMessages.LibraryRefContainer_Libraries;
++					}
+ 				} else if (celement instanceof IBinaryModule) {
+ 					IBinary bin = ((IBinaryModule) celement).getBinary();
+ 					return bin.getPath() + ":" + celement.getElementName(); //$NON-NLS-1$
 diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java
 index 555d85ab0f..17c9b1af36 100644
 --- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/internal/ui/viewsupport/CElementLabelComposer.java
@@ -1395,10 +1458,19 @@ index 555d85ab0f..17c9b1af36 100644
  			}
  		}
 diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementContentProvider.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementContentProvider.java
-index 6e567e6df8..8cac597621 100644
+index 6e567e6df8..ee2f78f4c4 100644
 --- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementContentProvider.java
 +++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementContentProvider.java
-@@ -283,7 +283,7 @@ public class CElementContentProvider extends BaseCElementContentProvider
+@@ -29,6 +29,8 @@ import org.eclipse.cdt.core.model.ICElementDelta;
+ import org.eclipse.cdt.core.model.ICModel;
+ import org.eclipse.cdt.core.model.ICProject;
+ import org.eclipse.cdt.core.model.IElementChangedListener;
++import org.eclipse.cdt.core.model.IIncludeReferenceContainer;
++import org.eclipse.cdt.core.model.ILibraryReferenceContainer;
+ import org.eclipse.cdt.core.model.IParent;
+ import org.eclipse.cdt.core.model.ITranslationUnit;
+ import org.eclipse.cdt.core.model.IWorkingCopy;
+@@ -283,7 +285,7 @@ public class CElementContentProvider extends BaseCElementContentProvider
  		ICProject cproject = null;
  		if (cfile instanceof IBinary) {
  			IBinary bin = (IBinary) cfile;
@@ -1407,6 +1479,53 @@ index 6e567e6df8..8cac597621 100644
  				cproject = bin.getCProject();
  				container = cproject.getBinaryContainer();
  			}
+@@ -317,7 +319,9 @@ public class CElementContentProvider extends BaseCElementContentProvider
+ 
+ 		@Override
+ 		public void refresh() {
+-			if (container instanceof IBinaryContainer || container instanceof IArchiveContainer) {
++			if (container instanceof IBinaryContainer || container instanceof IArchiveContainer
++					|| container instanceof IIncludeReferenceContainer
++					|| container instanceof ILibraryReferenceContainer) {
+ 				// Always refresh the project to properly show/hide container
+ 				fViewer.refresh(project);
+ 			} else if (container.hasChildren()) {
+diff --git a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementSorter.java b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementSorter.java
+index 50e0e5a2b9..c4c81cb81c 100644
+--- a/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementSorter.java
++++ b/core/org.eclipse.cdt.ui/src/org/eclipse/cdt/ui/CElementSorter.java
+@@ -25,7 +25,9 @@ import org.eclipse.cdt.core.model.IArchiveContainer;
+ import org.eclipse.cdt.core.model.IBinaryContainer;
+ import org.eclipse.cdt.core.model.ICElement;
+ import org.eclipse.cdt.core.model.IIncludeReference;
++import org.eclipse.cdt.core.model.IIncludeReferenceContainer;
+ import org.eclipse.cdt.core.model.ILibraryReference;
++import org.eclipse.cdt.core.model.ILibraryReferenceContainer;
+ import org.eclipse.cdt.core.model.IMember;
+ import org.eclipse.cdt.core.model.IMethodDeclaration;
+ import org.eclipse.cdt.core.model.ISourceRoot;
+@@ -159,6 +161,10 @@ public class CElementSorter extends ViewerSorter {
+ 					return BINARYCONTAINER;
+ 				} else if (element instanceof IArchiveContainer) {
+ 					return ARCHIVECONTAINER;
++				} else if (element instanceof IIncludeReferenceContainer) {
++					return INCLUDEREFCONTAINER;
++				} else if (element instanceof ILibraryReferenceContainer) {
++					return LIBRARYREFCONTAINER;
+ 				} else if (element instanceof ILibraryReference) {
+ 					return LIBRARYREFERENCES;
+ 				} else if (element instanceof IIncludeReference) {
+@@ -238,10 +244,6 @@ public class CElementSorter extends ViewerSorter {
+ 				return TYPES;
+ 			case CElementGrouping.NAMESPACE_GROUPING:
+ 				return NAMESPACES;
+-			case CElementGrouping.LIBRARY_REF_CONTAINER:
+-				return LIBRARYREFCONTAINER;
+-			case CElementGrouping.INCLUDE_REF_CONTAINER:
+-				return INCLUDEREFCONTAINER;
+ 			}
+ 		}
+ 		return OTHERS;
 diff --git a/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java b/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java
 index 7aa49bf3cb..7f510e2eb8 100644
 --- a/debug/org.eclipse.cdt.debug.ui/src/org/eclipse/cdt/debug/ui/importexecutable/AbstractImportExecutableWizard.java
@@ -1541,11 +1660,11 @@ index 727e400485..d9439df015 100644
  			</targetPlatform>
 
 real	0m0.223s
-user	0m0.062s
-sys	0m0.140s
+user	0m0.000s
+sys	0m0.156s
 git_diff test0000...HEAD  # at /cygdrive/e/Note/IDE/cdt finished
 
-real	0m0.593s
-user	0m0.077s
-sys	0m0.185s
+real	0m0.582s
+user	0m0.015s
+sys	0m0.276s
 git_diff_branch...HEAD  # at /cygdrive/e/Note/IDE/cdt finished

@@ -1,4 +1,4 @@
-From 8257456bede49d9cafbd96b96f71e74dc59e5489 Mon Sep 17 00:00:00 2001
+From 80db8ae992dd8e3ea9057e6d5041c4a7c426b8d2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=E5=BE=90=E6=8C=81=E6=81=92=20Xu=20Chiheng?=
  <chiheng.xu@gmail.com>
 Date: Wed, 10 Apr 2024 04:18:03 +0800
@@ -42,8 +42,7 @@ Subject: [PATCH 43/43] rework cdt.core and cdt.ui
  .../actions/ChangeBuildConfigActionBase.java  |  13 -
  .../cdt/ui/newui/ManageConfigSelector.java    |  13 -
  .../AbstractImportExecutableWizard.java       |  10 +-
- .../plugin.xml                                |  16 +-
- 38 files changed, 462 insertions(+), 847 deletions(-)
+ 37 files changed, 458 insertions(+), 835 deletions(-)
  delete mode 100644 core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/BinaryFilePresentation.java
  create mode 100644 core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/IIncludeReferenceContainer.java
  create mode 100644 core/org.eclipse.cdt.core/model/org/eclipse/cdt/core/model/ILibraryReferenceContainer.java
@@ -2013,110 +2012,6 @@ index 7aa49bf3cb..7f510e2eb8 100644
  		}
  		return new String[] { defaultBinaryParserId };
  	}
-diff --git a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
-index 727e400485..d9439df015 100644
---- a/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
-+++ b/llvm/org.eclipse.cdt.managedbuilder.llvm.ui/plugin.xml
-@@ -154,7 +154,6 @@
- 				command="-native"
- 				defaultValue="false"
- 				id="llvm.link.option.native"
--				isAbstract="false"
- 				name="%Option.Posix.Linker.native"
- 				resourceFilter="all"
- 				tip="%option.tip.6"
-@@ -165,7 +164,6 @@
- 				command="-native-cbe"
- 				defaultValue="false"
- 				id="llvm.link.option.nativeCBackEnd"
--				isAbstract="false"
- 				name="%Option.Posix.Linker.nativeCBackend"
- 				resourceFilter="all"
- 				tip="%option.tip.7"
-@@ -260,7 +258,6 @@
- 		<tool
- 			command="llvm-ar"
- 			id="cdt.managedbuild.tool.llvm.archiver"
--			isAbstract="true"
- 			name="%ToolName.archiver.llvm"
- 			natureFilter="both">
- 			<supportedProperties>
-@@ -298,7 +295,6 @@
- 				category="llvm.lib.category.options"
- 				command="d"
- 				id="llvm.lib.option.delete"
--				isAbstract="false"
- 				name="%Option.Posix.Archiver.delete"
- 				resourceFilter="all"
- 				tip="%option.tip.9"
-@@ -308,7 +304,6 @@
- 				category="llvm.lib.category.options"
- 				command="t"
- 				id="llvm.lib.option.print.contents"
--				isAbstract="false"
- 				name="%Option.Posix.Archiver.print.contents"
- 				resourceFilter="all"
- 				valueType="boolean">
-@@ -340,7 +335,6 @@
- 			command="llvm-as"
- 			errorParsers="org.eclipse.cdt.core.GASErrorParser"
- 			id="cdt.managedbuild.tool.llvm.assembler"
--			isAbstract="true"
- 			name="%ToolName.assembler.llvm"
- 			natureFilter="both"
- 			outputFlag="-o">
-@@ -385,7 +379,6 @@
- 		<tool
- 			errorParsers="org.eclipse.cdt.core.GCCErrorParser"
- 			id="cdt.managedbuild.tool.llvm.compiler"
--			isAbstract="true"
- 			name="%ToolName.compiler.llvm"
- 			outputFlag="-o">
- 			<supportedProperties>
-@@ -815,7 +808,7 @@
- 			<outputType
- 				outputs="exe"
- 				superClass="cdt.managedbuild.tool.llvm.linker.output.exe"
--				id="cdt.managedbuild.tool.llvm.c.linker.cygwin.output">
-+				id="cdt.managedbuild.tool.llvm.c.linker.cygwin.output.exe">
- 			</outputType>
- 			<outputType
- 				outputs="dll,dll.a"
-@@ -832,7 +825,7 @@
- 			<outputType
- 				outputs="exe"
- 				superClass="cdt.managedbuild.tool.llvm.linker.output.exe"
--				id="cdt.managedbuild.tool.llvm.cpp.linker.cygwin.output">
-+				id="cdt.managedbuild.tool.llvm.cpp.linker.cygwin.output.exe">
- 			</outputType>
- 			<outputType
- 				outputs="dll,dll.a"
-@@ -849,7 +842,7 @@
- 			<outputType
- 				outputs="exe"
- 				superClass="cdt.managedbuild.tool.llvm.linker.output.exe"
--				id="cdt.managedbuild.tool.llvm.c.linker.mingw.output">
-+				id="cdt.managedbuild.tool.llvm.c.linker.mingw.output.exe">
- 			</outputType>
- 			<outputType
- 				outputs="dll,dll.a"
-@@ -866,7 +859,7 @@
- 			<outputType
- 				outputs="exe"
- 				superClass="cdt.managedbuild.tool.llvm.linker.output.exe"
--				id="cdt.managedbuild.tool.llvm.cpp.linker.mingw.output">
-+				id="cdt.managedbuild.tool.llvm.cpp.linker.mingw.output.exe">
- 			</outputType>
- 			<outputType
- 				outputs="dll,dll.a"
-@@ -885,7 +878,6 @@
- 				archList="all"
- 				binaryParser="org.eclipse.cdt.core.ELF"
- 				id="cdt.managedbuild.target.llvm.platform.linux.base"
--				isAbstract="true"
- 				name="%PlatformName.Dbg"
- 				osList="linux,hpux,aix,qnx">
- 			</targetPlatform>
 -- 
 2.42.1
 

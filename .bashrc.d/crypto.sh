@@ -29,15 +29,9 @@ gpg_export_private_and_public_keys() {
 }
 
 gpg_generate_rsa_4096_bit_key_pair_for_git() {
-
 	{ cat <<EOF
-
-# This script automates interactions with a command-line program
-
-# Set timeout for Expect commands (in seconds)
 set timeout 10
 
-# Spawn the command-line program
 spawn gpg --full-gen-key
 
 expect "Your selection?"
@@ -66,12 +60,32 @@ send "O\r"
 
 # Wait for the program to finish
 expect eof
-
 EOF
 } | expect 
 
 }
 
+ssh_generate_key_pair_for_github() {
+	{ cat <<EOF
+set timeout 10
+
+spawn ssh-keygen -t ed25519 -C "$(git config user.email)"
+
+expect -re {Enter file in which to save the key (.*):}
+send "$(echo ~)/.ssh/github\r"
+
+expect "Enter passphrase (empty for no passphrase):"
+send "\r"
+
+expect "Enter same passphrase again:"
+send "\r"
+
+# Wait for the program to finish
+expect eof
+EOF
+} | expect 
+
+}
 
 
 file_split_one() {
@@ -141,7 +155,7 @@ gpg_encrypt_file() {
 	# I like AES256 and SHA512
 	if gpg --cipher-algo AES256 --digest-algo SHA512 --cert-digest-algo SHA512 --compress-algo none \
 		--s2k-mode 3 --s2k-digest-algo SHA512 --s2k-count 1000000 \
-		--encrypt --recipient "${GPG_ENCRYPTION_RECIPIENT}" --output "${file}".gpg "${file}"; then
+		--encrypt --recipient "$(git config user.email)" --output "${file}".gpg "${file}"; then
 		echo "${file} finished"
 		rm -rf "${file}"
 		return 0
@@ -283,7 +297,7 @@ find_files_to_decrypt_-print0() {
 
 gpg_decrypt_in_parallel_ask_for_password_first_time() {
 	echo "type the master password of secret key(private key) for the first time" \
-	&& echo "password correct" | gpg --encrypt --recipient "${GPG_ENCRYPTION_RECIPIENT}" | gpg --decrypt \
+	&& echo "password correct" | gpg --encrypt --recipient "$(git config user.email)" | gpg --decrypt \
 	&& echo "waiting for 1 seconds ..." \
 	&& sleep 1 \
 	&& echo "decrypting in parallel ..."

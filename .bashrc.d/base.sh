@@ -85,7 +85,6 @@ set_environment_variables_at_bash_startup() {
 	export LANG=en_US.UTF-8
 	export LC_ALL=en_US.UTF-8
 	export EDITOR=~/editor.sh
-	export GPG_ENCRYPTION_RECIPIENT="chiheng.xu@gmail.com"
 
 	case "${HOST_TRIPLE}" in
 		# https://www.joshkel.com/2018/01/18/symlinks-in-windows/

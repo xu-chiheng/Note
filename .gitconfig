@@ -1,7 +1,6 @@
 [user]
 	name = 徐持恒 Xu Chiheng
 	email = chiheng.xu@gmail.com
-	signingkey = chiheng.xu@gmail.com
 [core]
 	editor = $EDITOR
 	filemode = true
@@ -16,3 +15,5 @@
 # git config --global --add safe.directory '*'
 [safe]
 	directory = *
+[commit]
+	gpgSign = true

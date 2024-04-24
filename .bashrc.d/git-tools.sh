@@ -125,7 +125,7 @@ do_git_commit() {
 	local commit_command="$1"
 	local commit_message_file="$(print_git_commit_message_file_name)"
 	case "${commit_command}" in
-		"" | -S  | merge_--squash | -S_merge_--squash )
+		"" | merge_--squash )
 			true
 			;;
 		* )
@@ -134,17 +134,10 @@ do_git_commit() {
 			;;
 	esac
 
-	local args=(  )
-	case "${commit_command}" in
-		-S | -S_merge_--squash )
-			args+=( -S )
-			;;
-	esac
-
-	args+=( -a )
+	local args=( -a  )
 
 	case "${commit_command}" in
-		merge_--squash | -S_merge_--squash )
+		merge_--squash )
 			if [ ! -f .git/branch ]; then
 				echo ".git/branch file does not exist!"
 				return 1

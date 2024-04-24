@@ -75,7 +75,7 @@
 
 # v2rayN has Tun mode(using sing-box as virtual NIC), using which, all non-browser apps(SSH git curl wget FileZilla WinSCP),
 # having different ways to setting Socks/HTTP proxy, do not need to set Socks/HTTP proxy in config files or by some GUI configuration.
-# But As v2rayN 6.43 2024-04-10, Tun mode is not as stable as Socks/HTTP proxy mode, "Turn on Sniffing" must be ON.
+# But As v2rayN 6.43 2024-04-10, Tun mode is not as stable as Socks/HTTP proxy mode, "Turn on Sniffing" must be ON, and in this mode, v2rayN can't do delay and bandwidth test.
 # But Tor Browser require "Turn on Sniffing" to be OFF, this conflicts with Tun mode.
 # The solution is setting "Turn on Sniffing" to be OFF only when using Tor Browser.
 

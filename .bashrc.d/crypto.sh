@@ -20,6 +20,60 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
+gpg_export_private_and_public_keys() {
+	# export private keys
+	gpg --export-secret-keys -a;
+	# export public keys
+	gpg --export -a; 
+}
+
+gpg_generate_rsa_4096_bit_key_pair_for_git() {
+
+	{ cat <<EOF
+
+# This script automates interactions with a command-line program
+
+# Set timeout for Expect commands (in seconds)
+set timeout 10
+
+# Spawn the command-line program
+spawn gpg --full-gen-key
+
+expect "Your selection?"
+send "1\r"
+
+expect "What keysize do you want? (3072)"
+send "4096\r"
+
+expect "Key is valid for? (0)"
+send "\r"
+
+expect "Is this correct? (y/N)"
+send "y\r"
+
+expect "Real name:"
+send "$(git config user.name)\r"
+
+expect "Email address:"
+send "$(git config user.email)\r"
+
+expect "Comment:"
+send "\r"
+
+expect "Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?"
+send "O\r"
+
+# Wait for the program to finish
+expect eof
+
+EOF
+} | expect 
+
+}
+
+
+
 file_split_one() {
 	local size="$1"
 	local file="$2"

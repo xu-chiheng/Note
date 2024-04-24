@@ -184,14 +184,33 @@ git_show_commit_message() {
 	fi
 }
 
-git_show_branch_info_for_diff(){
-	local branch="$1"
+git_show_branch_info_print_current_branch() {
 	echo "current branch  : $(git branch --show-current)"
+}
+
+git_show_branch_info_for_diff_0(){
+	git_show_branch_info_print_current_branch
 	if [ -f .git/branch ]; then
 		echo "cat .git/branch : $(cat .git/branch)"
+	else
+		echo "no .git/branch file"
 	fi
+}
+
+git_show_branch_info_for_diff_1(){
+	local branch="$1"
+	git_show_branch_info_print_current_branch
 	if [ ! -z "${branch}" ]; then
 		echo "branch          : ${branch}"
+	else
+		echo "no branch specified"
+	fi
+}
+
+git_show_branch_info_for_diff_2(){
+	git_show_branch_info_print_current_branch
+	if [ -f .git/branch ]; then
+		echo "cat .git/branch : $(cat .git/branch)"
 	fi
 }
 
@@ -199,7 +218,7 @@ git_diff_HEAD() {
 	git_show_commit_message
 
 	printf "\n\n"
-	git_show_branch_info_for_diff
+	git_show_branch_info_for_diff_2
 
 	printf "\n\n"
 	echo "git diff HEAD"
@@ -218,7 +237,7 @@ git_diff_HEAD_remote_branch_tag() {
 	git_show_commit_message
 
 	printf "\n\n"
-	git_show_branch_info_for_diff
+	git_show_branch_info_for_diff_2
 
 	printf "\n\n"
 	git_print_remote_branch_tag
@@ -253,7 +272,11 @@ git_diff_branch...HEAD() {
 	git_show_commit_message
 
 	printf "\n\n"
-	git_show_branch_info_for_diff "${branch}"
+	if [ -z "$1" ]; then
+		git_show_branch_info_for_diff_0
+	else
+		git_show_branch_info_for_diff_1 "${branch}"
+	fi
 
 	printf "\n\n"
 	local current_branch="$(git branch --show-current)"

@@ -28,11 +28,13 @@ gpg_export_private_and_public_keys() {
 	gpg --export -a; 
 }
 
+# https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
 gpg_generate_rsa_4096_bit_key_pair_for_git() {
 	{ cat <<EOF
+# Set timeout for Expect commands (in seconds)
 set timeout 10
 
-spawn gpg --full-gen-key
+spawn gpg --full-generate-key
 
 expect "Your selection?"
 send "1\r"
@@ -58,6 +60,9 @@ send "\r"
 expect "Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?"
 send "O\r"
 
+# wait 3 minutes for typing of the password of private key
+set timeout 180
+
 # Wait for the program to finish
 expect eof
 EOF
@@ -65,8 +70,10 @@ EOF
 
 }
 
+# https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 ssh_generate_key_pair_for_github() {
 	{ cat <<EOF
+# Set timeout for Expect commands (in seconds)
 set timeout 10
 
 spawn ssh-keygen -t ed25519 -C "$(git config user.email)"

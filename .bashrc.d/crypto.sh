@@ -22,14 +22,16 @@
 
 
 gpg_export_private_and_public_keys() {
-	# export private keys
-	gpg --export-secret-keys -a;
-	# export public keys
-	gpg --export -a; 
+	{
+		# export private keys
+		gpg --export-secret-keys -a;
+		# export public keys
+		gpg --export -a;
+	}  | tee keyring_all.asc
 }
 
 # https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
-gpg_generate_rsa_4096_bit_key_pair_for_git() {
+gpg_generate_rsa_4096_bit_no_expiration_key_pair_for_git() {
 	{ cat <<EOF
 # Set timeout for Expect commands (in seconds)
 set timeout 10
@@ -70,8 +72,10 @@ EOF
 
 }
 
+# Setting Up SSH Keys for GitHub
+# https://www.youtube.com/watch?v=8X4u9sca3Io
 # https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
-ssh_generate_key_pair_for_github() {
+ssh_generate_ed25519_no_password_key_pair_for_github() {
 	{ cat <<EOF
 # Set timeout for Expect commands (in seconds)
 set timeout 10

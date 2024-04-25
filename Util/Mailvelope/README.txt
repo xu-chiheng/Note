@@ -11,10 +11,10 @@ https://www.youtube.com/watch?v=Q5k8l1Bp8Xo
 
 
 GnuPG export keys
-gpg_export_private_and_public_keys | tee keyring_all.asc
+gpg_export_private_and_public_keys
 
 GnuPG generate key pair
-gpg_generate_rsa_4096_bit_key_pair_for_git
+gpg_generate_rsa_4096_bit_no_expiration_key_pair_for_git
 
 
 Email address chiheng.xu@gmail.com successfully verified

@@ -10,11 +10,15 @@ Installing, configuring, and using Mailvelope - YouTube
 https://www.youtube.com/watch?v=Q5k8l1Bp8Xo
 
 
+Options --> Security --> Remember passwords for this browser session : Yes, keep in memory for 600 minutes.
+Options --> Gmail API --> Gmail API Integration : ON
+
+
 GnuPG export keys
 gpg_export_private_and_public_keys
 
 GnuPG generate key pair
-gpg_generate_rsa_4096_bit_no_expiration_key_pair_for_git
+gpg_generate_rsa_4096_bit_no_expiration_signing_key_pair_for_git
 
 
 Email address chiheng.xu@gmail.com successfully verified

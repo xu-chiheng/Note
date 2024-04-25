@@ -20,11 +20,8 @@ do_update_all_files() {
 
 		__clean_and_hide.cmd
 
-		.ssh/.gitignore
-		.ssh/config
-
-		.gnupg/.gitignore
-		.gnupg/gpg.conf
+		.ssh/{.gitignore,config}
+		.gnupg/{.gitignore,gpg.conf,gpg-agent.conf}
 
 		{eclipse-workspace,runtime-EclipseApplication}/{.gitignore,{clean,cygwin,backup_metadata_dir,git_add_-f_prefs_files}.cmd}
 
@@ -66,6 +63,7 @@ do_update_all_files() {
 		Util/other/{crypto,backup}
 		Util/{linux_setup,xray-nginx,wireguard}.sh
 		Util/Mailvelope/{README.txt,cygwin.cmd,linux.sh}
+		Util/gpg-agent
 
 		Util/quirk
 		Util/shell

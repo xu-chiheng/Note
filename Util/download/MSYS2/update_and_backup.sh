@@ -36,6 +36,7 @@ update_and_backup_msys2() {
 		# msys-2.0.dll
 		base
 		base-devel
+		sys-utils
 		compression
 		editors
 		VCS

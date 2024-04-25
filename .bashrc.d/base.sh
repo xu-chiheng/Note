@@ -218,13 +218,14 @@ fix_system_quirks_one_time() {
 			# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
 			local usr_bin_gpg="/usr/bin/gpg.exe"
 			local usr_bin_gpg2="/usr/bin/gpg2.exe"
-			if [ -e "${usr_bin_gpg2}" ] \
-				&& ! { [ -e "${usr_bin_gpg}" ] && [ "$(readlink -f "${usr_bin_gpg}")" = "$(readlink -f "${usr_bin_gpg2}")" ] ;}; then
-				if [ -e "${usr_bin_gpg}" ] && [ ! -L "${usr_bin_gpg}" ] && [ -f "${usr_bin_gpg}" ] && [ ! -e "${usr_bin_gpg}".backup ]; then
+			if [ -f "${usr_bin_gpg2}" ] ; then
+				if [ -f "${usr_bin_gpg}" ] && [ ! -f "${usr_bin_gpg}".backup ]; then
 					mv -f "${usr_bin_gpg}" "${usr_bin_gpg}".backup
 				fi \
-				&& rm -rf "${usr_bin_gpg}" \
-				&& ln -s "${usr_bin_gpg2}" "${usr_bin_gpg}"
+				&& if [ ! -f "${usr_bin_gpg}" ] || ! cmp --quiet "${usr_bin_gpg}" "${usr_bin_gpg2}" ; then
+					rm -rf "${usr_bin_gpg}" \
+					&& cp -f "${usr_bin_gpg2}" "${usr_bin_gpg}"
+				fi
 			fi
 	esac
 

@@ -21,6 +21,11 @@
 # SOFTWARE.
 
 
+# https://stackoverflow.com/questions/50332885/how-do-i-install-and-use-gpg-agent-on-windows
+gpg_agent_start_in_background() {
+	gpgconf --launch gpg-agent
+}
+
 gpg_export_private_and_public_keys() {
 	{
 		# export private keys
@@ -31,7 +36,7 @@ gpg_export_private_and_public_keys() {
 }
 
 # https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
-gpg_generate_rsa_4096_bit_no_expiration_key_pair_for_git() {
+gpg_generate_rsa_4096_bit_no_expiration_signing_key_pair_for_git() {
 	{ cat <<EOF
 # Set timeout for Expect commands (in seconds)
 set timeout 10
@@ -75,7 +80,7 @@ EOF
 # Setting Up SSH Keys for GitHub
 # https://www.youtube.com/watch?v=8X4u9sca3Io
 # https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
-ssh_generate_ed25519_no_password_key_pair_for_github() {
+ssh_generate_ed25519_no_password_authentication_key_pair_for_github() {
 	{ cat <<EOF
 # Set timeout for Expect commands (in seconds)
 set timeout 10

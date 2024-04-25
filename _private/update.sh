@@ -3,6 +3,7 @@ cd ..
 
 do_update_all_files() {
 	local paths=(
+		README.txt
 		~git-tools~
 		.gitattributes
 		.gitconfig

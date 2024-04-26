@@ -24,13 +24,43 @@
 # locate a public key by email address
 # gpg --locate-keys user@example.com
 
-# https://keys.openpgp.org/about/usage
 gpg_upload_public_key_to_key_server() {
+	# https://keys.openpgp.org/about/usage
+	# https://keys.openpgp.org/about/faq
 	# You can upload keys using GnuPG’s --send-keys command, but identity information can’t be verified that way to make the key searchable by email address.
 	# Alternatively, try this shortcut for uploading your key:
 	gpg --export "$(git config user.email)" | curl -T - https://keys.openpgp.org
 	# Remember to verify your email address to ensure others can find your key when searching by email address
+	# https://keys.openpgp.org
+	# We found an entry for chiheng.xu@gmail.com.
+	# https://keys.openpgp.org/vks/v1/by-fingerprint/4E928EB96C7929323551C3ACD53FA5A3E656A74C
+
+
+
+	# https://keys.mailvelope.com
+	# https://keys.mailvelope.com/manage.html
+	# Using Mailvelope browser extension to import GnuPG exported public and private keys, 
+	# it will upload the public key to the key server and the key server will send you an email to verify the email address of the public key.
+	# Email address chiheng.xu@gmail.com successfully verified
+	# Your public OpenPGP key is now available at the following link: https://keys.mailvelope.com/pks/lookup?op=get&search=chiheng.xu@gmail.com
+
+
+
+	# The following key servers does not verify email address of public key.
+	# So, can only be used to search public key by id
+	# https://keyserver.ubuntu.com/
+
 }
+
+# Hagrid
+# Hagrid is a verifying OpenPGP key server.
+# You can find general instructions and an API documentation at the running instance at https://keys.openpgp.org.
+# https://gitlab.com/keys.openpgp.org/hagrid
+
+# Mailvelope Keyserver
+# A simple OpenPGP public key server that validates email address ownership of uploaded keys.
+# https://github.com/mailvelope/keyserver
+
 
 gpg_refresh_all_public_keys_from_keyserver() {
 	gpg --refresh-keys
@@ -43,6 +73,13 @@ gpg_refresh_all_public_keys_from_keyserver() {
 # https://stackoverflow.com/questions/50332885/how-do-i-install-and-use-gpg-agent-on-windows
 gpg_agent_start_in_background() {
 	gpgconf --launch gpg-agent
+}
+
+gpg_export_public_keys_only() {
+	{
+		# export public keys
+		gpg --export -a;
+	}  | tee keyring_public.asc
 }
 
 gpg_export_private_and_public_keys() {

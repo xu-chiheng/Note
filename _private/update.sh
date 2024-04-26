@@ -22,7 +22,7 @@ do_update_all_files() {
 		__clean_and_hide.cmd
 
 		.ssh/{.gitignore,config}
-		.gnupg/{.gitignore,gpg.conf,gpg-agent.conf}
+		.gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf}
 
 		{eclipse-workspace,runtime-EclipseApplication}/{.gitignore,{clean,cygwin,backup_metadata_dir,git_add_-f_prefs_files}.cmd}
 

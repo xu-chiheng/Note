@@ -23,3 +23,8 @@ gpg_generate_rsa_4096_bit_no_expiration_signing_key_pair_for_git
 
 Email address chiheng.xu@gmail.com successfully verified
 Your public OpenPGP key is now available at the following link: https://keys.mailvelope.com/pks/lookup?op=get&search=chiheng.xu@gmail.com
+
+https://keys.openpgp.org
+We found an entry for chiheng.xu@gmail.com.
+https://keys.openpgp.org/vks/v1/by-fingerprint/4E928EB96C7929323551C3ACD53FA5A3E656A74C
+

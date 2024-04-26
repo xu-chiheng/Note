@@ -119,7 +119,6 @@
 # https://github.com/2dust/v2rayN/issues/360
 # 这是sniffing的问题，关闭sniffing即可。
 # v2ray有一个sniffing功能，它可以检测http和tls流量中的域名并把它提取出来交给vps解析，然后把这些流量的数据包的目的地址重写为解析所得的地址。其本意是解决dns污染的问题，但因为tor连接用了一些不寻常的方式(比如域名和ip不匹配等)，所以此功能反而会使连接失败。
-# 目前v2rayn还不能设置关闭sniffing,想关闭sniffing只能手动编辑配置文件。
 
 
 

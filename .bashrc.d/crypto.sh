@@ -21,6 +21,25 @@
 # SOFTWARE.
 
 
+# locate a public key by email address
+# gpg --locate-keys user@example.com
+
+# https://keys.openpgp.org/about/usage
+gpg_upload_public_key_to_key_server() {
+	# You can upload keys using GnuPG’s --send-keys command, but identity information can’t be verified that way to make the key searchable by email address.
+	# Alternatively, try this shortcut for uploading your key:
+	gpg --export "$(git config user.email)" | curl -T - https://keys.openpgp.org
+	# Remember to verify your email address to ensure others can find your key when searching by email address
+}
+
+gpg_refresh_all_public_keys_from_keyserver() {
+	gpg --refresh-keys
+}
+
+# https://www.digitalocean.com/community/tutorials/how-to-use-gpg-to-encrypt-and-sign-messages
+# https://www.howtogeek.com/427982/how-to-encrypt-and-decrypt-files-with-gpg-on-linux/
+
+
 # https://stackoverflow.com/questions/50332885/how-do-i-install-and-use-gpg-agent-on-windows
 gpg_agent_start_in_background() {
 	gpgconf --launch gpg-agent
@@ -159,6 +178,7 @@ file_concatenate_one() {
 
 gpg_encrypt_file() {
 	local file="$1"
+	local recipient="$2"
 	if [ -z "${file}" ]; then
 		echo "no file specified"
 		return 1
@@ -166,12 +186,15 @@ gpg_encrypt_file() {
 		echo "file ${file} does not exist"
 		return 1
 	fi
+	if [ -z "${recipient}" ]; then
+		recipient="$(git config user.email)"
+	fi
 	echo "${file} started"
 	# https://news.ycombinator.com/item?id=13382734
 	# I like AES256 and SHA512
 	if gpg --cipher-algo AES256 --digest-algo SHA512 --cert-digest-algo SHA512 --compress-algo none \
 		--s2k-mode 3 --s2k-digest-algo SHA512 --s2k-count 1000000 \
-		--encrypt --recipient "$(git config user.email)" --output "${file}".gpg "${file}"; then
+		--encrypt --recipient "${recipient}" --output "${file}".gpg "${file}"; then
 		echo "${file} finished"
 		rm -rf "${file}"
 		return 0
@@ -311,14 +334,6 @@ find_files_to_decrypt_-print0() {
 	find . -type f -name '*.gpg' -print0
 }
 
-gpg_decrypt_in_parallel_ask_for_password_first_time() {
-	echo "type the master password of secret key(private key) for the first time" \
-	&& echo "password correct" | gpg --encrypt --recipient "$(git config user.email)" | gpg --decrypt \
-	&& echo "waiting for 1 seconds ..." \
-	&& sleep 1 \
-	&& echo "decrypting in parallel ..."
-}
-
 # https://stackoverflow.com/questions/11003418/calling-shell-functions-with-xargs
 # https://unix.stackexchange.com/questions/158564/how-to-use-defined-function-with-xargs
 
@@ -351,8 +366,6 @@ handle_file_operation() {
 			bash -c "$(declare -f gpg_encrypt_file); gpg_encrypt_file"' "$@" ;' -
 			;;
 		gpg_decrypt_in_parallel )
-			gpg_decrypt_in_parallel_ask_for_password_first_time
-
 			find_files_to_decrypt_-print0 \
 			| xargs -0 -n1 -P0 \
 			bash -c "$(declare -f gpg_decrypt_file); gpg_decrypt_file"' "$@" ;' -

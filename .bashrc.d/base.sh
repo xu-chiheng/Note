@@ -553,3 +553,18 @@ backup_or_restore_file_or_dir() {
 	&& popd
 }
 
+google_chrome_remove_remnant_files_after_uninstall() {
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
+			true
+			;;
+		* )
+			echo "unsupported host ${HOST_TRIPLE}"
+			return 1
+			;;
+	esac
+
+	rm -rf "$(cygpath -u 'C:\Program Files\Google\Chrome')"
+	rm -rf ~/AppData/Local/Google/Chrome
+}
+

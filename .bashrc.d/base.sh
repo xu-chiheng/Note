@@ -485,6 +485,8 @@ clean_or_hide_windows_home_dir_entries() {
 			;;
 	esac
 
+	cd ~
+
 	local dir_entries_to_delete=(
 		.Xauthority .viminfo .emacs.d .bash_history .serverauth.* .cache .kde .local .mozilla .pki .pylint.d .python_history .lesshst .wget-hsts
 		ansel source .ms-ad _build .cgdb .dotnet .fltk .fvwm .ncftp .qt .source-highlight .kde4 .templateengine
@@ -553,18 +555,13 @@ backup_or_restore_file_or_dir() {
 	&& popd
 }
 
-google_chrome_remove_remnant_files_after_uninstall() {
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
-			true
-			;;
-		* )
-			echo "unsupported host ${HOST_TRIPLE}"
-			return 1
-			;;
-	esac
+# google_chrome_remove_remnant_files_after_uninstall() {
+# 	rm -rf "$(cygpath -u 'C:\Program Files\Google\Chrome')"
+# 	rm -rf ~/AppData/Local/Google/Chrome
+# }
 
-	rm -rf "$(cygpath -u 'C:\Program Files\Google\Chrome')"
-	rm -rf ~/AppData/Local/Google/Chrome
-}
+# microsoft_edge_remove_remnant_files_after_uninstall() {
+# 	rm -rf "$(cygpath -u 'C:\Program Files (x86)\Microsoft\Edge')"
+# 	rm -rf ~/AppData/Local/Microsoft/Edge
+# }
 

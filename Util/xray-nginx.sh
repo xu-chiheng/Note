@@ -4,9 +4,9 @@
 
 # VMess
 # https://guide.v2fly.org/basics/vmess.html
+
 # WebSocket + TLS + Web
 # https://guide.v2fly.org/advanced/wss_and_web.html
-
 
 # Xray core
 # https://github.com/XTLS/Xray-core
@@ -49,6 +49,20 @@
 # https://sectigo.com/resource-library/what-is-acme-protocol
 
 
+# 节点搭建系列(5)：最稳定的翻墙方式？深入浅出VMESS+WS+TLS+WEB原理与搭建，Vmess节点还推荐吗？vmess和v2ray是什么关系？为什么vmess和系统时间有关？额外ID是个啥？
+# https://www.youtube.com/watch?v=y8s5UivMNcE
+
+# 节点搭建系列(6)：XTLS性能之王被精准识别？VLESS+XTLS+回落原理与搭建，V2Ray和Xray为何分家？VLESS、V2Ray、Xray、XTLS之间的关系，VLESS和trojan的关系
+# https://www.youtube.com/watch?v=7GHh91AYAmM
+
+# 节点搭建系列(8)：如何不花钱提升你的节点速度？使用CF的免费CDN服务提升节点速度，bbr拥塞控制优化链路速度，CDN的原理、CF优选IP的原理，vless+ws+tls+web+cdn节点组合搭建
+# https://www.youtube.com/watch?v=Azj8-1rdF-o
+
+# 【零基础】最新保姆级纯小白节点搭建教程，人人都能学会，目前最简单、最安全、最稳定的专属节点搭建方法，手把手自建节点搭建教学，晚高峰高速稳定，4K秒开的科学上网线路体验
+# https://www.youtube.com/watch?v=SpxTFes1B8U
+
+# 【进阶•代理模式篇】看懂就能解决99%的代理问题，详解系统代理、TUN/TAP代理、真VPN代理，clash/v2ray/singbox 虚拟网卡怎么接管系统全局流量？什么是真正的VPN？看完就知道了
+# https://www.youtube.com/watch?v=qItL005LUik&t=785s
 
 # V2Ray进阶篇2：V2Ray+Websocket+TLS+Cloudflare拯救被墙的IP/复活你的VPS/隐藏真实IP/最安全的科学上网方式/V2Ray如何套上CDN加强安全性
 # https://www.youtube.com/watch?v=-GH7DOlqe-M

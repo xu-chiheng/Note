@@ -19,6 +19,13 @@ known_hosts: 这个文件包含了 SSH 客户端曾经连接过的远程主机�
 
 
 
+
+Edwards-curve Digital Signature Algorithm (EdDSA)
+https://en.wikipedia.org/wiki/EdDSA
+
+
+
+
 ED25519 is a digital signature algorithm that provides high security and efficiency. It is an elliptic curve digital signature algorithm that is designed to provide faster performance and higher security compared to older algorithms like RSA and DSA.
 
 When it comes to GitHub's SSH connection and how it uses ED25519, here's an explanation:

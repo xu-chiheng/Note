@@ -21,6 +21,37 @@
 # SOFTWARE.
 
 
+
+how_to_use_mailvelope_browser_extension() {
+
+	# https://mailvelope.com/en
+	# https://github.com/mailvelope/mailvelope
+
+
+	# Encrypting Your E-Mails Using PGP Mailvelope For Confidentiality - YouTube
+	# https://www.youtube.com/watch?v=0l1a_cwnhDU
+
+	# Installing, configuring, and using Mailvelope - YouTube
+	# https://www.youtube.com/watch?v=Q5k8l1Bp8Xo
+
+
+	# Options --> Security --> Remember passwords for this browser session : Yes, keep in memory for 600 minutes.
+	# Options --> Gmail API --> Gmail API Integration : ON
+
+
+	# GnuPG export keys
+	gpg_export_public_and_private_keys_with_ascii_armored_output_and_to_text_file
+
+	# https://keys.mailvelope.com
+	# https://keys.mailvelope.com/manage.html
+	# Using Mailvelope browser extension to import GnuPG exported public and private keys, 
+	# it will upload the public key to the key server and the key server will send you an email to verify the email address of the public key.
+	# Email address chiheng.xu@gmail.com successfully verified
+	# Your public OpenPGP key is now available at the following link: https://keys.mailvelope.com/pks/lookup?op=get&search=chiheng.xu@gmail.com
+
+}
+
+
 # locate a public key by email address
 # gpg --locate-keys user@example.com
 
@@ -34,15 +65,6 @@ gpg_upload_public_key_to_key_server() {
 	# https://keys.openpgp.org
 	# We found an entry for chiheng.xu@gmail.com.
 	# https://keys.openpgp.org/vks/v1/by-fingerprint/4E928EB96C7929323551C3ACD53FA5A3E656A74C
-
-
-
-	# https://keys.mailvelope.com
-	# https://keys.mailvelope.com/manage.html
-	# Using Mailvelope browser extension to import GnuPG exported public and private keys, 
-	# it will upload the public key to the key server and the key server will send you an email to verify the email address of the public key.
-	# Email address chiheng.xu@gmail.com successfully verified
-	# Your public OpenPGP key is now available at the following link: https://keys.mailvelope.com/pks/lookup?op=get&search=chiheng.xu@gmail.com
 
 
 

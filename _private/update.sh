@@ -63,8 +63,6 @@ do_update_all_files() {
 
 		Util/other/{crypto,backup}
 		Util/{linux_setup,xray-nginx,wireguard}.sh
-		Util/Mailvelope/{README.txt,cygwin.cmd,linux.sh}
-		Util/gpg-agent
 
 		Util/quirk
 		Util/shell

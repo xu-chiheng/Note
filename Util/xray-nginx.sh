@@ -125,9 +125,10 @@
 # 多个地点Ping服务器,网站测速 - 站长工具
 # https://ping.chinaz.com
 
+# The trusted source for IP address data
+# https://ipinfo.io/
 
-# VPS 需要 disable ipv6
-# "自定义反代站点"设置为 https://www.baidu.com
+# VPS need to disable ipv6 ?
 
 how_to_use_this_script() {
 	# VPS SSH login as root

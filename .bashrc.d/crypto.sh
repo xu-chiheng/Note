@@ -75,19 +75,19 @@ gpg_agent_start_in_background() {
 	gpgconf --launch gpg-agent
 }
 
-gpg_export_public_keys_only() {
+gpg_export_only_public_keys_with_ascii_armored_output_and_to_text_file() {
 	{
 		# export public keys
 		gpg --export -a;
 	}  | tee keyring_public.asc
 }
 
-gpg_export_private_and_public_keys() {
+gpg_export_public_and_private_keys_with_ascii_armored_output_and_to_text_file() {
 	{
-		# export private keys
-		gpg --export-secret-keys -a;
 		# export public keys
 		gpg --export -a;
+		# export private keys
+		gpg --export-secret-keys -a;
 	}  | tee keyring_all.asc
 }
 

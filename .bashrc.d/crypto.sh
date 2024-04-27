@@ -35,7 +35,8 @@ how_to_use_mailvelope_browser_extension() {
 	# https://www.youtube.com/watch?v=Q5k8l1Bp8Xo
 
 
-	# Options --> Security --> Remember passwords for this browser session : Yes, keep in memory for 600 minutes.
+	# Options --> Security --> Remember passwords for this browser session. : Yes, keep in memory for 600 minutes.
+	# Options --> Security --> Where are decrypted messages displayed?      : On the email provider's page.
 	# Options --> Gmail API --> Gmail API Integration : ON
 
 

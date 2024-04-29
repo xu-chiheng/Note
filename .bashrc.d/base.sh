@@ -82,6 +82,7 @@ print_host_triple_2() {
 set_environment_variables_at_bash_startup() {
 	export HOST_TRIPLE="$(print_host_triple_2)"
 	export TZ=Asia/Shanghai
+	# export TZ=America/Los_Angeles
 	export LANG=en_US.UTF-8
 	export LC_ALL=en_US.UTF-8
 	export EDITOR=~/editor.sh

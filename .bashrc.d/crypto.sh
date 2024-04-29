@@ -94,9 +94,9 @@ gpg_refresh_all_public_keys_from_keyserver() {
 
 
 # https://stackoverflow.com/questions/50332885/how-do-i-install-and-use-gpg-agent-on-windows
-gpg_agent_start_in_background() {
-	gpgconf --launch gpg-agent
-}
+# gpg_agent_start_in_background() {
+# 	gpgconf --launch gpg-agent
+# }
 
 gpg_export_only_public_keys_with_ascii_armored_output_and_to_text_file() {
 	{
@@ -115,7 +115,7 @@ gpg_export_public_and_private_keys_with_ascii_armored_output_and_to_text_file() 
 }
 
 # https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
-gpg_generate_rsa_4096_bit_no_expiration_signing_key_pair_for_git() {
+gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pair_for_git() {
 	{ cat <<EOF
 # Set timeout for Expect commands (in seconds)
 set timeout 10

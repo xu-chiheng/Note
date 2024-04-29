@@ -126,7 +126,19 @@
 # https://ping.chinaz.com
 
 # The trusted source for IP address data
-# https://ipinfo.io/
+# https://ipinfo.io
+
+
+# Pixelscan - Revealing the Web's Data Harvest
+# https://pixelscan.net
+# What personal information do websites collect - alternative Pixelscan
+# https://gologin.com/pixelscan
+# My Fingerprint- Am I Unique ?
+# https://amiunique.org/fingerprint
+
+# IP Reputation Check
+# https://www.ipqualityscore.com/ip-reputation-check
+
 
 # VPS need to disable ipv6 ?
 

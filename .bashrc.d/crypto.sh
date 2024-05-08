@@ -41,7 +41,7 @@ how_to_use_mailvelope_browser_extension() {
 
 
 	# GnuPG export keys
-	gpg_export_public_and_private_keys_with_ascii_armored_output_and_to_text_file
+	gpg_export_all_public_and_private_keys_with_ascii_armored_output_and_to_text_file
 
 	# https://keys.mailvelope.com
 	# https://keys.mailvelope.com/manage.html
@@ -56,7 +56,7 @@ how_to_use_mailvelope_browser_extension() {
 # locate a public key by email address
 # gpg --locate-keys user@example.com
 
-gpg_upload_public_key_to_key_server() {
+gpg_upload_default_public_key_to_key_server() {
 	# https://keys.openpgp.org/about/usage
 	# https://keys.openpgp.org/about/faq
 	# You can upload keys using GnuPG’s --send-keys command, but identity information can’t be verified that way to make the key searchable by email address.
@@ -98,14 +98,30 @@ gpg_refresh_all_public_keys_from_keyserver() {
 # 	gpgconf --launch gpg-agent
 # }
 
-gpg_export_only_public_keys_with_ascii_armored_output_and_to_text_file() {
+gpg_export_default_public_key_with_ascii_armored_output_and_to_text_file() {
+	{
+		# export public keys
+		gpg --export -a "$(git config user.email)";
+	}  | tee keyring_public_default.asc
+}
+
+gpg_export_default_public_and_private_key_with_ascii_armored_output_and_to_text_file() {
+	{
+		# export public keys
+		gpg --export -a "$(git config user.email)";
+		# export private keys
+		gpg --export-secret-keys -a "$(git config user.email)";
+	}  | tee keyring_all_default.asc
+}
+
+gpg_export_all_public_keys_with_ascii_armored_output_and_to_text_file() {
 	{
 		# export public keys
 		gpg --export -a;
 	}  | tee keyring_public.asc
 }
 
-gpg_export_public_and_private_keys_with_ascii_armored_output_and_to_text_file() {
+gpg_export_all_public_and_private_keys_with_ascii_armored_output_and_to_text_file() {
 	{
 		# export public keys
 		gpg --export -a;

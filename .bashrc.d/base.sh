@@ -514,6 +514,28 @@ clean_or_hide_windows_home_dir_entries() {
 	echo "completed"
 }
 
+# https://superuser.com/questions/198525/how-can-i-execute-a-windows-command-line-in-background
+# https://stackoverflow.com/questions/21031171/how-to-run-a-command-in-the-background-on-windows
+# https://stackoverflow.com/questions/31164253/how-to-open-url-in-microsoft-edge-from-the-command-line
+launch_windows_program_in_background() {
+	case "${HOST_TRIPLE}" in
+		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
+			true
+			;;
+		* )
+			echo "unsupported host ${HOST_TRIPLE}"
+			return 1
+			;;
+	esac
+
+	local program_unix_path="$(cygpath -u "$1")"
+	shift 1
+	local program_base_name="$(basename "${program_unix_path}")"
+	local program_dir_name="$(dirname "${program_unix_path}")"
+
+	PATH="${PATH}:${program_dir_name}" cmd.exe /c start /B "${program_base_name}" "$@"
+}
+
 print_program_dir() {
 	local program="$1"
 	dirname "$(which "${program}")"

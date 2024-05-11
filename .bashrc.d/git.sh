@@ -114,16 +114,6 @@ git_branch_delete_test_range_upstream() {
 	git_branch_delete_test_range "${first}" "${last}" "upstream"
 }
 
-git_merge_-squash_and_commit() {
-	if [ ! -d .git ]; then
-		return 1
-	fi
-
-	local branch="$1"
-	echo_command git merge --squash "${branch}" \
-	&& echo_command git commit
-}
-
 # git_clone_domain_user_repos https://github.com xu-chiheng Note/main/Note
 git_clone_domain_user_repos() {
 	local domain="$1"

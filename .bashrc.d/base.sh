@@ -500,7 +500,7 @@ clean_or_hide_windows_home_dir_entries() {
 		.*
 		"3D Objects" AppData Contacts Desktop Downloads Favorites Links Music Pictures Public "Saved Games" Searches Videos Documents OneDrive
 		~shortcuts_ config.guess editor.sh github-recovery-codes.txt go
-		# keyring_*.asc
+		keyring_*.asc
 	)
 
 	echo_multi_line "dir entries to hide :" "${dir_entries_to_hide[@]}"
@@ -533,7 +533,7 @@ launch_windows_program_in_background() {
 	local program_base_name="$(basename "${program_unix_path}")"
 	local program_dir_name="$(dirname "${program_unix_path}")"
 
-	PATH="${PATH}:${program_dir_name}" cmd.exe /c start /B "${program_base_name}" "$@"
+	PATH="$(join_array_elements ':' "${program_dir_name}" "${PATH}")" cmd.exe /c start /B "${program_base_name}" "$@"
 }
 
 print_program_dir() {

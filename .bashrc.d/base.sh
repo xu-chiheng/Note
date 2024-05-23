@@ -78,6 +78,18 @@ print_host_triple_2() {
 	esac
 }
 
+host_triple_is_windows() {
+	local host_triple="$1"
+	case "${host_triple}" in
+		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
+			true
+			;;
+		* )
+			false
+			;;
+	esac
+}
+
 # Note : this function can't print any message, otherwise, FileZilla and WinSCP can't connect to this VPS through SFTP(FTP over SSH).
 set_environment_variables_at_bash_startup() {
 	export HOST_TRIPLE="$(print_host_triple_2)"
@@ -119,7 +131,7 @@ set_environment_variables_at_bash_startup() {
 	if [ "${prepend_packages_bin_dirs_to_path}" = yes ]; then
 		case "${HOST_TRIPLE}" in
 			x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux-gnu )
-				local packages_dir="$(print_packages_dir "${HOST_TRIPLE}")"
+				local packages_dir="$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")"
 				local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
 				case "${HOST_TRIPLE}" in
 					x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
@@ -254,7 +266,7 @@ fix_system_quirks_one_time() {
 	esac
 }
 
-print_packages_dir() {
+print_packages_dir_of_host_triple() {
 	local host_triple="$1"
 	case "${host_triple}" in
 		x86_64-pc-cygwin )
@@ -475,16 +487,11 @@ password_generate() {
 }
 
 # https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory
-clean_or_hide_windows_home_dir_entries() {
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
-			true
-			;;
-		* )
-			echo "unsupported host ${HOST_TRIPLE}"
-			return 1
-			;;
-	esac
+windows_clean_or_hide_home_dir_entries() {
+	if ! host_triple_is_windows "${HOST_TRIPLE}"; then
+		echo "unsupported host ${HOST_TRIPLE}"
+		return 1
+	fi
 
 	cd ~
 
@@ -517,16 +524,11 @@ clean_or_hide_windows_home_dir_entries() {
 # https://superuser.com/questions/198525/how-can-i-execute-a-windows-command-line-in-background
 # https://stackoverflow.com/questions/21031171/how-to-run-a-command-in-the-background-on-windows
 # https://stackoverflow.com/questions/31164253/how-to-open-url-in-microsoft-edge-from-the-command-line
-launch_windows_program_in_background() {
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
-			true
-			;;
-		* )
-			echo "unsupported host ${HOST_TRIPLE}"
-			return 1
-			;;
-	esac
+windows_launch_program_in_background() {
+	if ! host_triple_is_windows "${HOST_TRIPLE}"; then
+		echo "unsupported host ${HOST_TRIPLE}"
+		return 1
+	fi
 
 	local program_unix_path="$(cygpath -u "$1")"
 	shift 1

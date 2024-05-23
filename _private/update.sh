@@ -19,7 +19,7 @@ do_update_all_files() {
 		config.guess
 		editor.sh
 
-		__clean_and_hide.cmd
+		__clean_or_hide.cmd
 
 		.ssh/{.gitignore,README.txt,config}
 		.gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf}

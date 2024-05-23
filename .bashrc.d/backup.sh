@@ -22,15 +22,10 @@
 
 # Cygwin genisoimage was buggy, new version is not tested yet.
 backup_current_directory_to_iso_file() {
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			true
-			;;
-		* )
-			echo "unsupported host ${HOST_TRIPLE}"
-			return 1
-			;;
-	esac
+	if ! host_triple_is_windows "${HOST_TRIPLE}"; then
+		echo "unsupported host ${HOST_TRIPLE}"
+		return 1
+	fi
 
 	local dir
 	if [ -z "$1" ]; then

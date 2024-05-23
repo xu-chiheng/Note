@@ -138,7 +138,11 @@
 
 # IP Reputation Check
 # https://www.ipqualityscore.com/ip-reputation-check
+# Scamalytics provide security products to businesses, to help them detect and prevent fraud.
+# https://scamalytics.com
 
+# https://www.ip123.in
+# https://whoer.net
 
 # VPS need to disable ipv6 ?
 

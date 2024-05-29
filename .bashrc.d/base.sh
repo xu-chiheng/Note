@@ -33,7 +33,7 @@
 
 # default umask is 022, default new file mode is 755
 
-print_host_triple() {
+print_host_triple_0() {
 	case "$(uname -m)" in
 		x86_64 )
 			case "$(uname -o)" in
@@ -65,8 +65,8 @@ print_host_triple() {
 	~/config.guess
 }
 
-print_host_triple_2() {
-	local host_triple="$(print_host_triple)"
+print_host_triple() {
+	local host_triple="$(print_host_triple_0)"
 	if host_triple_is_windows "${host_triple}"; then
 		echo "${host_triple}"
 	else
@@ -96,7 +96,7 @@ host_triple_is_windows() {
 
 # Note : this function can't print any message, otherwise, FileZilla and WinSCP can't connect to this VPS through SFTP(FTP over SSH).
 set_environment_variables_at_bash_startup() {
-	export HOST_TRIPLE="$(print_host_triple_2)"
+	export HOST_TRIPLE="$(print_host_triple)"
 	export TZ=Asia/Shanghai
 	# export TZ=America/Los_Angeles
 	export LANG=en_US.UTF-8
@@ -145,6 +145,10 @@ set_environment_variables_at_bash_startup() {
 
 				export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
 				;;
+			x86_64-pc-msys )
+				# no self built package
+				true
+				;;
 		esac
 	fi
 
@@ -152,7 +156,7 @@ set_environment_variables_at_bash_startup() {
 		local dirs=(
 			'C:\Program Files\Notepad++'
 			# 'C:\Program Files\Microsoft VS Code'
-			'C:\Program Files\Google\Chrome\Application'
+			# 'C:\Program Files\Google\Chrome\Application'
 			'C:\Program Files (x86)\UltraISO'
 			'D:\qemu'
 			'D:\youtube-dl'
@@ -197,10 +201,8 @@ set_environment_variables_at_bash_startup() {
 }
 
 fix_system_quirks_one_time() {
-	if host_triple_is_windows "${HOST_TRIPLE}"; then
-		if [ ! "${HOST_TRIPLE}" = "$(~/config.guess)" ]; then
-			echo "host triple not equal to the output of config.guess"
-		fi
+	if host_triple_is_windows "${HOST_TRIPLE}" && [ ! "${HOST_TRIPLE}" = "$(~/config.guess)" ]; then
+		echo "host triple ${HOST_TRIPLE} not equal to the output of config.guess $(~/config.guess)"
 	fi
 
 	case "${HOST_TRIPLE}" in

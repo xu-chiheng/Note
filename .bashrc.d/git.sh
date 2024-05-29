@@ -278,41 +278,51 @@ print_git_commit_message_file_name() {
 	echo "~commit-message.txt"
 }
 
-print_hard_drives_mount_points() {
+mount_point_size_available_in_G() {
+	local mount_point="$1"
+	df -BG "${mount_point}" | tail -n +2 | awk '{print $4}' | sed -E -e "s/G$//g"
+}
+
+mount_point_size_available_is_bigger_than_10G() {
+	local mount_point="$1"
+	local a="$(mount_point_size_available_in_G "${mount_point}")"
+	local b="10"
+	# if [ "$a" -gt "$b" ]; then
+	if (( a > b )); then
+		true
+	else
+		false
+	fi
+}
+
+print_hard_drives_mount_points_0() {
 	local d
 	# writable mountpoints
 	case "${HOST_TRIPLE}" in
 		*-cygwin )
-			for d in $(cat /proc/mounts | grep -E '^[A-Z]: /cygdrive/[a-z] ' | cut -d ' ' -f 2); do
-				if [ -w "$d" ]; then
-					echo "$d"
-				fi
-			done
+			cat /proc/mounts | grep -E '^[A-Z]: /cygdrive/[a-z] ' | cut -d ' ' -f 2
 			;;
 		*-msys | *-mingw64 )
-			for d in $(cat /proc/mounts | grep -E '^[A-Z]: /[a-z] ' | cut -d ' ' -f 2); do
-				if [ -w "$d" ]; then
-					echo "$d"
-				fi
-			done
+			cat /proc/mounts | grep -E '^[A-Z]: /[a-z] ' | cut -d ' ' -f 2
 			;;
 		*-linux-gnu )
 			# Linux hard drive device file naming convention
 			# regular expression special characters
-			for d in $(cat /proc/mounts | grep -E '^/dev/[hsv]d[a-z](|[1-9][0-9]*) (/|(/\w+)+) ' | cut -d ' ' -f 2); do
-				if [ -w "$d" ]; then
-					case "$d" in
-						/boot | /boot/efi )
-							true
-							;;
-						* )
-							echo "$d"
-							;;
-					esac
-				fi
-			done
+			cat /proc/mounts | grep -E '^/dev/[hsv]d[a-z](|[1-9][0-9]*) (/|(/\w+)+) ' | cut -d ' ' -f 2
 			;;
 	esac
+}
+
+print_hard_drives_mount_points() {
+	local d
+	# writable mountpoints
+
+	for d in $(print_hard_drives_mount_points_0); do
+		# echo "$d $(mount_point_size_available_in_G "$d")"
+		if [ -w "$d" ] && mount_point_size_available_is_bigger_than_10G "$d"; then
+			echo "$d"
+		fi
+	done
 }
 
 hide_or_unhide_backup_dirs() {

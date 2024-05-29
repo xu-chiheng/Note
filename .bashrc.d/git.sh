@@ -297,7 +297,6 @@ mount_point_size_available_is_bigger_than_10G() {
 
 print_hard_drives_mount_points_0() {
 	local d
-	# writable mountpoints
 	case "${HOST_TRIPLE}" in
 		*-cygwin )
 			cat /proc/mounts | grep -E '^[A-Z]: /cygdrive/[a-z] ' | cut -d ' ' -f 2
@@ -315,31 +314,31 @@ print_hard_drives_mount_points_0() {
 
 print_hard_drives_mount_points() {
 	local d
-	# writable mountpoints
-
 	for d in $(print_hard_drives_mount_points_0); do
 		# echo "$d $(mount_point_size_available_in_G "$d")"
 		if [ -w "$d" ] && mount_point_size_available_is_bigger_than_10G "$d"; then
+			# writable and available size > 10G
 			echo "$d"
 		fi
 	done
 }
 
 hide_or_unhide_backup_dirs() {
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			local d
-			local dir
-			for d in $(print_hard_drives_mount_points); do
-				dir="$d/Backup"
-				if [ -f "${dir}/.trusted" ]; then
-					echo_command attrib +H "$(cygpath -w "${dir}")"
-				else
-					echo_command attrib -H "$(cygpath -w "${dir}")"
-				fi
-			done
-			;;
-	esac
+	if ! host_triple_is_windows "${HOST_TRIPLE}"; then
+		echo "unsupported host ${HOST_TRIPLE}"
+		return 1
+	fi
+
+	local d
+	local dir
+	for d in $(print_hard_drives_mount_points); do
+		dir="$d/Backup"
+		if [ -f "${dir}/.trusted" ]; then
+			echo_command attrib +H "$(cygpath -w "${dir}")"
+		else
+			echo_command attrib -H "$(cygpath -w "${dir}")"
+		fi
+	done
 }
 
 # sometimes, we want to remove the files copied to the backup directories.

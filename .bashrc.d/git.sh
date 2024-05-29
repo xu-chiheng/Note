@@ -369,21 +369,16 @@ copy_tarball_to_all_drives() {
 				print_hard_drives_mount_points
 
 				# data directory
-				case "${HOST_TRIPLE}" in
-					*-cygwin | *-msys | *-mingw64 )
-						if [ -v DATA_DIR ] && [ ! -z "${DATA_DIR}" ]; then
-							echo "$(cygpath -u "${DATA_DIR}")"
-						fi
-						;;
-				esac
+				if host_triple_is_windows "${HOST_TRIPLE}"; then
+					if [ -v DATA_DIR ] && [ ! -z "${DATA_DIR}" ]; then
+						echo "$(cygpath -u "${DATA_DIR}")"
+					fi
+				fi
 			} | sort | uniq
 		); do
 		### run in foreground
 		# echo "${d}"
 		dir="${d}/Backup"
-
-		# sync "${dir}"/"${tarball}"{,.sha512}
-		# sync "${dir}"/"${tarball}"{.gpg{,.sha512},.sha512}
 
 		### run in background
 		mkdir -p "${dir}" \

@@ -81,7 +81,7 @@ print_host_triple_2() {
 host_triple_is_windows() {
 	local host_triple="$1"
 	case "${host_triple}" in
-		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
+		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
 			true
 			;;
 		* )
@@ -118,30 +118,21 @@ set_environment_variables_at_bash_startup() {
 			;;
 	esac
 
-	local prepend_packages_bin_dirs_to_path=yes
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			if [ -v VSINSTALLDIR ]; then
-				# Visual Studio, MSVC bin dirs has been prepended to PATH
-				# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
-				prepend_packages_bin_dirs_to_path=no
-			fi
-			;;
-	esac
-	if [ "${prepend_packages_bin_dirs_to_path}" = yes ]; then
+	if host_triple_is_windows "${HOST_TRIPLE}" && [ -v VSINSTALLDIR ]; then
+		# Visual Studio, MSVC bin dirs has been prepended to PATH
+		# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
+		true
+	else
 		case "${HOST_TRIPLE}" in
 			x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux-gnu )
 				local packages_dir="$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")"
 				local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
-				case "${HOST_TRIPLE}" in
-					x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-						# share the self built QEMU
-						true
-						;;
-					*-linux-gnu )
-						packages+=( qemu )
-						;;
-				esac
+				if ! host_triple_is_windows "${HOST_TRIPLE}"; then
+					packages+=( qemu )
+				else
+					# share the self built QEMU
+					true
+				fi
 				local bin_dirs=()
 				local package
 				for package in "${packages[@]}"; do
@@ -153,59 +144,52 @@ set_environment_variables_at_bash_startup() {
 		esac
 	fi
 
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			local dirs=(
-				'C:\Program Files\Notepad++'
-				# 'C:\Program Files\Microsoft VS Code'
-				'C:\Program Files\Google\Chrome\Application'
-				'C:\Program Files (x86)\UltraISO'
-				'D:\qemu'
-				'D:\youtube-dl'
+	if host_triple_is_windows "${HOST_TRIPLE}"; then
+		local dirs=(
+			'C:\Program Files\Notepad++'
+			# 'C:\Program Files\Microsoft VS Code'
+			'C:\Program Files\Google\Chrome\Application'
+			'C:\Program Files (x86)\UltraISO'
+			'D:\qemu'
+			'D:\youtube-dl'
 
-			)
-			local dirs2=()
-			local dir
-			for dir in "${dirs[@]}"; do
-				dirs2+=( "$(cygpath -u "${dir}")" )
-			done
+		)
+		local dirs2=()
+		local dir
+		for dir in "${dirs[@]}"; do
+			dirs2+=( "$(cygpath -u "${dir}")" )
+		done
 
-			export PATH="$(join_array_elements ':' "${PATH}" "${dirs2[@]}")"
-			;;
-	esac
+		export PATH="$(join_array_elements ':' "${PATH}" "${dirs2[@]}")"
 
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			export BROWSER=chrome
-			;;
-	esac
-
-	case "${HOST_TRIPLE}" in
-		*-linux-gnu )
-			# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
-			case "${DESKTOP_SESSION}" in
-				*plasma* )
-					FILE_EXPLORER=dolphin
-					TERMINAL_EMULATOR=konsole
-					if quiet_command which plasma-systemmonitor; then
-						TASK_MANAGER=plasma-systemmonitor
-					elif quiet_command which ksysguard; then
-						TASK_MANAGER=ksysguard
-					else
-						# echo "KDE has no plasma-systemmonitor or ksysguard"
+		# export BROWSER=chrome
+	else
+		case "${HOST_TRIPLE}" in
+			*-linux-gnu )
+				# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
+				case "${DESKTOP_SESSION}" in
+					*plasma* )
+						FILE_EXPLORER=dolphin
+						TERMINAL_EMULATOR=konsole
+						if quiet_command which plasma-systemmonitor; then
+							TASK_MANAGER=plasma-systemmonitor
+						elif quiet_command which ksysguard; then
+							TASK_MANAGER=ksysguard
+						else
+							# echo "KDE has no plasma-systemmonitor or ksysguard"
+							true
+						fi
+						;;
+					* )
+						# echo "Unknown Desktop Environment ${DESKTOP_SESSION}"
 						true
-					fi
-					;;
-				* )
-					# echo "Unknown Desktop Environment ${DESKTOP_SESSION}"
-					true
-					;;
-			esac
-			# https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
-			export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
-			;;
-	esac
-
+						;;
+				esac
+				# https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
+				export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
+				;;
+		esac
+	fi
 }
 
 fix_system_quirks_one_time() {

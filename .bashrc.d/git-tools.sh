@@ -28,15 +28,11 @@ git_backup_directory() {
 	&& time_command tar -cf "${tarball}" "${base}"/{.git,'~git-tools~'} \
 	&& time_command sha512_calculate_file "${tarball}" \
 	&& time_command sync .
-
-	# sync "${tarball}"{,.sha512}
 }
 
 git_backup_directory_to_all_drives() {
 	local base="$1"
 	local tarball="$2"
-
-	# sync "${tarball}".gpg{,.sha512}
 
 	time_command git_backup_directory "${base}" "${tarball}" \
 	&& echo_command cp -f "${tarball}" "${tarball}".bak \

@@ -67,15 +67,19 @@ print_host_triple() {
 
 print_host_triple_2() {
 	local host_triple="$(print_host_triple)"
-	case "${host_triple}" in
-		*-linux* )
-			# x86_64-pc-linux-gnu  ---> x86_64-linux-gnu
-			echo "${host_triple}" | sed -E -e 's/^([^-]+)-([^-]+)-(([^-]+)(-([^-]+))?)$/\1-\3/g'
-			;;
-		* )
-			echo "${host_triple}"
-			;;
-	esac
+	if host_triple_is_windows "${host_triple}"; then
+		echo "${host_triple}"
+	else
+		case "${host_triple}" in
+			*-linux* )
+				# x86_64-pc-linux-gnu  ---> x86_64-linux-gnu
+				echo "${host_triple}" | sed -E -e 's/^([^-]+)-([^-]+)-(([^-]+)(-([^-]+))?)$/\1-\3/g'
+				;;
+			* )
+				echo "${host_triple}"
+				;;
+		esac
+	fi
 }
 
 host_triple_is_windows() {
@@ -193,8 +197,10 @@ set_environment_variables_at_bash_startup() {
 }
 
 fix_system_quirks_one_time() {
-	if [ ! "$(print_host_triple)" = "$(~/config.guess)" ]; then
-		echo "host triple not equal to the output of config.guess"
+	if host_triple_is_windows "${HOST_TRIPLE}"; then
+		if [ ! "${HOST_TRIPLE}" = "$(~/config.guess)" ]; then
+			echo "host triple not equal to the output of config.guess"
+		fi
 	fi
 
 	case "${HOST_TRIPLE}" in
@@ -226,28 +232,26 @@ fix_system_quirks_one_time() {
 			fi
 	esac
 
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
-			# ssh uses wrong home directory in Cygwin - Server Fault
-			# https://serverfault.com/questions/95750/ssh-uses-wrong-home-directory-in-cygwin
-			# If your $HOME variable is set, but ssh isn't recognizing it, put this line in /etc/nsswitch.conf:
-			# db_home: /cygdrive/e/Note
-			# That will set the Cygwin home directory without requiring an /etc/passwd file to exist.
-			# https://cygwin.com/cygwin-ug-net/ntsec.html#ntsec-mapping-nsswitch
-			# sed -i -e s,'^.*\(# \)\?\(db_home:  \).*$','\2'"$HOME",g /etc/nsswitch.conf
-			# cat /etc/nsswitch.conf
+	if host_triple_is_windows "${HOST_TRIPLE}"; then
+		# ssh uses wrong home directory in Cygwin - Server Fault
+		# https://serverfault.com/questions/95750/ssh-uses-wrong-home-directory-in-cygwin
+		# If your $HOME variable is set, but ssh isn't recognizing it, put this line in /etc/nsswitch.conf:
+		# db_home: /cygdrive/e/Note
+		# That will set the Cygwin home directory without requiring an /etc/passwd file to exist.
+		# https://cygwin.com/cygwin-ug-net/ntsec.html#ntsec-mapping-nsswitch
+		# sed -i -e s,'^.*\(# \)\?\(db_home:  \).*$','\2'"$HOME",g /etc/nsswitch.conf
+		# cat /etc/nsswitch.conf
 
-			# https://linux.die.net/man/1/readlink
-			# https://www.geeksforgeeks.org/readlink-command-in-linux-with-examples/
-			# https://serverfault.com/questions/76042/find-out-symbolic-link-target-via-command-line
-			local home_unix_path="$(cygpath -u "${HOME}")"
-			local ssh_home_dir="/home/${USERNAME}"
-			if ! { [ -e "${ssh_home_dir}" ] && [ "$(readlink -f "${ssh_home_dir}")" = "$(readlink -f "${home_unix_path}")" ] ;}; then
-				rm -rf "${ssh_home_dir}" \
-				&& ln -s "${home_unix_path}" "${ssh_home_dir}"
-			fi
-			;;
-	esac
+		# https://linux.die.net/man/1/readlink
+		# https://www.geeksforgeeks.org/readlink-command-in-linux-with-examples/
+		# https://serverfault.com/questions/76042/find-out-symbolic-link-target-via-command-line
+		local home_unix_path="$(cygpath -u "${HOME}")"
+		local ssh_home_dir="/home/${USERNAME}"
+		if ! { [ -e "${ssh_home_dir}" ] && [ "$(readlink -f "${ssh_home_dir}")" = "$(readlink -f "${home_unix_path}")" ] ;}; then
+			rm -rf "${ssh_home_dir}" \
+			&& ln -s "${home_unix_path}" "${ssh_home_dir}"
+		fi
+	fi
 }
 
 print_packages_dir_of_host_triple() {

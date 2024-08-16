@@ -358,7 +358,7 @@ do_git_misc() {
 			local remote="$1"
 			if [ -z "${remote}" ]; then
 				if [ -f .git/remote ]; then
-					branch="$(cat .git/remote)"
+					remote="$(cat .git/remote)"
 				else
 					echo "the file .git/remote does not exist."
 					return 1

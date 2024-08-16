@@ -208,6 +208,9 @@ git_show_branch_info_for_diff_2(){
 	if [ -f .git/branch ]; then
 		echo "cat .git/branch : $(cat .git/branch)"
 	fi
+	if [ -f .git/remote ]; then
+		echo "cat .git/remote : $(cat .git/remote)"
+	fi
 }
 
 git_diff_HEAD() {
@@ -351,14 +354,33 @@ do_git_misc() {
 		git_gc )
 			time_command git_gc
 			;;
-		git_pull_--rebase )
+		git_pull_--rebase | git_push )
 			local remote="$1"
-			time_command git pull --rebase "${remote}" "$(git branch --show-current)" \
-			&& time_command sync .git
-			;;
-		git_push )
-			local remote="$1"
-			time_command git push "${remote}" "$(git branch --show-current)"
+			if [ -z "${remote}" ]; then
+				if [ -f .git/remote ]; then
+					branch="$(cat .git/remote)"
+				else
+					echo "the file .git/remote does not exist."
+					return 1
+				fi
+			fi
+
+			if [ -z "${remote}" ]; then
+				echo "remote is not specified."
+				return 1
+			elif ! git remote | grep "^${remote}$"; then
+				echo "remote ${remote} does not exist."
+				return 1
+			fi
+			case "${misc_command}" in
+				git_pull_--rebase )
+					time_command git pull --rebase "${remote}" "$(git branch --show-current)" \
+					&& time_command sync .git
+					;;
+				git_push )
+					time_command git push "${remote}" "$(git branch --show-current)"
+					;;
+			esac
 			;;
 		git_reset_--hard_HEAD )
 			echo "git reset --hard HEAD"

@@ -1,0 +1,12 @@
+diff --git a/gcc/config/mingw/t-cygming b/gcc/config/mingw/t-cygming
+index 3dd9116d92b..fe0af545efc 100644
+--- a/gcc/config/mingw/t-cygming
++++ b/gcc/config/mingw/t-cygming
+@@ -18,7 +18,6 @@
+ 
+ # cygwin and mingw always have a limits.h, but, depending upon how we are
+ # doing the build, it may not be installed yet.
+-LIMITS_H_TEST = true
+ 
+ winnt.o: $(srcdir)/config/mingw/winnt.cc $(CONFIG_H) $(SYSTEM_H) coretypes.h \
+   $(TM_H) $(RTL_H) $(REGS_H) hard-reg-set.h output.h $(TREE_H) flags.h \

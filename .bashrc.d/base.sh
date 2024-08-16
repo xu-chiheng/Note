@@ -67,18 +67,11 @@ print_host_triple_0() {
 
 print_host_triple() {
 	local host_triple="$(print_host_triple_0)"
-	if host_triple_is_windows "${host_triple}"; then
-		echo "${host_triple}"
+	if host_triple_is_linux "${HOST_TRIPLE}"; then
+		# x86_64-pc-linux-gnu  ---> x86_64-linux-gnu
+		echo "${host_triple}" | sed -E -e 's/^([^-]+)-([^-]+)-(([^-]+)(-([^-]+))?)$/\1-\3/g'
 	else
-		case "${host_triple}" in
-			*-linux* )
-				# x86_64-pc-linux-gnu  ---> x86_64-linux-gnu
-				echo "${host_triple}" | sed -E -e 's/^([^-]+)-([^-]+)-(([^-]+)(-([^-]+))?)$/\1-\3/g'
-				;;
-			* )
-				echo "${host_triple}"
-				;;
-		esac
+		echo "${host_triple}"
 	fi
 }
 
@@ -86,6 +79,18 @@ host_triple_is_windows() {
 	local host_triple="$1"
 	case "${host_triple}" in
 		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
+			true
+			;;
+		* )
+			false
+			;;
+	esac
+}
+
+host_triple_is_linux() {
+	local host_triple="$1"
+	case "${host_triple}" in
+		*-linux-gnu )
 			true
 			;;
 		* )
@@ -125,7 +130,9 @@ set_environment_variables_at_bash_startup() {
 	if host_triple_is_windows "${HOST_TRIPLE}" && [ -v VSINSTALLDIR ]; then
 		# Visual Studio, MSVC bin dirs has been prepended to PATH
 		# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
-		true
+		if [ -v VCPKG_DIR ]; then
+			export PATH="$(join_array_elements ':' "$(cygpath -u "${VCPKG_DIR}")" "${PATH}")"
+		fi
 	else
 		case "${HOST_TRIPLE}" in
 			x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux-gnu )
@@ -171,32 +178,28 @@ set_environment_variables_at_bash_startup() {
 		export PATH="$(join_array_elements ':' "${PATH}" "${dirs2[@]}")"
 
 		# export BROWSER=chrome
-	else
-		case "${HOST_TRIPLE}" in
-			*-linux-gnu )
-				# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
-				case "${DESKTOP_SESSION}" in
-					*plasma* )
-						FILE_EXPLORER=dolphin
-						TERMINAL_EMULATOR=konsole
-						if quiet_command which plasma-systemmonitor; then
-							TASK_MANAGER=plasma-systemmonitor
-						elif quiet_command which ksysguard; then
-							TASK_MANAGER=ksysguard
-						else
-							# echo "KDE has no plasma-systemmonitor or ksysguard"
-							true
-						fi
-						;;
-					* )
-						# echo "Unknown Desktop Environment ${DESKTOP_SESSION}"
-						true
-						;;
-				esac
-				# https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
-				export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
+	elif host_triple_is_linux "${HOST_TRIPLE}"; then
+		# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
+		case "${DESKTOP_SESSION}" in
+			*plasma* )
+				FILE_EXPLORER=dolphin
+				TERMINAL_EMULATOR=konsole
+				if quiet_command which plasma-systemmonitor; then
+					TASK_MANAGER=plasma-systemmonitor
+				elif quiet_command which ksysguard; then
+					TASK_MANAGER=ksysguard
+				else
+					# echo "KDE has no plasma-systemmonitor or ksysguard"
+					true
+				fi
+				;;
+			* )
+				# echo "Unknown Desktop Environment ${DESKTOP_SESSION}"
+				true
 				;;
 		esac
+		# https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
+		export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
 	fi
 }
 

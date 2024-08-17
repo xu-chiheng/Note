@@ -47,12 +47,18 @@ patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-1,driver-2,general-{a,b,c},ma
               ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707 2024-01-24
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls-1,findgcc-0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls-1,findgcc-0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
               ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 19.0.0    c5f839bd58e7f888acc4cb39a18e9e5bbaa9fb0a 2024-03-22
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
               ../_patch/llvm/cygwin-disable-debug-ata.patch
+
+19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8 2024-07-23
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+
+20.0.0    f999b321d7317fa9e59ce597bd3d63b7035fe774 2024-08-16
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 

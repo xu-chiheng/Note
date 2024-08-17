@@ -1,0 +1,13 @@
+diff --git a/llvm/lib/Target/X86/X86TargetMachine.cpp b/llvm/lib/Target/X86/X86TargetMachine.cpp
+index d2d59ff3b93c..5b1c2a6ac144 100644
+--- a/llvm/lib/Target/X86/X86TargetMachine.cpp
++++ b/llvm/lib/Target/X86/X86TargetMachine.cpp
+@@ -223,6 +223,8 @@ getEffectiveX86CodeModel(const Triple &TT, std::optional<CodeModel::Model> CM,
+   }
+   if (JIT)
+     return Is64Bit ? CodeModel::Large : CodeModel::Small;
++  if (TT.isWindowsCygwinEnvironment())
++    return Is64Bit ? CodeModel::Medium : CodeModel::Small;
+   return CodeModel::Small;
+ }
+ 

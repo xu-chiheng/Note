@@ -34,10 +34,10 @@ index 661d9977fbc5..6c9bb2c70260 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..cb3c9691e01d
+index 000000000000..6bfb8a870990
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,731 @@
+@@ -0,0 +1,756 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ------------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -224,7 +224,14 @@ index 000000000000..cb3c9691e01d
 +      CmdArgs.push_back("_cygwin_dll_entry");
 +    CmdArgs.push_back("--enable-auto-image-base");
 +  }
-+  CmdArgs.push_back("--dynamicbase");
++  switch (TC.getArch()) {
++  case llvm::Triple::x86_64:
++    CmdArgs.push_back("--dynamicbase");
++    break;
++  case llvm::Triple::aarch64:
++  default:
++    break;
++  }
 +
 +  if (Args.hasArg(options::OPT_Z_Xlinker__no_demangle))
 +    CmdArgs.push_back("--no-demangle");
@@ -691,10 +698,19 @@ index 000000000000..cb3c9691e01d
 +  StringRef Slash = llvm::sys::path::get_separator();
 +
 +  switch (GetCXXStdlibType(DriverArgs)) {
-+  case ToolChain::CST_Libcxx:
++  case ToolChain::CST_Libcxx: {
++    std::string TargetDir = (Base + "include" + Slash + getTripleString() +
++                             Slash + "c++" + Slash + "v1")
++                                .str();
++    if (getDriver().getVFS().exists(TargetDir))
++      addSystemInclude(DriverArgs, CC1Args, TargetDir);
++    addSystemInclude(DriverArgs, CC1Args,
++                     Base + SubdirName + Slash + "include" + Slash + "c++" +
++                         Slash + "v1");
 +    addSystemInclude(DriverArgs, CC1Args,
 +                     Base + "include" + Slash + "c++" + Slash + "v1");
 +    break;
++  }
 +
 +  case ToolChain::CST_Libstdcxx:
 +    llvm::SmallVector<llvm::SmallString<1024>, 7> CppIncludeBases;
@@ -707,6 +723,15 @@ index 000000000000..cb3c9691e01d
 +    llvm::sys::path::append(CppIncludeBases[2], "include", "c++", Ver);
 +    CppIncludeBases.emplace_back(GccLibDir);
 +    llvm::sys::path::append(CppIncludeBases[3], "include", "c++");
++    CppIncludeBases.emplace_back(GccLibDir);
++    llvm::sys::path::append(CppIncludeBases[4], "include",
++                            "g++-v" + GccVer.Text);
++    CppIncludeBases.emplace_back(GccLibDir);
++    llvm::sys::path::append(CppIncludeBases[5], "include",
++                            "g++-v" + GccVer.MajorStr + "." + GccVer.MinorStr);
++    CppIncludeBases.emplace_back(GccLibDir);
++    llvm::sys::path::append(CppIncludeBases[6], "include",
++                            "g++-v" + GccVer.MajorStr);
 +    for (auto &CppIncludeBase : CppIncludeBases) {
 +      addSystemInclude(DriverArgs, CC1Args, CppIncludeBase);
 +      CppIncludeBase += Slash;

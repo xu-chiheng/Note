@@ -6,11 +6,11 @@ https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-gcc
 https://src.fedoraproject.org/rpms/gcc.git
 
 
-13.0.0  8e08c7886eed5824bebd0e011526ec302d622844 2023-04-17
-14.0.0  b8e9fd535d6093e3a24af858364d8517a767b0d7 2024-04-24
+13.0.0    8e08c7886eed5824bebd0e011526ec302d622844 2023-04-17
+14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7 2024-04-24
 patch_apply . ../_patch/gcc/{cygwin-{ldflags,limits.h-0},mingw-{ldflags,gethostname,libgcc-inhibit_libc}}.patch
 
-15.0.0  1b8b53ef75c143cddc114705c97c74d9c8f7a64b 2024-08-16
+15.0.0    1b8b53ef75c143cddc114705c97c74d9c8f7a64b 2024-08-16
 patch_apply . ../_patch/gcc/{cygwin-{ldflags,limits.h-1},mingw-{ldflags,gethostname,libgcc-inhibit_libc}}.patch
 
 

@@ -1,9 +1,4 @@
 
-I have build scripts and patches at https://github.com/xu-chiheng/Note .
-I can use the build scripts and patches to build and bootstrap GCC(start from 13.0.0) and Clang/LLVM(start from 16.0.0), using GCC or Clang, on Cygwin and MinGW.
-If you have interests, you can look at my other PRs at https://github.com/llvm/llvm-project/pulls/xu-chiheng .
-
-Most patches come from upstream at 
 
 https://cygwin.com/cgit/cygwin-packages
 https://cygwin.com/cgit/cygwin-packages/clang
@@ -55,10 +50,10 @@ patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-1,driver-3,general-{a,b,c},ma
               ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8 2024-07-23
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 20.0.0    f999b321d7317fa9e59ce597bd3d63b7035fe774 2024-08-16
-patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+patch_apply . ../_patch/llvm/{cygwin-{basic,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}
 

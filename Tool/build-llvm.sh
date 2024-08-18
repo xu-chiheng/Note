@@ -62,7 +62,7 @@ check_llvm_static_or_shared "$3"
 	# VERSION=16.0.6
 	# VERSION=17.0.6
 	# VERSION=18.1.8
-	# VERSION=19.1.x
+	# VERSION=19.1.1
 	VERSION=20.0.0 # commit f999b321d7317fa9e59ce597bd3d63b7035fe774 2024-08-16
 
 	SOURCE_DIR="${PACKAGE}"

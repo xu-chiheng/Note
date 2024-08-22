@@ -110,25 +110,11 @@ check_llvm_static_or_shared "$1"
 		static )
 			CMAKE_OPTIONS+=(
 				-DBUILD_SHARED_LIBS=OFF
-
-				-DLLVM_BUILD_LLVM_DYLIB=OFF
-				-DLLVM_LINK_LLVM_DYLIB=OFF
-
-				# On Cygwin and MinGW, it is important to explicitly set LLVM_ENABLE_PIC to OFF
-				# otherwise, there is link error
-				# /usr/bin/ld: error: export ordinal too large: 101192
-				# caused by commit de07b1e84d8de948304766df602fee2b845e9532
-				-DLLVM_ENABLE_PIC=OFF
 			)
 			;;
 		shared )
 			CMAKE_OPTIONS+=(
 				-DBUILD_SHARED_LIBS=ON
-
-				# NOTE: Important! the following 2 lines must be commented,  the 2 variables must have no initial values. Tested many times.
-				# -DLLVM_BUILD_LLVM_DYLIB=OFF
-				# -DLLVM_LINK_LLVM_DYLIB=OFF
-				# -DLLVM_ENABLE_PIC=OFF
 			)
 			;;
 	esac

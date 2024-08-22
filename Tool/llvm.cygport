@@ -91,42 +91,7 @@ MAKEOPTS="-j$(expr $(nproc --all) '*' 2)"
 
 # use the standard cmake src_compile, src_install and src_test
 
-# this function should be synced with the same function in common.sh
-# https://github.com/xu-chiheng/Note/blob/main/Tool/common.sh
-# MIT License
-process_install_dir_bin_symlinks () {
-	local install_dir="$1"
-	pushd "${install_dir}" \
-	&& for path in $(find bin); do
-		if [ -L "${path}" ]; then
-			path2="$(readlink -f "${path}")"
-			if [ -f "${path2}" ]; then
-				local base="$(basename "${path}")"
-				local base2="$(basename "${path2}")"
-				local suffix="${base2##*.}"
-
-				local path1="${path}"
-				if [ ! -z "${suffix}" ]; then
-					if [[ "${base}" == *".${suffix}" ]]; then
-						# echo "The file has the specified suffix."
-						true
-					else
-						# echo "The file does not have the specified suffix."
-						path1+=".${suffix}"
-					fi
-				fi
-				if ! { rm -rf "${path}" && cp -f "${path2}" "${path1}" ;}; then
-					echo "failed to process symlink ${path} pointing to ${path2}"
-					return 1
-				fi
-			fi
-		fi
-	done \
-	&& popd
-}
-
 src_install() {
 	cd "${B}"
-	cyginstall \
-	&& process_install_dir_bin_symlinks "${D}/usr"
+	cyginstall
 }

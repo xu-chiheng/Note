@@ -32,8 +32,19 @@
 # Quirk : 2024-03-22, QEMU must be built in ~/Tool directory， can't be built in E:/Note/Tool directory.
 # QEMU build system does not support the directory symlink E:/Note ---> ~  .
 
-# Self-built GCC has problems to build QEMU
-# Pre-installed GCC is OK
+# Self-built GCC has problems to build QEMU, Pre-installed GCC is OK
+# ../qemu/meson.build:1:0: ERROR: Unable to detect GNU compiler type:
+# gcc: fatal error: cannot execute 'cc1': CreateProcess: No such file or directory
+# compilation terminated.
+
+# 7.1.0 can be built by GCC and Clang
+# 9.1.0 can only be built by GCC
+# Program iasl found: NO
+# Program bzip2 found: YES (D:\msys64\ucrt64\bin/bzip2.EXE)
+# ../qemu/meson.build:321:4: ERROR: Problem encountered: Your compiler does not support __attribute__((gcc_struct)) - please use GCC instead of Clang
+# A full log can be found at C:/Users/Administrator/Tool/qemu-mingw-ucrt-clang-release-build/meson-logs/meson-log.txt
+# ERROR: meson setup failed
+
 
 cd "$(dirname "$0")"
 . "./common.sh"
@@ -44,7 +55,8 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 {
 	dump_toolchain_build_type_and_compiler_flags
 
-	VERSION=7.1.0
+	# VERSION=7.1.0
+	VERSION=9.1.0   # commit 407f9a4b121eb65166375c410e14d7b704bc1106 2024-08-22
 
 	CONFIGURE_OPTIONS=(
 		--enable-gtk

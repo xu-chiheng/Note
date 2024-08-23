@@ -1,24 +1,7 @@
 
 Issues:
-MinGW GCC 14.0.0 can't build QEMU 7.1.0
 MinGW Clang does not show git revision
-Cygwin GCC can't build debug mode llvm using "./build-llvm.sh GCC Debug shared"
-
-
-
-[ 98%] Built target clang-tidy
-collect2: error: ld returned 1 exit status
-make[2]: *** [tools/clang/tools/clang-shlib/CMakeFiles/clang-cpp.dir/build.make:1961: bin/cygclang-cpp-18git.dll] Error 1
-make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-gcc-debug-build'
-make[1]: *** [CMakeFiles/Makefile2:45838: tools/clang/tools/clang-shlib/CMakeFiles/clang-cpp.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-gcc-debug-build'
-[ 98%] Built target clangDaemon
-make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-gcc-debug-build'
-make: *** [Makefile:156: all] Error 2
-
-
-
+Cygwin GCC can't build debug mode LLVM using "./build-llvm.sh GCC Debug shared"
 
 
 

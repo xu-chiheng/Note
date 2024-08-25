@@ -75,7 +75,7 @@ binutils_create_test_branches_for_bisect() {
 }
 
 gdb_create_test_branches_for_bisect() {
-	common_create_test_branches_for_bisect gdb 10 "remotes/upstream/gdb-" "-branch" master
+	common_create_test_branches_for_bisect gdb 14 "remotes/upstream/gdb-" "-branch" master
 }
 
 check_compiler_existence() {

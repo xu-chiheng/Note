@@ -107,9 +107,10 @@ patch_apply() {
 	local patches=( "$@" )
 
 	for patch in "${patches[@]}"; do
+		echo "check ${patch}"
 		if ! { cat "${patch}" | {
 					quiet_command pushd "${dir}" \
-					&& quiet_command patch -Np1 --dry-run \
+					&& patch -Np1 --dry-run --quiet \
 					&& quiet_command popd
 				} ;}; then
 			echo "${patch} can not be applied"
@@ -117,11 +118,17 @@ patch_apply() {
 		fi
 	done
 
-	cat "${patches[@]}" | {
-		quiet_command pushd "${dir}" \
-		&& patch -Np1 \
-		&& quiet_command popd
-	}
+	for patch in "${patches[@]}"; do
+		echo "apply ${patch}"
+		if ! { cat "${patch}" | {
+					quiet_command pushd "${dir}" \
+					&& patch -Np1 \
+					&& quiet_command popd
+				} ;}; then
+			echo "${patch} can not be applied"
+			return 1
+		fi
+	done
 }
 
 patch_apply_reverse() {
@@ -133,9 +140,10 @@ patch_apply_reverse() {
 	local patches=( "$@" )
 
 	for patch in "${patches[@]}"; do
+		echo "check ${patch}"
 		if ! { cat "${patch}" | {
 					quiet_command pushd "${dir}" \
-					&& quiet_command patch -Rp1 --dry-run \
+					&& patch -Rp1 --dry-run --quiet \
 					&& quiet_command popd
 				} ;}; then
 			echo "${patch} can not be applied"
@@ -143,9 +151,15 @@ patch_apply_reverse() {
 		fi
 	done
 
-	cat "${patches[@]}" | {
-		quiet_command pushd "${dir}" \
-		&& patch -Rp1 \
-		&& quiet_command popd
-	}
+	for patch in "${patches[@]}"; do
+		echo "apply ${patch}"
+		if ! { cat "${patch}" | {
+					quiet_command pushd "${dir}" \
+					&& patch -Rp1 \
+					&& quiet_command popd
+				} ;}; then
+			echo "${patch} can not be applied"
+			return 1
+		fi
+	done
 }

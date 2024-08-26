@@ -26,7 +26,7 @@ patch_apply . ../_patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-o
 patch_apply . ../_patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-option,basic,cmodel-0,driver-0,general-{a,b,c},macro,CGCall.h},mingw-{ldflags,pthread,emutls-1,findgcc-0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    6f44f87011cd52367626cac111ddbb2d25784b90 2023-10-05
-patch_apply . ../_patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-option,basic,cmodel-1,driver-{2,1},general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp},mingw-{ldflags,pthread,emutls-1,findgcc-0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+patch_apply . ../_patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-option,basic,cmodel-1,driver-1,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp},mingw-{ldflags,pthread,emutls-1,findgcc-0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 18.0.0    49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09
 patch_apply . ../_patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-option,basic,cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp},mingw-{ldflags,pthread,emutls-1,findgcc-0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch

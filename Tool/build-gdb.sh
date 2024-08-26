@@ -22,6 +22,37 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
+# Clang/LLVM 20 commit 2dec83cc8e21a72e8718b5b3f009a19d6634fad3 2024-08-15
+# [clang] Turn -Wenum-constexpr-conversion into a hard error (#102364)
+# this break build of GDB 14 15 16
+
+# ../../gdb/gdb/../gdbsupport/enum-flags.h:96:5: error: non-type template argument is not a constant expression
+#    96 |                                 static_cast<bool>(T (-1) < T (0))>::type;
+#       |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ../../gdb/gdb/../gdbsupport/enum-flags.h:132:36: note: in instantiation of template class 'enum_underlying_type<btrace_insn_flag>' requested here
+#   132 |   using underlying_type = typename enum_underlying_type<enum_type>::type;
+#       |                                    ^
+# ../../gdb/gdb/btrace.h:96:21: note: in instantiation of template class 'enum_flags<btrace_insn_flag>' requested here
+#    96 |   btrace_insn_flags flags;
+#       |                     ^
+# ../../gdb/gdb/../gdbsupport/enum-flags.h:96:23: note: integer value -1 is outside the valid range of values [0, 1] for the enumeration type 'btrace_insn_flag'
+#    96 |                                 static_cast<bool>(T (-1) < T (0))>::type;
+#       |                                                   ^
+# ../../gdb/gdb/../gdbsupport/enum-flags.h:96:5: error: non-type template argument is not a constant expression
+#    96 |                                 static_cast<bool>(T (-1) < T (0))>::type;
+#       |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ../../gdb/gdb/../gdbsupport/enum-flags.h:132:36: note: in instantiation of template class 'enum_underlying_type<btrace_function_flag>' requested here
+#   132 |   using underlying_type = typename enum_underlying_type<enum_type>::type;
+#       |                                    ^
+# ../../gdb/gdb/btrace.h:205:25: note: in instantiation of template class 'enum_flags<btrace_function_flag>' requested here
+#   205 |   btrace_function_flags flags = 0;
+#       |                         ^
+# ../../gdb/gdb/../gdbsupport/enum-flags.h:96:23: note: integer value -1 is outside the valid range of values [0, 7] for the enumeration type 'btrace_function_flag'
+#    96 |                                 static_cast<bool>(T (-1) < T (0))>::type;
+#       |                                                   ^
+
+
 cd "$(dirname "$0")"
 . "./common.sh"
 

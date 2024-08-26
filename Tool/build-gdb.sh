@@ -62,7 +62,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 {
 	dump_toolchain_build_type_and_compiler_flags
 
-	VERSION=16.0.0 # commit 6179272353d3b4384a2ac306fe11aa024f344d47 2024-08-24
+	VERSION=16.0.0 # 6179272353d3b4384a2ac306fe11aa024f344d47 2024-08-24
 
 	CONFIGURE_OPTIONS=(
 		--enable-targets=all

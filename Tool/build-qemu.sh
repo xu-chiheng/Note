@@ -56,7 +56,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 	dump_toolchain_build_type_and_compiler_flags
 
 	# VERSION=7.1.0
-	VERSION=9.1.0   # commit 407f9a4b121eb65166375c410e14d7b704bc1106 2024-08-22
+	VERSION=9.1.0   # 407f9a4b121eb65166375c410e14d7b704bc1106 2024-08-22
 
 	CONFIGURE_OPTIONS=(
 		--enable-gtk

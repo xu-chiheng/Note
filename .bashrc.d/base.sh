@@ -574,6 +574,15 @@ backup_or_restore_file_or_dir() {
 	&& popd
 }
 
+# https://stackoverflow.com/questions/2556190/random-number-from-a-range-in-a-bash-script
+port_number_generate() {
+	local start="$1"
+	if [ -z "${start}" ]; then
+		start=10000
+	fi
+	shuf -i "${start}"-65535 -n 1
+}
+
 # google_chrome_remove_remnant_files_after_uninstall() {
 # 	rm -rf "$(cygpath -u 'C:\Program Files\Google\Chrome')"
 # 	rm -rf ~/AppData/Local/Google/Chrome

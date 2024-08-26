@@ -20,16 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# https://stackoverflow.com/questions/2556190/random-number-from-a-range-in-a-bash-script
-port_number_generate() {
-	local start="$1"
-	if [ -z "${start}" ]; then
-		start=10000
-	fi 
-	shuf -i "${start}"-65535 -n 1
-}
-
-xray_uuid_generate() {
+linux_xray_uuid_generate() {
 	cat '/proc/sys/kernel/random/uuid'
 }
 

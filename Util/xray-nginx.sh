@@ -318,7 +318,7 @@ install() {
 	NGINX_CONF_PATH="/etc/nginx/conf.d"
 	CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
 	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
-	UUID="$(xray_uuid_generate)"
+	UUID="$(linux_xray_uuid_generate)"
 	PORT="$(port_number_generate)"
 	XPORT="$(port_number_generate)"
 	WSPATH="/$(password_generate_one)"

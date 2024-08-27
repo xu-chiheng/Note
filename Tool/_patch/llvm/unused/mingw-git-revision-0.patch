@@ -1,0 +1,248 @@
+diff --git a/bolt/lib/Utils/CommandLineOpts.cpp b/bolt/lib/Utils/CommandLineOpts.cpp
+index 435a8fa9cafc..47375abb2ad3 100644
+--- a/bolt/lib/Utils/CommandLineOpts.cpp
++++ b/bolt/lib/Utils/CommandLineOpts.cpp
+@@ -11,15 +11,15 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #include "bolt/Utils/CommandLineOpts.h"
+-#include "VCSVersion.inc"
++#include "llvm/Support/VCSRevision.h"
+ 
+ using namespace llvm;
+ 
+ namespace llvm {
+ namespace bolt {
+ const char *BoltRevision =
+-#ifdef BOLT_REVISION
+-    BOLT_REVISION;
++#ifdef LLVM_REVISION
++    LLVM_REVISION;
+ #else
+     "<unknown>";
+ #endif
+diff --git a/clang/lib/Basic/Version.cpp b/clang/lib/Basic/Version.cpp
+index 4823f566bd77..4d45f9ab97b2 100644
+--- a/clang/lib/Basic/Version.cpp
++++ b/clang/lib/Basic/Version.cpp
+@@ -17,7 +17,7 @@
+ #include <cstdlib>
+ #include <cstring>
+ 
+-#include "VCSVersion.inc"
++#include "llvm/Support/VCSRevision.h"
+ 
+ namespace clang {
+ 
+@@ -25,8 +25,8 @@ std::string getClangRepositoryPath() {
+ #if defined(CLANG_REPOSITORY_STRING)
+   return CLANG_REPOSITORY_STRING;
+ #else
+-#ifdef CLANG_REPOSITORY
+-  return CLANG_REPOSITORY;
++#ifdef LLVM_REPOSITORY
++  return LLVM_REPOSITORY;
+ #else
+   return "";
+ #endif
+@@ -42,8 +42,8 @@ std::string getLLVMRepositoryPath() {
+ }
+ 
+ std::string getClangRevision() {
+-#ifdef CLANG_REVISION
+-  return CLANG_REVISION;
++#ifdef LLVM_REVISION
++  return LLVM_REVISION;
+ #else
+   return "";
+ #endif
+diff --git a/flang/lib/Common/Version.cpp b/flang/lib/Common/Version.cpp
+index d67255f353df..811139828004 100644
+--- a/flang/lib/Common/Version.cpp
++++ b/flang/lib/Common/Version.cpp
+@@ -15,7 +15,7 @@
+ #include <cstdlib>
+ #include <cstring>
+ 
+-#include "VCSVersion.inc"
++#include "llvm/Support/VCSRevision.h"
+ 
+ namespace Fortran::common {
+ 
+@@ -23,8 +23,8 @@ std::string getFlangRepositoryPath() {
+ #if defined(FLANG_REPOSITORY_STRING)
+   return FLANG_REPOSITORY_STRING;
+ #else
+-#ifdef FLANG_REPOSITORY
+-  return FLANG_REPOSITORY;
++#ifdef LLVM_REPOSITORY
++  return LLVM_REPOSITORY;
+ #else
+   return "";
+ #endif
+@@ -40,8 +40,8 @@ std::string getLLVMRepositoryPath() {
+ }
+ 
+ std::string getFlangRevision() {
+-#ifdef FLANG_REVISION
+-  return FLANG_REVISION;
++#ifdef LLVM_REVISION
++  return LLVM_REVISION;
+ #else
+   return "";
+ #endif
+diff --git a/lld/Common/Version.cpp b/lld/Common/Version.cpp
+index 59183c79f7a3..fa989412009c 100644
+--- a/lld/Common/Version.cpp
++++ b/lld/Common/Version.cpp
+@@ -11,7 +11,6 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #include "lld/Common/Version.h"
+-#include "VCSVersion.inc"
+ #include "llvm/Support/VCSRevision.h"
+ 
+ // Returns a version string, e.g.:
+diff --git a/lldb/source/Version/Version.cpp b/lldb/source/Version/Version.cpp
+index b391fe1eacd8..16b24af0b903 100644
+--- a/lldb/source/Version/Version.cpp
++++ b/lldb/source/Version/Version.cpp
+@@ -7,7 +7,7 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #include "lldb/Version/Version.h"
+-#include "VCSVersion.inc"
++#include "llvm/Support/VCSRevision.h"
+ #include "lldb/Version/Version.inc"
+ #include "clang/Basic/Version.h"
+ 
+@@ -20,16 +20,16 @@ static const char *GetLLDBVersion() {
+ }
+ 
+ static const char *GetLLDBRevision() {
+-#ifdef LLDB_REVISION
+-  return LLDB_REVISION;
++#ifdef LLVM_REVISION
++  return LLVM_REVISION;
+ #else
+   return nullptr;
+ #endif
+ }
+ 
+ static const char *GetLLDBRepository() {
+-#ifdef LLDB_REPOSITORY
+-  return LLDB_REPOSITORY;
++#ifdef LLVM_REPOSITORY
++  return LLVM_REPOSITORY;
+ #else
+   return nullptr;
+ #endif
+diff --git a/llvm/utils/gn/secondary/bolt/lib/Utils/BUILD.gn b/llvm/utils/gn/secondary/bolt/lib/Utils/BUILD.gn
+index 8517ff43be47..4dbbe6067551 100644
+--- a/llvm/utils/gn/secondary/bolt/lib/Utils/BUILD.gn
++++ b/llvm/utils/gn/secondary/bolt/lib/Utils/BUILD.gn
+@@ -10,7 +10,7 @@ config("write_vcsrevision_config") {
+ write_vcsrevision("write_vcsversion") {
+   visibility = [ ":Utils" ]
+   header = "$target_gen_dir/VCSVersion.inc"
+-  names = [ "LLDB" ]
++  names = [ ]
+   public_configs = [ ":write_vcsrevision_config" ]
+ }
+ 
+diff --git a/llvm/utils/gn/secondary/clang/lib/Basic/BUILD.gn b/llvm/utils/gn/secondary/clang/lib/Basic/BUILD.gn
+index d2cf5243627a..0a4b3cf5ebb8 100644
+--- a/llvm/utils/gn/secondary/clang/lib/Basic/BUILD.gn
++++ b/llvm/utils/gn/secondary/clang/lib/Basic/BUILD.gn
+@@ -9,10 +9,7 @@ config("write_vcsrevision_config") {
+ write_vcsrevision("write_vcsversion") {
+   visibility = [ ":Basic" ]
+   header = "$target_gen_dir/VCSVersion.inc"
+-  names = [
+-    "LLVM",
+-    "CLANG",
+-  ]
++  names = [ ]
+   public_configs = [ ":write_vcsrevision_config" ]
+ }
+ 
+diff --git a/llvm/utils/gn/secondary/lld/Common/BUILD.gn b/llvm/utils/gn/secondary/lld/Common/BUILD.gn
+index b5286545f867..0958e4142fa1 100644
+--- a/llvm/utils/gn/secondary/lld/Common/BUILD.gn
++++ b/llvm/utils/gn/secondary/lld/Common/BUILD.gn
+@@ -9,7 +9,7 @@ config("write_vcsrevision_config") {
+ write_vcsrevision("write_vcsversion") {
+   visibility = [ ":Common" ]
+   header = "$target_gen_dir/VCSVersion.inc"
+-  names = [ "LLD" ]
++  names = [ ]
+   public_configs = [ ":write_vcsrevision_config" ]
+ }
+ 
+diff --git a/llvm/utils/gn/secondary/lldb/source/Version/BUILD.gn b/llvm/utils/gn/secondary/lldb/source/Version/BUILD.gn
+index 5103e4504325..189708953944 100644
+--- a/llvm/utils/gn/secondary/lldb/source/Version/BUILD.gn
++++ b/llvm/utils/gn/secondary/lldb/source/Version/BUILD.gn
+@@ -10,7 +10,7 @@ config("write_vcsrevision_config") {
+ write_vcsrevision("write_vcsversion") {
+   visibility = [ ":Version" ]
+   header = "$target_gen_dir/VCSVersion.inc"
+-  names = [ "LLDB" ]
++  names = [ ]
+   public_configs = [ ":write_vcsrevision_config" ]
+ }
+ 
+diff --git a/utils/bazel/llvm-project-overlay/bolt/BUILD.bazel b/utils/bazel/llvm-project-overlay/bolt/BUILD.bazel
+index 907fe106166b..6277b66dd370 100644
+--- a/utils/bazel/llvm-project-overlay/bolt/BUILD.bazel
++++ b/utils/bazel/llvm-project-overlay/bolt/BUILD.bazel
+@@ -13,7 +13,7 @@ licenses(["notice"])
+ genrule(
+     name = "generate_vcs_revision",
+     outs = ["include/VCSVersion.inc"],
+-    cmd = "echo '#undef BOLT_REVISION' >> $@\n",
++    cmd = "echo >> $@",
+ )
+ 
+ cc_binary(
+diff --git a/utils/bazel/llvm-project-overlay/clang/BUILD.bazel b/utils/bazel/llvm-project-overlay/clang/BUILD.bazel
+index 945c3d64a991..c27abe74e5d2 100644
+--- a/utils/bazel/llvm-project-overlay/clang/BUILD.bazel
++++ b/utils/bazel/llvm-project-overlay/clang/BUILD.bazel
+@@ -583,7 +583,7 @@ genrule(
+     # are passed through bazel, it's easier to drop generated files next to
+     # the other includes.
+     outs = ["include/VCSVersion.inc"],
+-    cmd = "echo '#undef CLANG_REVISION' > $@",
++    cmd = "echo >> $@",
+ )
+ 
+ py_binary(
+diff --git a/utils/bazel/llvm-project-overlay/lld/BUILD.bazel b/utils/bazel/llvm-project-overlay/lld/BUILD.bazel
+index db580495dfd9..d10435358079 100644
+--- a/utils/bazel/llvm-project-overlay/lld/BUILD.bazel
++++ b/utils/bazel/llvm-project-overlay/lld/BUILD.bazel
+@@ -27,8 +27,7 @@ genrule(
+ genrule(
+     name = "vcs_version_gen",
+     outs = ["Common/VCSVersion.inc"],
+-    cmd = "echo '#undef LLD_REVISION' >> $@\n" +
+-          "echo '#undef LLD_REPOSITORY' >> $@\n",
++    cmd = "echo >> $@",
+ )
+ 
+ # See https://github.com/bazelbuild/bazel/issues/13803
+diff --git a/utils/bazel/llvm-project-overlay/lldb/BUILD.bazel b/utils/bazel/llvm-project-overlay/lldb/BUILD.bazel
+index ee7ea7458b44..016a0a94e321 100644
+--- a/utils/bazel/llvm-project-overlay/lldb/BUILD.bazel
++++ b/utils/bazel/llvm-project-overlay/lldb/BUILD.bazel
+@@ -71,8 +71,7 @@ _VERSION_SUBSTITUTIONS = {
+ genrule(
+     name = "vcs_version_gen",
+     outs = ["VCSVersion.inc"],
+-    cmd = "echo '#undef LLDB_REVISION' >> $@\n" +
+-          "echo '#undef LLDB_REPOSITORY' >> $@\n",
++    cmd = "echo >> $@",
+ )
+ 
+ expand_template(

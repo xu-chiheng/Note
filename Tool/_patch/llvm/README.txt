@@ -62,6 +62,19 @@ git show -s
 
 
 
+
+cygwin-prevent-versioning.patch
+Cygwin : Prevent versioning when building LLVM
+
+cygwin-not-use-symlink.patch
+Cygwin : Not use symlink when building LLVM
+
+cygwin-cmake-option.patch
+Cygwin : Fix CMake options values
+
+cygwin-macro.patch
+Cygwin : Remove some macros not defined in GCC
+
 cygwin-general-a.patch
 Fix build error by Clang due to the conflict of CIndexer.cpp and mm_malloc.h. In mm_malloc.h, _WIN32 and __CYGWIN__ can't both be defined, but CIndexer.cpp define both.
 In file included from /cygdrive/e/Note/Tool/llvm/clang/tools/libclang/CIndexer.cpp:35:
@@ -208,10 +221,8 @@ mingw-Value.h.patch
 Fix the regression caused by commit 592e935e115ffb451eb9b782376711dab6558fe0 2023-05-26, that, in MinGW, Clang can't be built by system Clang.
 
 
-
-
-
-
+mingw-git-revision.patch
+MinGW : Show git revision correctly
 
 
 [  7%] Generating nonterminal symbol file for cxx grammar...

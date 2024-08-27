@@ -19,7 +19,7 @@ https://github.com/llvm/llvm-project/pull/74979
 
 
 mingw-git-revision-0.patch
-MinG Clang show git revision
+MinGW Clang show git revision
 
 
 E:\Note\Tool\llvm\clang\lib\Basic\Version.cpp

@@ -48,23 +48,26 @@ update_and_backup_msys2() {
 
 	local mingw_vcrt_packages=(
 		# msvcrt.dll
-		mingw-w64-x86_64-libxml2
 
 		mingw-w64-x86_64-toolchain
-		# mingw-w64-x86_64-binutils
-		# mingw-w64-x86_64-gdb
-		# mingw-w64-x86_64-gcc
-		# mingw-w64-x86_64-make
 
 		mingw-w64-x86_64-clang
 		mingw-w64-x86_64-clang-analyzer
 		mingw-w64-x86_64-clang-tools-extra
 
+		# LLVM build requirements
 		mingw-w64-x86_64-cmake
-		mingw-w64-x86_64-astyle
+		mingw-w64-x86_64-libxml2
+
+		# QEMU build requirements
+		# https://wiki.qemu.org/Hosts/W32#Native_builds_with_MSYS2
 		mingw-w64-x86_64-glib2
+		mingw-w64-x86_64-pixman
 		mingw-w64-x86_64-gtk3
 		mingw-w64-x86_64-SDL2
+		mingw-w64-x86_64-libslirp
+
+		mingw-w64-x86_64-astyle
 		mingw-w64-x86_64-connect
 	)
 

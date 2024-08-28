@@ -39,8 +39,6 @@
 
 # 7.1.0 can be built by GCC and Clang
 # 9.1.0 can only be built by GCC
-# Program iasl found: NO
-# Program bzip2 found: YES (D:\msys64\ucrt64\bin/bzip2.EXE)
 # ../qemu/meson.build:321:4: ERROR: Problem encountered: Your compiler does not support __attribute__((gcc_struct)) - please use GCC instead of Clang
 # A full log can be found at C:/Users/Administrator/Tool/qemu-mingw-ucrt-clang-release-build/meson-logs/meson-log.txt
 # ERROR: meson setup failed
@@ -55,12 +53,12 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 {
 	dump_toolchain_build_type_and_compiler_flags
 
-	# VERSION=7.1.0
 	VERSION=9.1.0   # 407f9a4b121eb65166375c410e14d7b704bc1106 2024-08-22
 
 	CONFIGURE_OPTIONS=(
 		--enable-gtk
 		--enable-sdl
+		--enable-slirp
 		--disable-werror
 	)
 

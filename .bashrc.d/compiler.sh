@@ -26,7 +26,7 @@ maybe_create_test_branch_for_bisect() {
 	local test_branch="$2"
 	local trunk_branch="$3"
 
-	if ! quiet_command git_rev_parse "${test_branch}"; then
+	if ! git_branch_exists "${test_branch}"; then
 		echo_command git checkout -f -b "${test_branch}" "$(git merge-base "${trunk_branch}" "${major_branch}")"
 	fi
 }
@@ -51,7 +51,7 @@ common_create_test_branches_for_bisect() {
 		# echo "${major_version}"
 		local major_branch="${major_branch_pattern_begin}${major_version}${major_branch_pattern_end}"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
-		if quiet_command git_rev_parse "${major_branch}"; then
+		if git_branch_exists "${major_branch}"; then
 			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" "${trunk_branch}"
 		else
 			maybe_create_test_branch_for_bisect "${trunk_branch}" "${test_branch}" "${trunk_branch}"

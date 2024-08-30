@@ -90,7 +90,7 @@ git_branch_delete_test_range() {
 		echo_command git branch -D "${branches[@]}"
 	else
 		# remote branches
-		if git remote -v | grep -E "^${remote}\s"; then
+		if git_remote_exists "${remote}"; then
 			local branch
 			for branch in "${branches[@]}"; do
 				echo_command git push "${remote}" :"${branch}"
@@ -394,4 +394,22 @@ copy_tarball_to_all_drives() {
 		& # run in background
 	done \
 	&& time_command wait
+}
+
+git_branch_exists() {
+	if [ ! -d .git ]; then
+		return 1
+	fi
+
+	local branch="$1"
+	quiet_command git_rev_parse "${branch}"
+}
+
+git_remote_exists() {
+	if [ ! -d .git ]; then
+		return 1
+	fi
+
+	local remote="$1"
+	git remote | quiet_command grep "^${remote}$"
 }

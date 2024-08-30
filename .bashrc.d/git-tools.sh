@@ -263,7 +263,7 @@ git_diff_branch...HEAD() {
 	if [ -z "${branch}" ]; then
 		echo "branch is not specified."
 		return 1
-	elif ! quiet_command git_rev_parse "${branch}"; then
+	elif ! git_branch_exists "${branch}"; then
 		echo "branch ${branch} does not exist."
 		return 1
 	fi
@@ -368,7 +368,7 @@ do_git_misc() {
 			if [ -z "${remote}" ]; then
 				echo "remote is not specified."
 				return 1
-			elif ! git remote | grep "^${remote}$"; then
+			elif ! git_remote_exists "${remote}"; then
 				echo "remote ${remote} does not exist."
 				return 1
 			fi

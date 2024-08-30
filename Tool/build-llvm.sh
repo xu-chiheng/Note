@@ -122,6 +122,9 @@ check_llvm_static_or_shared "$3"
 
 		-DLLVM_BUILD_LLVM_C_DYLIB=OFF
 
+		# LLVM_BUILD_LLVM_DYLIB
+		# LLVM_LINK_LLVM_DYLIB
+		# LLVM_ENABLE_PIC
 	)
 
 	case "${LLVM_STATIC_OR_SHARED}" in

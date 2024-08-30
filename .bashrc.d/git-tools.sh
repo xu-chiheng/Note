@@ -344,8 +344,8 @@ do_git_misc() {
 			time_command git add -A --verbose \
 			&& time_command sync .git
 			;;
-		git_fetch )
-			time_command git fetch "$@" \
+		git_fetch_--all )
+			time_command git fetch --all \
 			&& time_command sync .git
 			;;
 		git_fsck )
@@ -354,7 +354,7 @@ do_git_misc() {
 		git_gc )
 			time_command git_gc
 			;;
-		git_pull_--rebase | git_push )
+		git_pull_--rebase | git_push | git_fetch )
 			local remote="$1"
 			if [ -z "${remote}" ]; then
 				if [ -f .git/remote ]; then
@@ -379,6 +379,10 @@ do_git_misc() {
 					;;
 				git_push )
 					time_command git push "${remote}" "$(git branch --show-current)"
+					;;
+				git_fetch )
+					time_command git fetch "${remote}" \
+					&& time_command sync .git
 					;;
 			esac
 			;;

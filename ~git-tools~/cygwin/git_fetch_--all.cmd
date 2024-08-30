@@ -4,4 +4,4 @@
 
 cd ../..
 
-@start mintty.exe --exec bash -i -c "time_command do_git_misc git_fetch --all; read;"
+@start mintty.exe --exec bash -i -c "time_command do_git_misc git_fetch_--all; read;"

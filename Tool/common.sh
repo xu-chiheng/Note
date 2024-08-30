@@ -295,6 +295,9 @@ git_repo_url_of_package() {
 		cmake )
 			echo "https://gitlab.kitware.com/cmake/cmake.git"
 			;;
+		meson )
+			echo "git@github.com:mesonbuild/meson.git"
+			;;
 		bash )
 			echo "https://git.savannah.gnu.org/git/bash.git"
 			;;

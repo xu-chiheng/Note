@@ -21,6 +21,9 @@
 /roslyn*
 /cygwin*
 /mingw*
+/mintty*
+/konsole*
+/gnome-terminal*
 /*.xz
 /*.tar
 /*.bz2

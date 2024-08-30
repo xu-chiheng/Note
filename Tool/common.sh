@@ -340,6 +340,15 @@ git_repo_url_of_package() {
 		linux )
 			echo "git@github.com:torvalds/linux.git"
 			;;
+		mintty )
+			echo "git@github.com:mintty/mintty.git"
+			;;
+		konsole )
+			echo "git@github.com:KDE/konsole.git"
+			;;
+		gnome-terminal )
+			echo "https://gitlab.gnome.org/GNOME/gnome-terminal"
+			;;
 		* )
 			echo "unknown package : ${package}"
 			return 1

@@ -55,7 +55,7 @@ do_update_all_files() {
 		Tool/_doc
 		Tool/_sysroot
 		Tool/_quirk
-		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make}
+		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,gnome-terminal}
 
 		Tool/{linux.sh,{cygwin,msys,mingw-vcrt,mingw-ucrt,vs2022_cygwin,vs2022_msys}.cmd}
 

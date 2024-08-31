@@ -209,72 +209,73 @@ print_mingw_root_dir() {
 mingw_gcc_check_or_create_directory_links() {
 	if quiet_command which gcc; then
 		local gcc_install_dir="$(print_gcc_install_dir)"
-		mingw_gcc_check_or_create_directory_links_0 /mingw \
-		&& mingw_gcc_check_or_create_directory_links_0 "${gcc_install_dir}/mingw" \
+		local mingw_root_dir="$(print_mingw_root_dir)"
+		check_or_create_directory_link_0 /mingw "${mingw_root_dir}" \
+		&& check_or_create_directory_link_0 "${gcc_install_dir}/mingw" "${mingw_root_dir}" \
 		&& mingw_gcc_check_or_create_directory_links_1 "${gcc_install_dir}" "${HOST_TRIPLE}"
 	fi
 }
 
+check_or_create_directory_link_0() {
+	local src="$1"
+	local dest="$2"
+	if ! { [ -e "${src}" ] && [ "$(readlink -f "${src}")" = "$(readlink -f "${dest}")" ] ;}; then
+		rm -rf "${src}" \
+		&& mkdir -p "$(dirname "${src}")" \
+		&& ln -s "${dest}" "${src}"
+	fi
+}
+
+remove_directory_link_0() {
+	local src="$1"
+	rm -rf "${src}"
+}
+
+check_or_create_directory_link_1() {
+	local src="$1"
+	local dest="$2"
+	if ! { [ -e "${src}" ] && [ "$(readlink -f "${src}")" = "$(readlink -f "${dest}")" ] ;}; then
+		if [ -e "${src}" ] && ! [ -e "${src}".backup ]; then
+			mv -f "${src}" "${src}".backup
+		else
+			rm -rf "${src}"
+		fi \
+		&& mkdir -p "$(dirname "${src}")" \
+		&& ln -s "${dest}" "${src}"
+	fi
+}
+
+remove_directory_link_1() {
+	local src="$1"
+	rm -rf "${src}" \
+	&& if [ -e "${src}".backup ]; then
+		mv -f "${src}".backup "${src}"
+	fi
+}
+
+
 mingw_gcc_check_or_create_directory_links_1() {
-	local mingw_root_dir="$(print_mingw_root_dir)"
 	local gcc_install_dir="$1"
 	local host_triple="$2"
 	local sysroot="${gcc_install_dir}/${host_triple}"
+	local mingw_root_dir="$(print_mingw_root_dir)"
 	if [ "${gcc_install_dir}" = "${mingw_root_dir}" ]; then
 		return 0
 	fi
-	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
-		return 0
-	fi
-	if [ -e "${sysroot}"/include ] && [ -e "${sysroot}"/lib ] \
-		&& [ "$(readlink -f "${sysroot}"/include)" = "$(readlink -f "${mingw_root_dir}"/include)" ] \
-		&& [ "$(readlink -f "${sysroot}"/lib)" = "$(readlink -f "${mingw_root_dir}"/lib)" ] ; then
-		# echo OK 1 "${sysroot}"
-		return 0
-	fi
-	rm -rf "${sysroot}"/{include,lib} \
-	&& mkdir -p "${sysroot}" \
-	&& ln -s "${mingw_root_dir}"/include "${sysroot}"/include \
-	&& ln -s "${mingw_root_dir}"/lib "${sysroot}"/lib
+	check_or_create_directory_link_1 "${sysroot}"/include "${mingw_root_dir}"/include \
+	&& check_or_create_directory_link_1 "${sysroot}"/lib "${mingw_root_dir}"/lib
 }
 
 mingw_gcc_remove_directory_links_1() {
-	local mingw_root_dir="$(print_mingw_root_dir)"
 	local gcc_install_dir="$1"
 	local host_triple="$2"
 	local sysroot="${gcc_install_dir}/${host_triple}"
+	local mingw_root_dir="$(print_mingw_root_dir)"
 	if [ "${gcc_install_dir}" = "${mingw_root_dir}" ]; then
 		return 0
 	fi
-	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
-		return 0
-	fi
-	echo_command rm -rf "${sysroot}"/{include,lib}
-}
-
-mingw_gcc_check_or_create_directory_links_0() {
-	local mingw_root_dir="$(print_mingw_root_dir)"
-	local sysroot="$1"
-	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
-		return 0
-	fi
-	if [ -e "${sysroot}" ] && [ "$(readlink -f "${sysroot}")" = "$(readlink -f "${mingw_root_dir}")" ] ; then
-		# echo OK 0 "${sysroot}"
-		return 0
-	fi
-	rm -rf "${sysroot}" \
-	&& mkdir -p "${sysroot}" \
-	&& rm -rf "${sysroot}" \
-	&& ln -s "${mingw_root_dir}" "${sysroot}"
-}
-
-mingw_gcc_remove_directory_links_0() {
-	local mingw_root_dir="$(print_mingw_root_dir)"
-	local sysroot="$1"
-	if [ "${sysroot}" = "${mingw_root_dir}" ]; then
-		return 0
-	fi
-	echo_command rm -rf "${sysroot}"
+	remove_directory_link_1 "${sysroot}"/include \
+	&& remove_directory_link_1 "${sysroot}"/lib
 }
 
 git_repo_url_of_package() {
@@ -847,7 +848,8 @@ pre_generate_package_action() {
 	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		echo_command mingw_gcc_check_or_create_directory_links_0 "$(pwd)/${install_dir}/mingw" \
+		local mingw_root_dir="$(print_mingw_root_dir)"
+		echo_command check_or_create_directory_link_0 "$(pwd)/${install_dir}/mingw" "${mingw_root_dir}" \
 		&& echo_command mingw_gcc_check_or_create_directory_links_1 "$(pwd)/${install_dir}" "${host_triple}"
 	fi
 }
@@ -859,7 +861,7 @@ post_build_package_action() {
 	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = gcc ]; then
-		echo_command mingw_gcc_remove_directory_links_0 "$(pwd)/${install_dir}/mingw" \
+		echo_command remove_directory_link_0 "$(pwd)/${install_dir}/mingw" \
 		&& echo_command mingw_gcc_remove_directory_links_1 "$(pwd)/${install_dir}" "${host_triple}"
 	fi
 }

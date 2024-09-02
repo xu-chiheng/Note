@@ -52,7 +52,7 @@ patch_apply . ../_patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-o
 19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8 2024-07-23
 patch_apply . ../_patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-option,support-tls,va-list-kind,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-20.0.0    f999b321d7317fa9e59ce597bd3d63b7035fe774 2024-08-16
+20.0.0    c2cac69d0806034879d2b958a2e52e45b6c533fb 2024-08-28
 patch_apply . ../_patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-option,support-tls,va-list-kind,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 git add clang/lib/Driver/ToolChains/Cygwin.{cpp,h}

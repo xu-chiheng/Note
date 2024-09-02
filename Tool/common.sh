@@ -129,6 +129,10 @@ check_toolchain_build_type_and_set_compiler_flags() {
 		x86_64-pc-mingw64 )
 			mingw_gcc_check_or_create_directory_links
 
+			# local mingw_root_dir="$(print_mingw_root_dir)"
+			# export INCLUDE="$(cygpath -m "${mingw_root_dir}")/include"
+			# export LIB="$(cygpath -m "${mingw_root_dir}")/lib"
+
 			local mingw_c_cxx_common_flags=(  )
 			# mingw_c_cxx_common_flags+=( -mcmodel=medium )
 			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )

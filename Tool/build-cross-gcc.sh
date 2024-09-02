@@ -33,7 +33,7 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 
 	# GCC_VERSION=12.3.0
 	# BINUTILS_VERSION=2.36
-	GCC_VERSION=15.0.0    # 1b8b53ef75c143cddc114705c97c74d9c8f7a64b 2024-08-16
+	GCC_VERSION=15.0.0    # abeeccef92892fe519cc417b30ae22ce9da2d5e6 2024-08-28
 	BINUTILS_VERSION=2.44 # 81e9e54636835c1fc286d87d33d51a8b3da7b35a 2024-08-16
 
 	EXTRA_LANGUAGES=()

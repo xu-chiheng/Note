@@ -63,19 +63,19 @@ common_create_test_branches_for_bisect() {
 }
 
 llvm_create_test_branches_for_bisect() {
-	common_create_test_branches_for_bisect llvm 16 "remotes/upstream/release/" ".x" main
+	common_create_test_branches_for_bisect llvm 16 "remotes/origin/release/" ".x" main
 }
 
 gcc_create_test_branches_for_bisect() {
-	common_create_test_branches_for_bisect gcc 13 "remotes/upstream/releases/gcc-" "" master
+	common_create_test_branches_for_bisect gcc 13 "remotes/origin/releases/gcc-" "" master
 }
 
 binutils_create_test_branches_for_bisect() {
-	common_create_test_branches_for_bisect binutils 36 "remotes/upstream/binutils-2_" "-branch" master
+	common_create_test_branches_for_bisect binutils 36 "remotes/origin/binutils-2_" "-branch" master
 }
 
 gdb_create_test_branches_for_bisect() {
-	common_create_test_branches_for_bisect gdb 14 "remotes/upstream/gdb-" "-branch" master
+	common_create_test_branches_for_bisect gdb 14 "remotes/origin/gdb-" "-branch" master
 }
 
 check_compiler_existence() {

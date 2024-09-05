@@ -8,10 +8,10 @@ https://src.fedoraproject.org/rpms/gcc.git
 
 13.0.0    8e08c7886eed5824bebd0e011526ec302d622844 2023-04-17
 14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7 2024-04-24
-patch_apply . ../_patch/gcc/{cygwin-{ldflags,limits.h-0},mingw-{ldflags,gethostname,libgcc-inhibit_libc}}.patch
+patch_apply . ../_patch/gcc/{cygwin-{ldflags,limits.h-0},mingw-{ldflags,gethostname,libgcc-inhibit_libc,include-{a,b,c}}}.patch
 
 15.0.0    abeeccef92892fe519cc417b30ae22ce9da2d5e6 2024-08-28
-patch_apply . ../_patch/gcc/{cygwin-{ldflags,limits.h-1},mingw-{ldflags,gethostname,libgcc-inhibit_libc}}.patch
+patch_apply . ../_patch/gcc/{cygwin-{ldflags,limits.h-1},mingw-{ldflags,gethostname,libgcc-inhibit_libc,include-{a,b,c}}}.patch
 
 
 mingw-libgcc-inhibit_libc.patch
@@ -20,6 +20,15 @@ Fix build of cross gcc of target x86_64-pc-mingw64 with no libc.
 
 cygwin-limits.h.patch
 Fix build of cross gcc of target x86_64-pc-cygwin with no libc.
+
+mingw-include-a.patch
+
+
+mingw-include-b.patch
+
+
+mingw-include-c.patch
+
 
 
 

@@ -85,7 +85,7 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			# x86-64-v3: (close to Haswell) AVX, AVX2, BMI1, BMI2, F16C, FMA, LZCNT, MOVBE, XSAVE
 			# x86-64-v4: AVX512F, AVX512BW, AVX512CD, AVX512DQ, AVX512VL
 
-			# only gcc 11+ and clang 12+ support this
+			# only GCC 11+ and Clang 12+ support this
 			# local cpu_arch_flags=( -march=x86-64-v3 )
 			cpu_arch_flags+=( -march=x86-64 )
 			;;
@@ -128,6 +128,21 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			;;
 		x86_64-pc-mingw64 )
 			mingw_gcc_check_or_create_directory_links
+
+			# https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html
+			# https://stackoverflow.com/questions/20483619/lib-vs-libpath-environment-variables-difference-for-ms-visual-c-c
+
+			# When using Microsoft Visual C++ (MSVC), the INCLUDE and LIB environment variables are used to specify search paths for header files and libraries: 
+			# INCLUDE
+			# Specifies the search path for the system #include header files. The INCLUDE variable should point to the \include subdirectory of your Visual Studio installation. 
+			# LIB
+			# Specifies the search path for libraries. The LIB variable can contain multiple path specifications, separated by semicolons. One path should point to the \lib subdirectory of your Visual C++ installation. 
+			# Other environment variables that can be used with MSVC include: 
+			# CL: Prepends options and arguments to the command-line arguments. 
+			# _CL_: Appends options and arguments to the command-line arguments. 
+			# LIBPATH: Specifies directories to search for metadata files referenced with #using. The linker will search the path specified by the /LIBPATH option before searching the path specified in the LIB environment variable. 
+			# PATH: Used if the tool needs to run CVTRES and can't find the file in the same directory as link.exe. The PATH variable should point to the \bin subdirectory of your Visual C++ installation. 
+			# TMP: Specifies a directory when linking OMF or .res files. 
 
 			# local mingw_root_dir="$(print_mingw_root_dir)"
 			# export INCLUDE="$(cygpath -m "${mingw_root_dir}")/include"
@@ -415,7 +430,7 @@ maybe_make_tarball_and_move() {
 	fi
 
 	local host_os="$(print_host_os_of_triple "${host_triple}")"
-	local dest_dir="__${host_os}/${toolchain,,}"
+	local dest_dir="__${host_os}-${toolchain,,}"
 
 	echo_command rm -rf "${tarball}"{,.sha512} \
 	&& { echo_command pushd "${install_dir}" \
@@ -515,6 +530,11 @@ gcc_pushd_and_configure() {
 	local build_fixincludes_dir="build-${host_triple}/fixincludes"
 
 	local install_prefix="$(pwd)/${install_dir}"
+	case "${host_triple}" in
+		x86_64-pc-mingw64 )
+			install_prefix="$(cygpath -m "${install_prefix}")"
+			;;
+	esac
 
 	local gcc_generic_configure_options=(
 			--prefix="${install_prefix}"
@@ -617,84 +637,84 @@ build_and_install_gmp_mpfr_mpc() {
 	&& echo "completed"
 }
 
-# Linux API Headers
-# https://www.linuxfromscratch.org/lfs/view/stable/chapter05/linux-headers.html
-build_and_install_target_linux_headers() {
-	local target="$1"
-	local toolchain="$2"
-	local build_type="$3"
-	local host_triple="$4"
-	local package="$5"
-	local version="$6"
+# # Linux API Headers
+# # https://www.linuxfromscratch.org/lfs/view/stable/chapter05/linux-headers.html
+# build_and_install_target_linux_headers() {
+# 	local target="$1"
+# 	local toolchain="$2"
+# 	local build_type="$3"
+# 	local host_triple="$4"
+# 	local package="$5"
+# 	local version="$6"
 
-	local source_dir="${package}"
-	local sysroot="$(pwd)/_sysroot/${target}"
+# 	local source_dir="${package}"
+# 	local sysroot="$(pwd)/_sysroot/${target}"
 
-	pushd "${source_dir}" \
-	&& make mrproper \
-	&& make headers \
-	&& find usr/include -type f ! -name '*.h' -delete \
-	&& cp -rv usr/include "${sysroot}"/usr \
-	&& popd
-}
+# 	pushd "${source_dir}" \
+# 	&& make mrproper \
+# 	&& make headers \
+# 	&& find usr/include -type f ! -name '*.h' -delete \
+# 	&& cp -rv usr/include "${sysroot}"/usr \
+# 	&& popd
+# }
 
-# Glibc
-# https://www.linuxfromscratch.org/lfs/view/stable/chapter05/glibc.html
-build_and_install_target_glibc() {
-	local target="$1"
-	local toolchain="$2"
-	local build_type="$3"
-	local host_triple="$4"
-	local package="$5"
-	local version="$6"
+# # Glibc
+# # https://www.linuxfromscratch.org/lfs/view/stable/chapter05/glibc.html
+# build_and_install_target_glibc() {
+# 	local target="$1"
+# 	local toolchain="$2"
+# 	local build_type="$3"
+# 	local host_triple="$4"
+# 	local package="$5"
+# 	local version="$6"
 
-	local source_dir="${package}"
-	local build_dir="${source_dir}"-build
-	local sysroot="$(pwd)/_sysroot/${target}"
+# 	local source_dir="${package}"
+# 	local build_dir="${source_dir}"-build
+# 	local sysroot="$(pwd)/_sysroot/${target}"
 
-	../configure \
-		--prefix=/usr \
-		--host="${target}" \
-		--build="${host_triple}" \
-		--enable-kernel=4.19 \
-		--with-headers="${sysroot}"/usr/include \
-		--disable-nscd \
-		libc_cv_slibdir=/usr/lib
+# 	../configure \
+# 		--prefix=/usr \
+# 		--host="${target}" \
+# 		--build="${host_triple}" \
+# 		--enable-kernel=4.19 \
+# 		--with-headers="${sysroot}"/usr/include \
+# 		--disable-nscd \
+# 		libc_cv_slibdir=/usr/lib
 
-	make
+# 	make
 
-	make DESTDIR="${sysroot}" install
-}
+# 	make DESTDIR="${sysroot}" install
+# }
 
-# Libstdc++
-# https://www.linuxfromscratch.org/lfs/view/stable/chapter05/gcc-libstdc++.html
-build_and_install_target_libstdcxx() {
-	local target="$1"
-	local toolchain="$2"
-	local build_type="$3"
-	local host_triple="$4"
-	local package="$5"
-	local version="$6"
+# # Libstdc++
+# # https://www.linuxfromscratch.org/lfs/view/stable/chapter05/gcc-libstdc++.html
+# build_and_install_target_libstdcxx() {
+# 	local target="$1"
+# 	local toolchain="$2"
+# 	local build_type="$3"
+# 	local host_triple="$4"
+# 	local package="$5"
+# 	local version="$6"
 
-	local source_dir="${package}"
-	local build_dir="${source_dir}"-build
-	local sysroot="$(pwd)/_sysroot/${target}"
+# 	local source_dir="${package}"
+# 	local build_dir="${source_dir}"-build
+# 	local sysroot="$(pwd)/_sysroot/${target}"
 
-	../libstdc++-v3/configure \
-		--host="${target}" \
-		--build="${host_triple}" \
-		--prefix=/usr \
-		--disable-multilib \
-		--disable-nls \
-		--disable-libstdcxx-pch \
-		--with-gxx-include-dir=/tools/$LFS_TGT/include/c++/13.2.0
+# 	../libstdc++-v3/configure \
+# 		--host="${target}" \
+# 		--build="${host_triple}" \
+# 		--prefix=/usr \
+# 		--disable-multilib \
+# 		--disable-nls \
+# 		--disable-libstdcxx-pch \
+# 		--with-gxx-include-dir=/tools/$LFS_TGT/include/c++/13.2.0
 
-	make
+# 	make
 
-	make DESTDIR="${sysroot}" install
+# 	make DESTDIR="${sysroot}" install
 
-	rm -v "${sysroot}"/usr/lib/lib{stdc++{,exp,fs},supc++}.la
-}
+# 	rm -v "${sysroot}"/usr/lib/lib{stdc++{,exp,fs},supc++}.la
+# }
 
 build_and_install_binutils_gcc_for_target() {
 	local target="$1"

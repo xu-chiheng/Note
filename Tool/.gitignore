@@ -29,10 +29,10 @@
 /*.bz2
 /*.gz
 /*.zst
-/__mingw-vcrt
-/__mingw-ucrt
-/__cygwin
-/__linux
+/__mingw-vcrt*
+/__mingw-ucrt*
+/__cygwin*
+/__linux*
 
 !/*.sha512
 !/*.cygport

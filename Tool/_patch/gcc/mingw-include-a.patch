@@ -1,0 +1,52 @@
+diff --git a/gcc/incpath.cc b/gcc/incpath.cc
+index 5b09966ec94..95dacfe4d7b 100644
+--- a/gcc/incpath.cc
++++ b/gcc/incpath.cc
+@@ -141,6 +141,11 @@ add_standard_paths (const char *sysroot, const char *iprefix,
+   int relocated = cpp_relocated ();
+   size_t len;
+ 
++	bool host_is_mingw = false;
++#ifdef __MINGW32__
++	host_is_mingw = true;
++#endif
++
+   if (iprefix && (len = cpp_GCC_INCLUDE_DIR_len) != 0)
+     {
+       /* Look for directories that start with the standard prefix.
+@@ -191,9 +196,27 @@ add_standard_paths (const char *sysroot, const char *iprefix,
+ 	{
+ 	  char *str;
+ 
++	if (host_is_mingw) {
++		if (p->fname[0] == '/') {
++			continue;
++		} else if (!filename_ncmp (p->fname, cpp_PREFIX, cpp_PREFIX_len)) {
++			if (p->add_sysroot) {
++				if (sysroot) {
++					goto label_sysroot;
++				} else {
++					continue;
++				}
++			} else {
++				goto label_relocated;
++			}
++		} else {
++			continue;
++		}
++	}
+ 	  /* Should this directory start with the sysroot?  */
+ 	  if (sysroot && p->add_sysroot)
+ 	    {
++label_sysroot:
+ 	      char *sysroot_no_trailing_dir_separator = xstrdup (sysroot);
+ 	      size_t sysroot_len = strlen (sysroot);
+ 
+@@ -205,6 +228,7 @@ add_standard_paths (const char *sysroot, const char *iprefix,
+ 	  else if (!p->add_sysroot && relocated
+ 		   && !filename_ncmp (p->fname, cpp_PREFIX, cpp_PREFIX_len))
+ 	    {
++label_relocated:
+  	      static const char *relocated_prefix;
+ 	      char *ostr;
+ 	      /* If this path starts with the configure-time prefix,

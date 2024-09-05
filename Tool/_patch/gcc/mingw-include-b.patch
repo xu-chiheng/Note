@@ -1,0 +1,15 @@
+diff --git a/gcc/incpath.cc b/gcc/incpath.cc
+index 5b09966ec94..95dacfe4d7b 100644
+--- a/gcc/incpath.cc
++++ b/gcc/incpath.cc
+@@ -492,6 +516,10 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p, i
+   p->canonical_name = 0;
+ #ifndef INO_T_EQ
+   p->canonical_name = lrealpath (path);
++#endif
++#if defined(__CYGWIN__) || defined(__MINGW32__)
++  p->name = lrealpath (path);;
++  free(path);
+ #endif
+   if (chain == INC_SYSTEM || chain == INC_AFTER)
+     p->sysp = 1 + !cxx_aware;

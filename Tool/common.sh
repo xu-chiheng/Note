@@ -129,25 +129,6 @@ check_toolchain_build_type_and_set_compiler_flags() {
 		x86_64-pc-mingw64 )
 			mingw_gcc_check_or_create_directory_links
 
-			# https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html
-			# https://stackoverflow.com/questions/20483619/lib-vs-libpath-environment-variables-difference-for-ms-visual-c-c
-
-			# When using Microsoft Visual C++ (MSVC), the INCLUDE and LIB environment variables are used to specify search paths for header files and libraries: 
-			# INCLUDE
-			# Specifies the search path for the system #include header files. The INCLUDE variable should point to the \include subdirectory of your Visual Studio installation. 
-			# LIB
-			# Specifies the search path for libraries. The LIB variable can contain multiple path specifications, separated by semicolons. One path should point to the \lib subdirectory of your Visual C++ installation. 
-			# Other environment variables that can be used with MSVC include: 
-			# CL: Prepends options and arguments to the command-line arguments. 
-			# _CL_: Appends options and arguments to the command-line arguments. 
-			# LIBPATH: Specifies directories to search for metadata files referenced with #using. The linker will search the path specified by the /LIBPATH option before searching the path specified in the LIB environment variable. 
-			# PATH: Used if the tool needs to run CVTRES and can't find the file in the same directory as link.exe. The PATH variable should point to the \bin subdirectory of your Visual C++ installation. 
-			# TMP: Specifies a directory when linking OMF or .res files. 
-
-			# local mingw_root_dir="$(print_mingw_root_dir)"
-			# export INCLUDE="$(cygpath -m "${mingw_root_dir}")/include"
-			# export LIB="$(cygpath -m "${mingw_root_dir}")/lib"
-
 			local mingw_c_cxx_common_flags=(  )
 			# mingw_c_cxx_common_flags+=( -mcmodel=medium )
 			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )

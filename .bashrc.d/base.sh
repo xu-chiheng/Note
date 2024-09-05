@@ -157,6 +157,64 @@ set_environment_variables_at_bash_startup() {
 				true
 				;;
 		esac
+
+		case "${HOST_TRIPLE}" in
+			x86_64-pc-mingw64 )
+				# https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html
+				# https://stackoverflow.com/questions/20483619/lib-vs-libpath-environment-variables-difference-for-ms-visual-c-c
+
+				# When using Microsoft Visual C++ (MSVC), the INCLUDE and LIB environment variables are used to specify search paths for header files and libraries: 
+				# INCLUDE
+				# Specifies the search path for the system #include header files. The INCLUDE variable should point to the \include subdirectory of your Visual Studio installation. 
+				# LIB
+				# Specifies the search path for libraries. The LIB variable can contain multiple path specifications, separated by semicolons. One path should point to the \lib subdirectory of your Visual C++ installation. 
+				# Other environment variables that can be used with MSVC include: 
+				# CL: Prepends options and arguments to the command-line arguments. 
+				# _CL_: Appends options and arguments to the command-line arguments. 
+				# LIBPATH: Specifies directories to search for metadata files referenced with #using. The linker will search the path specified by the /LIBPATH option before searching the path specified in the LIB environment variable. 
+				# PATH: Used if the tool needs to run CVTRES and can't find the file in the same directory as link.exe. The PATH variable should point to the \bin subdirectory of your Visual C++ installation. 
+				# TMP: Specifies a directory when linking OMF or .res files. 
+
+
+
+				# Does the GCC compiler use environment variables like INCLUDE and LIB in MSVC to specify include and library directories?
+
+				# The GCC compiler does have a similar mechanism for specifying include and library directories, but the names of the environment variables differ from those in MSVC. For GCC:
+
+				# 1. Include directories (equivalent to MSVC's INCLUDE):
+				#    - `C_INCLUDE_PATH`: for C header files
+				#    - `CPLUS_INCLUDE_PATH`: for C++ header files
+
+				# 2. Library directories (equivalent to MSVC's LIB):
+				#    - `LIBRARY_PATH`: for specifying library file search paths
+
+				# By using these environment variables, you can set GCC's default search paths. For example:
+
+				# ```bash
+				# export C_INCLUDE_PATH=/path/to/include
+				# export CPLUS_INCLUDE_PATH=/path/to/cpp/include
+				# export LIBRARY_PATH=/path/to/lib
+				# ```
+
+				# In addition to environment variables, GCC also provides command-line options to specify these paths:
+
+				# - `-I<dir>`: Adds an include search path
+				# - `-L<dir>`: Adds a library search path
+
+				# These command-line options usually take precedence over environment variables.
+
+				# It's important to note that while these environment variables work in GCC, they are not as commonly used as the INCLUDE and LIB variables in MSVC. In the GCC environment, it's more common to specify these paths directly in the compile command or manage them using a build system like Makefile.
+
+
+				# local mingw_root_dir="$(print_mingw_root_dir)"
+				# local mingw_root_dir_2="$(cygpath -m "${mingw_root_dir}")"
+				# export C_INCLUDE_PATH="${mingw_root_dir_2}/include"
+				# export CPLUS_INCLUDE_PATH="${mingw_root_dir_2}/include"
+				# export LIBRARY_PATH="${mingw_root_dir_2}/lib"
+
+				true
+				;;
+		esac
 	fi
 
 	if host_triple_is_windows "${HOST_TRIPLE}"; then

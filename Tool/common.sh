@@ -189,23 +189,6 @@ print_gcc_install_dir() {
 	print_program_dir_upper_dir gcc
 }
 
-print_mingw_root_dir() {
-	case "${MSYSTEM}" in
-		MINGW64 )
-			# msvcrt.dll
-			echo "/mingw64"
-			;;
-		UCRT64 )
-			# ucrtbase.dll
-			echo "/ucrt64"
-			;;
-		* )
-			echo "unknown MSYSTEM : ${MSYSTEM}"
-			return 1
-			;;
-	esac
-}
-
 mingw_gcc_check_or_create_directory_links() {
 	if quiet_command which gcc; then
 		local gcc_install_dir="$(print_gcc_install_dir)"

@@ -99,6 +99,23 @@ host_triple_is_linux() {
 	esac
 }
 
+print_mingw_root_dir() {
+	case "${MSYSTEM}" in
+		MINGW64 )
+			# msvcrt.dll
+			echo "/mingw64"
+			;;
+		UCRT64 )
+			# ucrtbase.dll
+			echo "/ucrt64"
+			;;
+		* )
+			echo "unknown MSYSTEM : ${MSYSTEM}"
+			return 1
+			;;
+	esac
+}
+
 # Note : this function can't print any message, otherwise, FileZilla and WinSCP can't connect to this VPS through SFTP(FTP over SSH).
 set_environment_variables_at_bash_startup() {
 	export HOST_TRIPLE="$(print_host_triple)"
@@ -177,6 +194,7 @@ set_environment_variables_at_bash_startup() {
 
 
 
+
 				# Does the GCC compiler use environment variables like INCLUDE and LIB in MSVC to specify include and library directories?
 
 				# The GCC compiler does have a similar mechanism for specifying include and library directories, but the names of the environment variables differ from those in MSVC. For GCC:
@@ -206,11 +224,70 @@ set_environment_variables_at_bash_startup() {
 				# It's important to note that while these environment variables work in GCC, they are not as commonly used as the INCLUDE and LIB variables in MSVC. In the GCC environment, it's more common to specify these paths directly in the compile command or manage them using a build system like Makefile.
 
 
-				# local mingw_root_dir="$(print_mingw_root_dir)"
-				# local mingw_root_dir_2="$(cygpath -m "${mingw_root_dir}")"
-				# export C_INCLUDE_PATH="${mingw_root_dir_2}/include"
-				# export CPLUS_INCLUDE_PATH="${mingw_root_dir_2}/include"
-				# export LIBRARY_PATH="${mingw_root_dir_2}/lib"
+
+
+				# Does the GCC compiler use environment variables like INCLUDE and LIB in MSVC to specify include and library directories?
+				# No, the GCC (GNU Compiler Collection) compiler does not use environment variables named `INCLUDE` and `LIB` like Microsoft Visual C++ (MSVC) to specify include and library directories. Instead, GCC utilizes a different set of environment variables and command-line options to manage these directories.
+
+				# **Environment Variables Used by GCC:**
+
+				# 1. **`CPATH`**: Specifies a list of directories that GCC should search for header files during compilation. The directories listed in `CPATH` are searched as if specified with the `-I` option, affecting both C and C++ compilers.
+
+				# 2. **`LIBRARY_PATH`**: Defines a list of directories for GCC to search for library files during linking. These directories are searched as if specified with the `-L` option.
+
+				# 3. **`C_INCLUDE_PATH`**: Specifies directories to be searched for C header files only. These directories are searched before those in `CPATH`.
+
+				# 4. **`CPLUS_INCLUDE_PATH`**: Similar to `C_INCLUDE_PATH`, but for C++ header files.
+
+				# 5. **`OBJC_INCLUDE_PATH`**: Specifies directories for Objective-C header files.
+
+				# **Usage Example:**
+
+				# To set these environment variables in a Unix-like shell:
+
+				# ```bash
+				# export CPATH=/path/to/includes
+				# export LIBRARY_PATH=/path/to/libs
+				# ```
+
+				# **Command-Line Options:**
+
+				# Alternatively, you can specify include and library directories directly in the GCC command line:
+
+				# - **`-I`**: Adds a directory to the list of directories to be searched for header files.
+
+				#   ```bash
+				#   gcc -I/path/to/includes myprogram.c -o myprogram
+				#   ```
+
+				# - **`-L`**: Adds a directory to the list of directories to be searched for library files during linking.
+
+				#   ```bash
+				#   gcc myprogram.o -L/path/to/libs -lmylib -o myprogram
+				#   ```
+
+				# **Why GCC Doesn't Use `INCLUDE` and `LIB`:**
+
+				# The environment variables `INCLUDE` and `LIB` are specific to MSVC and the Windows development environment. GCC was designed to be cross-platform and adheres to Unix-like conventions, which is why it uses different environment variables.
+
+				# **Summary:**
+
+				# - GCC uses `CPATH`, `LIBRARY_PATH`, `C_INCLUDE_PATH`, and `CPLUS_INCLUDE_PATH` to specify additional include and library directories.
+				# - You can also use `-I` and `-L` command-line options to specify directories directly.
+				# - `INCLUDE` and `LIB` are not recognized by GCC.
+
+				# **References:**
+
+				# - [GCC Environment Variables](https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html)
+				# - [Specifying Target Directories in GCC](https://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html)
+
+
+
+
+				local mingw_root_dir="$(print_mingw_root_dir)"
+				local mingw_root_dir_2="$(cygpath -m "${mingw_root_dir}")"
+				export INCLUDE="${mingw_root_dir_2}/include"
+				# export LIB="${mingw_root_dir_2}/lib"
 
 				true
 				;;

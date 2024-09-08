@@ -1,15 +1,251 @@
 diff --git a/gcc/incpath.cc b/gcc/incpath.cc
-index 5b09966ec94..95dacfe4d7b 100644
+index cbe556a2f59..c9bd56fd9ae 100644
 --- a/gcc/incpath.cc
 +++ b/gcc/incpath.cc
-@@ -492,6 +516,10 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p, i
-   p->canonical_name = 0;
- #ifndef INO_T_EQ
-   p->canonical_name = lrealpath (path);
-+#endif
+@@ -456,6 +456,227 @@ add_cpp_dir_path (cpp_dir *p, incpath_kind chain)
+   tails[chain] = p;
+ }
+ 
 +#if defined(__CYGWIN__) || defined(__MINGW32__)
-+  p->name = lrealpath (path);;
-+  free(path);
- #endif
-   if (chain == INC_SYSTEM || chain == INC_AFTER)
-     p->sysp = 1 + !cxx_aware;
++
++size_t update_path_1(char * path, size_t len)
++{
++	size_t i = 0;
++	while (i < len) {
++		if (path[i] == '\\') {
++			path[i] = '/';
++		}
++		i++;
++	}
++	path[i] = 0;
++	return i;
++}
++
++size_t update_path_2(char * path, size_t len)
++{
++	size_t i = 0;
++	size_t j = 0;
++	while (i < len) {
++		path[j++] = path[i];
++		if (path[i] == '/') {
++			while (i < len && path[i] == '/') {
++				i++;
++			}
++		} else {
++			i++;
++		}
++	}
++	if (j == 3
++		&& ((path[j - 3] >= 'a' && path[j - 3] <= 'z') || (path[j - 3] >= 'A' && path[j - 3] <= 'Z'))
++		&& path[j - 2] == ':' && path[j - 1] == '/') {
++		// D:/
++
++	} else if (j > 1 && path[j - 1] == '/') {
++		// remove the trailing /
++		j--;
++	}
++	path[j] = 0;
++	return j;
++}
++
++size_t update_path_3(char * path, size_t len)
++{
++	size_t i = 0;
++	size_t j = 0;
++	if (i < len && path[i] == '/') {
++		i += 1;
++		j += 1;
++	} else if (i + 2 < len 
++		&& ((path[i] >= 'a' && path[i] <= 'z') || (path[i] >= 'A' && path[i] <= 'Z'))
++		&& path[i + 1] == ':' && path[i + 2] == '/') {
++		i += 3;
++		j += 3;
++	} else {
++		// relative path
++
++	}
++	// -I./././gcc/libgcc/.
++	while (i + 1 < len) {
++		if (path[i] == '.' && path[i + 1] == '/') {
++			i += 2;
++			j += 2;
++		} else {
++			break;
++		}
++	}
++	while (i < len && path[i] != '/') {
++		i++;
++		j++;
++	}
++	// i == len || path[i] == '/'
++	while (i + 1 < len) {
++		// i + 2 <= len
++		if (path[i] == '/' && path[i + 1] == '.') {
++			if (i + 2 < len) {
++				if (path[i + 2] == '/') {
++					// see /./
++label1:
++					// see /./ or /.\0
++					i += 2;
++					continue;
++				} else {
++					// not /./, like /.a
++					path[j++] = path[i++];
++					path[j++] = path[i++];
++				}
++			} else {
++				// i + 2 == len
++				// see /.\0
++				goto label1;
++			}
++		} else {
++			path[j++] = path[i++];
++			continue;
++		}
++	}
++	while (i < len) {
++		path[j++] = path[i++];
++	}
++	path[j] = 0;
++	return j;
++}
++
++size_t update_path_4(char * path, size_t len)
++{
++	size_t i = 0;
++	size_t j = 0;
++	if (i < len && path[i] == '/') {
++		i += 1;
++		j += 1;
++		goto label_absolute;
++	} else if (i + 2 < len 
++		&& ((path[i] >= 'a' && path[i] <= 'z') || (path[i] >= 'A' && path[i] <= 'Z')) 
++		&& path[i + 1] == ':' && path[i + 2] == '/') {
++		i += 3;
++		j += 3;
++		goto label_absolute;
++	} else {
++		// relative path
++		goto label_relative;
++	}
++label_absolute:
++	if (((i + 2 < len) && (path[i] == '.' && path[i + 1] == '.' && path[i + 2] == '/'))
++		|| ((i + 2 == len) && (path[i] == '.' && path[i + 1] == '.'))) {
++		// see ../ or ..\0
++		// error
++		goto label_error;
++	}
++label_relative:
++	// -I../../../gcc/libgcc/.
++	while (i + 2 < len) {
++		if (path[i] == '.' && path[i + 1] == '.' && path[i + 2] == '/') {
++			i += 3;
++			j += 3;
++		} else {
++			break;
++		}
++	}
++	while (i < len && path[i] != '/') {
++		i++;
++		j++;
++	}
++	// i == len || path[i] == '/'
++	while (i + 2 < len) {
++		// i + 3 <= len
++		if (path[i] == '/' && path[i + 1] == '.' && path[i + 2] == '.') {
++			if (i + 3 < len) {
++				if (path[i + 3] == '/') {
++					// see /../
++label1:
++					i += 3;
++					if (j == 0) {
++label3:
++						path[j++] = '.';
++						path[j++] = '.';
++						path[j++] = '/';
++						continue;
++					} else if (j > 0 && path[j - 1] == '/') {
++						if (j == 1) {
++							// root
++							goto label_error;
++						} else if (j == 3 && ((path[j - 3] >= 'a' && path[j - 3] <= 'z') || (path[j - 3] >= 'A' && path[j - 3] <= 'Z')) && path[j - 2] == ':' ) {
++							// device root
++							goto label_error;
++						} else {
++							// relative
++						}
++						j--;
++						if ((j >= 3 && path[j - 3] == '/' && path[j - 2] == '.' && path[j - 1] == '.')
++							|| (j == 2 && path[j - 2] == '.' && path[j - 1] == '.')){
++							j++;
++							goto label3;
++						} else {
++label2:
++							while (j > 0 && path[j - 1] != '/') {
++								j--;
++							}
++							// j == 0 || (j > 0 && path[j - 1] == '/')
++							continue;
++						}
++					} else {
++						// j > 0 && path[j - 1] != '/'
++						goto label2;
++					}
++				} else {
++					// not /../, like /..a
++					for (size_t k = 0; k < 4; k++) {
++						path[j++] = path[i++];
++					}
++					continue;
++				}
++			} else {
++				// i + 3 == len
++				// see /..\0
++				goto label1;
++			}
++		} else {
++			path[j++] = path[i++];
++			continue;
++		}
++	}
++	while (i < len) {
++		path[j++] = path[i++];
++	}
++label_error:
++	path[j] = 0;
++	return j;
++}
++
++size_t update_path_0(char * path, size_t len)
++{
++	len = update_path_1(path, len);
++	len = update_path_2(path, len);
++	len = update_path_3(path, len);
++	len = update_path_4(path, len);
++	len = update_path_2(path, len);
++	return len;
++}
++#endif
++
+ /* Add PATH to the include chain CHAIN. PATH must be malloc-ed and
+    NUL-terminated.  */
+ void
+@@ -464,7 +685,7 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
+   cpp_dir *p;
+   size_t pathlen = strlen (path);
+ 
+-#if defined (HAVE_DOS_BASED_FILE_SYSTEM)
++#if 0
+   /* Remove unnecessary trailing slashes.  On some versions of MS
+      Windows, trailing  _forward_ slashes cause no problems for stat().
+      On newer versions, stat() does not recognize a directory that ends
+@@ -481,6 +702,9 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
+ 
+   p = XNEW (cpp_dir);
+   p->next = NULL;
++#if defined(__CYGWIN__) || defined(__MINGW32__)
++  pathlen = update_path_0(path, pathlen);
++#endif
+   p->name = path;
+   p->len = pathlen;
+ #ifndef INO_T_EQ

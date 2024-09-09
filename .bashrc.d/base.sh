@@ -287,9 +287,7 @@ set_environment_variables_at_bash_startup() {
 				local mingw_root_dir="$(print_mingw_root_dir)"
 				local mingw_root_dir_2="$(cygpath -m "${mingw_root_dir}")"
 				export INCLUDE="${mingw_root_dir_2}/include"
-				# export LIB="${mingw_root_dir_2}/lib"
-
-				true
+				export LIB="${mingw_root_dir_2}/lib"
 				;;
 		esac
 	fi

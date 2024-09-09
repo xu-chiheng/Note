@@ -10,9 +10,10 @@ CYGWIN_DIR=D:\cygwin64
 MSYS2_DIR=D:\msys64
 VS2022_DIR=C:\Program Files\Microsoft Visual Studio\2022\Enterprise
 VCPKG_DIR=D:\vcpkg
-HOME=%USERPROFILE%
+HOME=%USERPROFILE%          # can be any directory
+DATA_DIR=D:\Data            # optional, only for my data backup
 
-I also use one of the following commands to make a link, this is optional.
-ln -s ~ "$(cygpath -u 'E:\Note')"
-mklink /D E:\Note %USERPROFILE%
-ln -s ~ /mnt/work/Note
+I also use one of the following commands to make a link :
+ln -s ~ "$(cygpath -u 'E:\Note')"     # using Cygwin or MSYS2/MinGW bash in mintty terminal
+mklink /D E:\Note %HOME%              # using Windows cmd.exe command prompt
+ln -s ~ /mnt/work/Note                # using Linux bash in terminal

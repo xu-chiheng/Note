@@ -34,10 +34,10 @@ index 7109faa1072d..378218119f37 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..13e724e88490
+index 000000000000..5ab470073d00
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,795 @@
+@@ -0,0 +1,764 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ----------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -165,37 +165,6 @@ index 000000000000..13e724e88490
 +    break;
 +  default:
 +    D.Diag(diag::err_target_unknown_triple) << TC.getEffectiveTriple().str();
-+  }
-+
-+  if (!Args.getLastArgValue(options::OPT_fuse_ld_EQ, "link")
-+           .equals_insensitive("lld")) {
-+    if (TC.getArch() == llvm::Triple::x86) {
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_Znwj");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_Znaj");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_ZnwjRKSt9nothrow_t");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_ZnajRKSt9nothrow_t");
-+    } else {
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_Znwm");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_Znam");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_ZnwmRKSt9nothrow_t");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_ZnamRKSt9nothrow_t");
-+    }
-+    CmdArgs.push_back("--wrap");
-+    CmdArgs.push_back("_ZdlPv");
-+    CmdArgs.push_back("--wrap");
-+    CmdArgs.push_back("_ZdaPv");
-+    CmdArgs.push_back("--wrap");
-+    CmdArgs.push_back("_ZdlPvRKSt9nothrow_t");
-+    CmdArgs.push_back("--wrap");
-+    CmdArgs.push_back("_ZdaPvRKSt9nothrow_t");
 +  }
 +
 +  Arg *SubsysArg =

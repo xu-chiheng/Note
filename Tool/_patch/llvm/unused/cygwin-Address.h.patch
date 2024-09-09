@@ -1,7 +1,5 @@
 diff --git a/clang/lib/CodeGen/Address.h b/clang/lib/CodeGen/Address.h
-old mode 100644
-new mode 100755
-index cf48df8f5e73..f233f19414d6
+index cf48df8f5e73..f233f19414d6 100644
 --- a/clang/lib/CodeGen/Address.h
 +++ b/clang/lib/CodeGen/Address.h
 @@ -25,32 +25,93 @@ namespace CodeGen {

@@ -34,10 +34,10 @@ index 661d9977fbc5..6c9bb2c70260 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..6bfb8a870990
+index 000000000000..5800d019dc6a
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,756 @@
+@@ -0,0 +1,726 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ------------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -165,36 +165,6 @@ index 000000000000..6bfb8a870990
 +    break;
 +  default:
 +    llvm_unreachable("Unsupported target architecture.");
-+  }
-+
-+  if (!Args.getLastArgValue(options::OPT_fuse_ld_EQ, "link").equals_insensitive("lld")) {
-+    if (TC.getArch() == llvm::Triple::x86) {
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_Znwj");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_Znaj");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_ZnwjRKSt9nothrow_t");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_ZnajRKSt9nothrow_t");
-+    } else {
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_Znwm");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_Znam");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_ZnwmRKSt9nothrow_t");
-+      CmdArgs.push_back("--wrap");
-+      CmdArgs.push_back("_ZnamRKSt9nothrow_t");
-+    }
-+    CmdArgs.push_back("--wrap");
-+    CmdArgs.push_back("_ZdlPv");
-+    CmdArgs.push_back("--wrap");
-+    CmdArgs.push_back("_ZdaPv");
-+    CmdArgs.push_back("--wrap");
-+    CmdArgs.push_back("_ZdlPvRKSt9nothrow_t");
-+    CmdArgs.push_back("--wrap");
-+    CmdArgs.push_back("_ZdaPvRKSt9nothrow_t");
 +  }
 +
 +  Arg *SubsysArg =

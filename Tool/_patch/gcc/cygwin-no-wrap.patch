@@ -1,0 +1,44 @@
+diff --git a/gcc/config/i386/cygwin-w64.h b/gcc/config/i386/cygwin-w64.h
+index 21a28a7c42e..467437ab872 100644
+--- a/gcc/config/i386/cygwin-w64.h
++++ b/gcc/config/i386/cygwin-w64.h
+@@ -27,16 +27,7 @@ along with GCC; see the file COPYING3.  If not see
+ /* To implement C++ function replacement we always wrap the cxx
+    malloc-like operators.  See N2800 #17.6.4.6 [replacement.functions] */
+ #undef CXX_WRAP_SPEC_LIST
+-#define CXX_WRAP_SPEC_LIST " \
+-  --wrap _Znwm \
+-  --wrap _Znam \
+-  --wrap _ZdlPv \
+-  --wrap _ZdaPv \
+-  --wrap _ZnwmRKSt9nothrow_t \
+-  --wrap _ZnamRKSt9nothrow_t \
+-  --wrap _ZdlPvRKSt9nothrow_t \
+-  --wrap _ZdaPvRKSt9nothrow_t \
+-"
++#define CXX_WRAP_SPEC_LIST ""
+ 
+ #undef SPEC_32
+ #undef SPEC_64
+diff --git a/gcc/config/i386/cygwin.h b/gcc/config/i386/cygwin.h
+index 63de10c17d4..cc8aa7b6fbe 100644
+--- a/gcc/config/i386/cygwin.h
++++ b/gcc/config/i386/cygwin.h
+@@ -93,16 +93,7 @@ along with GCC; see the file COPYING3.  If not see
+ 
+ /* To implement C++ function replacement we always wrap the cxx
+    malloc-like operators.  See N2800 #17.6.4.6 [replacement.functions] */
+-#define CXX_WRAP_SPEC_LIST " \
+-  --wrap _Znwj \
+-  --wrap _Znaj \
+-  --wrap _ZdlPv \
+-  --wrap _ZdaPv \
+-  --wrap _ZnwjRKSt9nothrow_t \
+-  --wrap _ZnajRKSt9nothrow_t \
+-  --wrap _ZdlPvRKSt9nothrow_t \
+-  --wrap _ZdaPvRKSt9nothrow_t \
+-"
++#define CXX_WRAP_SPEC_LIST ""
+ 
+ #if defined (USE_CYGWIN_LIBSTDCXX_WRAPPERS)
+ 

@@ -6,7 +6,7 @@ index cbe556a2f59..c9bd56fd9ae 100644
    add_env_var_paths ("CPATH", INC_BRACKET);
    add_env_var_paths (lang_env_vars[idx], INC_SYSTEM);
  
-+#if defined(__MINGW32__) && !defined(CROSS_COMPILE)
++#if defined(_WIN32) && !defined(__CYGWIN__) && !defined(CROSS_COMPILE)
 +  add_env_var_paths ("INCLUDE", INC_AFTER);
 +#endif
 +

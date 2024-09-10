@@ -7,7 +7,7 @@ index 5b09966ec94..95dacfe4d7b 100644
    size_t len;
  
 +	bool host_is_mingw = false;
-+#ifdef __MINGW32__
++#if defined(_WIN32) && !defined(__CYGWIN__)
 +	host_is_mingw = true;
 +#endif
 +

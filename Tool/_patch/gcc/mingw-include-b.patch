@@ -1,33 +1,112 @@
 diff --git a/gcc/incpath.cc b/gcc/incpath.cc
-index cbe556a2f59..c9bd56fd9ae 100644
+index 07e3d565bb2..2dacb432ffa 100644
 --- a/gcc/incpath.cc
 +++ b/gcc/incpath.cc
-@@ -456,6 +456,227 @@ add_cpp_dir_path (cpp_dir *p, incpath_kind chain)
-   tails[chain] = p;
- }
+@@ -464,7 +464,7 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
+   cpp_dir *p;
+   size_t pathlen = strlen (path);
  
-+#if defined(__CYGWIN__) || defined(__MINGW32__)
+-#if defined (HAVE_DOS_BASED_FILE_SYSTEM)
++#if 0
+   /* Remove unnecessary trailing slashes.  On some versions of MS
+      Windows, trailing  _forward_ slashes cause no problems for stat().
+      On newer versions, stat() does not recognize a directory that ends
+@@ -481,6 +481,7 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
+ 
+   p = XNEW (cpp_dir);
+   p->next = NULL;
++  pathlen = convert_path(path, pathlen);
+   p->name = path;
+   p->len = pathlen;
+ #ifndef INO_T_EQ
+diff --git a/include/libiberty.h b/include/libiberty.h
+index 02988e0ac91..230b00da809 100644
+--- a/include/libiberty.h
++++ b/include/libiberty.h
+@@ -137,6 +137,10 @@ extern const char *unix_lbasename (const char *) ATTRIBUTE_RETURNS_NONNULL ATTRI
+ 
+ extern char *lrealpath (const char *);
+ 
++size_t convert_path(char * path, size_t len);
 +
-+size_t update_path_1(char * path, size_t len)
++size_t convert_paths(char * paths, size_t len, char path_separator);
++
+ /* Return true when FD file descriptor exists.  */
+ 
+ extern int is_valid_fd (int fd);
+diff --git a/libiberty/xstrdup.c b/libiberty/xstrdup.c
+index fa12c96a3cd..a12fed3ece5 100644
+--- a/libiberty/xstrdup.c
++++ b/libiberty/xstrdup.c
+@@ -34,3 +34,345 @@ xstrdup (const char *s)
+   register char *ret = XNEWVEC (char, len);
+   return (char *) memcpy (ret, s, len);
+ }
++
++#include <stdbool.h>
++
++static
++size_t convert_path_0(char * path, size_t len)
 +{
-+	size_t i = 0;
-+	while (i < len) {
-+		if (path[i] == '\\') {
-+			path[i] = '/';
++	bool host_is_windows = false;
++#if defined(_WIN32) || defined(__CYGWIN__)
++	host_is_windows = true;
++#endif
++	if (host_is_windows) {
++		size_t i = 0;
++		while (i < len) {
++			if (path[i] == '\\') {
++				path[i] = '/';
++			}
++			i++;
 +		}
-+		i++;
 +	}
-+	path[i] = 0;
-+	return i;
++	path[len] = 0;
++	return len;
 +}
 +
-+size_t update_path_2(char * path, size_t len)
++static
++size_t convert_path_1(char * path, size_t len)
++{
++	bool host_is_windows = false;
++#if defined(_WIN32) || defined(__CYGWIN__)
++	host_is_windows = true;
++#endif
++	if (host_is_windows) {
++		size_t i = 0;
++		if (i + 1 < len
++			&& (path[i] >= 'a' && path[i] <= 'z')
++			&& path[i + 1] == ':') {
++			// i + 2 <= len
++			if (i + 2 < len) {
++				if (path[i + 2] == '/') {
++label1:
++					path[i] = path[i] - 'a' + 'A';
++					goto label2;
++				} else {
++					// error
++					goto label2;
++				}
++			} else {
++				// i + 2 == len
++				goto label1;	
++			}
++		}
++label2:
++	}
++	path[len] = 0;
++	return len;
++}
++
++static
++size_t convert_path_2(char * path, size_t len)
 +{
 +	size_t i = 0;
 +	size_t j = 0;
 +	while (i < len) {
 +		path[j++] = path[i];
 +		if (path[i] == '/') {
++			i++;
 +			while (i < len && path[i] == '/') {
 +				i++;
 +			}
@@ -35,28 +114,50 @@ index cbe556a2f59..c9bd56fd9ae 100644
 +			i++;
 +		}
 +	}
-+	if (j == 3
-+		&& ((path[j - 3] >= 'a' && path[j - 3] <= 'z') || (path[j - 3] >= 'A' && path[j - 3] <= 'Z'))
-+		&& path[j - 2] == ':' && path[j - 1] == '/') {
-+		// D:/
-+
-+	} else if (j > 1 && path[j - 1] == '/') {
++	bool host_is_windows = false;
++#if defined(_WIN32) || defined(__CYGWIN__)
++	host_is_windows = true;
++#endif
++	if (host_is_windows) {
++		if (j == 3
++			&& (path[j - 3] >= 'A' && path[j - 3] <= 'Z')
++			&& path[j - 2] == ':' && path[j - 1] == '/') {
++			// D:/
++			goto label_return;
++		} else {
++			goto label2;
++		}
++	} else {
++label2:
 +		// remove the trailing /
-+		j--;
++		if (j > 1 && path[j - 1] == '/') {
++			// j - 1 > 0
++			j--;
++		} else {
++			// j <= 1 || (j > 1 && path[j - 1] != '/')
++
++		}
++		goto label_return;
 +	}
++label_return:
 +	path[j] = 0;
 +	return j;
 +}
 +
-+size_t update_path_3(char * path, size_t len)
++static
++size_t convert_path_3(char * path, size_t len)
 +{
++	bool host_is_windows = false;
++#if defined(_WIN32) || defined(__CYGWIN__)
++	host_is_windows = true;
++#endif
 +	size_t i = 0;
 +	size_t j = 0;
 +	if (i < len && path[i] == '/') {
 +		i += 1;
 +		j += 1;
-+	} else if (i + 2 < len 
-+		&& ((path[i] >= 'a' && path[i] <= 'z') || (path[i] >= 'A' && path[i] <= 'Z'))
++	} else if (host_is_windows && i + 2 < len 
++		&& (path[i] >= 'A' && path[i] <= 'Z')
 +		&& path[i + 1] == ':' && path[i + 2] == '/') {
 +		i += 3;
 +		j += 3;
@@ -110,16 +211,21 @@ index cbe556a2f59..c9bd56fd9ae 100644
 +	return j;
 +}
 +
-+size_t update_path_4(char * path, size_t len)
++static
++size_t convert_path_4(char * path, size_t len)
 +{
++	bool host_is_windows = false;
++#if defined(_WIN32) || defined(__CYGWIN__)
++	host_is_windows = true;
++#endif
 +	size_t i = 0;
 +	size_t j = 0;
 +	if (i < len && path[i] == '/') {
 +		i += 1;
 +		j += 1;
 +		goto label_absolute;
-+	} else if (i + 2 < len 
-+		&& ((path[i] >= 'a' && path[i] <= 'z') || (path[i] >= 'A' && path[i] <= 'Z')) 
++	} else if (host_is_windows && i + 2 < len 
++		&& (path[i] >= 'A' && path[i] <= 'Z') 
 +		&& path[i + 1] == ':' && path[i + 2] == '/') {
 +		i += 3;
 +		j += 3;
@@ -168,7 +274,7 @@ index cbe556a2f59..c9bd56fd9ae 100644
 +						if (j == 1) {
 +							// root
 +							goto label_error;
-+						} else if (j == 3 && ((path[j - 3] >= 'a' && path[j - 3] <= 'z') || (path[j - 3] >= 'A' && path[j - 3] <= 'Z')) && path[j - 2] == ':' ) {
++						} else if (host_is_windows && j == 3 && (path[j - 3] >= 'A' && path[j - 3] <= 'Z') && path[j - 2] == ':' ) {
 +							// device root
 +							goto label_error;
 +						} else {
@@ -216,36 +322,65 @@ index cbe556a2f59..c9bd56fd9ae 100644
 +	return j;
 +}
 +
-+size_t update_path_0(char * path, size_t len)
++size_t convert_path(char * path, size_t len)
 +{
-+	len = update_path_1(path, len);
-+	len = update_path_2(path, len);
-+	len = update_path_3(path, len);
-+	len = update_path_4(path, len);
-+	len = update_path_2(path, len);
++	len = convert_path_0(path, len);
++	len = convert_path_1(path, len);
++	len = convert_path_2(path, len);
++	len = convert_path_3(path, len);
++	len = convert_path_4(path, len);
++	len = convert_path_2(path, len);
 +	return len;
 +}
-+#endif
 +
- /* Add PATH to the include chain CHAIN. PATH must be malloc-ed and
-    NUL-terminated.  */
- void
-@@ -464,7 +685,7 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
-   cpp_dir *p;
-   size_t pathlen = strlen (path);
- 
--#if defined (HAVE_DOS_BASED_FILE_SYSTEM)
-+#if 0
-   /* Remove unnecessary trailing slashes.  On some versions of MS
-      Windows, trailing  _forward_ slashes cause no problems for stat().
-      On newer versions, stat() does not recognize a directory that ends
-@@ -481,6 +702,9 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
- 
-   p = XNEW (cpp_dir);
-   p->next = NULL;
-+#if defined(__CYGWIN__) || defined(__MINGW32__)
-+  pathlen = update_path_0(path, pathlen);
-+#endif
-   p->name = path;
-   p->len = pathlen;
- #ifndef INO_T_EQ
++size_t convert_paths(char * paths, size_t len, char path_separator)
++{
++	size_t i = 0;
++	size_t j = 0;
++	while (i < len) {
++		size_t path_start, path_end;
++		path_start = i;
++		while (i < len && paths[i] != path_separator) {
++			i++;
++		}
++		// i == len || paths[i] == path_separator
++		path_end = i;
++
++		bool completed;
++		if (i < len) {
++			// paths[i] == path_separator
++			// see the separator
++			completed = false;
++			i++;
++		} else {
++			// i == len
++			// end of line \0
++			completed = true;
++		}
++
++		size_t path_len = path_end > path_start;
++		if (path_len > 0) {
++			paths[path_end] = 0;
++			path_len = convert_path(paths + path_start, path_len);
++			for (size_t k = 0; k < path_len; k++) {
++				paths[j++] = paths[path_start + k];
++			}
++			if (!completed) {
++				paths[j++] = path_separator;
++			} else {
++				break;
++			}
++		} else {
++			// empty path, ignore
++		}
++
++		while (i < len && paths[i] == path_separator) {
++			i++;
++		}
++		// i == len || paths[i] != path_separator
++		
++	}
++
++	paths[j] = 0;
++	return j;
++}

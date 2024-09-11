@@ -494,11 +494,6 @@ gcc_pushd_and_configure() {
 	local build_fixincludes_dir="build-${host_triple}/fixincludes"
 
 	local install_prefix="$(pwd)/${install_dir}"
-	case "${host_triple}" in
-		x86_64-pc-mingw64 )
-			install_prefix="$(cygpath -m "${install_prefix}")"
-			;;
-	esac
 
 	local gcc_generic_configure_options=(
 			--prefix="${install_prefix}"

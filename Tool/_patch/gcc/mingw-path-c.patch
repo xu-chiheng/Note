@@ -1,0 +1,30 @@
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index d07a8e172a4..296500f80d3 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -3149,13 +3149,22 @@ add_prefix (struct path_prefix *pprefix, const char *prefix,
+ 
+   /* Keep track of the longest prefix.  */
+ 
+-  prefix = update_path (prefix, component);
+-  len = strlen (prefix);
++  char * prefix2 = update_path (prefix, component);
++  len = strlen (prefix2);
++  len = convert_path(prefix2, len);
++  char prefix3[len + 10];
++  strcpy(prefix3, prefix2);
++  free(prefix2);
++  prefix2 = 0;
++  if (len > 0 && prefix3[len - 1] != '/') {
++    prefix3[len++] = '/';
++  }
++  prefix3[len] = 0;
+   if (len > pprefix->max_len)
+     pprefix->max_len = len;
+ 
+   pl = XNEW (struct prefix_list);
+-  pl->prefix = prefix;
++  pl->prefix = xstrdup(prefix3);
+   pl->require_machine_suffix = require_machine_suffix;
+   pl->priority = priority;
+   pl->os_multilib = os_multilib;

@@ -1,0 +1,19 @@
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index d07a8e172a4..296500f80d3 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -8721,8 +8787,12 @@ driver::maybe_putenv_COLLECT_LTO_WRAPPER () const
+       obstack_init (&collect_obstack);
+       obstack_grow (&collect_obstack, "COLLECT_LTO_WRAPPER=",
+ 		    sizeof ("COLLECT_LTO_WRAPPER=") - 1);
+-      obstack_grow (&collect_obstack, lto_wrapper_spec,
+-		    strlen (lto_wrapper_spec) + 1);
++      char * lto_wrapper_spec_2 = xstrdup(lto_wrapper_spec);
++      size_t lto_wrapper_spec_2_len = strlen(lto_wrapper_spec_2);
++      lto_wrapper_spec_2_len = convert_path(lto_wrapper_spec_2, lto_wrapper_spec_2_len);
++      obstack_grow (&collect_obstack, lto_wrapper_spec_2,
++		    lto_wrapper_spec_2_len + 1);
++      free(lto_wrapper_spec_2);
+       xputenv (XOBFINISH (&collect_obstack, char *));
+     }
+ 

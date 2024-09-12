@@ -1,0 +1,17 @@
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index d07a8e172a4..296500f80d3 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -8263,6 +8323,12 @@ driver::main (int argc, char **argv)
+ {
+   bool early_exit;
+ 
++#if defined(_WIN32) && !defined(__CYGWIN__)
++  size_t len0 = strlen(argv[0]);
++  len0 = convert_path(argv[0], len0);
++  (void)len0;
++#endif
++
+   set_progname (argv[0]);
+   expand_at_files (&argc, &argv);
+   decode_argv (argc, const_cast <const char **> (argv));

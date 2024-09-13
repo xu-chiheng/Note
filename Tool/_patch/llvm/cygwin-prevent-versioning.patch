@@ -1,5 +1,5 @@
 diff --git a/clang/tools/driver/CMakeLists.txt b/clang/tools/driver/CMakeLists.txt
-index 018605c2fd4f..a9cbf2ad75e4 100644
+index 018605c2fd4f..d6c6be821edf 100644
 --- a/clang/tools/driver/CMakeLists.txt
 +++ b/clang/tools/driver/CMakeLists.txt
 @@ -48,7 +48,7 @@ clang_target_link_libraries(clang
@@ -7,7 +7,7 @@ index 018605c2fd4f..a9cbf2ad75e4 100644
    )
  
 -if(WIN32 AND NOT CYGWIN)
-+if(WIN32 OR CYGWIN)
++if(ON)
    # Prevent versioning if the buildhost is targeting for Win32.
  else()
    set_target_properties(clang PROPERTIES VERSION ${CLANG_EXECUTABLE_VERSION})

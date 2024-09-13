@@ -1,14 +1,13 @@
 diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
-index d681b1ccab62..b3d3501f9c72 100644
+index d681b1ccab62..231a3173b728 100644
 --- a/llvm/CMakeLists.txt
 +++ b/llvm/CMakeLists.txt
-@@ -332,6 +332,9 @@ option(LLVM_INSTALL_CCTOOLS_SYMLINKS
+@@ -331,7 +331,7 @@ option(LLVM_INSTALL_CCTOOLS_SYMLINKS
+ # By default we use symlinks on Unix platforms and copy binaries on Windows
  # If you have the correct setup on Windows you can use this option to enable
  # symlinks and save a lot of diskspace.
- option(LLVM_USE_SYMLINKS "Use symlinks instead of copying binaries" ${CMAKE_HOST_UNIX})
-+if(WIN32 OR CYGWIN)
-+  set(LLVM_USE_SYMLINKS OFF)
-+endif()
+-option(LLVM_USE_SYMLINKS "Use symlinks instead of copying binaries" ${CMAKE_HOST_UNIX})
++option(LLVM_USE_SYMLINKS "Use symlinks instead of copying binaries" OFF)
  
  option(LLVM_INSTALL_UTILS "Include utility binaries in the 'install' target." OFF)
  

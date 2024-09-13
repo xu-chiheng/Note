@@ -6,9 +6,9 @@ index 02988e0ac91..230b00da809 100644
  
  extern char *lrealpath (const char *);
  
-+size_t convert_path(char * path, size_t len);
++extern size_t convert_path(char * path, size_t len);
 +
-+size_t convert_paths(char * paths, size_t len, char path_separator);
++extern size_t convert_paths(char * paths, size_t len, char path_separator);
 +
  /* Return true when FD file descriptor exists.  */
  

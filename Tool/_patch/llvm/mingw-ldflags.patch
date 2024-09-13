@@ -1,19 +1,21 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index 908484fcc0b8..0ccc982756c1 100644
+index c81a7ed17029..41ed9df2448e 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -165,6 +165,14 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -167,7 +167,16 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+     else
        CmdArgs.push_back("DllMainCRTStartup");
      CmdArgs.push_back("--enable-auto-image-base");
++  } else {
++    if (Args.hasArg(options::OPT_no_pie)) {
++      CmdArgs.push_back("--disable-dynamicbase");
++    }
++    if (TC.getArch() == llvm::Triple::x86) {
++		CmdArgs.push_back("--large-address-aware");
++	}
    }
-+  switch (TC.getArch()) {
-+  case llvm::Triple::x86_64:
-+    CmdArgs.push_back("--allow-multiple-definition");
-+    break;
-+  case llvm::Triple::aarch64:
-+  default:
-+    break;
-+  }
++  CmdArgs.push_back("--allow-multiple-definition");
++  CmdArgs.push_back("--dll-search-prefix=lib");
  
    if (Args.hasArg(options::OPT_Z_Xlinker__no_demangle))
      CmdArgs.push_back("--no-demangle");

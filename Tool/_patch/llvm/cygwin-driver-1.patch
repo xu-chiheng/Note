@@ -34,10 +34,10 @@ index 77328e1f99e5..9d4b24a79f60 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..f2ee81155725
+index 000000000000..679324474920
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,743 @@
+@@ -0,0 +1,741 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ----------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -193,15 +193,13 @@ index 000000000000..f2ee81155725
 +    else
 +      CmdArgs.push_back("_cygwin_dll_entry");
 +    CmdArgs.push_back("--enable-auto-image-base");
++  } else {
++    if (TC.getArch() == llvm::Triple::x86) {
++		CmdArgs.push_back("--large-address-aware");
++	}
 +  }
-+  switch (TC.getArch()) {
-+  case llvm::Triple::x86_64:
-+    CmdArgs.push_back("--dynamicbase");
-+    break;
-+  case llvm::Triple::aarch64:
-+  default:
-+    break;
-+  }
++  CmdArgs.push_back("--dynamicbase");
++  CmdArgs.push_back("--dll-search-prefix=cyg");
 +
 +  if (Args.hasArg(options::OPT_Z_Xlinker__no_demangle))
 +    CmdArgs.push_back("--no-demangle");

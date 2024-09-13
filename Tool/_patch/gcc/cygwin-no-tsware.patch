@@ -1,0 +1,26 @@
+diff --git a/gcc/config/i386/cygwin-w64.h b/gcc/config/i386/cygwin-w64.h
+index 467437ab872..f4b15822f84 100644
+--- a/gcc/config/i386/cygwin-w64.h
++++ b/gcc/config/i386/cygwin-w64.h
+@@ -59,7 +59,7 @@ along with GCC; see the file COPYING3.  If not see
+   %{shared|!shared: --dynamicbase} \
+   %(shared_libgcc_undefs) \
+   --dll-search-prefix=cyg \
+-  %{!shared: %{!mdll: %{" SPEC_32 ":--large-address-aware} --tsaware}}"
++  %{!shared: %{!mdll: %{" SPEC_32 ":--large-address-aware}}}"
+ 
+ /* Cygwin64 will have a 64-bit long type. */
+ #undef LONG_TYPE_SIZE
+diff --git a/gcc/config/i386/cygwin.h b/gcc/config/i386/cygwin.h
+index cc8aa7b6fbe..3d42cee4395 100644
+--- a/gcc/config/i386/cygwin.h
++++ b/gcc/config/i386/cygwin.h
+@@ -122,7 +122,7 @@ along with GCC; see the file COPYING3.  If not see
+   %{static:-Bstatic} %{!static:-Bdynamic} \
+   %{shared|mdll: --enable-auto-image-base -e __cygwin_dll_entry@12} \
+   --dll-search-prefix=cyg \
+-  %{!shared: %{!mdll: --large-address-aware --tsaware}}"
++  %{!shared: %{!mdll: --large-address-aware}}"
+ 
+ /* Binutils does not handle weak symbols from dlls correctly.  For now,
+    do not use them unnecessarily in gthr-posix.h.  */

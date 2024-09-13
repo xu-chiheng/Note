@@ -1,12 +1,24 @@
 diff --git a/gcc/config/i386/cygwin-w64.h b/gcc/config/i386/cygwin-w64.h
-index a1787ebab48..dc0b9c55a32 100644
+index 8dac104cb43..e20e6511877 100644
 --- a/gcc/config/i386/cygwin-w64.h
 +++ b/gcc/config/i386/cygwin-w64.h
-@@ -65,6 +65,7 @@ along with GCC; see the file COPYING3.  If not see
-   %{shared: --shared} %{mdll:--dll} \
+@@ -66,6 +66,7 @@ along with GCC; see the file COPYING3.  If not see
    %{static:-Bstatic} %{!static:-Bdynamic} \
    %{shared|mdll: " SUB_LINK_ENTRY " --enable-auto-image-base} \
-+  %{shared|!shared: --dynamicbase} \
    %(shared_libgcc_undefs) \
++  --dynamicbase \
    --dll-search-prefix=cyg \
    %{!shared: %{!mdll: %{" SPEC_32 ":--large-address-aware} --tsaware}}"
+ 
+diff --git a/gcc/config/i386/cygwin.h b/gcc/config/i386/cygwin.h
+index 63de10c17d4..cc661e022c3 100644
+--- a/gcc/config/i386/cygwin.h
++++ b/gcc/config/i386/cygwin.h
+@@ -130,6 +130,7 @@ along with GCC; see the file COPYING3.  If not see
+   %{shared: --shared} %{mdll:--dll} \
+   %{static:-Bstatic} %{!static:-Bdynamic} \
+   %{shared|mdll: --enable-auto-image-base -e __cygwin_dll_entry@12} \
++  --dynamicbase \
+   --dll-search-prefix=cyg \
+   %{!shared: %{!mdll: --large-address-aware --tsaware}}"
+ 

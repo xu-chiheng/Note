@@ -1,16 +1,17 @@
 diff --git a/gcc/gcc.cc b/gcc/gcc.cc
-index d07a8e172a4..296500f80d3 100644
+index 28db093d29d..5c1e21fd1ad 100644
 --- a/gcc/gcc.cc
 +++ b/gcc/gcc.cc
-@@ -4930,6 +4939,57 @@ process_command (unsigned int decoded_options_count,
+@@ -4939,6 +4939,58 @@ process_command (unsigned int decoded_options_count,
  	}
      }
  
 +#if defined(_WIN32) && !defined(__CYGWIN__) && !defined(CROSS_COMPILE)
 +	temp = env.get ("LIB");
 +	if (temp) {
-+		char * paths = xstrdup(temp);
-+		size_t len = strlen(paths);
++		size_t len = strlen(temp);
++		char paths[len + 10];
++		strcpy(paths, temp);
 +		char path_separator = PATH_SEPARATOR;
 +		size_t i = 0;
 +		while (i < len) {

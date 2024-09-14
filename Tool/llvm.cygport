@@ -21,17 +21,17 @@ SRC_DIR="llvm-project-llvmorg-${VERSION}"
 
 PATCHES=(
 	# 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a 2023-01-24
-	# _patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-option,support-tls,va-list-kind,cmodel-0,driver-0,general-{a,b,c},macro},mingw-{git-revision,ldflags,pthread,emutls-0,findgcc-0},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+	# _patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-0,driver-0,general-{a,b,c},macro},mingw-{git-revision,ldflags,pthread,emutls-0,findgcc-0,compiler-INCLUDE},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 	# 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7 2023-07-25
-	# _patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-option,support-tls,va-list-kind,cmodel-0,driver-0,general-{a,b,c},macro,CGCall.h},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+	# _patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-0,driver-0,general-{a,b,c},macro,CGCall.h},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-INCLUDE},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 	# 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707 2024-01-24
-	# _patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-option,support-tls,va-list-kind,cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+	# _patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-INCLUDE},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
 	# _patch/llvm/cygwin-disable-debug-ata.patch
 
 	# 19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8 2024-07-23
-	_patch/llvm/{cygwin-{prevent-versioning,not-use-symlink,cmake-option,support-tls,va-list-kind,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+	_patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h,compiler-INCLUDE},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 )
 
 PATCH_URI="${PATCHES[*]}"

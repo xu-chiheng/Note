@@ -1,0 +1,63 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index ccb0bac6a90e..9deaacc7d88d 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -699,6 +699,58 @@ void toolchains::MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+   if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/false) ||
+       getDriver().SysRoot.size())
+     addSystemInclude(DriverArgs, CC1Args, Base + "include");
++
++	if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true)) {
++		const char * temp = getenv("INCLUDE");
++		if (temp) {
++			size_t len = strlen(temp);
++			char paths[len + 10];
++			strcpy(paths, temp);
++			char path_separator = ';';
++			size_t i = 0;
++			while (i < len) {
++				size_t path_start, path_end;
++				path_start = i;
++				while (i < len && paths[i] != path_separator) {
++					i++;
++				}
++				// i == len || paths[i] == path_separator
++				path_end = i;
++
++				bool completed;
++				if (i < len) {
++					// paths[i] == path_separator
++					// see the separator
++					completed = false;
++					i++;
++				} else {
++					// i == len
++					// end of line \0
++					completed = true;
++				}
++
++				size_t path_len = path_end > path_start;
++				if (path_len > 0) {
++					paths[path_end] = 0;
++
++					addSystemInclude(DriverArgs, CC1Args, paths + path_start);
++
++					if (!completed) {
++
++					} else {
++						break;
++					}
++				} else {
++					// empty path, ignore
++				}
++
++				while (i < len && paths[i] == path_separator) {
++					i++;
++				}
++				// i == len || paths[i] != path_separator
++			}
++		}
++	}
+ }
+ 
+ void toolchains::MinGW::addClangTargetOptions(

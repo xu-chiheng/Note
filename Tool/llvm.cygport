@@ -21,17 +21,17 @@ SRC_DIR="llvm-project-llvmorg-${VERSION}"
 
 PATCHES=(
 	# 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a 2023-01-24
-	# _patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-0,driver-0,general-{a,b,c},macro},mingw-{git-revision,ldflags,pthread,emutls-0,findgcc-0,compiler-INCLUDE},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+	# _patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-0,driver-0,general-{a,b,c},macro},mingw-{git-revision,ldflags,pthread,emutls-0,findgcc-0,compiler-{INCLUDE,LIB}},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 	# 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7 2023-07-25
-	# _patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-0,driver-0,general-{a,b,c},macro,CGCall.h},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-INCLUDE},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+	# _patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-0,driver-0,general-{a,b,c},macro,CGCall.h},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB}},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 	# 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707 2024-01-24
-	# _patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-INCLUDE},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
+	# _patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB}},pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
 	# _patch/llvm/cygwin-disable-debug-ata.patch
 
 	# 19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8 2024-07-23
-	_patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h,compiler-INCLUDE},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+	_patch/llvm/{cygwin-{prevent-versioning,cmake-option,support-tls,va-list-kind,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h,compiler-{INCLUDE,LIB}},pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 )
 
 PATCH_URI="${PATCHES[*]}"
@@ -47,6 +47,7 @@ CMAKE_OPTIONS=(
 		-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld"
 		-DLLVM_ENABLE_RUNTIMES=
 		-DLLVM_BUILD_RUNTIME=ON
+
 		-DLLVM_OPTIMIZED_TABLEGEN=ON
 		-DLLVM_ENABLE_WERROR=OFF
 		-DLLVM_ENABLE_ASSERTIONS=OFF
@@ -54,6 +55,7 @@ CMAKE_OPTIONS=(
 		-DLLVM_ENABLE_LIBXML2=ON
 		-DLLVM_ENABLE_PLUGINS=OFF
 		-DLLVM_ENABLE_MODULES=OFF
+
 		-DLLVM_BUILD_TESTS=ON
 		-DLLVM_INCLUDE_TESTS=ON
 		-DLLVM_BUILD_BENCHMARKS=OFF
@@ -61,14 +63,19 @@ CMAKE_OPTIONS=(
 		-DLLVM_BUILD_EXAMPLES=OFF
 		-DLLVM_INCLUDE_EXAMPLES=OFF
 		-DLLVM_INCLUDE_DOCS=OFF
+
 		-DCLANG_BUILD_TOOLS=ON
 		-DCLANG_ENABLE_ARCMT=ON
 		-DCLANG_ENABLE_STATIC_ANALYZER=ON
 		-DCLANG_INCLUDE_TESTS=ON
 		-DCLANG_BUILD_EXAMPLES=OFF
 		-DCLANG_INCLUDE_DOCS=OFF
+
+		-DLLVM_USE_SYMLINKS=OFF
 		-DLLVM_INSTALL_UTILS=ON
+
 		-DLLVM_BUILD_LLVM_C_DYLIB=OFF
+
 		-DBUILD_SHARED_LIBS=ON
 )
 

@@ -1,0 +1,66 @@
+diff --git a/ld/lexsup.c b/ld/lexsup.c
+index 4aa0124ce2f..23e8668dfb5 100644
+--- a/ld/lexsup.c
++++ b/ld/lexsup.c
+@@ -1859,6 +1859,61 @@ parse_args (unsigned argc, char **argv)
+ 	}
+     }
+ 
++#if defined(_WIN32) && !defined(__CYGWIN__) && !defined(CROSS_COMPILE)
++
++	const char * temp = getenv("LIB");
++	if (temp) {
++		size_t len = strlen(temp);
++		char paths[len + 10];
++		strcpy(paths, temp);
++		char path_separator = PATH_SEPARATOR;
++		size_t i = 0;
++		while (i < len) {
++			size_t path_start, path_end;
++			path_start = i;
++			while (i < len && paths[i] != path_separator) {
++				i++;
++			}
++			// i == len || paths[i] == path_separator
++			path_end = i;
++
++			bool completed;
++			if (i < len) {
++				// paths[i] == path_separator
++				// see the separator
++				completed = false;
++				i++;
++			} else {
++				// i == len
++				// end of line \0
++				completed = true;
++			}
++
++			size_t path_len = path_end > path_start;
++			if (path_len > 0) {
++				paths[path_end] = 0;
++
++				info_msg("Adding %s from LIB environment variable to library path\n", paths + path_start);
++				(void) ldfile_add_library_path (paths + path_start, search_dir_cmd_line);
++
++				if (!completed) {
++
++				} else {
++					break;
++				}
++			} else {
++				// empty path, ignore
++			}
++
++			while (i < len && paths[i] == path_separator) {
++				i++;
++			}
++			// i == len || paths[i] != path_separator
++		}
++	}
++
++#endif
++
+   free (really_longopts);
+   free (longopts);
+   free (shortopts);

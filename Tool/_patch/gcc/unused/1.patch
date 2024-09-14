@@ -16,6 +16,10 @@ index 28db093d29d..5c1e21fd1ad 100644
 +		size_t i = 0;
 +		while (i < len) {
 +			size_t path_start, path_end;
++			while (i < len && paths[i] == path_separator) {
++				i++;
++			}
++			// i == len || paths[i] != path_separator
 +			path_start = i;
 +			while (i < len && paths[i] != path_separator) {
 +				i++;
@@ -35,7 +39,7 @@ index 28db093d29d..5c1e21fd1ad 100644
 +				completed = true;
 +			}
 +
-+			size_t path_len = path_end > path_start;
++			size_t path_len = path_end - path_start;
 +			if (path_len > 0) {
 +				paths[path_end] = 0;
 +
@@ -50,10 +54,6 @@ index 28db093d29d..5c1e21fd1ad 100644
 +				// empty path, ignore
 +			}
 +
-+			while (i < len && paths[i] == path_separator) {
-+				i++;
-+			}
-+			// i == len || paths[i] != path_separator
 +		}
 +	}
 +#endif

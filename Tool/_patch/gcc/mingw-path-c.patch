@@ -17,8 +17,8 @@ index d07a8e172a4..296500f80d3 100644
 +  prefix2 = 0;
 +  if (len > 0 && prefix3[len - 1] != '/') {
 +    prefix3[len++] = '/';
++    prefix3[len] = 0;
 +  }
-+  prefix3[len] = 0;
    if (len > pprefix->max_len)
      pprefix->max_len = len;
  

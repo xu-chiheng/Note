@@ -318,6 +318,11 @@ index fa12c96a3cd..a12fed3ece5 100644
 +	size_t j = 0;
 +	while (i < len) {
 +		size_t path_start, path_end;
++
++		while (i < len && paths[i] == path_separator) {
++			i++;
++		}
++		// i == len || paths[i] != path_separator
 +		path_start = i;
 +		while (i < len && paths[i] != path_separator) {
 +			i++;
@@ -352,11 +357,6 @@ index fa12c96a3cd..a12fed3ece5 100644
 +		} else {
 +			// empty path, ignore
 +		}
-+
-+		while (i < len && paths[i] == path_separator) {
-+			i++;
-+		}
-+		// i == len || paths[i] != path_separator
 +		
 +	}
 +

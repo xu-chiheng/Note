@@ -8,10 +8,10 @@ https://src.fedoraproject.org/rpms/gcc.git
 
 13.0.0    8e08c7886eed5824bebd0e011526ec302d622844 2023-04-17
 14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7 2024-04-24
-patch_apply . ../_patch/gcc/{convert-path,cygwin-{ldflags,limits.h-0,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-inhibit_libc,include-lib-{a,b,c,d,e,f},path-{a,b,c},compiler-INCLUDE}}.patch
+patch_apply . ../_patch/gcc/{convert-path,cygwin-{ldflags,limits.h-0,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-inhibit_libc,include-lib-{a,b,c,d,e,f},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 15.0.0    abeeccef92892fe519cc417b30ae22ce9da2d5e6 2024-08-28
-patch_apply . ../_patch/gcc/{convert-path,cygwin-{ldflags,limits.h-1,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-inhibit_libc,include-lib-{a,b,c,d,e,f},path-{a,b,c},compiler-INCLUDE}}.patch
+patch_apply . ../_patch/gcc/{convert-path,cygwin-{ldflags,limits.h-1,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-inhibit_libc,include-lib-{a,b,c,d,e,f},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 
 mingw-libgcc-inhibit_libc.patch
@@ -21,20 +21,32 @@ Fix build of cross gcc of target x86_64-pc-mingw64 with no libc.
 cygwin-limits.h.patch
 Fix build of cross gcc of target x86_64-pc-cygwin with no libc.
 
-mingw-include-a.patch
+mingw-include-lib-a.patch
 
-mingw-include-b.patch
+mingw-include-lib-b.patch
 
-mingw-include-c.patch
-
-mingw-include-c.patch
+mingw-include-lib-c.patch
 
 
-
-mingw-no-native_system_header_dir.patch
+mingw-include-lib-d.patch
 Fix the error :
 The directory (BUILD_SYSTEM_HEADER_DIR) that should contain system headers does not exist:
   /mingw/include
+
+mingw-include-lib-e.patch
+
+mingw-include-lib-f.patch
+
+
+
+mingw-glimits.h.patch
+  if [ -f `echo /usr/include | sed -e :a -e 's,[^/]*/\.\.\/,,' -e ta`/limits.h ] ; then \
+    cat ../../gcc/gcc/limitx.h ../../gcc/gcc/glimits.h ../../gcc/gcc/limity.h > tmp-xlimits.h; \
+  else \
+    cat ../../gcc/gcc/glimits.h > tmp-xlimits.h; \
+  fi; \
+
+
 
 
 

@@ -1,0 +1,15 @@
+diff --git a/gcc/glimits.h b/gcc/glimits.h
+index ad09aa364ad..75b7ef2bdf9 100644
+--- a/gcc/glimits.h
++++ b/gcc/glimits.h
+@@ -24,6 +24,10 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+ #ifndef _LIMITS_H___
+ #define _LIMITS_H___
+ 
++#if defined(__MINGW32__) && __has_include_next(<limits.h>)
++#include_next <limits.h>
++#endif
++
+ /* Number of bits in a `char'.  */
+ #undef CHAR_BIT
+ #define CHAR_BIT __CHAR_BIT__

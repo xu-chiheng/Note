@@ -55,10 +55,6 @@ check_llvm_static_or_shared "$3"
 	dump_toolchain_build_type_and_compiler_flags
 	dump_llvm_static_or_shared
 
-	# VERSION=12.0.1
-	# VERSION=13.0.1
-	# VERSION=14.0.6
-	# VERSION=15.0.7
 	# VERSION=16.0.6
 	# VERSION=17.0.6
 	# VERSION=18.1.8

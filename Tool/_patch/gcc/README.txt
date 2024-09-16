@@ -14,11 +14,12 @@ patch_apply . ../_patch/gcc/{convert-path,cygwin-{ldflags,no-limits.h-test-0,mac
 patch_apply . ../_patch/gcc/{convert-path,cygwin-{ldflags,no-limits.h-test-1,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-no-libc,include-lib-{a,b,c,d,e,f},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 
-mingw-libgcc-inhibit_libc.patch
+mingw-libgcc-no-libc.patch
 Fix build of cross gcc of target x86_64-pc-mingw64 with no libc.
 
 
-cygwin-limits.h.patch
+cygwin-no-limits.h-test-0.patch
+cygwin-no-limits.h-test-1.patch
 Fix build of cross gcc of target x86_64-pc-cygwin with no libc.
 
 mingw-include-lib-a.patch

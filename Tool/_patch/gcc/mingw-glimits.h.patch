@@ -6,7 +6,7 @@ index ad09aa364ad..75b7ef2bdf9 100644
  #ifndef _LIMITS_H___
  #define _LIMITS_H___
  
-+#if defined(__MINGW32__) && __has_include_next(<limits.h>)
++#if defined(_WIN32) && !defined(__CYGWIN__) && __has_include_next(<limits.h>)
 +#include_next <limits.h>
 +#endif
 +

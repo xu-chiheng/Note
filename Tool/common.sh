@@ -308,7 +308,7 @@ print_host_os_of_triple() {
 	esac
 }
 
-maybe_make_tarball_and_move() {
+maybe_make_tarball_and_calculate_sha512() {
 	local toolchain="$1"
 	local build_type="$2"
 	local host_triple="$3"
@@ -320,16 +320,14 @@ maybe_make_tarball_and_move() {
 	fi
 
 	local host_os="$(print_host_os_of_triple "${host_triple}")"
-	local dest_dir="__${host_os}-${toolchain,,}"
+	local dest_dir="$(pwd)/__${host_os}-${toolchain,,}"
 
-	echo_command rm -rf "${tarball}"{,.sha512} \
+	echo_command mkdir -p "${dest_dir}" \
+	&& echo_command rm -rf "${dest_dir}/${tarball}"{,.sha512} \
 	&& { echo_command pushd "${install_dir}" \
-		&& time_command tar -cvf  "../${tarball}" * \
+		&& time_command tar -cvf "${dest_dir}/${tarball}" * \
 		&& echo_command popd;} \
-	&& time_command sha512_calculate_file "${tarball}" \
-	\
-	&& echo_command mkdir -p "${dest_dir}" \
-	&& time_command mv -f "${tarball}"{,.sha512} "${dest_dir}"
+	&& time_command sha512_calculate_file "${dest_dir}/${tarball}"
 }
 
 download_and_verify_source_tarball() {
@@ -436,7 +434,7 @@ gcc_pushd_and_configure() {
 	&& echo_command touch "${build_fixincludes_dir}/fixinc.sh"
 }
 
-copy_dependent_dlls() {
+copy_dependent_dlls_to_install_exe_dir() {
 	local host_triple="$1"
 	local install_dir="$2"
 	local install_exe_dir="$3"
@@ -684,7 +682,7 @@ build_and_install_binutils_gcc_for_target() {
 		2>&1 | tee "~${current_datetime}-${package}-${host_os}-${toolchain,,}-${build_type,,}-${target}-gcc-output.txt" \
 	\
 	\
-	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
+	&& time_command maybe_make_tarball_and_calculate_sha512 "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
 	\
 	&& echo_command export PATH="${old_path}"
 }
@@ -775,7 +773,7 @@ post_install_package_action() {
 	local install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = qemu ]; then
-		echo_command copy_dependent_dlls "${host_triple}" "${install_dir}" "."
+		echo_command copy_dependent_dlls_to_install_exe_dir "${host_triple}" "${install_dir}" "."
 	fi
 }
 
@@ -805,7 +803,7 @@ generate_build_install_package() {
 		&& time_command parallel_make install \
 		&& echo_command popd;} \
 	&& echo_command post_install_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
-	&& time_command maybe_make_tarball_and_move "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${install_dir}" \
+	&& time_command maybe_make_tarball_and_calculate_sha512 "${toolchain}" "${build_type}" "${host_triple}" "${bin_tarball}" "${install_dir}" \
 	&& time_command sync .
 }
 

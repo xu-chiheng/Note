@@ -1,5 +1,5 @@
 diff --git a/gcc/incpath.cc b/gcc/incpath.cc
-index 64cdd2f4a1b..5b09966ec94 100644
+index f5016c7bd6f..a49fc86528e 100644
 --- a/gcc/incpath.cc
 +++ b/gcc/incpath.cc
 @@ -51,8 +51,8 @@
@@ -20,40 +20,67 @@ index 64cdd2f4a1b..5b09966ec94 100644
 -free_path (struct cpp_dir *path, int reason)
 +free_path (struct cpp_dir *path, int reason, int verbose)
  {
-+	if (verbose) {
-+		fprintf (stderr, "free_path() path->name : %s reason : %d\n", path->name, reason);
-+	}
++  if (verbose) {
++    fprintf (stderr, "free_path() path->name : %s reason : %d\n", path->name, reason);
++  }
    switch (reason)
      {
      case REASON_DUP:
-@@ -128,8 +131,12 @@ add_env_var_paths (const char *env_var, incpath_kind chain)
+@@ -187,8 +190,26 @@ add_env_var_paths (const char *env_var, incpath_kind chain)
  /* Append the standard include chain defined in cppdefault.cc.  */
  static void
  add_standard_paths (const char *sysroot, const char *iprefix,
 -		    const char *imultilib, int cxx_stdinc)
 +		    const char *imultilib, int cxx_stdinc, int verbose)
  {
-+	if (verbose) {
-+		fprintf (stderr, "add_standard_paths() sysroot : %s iprefix : %s imultilib : %s cxx_stdinc : %d\n",
-+		sysroot, iprefix, imultilib, cxx_stdinc);
++  if (verbose) {
++    fprintf (stderr, "add_standard_paths() sysroot : %s iprefix : %s imultilib : %s cxx_stdinc : %d\n",
++      sysroot, iprefix, imultilib, cxx_stdinc);
++    fprintf (stderr, "add_standard_paths() cpp_GCC_INCLUDE_DIR : %s cpp_GCC_INCLUDE_DIR_len : %d\n",
++      cpp_GCC_INCLUDE_DIR, (int)cpp_GCC_INCLUDE_DIR_len);
++    fprintf (stderr, "add_standard_paths() cpp_PREFIX : %s cpp_PREFIX_len : %d\n",
++      cpp_PREFIX, (int)cpp_PREFIX_len);
++
++    fprintf (stderr, "\n");
++    fprintf (stderr, "add_standard_paths() cpp_include_defaults[]:\n");
++    const struct default_include *p;
++    for (p = cpp_include_defaults; p->fname; p++) {
++      fprintf (stderr, "add_standard_paths() p->  fname : %s component : %s"
++        " cplusplus : %d cxx_aware : %d add_sysroot : %d multilib : %d\n", 
++        p->fname, p->component, p->cplusplus, p->cxx_aware, p->add_sysroot, p->multilib);
 +	}
++    fprintf (stderr, "\n");
++  }
    const struct default_include *p;
    int relocated = cpp_relocated ();
    size_t len;
-@@ -173,6 +180,12 @@ add_standard_paths (const char *sysroot, const char *iprefix,
- 
-   for (p = cpp_include_defaults; p->fname; p++)
-     {
-+	  if (verbose) {
-+		  fprintf (stderr, "\n");
-+		  fprintf (stderr, "add_standard_paths() p->  fname : %s component : %s"
-+		  	" cplusplus : %d cxx_aware : %d add_sysroot : %d multilib : %d\n", 
-+		  	p->fname, p->component, p->cplusplus, p->cxx_aware, p->add_sysroot, p->multilib);
-+	  }
+@@ -208,6 +229,12 @@ add_standard_paths (const char *sysroot, const char *iprefix,
+ 	  if (p->cplusplus == 0
+ 	      || (cxx_stdinc && (p->cplusplus == flag_stdlib_kind)))
+ 	    {
++          if (verbose) {
++            fprintf (stderr, "\n");
++            fprintf (stderr, "add_standard_paths() loop 0, p->  fname : %s component : %s"
++              " cplusplus : %d cxx_aware : %d add_sysroot : %d multilib : %d\n", 
++              p->fname, p->component, p->cplusplus, p->cxx_aware, p->add_sysroot, p->multilib);
++          }
+ 	      /* Should we be translating sysrooted dirs too?  Assume
+ 		 that iprefix and sysroot are mutually exclusive, for
+ 		 now.  */
+@@ -240,6 +267,12 @@ add_standard_paths (const char *sysroot, const char *iprefix,
        if (p->cplusplus == 0
  	  || (cxx_stdinc && (p->cplusplus == flag_stdlib_kind)))
  	{
-@@ -210,6 +223,9 @@ add_standard_paths (const char *sysroot, const char *iprefix,
++          if (verbose) {
++            fprintf (stderr, "\n");
++            fprintf (stderr, "add_standard_paths() loop 1, p->  fname : %s component : %s"
++              " cplusplus : %d cxx_aware : %d add_sysroot : %d multilib : %d\n", 
++              p->fname, p->component, p->cplusplus, p->cxx_aware, p->add_sysroot, p->multilib);
++          }
+ 	  char *str;
+ 
+ 	if (host_is_mingw) {
+@@ -293,6 +326,9 @@ label_relocated:
  					    cpp_EXEC_PREFIX,
  					    cpp_PREFIX);
  		  free (dummy);
@@ -63,7 +90,7 @@ index 64cdd2f4a1b..5b09966ec94 100644
  		}
  	      ostr = concat (relocated_prefix,
  			     p->fname + cpp_PREFIX_len,
-@@ -232,7 +248,10 @@ add_standard_paths (const char *sysroot, const char *iprefix,
+@@ -315,7 +351,10 @@ label_relocated:
  	      str = reconcat (str, str, dir_separator_str, imultiarch, NULL);
  	    }
  
@@ -75,18 +102,18 @@ index 64cdd2f4a1b..5b09966ec94 100644
  	}
      }
  }
-@@ -249,6 +268,10 @@ remove_duplicates (cpp_reader *pfile, struct cpp_dir *head,
+@@ -332,6 +371,10 @@ remove_duplicates (cpp_reader *pfile, struct cpp_dir *head,
  		   struct cpp_dir *system, struct cpp_dir *join,
  		   int verbose)
  {
-+	if (verbose) {
-+		fprintf (stderr, "remove_duplicates() head->name : %s system->name : %s join->name : %s\n", 
-+		head?head->name:0, system?system->name:0, join?join->name:0);
-+	}
++  if (verbose) {
++    fprintf (stderr, "remove_duplicates() head->name : %s system->name : %s join->name : %s\n", 
++    head?head->name:0, system?system->name:0, join?join->name:0);
++  }
    struct cpp_dir **pcur, *tmp, *cur;
    struct HOST_STAT_FOR_64BIT_INODES st;
  
-@@ -313,7 +336,7 @@ remove_duplicates (cpp_reader *pfile, struct cpp_dir *head,
+@@ -396,7 +439,7 @@ remove_duplicates (cpp_reader *pfile, struct cpp_dir *head,
  
        /* Remove this entry from the chain.  */
        *pcur = cur->next;
@@ -95,62 +122,62 @@ index 64cdd2f4a1b..5b09966ec94 100644
      }
  
    *pcur = join;
-@@ -353,6 +376,9 @@ add_sysroot_to_chain (const char *sysroot, int chain)
+@@ -436,6 +479,9 @@ add_sysroot_to_chain (const char *sysroot, int chain)
  static void
  merge_include_chains (const char *sysroot, cpp_reader *pfile, int verbose)
  {
-+	if (verbose) {
-+		fprintf (stderr, "merge_include_chains() \n");
-+	}
++  if (verbose) {
++    fprintf (stderr, "merge_include_chains() \n");
++  }
    /* Add the sysroot to user-supplied paths starting with "=".  */
    if (sysroot)
      {
-@@ -435,8 +461,12 @@ add_cpp_dir_path (cpp_dir *p, incpath_kind chain)
+@@ -518,8 +564,12 @@ add_cpp_dir_path (cpp_dir *p, incpath_kind chain)
  /* Add PATH to the include chain CHAIN. PATH must be malloc-ed and
     NUL-terminated.  */
  void
 -add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
 +add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p, int verbose)
  {
-+	if (verbose) {
-+		fprintf (stderr, "add_path() path : %s chain : %d cxx_aware : %d user_supplied_p : %d\n", 
-+		path, chain, cxx_aware, user_supplied_p);
-+	}
++  if (verbose) {
++    fprintf (stderr, "add_path() path : %s chain : %d cxx_aware : %d user_supplied_p : %d\n", 
++    path, chain, cxx_aware, user_supplied_p);
++  }
    cpp_dir *p;
    size_t pathlen = strlen (path);
  
-@@ -459,6 +489,7 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
-   p->next = NULL;
+@@ -543,6 +593,7 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
+   pathlen = convert_path(path, pathlen);
    p->name = path;
    p->len = pathlen;
 +  p->canonical_name = 0;
  #ifndef INO_T_EQ
    p->canonical_name = lrealpath (path);
  #endif
-@@ -469,6 +500,10 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
+@@ -553,6 +604,10 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
    p->construct = 0;
    p->user_supplied_p = user_supplied_p;
  
 +  if (verbose) {
-+	  fprintf (stderr, "add_path() p->  name : %s len : %d canonical_name : %s sysp : %d user_supplied_p : %d\n", 
-+	  p->name, p->len, p->canonical_name, p->sysp, p->user_supplied_p);
++    fprintf (stderr, "add_path() p->  name : %s len : %d canonical_name : %s sysp : %d user_supplied_p : %d\n", 
++      p->name, p->len, p->canonical_name, p->sysp, p->user_supplied_p);
 +  }
    add_cpp_dir_path (p, chain);
  }
  
-@@ -479,6 +514,11 @@ register_include_chains (cpp_reader *pfile, const char *sysroot,
+@@ -563,6 +618,11 @@ register_include_chains (cpp_reader *pfile, const char *sysroot,
  			 const char *iprefix, const char *imultilib,
  			 int stdinc, int cxx_stdinc, int verbose)
  {
-+	if (verbose) {
-+		fprintf (stderr, "register_include_chains() sysroot : %s iprefix : %s imultilib : %s stdinc : %d cxx_stdinc :%d\n", 
-+		sysroot, iprefix, imultilib, stdinc, cxx_stdinc);
-+	}
++  if (verbose) {
++    fprintf (stderr, "register_include_chains() sysroot : %s iprefix : %s imultilib : %s stdinc : %d cxx_stdinc :%d\n", 
++      sysroot, iprefix, imultilib, stdinc, cxx_stdinc);
++  }
 +
    static const char *const lang_env_vars[] =
      { "C_INCLUDE_PATH", "CPLUS_INCLUDE_PATH",
        "OBJC_INCLUDE_PATH", "OBJCPLUS_INCLUDE_PATH" };
-@@ -499,7 +539,7 @@ register_include_chains (cpp_reader *pfile, const char *sysroot,
+@@ -583,7 +643,7 @@ register_include_chains (cpp_reader *pfile, const char *sysroot,
  
    /* Finally chain on the standard directories.  */
    if (stdinc)
@@ -158,7 +185,7 @@ index 64cdd2f4a1b..5b09966ec94 100644
 +    add_standard_paths (sysroot, iprefix, imultilib, cxx_stdinc, verbose);
  
    target_c_incpath.extra_includes (sysroot, iprefix, stdinc);
- 
+   
 diff --git a/gcc/incpath.h b/gcc/incpath.h
 index 44898161391..ceb8cc36ed5 100644
 --- a/gcc/incpath.h

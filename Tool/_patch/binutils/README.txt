@@ -18,3 +18,8 @@ https://src.fedoraproject.org/rpms/binutils.git
 
 
 2.44    a253bea8995323201b016fe477280c1782688ab4 2024-08-28
+patch_apply . ../_patch/binutils/mingw-dlltool.c.patch
+
+
+mingw-dlltool.c.patch
+MinGW : Fix build due to undefined NAME_MAX, caused by commit a253bea8995323201b016fe477280c1782688ab4 2024-08-28.

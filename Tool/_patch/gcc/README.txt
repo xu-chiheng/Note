@@ -8,10 +8,10 @@ https://src.fedoraproject.org/rpms/gcc.git
 
 13.0.0    8e08c7886eed5824bebd0e011526ec302d622844 2023-04-17
 14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7 2024-04-24
-patch_apply . ../_patch/gcc/{convert-path,cygwin-{ldflags,no-limits.h-test-0,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-no-libc,include-lib-{a,b,c,d,e,f},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
+patch_apply . ../_patch/gcc/{convert-path,add_env_var_paths,cygwin-{ldflags,no-limits.h-test-0,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-no-libc,include-lib-{a,b,c,d,e,f},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 15.0.0    abeeccef92892fe519cc417b30ae22ce9da2d5e6 2024-08-28
-patch_apply . ../_patch/gcc/{convert-path,cygwin-{ldflags,no-limits.h-test-1,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-no-libc,include-lib-{a,b,c,d,e,f},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
+patch_apply . ../_patch/gcc/{convert-path,add_env_var_paths,cygwin-{ldflags,no-limits.h-test-1,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-no-libc,include-lib-{a,b,c,d,e,f},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 
 mingw-libgcc-no-libc.patch

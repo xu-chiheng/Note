@@ -1,0 +1,16 @@
+diff --git a/binutils/dlltool.c b/binutils/dlltool.c
+index 6dc16a9ed84..df4e75a3734 100644
+--- a/binutils/dlltool.c
++++ b/binutils/dlltool.c
+@@ -238,6 +238,11 @@
+ 
+    .idata$7 = dll name (eg: "kernel32.dll").  */
+ 
++#if defined(_WIN32) && !defined(__CYGWIN__)
++// for NAME_MAX in /ucrt64/include/limits.h
++#define _POSIX_
++#endif
++
+ #include "sysdep.h"
+ #include "bfd.h"
+ #include "libiberty.h"

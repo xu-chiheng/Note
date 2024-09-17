@@ -8,6 +8,12 @@ FIND_ARGS=(
 	-maxdepth 1
 	'('
 		-name '*output.txt'
+
+		-or -name 'a.exe'
+		-or -name 'a.out'
+		-or -name 'main.cpp'
+		-or -name 'main.c'
+
 		-or -name 'gcc-*'
 		-or -name 'llvm-*'
 		-or -name 'qemu-*'

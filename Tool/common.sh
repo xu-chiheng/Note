@@ -522,82 +522,12 @@ build_and_install_gmp_mpfr_mpc() {
 
 # # Linux API Headers
 # # https://www.linuxfromscratch.org/lfs/view/stable/chapter05/linux-headers.html
-# build_and_install_target_linux_headers() {
-# 	local target="$1"
-# 	local toolchain="$2"
-# 	local build_type="$3"
-# 	local host_triple="$4"
-# 	local package="$5"
-# 	local version="$6"
-
-# 	local source_dir="${package}"
-# 	local sysroot="$(pwd)/_sysroot/${target}"
-
-# 	pushd "${source_dir}" \
-# 	&& make mrproper \
-# 	&& make headers \
-# 	&& find usr/include -type f ! -name '*.h' -delete \
-# 	&& cp -rv usr/include "${sysroot}"/usr \
-# 	&& popd
-# }
 
 # # Glibc
 # # https://www.linuxfromscratch.org/lfs/view/stable/chapter05/glibc.html
-# build_and_install_target_glibc() {
-# 	local target="$1"
-# 	local toolchain="$2"
-# 	local build_type="$3"
-# 	local host_triple="$4"
-# 	local package="$5"
-# 	local version="$6"
-
-# 	local source_dir="${package}"
-# 	local build_dir="${source_dir}"-build
-# 	local sysroot="$(pwd)/_sysroot/${target}"
-
-# 	../configure \
-# 		--prefix=/usr \
-# 		--host="${target}" \
-# 		--build="${host_triple}" \
-# 		--enable-kernel=4.19 \
-# 		--with-headers="${sysroot}"/usr/include \
-# 		--disable-nscd \
-# 		libc_cv_slibdir=/usr/lib
-
-# 	make
-
-# 	make DESTDIR="${sysroot}" install
-# }
 
 # # Libstdc++
 # # https://www.linuxfromscratch.org/lfs/view/stable/chapter05/gcc-libstdc++.html
-# build_and_install_target_libstdcxx() {
-# 	local target="$1"
-# 	local toolchain="$2"
-# 	local build_type="$3"
-# 	local host_triple="$4"
-# 	local package="$5"
-# 	local version="$6"
-
-# 	local source_dir="${package}"
-# 	local build_dir="${source_dir}"-build
-# 	local sysroot="$(pwd)/_sysroot/${target}"
-
-# 	../libstdc++-v3/configure \
-# 		--host="${target}" \
-# 		--build="${host_triple}" \
-# 		--prefix=/usr \
-# 		--disable-multilib \
-# 		--disable-nls \
-# 		--disable-libstdcxx-pch \
-# 		--with-gxx-include-dir=/tools/$LFS_TGT/include/c++/13.2.0
-
-# 	make
-
-# 	make DESTDIR="${sysroot}" install
-
-# 	rm -v "${sysroot}"/usr/lib/lib{stdc++{,exp,fs},supc++}.la
-# }
 
 build_and_install_binutils_gcc_for_target() {
 	local target="$1"

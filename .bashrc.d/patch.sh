@@ -104,7 +104,7 @@ patch_apply_no_check() {
 	local patches=( "$@" )
 
 	for patch in "${patches[@]}"; do
-		echo "apply ${patch}"
+		echo "applying ${patch}"
 		if ! cat "${patch}" | ( cd "${dir}" && patch -Np1 ) ; then
 			echo "${patch} can not be applied"
 		fi
@@ -120,7 +120,7 @@ patch_apply() {
 	local patches=( "$@" )
 
 	for patch in "${patches[@]}"; do
-		echo "check ${patch}"
+		echo "checking ${patch}"
 		if ! cat "${patch}" | ( cd "${dir}" && patch -Np1 --dry-run --quiet ) ; then
 			echo "${patch} can not be applied"
 			return 1
@@ -136,7 +136,7 @@ patch_apply_reverse_no_check() {
 	local patches=( "$@" )
 
 	for patch in "${patches[@]}"; do
-		echo "apply ${patch}"
+		echo "applying ${patch}"
 		if ! cat "${patch}" | ( cd "${dir}" && patch -Rp1 ) ; then
 			echo "${patch} can not be applied"
 		fi
@@ -152,7 +152,7 @@ patch_apply_reverse() {
 	local patches=( "$@" )
 
 	for patch in "${patches[@]}"; do
-		echo "check ${patch}"
+		echo "checking ${patch}"
 		if ! cat "${patch}" | ( cd "${dir}" && patch -Rp1 --dry-run --quiet ) ; then
 			echo "${patch} can not be applied"
 			return 1

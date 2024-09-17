@@ -1,3 +1,6 @@
+# cygport llvm.cygport download
+# cygport llvm.cygport all
+
 inherit cmake
 
 # package name
@@ -95,10 +98,3 @@ CXXFLAGS="${C_CXX_COMMON_FLAGS}"
 LDFLAGS="-Wl,--strip-all -Wl,--dynamicbase"
 
 MAKEOPTS="-j$(expr $(nproc --all) '*' 2)"
-
-# use the standard cmake src_compile, src_install and src_test
-
-src_install() {
-	cd "${B}"
-	cyginstall
-}

@@ -1,8 +1,8 @@
 diff --git a/gcc/incpath.cc b/gcc/incpath.cc
-index eaa1af020e1..f5016c7bd6f 100644
+index 64cdd2f4a1b..ec9ddb6f51e 100644
 --- a/gcc/incpath.cc
 +++ b/gcc/incpath.cc
-@@ -99,6 +99,64 @@ free_path (struct cpp_dir *path, int reason)
+@@ -99,6 +99,59 @@ free_path (struct cpp_dir *path, int reason)
  static void
  add_env_var_paths (const char *env_var, incpath_kind chain)
  {
@@ -11,7 +11,6 @@ index eaa1af020e1..f5016c7bd6f 100644
 +		size_t len = strlen(temp);
 +		char paths[len + 10];
 +		strcpy(paths, temp);
-+		// len = convert_paths(paths, len, PATH_SEPARATOR);
 +
 +		char path_separator = PATH_SEPARATOR;
 +		size_t i = 0;
@@ -43,10 +42,6 @@ index eaa1af020e1..f5016c7bd6f 100644
 +			size_t path_len = path_end - path_start;
 +			if (path_len > 0) {
 +				paths[path_end] = 0;
-+				// char path[path_len + 10];
-+				// strcpy(path, paths + path_start);
-+				// path_len = convert_path(path, path_len);
-+				// (void)path_len;
 +				char * path = xstrdup (paths + path_start);
 +
 +				add_path (path, chain, chain == INC_SYSTEM, false);
@@ -67,7 +62,7 @@ index eaa1af020e1..f5016c7bd6f 100644
    char *p, *q, *path;
  
    q = getenv (env_var);
-@@ -123,6 +181,7 @@ add_env_var_paths (const char *env_var, incpath_kind chain)
+@@ -123,6 +176,7 @@ add_env_var_paths (const char *env_var, incpath_kind chain)
  
        add_path (path, chain, chain == INC_SYSTEM, false);
      }

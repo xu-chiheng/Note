@@ -141,6 +141,9 @@ check_toolchain_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
+	# ldflags+=( -fuse-ld=bfd )
+	# ldflags+=( -fuse-ld=lld )
+
 	export TOOLCHAIN="${toolchain}"
 	export BUILD_TYPE="${build_type}"
 	export CC="${cc}"
@@ -403,19 +406,7 @@ gcc_pushd_and_configure() {
 	local source_dir="$2"
 	local install_dir="$3"
 	local languages="$4"
-	local host_triple="$5"
-	shift 5
-
-	# https://www.linuxfromscratch.org/lfs/view/7.1/chapter06/gcc.html
-	# gcc/Makefile.in
-	# # Control whether to run fixincludes.
-	# STMP_FIXINC = @STMP_FIXINC@
-	# sed -i -e 's,@STMP_FIXINC@,,g' "${source_dir}/gcc/Makefile.in"
-
-	# --disable-fixincludes
-	# make[2]: *** No rule to make target '../build-x86_64-pc-cygwin/fixincludes/fixinc.sh', needed by 'stmp-fixinc'.  Stop.
-
-	local build_fixincludes_dir="build-${host_triple}/fixincludes"
+	shift 4
 
 	local install_prefix="$(pwd)/${install_dir}"
 
@@ -429,9 +420,7 @@ gcc_pushd_and_configure() {
 			--enable-checking=release
 			--disable-fixincludes
 	)
-	time_command pushd_and_configure "${build_dir}" "${source_dir}" "${gcc_generic_configure_options[@]}" "$@" \
-	&& echo_command mkdir -p "${build_fixincludes_dir}" \
-	&& echo_command touch "${build_fixincludes_dir}/fixinc.sh"
+	time_command pushd_and_configure "${build_dir}" "${source_dir}" "${gcc_generic_configure_options[@]}" "$@"
 }
 
 copy_dependent_dlls_to_install_exe_dir() {
@@ -602,8 +591,7 @@ build_and_install_binutils_gcc_for_target() {
 	\
 	\
 	&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
-			"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${host_triple}" \
-			"${gcc_configure_options[@]}" \
+			"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${gcc_configure_options[@]}" \
 		&& time_command parallel_make all-gcc \
 		&& time_command parallel_make all-target-libgcc \
 		&& time_command parallel_make install-gcc \
@@ -821,5 +809,5 @@ gcc_configure_build_install_package() {
 	time_command generate_build_install_package \
 		"${toolchain}" "${build_type}" "${host_triple}" "${package}" "${version}" "${source_dir}" "${install_dir}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" \
-		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${host_triple}" "$@"
+		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "$@"
 }

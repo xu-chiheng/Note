@@ -8,18 +8,22 @@ https://src.fedoraproject.org/rpms/gcc.git
 
 13.0.0    8e08c7886eed5824bebd0e011526ec302d622844 2023-04-17
 14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7 2024-04-24
-patch_apply . ../_patch/gcc/{convert-path,add_env_var_paths,cygwin-{ldflags,no-limits.h-test-0,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-no-libc,include-lib-{a,b,c,d,e,f,g},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
+patch_apply . ../_patch/gcc/{convert-path,add_env_var_paths,cygming-{STMP_FIXINC-0,no-limits.h-test-0},cygwin-{ldflags,macro,no-wrap-0,no-tsaware},mingw-{ldflags-0,gethostname,libgcc-no-libc,include-lib-{a,b,c-0,d-0,e-0,f,g-0},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 15.0.0    abeeccef92892fe519cc417b30ae22ce9da2d5e6 2024-08-28
-patch_apply . ../_patch/gcc/{convert-path,add_env_var_paths,cygwin-{ldflags,no-limits.h-test-1,macro,no-wrap,no-tsaware},mingw-{ldflags,gethostname,libgcc-no-libc,include-lib-{a,b,c,d,e,f,g},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
+patch_apply . ../_patch/gcc/{convert-path,add_env_var_paths,cygming-{STMP_FIXINC-1,no-limits.h-test-1},cygwin-{ldflags,macro,no-wrap-1,no-tsaware},mingw-{ldflags-1,gethostname,libgcc-no-libc,include-lib-{a,b,c-1,d-1,e-1,f,g-1},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 
 mingw-libgcc-no-libc.patch
 Fix build of cross gcc of target x86_64-pc-mingw64 with no libc.
 
 
-cygwin-no-limits.h-test-0.patch
-cygwin-no-limits.h-test-1.patch
+cygming-STMP_FIXINC-0.patch
+cygming-STMP_FIXINC-1.patch
+No STMP_FIXINC for Cygwin and MinGW
+
+cygming-no-limits.h-test-0.patch
+cygming-no-limits.h-test-1.patch
 Fix build of cross gcc of target x86_64-pc-cygwin with no libc.
 
 mingw-include-lib-a.patch

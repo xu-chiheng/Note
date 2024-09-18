@@ -56,6 +56,8 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 		sparc64-elf
 		mips64-elf
 
+		# MinGW Clang will have memory errors, if there are too many targets.
+
 		# -m32
 		# i686-elf
 		# arm-eabi

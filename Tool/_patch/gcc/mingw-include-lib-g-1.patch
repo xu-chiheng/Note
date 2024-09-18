@@ -7,7 +7,7 @@ index d1d2ade3c01..078051e5c88 100644
  #endif
  
 +/* $prefix/include, on MinGW, $prefix is not converted from unix path to windows path,
-+   unlike other paths in the array cpp_include_defaults[], so it is useless. */
++   this is not like other paths in the array cpp_include_defaults[], so it is useless. */
 +#undef PREFIX_INCLUDE_DIR
 +
  /* For native mingw-version we need to take care that NATIVE_SYSTEM_HEADER_DIR

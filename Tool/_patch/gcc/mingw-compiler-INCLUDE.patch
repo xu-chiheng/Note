@@ -7,7 +7,7 @@ index 64cdd2f4a1b..d819b301f3c 100644
  
    target_c_incpath.extra_includes (sysroot, iprefix, stdinc);
 +  
-+#if defined(_WIN32) && !defined(__CYGWIN__) && !defined(CROSS_COMPILE)
++#if defined(_WIN32) && !defined(__CYGWIN__) && !defined(CROSS_DIRECTORY_STRUCTURE)
 +	add_env_var_paths ("INCLUDE", INC_AFTER);
 +#endif
  

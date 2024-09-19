@@ -20,7 +20,7 @@ index 64cdd2f4a1b..7571fbcc3bf 100644
  
 +		if (host_is_mingw) {
 +			if (p->fname[0] == '/') {
-+				// NATIVE_SYSTEM_HEADER_DIR and PREFIX_INCLUDE_DIR have been undefined, so this should never happen
++				// should never happen
 +				continue;
 +			} else if (!filename_ncmp (p->fname, cpp_PREFIX, cpp_PREFIX_len)) {
 +				if (p->add_sysroot) {

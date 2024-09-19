@@ -1,0 +1,26 @@
+diff --git a/gcc/configure b/gcc/configure
+index eabead9e572..5d49f599752 100755
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -32069,7 +32069,7 @@ if test x$with_sysroot = x && test x$host = x$target \
+    && test "$prefix" != "NONE"; then
+ 
+ cat >>confdefs.h <<_ACEOF
+-#define PREFIX_INCLUDE_DIR "$prefix/include"
++#define PREFIX_INCLUDE_DIR PREFIX "include"
+ _ACEOF
+ 
+ fi
+diff --git a/gcc/configure.ac b/gcc/configure.ac
+index 72273f43c01..c6cd5e1c28d 100644
+--- a/gcc/configure.ac
++++ b/gcc/configure.ac
+@@ -5954,7 +5954,7 @@ gcc_GAS_CHECK_FEATURE([.lcomm with alignment], gcc_cv_as_lcomm_with_alignment,,
+ if test x$with_sysroot = x && test x$host = x$target \
+    && test "$prefix" != "/usr" && test "x$prefix" != "x$local_prefix" \
+    && test "$prefix" != "NONE"; then
+-  AC_DEFINE_UNQUOTED(PREFIX_INCLUDE_DIR, "$prefix/include",
++  AC_DEFINE_UNQUOTED(PREFIX_INCLUDE_DIR, "PREFIX \"include\"",
+ [Define to PREFIX/include if cpp should also search that directory.])
+ fi
+ 

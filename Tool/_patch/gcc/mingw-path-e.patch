@@ -1,0 +1,21 @@
+diff --git a/gcc/incpath.cc b/gcc/incpath.cc
+index 07e3d565bb2..2dacb432ffa 100644
+--- a/gcc/incpath.cc
++++ b/gcc/incpath.cc
+@@ -464,7 +464,7 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
+   cpp_dir *p;
+   size_t pathlen = strlen (path);
+ 
+-#if defined (HAVE_DOS_BASED_FILE_SYSTEM)
++#if 0
+   /* Remove unnecessary trailing slashes.  On some versions of MS
+      Windows, trailing  _forward_ slashes cause no problems for stat().
+      On newer versions, stat() does not recognize a directory that ends
+@@ -481,6 +481,7 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
+ 
+   p = XNEW (cpp_dir);
+   p->next = NULL;
++  pathlen = convert_path(path, pathlen);
+   p->name = path;
+   p->len = pathlen;
+ #ifndef INO_T_EQ

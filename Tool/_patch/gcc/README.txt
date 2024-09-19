@@ -8,11 +8,20 @@ https://src.fedoraproject.org/rpms/gcc.git
 
 13.0.0    8e08c7886eed5824bebd0e011526ec302d622844 2023-04-17
 14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7 2024-04-24
-patch_apply . ../_patch/gcc/{convert-path,add_env_var_paths,cygming-{STMP_FIXINC-0,no-limits.h-test-0},cygwin-{ldflags,macro,no-wrap-0,no-tsaware},mingw-{ldflags-0,gethostname,libgcc-no-libc,include-lib-{a,b,c-0,d-0,e-0,f,g},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
+patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths_to_include_path,_add_env_var_paths_to_library_path,_PREFIX_INCLUDE_DIR,\
+cygming-{STMP_FIXINC-0,no-limits.h-test-0},cygwin-{ldflags,macro,no-wrap-0,no-tsaware},\
+mingw-{ldflags-0,gethostname,libgcc-no-libc,include-lib-{a,b,c-0,d-0,e-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 15.0.0    abeeccef92892fe519cc417b30ae22ce9da2d5e6 2024-08-28
-patch_apply . ../_patch/gcc/{convert-path,add_env_var_paths,cygming-{STMP_FIXINC-1,no-limits.h-test-1},cygwin-{ldflags,macro,no-wrap-1,no-tsaware},mingw-{ldflags-1,gethostname,libgcc-no-libc,include-lib-{a,b,c-1,d-1,e-1,f,g},path-{a,b,c},compiler-{INCLUDE,LIB},glimits.h}}.patch
+patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths_to_include_path,_add_env_var_paths_to_library_path,_PREFIX_INCLUDE_DIR,\
+cygming-{STMP_FIXINC-1,no-limits.h-test-1},cygwin-{ldflags,macro,no-wrap-1,no-tsaware},\
+mingw-{ldflags-1,gethostname,libgcc-no-libc,include-lib-{a,b,c-1,d-1,e-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
+
+_PREFIX_INCLUDE_DIR.patch
+$prefix/include, on MinGW, $prefix is not converted from unix path to windows path,
+but the macro PREFIX is. All other paths in the array cpp_include_defaults[] at gcc/cppdefault.cc are based on PREFIX,
+so they are all windows path on MinGW.
 
 mingw-libgcc-no-libc.patch
 Fix build of cross gcc of target x86_64-pc-mingw64 with no libc.
@@ -39,12 +48,6 @@ The directory (BUILD_SYSTEM_HEADER_DIR) that should contain system headers does 
   /mingw/include
 
 mingw-include-lib-e.patch
-
-mingw-include-lib-f.patch
-
-mingw-include-lib-g.patch
-$prefix/include, on MinGW, $prefix is not converted from unix path to windows path,
-but the macro PREFIX is.
 
 mingw-glimits.h.patch
   if [ -f `echo /usr/include | sed -e :a -e 's,[^/]*/\.\.\/,,' -e ta`/limits.h ] ; then \

@@ -1,0 +1,14 @@
+diff --git a/libiberty/make-temp-file.c b/libiberty/make-temp-file.c
+index 23b467035d5..11214d11c9b 100644
+--- a/libiberty/make-temp-file.c
++++ b/libiberty/make-temp-file.c
+@@ -230,6 +230,9 @@ make_temp_file_with_prefix (const char *prefix, const char *suffix)
+   /* We abort on failed close out of sheer paranoia.  */
+   if (close (fd))
+     abort ();
++  size_t temp_len = strlen(temp_filename);
++  temp_len = convert_path(temp_filename, temp_len);
++  (void)temp_len;
+   return temp_filename;
+ }
+ 

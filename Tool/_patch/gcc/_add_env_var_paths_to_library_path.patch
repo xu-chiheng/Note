@@ -1,17 +1,18 @@
-diff --git a/gcc/incpath.cc b/gcc/incpath.cc
-index 64cdd2f4a1b..ec9ddb6f51e 100644
---- a/gcc/incpath.cc
-+++ b/gcc/incpath.cc
-@@ -99,6 +99,59 @@ free_path (struct cpp_dir *path, int reason)
- static void
- add_env_var_paths (const char *env_var, incpath_kind chain)
- {
-+	const char * temp = getenv(env_var);
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index d07a8e172a4..7e09aa926df 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -8243,6 +8243,63 @@ compare_files (char *cmpfile[])
+   return ret;
+ }
+ 
++static void
++add_env_var_paths_to_library_path(const char * env_var) {
++	const char * temp = env.get(env_var);
 +	if (temp) {
 +		size_t len = strlen(temp);
 +		char paths[len + 10];
 +		strcpy(paths, temp);
-+
 +		char path_separator = PATH_SEPARATOR;
 +		size_t i = 0;
 +		while (i < len) {
@@ -42,9 +43,12 @@ index 64cdd2f4a1b..ec9ddb6f51e 100644
 +			size_t path_len = path_end - path_start;
 +			if (path_len > 0) {
 +				paths[path_end] = 0;
-+				char * path = xstrdup (paths + path_start);
++				char path[path_len + 10];
++				strcpy(path, paths + path_start);
++				path_len = convert_path(path, path_len);
++				(void)path_len;
 +
-+				add_path (path, chain, chain == INC_SYSTEM, false);
++				add_prefix(&startfile_prefixes, path, NULL, PREFIX_PRIORITY_LAST, 0, 1);
 +
 +				if (!completed) {
 +
@@ -57,16 +61,8 @@ index 64cdd2f4a1b..ec9ddb6f51e 100644
 +
 +		}
 +	}
++}
 +
-+#if 0
-   char *p, *q, *path;
- 
-   q = getenv (env_var);
-@@ -123,6 +176,7 @@ add_env_var_paths (const char *env_var, incpath_kind chain)
- 
-       add_path (path, chain, chain == INC_SYSTEM, false);
-     }
-+#endif
- }
- 
- /* Append the standard include chain defined in cppdefault.cc.  */
+ driver::driver (bool can_finalize, bool debug) :
+   explicit_link_files (NULL),
+   decoded_options (NULL)

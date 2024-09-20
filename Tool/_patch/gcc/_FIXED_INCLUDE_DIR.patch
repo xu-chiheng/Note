@@ -1,0 +1,13 @@
+diff --git a/gcc/cppdefault.cc b/gcc/cppdefault.cc
+index f82b4badad7..107517f231b 100644
+--- a/gcc/cppdefault.cc
++++ b/gcc/cppdefault.cc
+@@ -24,6 +24,8 @@
+ #include "tm.h"
+ #include "cppdefault.h"
+ 
++#undef FIXED_INCLUDE_DIR
++
+ #ifndef NATIVE_SYSTEM_HEADER_COMPONENT
+ #define NATIVE_SYSTEM_HEADER_COMPONENT 0
+ #endif

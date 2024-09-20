@@ -45,14 +45,14 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 				# --target=x86_64-pc-cygwin
 				--without-libiconv-prefix
 				--without-libintl-prefix
-				--with-gcc-major-version-only
+				# --with-gcc-major-version-only
 				--enable-shared
 				--enable-shared-libgcc
 				--enable-static
 				--enable-version-specific-runtime-libs
 				# --enable-bootstrap
 				--enable-__cxa_atexit
-				--with-dwarf2
+				# --with-dwarf2
 				--with-tune=generic
 				# --enable-languages=c,c++,fortran,lto,objc,obj-c++,jit
 				--enable-graphite

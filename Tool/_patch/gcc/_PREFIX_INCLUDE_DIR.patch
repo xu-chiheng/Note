@@ -7,7 +7,7 @@ index eabead9e572..5d49f599752 100755
  
  cat >>confdefs.h <<_ACEOF
 -#define PREFIX_INCLUDE_DIR "$prefix/include"
-+#define PREFIX_INCLUDE_DIR PREFIX "include"
++#define PREFIX_INCLUDE_DIR PREFIX"include"
  _ACEOF
  
  fi
@@ -20,7 +20,7 @@ index 72273f43c01..c6cd5e1c28d 100644
     && test "$prefix" != "/usr" && test "x$prefix" != "x$local_prefix" \
     && test "$prefix" != "NONE"; then
 -  AC_DEFINE_UNQUOTED(PREFIX_INCLUDE_DIR, "$prefix/include",
-+  AC_DEFINE_UNQUOTED(PREFIX_INCLUDE_DIR, "PREFIX \"include\"",
++  AC_DEFINE_UNQUOTED(PREFIX_INCLUDE_DIR, PREFIX"include",
  [Define to PREFIX/include if cpp should also search that directory.])
  fi
  

@@ -2,7 +2,7 @@ diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains
 index 188d76973716..5a00553cacee 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -534,6 +534,59 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
+@@ -540,6 +528,64 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
        getDriver().SysRoot.size())
      getFilePaths().push_back(Base + "lib");
  
@@ -54,9 +54,14 @@ index 188d76973716..5a00553cacee 100644
 +				} else {
 +					// empty path, ignore
 +				}
-+
 +			}
++		} else {
++
 +		}
++	} else if (getDriver().SysRoot.size()) {
++	    getFilePaths().push_back(getDriver().SysRoot + "/lib");
++	} else {
++		// must add library directories by -L
 +	}
 +
    NativeLLVMSupport =

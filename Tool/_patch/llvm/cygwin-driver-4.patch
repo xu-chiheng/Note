@@ -34,10 +34,10 @@ index 8e44d5afa40e..3a6b17ca3383 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..0ca998f41d3f
+index 000000000000..a0e893d5b9c4
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,788 @@
+@@ -0,0 +1,793 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ----------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -487,7 +487,7 @@ index 000000000000..0ca998f41d3f
 +
 +static bool looksLikeCygwinSysroot(const std::string &Directory) {
 +  StringRef Sep = llvm::sys::path::get_separator();
-+  if (!llvm::sys::fs::exists(Directory + Sep + "include" + Sep + "cygwin" + Sep + "cygwin_dll.h"))
++  if (!llvm::sys::fs::exists(Directory + Sep + "include" + Sep + "cygwin" + Sep + "version.h"))
 +    return false;
 +  if (!llvm::sys::fs::exists(Directory + Sep + "lib" + Sep + "libcygwin.a"))
 +    return false;
@@ -530,13 +530,6 @@ index 000000000000..0ca998f41d3f
 +  // GccLibDir must precede Base/lib so that the
 +  // correct crtbegin.o ,cetend.o would be found.
 +  getFilePaths().push_back(GccLibDir);
-+  getFilePaths().push_back(
-+      (Base + SubdirName + llvm::sys::path::get_separator() + "lib").str());
-+  getFilePaths().push_back(
-+      (Base + SubdirName + llvm::sys::path::get_separator() + "usr/lib").str());
-+  getFilePaths().push_back(
-+      (Base + SubdirName + llvm::sys::path::get_separator() + "usr/lib/w32api")
-+          .str());
 +
 +  // Only include <base>/lib if we're not cross compiling (not even for
 +  // windows->windows to a different arch), or if the sysroot has been set
@@ -547,8 +540,14 @@ index 000000000000..0ca998f41d3f
 +    getFilePaths().push_back(Base + "lib");
 +
 +  // for Cygwin's crt0.o
-+  getFilePaths().push_back(getDriver().SysRoot + "/lib");
-+  getFilePaths().push_back(getDriver().SysRoot + "/usr/lib");
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
++      getDriver().SysRoot.size()) {
++    getFilePaths().push_back(getDriver().SysRoot + "/lib");
++    getFilePaths().push_back(getDriver().SysRoot + "/usr/lib");
++    getFilePaths().push_back(getDriver().SysRoot + "/usr/lib/w32api");
++  } else {
++    // must add library directories by -L
++  }
 +
 +  NativeLLVMSupport =
 +      Args.getLastArgValue(options::OPT_fuse_ld_EQ, CLANG_DEFAULT_LINKER)
@@ -654,14 +653,20 @@ index 000000000000..0ca998f41d3f
 +  if (DriverArgs.hasArg(options::OPT_nostdlibinc))
 +    return;
 +
-+  addSystemInclude(DriverArgs, CC1Args,
-+                   Base + SubdirName + llvm::sys::path::get_separator() +
-+                       "include");
-+  addSystemInclude(DriverArgs, CC1Args,
-+                   getDriver().SysRoot + "/usr/local/include");
-+  addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/include");
-+  addSystemInclude(DriverArgs, CC1Args,
-+                   getDriver().SysRoot + "/usr/include/w32api");
++  addSystemInclude(DriverArgs, CC1Args, Base + SubdirName + "/include");
++
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
++      getDriver().SysRoot.size())
++    addSystemInclude(DriverArgs, CC1Args, Base + "include");
++
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
++      getDriver().SysRoot.size()) {
++    addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/local/include");
++    addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/include");
++    addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/include/w32api");
++  } else {
++    // must add include directories by -I option
++  }
 +}
 +
 +void toolchains::Cygwin::addClangTargetOptions(

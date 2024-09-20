@@ -2,7 +2,7 @@ diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains
 index 5a00553cacee..4a33029ac4fc 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -514,18 +514,6 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
+@@ -520,18 +520,6 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
    // correct crtbegin.o ,cetend.o would be found.
    getFilePaths().push_back(GccLibDir);
  

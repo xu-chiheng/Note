@@ -2,8 +2,25 @@ diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains
 index ccb0bac6a90e..9deaacc7d88d 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -699,6 +699,58 @@ void toolchains::MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
-   if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/false) ||
+@@ -690,21 +736,68 @@ void toolchains::MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+   if (DriverArgs.hasArg(options::OPT_nostdlibinc))
+     return;
+ 
+-  addSystemInclude(DriverArgs, CC1Args,
+-                   Base + SubdirName + llvm::sys::path::get_separator() +
+-                       "include");
++  addSystemInclude(DriverArgs, CC1Args, Base + SubdirName + "/include");
+ 
+-  // Gentoo
+-  addSystemInclude(DriverArgs, CC1Args,
+-                   Base + SubdirName + llvm::sys::path::get_separator() + "usr/include");
+-
+-  // Only include <base>/include if we're not cross compiling (but do allow it
+-  // if we're on Windows and building for Windows on another architecture),
+-  // or if the sysroot has been set (where we presume the user has pointed it
+-  // at an arch specific subdirectory).
+-  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/false) ||
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
        getDriver().SysRoot.size())
      addSystemInclude(DriverArgs, CC1Args, Base + "include");
 +
@@ -54,9 +71,14 @@ index ccb0bac6a90e..9deaacc7d88d 100644
 +				} else {
 +					// empty path, ignore
 +				}
-+
 +			}
++		} else {
++
 +		}
++	} else if (getDriver().SysRoot.size()) {
++	    addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/include");
++	} else {
++		// must add include directories by -I option
 +	}
  }
  

@@ -1,23 +1,57 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index 5a00553cacee..4a33029ac4fc 100644
+index 4a33029ac4fc..210550ea82b2 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -520,18 +520,6 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
-   // correct crtbegin.o ,cetend.o would be found.
-   getFilePaths().push_back(GccLibDir);
+@@ -665,52 +665,6 @@ void toolchains::MinGW::printVerboseInfo(raw_ostream &OS) const {
+   RocmInstallation->print(OS);
+ }
  
--  // openSUSE/Fedora
--  std::string CandidateSubdir = SubdirName + "/sys-root/mingw";
--  if (getDriver().getVFS().exists(Base + CandidateSubdir))
--    SubdirName = CandidateSubdir;
+-// Include directories for various hosts:
 -
--  getFilePaths().push_back(
--      (Base + SubdirName + llvm::sys::path::get_separator() + "lib").str());
+-// Windows, mingw.org
+-// c:\mingw\lib\gcc\mingw32\4.8.1\include\c++
+-// c:\mingw\lib\gcc\mingw32\4.8.1\include\c++\mingw32
+-// c:\mingw\lib\gcc\mingw32\4.8.1\include\c++\backward
+-// c:\mingw\include
+-// c:\mingw\mingw32\include
 -
--  // Gentoo
--  getFilePaths().push_back(
--      (Base + SubdirName + llvm::sys::path::get_separator() + "mingw/lib").str());
+-// Windows, mingw-w64 mingw-builds
+-// c:\mingw32\i686-w64-mingw32\include
+-// c:\mingw32\i686-w64-mingw32\include\c++
+-// c:\mingw32\i686-w64-mingw32\include\c++\i686-w64-mingw32
+-// c:\mingw32\i686-w64-mingw32\include\c++\backward
 -
-   // Only include <base>/lib if we're not cross compiling (not even for
-   // windows->windows to a different arch), or if the sysroot has been set
-   // (where we presume the user has pointed it at an arch specific
+-// Windows, mingw-w64 msys2
+-// c:\msys64\mingw32\include
+-// c:\msys64\mingw32\i686-w64-mingw32\include
+-// c:\msys64\mingw32\include\c++\4.9.2
+-// c:\msys64\mingw32\include\c++\4.9.2\i686-w64-mingw32
+-// c:\msys64\mingw32\include\c++\4.9.2\backward
+-
+-// openSUSE
+-// /usr/lib64/gcc/x86_64-w64-mingw32/5.1.0/include/c++
+-// /usr/lib64/gcc/x86_64-w64-mingw32/5.1.0/include/c++/x86_64-w64-mingw32
+-// /usr/lib64/gcc/x86_64-w64-mingw32/5.1.0/include/c++/backward
+-// /usr/x86_64-w64-mingw32/sys-root/mingw/include
+-
+-// Arch Linux
+-// /usr/i686-w64-mingw32/include/c++/5.1.0
+-// /usr/i686-w64-mingw32/include/c++/5.1.0/i686-w64-mingw32
+-// /usr/i686-w64-mingw32/include/c++/5.1.0/backward
+-// /usr/i686-w64-mingw32/include
+-
+-// Ubuntu
+-// /usr/include/c++/4.8
+-// /usr/include/c++/4.8/x86_64-w64-mingw32
+-// /usr/include/c++/4.8/backward
+-// /usr/x86_64-w64-mingw32/include
+-
+-// Fedora
+-// /usr/x86_64-w64-mingw32ucrt/sys-root/mingw/include/c++/x86_64-w64-mingw32ucrt
+-// /usr/x86_64-w64-mingw32ucrt/sys-root/mingw/include/c++/backward
+-// /usr/x86_64-w64-mingw32ucrt/sys-root/mingw/include
+-// /usr/lib/gcc/x86_64-w64-mingw32ucrt/12.2.1/include-fixed
+-
+ void toolchains::MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+                                                   ArgStringList &CC1Args) const {
+   if (DriverArgs.hasArg(options::OPT_nostdinc))

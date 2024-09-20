@@ -1,7 +1,26 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index 188d76973716..5a00553cacee 100644
+index c81a7ed17029..aa15f69b0134 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -520,18 +520,6 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
+   // correct crtbegin.o ,cetend.o would be found.
+   getFilePaths().push_back(GccLibDir);
+ 
+-  // openSUSE/Fedora
+-  std::string CandidateSubdir = SubdirName + "/sys-root/mingw";
+-  if (getDriver().getVFS().exists(Base + CandidateSubdir))
+-    SubdirName = CandidateSubdir;
+-
+-  getFilePaths().push_back(
+-      (Base + SubdirName + llvm::sys::path::get_separator() + "lib").str());
+-
+-  // Gentoo
+-  getFilePaths().push_back(
+-      (Base + SubdirName + llvm::sys::path::get_separator() + "mingw/lib").str());
+-
+   // Only include <base>/lib if we're not cross compiling (not even for
+   // windows->windows to a different arch), or if the sysroot has been set
+   // (where we presume the user has pointed it at an arch specific
 @@ -540,6 +528,64 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
        getDriver().SysRoot.size())
      getFilePaths().push_back(Base + "lib");

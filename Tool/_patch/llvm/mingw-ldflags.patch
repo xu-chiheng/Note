@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..41ed9df2448e 100644
+index c81a7ed17029..1b9c17d63e3e 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -167,7 +167,16 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -167,7 +167,15 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
      else
        CmdArgs.push_back("DllMainCRTStartup");
      CmdArgs.push_back("--enable-auto-image-base");
@@ -15,7 +15,6 @@ index c81a7ed17029..41ed9df2448e 100644
 +	}
    }
 +  CmdArgs.push_back("--allow-multiple-definition");
-+  CmdArgs.push_back("--dll-search-prefix=lib");
  
    if (Args.hasArg(options::OPT_Z_Xlinker__no_demangle))
      CmdArgs.push_back("--no-demangle");

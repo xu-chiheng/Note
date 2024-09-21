@@ -34,10 +34,10 @@ index 7109faa1072d..378218119f37 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..eaa7c1dca08e
+index 000000000000..55dc74135c8b
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,767 @@
+@@ -0,0 +1,766 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ----------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -199,7 +199,6 @@ index 000000000000..eaa7c1dca08e
 +	}
 +  }
 +  CmdArgs.push_back("--dynamicbase");
-+  CmdArgs.push_back("--dll-search-prefix=cyg");
 +
 +  if (Args.hasArg(options::OPT_Z_Xlinker__no_demangle))
 +    CmdArgs.push_back("--no-demangle");

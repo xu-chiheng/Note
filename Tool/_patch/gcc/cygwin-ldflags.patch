@@ -1,24 +1,26 @@
 diff --git a/gcc/config/i386/cygwin-w64.h b/gcc/config/i386/cygwin-w64.h
-index 8dac104cb43..e20e6511877 100644
+index 8dac104cb43..c41bbd7bb71 100644
 --- a/gcc/config/i386/cygwin-w64.h
 +++ b/gcc/config/i386/cygwin-w64.h
-@@ -66,6 +66,7 @@ along with GCC; see the file COPYING3.  If not see
+@@ -66,7 +66,7 @@ along with GCC; see the file COPYING3.  If not see
    %{static:-Bstatic} %{!static:-Bdynamic} \
    %{shared|mdll: " SUB_LINK_ENTRY " --enable-auto-image-base} \
    %(shared_libgcc_undefs) \
+-  --dll-search-prefix=cyg \
 +  --dynamicbase \
-   --dll-search-prefix=cyg \
    %{!shared: %{!mdll: %{" SPEC_32 ":--large-address-aware} --tsaware}}"
  
+ /* Cygwin64 will have a 64-bit long type. */
 diff --git a/gcc/config/i386/cygwin.h b/gcc/config/i386/cygwin.h
-index 63de10c17d4..cc661e022c3 100644
+index 63de10c17d4..56297749dba 100644
 --- a/gcc/config/i386/cygwin.h
 +++ b/gcc/config/i386/cygwin.h
-@@ -130,6 +130,7 @@ along with GCC; see the file COPYING3.  If not see
+@@ -130,7 +130,7 @@ along with GCC; see the file COPYING3.  If not see
    %{shared: --shared} %{mdll:--dll} \
    %{static:-Bstatic} %{!static:-Bdynamic} \
    %{shared|mdll: --enable-auto-image-base -e __cygwin_dll_entry@12} \
+-  --dll-search-prefix=cyg \
 +  --dynamicbase \
-   --dll-search-prefix=cyg \
    %{!shared: %{!mdll: --large-address-aware --tsaware}}"
  
+ /* Binutils does not handle weak symbols from dlls correctly.  For now,

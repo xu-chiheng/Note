@@ -186,7 +186,7 @@ dump_compiler_linker_build_type_and_compiler_flags() {
 check_llvm_static_or_shared() {
 	local llvm_static_or_shared="$1"
 	if [ -z "${llvm_static_or_shared}" ]; then
-		llvm_static_or_shared=static
+		llvm_static_or_shared=shared
 	fi
 	case "${llvm_static_or_shared}" in
 		static | shared )
@@ -330,7 +330,7 @@ print_host_os_of_triple() {
 	esac
 }
 
-print_unique_name_for_host_triple_compiler_linker_build_type() {
+print_name_for_config() {
 	local prefix="$1"
 	local host_triple="$2"
 	local compiler="$3"
@@ -521,9 +521,9 @@ build_and_install_gmp_mpfr_mpc() {
 	local mpfr_extracted_dir="mpfr-${mpfr_version}"
 	local mpc_extracted_dir="mpc-${mpc_version}"
 
-	local gmp_build_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type gmp "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
-	local mpfr_build_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type mpfr "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
-	local mpc_build_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type mpc "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
+	local gmp_build_dir="$(print_name_for_config gmp "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
+	local mpfr_build_dir="$(print_name_for_config mpfr "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
+	local mpc_build_dir="$(print_name_for_config mpc "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
 
 	# local mirror_site=https://mirrors.aliyun.com
 	# local mirror_site=https://mirrors.tuna.tsinghua.edu.cn
@@ -542,13 +542,13 @@ build_and_install_gmp_mpfr_mpc() {
 	&& echo "building gmp mpfr mpc ......" \
 	&& time_command extract_configure_build_and_install_package gmp "${gmp_tarball}" "${gmp_extracted_dir}" "${gmp_build_dir}" "${gmp_mpfr_mpc_install_dir}" \
 			--prefix="${install_prefix}" --disable-shared \
-			2>&1 | tee "$(print_unique_name_for_host_triple_compiler_linker_build_type "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" gmp-output.txt)" \
+			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" gmp-output.txt)" \
 	&& time_command extract_configure_build_and_install_package mpfr "${mpfr_tarball}" "${mpfr_extracted_dir}" "${mpfr_build_dir}" "${gmp_mpfr_mpc_install_dir}" \
 			--prefix="${install_prefix}" --disable-shared --with-gmp="${install_prefix}" \
-			2>&1 | tee "$(print_unique_name_for_host_triple_compiler_linker_build_type "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" mpfr-output.txt)" \
+			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" mpfr-output.txt)" \
 	&& time_command extract_configure_build_and_install_package mpc "${mpc_tarball}" "${mpc_extracted_dir}" "${mpc_build_dir}" "${gmp_mpfr_mpc_install_dir}" \
 			--prefix="${install_prefix}" --disable-shared --with-gmp="${install_prefix}" \
-			2>&1 | tee "$(print_unique_name_for_host_triple_compiler_linker_build_type "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" mpc-output.txt)" \
+			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" mpc-output.txt)" \
 	&& echo "completed"
 }
 
@@ -576,10 +576,10 @@ build_and_install_binutils_gcc_for_target() {
 	local gmp_mpfr_mpc_install_dir="${12}"
 	local current_datetime="${13}"
 
-	local gcc_install_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type "${gcc_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-install")"
-	local gcc_build_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type "${gcc_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
+	local gcc_install_dir="$(print_name_for_config "${gcc_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-install")"
+	local gcc_build_dir="$(print_name_for_config "${gcc_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
 	local bin_tarball="${package}-${target}-${version}.tar"
-	local binutils_build_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type "${binutils_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
+	local binutils_build_dir="$(print_name_for_config "${binutils_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
 
 	local install_prefix="$(pwd)/${gcc_install_dir}"
 
@@ -630,7 +630,7 @@ build_and_install_binutils_gcc_for_target() {
 		&& time_command parallel_make \
 		&& time_command parallel_make install \
 		&& echo_command popd;} \
-		2>&1 | tee "$(print_unique_name_for_host_triple_compiler_linker_build_type "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-binutils-output.txt")" \
+		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-binutils-output.txt")" \
 	\
 	\
 	&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
@@ -640,7 +640,7 @@ build_and_install_binutils_gcc_for_target() {
 		&& time_command parallel_make install-gcc \
 		&& time_command parallel_make install-target-libgcc \
 		&& echo_command popd;} \
-		2>&1 | tee "$(print_unique_name_for_host_triple_compiler_linker_build_type "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-gcc-output.txt")" \
+		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-gcc-output.txt")" \
 	\
 	\
 	&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
@@ -686,11 +686,11 @@ build_and_install_cross_gcc_for_targets() {
 	local gcc_source_dir="gcc"
 	local binutils_source_dir="binutils"
 
-	local gmp_mpfr_mpc_install_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type gmp-mpfr-mpc "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
+	local gmp_mpfr_mpc_install_dir="$(print_name_for_config gmp-mpfr-mpc "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
 
 	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
 		time_command build_and_install_gmp_mpfr_mpc "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${gmp_mpfr_mpc_install_dir}" \
-		2>&1 | tee "$(print_unique_name_for_host_triple_compiler_linker_build_type "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" gmp-mpfr-mpc-output.txt)"
+		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" gmp-mpfr-mpc-output.txt)"
 	fi \
 	&& time_command check_dir_maybe_clone_from_url "${binutils_source_dir}" "${binutils_git_repo_url}" \
 	&& time_command check_dir_maybe_clone_from_url "${gcc_source_dir}" "${gcc_git_repo_url}" \
@@ -701,7 +701,7 @@ build_and_install_cross_gcc_for_targets() {
 			"${target}" "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${gcc_version}" "${extra_languages}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${binutils_source_dir}" "${gcc_source_dir}" \
 			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
-			2>&1 | tee "$(print_unique_name_for_host_triple_compiler_linker_build_type "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-output.txt")"
+			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-output.txt")"
 	done \
 	&& time_command wait \
 	&& echo "completed" \
@@ -783,8 +783,8 @@ cmake_build_install_package() {
 	shift 11
 
 	local source_dir="${package}"
-	local build_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
-	local install_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type  "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
+	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
+	local install_dir="$(print_name_for_config  "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
 
 	local install_prefix="$(pwd)/${install_dir}"
 
@@ -815,8 +815,8 @@ configure_build_install_package() {
 	shift 6
 
 	local source_dir="${package}"
-	local build_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
-	local install_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
+	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
+	local install_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
 
 	local install_prefix="$(pwd)/${install_dir}"
 
@@ -840,8 +840,8 @@ gcc_configure_build_install_package() {
 	shift 7
 
 	local source_dir="${package}"
-	local build_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
-	local install_dir="$(print_unique_name_for_host_triple_compiler_linker_build_type "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
+	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
+	local install_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
 
 	local languages=(
 		# all

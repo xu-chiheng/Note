@@ -29,10 +29,7 @@ cd "$(dirname "$0")"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=llvm
-check_llvm_static_or_shared "$1"
 {
-	dump_llvm_static_or_shared
-
 	SOURCE_DIR="${PACKAGE}"
 
 	PROJECTS=(
@@ -113,18 +110,9 @@ check_llvm_static_or_shared "$1"
 		# LLVM_ENABLE_PIC
 	)
 
-	case "${LLVM_STATIC_OR_SHARED}" in
-		static )
-			CMAKE_OPTIONS+=(
-				-DBUILD_SHARED_LIBS=OFF
-			)
-			;;
-		shared )
-			CMAKE_OPTIONS+=(
-				-DBUILD_SHARED_LIBS=ON
-			)
-			;;
-	esac
+	-DBUILD_SHARED_LIBS=OFF
+	# MSVC does not support this option
+	# -DBUILD_SHARED_LIBS=ON
 
 	VS2022_BUILD_DIR="${SOURCE_DIR}-vs2022-build"
 	# NINJA_BUILD_DIR="${SOURCE_DIR}-ninja-build"

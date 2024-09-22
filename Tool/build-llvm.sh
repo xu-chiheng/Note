@@ -49,10 +49,10 @@ cd "$(dirname "$0")"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=llvm
-check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
-check_llvm_static_or_shared "$3"
+check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_TRIPLE}" "${PACKAGE}"
+check_llvm_static_or_shared "$4"
 {
-	dump_toolchain_build_type_and_compiler_flags
+	dump_compiler_linker_build_type_and_compiler_flags
 	dump_llvm_static_or_shared
 
 	# VERSION=16.0.6
@@ -138,9 +138,9 @@ check_llvm_static_or_shared "$3"
 	esac
 
 	time_command cmake_build_install_package \
-		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" \
+		"${COMPILER__}" "${LINKER__}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" \
 		"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${CMAKE_OPTIONS[@]}"
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-$(print_host_os_of_triple "${HOST_TRIPLE}")-${TOOLCHAIN,,}-${BUILD_TYPE,,}-output.txt"
+} 2>&1 | tee "$(print_unique_name_for_host_triple_compiler_linker_build_type "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER__}" "${LINKER__}" "${BUILD_TYPE}" output.txt)"
 
 sync .

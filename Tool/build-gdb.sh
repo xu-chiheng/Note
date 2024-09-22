@@ -58,9 +58,9 @@ cd "$(dirname "$0")"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE="gdb"
-check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
+check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_TRIPLE}" "${PACKAGE}"
 {
-	dump_toolchain_build_type_and_compiler_flags
+	dump_compiler_linker_build_type_and_compiler_flags
 
 	VERSION=16.0.0 # a253bea8995323201b016fe477280c1782688ab4 2024-08-28
 
@@ -79,8 +79,8 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 	esac
 
 	time_command configure_build_install_package \
-		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${CONFIGURE_OPTIONS[@]}"
+		"${COMPILER__}" "${LINKER__}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${CONFIGURE_OPTIONS[@]}"
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-$(print_host_os_of_triple "${HOST_TRIPLE}")-${TOOLCHAIN,,}-${BUILD_TYPE,,}-output.txt"
+} 2>&1 | tee "$(print_unique_name_for_host_triple_compiler_linker_build_type "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER__}" "${LINKER__}" "${BUILD_TYPE}" output.txt)"
 
 sync .

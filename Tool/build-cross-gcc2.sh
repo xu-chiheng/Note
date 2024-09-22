@@ -27,9 +27,9 @@ cd "$(dirname "$0")"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=gcc
-check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${PACKAGE}"
+check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_TRIPLE}" "${PACKAGE}"
 {
-	dump_toolchain_build_type_and_compiler_flags
+	dump_compiler_linker_build_type_and_compiler_flags
 
 	# GCC_VERSION=12.3.0
 	# BINUTILS_VERSION=2.36
@@ -67,9 +67,9 @@ check_toolchain_build_type_and_set_compiler_flags "$1" "$2" "${HOST_TRIPLE}" "${
 	print_array_elements "${TARGETS[@]}"
 
 	time_command build_and_install_cross_gcc_for_targets \
-		"${TOOLCHAIN}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
+		"${COMPILER__}" "${LINKER__}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
 		"$(join_array_elements ',' "${EXTRA_LANGUAGES[@]}")" no "${CURRENT_DATETIME}" "${TARGETS[@]}"
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-$(print_host_os_of_triple "${HOST_TRIPLE}")-${TOOLCHAIN,,}-${BUILD_TYPE,,}-output.txt"
+} 2>&1 | tee "$(print_unique_name_for_host_triple_compiler_linker_build_type "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER__}" "${LINKER__}" "${BUILD_TYPE}" output.txt)"
 
 sync .

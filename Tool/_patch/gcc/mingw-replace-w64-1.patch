@@ -1,0 +1,143 @@
+diff --git a/configure b/configure
+index 89c4dc02a38..92293da0aa7 100755
+--- a/configure
++++ b/configure
+@@ -3583,7 +3583,7 @@ case "${target}" in
+   ia64*-*-*vms*)
+     noconfigdirs="$noconfigdirs target-libffi"
+     ;;
+-  i[3456789]86-w64-mingw*)
++  i[3456789]86-*-mingw64*)
+     noconfigdirs="$noconfigdirs target-libffi"
+     ;;
+   i[3456789]86-*-mingw*)
+@@ -3923,7 +3923,7 @@ case "${target}" in
+     # No ld support yet.
+     noconfigdirs="$noconfigdirs libgui itcl ld"
+     ;;
+-  i[3456789]86-w64-mingw*)
++  i[3456789]86-*-mingw64*)
+     ;;
+   i[3456789]86-*-mingw*)
+     target_configdirs="$target_configdirs target-winsup"
+diff --git a/configure.ac b/configure.ac
+index 194416be6f8..d7ee8209b66 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -811,7 +811,7 @@ case "${target}" in
+   ia64*-*-*vms*)
+     noconfigdirs="$noconfigdirs target-libffi"
+     ;;
+-  i[[3456789]]86-w64-mingw*)
++  i[[3456789]]86-*-mingw64*)
+     noconfigdirs="$noconfigdirs target-libffi"
+     ;;
+   i[[3456789]]86-*-mingw*)
+@@ -1148,7 +1148,7 @@ case "${target}" in
+     # No ld support yet.
+     noconfigdirs="$noconfigdirs libgui itcl ld"
+     ;;
+-  i[[3456789]]86-w64-mingw*)
++  i[[3456789]]86-*-mingw64*)
+     ;;
+   i[[3456789]]86-*-mingw*)
+     target_configdirs="$target_configdirs target-winsup"
+diff --git a/contrib/config-list.mk b/contrib/config-list.mk
+index f282cd95c8d..02696bb7190 100644
+--- a/contrib/config-list.mk
++++ b/contrib/config-list.mk
+@@ -108,7 +108,7 @@ LIST = \
+   x86_64-apple-darwin10 x86_64-apple-darwin15 x86_64-apple-darwin21 \
+   x86_64-gnu x86_64-pc-linux-gnuOPT-with-fpmath=avx \
+   x86_64-elfOPT-with-fpmath=sse x86_64-freebsd13 x86_64-netbsd \
+-  x86_64-w64-mingw32 \
++  x86_64-pc-mingw64 \
+   x86_64-mingw32OPT-enable-sjlj-exceptions=yes x86_64-rtems \
+   xstormy16-elf xtensa-elf \
+   xtensa-linux
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index 9adcd267c26..35c000c51e7 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -2235,7 +2235,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	rust_target_objs="${rust_target_objs} winnt-rust.o"
+ 	target_has_targetrustm="yes"
+ 	case ${target} in
+-		x86_64-*-* | *-w64-*)
++		x86_64-*-*)
+ 			need_64bit_isa=yes
+ 			;;
+ 		*)
+@@ -2250,7 +2250,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	tm_file="${tm_file} mingw/mingw32.h"
+ 	# This makes the logic if mingw's or the w64 feature set has to be used
+ 	case ${target} in
+-		*-w64-*)
++		*-mingw64*)
+ 			user_headers_inc_next_post="${user_headers_inc_next_post} float.h"
+ 			user_headers_inc_next_pre="${user_headers_inc_next_pre} stddef.h stdarg.h"
+ 			tm_file="${tm_file} i386/mingw-w64.h"
+@@ -2281,10 +2281,10 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	tm_file="${tm_file} mingw/winnt-dll.h"
+ 	tmake_file="${tmake_file} t-winnt mingw/t-cygming t-slibgcc"
+         case ${target} in
+-               x86_64-w64-*)
++               *-mingw64*)
+                		tmake_file="${tmake_file} i386/t-mingw-w64"
+ 			;;
+-	       i[34567]86-w64-*)
++	       *-mingw32*)
+ 			tmake_file="${tmake_file} i386/t-mingw-w32"
+ 			;;
+ 	esac
+@@ -2292,7 +2292,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	target_gtfiles="$target_gtfiles \$(srcdir)/config/mingw/winnt-dll.cc"
+ 	extra_options="${extra_options} mingw/cygming.opt mingw/mingw.opt"
+ 	case ${target} in
+-		*-w64-*)
++		*-mingw64*)
+ 			extra_options="${extra_options} i386/mingw-w64.opt"
+ 			;;
+ 		*)
+diff --git a/libgm2/configure.host b/libgm2/configure.host
+index 2806fd6872b..8c7ad00c954 100644
+--- a/libgm2/configure.host
++++ b/libgm2/configure.host
+@@ -270,13 +270,13 @@ case "${host_os}" in
+   hpux*)
+     os_include_dir="os/hpux"
+     ;;
+-  mingw32*)
++  mingw*)
+     case "$host" in
+-      *-w64-*)
++      *-mingw64*)
+         os_include_dir="os/mingw32-w64"
+         error_constants_dir="os/mingw32-w64"
+         ;;
+-      *)
++      *-mingw32*)
+         os_include_dir="os/mingw32"
+         error_constants_dir="os/mingw32"
+         ;;
+diff --git a/libstdc++-v3/configure.host b/libstdc++-v3/configure.host
+index 7bc43071616..af0c2d7aea0 100644
+--- a/libstdc++-v3/configure.host
++++ b/libstdc++-v3/configure.host
+@@ -270,13 +270,13 @@ case "${host_os}" in
+   hpux*)
+     os_include_dir="os/hpux"
+     ;;
+-  mingw32*)
++  mingw*)
+     case "$host" in
+-      *-w64-*)
++      *-mingw64*)
+         os_include_dir="os/mingw32-w64"
+         error_constants_dir="os/mingw32-w64"
+         ;;
+-      *)
++      *-mingw32*)
+         os_include_dir="os/mingw32"
+         error_constants_dir="os/mingw32"
+         ;;

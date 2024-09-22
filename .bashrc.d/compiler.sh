@@ -215,7 +215,7 @@ show_compiler_commands() {
 	esac
 
 	"${print_hello_world_program_command}" | tee "${source_file_name}"
-	echo_command "$@" -v "${source_file_name}"
+	echo_command "$@" -v -Wl,-v "${source_file_name}"
 }
 
 show_compiler_commands_bfd() {

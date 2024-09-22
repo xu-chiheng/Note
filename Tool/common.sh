@@ -151,7 +151,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 			ldflags+=( -fuse-ld=bfd )
 			;;
 		LLD )
-			# MinGW Clang can use this option
+			# MinGW GCC/Clang can use this option
 			ldflags+=( -fuse-ld=lld )
 			;;
 		* )
@@ -339,17 +339,8 @@ print_name_for_config() {
 	local suffix="$6"
 	shift 6
 
-	local result=()
-	if [ ! -z "${prefix}" ]; then
-		result+=( "${prefix}" )
-	fi
-
 	local host_os="$(print_host_os_of_triple "${host_triple}")"
-	result+=( "${host_os}" "${compiler,,}" "${linker,,}" "${build_type,,}" )
-
-	if [ ! -z "${suffix}" ]; then
-		result+=( "${suffix}" )
-	fi
+	local result=( "${prefix}" "${host_os}" "${compiler,,}" "${linker,,}" "${build_type,,}" "${suffix}" )
 
 	join_array_elements '-' "${result[@]}" "$@"
 }

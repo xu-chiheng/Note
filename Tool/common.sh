@@ -701,7 +701,8 @@ build_and_install_cross_gcc_for_targets() {
 			"${target}" "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${gcc_version}" "${extra_languages}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${binutils_source_dir}" "${gcc_source_dir}" \
 			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
-			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-output.txt")"
+			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-output.txt")" \
+			& # run in background
 	done \
 	&& time_command wait \
 	&& echo "completed" \

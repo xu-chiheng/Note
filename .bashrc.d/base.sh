@@ -236,20 +236,22 @@ set_environment_variables_at_bash_startup() {
 }
 
 fix_system_quirks_one_time() {
-	if host_triple_is_windows "${HOST_TRIPLE}" && [ ! "${HOST_TRIPLE}" = "$(~/config.guess)" ]; then
-		echo "host triple ${HOST_TRIPLE} not equal to the output of config.guess $(~/config.guess)"
-	fi
-
 	if host_triple_is_windows "${HOST_TRIPLE}"; then
+		if [ ! "${HOST_TRIPLE}" = "$(~/config.guess)" ]; then
+			echo "host triple ${HOST_TRIPLE} not equal to the output of config.guess $(~/config.guess)"
+		fi
+
 		case "${HOST_TRIPLE}" in
 			*-cygwin )
 				# Cygwin has no connect.exe, use MinGW's
 				local usr_bin_connect="/usr/bin/connect.exe"
-				if [ ! -f "${usr_bin_connect}" ] && [ -v MSYS2_DIR ]; then
+				if [ -v MSYS2_DIR ]; then
 					local mingw_ucrt_bin_connect="$(cygpath -u "${MSYS2_DIR}")/ucrt64/bin/connect.exe"
 					if [ -f "${mingw_ucrt_bin_connect}" ]; then
-						rm -rf "${usr_bin_connect}" \
-						&& cp -f "${mingw_ucrt_bin_connect}" "${usr_bin_connect}"
+						if [ ! -f "${usr_bin_connect}" ] || ! cmp --quiet "${usr_bin_connect}" "${mingw_ucrt_bin_connect}" ; then
+							rm -rf "${usr_bin_connect}" \
+							&& cp -f "${mingw_ucrt_bin_connect}" "${usr_bin_connect}"
+						fi
 					fi
 				fi
 

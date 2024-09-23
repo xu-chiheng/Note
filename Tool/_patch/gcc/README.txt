@@ -9,17 +9,17 @@ https://src.fedoraproject.org/rpms/gcc.git
 13.0.0    8e08c7886eed5824bebd0e011526ec302d622844 2023-04-17
 patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths_to_include_path,_add_env_var_paths_to_library_path,\
 _PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-0,no-limits.h-test-0},cygwin-{ldflags,macro,no-wrap-0,no-tsaware},\
-mingw-{replace-w64-0,ldflags{32-0,64},gethostname,libgcc-no-libc,include-lib-{a,b,c-0,d-0,e-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
+mingw-{replace-w64-0,ldflags-w{32-0,64},gethostname,libgcc-no-libc,include-lib-{a,b,c-0,d-0,e-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7 2024-04-24
 patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths_to_include_path,_add_env_var_paths_to_library_path,\
 _PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-0,no-limits.h-test-0},cygwin-{ldflags,macro,no-wrap-0,no-tsaware},\
-mingw-{replace-w64-1,ldflags{32-0,64},gethostname,libgcc-no-libc,include-lib-{a,b,c-0,d-0,e-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
+mingw-{replace-w64-1,ldflags-w{32-0,64},gethostname,libgcc-no-libc,include-lib-{a,b,c-0,d-0,e-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 15.0.0    abeeccef92892fe519cc417b30ae22ce9da2d5e6 2024-08-28
 patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths_to_include_path,_add_env_var_paths_to_library_path,\
 _PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-1,no-limits.h-test-1},cygwin-{ldflags,macro,no-wrap-1,no-tsaware},\
-mingw-{replace-w64-1,ldflags{32-1,64},gethostname,libgcc-no-libc,include-lib-{a,b,c-1,d-1,e-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
+mingw-{replace-w64-1,ldflags-w{32-1,64},gethostname,libgcc-no-libc,include-lib-{a,b,c-1,d-1,e-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 
 _PREFIX_INCLUDE_DIR.patch
@@ -162,4 +162,116 @@ configure: failed program was:
 | # include <assert.h>
 | #endif
 | 		     Syntax error
+
+
+
+
+
+
+
+https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html
+https://stackoverflow.com/questions/20483619/lib-vs-libpath-environment-variables-difference-for-ms-visual-c-c
+
+When using Microsoft Visual C++ (MSVC), the INCLUDE and LIB environment variables are used to specify search paths for header files and libraries: 
+INCLUDE
+Specifies the search path for the system #include header files. The INCLUDE variable should point to the \include subdirectory of your Visual Studio installation. 
+LIB
+Specifies the search path for libraries. The LIB variable can contain multiple path specifications, separated by semicolons. One path should point to the \lib subdirectory of your Visual C++ installation. 
+Other environment variables that can be used with MSVC include: 
+CL: Prepends options and arguments to the command-line arguments. 
+_CL_: Appends options and arguments to the command-line arguments. 
+LIBPATH: Specifies directories to search for metadata files referenced with #using. The linker will search the path specified by the /LIBPATH option before searching the path specified in the LIB environment variable. 
+PATH: Used if the tool needs to run CVTRES and can't find the file in the same directory as link.exe. The PATH variable should point to the \bin subdirectory of your Visual C++ installation. 
+TMP: Specifies a directory when linking OMF or .res files. 
+
+
+
+
+Does the GCC compiler use environment variables like INCLUDE and LIB in MSVC to specify include and library directories?
+
+The GCC compiler does have a similar mechanism for specifying include and library directories, but the names of the environment variables differ from those in MSVC. For GCC:
+
+1. Include directories (equivalent to MSVC's INCLUDE):
+	- `C_INCLUDE_PATH`: for C header files
+	- `CPLUS_INCLUDE_PATH`: for C++ header files
+
+2. Library directories (equivalent to MSVC's LIB):
+	- `LIBRARY_PATH`: for specifying library file search paths
+
+By using these environment variables, you can set GCC's default search paths. For example:
+
+```bash
+export C_INCLUDE_PATH=/path/to/include
+export CPLUS_INCLUDE_PATH=/path/to/cpp/include
+export LIBRARY_PATH=/path/to/lib
+```
+
+In addition to environment variables, GCC also provides command-line options to specify these paths:
+
+- `-I<dir>`: Adds an include search path
+- `-L<dir>`: Adds a library search path
+
+These command-line options usually take precedence over environment variables.
+
+It's important to note that while these environment variables work in GCC, they are not as commonly used as the INCLUDE and LIB variables in MSVC. In the GCC environment, it's more common to specify these paths directly in the compile command or manage them using a build system like Makefile.
+
+
+
+
+Does the GCC compiler use environment variables like INCLUDE and LIB in MSVC to specify include and library directories?
+No, the GCC (GNU Compiler Collection) compiler does not use environment variables named `INCLUDE` and `LIB` like Microsoft Visual C++ (MSVC) to specify include and library directories. Instead, GCC utilizes a different set of environment variables and command-line options to manage these directories.
+
+**Environment Variables Used by GCC:**
+
+1. **`CPATH`**: Specifies a list of directories that GCC should search for header files during compilation. The directories listed in `CPATH` are searched as if specified with the `-I` option, affecting both C and C++ compilers.
+
+2. **`LIBRARY_PATH`**: Defines a list of directories for GCC to search for library files during linking. These directories are searched as if specified with the `-L` option.
+
+3. **`C_INCLUDE_PATH`**: Specifies directories to be searched for C header files only. These directories are searched before those in `CPATH`.
+
+4. **`CPLUS_INCLUDE_PATH`**: Similar to `C_INCLUDE_PATH`, but for C++ header files.
+
+5. **`OBJC_INCLUDE_PATH`**: Specifies directories for Objective-C header files.
+
+**Usage Example:**
+
+To set these environment variables in a Unix-like shell:
+
+```bash
+export CPATH=/path/to/includes
+export LIBRARY_PATH=/path/to/libs
+```
+
+**Command-Line Options:**
+
+Alternatively, you can specify include and library directories directly in the GCC command line:
+
+- **`-I`**: Adds a directory to the list of directories to be searched for header files.
+
+	```bash
+	gcc -I/path/to/includes myprogram.c -o myprogram
+	```
+
+- **`-L`**: Adds a directory to the list of directories to be searched for library files during linking.
+
+	```bash
+	gcc myprogram.o -L/path/to/libs -lmylib -o myprogram
+	```
+
+**Why GCC Doesn't Use `INCLUDE` and `LIB`:**
+
+The environment variables `INCLUDE` and `LIB` are specific to MSVC and the Windows development environment. GCC was designed to be cross-platform and adheres to Unix-like conventions, which is why it uses different environment variables.
+
+**Summary:**
+
+- GCC uses `CPATH`, `LIBRARY_PATH`, `C_INCLUDE_PATH`, and `CPLUS_INCLUDE_PATH` to specify additional include and library directories.
+- You can also use `-I` and `-L` command-line options to specify directories directly.
+- `INCLUDE` and `LIB` are not recognized by GCC.
+
+**References:**
+
+- [GCC Environment Variables](https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html)
+- [Specifying Target Directories in GCC](https://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html)
+
+
 

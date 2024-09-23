@@ -61,7 +61,7 @@ print_host_triple_0() {
 			;;
 	esac
 
-	# fall back
+	# fallback
 	~/config.guess
 }
 
@@ -78,7 +78,7 @@ print_host_triple() {
 host_triple_is_windows() {
 	local host_triple="$1"
 	case "${host_triple}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
+		*-cygwin | *-msys | *-mingw* )
 			true
 			;;
 		* )
@@ -90,7 +90,7 @@ host_triple_is_windows() {
 host_triple_is_linux() {
 	local host_triple="$1"
 	case "${host_triple}" in
-		*-linux-gnu )
+		*-linux* )
 			true
 			;;
 		* )
@@ -125,24 +125,26 @@ set_environment_variables_at_bash_startup() {
 	export LC_ALL=en_US.UTF-8
 	export EDITOR=~/editor.sh
 
-	case "${HOST_TRIPLE}" in
-		# https://www.joshkel.com/2018/01/18/symlinks-in-windows/
-		# https://www.cygwin.com/cygwin-ug-net/using.html#pathnames-symlinks
-		# https://stackoverflow.com/questions/32847697/windows-specific-git-configuration-settings-where-are-they-set/32849199#32849199
+	if host_triple_is_windows "${HOST_TRIPLE}"; then
+		case "${HOST_TRIPLE}" in
+			# https://www.joshkel.com/2018/01/18/symlinks-in-windows/
+			# https://www.cygwin.com/cygwin-ug-net/using.html#pathnames-symlinks
+			# https://stackoverflow.com/questions/32847697/windows-specific-git-configuration-settings-where-are-they-set/32849199#32849199
 
-		# https://superuser.com/questions/550732/use-mklink-in-msys
-		# https://superuser.com/questions/526736/how-to-run-internal-cmd-command-from-the-msys-shell
+			# https://superuser.com/questions/550732/use-mklink-in-msys
+			# https://superuser.com/questions/526736/how-to-run-internal-cmd-command-from-the-msys-shell
 
-		x86_64-pc-cygwin )
-			# For Cygwin, add an environment variable, CYGWIN, and make sure it contains winsymlinks:nativestrict. See the Cygwin manual for details. (If you don’t do this, then Cygwin defaults to emulating symlinks by using special file contents that it understands but non-Cygwin software doesn’t.)
-			# default setting works
-			export CYGWIN=winsymlinks:native
-			;;
-		x86_64-pc-msys | x86_64-pc-mingw64 )
-			# For MSYS / MinGW (this includes the command-line utilities that used in the git-bash shell), add an environment variable, MSYS, and make sure it contains winsymlinks:nativestrict. (If you don’t do this, then symlinks are “emulated” by copying files and directories. This can be surprising, to say the least.)
-			export MSYS=winsymlinks:native
-			;;
-	esac
+			*-cygwin )
+				# For Cygwin, add an environment variable, CYGWIN, and make sure it contains winsymlinks:nativestrict. See the Cygwin manual for details. (If you don’t do this, then Cygwin defaults to emulating symlinks by using special file contents that it understands but non-Cygwin software doesn’t.)
+				# default setting works
+				export CYGWIN=winsymlinks:native
+				;;
+			*-msys | *-mingw* )
+				# For MSYS / MinGW (this includes the command-line utilities that used in the git-bash shell), add an environment variable, MSYS, and make sure it contains winsymlinks:nativestrict. (If you don’t do this, then symlinks are “emulated” by copying files and directories. This can be surprising, to say the least.)
+				export MSYS=winsymlinks:native
+				;;
+		esac
+	fi
 
 	if host_triple_is_windows "${HOST_TRIPLE}" && [ -v VSINSTALLDIR ]; then
 		# Visual Studio, MSVC bin dirs has been prepended to PATH
@@ -152,7 +154,7 @@ set_environment_variables_at_bash_startup() {
 		fi
 	else
 		case "${HOST_TRIPLE}" in
-			x86_64-pc-cygwin | x86_64-pc-mingw64 | *-linux-gnu )
+			*-cygwin | *-mingw* | *-linux* )
 				local packages_dir="$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")"
 				local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
 				if ! host_triple_is_windows "${HOST_TRIPLE}"; then
@@ -166,124 +168,21 @@ set_environment_variables_at_bash_startup() {
 				for package in "${packages[@]}"; do
 					bin_dirs+=( "${packages_dir}/${package}/bin" )
 				done
-
 				export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
+
+				if host_triple_is_linux "${HOST_TRIPLE}"; then
+					# LD_LIBRARY_PATH
+					true
+				fi
 				;;
-			x86_64-pc-msys )
+			*-msys )
 				# no self built package
 				true
 				;;
 		esac
 
 		case "${HOST_TRIPLE}" in
-			x86_64-pc-mingw64 )
-				# https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html
-				# https://stackoverflow.com/questions/20483619/lib-vs-libpath-environment-variables-difference-for-ms-visual-c-c
-
-				# When using Microsoft Visual C++ (MSVC), the INCLUDE and LIB environment variables are used to specify search paths for header files and libraries: 
-				# INCLUDE
-				# Specifies the search path for the system #include header files. The INCLUDE variable should point to the \include subdirectory of your Visual Studio installation. 
-				# LIB
-				# Specifies the search path for libraries. The LIB variable can contain multiple path specifications, separated by semicolons. One path should point to the \lib subdirectory of your Visual C++ installation. 
-				# Other environment variables that can be used with MSVC include: 
-				# CL: Prepends options and arguments to the command-line arguments. 
-				# _CL_: Appends options and arguments to the command-line arguments. 
-				# LIBPATH: Specifies directories to search for metadata files referenced with #using. The linker will search the path specified by the /LIBPATH option before searching the path specified in the LIB environment variable. 
-				# PATH: Used if the tool needs to run CVTRES and can't find the file in the same directory as link.exe. The PATH variable should point to the \bin subdirectory of your Visual C++ installation. 
-				# TMP: Specifies a directory when linking OMF or .res files. 
-
-
-
-
-				# Does the GCC compiler use environment variables like INCLUDE and LIB in MSVC to specify include and library directories?
-
-				# The GCC compiler does have a similar mechanism for specifying include and library directories, but the names of the environment variables differ from those in MSVC. For GCC:
-
-				# 1. Include directories (equivalent to MSVC's INCLUDE):
-				#    - `C_INCLUDE_PATH`: for C header files
-				#    - `CPLUS_INCLUDE_PATH`: for C++ header files
-
-				# 2. Library directories (equivalent to MSVC's LIB):
-				#    - `LIBRARY_PATH`: for specifying library file search paths
-
-				# By using these environment variables, you can set GCC's default search paths. For example:
-
-				# ```bash
-				# export C_INCLUDE_PATH=/path/to/include
-				# export CPLUS_INCLUDE_PATH=/path/to/cpp/include
-				# export LIBRARY_PATH=/path/to/lib
-				# ```
-
-				# In addition to environment variables, GCC also provides command-line options to specify these paths:
-
-				# - `-I<dir>`: Adds an include search path
-				# - `-L<dir>`: Adds a library search path
-
-				# These command-line options usually take precedence over environment variables.
-
-				# It's important to note that while these environment variables work in GCC, they are not as commonly used as the INCLUDE and LIB variables in MSVC. In the GCC environment, it's more common to specify these paths directly in the compile command or manage them using a build system like Makefile.
-
-
-
-
-				# Does the GCC compiler use environment variables like INCLUDE and LIB in MSVC to specify include and library directories?
-				# No, the GCC (GNU Compiler Collection) compiler does not use environment variables named `INCLUDE` and `LIB` like Microsoft Visual C++ (MSVC) to specify include and library directories. Instead, GCC utilizes a different set of environment variables and command-line options to manage these directories.
-
-				# **Environment Variables Used by GCC:**
-
-				# 1. **`CPATH`**: Specifies a list of directories that GCC should search for header files during compilation. The directories listed in `CPATH` are searched as if specified with the `-I` option, affecting both C and C++ compilers.
-
-				# 2. **`LIBRARY_PATH`**: Defines a list of directories for GCC to search for library files during linking. These directories are searched as if specified with the `-L` option.
-
-				# 3. **`C_INCLUDE_PATH`**: Specifies directories to be searched for C header files only. These directories are searched before those in `CPATH`.
-
-				# 4. **`CPLUS_INCLUDE_PATH`**: Similar to `C_INCLUDE_PATH`, but for C++ header files.
-
-				# 5. **`OBJC_INCLUDE_PATH`**: Specifies directories for Objective-C header files.
-
-				# **Usage Example:**
-
-				# To set these environment variables in a Unix-like shell:
-
-				# ```bash
-				# export CPATH=/path/to/includes
-				# export LIBRARY_PATH=/path/to/libs
-				# ```
-
-				# **Command-Line Options:**
-
-				# Alternatively, you can specify include and library directories directly in the GCC command line:
-
-				# - **`-I`**: Adds a directory to the list of directories to be searched for header files.
-
-				#   ```bash
-				#   gcc -I/path/to/includes myprogram.c -o myprogram
-				#   ```
-
-				# - **`-L`**: Adds a directory to the list of directories to be searched for library files during linking.
-
-				#   ```bash
-				#   gcc myprogram.o -L/path/to/libs -lmylib -o myprogram
-				#   ```
-
-				# **Why GCC Doesn't Use `INCLUDE` and `LIB`:**
-
-				# The environment variables `INCLUDE` and `LIB` are specific to MSVC and the Windows development environment. GCC was designed to be cross-platform and adheres to Unix-like conventions, which is why it uses different environment variables.
-
-				# **Summary:**
-
-				# - GCC uses `CPATH`, `LIBRARY_PATH`, `C_INCLUDE_PATH`, and `CPLUS_INCLUDE_PATH` to specify additional include and library directories.
-				# - You can also use `-I` and `-L` command-line options to specify directories directly.
-				# - `INCLUDE` and `LIB` are not recognized by GCC.
-
-				# **References:**
-
-				# - [GCC Environment Variables](https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html)
-				# - [Specifying Target Directories in GCC](https://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html)
-
-
-
-
+			*-mingw* )
 				local mingw_root_dir="$(print_mingw_root_dir)"
 				local mingw_root_dir_2="$(cygpath -m "${mingw_root_dir}")"
 				export INCLUDE="${mingw_root_dir_2}/include"
@@ -341,36 +240,33 @@ fix_system_quirks_one_time() {
 		echo "host triple ${HOST_TRIPLE} not equal to the output of config.guess $(~/config.guess)"
 	fi
 
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin )
-			# Cygwin has no connect.exe, use MinGW's
-			local usr_bin_connect="/usr/bin/connect.exe"
-			if [ ! -f "${usr_bin_connect}" ] && [ -v MSYS2_DIR ]; then
-				local mingw_ucrt_bin_connect="$(cygpath -u "${MSYS2_DIR}")/ucrt64/bin/connect.exe"
-				if [ -f "${mingw_ucrt_bin_connect}" ]; then
-					rm -rf "${usr_bin_connect}" \
-					&& cp -f "${mingw_ucrt_bin_connect}" "${usr_bin_connect}"
-				fi
-			fi
-	esac
-
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin )
-			# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
-			local usr_bin_gpg="/usr/bin/gpg.exe"
-			local usr_bin_gpg2="/usr/bin/gpg2.exe"
-			if [ -f "${usr_bin_gpg2}" ] ; then
-				if [ -f "${usr_bin_gpg}" ] && [ ! -f "${usr_bin_gpg}".backup ]; then
-					mv -f "${usr_bin_gpg}" "${usr_bin_gpg}".backup
-				fi \
-				&& if [ ! -f "${usr_bin_gpg}" ] || ! cmp --quiet "${usr_bin_gpg}" "${usr_bin_gpg2}" ; then
-					rm -rf "${usr_bin_gpg}" \
-					&& cp -f "${usr_bin_gpg2}" "${usr_bin_gpg}"
-				fi
-			fi
-	esac
-
 	if host_triple_is_windows "${HOST_TRIPLE}"; then
+		case "${HOST_TRIPLE}" in
+			*-cygwin )
+				# Cygwin has no connect.exe, use MinGW's
+				local usr_bin_connect="/usr/bin/connect.exe"
+				if [ ! -f "${usr_bin_connect}" ] && [ -v MSYS2_DIR ]; then
+					local mingw_ucrt_bin_connect="$(cygpath -u "${MSYS2_DIR}")/ucrt64/bin/connect.exe"
+					if [ -f "${mingw_ucrt_bin_connect}" ]; then
+						rm -rf "${usr_bin_connect}" \
+						&& cp -f "${mingw_ucrt_bin_connect}" "${usr_bin_connect}"
+					fi
+				fi
+
+				# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
+				local usr_bin_gpg="/usr/bin/gpg.exe"
+				local usr_bin_gpg2="/usr/bin/gpg2.exe"
+				if [ -f "${usr_bin_gpg2}" ] ; then
+					if [ -f "${usr_bin_gpg}" ] && [ ! -f "${usr_bin_gpg}".backup ]; then
+						mv -f "${usr_bin_gpg}" "${usr_bin_gpg}".backup
+					fi \
+					&& if [ ! -f "${usr_bin_gpg}" ] || ! cmp --quiet "${usr_bin_gpg}" "${usr_bin_gpg2}" ; then
+						rm -rf "${usr_bin_gpg}" \
+						&& cp -f "${usr_bin_gpg2}" "${usr_bin_gpg}"
+					fi
+				fi
+		esac
+
 		# ssh uses wrong home directory in Cygwin - Server Fault
 		# https://serverfault.com/questions/95750/ssh-uses-wrong-home-directory-in-cygwin
 		# If your $HOME variable is set, but ssh isn't recognizing it, put this line in /etc/nsswitch.conf:
@@ -395,10 +291,10 @@ fix_system_quirks_one_time() {
 print_packages_dir_of_host_triple() {
 	local host_triple="$1"
 	case "${host_triple}" in
-		x86_64-pc-cygwin )
+		*-cygwin )
 			echo "$(cygpath -u 'D:\_cygwin')"
 			;;
-		x86_64-pc-mingw64 )
+		*-mingw* )
 			case "${MSYSTEM}" in
 				MINGW64 )
 					# msvcrt.dll
@@ -414,7 +310,7 @@ print_packages_dir_of_host_triple() {
 					;;
 			esac
 			;;
-		*-linux-gnu )
+		*-linux* )
 			echo "/mnt/work/_linux"
 			;;
 		* )

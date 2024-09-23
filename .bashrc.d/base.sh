@@ -157,14 +157,17 @@ set_environment_variables_at_bash_startup() {
 			*-cygwin | *-mingw* | *-linux* )
 				local packages_dir="$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")"
 				local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
-				if ! host_triple_is_windows "${HOST_TRIPLE}"; then
-					packages+=( qemu )
-				else
+				if host_triple_is_windows "${HOST_TRIPLE}"; then
 					# share the self built QEMU
 					true
+				else
+					packages+=( qemu )
 				fi
-				local bin_dirs=()
+
 				local package
+
+				# PATH
+				local bin_dirs=()
 				for package in "${packages[@]}"; do
 					bin_dirs+=( "${packages_dir}/${package}/bin" )
 				done
@@ -172,7 +175,11 @@ set_environment_variables_at_bash_startup() {
 
 				if host_triple_is_linux "${HOST_TRIPLE}"; then
 					# LD_LIBRARY_PATH
-					true
+					local lib_dirs=()
+					for package in "${packages[@]}"; do
+						lib_dirs+=( "${packages_dir}/${package}/lib" )
+					done
+					export LD_LIBRARY_PATH="$(join_array_elements ':' "${lib_dirs[@]}" "${LD_LIBRARY_PATH}")"
 				fi
 				;;
 			*-msys )

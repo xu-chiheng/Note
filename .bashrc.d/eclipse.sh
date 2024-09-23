@@ -51,7 +51,7 @@ eclipse_workspace_backup_metadata_dir() {
 
 # Running this command in Linux VPS is fast 
 # On Windows, using v2rayN Tun mode(sing-box Virtual NIC), Cygwin git is slow, and has bug to finish the cloning.
-download_and_backup_eclipse_platform_source() {
+eclipse_download_and_backup_platform_source() {
 	local current_datetime="$(print_current_datetime)"
 	local eclipse_platform_source_dir=eclipse
 	local eclipse_platform_source_tarball="${eclipse_platform_source_dir}-${current_datetime}".tar

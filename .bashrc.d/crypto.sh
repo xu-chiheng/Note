@@ -102,7 +102,7 @@ gpg_export_default_public_key_with_ascii_armored_output_and_to_text_file() {
 	{
 		# export public keys
 		gpg --export -a "$(git config user.email)";
-	}  | tee keyring_public_default.asc
+	}  | tee keyring_default_public.asc
 }
 
 gpg_export_default_public_and_private_key_with_ascii_armored_output_and_to_text_file() {
@@ -111,14 +111,14 @@ gpg_export_default_public_and_private_key_with_ascii_armored_output_and_to_text_
 		gpg --export -a "$(git config user.email)";
 		# export private keys
 		gpg --export-secret-keys -a "$(git config user.email)";
-	}  | tee keyring_all_default.asc
+	}  | tee keyring_default_public_and_private.asc
 }
 
 gpg_export_all_public_keys_with_ascii_armored_output_and_to_text_file() {
 	{
 		# export public keys
 		gpg --export -a;
-	}  | tee keyring_public.asc
+	}  | tee keyring_all_public.asc
 }
 
 gpg_export_all_public_and_private_keys_with_ascii_armored_output_and_to_text_file() {
@@ -127,7 +127,7 @@ gpg_export_all_public_and_private_keys_with_ascii_armored_output_and_to_text_fil
 		gpg --export -a;
 		# export private keys
 		gpg --export-secret-keys -a;
-	}  | tee keyring_all.asc
+	}  | tee keyring_all_public_and_private.asc
 }
 
 # https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key

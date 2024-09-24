@@ -161,19 +161,20 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
-	export COMPILER__="${compiler}"
-	export LINKER__="${linker}"
-	export BUILD_TYPE="${build_type}"
-	export CC="${cc}"
-	export CXX="${cxx}"
-	export CFLAGS="${cflags[*]}"
-	export CXXFLAGS="${cxxflags[*]}"
-	export LDFLAGS="${ldflags[*]}"
+	COMPILER="${compiler}"
+	LINKER="${linker}"
+	BUILD_TYPE="${build_type}"
+	CC="${cc}"
+	CXX="${cxx}"
+	CFLAGS="${cflags[*]}"
+	CXXFLAGS="${cxxflags[*]}"
+	LDFLAGS="${ldflags[*]}"
+	export CC CXX CFLAGS CXXFLAGS LDFLAGS
 }
 
 dump_compiler_linker_build_type_and_compiler_flags() {
-	echo "COMPILER__ : ${COMPILER__}"
-	echo "LINKER__   : ${LINKER__}"
+	echo "COMPILER   : ${COMPILER}"
+	echo "LINKER     : ${LINKER}"
 	echo "BUILD_TYPE : ${BUILD_TYPE}"
 	echo "CC         : ${CC} $(print_compiler_version "${CC}") $(which "${CC}")"
 	echo "CXX        : ${CXX} $(print_compiler_version "${CXX}") $(which "${CXX}")"

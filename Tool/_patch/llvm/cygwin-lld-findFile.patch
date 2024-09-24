@@ -1,0 +1,29 @@
+diff --git a/lld/MinGW/Driver.cpp b/lld/MinGW/Driver.cpp
+index c7d7b9cfca38..fad50f4e8113 100644
+--- a/lld/MinGW/Driver.cpp
++++ b/lld/MinGW/Driver.cpp
+@@ -49,6 +49,7 @@
+ using namespace lld;
+ using namespace llvm::opt;
+ using namespace llvm;
++using namespace llvm::sys::path;
+ 
+ // Create OptTable
+ enum {
+@@ -128,8 +129,15 @@ opt::InputArgList MinGWOptTable::parse(ArrayRef<const char *> argv) {
+ // Find a file by concatenating given paths.
+ static std::optional<std::string> findFile(StringRef path1,
+                                            const Twine &path2) {
++  Style style;
++#ifdef __CYGWIN__
++  style = Style::posix;
++#else
++  style = Style::native;
++#endif
++
+   SmallString<128> s;
+-  sys::path::append(s, path1, path2);
++  sys::path::append(s, style, path1, path2);
+   if (sys::fs::exists(s))
+     return std::string(s);
+   return std::nullopt;

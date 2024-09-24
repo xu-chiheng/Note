@@ -6,20 +6,20 @@ https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-gcc
 https://src.fedoraproject.org/rpms/gcc.git
 
 
-13.0.0    8e08c7886eed5824bebd0e011526ec302d622844 2023-04-17
+13.0.0    8e08c7886eed5824bebd0e011526ec302d622844    2023-04-17    branch point
 patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths_to_include_path,_add_env_var_paths_to_library_path,\
 _PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-0,no-limits.h-test-0},cygwin-{ldflags,macro,no-wrap-0,no-manifest},\
-mingw-{replace-w64-0,ldflags-w{32-0,64},no-manifest-0,gethostname,libgcc-no-libc,include-lib-{a,b,c-0,d-0,e-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
+mingw-{replace-w64-0,ldflags-w{32-0,64},no-manifest-0,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
-14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7 2024-04-24
+14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7    2024-04-24    branch point
 patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths_to_include_path,_add_env_var_paths_to_library_path,\
 _PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-0,no-limits.h-test-0},cygwin-{ldflags,macro,no-wrap-0,no-manifest},\
-mingw-{replace-w64-1,ldflags-w{32-0,64},no-manifest-0,gethostname,libgcc-no-libc,include-lib-{a,b,c-0,d-0,e-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
+mingw-{replace-w64-1,ldflags-w{32-0,64},no-manifest-0,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
-15.0.0    abeeccef92892fe519cc417b30ae22ce9da2d5e6 2024-08-28
+15.0.0    abeeccef92892fe519cc417b30ae22ce9da2d5e6    2024-08-28
 patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths_to_include_path,_add_env_var_paths_to_library_path,\
 _PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-1,no-limits.h-test-1},cygwin-{ldflags,macro,no-wrap-1,no-manifest},\
-mingw-{replace-w64-1,ldflags-w{32-1,64},no-manifest-1,gethostname,libgcc-no-libc,include-lib-{a,b,c-1,d-1,e-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
+mingw-{replace-w64-1,ldflags-w{32-1,64},no-manifest-1,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 
 _PREFIX_INCLUDE_DIR.patch

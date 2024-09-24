@@ -32,7 +32,7 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 	dump_compiler_linker_build_type_and_compiler_flags
 
 	# VERSION=13.2.0
-	VERSION=15.0.0 # abeeccef92892fe519cc417b30ae22ce9da2d5e6 2024-08-28
+	VERSION=15.0.0    # abeeccef92892fe519cc417b30ae22ce9da2d5e6    2024-08-28
 
 	EXTRA_LANGUAGES=()
 
@@ -155,10 +155,10 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 	esac
 
 	time_command gcc_configure_build_install_package \
-		"${COMPILER__}" "${LINKER__}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" \
+		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" \
 		"$(join_array_elements ',' "${EXTRA_LANGUAGES[@]}")" "${CONFIGURE_OPTIONS[@]}"
 
-} 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER__}" "${LINKER__}" "${BUILD_TYPE}" output.txt)"
+} 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
 
 sync .
 

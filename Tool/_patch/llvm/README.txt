@@ -19,83 +19,83 @@ stage 2 : Clang 16.0.6
 stage 3 : Clang 16.0.6
 
 
-16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a 2023-01-24   branch point
+16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a    2023-01-24    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-0,driver-0,general-{a,b,c},macro},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-0,driver-0,general-{a,b,c},macro},\
 mingw-{git-revision,ldflags,pthread,emutls-0,findgcc-0,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7 2023-07-25   branch point
+17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7    2023-07-25    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-0,driver-0,general-{a,b,c},macro,CGCall.h},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-0,driver-0,general-{a,b,c},macro,CGCall.h},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-18.0.0    6f44f87011cd52367626cac111ddbb2d25784b90 2023-10-05
+18.0.0    6f44f87011cd52367626cac111ddbb2d25784b90    2023-10-05
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-1,driver-1,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-1,driver-1,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-18.0.0    49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09
+18.0.0    49b27b150b97c190dedf8b45bf991c4b811ed953    2023-12-09
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-18.0.0    f49e2b05bf3ececa2fe20c5d658ab92ab974dc36 2023-12-17
+18.0.0    f49e2b05bf3ececa2fe20c5d658ab92ab974dc36    2023-12-17
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-a},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-a},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104 2024-01-01
+18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104    2024-01-01
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b}},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b}},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-18.0.0    8b4bb15f6d879fd8655f9e41fee224a8a59f238c 2024-01-19
+18.0.0    8b4bb15f6d879fd8655f9e41fee224a8a59f238c    2024-01-19
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b}},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-1,driver-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b}},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
 ../_patch/llvm/cygwin-disable-debug-ata.patch
 
-18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707 2024-01-24   branch point
+18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707    2024-01-24    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
 ../_patch/llvm/cygwin-disable-debug-ata.patch
 
-19.0.0    c5f839bd58e7f888acc4cb39a18e9e5bbaa9fb0a 2024-03-22
+19.0.0    c5f839bd58e7f888acc4cb39a18e9e5bbaa9fb0a    2024-03-22
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
 ../_patch/llvm/cygwin-disable-debug-ata.patch
 
-19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8 2024-07-23   branch point
+19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8    2024-07-23    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
-20.0.0    c2cac69d0806034879d2b958a2e52e45b6c533fb 2024-08-28
+20.0.0    c2cac69d0806034879d2b958a2e52e45b6c533fb    2024-08-28
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,\
-cygwin-{support-tls,va-list-kind,cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h,compiler-{INCLUDE,LIB},driver-a},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 

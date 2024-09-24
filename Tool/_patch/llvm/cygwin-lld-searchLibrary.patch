@@ -1,0 +1,27 @@
+diff --git a/lld/MinGW/Driver.cpp b/lld/MinGW/Driver.cpp
+index c7d7b9cfca38..fad50f4e8113 100644
+--- a/lld/MinGW/Driver.cpp
++++ b/lld/MinGW/Driver.cpp
+@@ -146,6 +154,13 @@ searchLibrary(StringRef name, ArrayRef<StringRef> searchPaths, bool bStatic) {
+     return "";
+   }
+ 
++  const char * dll_search_prefix;
++#ifdef __CYGWIN__
++  dll_search_prefix = "cyg";
++#else
++  dll_search_prefix = "lib";
++#endif
++
+   for (StringRef dir : searchPaths) {
+     if (!bStatic) {
+       if (std::optional<std::string> s = findFile(dir, "lib" + name + ".dll.a"))
+@@ -158,7 +173,7 @@ searchLibrary(StringRef name, ArrayRef<StringRef> searchPaths, bool bStatic) {
+     if (std::optional<std::string> s = findFile(dir, name + ".lib"))
+       return *s;
+     if (!bStatic) {
+-      if (std::optional<std::string> s = findFile(dir, "lib" + name + ".dll"))
++      if (std::optional<std::string> s = findFile(dir, dll_search_prefix + name + ".dll"))
+         return *s;
+       if (std::optional<std::string> s = findFile(dir, name + ".dll"))
+         return *s;

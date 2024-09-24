@@ -32,7 +32,7 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 	dump_compiler_linker_build_type_and_compiler_flags
 
 	# VERSION=3.27.6
-	VERSION=3.30.0 # commit 86b55fd236056da7caf20674af32c117420c5814 2024-03-23
+	VERSION=3.30.0    # commit 86b55fd236056da7caf20674af32c117420c5814    2024-03-23
 
 	SOURCE_DIR="${PACKAGE}"
 
@@ -41,9 +41,9 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 	)
 
 	time_command cmake_build_install_package \
-		"${COMPILER__}" "${LINKER__}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" \
+		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" \
 		"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${CMAKE_OPTIONS[@]}"
 
-} 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER__}" "${LINKER__}" "${BUILD_TYPE}" output.txt)"
+} 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
 
 sync .

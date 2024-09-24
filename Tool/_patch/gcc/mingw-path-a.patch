@@ -6,7 +6,7 @@ index d07a8e172a4..296500f80d3 100644
  {
    bool early_exit;
  
-+#if defined(_WIN32) && !defined(__CYGWIN__)
++#ifdef _WIN32
 +  size_t len0 = strlen(argv[0]);
 +  len0 = convert_path(argv[0], len0);
 +  (void)len0;

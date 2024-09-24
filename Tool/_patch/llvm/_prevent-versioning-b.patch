@@ -7,7 +7,7 @@ index 99959ecfae9c..aa09124ebcd4 100644
      # Set SOVERSION on shared libraries that lack explicit SONAME
      # specifier, on *nix systems that are not Darwin.
 -    if(UNIX AND NOT APPLE AND NOT ARG_SONAME)
-+    if(UNIX AND NOT (APPLE OR ARG_SONAME OR CYGWIN OR LINUX))
++    if(OFF)
        set_target_properties(${name}
          PROPERTIES
          # Since 18.1.0, the ABI version is indicated by the major and minor version.

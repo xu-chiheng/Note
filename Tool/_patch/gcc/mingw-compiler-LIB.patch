@@ -6,7 +6,7 @@ index d07a8e172a4..7e09aa926df 100644
  	do_self_spec (*sl->ptr_spec);
    }
  
-+#if defined(_WIN32) && !defined(__CYGWIN__) && !defined(CROSS_DIRECTORY_STRUCTURE)
++#if defined(_WIN32) && !defined(CROSS_DIRECTORY_STRUCTURE)
 +  add_env_var_paths_to_library_path("LIB");
 +#endif
 +

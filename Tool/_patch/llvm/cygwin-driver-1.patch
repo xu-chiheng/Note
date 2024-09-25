@@ -526,9 +526,9 @@ index 000000000000..237efcb58e08
 +  // for Cygwin's crt0.o
 +  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
 +      getDriver().SysRoot.size()) {
++    // /usr/lib is the same as /lib
 +    getFilePaths().push_back(getDriver().SysRoot + "/lib");
-+    getFilePaths().push_back(getDriver().SysRoot + "/usr/lib");
-+    getFilePaths().push_back(getDriver().SysRoot + "/usr/lib/w32api");
++    getFilePaths().push_back(getDriver().SysRoot + "/lib/w32api");
 +  } else {
 +    // must add library directories by -L
 +  }

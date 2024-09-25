@@ -9,7 +9,7 @@ index 8dac104cb43..6b7fa04af7b 100644
 -  --dll-search-prefix=cyg \
 -  %{!shared: %{!mdll: %{" SPEC_32 ":--large-address-aware} --tsaware}}"
 +  --dynamicbase \
-+  -L/lib -L/usr/lib -L/usr/lib/w32api \
++  -L/lib -L/lib/w32api \
 +  %{!shared: %{!mdll: %{" SPEC_32 ":--large-address-aware}}}"
  
  /* Cygwin64 will have a 64-bit long type. */
@@ -25,7 +25,7 @@ index 63de10c17d4..c360ca4e321 100644
 -  --dll-search-prefix=cyg \
 -  %{!shared: %{!mdll: --large-address-aware --tsaware}}"
 +  --dynamicbase \
-+  -L/lib -L/usr/lib -L/usr/lib/w32api \
++  -L/lib -L/lib/w32api \
 +  %{!shared: %{!mdll: --large-address-aware}}"
  
  /* Binutils does not handle weak symbols from dlls correctly.  For now,

@@ -1,0 +1,13 @@
+diff --git a/gcc/config/i386/cygwin.h b/gcc/config/i386/cygwin.h
+index 935c552ffb3..3c89c7f8f93 100644
+--- a/gcc/config/i386/cygwin.h
++++ b/gcc/config/i386/cygwin.h
+@@ -34,7 +34,7 @@ along with GCC; see the file COPYING3.  If not see
+   %{!ansi:-Dunix} \
+   %{pthread:-D_REENTRANT} \
+   %{mwin32:-DWIN32 -D_WIN32 -D__WIN32 -D__WIN32__ %{!ansi:-DWINNT}} \
+-  %{!nostdinc:%{!mno-win32:-idirafter ../include/w32api%s -idirafter ../../include/w32api%s}}\
++  -idirafter /usr/include/w32api \
+ "
+ 
+ #undef STARTFILE_SPEC

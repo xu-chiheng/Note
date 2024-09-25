@@ -34,10 +34,10 @@ index e241706b9082..b6f3da3a006f 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..8c289d50b253
+index 000000000000..caed4392266a
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,745 @@
+@@ -0,0 +1,748 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ----------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -334,6 +334,9 @@ index 000000000000..8c289d50b253
 +      }
 +
 +      AddLibGCC(Args, CmdArgs);
++
++      if (Args.hasArg(options::OPT_pg))
++        CmdArgs.push_back("-lgmon");
 +
 +      if (Sanitize.needsAsanRt()) {
 +        // Cygwin always links against a shared Cygwin DLL.

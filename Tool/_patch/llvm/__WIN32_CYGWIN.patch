@@ -1,0 +1,205 @@
+diff --git a/clang/CMakeLists.txt b/clang/CMakeLists.txt
+index c6496167d382..a78991530422 100644
+--- a/clang/CMakeLists.txt
++++ b/clang/CMakeLists.txt
+@@ -138,7 +138,7 @@ if(CLANG_BUILT_STANDALONE)
+       get_errc_messages(LLVM_LIT_ERRC_MESSAGES)
+ 
+       # On Win32 hosts, provide an option to specify the path to the GnuWin32 tools.
+-      if( WIN32 AND NOT CYGWIN )
++      if(WIN32)
+         set(LLVM_LIT_TOOLS_DIR "" CACHE PATH "Path to GnuWin32 tools")
+       endif()
+     else()
+diff --git a/clang/tools/clang-format/CMakeLists.txt b/clang/tools/clang-format/CMakeLists.txt
+index 1c61a3c8fb80..41414609eeff 100644
+--- a/clang/tools/clang-format/CMakeLists.txt
++++ b/clang/tools/clang-format/CMakeLists.txt
+@@ -39,7 +39,7 @@ install(PROGRAMS git-clang-format
+   DESTINATION "${CMAKE_INSTALL_BINDIR}"
+   COMPONENT clang-format)
+ 
+-if (WIN32 AND NOT CYGWIN)
++if (WIN32)
+   install(PROGRAMS git-clang-format.bat
+     DESTINATION "${CMAKE_INSTALL_BINDIR}"
+     COMPONENT clang-format)
+diff --git a/clang/tools/scan-build/CMakeLists.txt b/clang/tools/scan-build/CMakeLists.txt
+index ef687b0e90a1..1da0482c144c 100644
+--- a/clang/tools/scan-build/CMakeLists.txt
++++ b/clang/tools/scan-build/CMakeLists.txt
+@@ -2,7 +2,7 @@ option(CLANG_INSTALL_SCANBUILD "Install the scan-build tool" ON)
+ 
+ include(GNUInstallDirs)
+ 
+-if (WIN32 AND NOT CYGWIN)
++if (WIN32)
+   set(BinFiles
+         scan-build
+         scan-build.bat
+diff --git a/compiler-rt/cmake/Modules/AddCompilerRT.cmake b/compiler-rt/cmake/Modules/AddCompilerRT.cmake
+index 6962b733733a..7c602c10ab2e 100644
+--- a/compiler-rt/cmake/Modules/AddCompilerRT.cmake
++++ b/compiler-rt/cmake/Modules/AddCompilerRT.cmake
+@@ -384,7 +384,7 @@ function(add_compiler_rt_runtime name type)
+       if(APPLE OR WIN32)
+         set_property(TARGET ${libname} PROPERTY BUILD_WITH_INSTALL_RPATH ON)
+       endif()
+-      if(WIN32 AND NOT CYGWIN AND NOT MINGW)
++      if(WIN32 AND NOT MINGW)
+         set_target_properties(${libname} PROPERTIES IMPORT_PREFIX "")
+         set_target_properties(${libname} PROPERTIES IMPORT_SUFFIX ".lib")
+       endif()
+diff --git a/compiler-rt/cmake/base-config-ix.cmake b/compiler-rt/cmake/base-config-ix.cmake
+index 5a97992756a9..131e1c2f6b2b 100644
+--- a/compiler-rt/cmake/base-config-ix.cmake
++++ b/compiler-rt/cmake/base-config-ix.cmake
+@@ -162,7 +162,7 @@ else()
+   option(COMPILER_RT_DEFAULT_TARGET_ONLY "Build builtins only for the default target" Off)
+ endif()
+ 
+-if(WIN32 AND NOT MINGW AND NOT CYGWIN)
++if(WIN32 AND NOT MINGW)
+   set(CMAKE_SHARED_LIBRARY_PREFIX_C "")
+   set(CMAKE_SHARED_LIBRARY_PREFIX_CXX "")
+   set(CMAKE_STATIC_LIBRARY_PREFIX_C "")
+diff --git a/compiler-rt/cmake/config-ix.cmake b/compiler-rt/cmake/config-ix.cmake
+index 97204177cde9..4010f4bff255 100644
+--- a/compiler-rt/cmake/config-ix.cmake
++++ b/compiler-rt/cmake/config-ix.cmake
+@@ -104,7 +104,7 @@ check_cxx_compiler_flag("-Werror -mcrc"      COMPILER_RT_HAS_MCRC_FLAG)
+ check_cxx_compiler_flag(-fno-partial-inlining COMPILER_RT_HAS_FNO_PARTIAL_INLINING_FLAG)
+ check_cxx_compiler_flag("-Werror -ftrivial-auto-var-init=pattern" COMPILER_RT_HAS_TRIVIAL_AUTO_INIT)
+ 
+-if(NOT WIN32 AND NOT CYGWIN)
++if(NOT (WIN32 OR CYGWIN))
+   # MinGW warns if -fvisibility-inlines-hidden is used.
+   check_cxx_compiler_flag("-fvisibility-inlines-hidden" COMPILER_RT_HAS_FVISIBILITY_INLINES_HIDDEN_FLAG)
+ endif()
+diff --git a/lld/CMakeLists.txt b/lld/CMakeLists.txt
+index 64c9f2380550..aa175c9408f0 100644
+--- a/lld/CMakeLists.txt
++++ b/lld/CMakeLists.txt
+@@ -93,7 +93,7 @@ if(LLD_BUILT_STANDALONE)
+       get_errc_messages(LLVM_LIT_ERRC_MESSAGES)
+ 
+       # On Win32 hosts, provide an option to specify the path to the GnuWin32 tools.
+-      if(WIN32 AND NOT CYGWIN)
++      if(WIN32)
+         set(LLVM_LIT_TOOLS_DIR "" CACHE PATH "Path to GnuWin32 tools")
+       endif()
+     else()
+diff --git a/lldb/cmake/modules/LLDBConfig.cmake b/lldb/cmake/modules/LLDBConfig.cmake
+index a60921990cf7..82567c6c49bb 100644
+--- a/lldb/cmake/modules/LLDBConfig.cmake
++++ b/lldb/cmake/modules/LLDBConfig.cmake
+@@ -288,7 +288,7 @@ if (APPLE)
+   include_directories(${LIBXML2_INCLUDE_DIR})
+ endif()
+ 
+-if( WIN32 AND NOT CYGWIN )
++if(WIN32)
+   set(PURE_WINDOWS 1)
+ endif()
+ 
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index 4753b73b126f..d3c77cbdf92e 100644
+--- a/llvm/CMakeLists.txt
++++ b/llvm/CMakeLists.txt
+@@ -734,7 +734,7 @@ endif()
+ set(LLVM_LIT_ARGS "${LIT_ARGS_DEFAULT}" CACHE STRING "Default options for lit")
+ 
+ # On Win32 hosts, provide an option to specify the path to the GnuWin32 tools.
+-if( WIN32 AND NOT CYGWIN )
++if(WIN32)
+   set(LLVM_LIT_TOOLS_DIR "" CACHE PATH "Path to GnuWin32 tools")
+ endif()
+ set(LLVM_NATIVE_TOOL_DIR "" CACHE PATH "Path to a directory containing prebuilt matching native tools (such as llvm-tblgen)")
+diff --git a/llvm/cmake/config-ix.cmake b/llvm/cmake/config-ix.cmake
+index f76eacb9d513..2f467ea8fb44 100644
+--- a/llvm/cmake/config-ix.cmake
++++ b/llvm/cmake/config-ix.cmake
+@@ -1,4 +1,4 @@
+-if( WIN32 AND NOT CYGWIN )
++if(WIN32)
+   # We consider Cygwin as another Unix
+   set(PURE_WINDOWS 1)
+ endif()
+diff --git a/llvm/cmake/modules/HandleLLVMOptions.cmake b/llvm/cmake/modules/HandleLLVMOptions.cmake
+index bdbd36174fc7..19e6ec7ad4b4 100644
+--- a/llvm/cmake/modules/HandleLLVMOptions.cmake
++++ b/llvm/cmake/modules/HandleLLVMOptions.cmake
+@@ -405,7 +405,7 @@ if( LLVM_ENABLE_PIC )
+     # Xcode has -mdynamic-no-pic on by default, which overrides -fPIC. I don't
+     # know how to disable this, so just force ENABLE_PIC off for now.
+     message(WARNING "-fPIC not supported with Xcode.")
+-  elseif( WIN32 OR CYGWIN)
++  elseif(WIN32 OR CYGWIN)
+     # On Windows all code is PIC. MinGW warns if -fPIC is used.
+   else()
+     add_flag_or_print_warning("-fPIC" FPIC)
+diff --git a/llvm/examples/Bye/CMakeLists.txt b/llvm/examples/Bye/CMakeLists.txt
+index 7dd04f903323..a0c8fd0230f0 100644
+--- a/llvm/examples/Bye/CMakeLists.txt
++++ b/llvm/examples/Bye/CMakeLists.txt
+@@ -6,7 +6,7 @@ endif()
+ # but expects them to exist in the process loading the plugin. This doesn't
+ # work with DLLs on Windows (where a shared library can't have undefined
+ # references), so just skip this example on Windows.
+-if (NOT WIN32 AND NOT CYGWIN)
++if (NOT (WIN32 OR CYGWIN))
+   add_llvm_pass_plugin(Bye
+     Bye.cpp
+     DEPENDS
+diff --git a/llvm/examples/IRTransforms/CMakeLists.txt b/llvm/examples/IRTransforms/CMakeLists.txt
+index 3941d5f7d49f..33ee796022b4 100644
+--- a/llvm/examples/IRTransforms/CMakeLists.txt
++++ b/llvm/examples/IRTransforms/CMakeLists.txt
+@@ -6,7 +6,7 @@ endif()
+ # but expects them to exist in the process loading the plugin. This doesn't
+ # work with DLLs on Windows (where a shared library can't have undefined
+ # references), so just skip this example on Windows.
+-if (NOT WIN32 AND NOT CYGWIN)
++if (NOT (WIN32 OR CYGWIN))
+   add_llvm_pass_plugin(ExampleIRTransforms
+     SimplifyCFG.cpp
+     DEPENDS
+diff --git a/llvm/unittests/Analysis/InlineAdvisorPlugin/CMakeLists.txt b/llvm/unittests/Analysis/InlineAdvisorPlugin/CMakeLists.txt
+index 22cd0cb1d9a0..40148ea887e5 100644
+--- a/llvm/unittests/Analysis/InlineAdvisorPlugin/CMakeLists.txt
++++ b/llvm/unittests/Analysis/InlineAdvisorPlugin/CMakeLists.txt
+@@ -2,7 +2,7 @@
+ # libraries, but expects them to exist in the process loading the plugin. This 
+ # doesn't work with DLLs on Windows (where a shared library can't have undefined
+ # references), so just skip this testcase on Windows.
+-if (NOT WIN32 AND NOT CYGWIN)
++if (NOT (WIN32 OR CYGWIN))
+   unset(LLVM_LINK_COMPONENTS)
+   add_llvm_library(InlineAdvisorPlugin MODULE BUILDTREE_ONLY
+     InlineAdvisorPlugin.cpp
+diff --git a/llvm/unittests/Analysis/InlineOrderPlugin/CMakeLists.txt b/llvm/unittests/Analysis/InlineOrderPlugin/CMakeLists.txt
+index cc470a934426..132369f9a51e 100644
+--- a/llvm/unittests/Analysis/InlineOrderPlugin/CMakeLists.txt
++++ b/llvm/unittests/Analysis/InlineOrderPlugin/CMakeLists.txt
+@@ -2,7 +2,7 @@
+ # libraries, but expects them to exist in the process loading the plugin. This 
+ # doesn't work with DLLs on Windows (where a shared library can't have undefined
+ # references), so just skip this testcase on Windows.
+-if (NOT WIN32 AND NOT CYGWIN)
++if (NOT (WIN32 OR CYGWIN))
+   unset(LLVM_LINK_COMPONENTS)
+   add_llvm_library(InlineOrderPlugin MODULE BUILDTREE_ONLY
+     InlineOrderPlugin.cpp
+diff --git a/llvm/unittests/Passes/Plugins/CMakeLists.txt b/llvm/unittests/Passes/Plugins/CMakeLists.txt
+index e90cae167bc2..a196117d3e32 100644
+--- a/llvm/unittests/Passes/Plugins/CMakeLists.txt
++++ b/llvm/unittests/Passes/Plugins/CMakeLists.txt
+@@ -2,7 +2,7 @@
+ # but expects them to exist in the process loading the plugin. This doesn't
+ # work with DLLs on Windows (where a shared library can't have undefined
+ # references), so just skip this testcase on Windows.
+-if (NOT WIN32 AND NOT CYGWIN)
++if (NOT (WIN32 OR CYGWIN))
+   set(LLVM_LINK_COMPONENTS Support Passes Core AsmParser)
+   add_llvm_unittest(PluginsTests
+     PluginsTest.cpp

@@ -1,0 +1,19 @@
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index da6beedc9d4c..4753b73b126f 100644
+--- a/llvm/CMakeLists.txt
++++ b/llvm/CMakeLists.txt
+@@ -2,6 +2,14 @@
+ 
+ cmake_minimum_required(VERSION 3.20.0)
+ 
++# get_cmake_property(_variableNames VARIABLES)
++set(_variableNames "CYGWIN" "MINGW" "WIN32" "UNIX" "LINUX" "CMAKE_HOST_WIN32" "CMAKE_HOST_UNIX" "CMAKE_HOST_LINUX" "CMAKE_HOST_SYSTEM"
++      "CMAKE_EXECUTABLE_SUFFIX" "CMAKE_SHARED_LIBRARY_PREFIX" "CMAKE_SHARED_LIBRARY_SUFFIX" "CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG"
++      "CMAKE_IMPORT_LIBRARY_PREFIX" "CMAKE_IMPORT_LIBRARY_SUFFIX" "CMAKE_C_OUTPUT_EXTENSION" "CMAKE_CXX_OUTPUT_EXTENSION")
++foreach (_variableName ${_variableNames})
++  message(STATUS "${_variableName} = ${${_variableName}}")
++endforeach()
++
+ set(LLVM_COMMON_CMAKE_UTILS ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
+ include(${LLVM_COMMON_CMAKE_UTILS}/Modules/CMakePolicy.cmake
+   NO_POLICY_SCOPE)

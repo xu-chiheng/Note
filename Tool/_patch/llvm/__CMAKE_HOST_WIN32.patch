@@ -1,0 +1,48 @@
+diff --git a/lldb/cmake/modules/LLDBStandalone.cmake b/lldb/cmake/modules/LLDBStandalone.cmake
+index c9367214848f..9ed334c5b59c 100644
+--- a/lldb/cmake/modules/LLDBStandalone.cmake
++++ b/lldb/cmake/modules/LLDBStandalone.cmake
+@@ -22,7 +22,7 @@ set(LLDB_TEST_LIBCXX_ROOT_DIR "${LLVM_BINARY_DIR}" CACHE PATH
+ set(LLVM_LIT_ARGS "-sv" CACHE STRING "Default options for lit")
+ 
+ set(lit_file_name "llvm-lit")
+-if(CMAKE_HOST_WIN32 AND NOT CYGWIN)
++if(CMAKE_HOST_WIN32)
+   set(lit_file_name "${lit_file_name}.py")
+ endif()
+ 
+diff --git a/llvm/cmake/modules/AddLLVM.cmake b/llvm/cmake/modules/AddLLVM.cmake
+index 1b696b35f9ef..74038d5758af 100644
+--- a/llvm/cmake/modules/AddLLVM.cmake
++++ b/llvm/cmake/modules/AddLLVM.cmake
+@@ -1980,7 +1980,7 @@ function(get_llvm_lit_path base_dir file_name)
+   endif()
+ 
+   set(lit_file_name "llvm-lit")
+-  if (CMAKE_HOST_WIN32 AND NOT CYGWIN)
++  if (CMAKE_HOST_WIN32)
+     # llvm-lit needs suffix.py for multiprocess to find a main module.
+     set(lit_file_name "${lit_file_name}.py")
+   endif ()
+diff --git a/llvm/cmake/modules/CMakeLists.txt b/llvm/cmake/modules/CMakeLists.txt
+index d99af79aa38e..a1cac1be3a4d 100644
+--- a/llvm/cmake/modules/CMakeLists.txt
++++ b/llvm/cmake/modules/CMakeLists.txt
+@@ -70,7 +70,7 @@ set(LLVM_CONFIG_TOOLS_BINARY_DIR "${LLVM_TOOLS_BINARY_DIR}")
+ 
+ # Generate a default location for lit
+ if (LLVM_BUILD_UTILS)
+-  if (CMAKE_HOST_WIN32 AND NOT CYGWIN)
++  if (CMAKE_HOST_WIN32)
+     set(LLVM_CONFIG_DEFAULT_EXTERNAL_LIT "${LLVM_CONFIG_TOOLS_BINARY_DIR}/llvm-lit.py")
+   else()
+     set(LLVM_CONFIG_DEFAULT_EXTERNAL_LIT "${LLVM_CONFIG_TOOLS_BINARY_DIR}/llvm-lit")
+@@ -140,7 +140,7 @@ extend_path(LLVM_CONFIG_TOOLS_BINARY_DIR "\${LLVM_INSTALL_PREFIX}" "${LLVM_TOOLS
+ 
+ # Generate a default location for lit
+ if (LLVM_INSTALL_UTILS AND LLVM_BUILD_UTILS)
+-  if (CMAKE_HOST_WIN32 AND NOT CYGWIN)
++  if (CMAKE_HOST_WIN32)
+     set(LLVM_CONFIG_DEFAULT_EXTERNAL_LIT "${LLVM_CONFIG_TOOLS_BINARY_DIR}/llvm-lit.py")
+   else()
+     set(LLVM_CONFIG_DEFAULT_EXTERNAL_LIT "${LLVM_CONFIG_TOOLS_BINARY_DIR}/llvm-lit")

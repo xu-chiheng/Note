@@ -781,25 +781,7 @@ cmake_build_install_package() {
 
 	local install_prefix="$(pwd)/${install_dir}"
 
-	local generic_cmake_options=()
-
-	# https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html#variables-that-describe-the-system
-	case "${host_triple}" in
-		*-cygwin )
-			# Cygwin CMake version 3.25.3 does not define CYGWIN
-			generic_cmake_options+=(
-				-DCYGWIN=1
-			)
-			;;
-		*-mingw* )
-			# MinGW CMake version 3.29.20240323 does not define MINGW
-			generic_cmake_options+=(
-				-DMINGW=1
-			)
-			;;
-	esac
-
-	local generic_cmake_options+=(
+	local generic_cmake_options=(
 			-G 'Unix Makefiles'
 			-DCMAKE_BUILD_TYPE="${build_type}"
 			-DCMAKE_INSTALL_PREFIX="${install_prefix}"

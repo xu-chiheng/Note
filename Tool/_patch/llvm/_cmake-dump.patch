@@ -1,19 +1,30 @@
 diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
-index da6beedc9d4c..4753b73b126f 100644
+index d681b1ccab62..7565970c1747 100644
 --- a/llvm/CMakeLists.txt
 +++ b/llvm/CMakeLists.txt
-@@ -2,6 +2,14 @@
+@@ -2,6 +2,15 @@
  
  cmake_minimum_required(VERSION 3.20.0)
  
-+# get_cmake_property(_variableNames VARIABLES)
-+set(_variableNames "CYGWIN" "MINGW" "WIN32" "UNIX" "LINUX" "CMAKE_HOST_WIN32" "CMAKE_HOST_UNIX" "CMAKE_HOST_LINUX" "CMAKE_HOST_SYSTEM"
-+      "CMAKE_EXECUTABLE_SUFFIX" "CMAKE_SHARED_LIBRARY_PREFIX" "CMAKE_SHARED_LIBRARY_SUFFIX" "CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG"
-+      "CMAKE_IMPORT_LIBRARY_PREFIX" "CMAKE_IMPORT_LIBRARY_SUFFIX" "CMAKE_C_OUTPUT_EXTENSION" "CMAKE_CXX_OUTPUT_EXTENSION")
-+foreach (_variableName ${_variableNames})
-+  message(STATUS "${_variableName} = ${${_variableName}}")
-+endforeach()
++function(dump_some_cmake_predefined_variables)
++	set(_variableNames "CYGWIN" "MINGW" "WIN32" "UNIX" "LINUX" "CMAKE_HOST_WIN32" "CMAKE_HOST_UNIX" "CMAKE_HOST_LINUX" "CMAKE_HOST_SYSTEM"
++		"CMAKE_EXECUTABLE_SUFFIX" "CMAKE_SHARED_LIBRARY_PREFIX" "CMAKE_SHARED_LIBRARY_SUFFIX" "CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG"
++		"CMAKE_IMPORT_LIBRARY_PREFIX" "CMAKE_IMPORT_LIBRARY_SUFFIX" "CMAKE_C_OUTPUT_EXTENSION" "CMAKE_CXX_OUTPUT_EXTENSION")
++	foreach (_variableName ${_variableNames})
++		message(STATUS "${_variableName} = ${${_variableName}}")
++	endforeach()
++endfunction()
 +
  set(LLVM_COMMON_CMAKE_UTILS ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
  include(${LLVM_COMMON_CMAKE_UTILS}/Modules/CMakePolicy.cmake
    NO_POLICY_SCOPE)
+@@ -46,6 +55,9 @@ project(LLVM
+   VERSION ${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}
+   LANGUAGES C CXX ASM)
+ 
++# it seems that the dumping must be after the above statement
++dump_some_cmake_predefined_variables()
++
+ if (NOT DEFINED CMAKE_INSTALL_LIBDIR AND DEFINED LLVM_LIBDIR_SUFFIX)
+   # Must go before `include(GNUInstallDirs)`.
+   set(CMAKE_INSTALL_LIBDIR "lib${LLVM_LIBDIR_SUFFIX}")

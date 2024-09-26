@@ -67,10 +67,18 @@ patch_generate() {
 	&& rm -rf a b
 }
 
-patch_apply_verify() {
-	local dir="$1"
-	shift 1
+patch_apply_1() {
+	local reverse="$1"
+	local dir="$2"
+	shift 2
 	local patches=( "$@" )
+
+	local patch_options=()
+	if [ "${reverse}" = yes ]; then
+		patch_options+=( -Rp1 )
+	else
+		patch_options+=( -Np1 )
+	fi
 
 	if [ -z "${dir}" ]; then
 		echo "directory is not provided"
@@ -96,68 +104,35 @@ patch_apply_verify() {
 			return 1
 		fi
 	done
-}
-
-patch_apply_no_check() {
-	local dir="$1"
-	shift 1
-	local patches=( "$@" )
 
 	for patch in "${patches[@]}"; do
-		echo "applying ${patch}"
-		if ! cat "${patch}" | ( cd "${dir}" && patch -Np1 ) ; then
+		echo "checking ${patch}"
+		if ! cat "${patch}" | ( cd "${dir}" && patch "${patch_options[@]}" --dry-run --quiet ) ; then
 			echo "${patch} can not be applied"
+			return 1
 		fi
 	done
+
+	local failed_patches=()
+	for patch in "${patches[@]}"; do
+		echo "applying ${patch}"
+		if ! cat "${patch}" | ( cd "${dir}" && patch "${patch_options[@]}" ) ; then
+			echo "${patch} can not be applied"
+			failed_patches+=( "${patch}" )
+		fi
+	done
+	if ! [ ${#failed_patches[@]} -eq 0 ]; then
+		echo "failed patches :"
+		print_array_elements "${failed_patches[@]}"
+	else
+		echo "all succeed"
+	fi
 }
 
 patch_apply() {
-	if ! patch_apply_verify "$@"; then
-		return 1
-	fi
-	local dir="$1"
-	shift 1
-	local patches=( "$@" )
-
-	for patch in "${patches[@]}"; do
-		echo "checking ${patch}"
-		if ! cat "${patch}" | ( cd "${dir}" && patch -Np1 --dry-run --quiet ) ; then
-			echo "${patch} can not be applied"
-			return 1
-		fi
-	done
-
-	patch_apply_no_check "${dir}" "${patches[@]}"
-}
-
-patch_apply_reverse_no_check() {
-	local dir="$1"
-	shift 1
-	local patches=( "$@" )
-
-	for patch in "${patches[@]}"; do
-		echo "applying ${patch}"
-		if ! cat "${patch}" | ( cd "${dir}" && patch -Rp1 ) ; then
-			echo "${patch} can not be applied"
-		fi
-	done
+	patch_apply_1 no "$@"
 }
 
 patch_apply_reverse() {
-	if ! patch_apply_verify "$@"; then
-		return 1
-	fi
-	local dir="$1"
-	shift 1
-	local patches=( "$@" )
-
-	for patch in "${patches[@]}"; do
-		echo "checking ${patch}"
-		if ! cat "${patch}" | ( cd "${dir}" && patch -Rp1 --dry-run --quiet ) ; then
-			echo "${patch} can not be applied"
-			return 1
-		fi
-	done
-
-	patch_apply_reverse_no_check "${dir}" "${patches[@]}"
+	patch_apply_1 yes "$@"
 }

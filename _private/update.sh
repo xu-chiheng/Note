@@ -50,7 +50,7 @@ do_update_all_files() {
 		Tool/clean.sh
 		Tool/common.sh
 
-		Tool/_cygport/{.gitignore,llvm.cygport}
+		Tool/_cygport/{.gitignore,cygwin.cmd,llvm.cygport}
 
 		Tool/_doc
 		Tool/_quirk
@@ -69,14 +69,16 @@ do_update_all_files() {
 
 	local path
 	for path in "${paths[@]}"; do
-		echo "${path}"
-		dir="$(dirname "${path}")"
-
-		rm -rf "${path}" \
-		&& mkdir -p "${dir}" \
-		&& cp -rf ~/"${path}" "${dir}"/
+		if [ -e ~/"${path}" ]; then
+			echo "${path}"
+			dir="$(dirname "${path}")"
+			rm -rf "${path}" \
+			&& mkdir -p "${dir}" \
+			&& cp -rf ~/"${path}" "${dir}"
+		else
+			echo "${path} does not exist"
+		fi
 	done
-
 	echo "Completed!"
 }
 

@@ -50,7 +50,7 @@ do_update_all_files() {
 		Tool/clean.sh
 		Tool/common.sh
 
-		Tool/llvm.cygport
+		Tool/_cygport/{.gitignore,llvm.cygport}
 
 		Tool/_doc
 		Tool/_quirk

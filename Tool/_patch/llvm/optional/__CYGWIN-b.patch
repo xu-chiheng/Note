@@ -1,0 +1,19 @@
+diff --git a/third-party/benchmark/CMakeLists.txt b/third-party/benchmark/CMakeLists.txt
+index d9bcc6a4939b..b8dd94dfc1b5 100644
+--- a/third-party/benchmark/CMakeLists.txt
++++ b/third-party/benchmark/CMakeLists.txt
+@@ -232,14 +232,6 @@ else()
+     cxx_feature_check(THREAD_SAFETY_ATTRIBUTES "-DINCLUDE_DIRECTORIES=${PROJECT_SOURCE_DIR}/include")
+   endif()
+ 
+-  # On most UNIX like platforms g++ and clang++ define _GNU_SOURCE as a
+-  # predefined macro, which turns on all of the wonderful libc extensions.
+-  # However g++ doesn't do this in Cygwin so we have to define it ourselves
+-  # since we depend on GNU/POSIX/BSD extensions.
+-  if (CYGWIN)
+-    add_definitions(-D_GNU_SOURCE=1)
+-  endif()
+-
+   if (QNXNTO)
+     add_definitions(-D_QNX_SOURCE)
+   endif()

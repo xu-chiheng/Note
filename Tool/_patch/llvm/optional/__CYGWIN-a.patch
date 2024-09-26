@@ -1,0 +1,19 @@
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index d3c77cbdf92e..272c75e15cc1 100644
+--- a/llvm/CMakeLists.txt
++++ b/llvm/CMakeLists.txt
+@@ -82,14 +82,6 @@ endif()
+ set(CMAKE_CXX_STANDARD ${LLVM_REQUIRED_CXX_STANDARD} CACHE STRING "C++ standard to conform to")
+ set(CMAKE_CXX_STANDARD_REQUIRED YES)
+ 
+-if (CYGWIN)
+-  # Cygwin is a bit stricter and lack things like 'strdup', 'stricmp', etc in
+-  # c++xx mode.
+-  set(CMAKE_CXX_EXTENSIONS YES)
+-else()
+-  set(CMAKE_CXX_EXTENSIONS NO)
+-endif()
+-
+ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+   message(FATAL_ERROR "
+ No build type selected. You need to pass -DCMAKE_BUILD_TYPE=<type> in order to configure LLVM.

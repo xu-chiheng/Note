@@ -121,7 +121,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 	esac
 
 	case "${host_triple}" in
-		x86_64-pc-cygwin )
+		*-cygwin )
 			local cygwin_c_cxx_common_flags=(  )
 			# cygwin_c_cxx_common_flags+=( -mcmodel=small )
 			cflags+=(   "${cygwin_c_cxx_common_flags[@]}" )
@@ -131,7 +131,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 				ldflags+=( -Wl,--dynamicbase )
 			fi
 			;;
-		x86_64-pc-mingw64 )
+		*-mingw* )
 			local mingw_c_cxx_common_flags=(  )
 			# mingw_c_cxx_common_flags+=( -mcmodel=medium )
 			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
@@ -301,7 +301,7 @@ check_dir_maybe_clone_from_url() {
 print_host_os_of_triple() {
 	local host_triple="$1"
 	case "${host_triple}" in
-		x86_64-pc-mingw64 )
+		*-mingw* )
 			case "${MSYSTEM}" in
 				MINGW64 )
 					# msvcrt.dll
@@ -317,11 +317,11 @@ print_host_os_of_triple() {
 					;;
 			esac
 			;;
-		x86_64-pc-cygwin )
+		*-cygwin )
 			# cygwin1.dll
 			echo "cygwin"
 			;;
-		*-linux-gnu )
+		*-linux* )
 			echo "linux"
 			;;
 		* )
@@ -466,17 +466,17 @@ copy_dependent_dlls_to_install_exe_dir() {
 	local root_dirs=()
 	local bin_dirs=()
 	case "${host_triple}" in
-		x86_64-pc-cygwin | x86_64-pc-mingw64 | x86_64-pc-msys )
+		*-cygwin | *-mingw* | *-msys )
 			case "${host_triple}" in
-				x86_64-pc-mingw64 )
+				*-mingw* )
 					# msvcrt.dll or ucrtbase.dll
 					root_dirs+=( "$(print_mingw_root_dir)" "$(print_gcc_install_dir)" )
 					;;
-				x86_64-pc-cygwin )
+				*-cygwin )
 					# cygwin1.dll
 					root_dirs+=( /usr "$(print_gcc_install_dir)" )
 					;;
-				x86_64-pc-msys )
+				*-msys )
 					# msys-2.0.dll
 					root_dirs+=( /usr )
 					;;

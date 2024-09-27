@@ -24,7 +24,7 @@
 
 open_files_in_editor() {
 	case "${HOST_TRIPLE}" in
-		*-cygwin | *-msys | *-mingw64 )
+		*-cygwin | *-msys | *-mingw* )
 			local translated_file_paths=()
 			local file
 			for file in "$@"; do
@@ -34,7 +34,7 @@ open_files_in_editor() {
 			notepad++ -multiInst -nosession -noPlugin "${translated_file_paths[@]}"
 			# code --wait --new-window "${translated_file_paths[@]}"
 			;;
-		*-linux-gnu )
+		*-linux* )
 			# code --wait --new-window "$@"
 			# gedit "$@"
 			kwrite "$@"

@@ -41,10 +41,10 @@ git_backup_directory_to_all_drives() {
 	&& time_command sha512_calculate_file "${tarball}".gpg \
 	&& time_command sync . \
 	&& case "${HOST_TRIPLE}" in
-			*-cygwin | *-msys | *-mingw64 | *-linux-gnu )
+			*-cygwin | *-msys | *-mingw* | *-linux* )
 				set +m; time_command copy_tarball_to_all_drives "${base}" "${tarball}";
 				;;
-			*-linux-gnu )
+			*-linux* )
 				# https://unix.stackexchange.com/questions/269078/executing-a-bash-script-function-with-sudo
 				# https://serverfault.com/questions/177699/how-can-i-execute-a-bash-function-with-sudo
 

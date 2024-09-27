@@ -114,6 +114,12 @@ git_branch_delete_test_range_upstream() {
 	git_branch_delete_test_range "${first}" "${last}" "upstream"
 }
 
+git_branch_delete_test_range_downstream() {
+	local first="$1"
+	local last="$2"
+	git_branch_delete_test_range "${first}" "${last}" "downstream"
+}
+
 # git_clone_domain_user_repos https://github.com xu-chiheng Note/main/Note
 git_clone_domain_user_repos() {
 	local domain="$1"
@@ -301,10 +307,10 @@ print_hard_drives_mount_points_0() {
 		*-cygwin )
 			cat /proc/mounts | grep -E '^[A-Z]: /cygdrive/[a-z] ' | cut -d ' ' -f 2
 			;;
-		*-msys | *-mingw64 )
+		*-msys | *-mingw* )
 			cat /proc/mounts | grep -E '^[A-Z]: /[a-z] ' | cut -d ' ' -f 2
 			;;
-		*-linux-gnu )
+		*-linux* )
 			# Linux hard drive device file naming convention
 			# regular expression special characters
 			cat /proc/mounts | grep -E '^/dev/[hsv]d[a-z](|[1-9][0-9]*) (/|(/\w+)+) ' | cut -d ' ' -f 2

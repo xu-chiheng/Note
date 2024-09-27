@@ -27,21 +27,21 @@ PATCHES=(
 # patch_apply . \
 # ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,_cmake-dump,\
 # cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-0,driver-0,general-{a,b,c},macro},\
-# mingw-{git-revision,ldflags,pthread,emutls-0,findgcc-0,compiler-{INCLUDE,LIB},driver-a},\
+# mingw-{git-revision,ldflags,pthread,emutls-0,findgcc-0,compiler-{INCLUDE,LIB},driver-a,GCC-O3},\
 # pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 # 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7    2023-07-25    branch point
 # patch_apply . \
 # ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,_cmake-dump,\
 # cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-0,driver-0,general-{a,b,c},macro,CGCall.h},\
-# mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
+# mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a,GCC-O3},\
 # pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 # 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707    2024-01-24    branch point
 # patch_apply . \
 # ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,_cmake-dump,\
 # cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
-# mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
+# mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a,GCC-O3},\
 # pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
 # ../_patch/llvm/cygwin-disable-debug-ata.patch
 
@@ -49,7 +49,7 @@ PATCHES=(
 # patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-option,_cmake-dump,\
 cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary},cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
-mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h,compiler-{INCLUDE,LIB},driver-a},\
+mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h,compiler-{INCLUDE,LIB},driver-a,GCC-O3},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 )
 

@@ -128,7 +128,7 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 				# jit
 			)
 			;;
-		*-linux-gnu )
+		*-linux* )
 			CONFIGURE_OPTIONS=(
 				# On Linux, ${HOST_TRIPLE} is not the same as the output of config.guess
 				--build="${HOST_TRIPLE}"

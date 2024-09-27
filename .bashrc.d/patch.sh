@@ -68,9 +68,10 @@ patch_generate() {
 }
 
 patch_apply_1() {
-	local reverse="$1"
-	local dir="$2"
-	shift 2
+	local check="$1"
+	local reverse="$2"
+	local dir="$3"
+	shift 3
 	local patches=( "$@" )
 
 	local patch_options=()
@@ -80,38 +81,41 @@ patch_apply_1() {
 		patch_options+=( -Np1 )
 	fi
 
-	if [ -z "${dir}" ]; then
-		echo "directory is not provided"
-		return 1
-	elif [ ! -e "${dir}" ]; then
-		echo "${dir} does not exist"
-		return 1
-	elif [ ! -d "${dir}" ]; then
-		echo "${dir} is not a directory"
-		return 1
-	fi
-
 	local patch
-	for patch in "${patches[@]}"; do
-		if [ ! -e "${patch}" ]; then
-			echo "${patch} does not exist"
-			return 1
-		elif [ ! -f "${patch}" ]; then
-			echo "${patch} is not a file"
-			return 1
-		elif ! file "${patch}" | grep "unified diff output"; then
-			echo "${patch} is not a patch file"
-			return 1
-		fi
-	done
 
-	for patch in "${patches[@]}"; do
-		echo "checking ${patch}"
-		if ! cat "${patch}" | ( cd "${dir}" && patch "${patch_options[@]}" --dry-run --quiet ) ; then
-			echo "${patch} can not be applied"
+	if [ "${check}" = yes ]; then
+		if [ -z "${dir}" ]; then
+			echo "directory is not provided"
+			return 1
+		elif [ ! -e "${dir}" ]; then
+			echo "${dir} does not exist"
+			return 1
+		elif [ ! -d "${dir}" ]; then
+			echo "${dir} is not a directory"
 			return 1
 		fi
-	done
+
+		for patch in "${patches[@]}"; do
+			if [ ! -e "${patch}" ]; then
+				echo "${patch} does not exist"
+				return 1
+			elif [ ! -f "${patch}" ]; then
+				echo "${patch} is not a file"
+				return 1
+			elif ! file "${patch}" | grep "unified diff output"; then
+				echo "${patch} is not a patch file"
+				return 1
+			fi
+		done
+
+		for patch in "${patches[@]}"; do
+			echo "checking ${patch}"
+			if ! cat "${patch}" | ( cd "${dir}" && patch "${patch_options[@]}" --dry-run --quiet ) ; then
+				echo "${patch} can not be applied"
+				return 1
+			fi
+		done
+	fi
 
 	local failed_patches=()
 	for patch in "${patches[@]}"; do
@@ -129,10 +133,18 @@ patch_apply_1() {
 	fi
 }
 
+patch_apply_no_check() {
+	patch_apply_1 no no "$@"
+}
+
 patch_apply() {
-	patch_apply_1 no "$@"
+	patch_apply_1 yes no "$@"
+}
+
+patch_apply_reverse_no_check() {
+	patch_apply_1 no yes "$@"
 }
 
 patch_apply_reverse() {
-	patch_apply_1 yes "$@"
+	patch_apply_1 yes yes "$@"
 }

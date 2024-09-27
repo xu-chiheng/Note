@@ -264,7 +264,7 @@ remove_test_suite_dirs() {
 gnu_toolchain_run_test_suite() {
 	local make_command=( parallel_make )
 	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin | x86_64-pc-msys | x86_64-pc-mingw64 )
+		*-cygwin | *-msys | *-mingw* )
 			# too many jobs will cause following errors :
 			# -574947849 [main] expect 10703 tty_list::allocate: No pty allocated
 			# FAIL: gcc.dg/torture/matrix-4.c   -O2 -flto  (test for excess errors)

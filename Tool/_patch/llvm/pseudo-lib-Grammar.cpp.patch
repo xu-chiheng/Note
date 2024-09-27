@@ -1,26 +1,25 @@
 diff --git a/clang-tools-extra/pseudo/lib/grammar/Grammar.cpp b/clang-tools-extra/pseudo/lib/grammar/Grammar.cpp
-index 3e9c5c3c7a6c..ec6e8915a2c7 100644
+index 3e9c5c3c7a6c..a4d3f8270b67 100644
 --- a/clang-tools-extra/pseudo/lib/grammar/Grammar.cpp
 +++ b/clang-tools-extra/pseudo/lib/grammar/Grammar.cpp
-@@ -172,9 +172,10 @@ std::vector<llvm::DenseSet<SymbolID>> followSets(const Grammar &G) {
-   return FollowSets;
+@@ -173,16 +173,16 @@ std::vector<llvm::DenseSet<SymbolID>> followSets(const Grammar &G) {
  }
  
-+static auto TerminalNames = new std::string[NumTerminals];
-+
  static llvm::ArrayRef<std::string> getTerminalNames() {
 -  static const auto &TerminalNames = []() {
 -    auto TerminalNames = new std::string[NumTerminals];
-+  static const auto &TerminalNames1 = []() {
++  static std::string * TerminalNames = 0;
++  if (TerminalNames == 0) {
++    TerminalNames = new std::string[NumTerminals];
  #define PUNCTUATOR(Tok, Spelling) TerminalNames[tok::Tok] = Spelling;
  #define KEYWORD(Keyword, Condition)                                            \
    TerminalNames[tok::kw_##Keyword] = llvm::StringRef(#Keyword).upper();
-@@ -182,7 +183,7 @@ static llvm::ArrayRef<std::string> getTerminalNames() {
+ #define TOK(Tok) TerminalNames[tok::Tok] = llvm::StringRef(#Tok).upper();
  #include "clang/Basic/TokenKinds.def"
++  }
      return llvm::ArrayRef(TerminalNames, NumTerminals);
-   }();
+-  }();
 -  return TerminalNames;
-+  return TerminalNames1;
  }
  GrammarTable::GrammarTable() : Terminals(getTerminalNames()) {}
  

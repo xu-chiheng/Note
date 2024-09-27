@@ -1,23 +1,24 @@
 diff --git a/clang-tools-extra/pseudo/gen/Main.cpp b/clang-tools-extra/pseudo/gen/Main.cpp
-index 25cb26563837..2c0bf662ef40 100644
+index 25cb26563837..3bb21104341a 100644
 --- a/clang-tools-extra/pseudo/gen/Main.cpp
 +++ b/clang-tools-extra/pseudo/gen/Main.cpp
-@@ -70,13 +70,13 @@ namespace {
+@@ -70,13 +70,16 @@ namespace {
  //   keyword: `INT` becomes `INT`;
  //   terminal: `IDENTIFIER` becomes `IDENTIFIER`;
  std::string mangleSymbol(SymbolID SID, const Grammar &G) {
 -  static auto &TokNames = *new std::vector<std::string>{
--#define TOK(X) llvm::StringRef(#X).upper(),
--#define KEYWORD(Keyword, Condition) llvm::StringRef(#Keyword).upper(),
-+  static char const *TokNames[] = {
-+#define TOK(X) #X,
-+#define KEYWORD(Keyword, Condition) #Keyword,
++  static std::vector<std::string> * TokNames = 0;
++  if (TokNames == 0) {
++    TokNames = new std::vector<std::string>{
+ #define TOK(X) llvm::StringRef(#X).upper(),
+ #define KEYWORD(Keyword, Condition) llvm::StringRef(#Keyword).upper(),
  #include "clang/Basic/TokenKinds.def"
 -      };
-+  };
++    };
++  }
    if (isToken(SID))
 -    return TokNames[symbolToToken(SID)];
-+    return llvm::StringRef(TokNames[symbolToToken(SID)]).upper();
++    return (*TokNames)[symbolToToken(SID)];
    std::string Name = G.symbolName(SID).str();
    // translation-unit -> translation_unit
    std::replace(Name.begin(), Name.end(), '-', '_');

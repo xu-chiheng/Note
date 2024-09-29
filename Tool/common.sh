@@ -456,6 +456,7 @@ gcc_pushd_and_configure() {
 			--enable-checking=release
 			--disable-fixincludes
 	)
+
 	time_command pushd_and_configure "${build_dir}" "${source_dir}" "${gcc_generic_configure_options[@]}" "$@"
 }
 

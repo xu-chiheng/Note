@@ -1,0 +1,21 @@
+diff --git a/lld/MinGW/Driver.cpp b/lld/MinGW/Driver.cpp
+index c7d7b9cfca38..2f1b841de918 100644
+--- a/lld/MinGW/Driver.cpp
++++ b/lld/MinGW/Driver.cpp
+@@ -529,6 +529,16 @@ bool link(ArrayRef<const char *> argsArr, llvm::raw_ostream &stdoutOS,
+     add("-libpath:" + StringRef(a->getValue()));
+   }
+ 
++#ifdef __CYGWIN__
++	const char * path;
++	path = "/lib";
++	searchPaths.push_back(path);
++	add("-libpath:" + StringRef(path));
++	path = "/lib/w32api";
++	searchPaths.push_back(path);
++	add("-libpath:" + StringRef(path));
++#endif
++
+   StringRef prefix = "";
+   bool isStatic = false;
+   for (auto *a : args) {

@@ -1,0 +1,74 @@
+diff --git a/lld/MinGW/Driver.cpp b/lld/MinGW/Driver.cpp
+index fad50f4e8113..e665d5fe6bc2 100644
+--- a/lld/MinGW/Driver.cpp
++++ b/lld/MinGW/Driver.cpp
+@@ -544,6 +544,69 @@ bool link(ArrayRef<const char *> argsArr, llvm::raw_ostream &stdoutOS,
+     add("-libpath:" + StringRef(a->getValue()));
+   }
+ 
++#ifdef __CYGWIN__
++	const char * path;
++	path = "/lib";
++	searchPaths.push_back(path);
++	add("-libpath:" + StringRef(path));
++	path = "/lib/w32api";
++	searchPaths.push_back(path);
++	add("-libpath:" + StringRef(path));
++#endif
++
++#ifdef _WIN32
++	const char * temp = getenv("LIB");
++	if (temp) {
++		size_t len = strlen(temp);
++		char paths[len + 10];
++		strcpy(paths, temp);
++		char path_separator = ';';
++		size_t i = 0;
++		while (i < len) {
++			size_t path_start, path_end;
++			while (i < len && paths[i] == path_separator) {
++				i++;
++			}
++			// i == len || paths[i] != path_separator
++			path_start = i;
++			while (i < len && paths[i] != path_separator) {
++				i++;
++			}
++			// i == len || paths[i] == path_separator
++			path_end = i;
++
++			bool completed;
++			if (i < len) {
++				// paths[i] == path_separator
++				// see the separator
++				completed = false;
++				i++;
++			} else {
++				// i == len
++				// end of line \0
++				completed = true;
++			}
++
++			size_t path_len = path_end - path_start;
++			if (path_len > 0) {
++				paths[path_end] = 0;
++
++				const char * path = paths + path_start;
++				searchPaths.push_back(path);
++				add("-libpath:" + StringRef(path));
++
++				if (!completed) {
++
++				} else {
++					break;
++				}
++			} else {
++				// empty path, ignore
++			}
++		}
++	}
++#endif
++
+   StringRef prefix = "";
+   bool isStatic = false;
+   for (auto *a : args) {

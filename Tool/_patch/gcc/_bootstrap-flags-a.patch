@@ -1,0 +1,26 @@
+diff --git a/configure b/configure
+index 92293da0aa7..c5b7be0350e 100755
+--- a/configure
++++ b/configure
+@@ -5918,7 +5918,7 @@ esac
+ # C++11 compiler can still start the bootstrap.  Otherwise, if building GCC,
+ # require C++11 (or higher).
+ if test "$enable_bootstrap:$GXX" = "yes:yes"; then
+-  CXX="$CXX -std=c++11"
++  CXX="$CXX"
+ elif test "$have_compiler" = yes; then
+     ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
+   ac_ext=cpp
+diff --git a/configure.ac b/configure.ac
+index d7ee8209b66..43bd4b2f89e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1461,7 +1461,7 @@ esac
+ # C++11 compiler can still start the bootstrap.  Otherwise, if building GCC,
+ # require C++11 (or higher).
+ if test "$enable_bootstrap:$GXX" = "yes:yes"; then
+-  CXX="$CXX -std=c++11"
++  CXX="$CXX"
+ elif test "$have_compiler" = yes; then
+   AX_CXX_COMPILE_STDCXX(11)
+ 

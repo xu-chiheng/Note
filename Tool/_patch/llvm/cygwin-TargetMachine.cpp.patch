@@ -1,0 +1,18 @@
+diff --git a/llvm/lib/Target/TargetMachine.cpp b/llvm/lib/Target/TargetMachine.cpp
+index 8ddc74200429..855f67d8ff6d 100644
+--- a/llvm/lib/Target/TargetMachine.cpp
++++ b/llvm/lib/Target/TargetMachine.cpp
+@@ -42,11 +42,12 @@ TargetMachine::~TargetMachine() = default;
+ bool TargetMachine::isLargeGlobalValue(const GlobalValue *GVal) const {
+   if (getTargetTriple().getArch() != Triple::x86_64)
+     return false;
++  bool targetIsCygwin64 = getTargetTriple().isWindowsCygwinEnvironment();
+ 
+   // Remaining logic below is ELF-specific. For other object file formats where
+   // the large code model is mostly used for JIT compilation, just look at the
+   // code model.
+-  if (!getTargetTriple().isOSBinFormatELF())
++  if (!getTargetTriple().isOSBinFormatELF() && !targetIsCygwin64)
+     return getCodeModel() == CodeModel::Large;
+ 
+   auto *GO = GVal->getAliaseeObject();

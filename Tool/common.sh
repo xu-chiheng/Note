@@ -35,14 +35,44 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 	if [ -z "${compiler}" ]; then
 		compiler=GCC
 	fi
+	case "${compiler}" in
+		GCC | Clang )
+			true
+			;;
+		* )
+			echo "unknown compiler : ${compiler}"
+			echo "valid compiler : GCC Clang"
+			exit 1
+			;;
+	esac
 
 	if [ -z "${linker}" ]; then
 		linker=BFD
 	fi
+	case "${linker}" in
+		BFD | LLD )
+			true
+			;;
+		* )
+			echo "unknown linker : ${linker}"
+			echo "valid linker : BFD LLD"
+			exit 1
+			;;
+	esac
 
 	if [ -z "${build_type}" ]; then
 		build_type=Release
 	fi
+	case "${build_type}" in
+		Release | Debug )
+			true
+			;;
+		* )
+			echo "unknown build type : ${build_type}"
+			echo "valid build type : Release Debug"
+			exit 1
+			;;
+	esac
 
 	case "${compiler}" in
 		GCC )
@@ -52,11 +82,6 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 		Clang )
 			cc=clang
 			cxx=clang++
-			;;
-		* )
-			echo "unknown compiler : ${compiler}"
-			echo "valid compiler : GCC Clang"
-			exit 1
 			;;
 	esac
 
@@ -113,11 +138,6 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 			cxxflags+=( "${debug_c_cxx_common_flags[@]}" )
 			ldflags+=()
 			;;
-		* )
-			echo "unknown build type : ${build_type}"
-			echo "valid build type : Release Debug"
-			exit 1
-			;;
 	esac
 
 	case "${host_triple}" in
@@ -146,6 +166,14 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
+	# case "${compiler}" in
+	# 	Clang )
+	# 		local clang_c_cxx_common_flags=( -Wno-unknown-warning-option -Wno-unknown-attributes -Qunused-arguments )
+	# 		cflags+=(   "${clang_c_cxx_common_flags[@]}" )
+	# 		cxxflags+=( "${clang_c_cxx_common_flags[@]}" )
+	# 		;;
+	# esac
+
 	case "${linker}" in
 		BFD )
 			ldflags+=( -fuse-ld=bfd )
@@ -153,11 +181,6 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 		LLD )
 			# MinGW GCC/Clang can use this option
 			ldflags+=( -fuse-ld=lld )
-			;;
-		* )
-			echo "unknown linker : ${linker}"
-			echo "valid linker : BFD LLD"
-			exit 1
 			;;
 	esac
 

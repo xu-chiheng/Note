@@ -115,15 +115,15 @@ git show -s
 
 
 
-prevent-versioning.patch
+_prevent-versioning-a.patch
+_prevent-versioning-b.patch
 Prevent versioning when building LLVM
-
-
-cmake-option.patch
-Fix CMake options values
 
 _cmake-dump.patch
 Dump CMake variables
+
+cygming-cmake-option.patch
+Fix CMake options values
 
 cygwin-macro.patch
 Cygwin : Remove some macros not defined in GCC

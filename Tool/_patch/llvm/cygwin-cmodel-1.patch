@@ -18,8 +18,8 @@ index 5668b514d6de..fcfd4bdba967 100644
    }
    if (JIT)
      return Is64Bit ? CodeModel::Large : CodeModel::Small;
-+  if (TT.isWindowsCygwinEnvironment())
-+    return Is64Bit ? CodeModel::Medium : CodeModel::Small;
++  if (TT.isWindowsCygwinEnvironment() && Is64Bit)
++    return CodeModel::Medium;
    return CodeModel::Small;
  }
  

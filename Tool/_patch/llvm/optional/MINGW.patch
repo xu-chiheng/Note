@@ -33,7 +33,7 @@ index 6962b733733a..c86424b54c3c 100644
          set_property(TARGET ${libname} PROPERTY BUILD_WITH_INSTALL_RPATH ON)
        endif()
 -      if(WIN32 AND NOT CYGWIN AND NOT MINGW)
-+      if(WIN32 AND NOT (MINGW OR CYGWIN))
++      if(WIN32 AND NOT MINGW)
          set_target_properties(${libname} PROPERTIES IMPORT_PREFIX "")
          set_target_properties(${libname} PROPERTIES IMPORT_SUFFIX ".lib")
        endif()
@@ -46,7 +46,7 @@ index 5a97992756a9..fec948c2ac08 100644
  endif()
  
 -if(WIN32 AND NOT MINGW AND NOT CYGWIN)
-+if(WIN32 AND NOT (MINGW OR CYGWIN))
++if(WIN32 AND NOT MINGW)
    set(CMAKE_SHARED_LIBRARY_PREFIX_C "")
    set(CMAKE_SHARED_LIBRARY_PREFIX_CXX "")
    set(CMAKE_STATIC_LIBRARY_PREFIX_C "")

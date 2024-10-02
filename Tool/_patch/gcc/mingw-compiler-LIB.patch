@@ -7,7 +7,7 @@ index d07a8e172a4..d98cfb5c66c 100644
    }
  
 +#if defined(_WIN32) && !defined(CROSS_DIRECTORY_STRUCTURE)
-+	const char * path = getenv("LIB");
++	const char * path = env.get("LIB");
 +	if (path) {
 +		add_prefix(&startfile_prefixes, path, NULL, PREFIX_PRIORITY_LAST, 0, 1);
 +	}

@@ -11,7 +11,7 @@ index 64cdd2f4a1b..de29a28b89a 100644
 +	const char * path = getenv("INCLUDE");
 +	if (path) {
 +		incpath_kind chain = INC_AFTER;
-+		add_path(path, chain, chain == INC_SYSTEM, false);
++		add_path(xstrdup(path), chain, chain == INC_SYSTEM, false);
 +	}
 +#endif
  

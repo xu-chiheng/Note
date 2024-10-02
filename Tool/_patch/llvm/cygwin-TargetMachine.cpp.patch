@@ -12,7 +12,7 @@ index 8ddc74200429..24aefb5c1ecd 100644
    // the large code model is mostly used for JIT compilation, just look at the
    // code model.
 -  if (!getTargetTriple().isOSBinFormatELF())
-+  if (!getTargetTriple().isOSBinFormatELF() && !targetIsCygwin64)
++  if (!targetIsCygwin64 && !getTargetTriple().isOSBinFormatELF())
      return getCodeModel() == CodeModel::Large;
  
    auto *GO = GVal->getAliaseeObject();

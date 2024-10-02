@@ -206,7 +206,7 @@ dump_compiler_linker_build_type_and_compiler_flags() {
 	echo "LDFLAGS    : ${LDFLAGS}"
 }
 
-# control llvm as a library, whether is static or shared
+# control whether llvm, as library, is static or shared
 check_llvm_static_or_shared() {
 	local llvm_static_or_shared="$1"
 	if [ -z "${llvm_static_or_shared}" ]; then

@@ -108,11 +108,11 @@ PACKAGE=llvm
 		# LLVM_BUILD_LLVM_DYLIB
 		# LLVM_LINK_LLVM_DYLIB
 		# LLVM_ENABLE_PIC
-	)
 
-	-DBUILD_SHARED_LIBS=OFF
-	# MSVC does not support this option
-	# -DBUILD_SHARED_LIBS=ON
+		-DBUILD_SHARED_LIBS=OFF
+		# MSVC does not support this option
+		# -DBUILD_SHARED_LIBS=ON
+	)
 
 	VS2022_BUILD_DIR="${SOURCE_DIR}-vs2022-build"
 	# NINJA_BUILD_DIR="${SOURCE_DIR}-ninja-build"

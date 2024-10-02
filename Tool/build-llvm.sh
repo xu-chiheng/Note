@@ -29,6 +29,7 @@ cd "$(dirname "$0")"
 # https://llvm.org/docs/CMake.html
 # https://llvm.org/docs/GettingStarted.html
 
+# https://llvm.org/docs/CMakePrimer.html
 # https://llvm.org/docs/AdvancedBuilds.html
 # https://llvm.org/docs/BuildingADistribution.html
 
@@ -42,10 +43,6 @@ cd "$(dirname "$0")"
 
 # 2023 LLVM Dev Mtg - Understanding the LLVM build
 # https://www.youtube.com/watch?v=Dnubzx8-E1M
-
-
-# https://llvm.org/docs/CMakePrimer.html
-# https://llvm.org/docs/AdvancedBuilds.html
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=llvm

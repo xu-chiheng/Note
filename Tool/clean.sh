@@ -38,7 +38,6 @@ FIND_ARGS=(
 		-or -name '*.sha512'
 		-or -name '*.cmd'
 		-or -name '*.sh'
-		-or -name '*.cygport'
 	')'
 )
 

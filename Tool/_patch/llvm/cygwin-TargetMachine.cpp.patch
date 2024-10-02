@@ -1,5 +1,5 @@
 diff --git a/llvm/lib/Target/TargetMachine.cpp b/llvm/lib/Target/TargetMachine.cpp
-index 8ddc74200429..855f67d8ff6d 100644
+index 8ddc74200429..24aefb5c1ecd 100644
 --- a/llvm/lib/Target/TargetMachine.cpp
 +++ b/llvm/lib/Target/TargetMachine.cpp
 @@ -42,11 +42,12 @@ TargetMachine::~TargetMachine() = default;
@@ -16,3 +16,12 @@ index 8ddc74200429..855f67d8ff6d 100644
      return getCodeModel() == CodeModel::Large;
  
    auto *GO = GVal->getAliaseeObject();
+@@ -65,7 +66,7 @@ bool TargetMachine::isLargeGlobalValue(const GlobalValue *GVal) const {
+   if (!GV) {
+     // Handle explicit sections as we do for GlobalVariables with an explicit
+     // section, see comments below.
+-    if (GO->hasSection()) {
++    if (!targetIsCygwin64 && GO->hasSection()) {
+       StringRef Name = GO->getSection();
+       return IsPrefix(Name, ".ltext");
+     }

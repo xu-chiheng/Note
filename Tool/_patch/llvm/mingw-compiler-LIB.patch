@@ -1,5 +1,5 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..aa15f69b0134 100644
+index c81a7ed17029..e1d658fbebd7 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
 @@ -520,18 +520,6 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
@@ -21,59 +21,15 @@ index c81a7ed17029..aa15f69b0134 100644
    // Only include <base>/lib if we're not cross compiling (not even for
    // windows->windows to a different arch), or if the sysroot has been set
    // (where we presume the user has pointed it at an arch specific
-@@ -540,6 +528,64 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
+@@ -540,6 +528,20 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
        getDriver().SysRoot.size())
      getFilePaths().push_back(Base + "lib");
  
 +	// for MinGW's crt2.o
 +	if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true)) {
-+		const char * temp = getenv("LIB");
-+		if (temp) {
-+			size_t len = strlen(temp);
-+			char paths[len + 10];
-+			strcpy(paths, temp);
-+			char path_separator = ';';
-+			size_t i = 0;
-+			while (i < len) {
-+				size_t path_start, path_end;
-+				while (i < len && paths[i] == path_separator) {
-+					i++;
-+				}
-+				// i == len || paths[i] != path_separator
-+				path_start = i;
-+				while (i < len && paths[i] != path_separator) {
-+					i++;
-+				}
-+				// i == len || paths[i] == path_separator
-+				path_end = i;
-+
-+				bool completed;
-+				if (i < len) {
-+					// paths[i] == path_separator
-+					// see the separator
-+					completed = false;
-+					i++;
-+				} else {
-+					// i == len
-+					// end of line \0
-+					completed = true;
-+				}
-+
-+				size_t path_len = path_end - path_start;
-+				if (path_len > 0) {
-+					paths[path_end] = 0;
-+
-+					getFilePaths().push_back(paths + path_start);
-+
-+					if (!completed) {
-+
-+					} else {
-+						break;
-+					}
-+				} else {
-+					// empty path, ignore
-+				}
-+			}
++		const char * path = getenv("LIB");
++		if (path) {
++			getFilePaths().push_back(path);
 +		} else {
 +
 +		}

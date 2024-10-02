@@ -1,13 +1,16 @@
 diff --git a/gcc/gcc.cc b/gcc/gcc.cc
-index d07a8e172a4..7e09aa926df 100644
+index d07a8e172a4..d98cfb5c66c 100644
 --- a/gcc/gcc.cc
 +++ b/gcc/gcc.cc
-@@ -8631,6 +8688,10 @@ driver::set_up_specs () const
+@@ -8631,6 +8631,13 @@ driver::set_up_specs () const
  	do_self_spec (*sl->ptr_spec);
    }
  
 +#if defined(_WIN32) && !defined(CROSS_DIRECTORY_STRUCTURE)
-+  add_env_var_paths_to_library_path("LIB");
++	const char * path = getenv("LIB");
++	if (path) {
++		add_prefix(&startfile_prefixes, path, NULL, PREFIX_PRIORITY_LAST, 0, 1);
++	}
 +#endif
 +
    if (compare_debug)

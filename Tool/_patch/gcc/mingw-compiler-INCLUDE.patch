@@ -1,14 +1,18 @@
 diff --git a/gcc/incpath.cc b/gcc/incpath.cc
-index 64cdd2f4a1b..d819b301f3c 100644
+index 64cdd2f4a1b..de29a28b89a 100644
 --- a/gcc/incpath.cc
 +++ b/gcc/incpath.cc
-@@ -502,6 +502,10 @@ register_include_chains (cpp_reader *pfile, const char *sysroot,
+@@ -502,6 +502,14 @@ register_include_chains (cpp_reader *pfile, const char *sysroot,
      add_standard_paths (sysroot, iprefix, imultilib, cxx_stdinc);
  
    target_c_incpath.extra_includes (sysroot, iprefix, stdinc);
 +  
 +#if defined(_WIN32) && !defined(CROSS_DIRECTORY_STRUCTURE)
-+	add_env_var_paths ("INCLUDE", INC_AFTER);
++	const char * path = getenv("INCLUDE");
++	if (path) {
++		incpath_kind chain = INC_AFTER;
++		add_path(path, chain, chain == INC_SYSTEM, false);
++	}
 +#endif
  
    merge_include_chains (sysroot, pfile, verbose);

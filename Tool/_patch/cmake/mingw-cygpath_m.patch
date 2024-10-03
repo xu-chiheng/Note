@@ -1,0 +1,48 @@
+diff --git a/Source/cmLocalGenerator.cxx b/Source/cmLocalGenerator.cxx
+index da95b19f81..0b84a7813a 100644
+--- a/Source/cmLocalGenerator.cxx
++++ b/Source/cmLocalGenerator.cxx
+@@ -1126,6 +1126,43 @@ cmTarget* cmLocalGenerator::AddUtilityCommand(
+   return target;
+ }
+ 
++#ifdef __MINGW32__
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++static
++std::string cygpath_m(std::string const& path)
++{
++    // Create a pipe.
++    std::string command = "cygpath -m '" + path + "'";
++    FILE * pipe = popen(command.c_str(), "r");
++
++    std::string output;
++    char line[4096 + 1];
++    // https://cplusplus.com/reference/cstdio/fgets
++    while (fgets(line, sizeof(line), pipe) != nullptr) {
++        char * p = strchr(line, '\n');
++        if (p) {
++            *p = 0;
++            output += line;
++            break;
++        } else {
++            // without end of line ?
++            output += line;
++            continue;
++        }
++    }
++
++    // Close the pipe.
++    pclose(pipe);
++
++    return output;
++}
++
++#endif
++
+ std::vector<BT<std::string>> cmLocalGenerator::GetIncludeDirectoriesImplicit(
+   cmGeneratorTarget const* target, std::string const& lang,
+   std::string const& config, bool stripImplicitDirs,

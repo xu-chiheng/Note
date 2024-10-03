@@ -2,7 +2,7 @@ diff --git a/Source/cmLocalGenerator.cxx b/Source/cmLocalGenerator.cxx
 index 684dfda705..94425820db 100644
 --- a/Source/cmLocalGenerator.cxx
 +++ b/Source/cmLocalGenerator.cxx
-@@ -1228,6 +1228,12 @@ std::vector<BT<std::string>> cmLocalGenerator::GetIncludeDirectoriesImplicit(
+@@ -1228,6 +1265,15 @@ std::vector<BT<std::string>> cmLocalGenerator::GetIncludeDirectoriesImplicit(
        // Only exclude this hard coded path for backwards compatibility.
        implicitExclude.emplace("/usr/include");
      }
@@ -10,6 +10,9 @@ index 684dfda705..94425820db 100644
 +	const char * path = getenv("INCLUDE");
 +	if (path) {
 +		implicitExclude.insert(path);
++	} else {
++		implicitExclude.insert(cygpath_m("/mingw64/include"));
++		implicitExclude.insert(cygpath_m("/ucrt64/include"));
 +	}
 +#endif
  

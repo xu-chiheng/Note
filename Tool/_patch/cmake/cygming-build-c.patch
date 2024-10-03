@@ -7,7 +7,7 @@ index d794bd53e0..cf51dd1df0 100644
   * IN THE SOFTWARE.
   */
 +#ifdef __CYGWIN__
-+#define _GNU_SOURCE 1
++#define _GNU_SOURCE
 +#endif
  
  #include "uv.h"

@@ -32,7 +32,7 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 	dump_compiler_linker_build_type_and_compiler_flags
 
 	# VERSION=3.27.6
-	VERSION=3.30.0    # commit 86b55fd236056da7caf20674af32c117420c5814    2024-03-23
+	VERSION=3.30.0    # 86b55fd236056da7caf20674af32c117420c5814    2024-03-23
 
 	SOURCE_DIR="${PACKAGE}"
 

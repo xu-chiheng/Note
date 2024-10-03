@@ -1,58 +1,16 @@
 diff --git a/Source/cmLocalGenerator.cxx b/Source/cmLocalGenerator.cxx
-index da95b19f81..0b84a7813a 100644
+index 684dfda705..94425820db 100644
 --- a/Source/cmLocalGenerator.cxx
 +++ b/Source/cmLocalGenerator.cxx
-@@ -1126,6 +1126,43 @@ cmTarget* cmLocalGenerator::AddUtilityCommand(
-   return target;
- }
- 
-+#ifdef __MINGW32__
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+
-+static
-+std::string cygpath_m(std::string const& path)
-+{
-+    // Create a pipe.
-+    std::string command = "cygpath -m '" + path + "'";
-+    FILE * pipe = popen(command.c_str(), "r");
-+
-+    std::string output;
-+    char line[4096 + 1];
-+    // https://cplusplus.com/reference/cstdio/fgets
-+    while (fgets(line, sizeof(line), pipe) != nullptr) {
-+        char * p = strchr(line, '\n');
-+        if (p) {
-+            *p = 0;
-+            output += line;
-+            break;
-+        } else {
-+            // without end of line ?
-+            output += line;
-+            continue;
-+        }
-+    }
-+
-+    // Close the pipe.
-+    pclose(pipe);
-+
-+    return output;
-+}
-+
-+#endif
-+
- std::vector<BT<std::string>> cmLocalGenerator::GetIncludeDirectoriesImplicit(
-   cmGeneratorTarget const* target, std::string const& lang,
-   std::string const& config, bool stripImplicitDirs,
-@@ -1229,6 +1266,10 @@ std::vector<BT<std::string>> cmLocalGenerator::GetIncludeDirectoriesImplicit(
+@@ -1228,6 +1228,12 @@ std::vector<BT<std::string>> cmLocalGenerator::GetIncludeDirectoriesImplicit(
        // Only exclude this hard coded path for backwards compatibility.
        implicitExclude.emplace("/usr/include");
      }
 +#ifdef __MINGW32__
-+    implicitExclude.insert(cygpath_m("/mingw64/include"));
-+    implicitExclude.insert(cygpath_m("/ucrt64/include"));
++	const char * path = getenv("INCLUDE");
++	if (path) {
++		implicitExclude.insert(path);
++	}
 +#endif
  
      for (std::string const& i : impDirVec) {

@@ -8,8 +8,8 @@ https://src.fedoraproject.org/rpms/cmake.git
 
 
 
-
-patch_apply . ../_patch/cmake/{cygwin-tty.c,mingw-include}.patch
+3.30.0    86b55fd236056da7caf20674af32c117420c5814    2024-03-23
+patch_apply . ../_patch/cmake/{cygming-build-{a,b,c},mingw-include}.patch
 
 
 

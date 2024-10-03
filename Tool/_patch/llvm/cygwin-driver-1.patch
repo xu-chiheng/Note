@@ -34,10 +34,10 @@ index 77328e1f99e5..9d4b24a79f60 100644
          break;
 diff --git a/clang/lib/Driver/ToolChains/Cygwin.cpp b/clang/lib/Driver/ToolChains/Cygwin.cpp
 new file mode 100644
-index 000000000000..237efcb58e08
+index 000000000000..dc5ea694095d
 --- /dev/null
 +++ b/clang/lib/Driver/ToolChains/Cygwin.cpp
-@@ -0,0 +1,748 @@
+@@ -0,0 +1,746 @@
 +//===--- Cygwin.cpp - CygwinToolChain Implementation ----------------------===//
 +//
 +// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -526,9 +526,7 @@ index 000000000000..237efcb58e08
 +  // for Cygwin's crt0.o
 +  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
 +      getDriver().SysRoot.size()) {
-+    // /usr/lib is the same as /lib
 +    getFilePaths().push_back(getDriver().SysRoot + "/lib");
-+    getFilePaths().push_back(getDriver().SysRoot + "/lib/w32api");
 +  } else {
 +    // must add library directories by -L
 +  }

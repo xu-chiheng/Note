@@ -1,5 +1,5 @@
 diff --git a/include/libiberty.h b/include/libiberty.h
-index 02988e0ac91..230b00da809 100644
+index 32385911690..86fd016e278 100644
 --- a/include/libiberty.h
 +++ b/include/libiberty.h
 @@ -137,6 +137,10 @@ extern const char *unix_lbasename (const char *) ATTRIBUTE_RETURNS_NONNULL ATTRI
@@ -14,16 +14,17 @@ index 02988e0ac91..230b00da809 100644
  
  extern int is_valid_fd (int fd);
 diff --git a/libiberty/xstrdup.c b/libiberty/xstrdup.c
-index fa12c96a3cd..a12fed3ece5 100644
+index fa12c96a3cd..60127db6089 100644
 --- a/libiberty/xstrdup.c
 +++ b/libiberty/xstrdup.c
-@@ -34,3 +34,345 @@ xstrdup (const char *s)
+@@ -34,3 +34,350 @@ xstrdup (const char *s)
    register char *ret = XNEWVEC (char, len);
    return (char *) memcpy (ret, s, len);
  }
 +
 +#include <stdbool.h>
 +
++// convert \ to /
 +static
 +size_t convert_path_0(char * path, size_t len)
 +{
@@ -44,6 +45,7 @@ index fa12c96a3cd..a12fed3ece5 100644
 +	return len;
 +}
 +
++// convert c:/ to C:/
 +static
 +size_t convert_path_1(char * path, size_t len)
 +{
@@ -77,6 +79,7 @@ index fa12c96a3cd..a12fed3ece5 100644
 +	return len;
 +}
 +
++// convert //+ to /
 +static
 +size_t convert_path_2(char * path, size_t len)
 +{
@@ -101,7 +104,7 @@ index fa12c96a3cd..a12fed3ece5 100644
 +		if (j == 3
 +			&& (path[j - 3] >= 'A' && path[j - 3] <= 'Z')
 +			&& path[j - 2] == ':' && path[j - 1] == '/') {
-+			// D:/
++			// device root C:/
 +			goto label_return;
 +		} else {
 +			goto label2;
@@ -114,7 +117,9 @@ index fa12c96a3cd..a12fed3ece5 100644
 +			j--;
 +		} else {
 +			// j <= 1 || (j > 1 && path[j - 1] != '/')
-+
++			if (j == 1 && path[j - 1] == '/') {
++				// root /
++			}
 +		}
 +		goto label_return;
 +	}
@@ -123,6 +128,7 @@ index fa12c96a3cd..a12fed3ece5 100644
 +	return j;
 +}
 +
++// convert .
 +static
 +size_t convert_path_3(char * path, size_t len)
 +{
@@ -148,14 +154,12 @@ index fa12c96a3cd..a12fed3ece5 100644
 +	while (i + 1 < len) {
 +		if (path[i] == '.' && path[i + 1] == '/') {
 +			i += 2;
-+			j += 2;
 +		} else {
 +			break;
 +		}
 +	}
 +	while (i < len && path[i] != '/') {
-+		i++;
-+		j++;
++		path[j++] = path[i++];
 +	}
 +	// i == len || path[i] == '/'
 +	while (i + 1 < len) {
@@ -190,6 +194,7 @@ index fa12c96a3cd..a12fed3ece5 100644
 +	return j;
 +}
 +
++// convert ..
 +static
 +size_t convert_path_4(char * path, size_t len)
 +{
@@ -251,10 +256,10 @@ index fa12c96a3cd..a12fed3ece5 100644
 +						continue;
 +					} else if (j > 0 && path[j - 1] == '/') {
 +						if (j == 1) {
-+							// root
++							// root /
 +							goto label_error;
 +						} else if (host_is_windows && j == 3 && (path[j - 3] >= 'A' && path[j - 3] <= 'Z') && path[j - 2] == ':' ) {
-+							// device root
++							// device root C:/
 +							goto label_error;
 +						} else {
 +							// relative

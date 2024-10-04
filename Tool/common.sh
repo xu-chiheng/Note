@@ -98,8 +98,6 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 	fi
 	local compiler_install_dir="$(dirname "${cc_dir}")"
 
-
-
 	# Disable color errors globally?
 	# http://clang-developers.42468.n3.nabble.com/Disable-color-errors-globally-td4065317.html
 	export TERM=dumb

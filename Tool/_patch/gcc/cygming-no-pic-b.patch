@@ -1,0 +1,34 @@
+diff --git a/configure b/configure
+index 92293da0aa7..d32217687db 100755
+--- a/configure
++++ b/configure
+@@ -8874,7 +8874,11 @@ else
+   PICFLAG=
+ fi
+ 
+-
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
+ 
+ # Rust requires -ldl and -lpthread if you are using an old glibc that does not include them by
+ # default, so we check for them here
+diff --git a/configure.ac b/configure.ac
+index d7ee8209b66..749ba826405 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2035,6 +2035,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ # Rust requires -ldl and -lpthread if you are using an old glibc that does not include them by

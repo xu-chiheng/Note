@@ -13,12 +13,12 @@ mingw-{replace-w64-0,ldflags-w{32-0,64},no-manifest-0,gethostname,libgcc-no-libc
 
 14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7    2024-04-24    branch point
 patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,\
-_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-0,LIMITS_H_TEST-0},cygwin-{ldflags,macro,include-w32api,no-wrap-0,no-manifest},\
+_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-0,LIMITS_H_TEST-0},cygming-no-pic-{a,b,c,d,e},cygwin-{ldflags,macro,include-w32api,no-wrap-0,no-manifest},\
 mingw-{replace-w64-1,ldflags-w{32-0,64},no-manifest-0,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 15.0.0    abeeccef92892fe519cc417b30ae22ce9da2d5e6    2024-08-28
 patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,\
-_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1},cygwin-{ldflags,macro,include-w32api,no-wrap-1,no-manifest},\
+_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1},cygming-no-pic-{a,b,c,d,e},cygwin-{ldflags,macro,include-w32api,no-wrap-1,no-manifest},\
 mingw-{replace-w64-1,ldflags-w{32-1,64},no-manifest-1,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 

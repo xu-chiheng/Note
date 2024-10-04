@@ -1,0 +1,60 @@
+diff --git a/gcc/configure b/gcc/configure
+index 05ac3aa97bc..85f2a7ea8f2 100755
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -34394,6 +34394,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ if test x$enable_host_pie = xyes; then
+@@ -34408,6 +34414,12 @@ if test x$enable_host_bind_now = xyes; then
+   LD_PICFLAG="$LD_PICFLAG -Wl,-z,now"
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    LD_PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # Enable Intel CET on Intel CET enabled host if jit is enabled.
+diff --git a/gcc/configure.ac b/gcc/configure.ac
+index 8b5dca36aa5..a129343031c 100644
+--- a/gcc/configure.ac
++++ b/gcc/configure.ac
+@@ -7731,6 +7731,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST([PICFLAG])
+ 
+ if test x$enable_host_pie = xyes; then
+@@ -7745,6 +7751,12 @@ if test x$enable_host_bind_now = xyes; then
+   LD_PICFLAG="$LD_PICFLAG -Wl,-z,now"
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    LD_PICFLAG=
++    ;;
++esac
++
+ AC_SUBST([LD_PICFLAG])
+ 
+ # Enable Intel CET on Intel CET enabled host if jit is enabled.

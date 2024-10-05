@@ -1,0 +1,13 @@
+diff --git a/clang/tools/libclang/CMakeLists.txt b/clang/tools/libclang/CMakeLists.txt
+index 968b46acb784..76f0d3b224b4 100644
+--- a/clang/tools/libclang/CMakeLists.txt
++++ b/clang/tools/libclang/CMakeLists.txt
+@@ -111,7 +111,7 @@ if (LLVM_EXPORTED_SYMBOL_FILE)
+                      DEPENDS ${LIBCLANG_VERSION_SCRIPT_FILE})
+ endif()
+ 
+-if(LLVM_ENABLE_PIC OR (WIN32 AND NOT LIBCLANG_BUILD_STATIC))
++if(LLVM_ENABLE_PIC)
+   set(ENABLE_SHARED SHARED)
+ endif()
+ 

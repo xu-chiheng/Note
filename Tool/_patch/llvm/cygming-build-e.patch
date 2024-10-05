@@ -1,0 +1,15 @@
+diff --git a/llvm/cmake/config-ix.cmake b/llvm/cmake/config-ix.cmake
+index f76eacb9d513..abd3095148cf 100644
+--- a/llvm/cmake/config-ix.cmake
++++ b/llvm/cmake/config-ix.cmake
+@@ -411,7 +411,9 @@ check_symbol_exists(proc_pid_rusage "libproc.h" HAVE_PROC_PID_RUSAGE)
+ # Define LLVM_HAS_ATOMICS if gcc or MSVC atomic builtins are supported.
+ include(CheckAtomic)
+ 
+-if( LLVM_ENABLE_PIC )
++if(WIN32 OR CYGWIN)
++
++elseif(LLVM_ENABLE_PIC)
+   set(ENABLE_PIC 1)
+ else()
+   set(ENABLE_PIC 0)

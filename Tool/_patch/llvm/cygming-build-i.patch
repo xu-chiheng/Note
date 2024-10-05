@@ -1,0 +1,15 @@
+diff --git a/polly/CMakeLists.txt b/polly/CMakeLists.txt
+index b4cfc77d0f21..f288c9e2e491 100644
+--- a/polly/CMakeLists.txt
++++ b/polly/CMakeLists.txt
+@@ -37,7 +37,9 @@ if(POLLY_STANDALONE_BUILD)
+     set(POLLY_GTEST_AVAIL 1)
+   endif()
+ 
+-  if (LLVM_ENABLE_PIC)
++  if(WIN32 OR CYGWIN)
++
++  elseif(LLVM_ENABLE_PIC)
+     # Make sure the isl c files are built as fPIC if possible
+     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+   endif ()

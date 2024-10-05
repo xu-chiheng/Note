@@ -21,7 +21,7 @@ stage 3 : Clang 16.0.6
 
 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a    2023-01-24    branch point
 patch_apply . \
-../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,cygming-build-{a,b,c,d,e,f,g,h,i},\
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,cygming-build-{a,c,d,e,g,h,i},\
 cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary,LIB},cmodel-0,driver-0,general-{a,b,c},macro},\
 mingw-{git-revision,ldflags,pthread,emutls-0,findgcc-0,compiler-{INCLUDE,LIB},driver-a,GCC-O3},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch

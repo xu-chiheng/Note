@@ -68,6 +68,21 @@ git_rev_parse() {
 	git rev-parse --verify --quiet "${revision}"
 }
 
+git_branch_delete_all_test_branches() {
+	if [ ! -d .git ]; then
+		return 1
+	fi
+
+	local remote="$1"
+	if [ -z "${remote}" ]; then
+		# local branches
+		git branch | grep -E '^  test' | xargs git branch -D
+	else
+		# remote branches
+		git branch -r | grep "${remote}/test" | xargs -I {} git push origin --delete {}
+	fi
+}
+
 # test branches are named like "test%04d"
 git_branch_delete_test_range() {
 	if [ ! -d .git ]; then

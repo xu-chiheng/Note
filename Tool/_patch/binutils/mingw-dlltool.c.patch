@@ -6,7 +6,7 @@ index 6dc16a9ed84..df4e75a3734 100644
  
     .idata$7 = dll name (eg: "kernel32.dll").  */
  
-+#if defined(_WIN32) && !defined(__CYGWIN__)
++#ifdef _WIN32
 +// for NAME_MAX in /ucrt64/include/limits.h
 +#define _POSIX_
 +#endif

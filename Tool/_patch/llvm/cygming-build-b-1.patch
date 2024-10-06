@@ -1,9 +1,13 @@
 diff --git a/clang/tools/clang-shlib/CMakeLists.txt b/clang/tools/clang-shlib/CMakeLists.txt
-index 298d3a9d18fe..2081cf7477f2 100644
+index 298d3a9d18fe..4f0484313d3e 100644
 --- a/clang/tools/clang-shlib/CMakeLists.txt
 +++ b/clang/tools/clang-shlib/CMakeLists.txt
-@@ -53,7 +53,10 @@ add_clang_library(clang-cpp
- if (NOT APPLE AND NOT MINGW AND NOT LLVM_LINKER_IS_SOLARISLD_ILLUMOS)
+@@ -50,10 +50,13 @@ add_clang_library(clang-cpp
+                   ${_DEPS})
+ # Optimize function calls for default visibility definitions to avoid PLT and
+ # reduce dynamic relocations.
+-if (NOT APPLE AND NOT MINGW AND NOT LLVM_LINKER_IS_SOLARISLD_ILLUMOS)
++if (NOT APPLE AND NOT CYGWIN AND NOT MINGW AND NOT LLVM_LINKER_IS_SOLARISLD_ILLUMOS)
    target_link_options(clang-cpp PRIVATE LINKER:-Bsymbolic-functions)
  endif()
 -if (MINGW OR CYGWIN)

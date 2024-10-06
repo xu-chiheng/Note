@@ -1,7 +1,4 @@
 
-Issues:
-Cygwin GCC can't build debug mode LLVM using './build-llvm.sh GCC BFD Debug shared'
-
 
 Binutils 2.40      a72b07181dcd18b54f193322043d51058c1ef632    2022-12-31
 GCC      13.0.0    8e08c7886eed5824bebd0e011526ec302d622844    2023-04-17

@@ -282,6 +282,18 @@ mingw-git-revision.patch
 MinGW : Show git revision correctly
 
 
+
+Issues:
+Cygwin GCC can't build debug mode LLVM using './build-llvm.sh GCC BFD Debug shared'
+/cygdrive/d/_cygwin/binutils/bin/ld.bfd: final link failed: bad value
+collect2: error: ld returned 1 exit status
+make[2]: *** [tools/clang/tools/clang-shlib/CMakeFiles/clang-cpp.dir/build.make:2039: bin/cygclang-cpp.dll] Error 1
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-cygwin-gcc-bfd-debug-build'
+make[1]: *** [CMakeFiles/Makefile2:49104: tools/clang/tools/clang-shlib/CMakeFiles/clang-cpp.dir/all] Error 2
+
+
+
+
 [  7%] Generating nonterminal symbol file for cxx grammar...
 [  7%] Generating bnf string file for cxx grammar...
 cd /cygdrive/e/Note/Tool/llvm-release-build/tools/clang/tools/extra/pseudo/include && ../../../../../../bin/clang-pseudo-gen.exe --grammar /cygdrive/e/Note/Tool/llvm/clang-tools-extra/pseudo/include/../lib/cxx/cxx.bnf --emit-symbol-list -o /cygdrive/e/Note/Tool/llvm-release-build/tools/clang/tools/extra/pseudo/include/CXXSymbols.inc

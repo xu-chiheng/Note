@@ -11,7 +11,7 @@ index d681b1ccab62..d68fc7408323 100644
 +endif()
 +
 +if ((WIN32 OR CYGWIN) AND (LLVM_BUILD_LLVM_DYLIB OR LLVM_LINK_LLVM_DYLIB))
-+	message(FATAL_ERROR "on Windows, no matter BUILD_SHARED_LIBS is on or of, LLVM_BUILD_LLVM_DYLIB or LLVM_LINK_LLVM_DYLIB should not be turned on.")
++	message(FATAL_ERROR "on Windows, no matter BUILD_SHARED_LIBS is on or off, LLVM_BUILD_LLVM_DYLIB or LLVM_LINK_LLVM_DYLIB should not be turned on.")
 +endif()
 +
  if (LLVM_LINK_LLVM_DYLIB AND BUILD_SHARED_LIBS)

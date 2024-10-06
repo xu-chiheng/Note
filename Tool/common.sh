@@ -85,6 +85,16 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
+	case "${linker}" in
+		BFD )
+			ldflags+=( -fuse-ld=bfd )
+			;;
+		LLD )
+			# MinGW GCC/Clang can use this option
+			ldflags+=( -fuse-ld=lld )
+			;;
+	esac
+
 	local cc_dir="$(print_program_dir "${cc}")"
 	local cxx_dir="$(print_program_dir "${cxx}")"
 
@@ -171,16 +181,6 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 	# 		cxxflags+=( "${clang_c_cxx_common_flags[@]}" )
 	# 		;;
 	# esac
-
-	case "${linker}" in
-		BFD )
-			ldflags+=( -fuse-ld=bfd )
-			;;
-		LLD )
-			# MinGW GCC/Clang can use this option
-			ldflags+=( -fuse-ld=lld )
-			;;
-	esac
 
 	COMPILER="${compiler}"
 	LINKER="${linker}"

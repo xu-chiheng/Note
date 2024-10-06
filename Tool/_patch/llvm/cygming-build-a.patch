@@ -7,7 +7,7 @@ index 4885afc1584d..0d7ac13b11ff 100644
  # For MinGW we only enable shared library if LLVM_LINK_LLVM_DYLIB=ON.
  # Without that option resulting library is too close to 2^16 DLL exports limit.
 -if(UNIX OR (MINGW AND LLVM_LINK_LLVM_DYLIB))
-+if(ON)
++if(UNIX AND NOT CYGWIN)
    add_clang_subdirectory(clang-shlib)
  endif()
  

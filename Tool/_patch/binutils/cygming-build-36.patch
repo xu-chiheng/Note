@@ -1,0 +1,105 @@
+diff --git a/libdecnumber/configure b/libdecnumber/configure
+index 14c103a0718..5a9be334410 100755
+--- a/libdecnumber/configure
++++ b/libdecnumber/configure
+@@ -5048,6 +5048,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # Output.
+diff --git a/libdecnumber/configure.ac b/libdecnumber/configure.ac
+index 16c7465b327..5f048dd1166 100644
+--- a/libdecnumber/configure.ac
++++ b/libdecnumber/configure.ac
+@@ -101,6 +101,13 @@ AC_ARG_ENABLE(host-shared,
+ [AS_HELP_STRING([--enable-host-shared],
+ 		[build host code as shared libraries])],
+ [PICFLAG=-fPIC], [PICFLAG=])
++
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ # Output.
+diff --git a/libiberty/configure b/libiberty/configure
+index b6af9baf212..506b00531e4 100755
+--- a/libiberty/configure
++++ b/libiberty/configure
+@@ -5260,6 +5260,12 @@ if [ "${shared}" != "yes" ]; then
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ NOASANFLAG=
+ case " ${CFLAGS} " in
+diff --git a/libiberty/configure.ac b/libiberty/configure.ac
+index ad952963971..6db322bb756 100644
+--- a/libiberty/configure.ac
++++ b/libiberty/configure.ac
+@@ -235,6 +235,13 @@ fi
+ if [[ "${shared}" != "yes" ]]; then
+   PICFLAG=
+ fi
++
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ NOASANFLAG=
+diff --git a/zlib/configure b/zlib/configure
+index b124acf9259..d34bea767f7 100755
+--- a/zlib/configure
++++ b/zlib/configure
+@@ -11463,6 +11463,12 @@ else
+ fi
+ 
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ ac_config_files="$ac_config_files Makefile"
+ 
+diff --git a/zlib/configure.ac b/zlib/configure.ac
+index e9ebd64f2e7..df6ec6a29a2 100644
+--- a/zlib/configure.ac
++++ b/zlib/configure.ac
+@@ -124,6 +124,13 @@ AC_ARG_ENABLE(host-shared,
+ [AS_HELP_STRING([--enable-host-shared],
+ 		[build host code as shared libraries])],
+ [PICFLAG=-fPIC], [PICFLAG=])
++
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ AC_CONFIG_FILES([Makefile])

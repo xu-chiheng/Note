@@ -1,0 +1,137 @@
+diff --git a/configure b/configure
+index 93d286bb3b7..6beabf8e5dc 100755
+--- a/configure
++++ b/configure
+@@ -8838,6 +8838,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # If we are building PIC/PIE host executables, and we are building dependent
+diff --git a/configure.ac b/configure.ac
+index 6fd9e77f20a..8b0d4a9803e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2049,6 +2049,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ # If we are building PIC/PIE host executables, and we are building dependent
+diff --git a/libdecnumber/configure b/libdecnumber/configure
+index e4600c10e55..dbbea22ad21 100755
+--- a/libdecnumber/configure
++++ b/libdecnumber/configure
+@@ -5069,6 +5069,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # Output.
+diff --git a/libdecnumber/configure.ac b/libdecnumber/configure.ac
+index 2e95b829dc0..ce201797f8c 100644
+--- a/libdecnumber/configure.ac
++++ b/libdecnumber/configure.ac
+@@ -116,6 +116,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ # Output.
+diff --git a/libiberty/configure b/libiberty/configure
+index f83b42fb0d5..629001d9a10 100755
+--- a/libiberty/configure
++++ b/libiberty/configure
+@@ -5413,6 +5413,12 @@ if [ "${shared}" != "yes" ]; then
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ NOASANFLAG=
+ case " ${CFLAGS} " in
+diff --git a/libiberty/configure.ac b/libiberty/configure.ac
+index c27e08e1428..727ae988f1c 100644
+--- a/libiberty/configure.ac
++++ b/libiberty/configure.ac
+@@ -253,6 +253,13 @@ fi
+ if [[ "${shared}" != "yes" ]]; then
+   PICFLAG=
+ fi
++
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ NOASANFLAG=
+diff --git a/zlib/configure b/zlib/configure
+index cae55c5ca49..19f9542bbd0 100755
+--- a/zlib/configure
++++ b/zlib/configure
+@@ -11583,6 +11583,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ ac_config_files="$ac_config_files Makefile"
+ 
+diff --git a/zlib/configure.ac b/zlib/configure.ac
+index 3fa379fb82a..38494d17a7c 100644
+--- a/zlib/configure.ac
++++ b/zlib/configure.ac
+@@ -141,6 +141,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ AC_CONFIG_FILES([Makefile])
+ AC_OUTPUT

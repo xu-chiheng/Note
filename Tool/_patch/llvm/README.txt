@@ -28,7 +28,7 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7    2023-07-25    branch point
 patch_apply . \
-../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,cygming-build-{a,b-1,c,d,e,f-1,g,h,i,j-0},\
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,cygming-build-{a,b-0,c,d,e,f-1,g,h,i,j-0},\
 cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary,LIB},cmodel-0,driver-0,general-{a,b,c},macro,CGCall.h},\
 mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a,GCC-O3},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch

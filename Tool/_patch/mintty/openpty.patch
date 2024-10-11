@@ -1,0 +1,269 @@
+diff --git a/src/child.c b/src/child.c
+index 247f4ae0..7deb25ed 100644
+--- a/src/child.c
++++ b/src/child.c
+@@ -20,6 +20,8 @@
+ #ifdef __CYGWIN__
+ #include <sys/cygwin.h>  // cygwin_internal
+ #endif
++#include <errno.h>
++#include <time.h>
+ 
+ #if CYGWIN_VERSION_API_MINOR >= 93
+ #include <pty.h>
+@@ -42,6 +44,7 @@ int forkpty(int *, char *, struct termios *, struct winsize *);
+ 
+ string child_dir = null;
+ 
++bool openpty_mode = false;
+ bool logging = false;
+ static pid_t pid;
+ static bool killed;
+@@ -112,6 +115,9 @@ childerror(char * action, bool from_fork, int errno_code, int code)
+ static void
+ sigexit(int sig)
+ {
++  if (openpty_mode) {
++    return;
++  }
+   if (pid)
+     kill(-pid, SIGHUP);
+   signal(sig, SIG_DFL);
+@@ -294,6 +300,27 @@ child_create(char *argv[], struct winsize *winp)
+   signal(SIGTERM, sigexit);
+   signal(SIGQUIT, sigexit);
+ 
++
++  if (openpty_mode) {
++    int slave;
++    char slave_name[4096];
++    if (openpty (&pty_fd, &slave, slave_name, 0, winp) == -1) {
++      fprintf(stderr, "openpty failed\n");
++      fflush(stderr);
++      exit(1);
++      return ;
++    }
++    // must close the slave, otherwise, reading from the master will return -1
++    close(slave);
++
++    fprintf(stdout, "%s\n", slave_name);
++    fflush(stdout);
++
++    pid = 0;
++    // do not create the child process
++    goto label_parent;
++  }
++
+   // Create the child process and pseudo terminal.
+   pid = forkpty(&pty_fd, 0, 0, winp);
+   if (pid < 0) {
+@@ -407,6 +434,7 @@ child_create(char *argv[], struct winsize *winp)
+     exit(mexit);
+   }
+   else { // Parent process.
++label_parent:
+     if (report_child_pid) {
+       printf("%d\n", pid);
+       fflush(stdout);
+@@ -561,56 +589,8 @@ child_proc(void)
+         // at a time, and newer ones or MSYS2 deliver up to 256 at a time.
+         // so call read() repeatedly until we have a worthwhile haul.
+         // this avoids most partial updates, results in less flickering/tearing.
+-        static char buf[4096];
+-        uint len = 0;
+-#if CYGWIN_VERSION_API_MINOR >= 74
+-        if (cfg.baud > 0) {
+-          uint cps = cfg.baud / 10; // 1 start bit, 8 data bits, 1 stop bit
+-          uint nspc = 2000000000 / cps;
+-
+-          static ulong prevtime = 0;
+-          static ulong exceeded = 0;
+-          static ulong granularity = 0;
+-          struct timespec tim;
+-          if (!granularity) {
+-            clock_getres(CLOCK_MONOTONIC, &tim); // cygwin granularity: 539ns
+-            granularity = tim.tv_nsec;
+-          }
+-          clock_gettime(CLOCK_MONOTONIC, &tim);
+-          ulong now = tim.tv_sec * (long)1000000000 + tim.tv_nsec;
+-          //printf("baud %d ns/char %d prev %ld now %ld delta\n", cfg.baud, nspc, prevtime, now);
+-          if (now < prevtime + nspc) {
+-            ulong delay = prevtime ? prevtime + nspc - now : 0;
+-            if (delay < exceeded)
+-              exceeded -= delay;
+-            else {
+-              tim.tv_sec = delay / 1000000000;
+-              tim.tv_nsec = delay % 1000000000;
+-              clock_nanosleep(CLOCK_MONOTONIC, 0, &tim, 0);
+-              clock_gettime(CLOCK_MONOTONIC, &tim);
+-              ulong then = tim.tv_sec * (long)1000000000 + tim.tv_nsec;
+-              //printf("nsleep %ld -> %ld\n", delay, then - now);
+-              if (then - now > delay)
+-                exceeded = then - now - delay;
+-              now = then;
+-            }
+-          }
+-          prevtime = now;
+-
+-          int ret = read(pty_fd, buf, 1);
+-          if (ret > 0)
+-            len = ret;
+-        }
+-        else
+-#endif
+-        do {
+-          int ret = read(pty_fd, buf + len, sizeof buf - len);
+-          //if (kb_trace) printf("[%lu] read %d\n", mtime(), ret);
+-          if (ret > 0)
+-            len += ret;
+-          else
+-            break;
+-        } while (len < sizeof buf);
++        char buf[4096];
++        ssize_t len = read(pty_fd, buf, sizeof(buf));
+ 
+         if (len > 0) {
+           term_write(buf, len);
+@@ -623,12 +603,68 @@ child_proc(void)
+           }
+           if (log_fd >= 0 && logging)
+             write(log_fd, buf, len);
+-        }
+-        else {
++        } else if (len == 0) {
++            // end of file, slave side of the pty is not yet opened, or just closed
++            // no way to detect the open and close of the slave side of a pty
++            // when the slave side of a pty is not yet opened, or just closed, read() will always return 0.
++            
++            // How can I detect when someone opens the slave side of a pty (pseudo-terminal) in Linux?
++            // http://stackoverflow.com/questions/3486491/how-can-i-detect-when-someone-opens-the-slave-side-of-a-pty-pseudo-terminal-in
++
++            // busy waiting
++busy_waiting:
++            struct timespec tim;
++            tim.tv_sec = 0;
++            tim.tv_nsec = 1 * 1000000;
++            nanosleep(&tim, 0);
++            goto label_continue_check;
++        } else {
++          // len < 0 
++          // check error code
++          int error_code = errno;
++          switch (error_code) {
++          case EAGAIN :
++          // The file descriptor fd refers to a file other than a socket and has been marked nonblocking (O_NONBLOCK), and the read would block.
++            goto label_continue_check;
++          // case EWOULDBLOCK :
++            // The file descriptor fd refers to a socket and has been marked nonblocking (O_NONBLOCK), and the read would block. POSIX.1-2001 allows either error to be returned for this case, and does not require these constants to have the same value, so a portable application should check for both possibilities.
++            // goto label_continue_check;
++          case EBADF :
++            // fd is not a valid file descriptor or is not open for reading.
++            goto label_has_error;
++          case EFAULT :
++            // buf is outside your accessible address space.
++            goto label_has_error;
++          case EINTR :
++            // The call was interrupted by a signal before any data was read; see signal(7).
++            goto label_continue_check;
++          case EINVAL :
++            // fd is attached to an object which is unsuitable for reading; or the file was opened with the O_DIRECT flag, and either the address specified in buf, the value specified in count, or the current file offset is not suitably aligned.
++            goto label_has_error;
++          // case EINVAL :
++            // fd was created via a call to timerfd_create(2) and the wrong size buffer was given to read(); see timerfd_create(2) for further information.
++            // goto label_has_error;
++          case EIO :
++            // I/O error. This will happen for example when the process is in a background process group, tries to read from its controlling terminal, and either it is ignoring or blocking SIGTTIN or its process group is orphaned. It may also occur when there is a low-level I/O error while reading from a disk or tape.
++            goto busy_waiting;
++          case EISDIR :
++            // fd refers to a directory.
++            goto label_has_error;
++          default :
++            goto label_has_error;
++          }
++
++label_has_error:
++          // https://stackoverflow.com/questions/503878/how-to-know-what-the-errno-means
++          // printf("Oh dear, something went wrong with read()! %s\n", strerror(error_code));
++          // goto label_continue_check;
++          FD_CLR(pty_fd, &fds);
++          close(pty_fd);
+           pty_fd = -1;
+           term_hide_cursor();
+         }
+       }
++label_continue_check:
+       if (FD_ISSET(win_fd, &fds))
+         return;
+     }
+@@ -640,14 +676,18 @@ child_kill(bool point_blank)
+ {
+   if (!pid ||
+       kill(-pid, point_blank ? SIGKILL : SIGHUP) < 0 ||
+-      point_blank)
+-    exit_mintty();
++      point_blank) {
++      exit_mintty();
++  }
+   killed = true;
+ }
+ 
+ bool
+ child_is_alive(void)
+ {
++  if (openpty_mode) {
++    return true;
++  }
+     return pid;
+ }
+ 
+diff --git a/src/child.h b/src/child.h
+index cd11cbc5..0a905834 100644
+--- a/src/child.h
++++ b/src/child.h
+@@ -3,6 +3,7 @@
+ 
+ #include <termios.h>
+ 
++extern bool openpty_mode;
+ extern string child_dir;
+ 
+ extern void child_update_charset(void);
+diff --git a/src/winmain.c b/src/winmain.c
+index 2d1ddca8..1ccf6029 100644
+--- a/src/winmain.c
++++ b/src/winmain.c
+@@ -3443,6 +3443,9 @@ static struct {
+     }
+ 
+     when WM_CLOSE:
++      if (openpty_mode) {
++        exit(0);
++      }
+       win_close();
+       return 0;
+ 
+@@ -5468,6 +5471,7 @@ static char help[] =
+   "  -R, --Report s|o      Report window position (short/long) after exit\n"
+   "      --nopin           Make this instance not pinnable to taskbar\n"
+   "  -D, --daemon          Start new instance with Windows shortcut key\n"
++  "  -O, --openpty         open pty only, do not create child process, and print the pty slave name\n"
+   "  -H, --help            Display help and exit\n"
+   "  -V, --version         Print version information and exit\n"
+   "See manual page for further command line options and configuration.\n"
+@@ -5495,6 +5499,7 @@ opts[] = {
+   {"loadconfig", required_argument, 0, 'C'},
+   {"configdir",  required_argument, 0, ''},
+   {"exec",       no_argument,       0, 'e'},
++  {"openpty",    no_argument,       0, 'O'},
+   {"hold",       required_argument, 0, 'h'},
+   {"icon",       required_argument, 0, 'i'},
+   {"log",        required_argument, 0, 'l'},
+@@ -5785,6 +5790,8 @@ main(int argc, char *argv[])
+         set_arg_option("Log", optarg);
+         set_arg_option("Logging", strdup("0"));
+       when 'o': parse_arg_option(optarg);
++      when 'O':
++        openpty_mode = true;
+       when 'p':
+         if (strcmp(optarg, "center") == 0 || strcmp(optarg, "centre") == 0)
+           center = true;

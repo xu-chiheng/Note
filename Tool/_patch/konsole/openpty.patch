@@ -1,0 +1,380 @@
+diff --git a/src/Application.cpp b/src/Application.cpp
+index aaaccf3b..2661ae1c 100644
+--- a/src/Application.cpp
++++ b/src/Application.cpp
+@@ -39,6 +39,8 @@
+ 
+ using namespace Konsole;
+ 
++extern bool is_use_openpty;
++
+ Application::Application() : KUniqueApplication()
+ {
+     init();
+@@ -105,6 +107,9 @@ int Application::newInstance()
+         if (processHelpArgs(args))
+             return 0;
+ 
++        bool openpty = is_use_openpty;
++
++
+         // create a new window or use an existing one
+         MainWindow* window = processWindowArgs(args);
+ 
+@@ -120,7 +125,7 @@ int Application::newInstance()
+             Profile::Ptr newProfile = processProfileChangeArgs(args, baseProfile);
+ 
+             // create new session
+-            Session* session = window->createSession(newProfile, QString());
++            Session* session = window->createSession(newProfile, QString(), openpty);
+ 
+             if (!args->isSet("close")) {
+                 session->setAutoClose(false);
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 3790bfce..13501fb3 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -166,6 +166,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/tests/CTestCustom.cmake)
+     kde4_add_app_icon(konsole_KDEINIT_SRCS "${KDE4_ICON_INSTALL_DIR}/oxygen/*/apps/utilities-terminal.png")
+ 
+     kde4_add_kdeinit_executable( konsole ${konsole_KDEINIT_SRCS})
++    set_property(TARGET "konsole" APPEND PROPERTY LINK_FLAGS "-Wl,-R,'$ORIGIN:$ORIGIN/../lib'")
+     target_link_libraries(kdeinit_konsole konsoleprivate)
+ 
+     install(TARGETS kdeinit_konsole konsole konsoleprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
+diff --git a/src/MainWindow.cpp b/src/MainWindow.cpp
+index b9952ee5..b98614cc 100644
+--- a/src/MainWindow.cpp
++++ b/src/MainWindow.cpp
+@@ -450,12 +450,12 @@ void MainWindow::cloneTab()
+     }
+ }
+ 
+-Session* MainWindow::createSession(Profile::Ptr profile, const QString& directory)
++Session* MainWindow::createSession(Profile::Ptr profile, const QString& directory, bool openpty)
+ {
+     if (!profile)
+         profile = ProfileManager::instance()->defaultProfile();
+ 
+-    Session* session = SessionManager::instance()->createSession(profile);
++    Session* session = SessionManager::instance()->createSession(profile, openpty);
+ 
+     if (!directory.isEmpty() && profile->startInCurrentSessionDir())
+         session->setInitialWorkingDirectory(directory);
+diff --git a/src/MainWindow.h b/src/MainWindow.h
+index d81dbe5a..710f39f5 100644
+--- a/src/MainWindow.h
++++ b/src/MainWindow.h
+@@ -78,7 +78,7 @@ public:
+      * @param directory Initial working directory for the new session or empty
+      * if the default working directory associated with the profile should be used.
+      */
+-    Session* createSession(Profile::Ptr profile, const QString& directory);
++    Session* createSession(Profile::Ptr profile, const QString& directory, bool openpty = false);
+ 
+     /**
+      * create a new SSH session.
+diff --git a/src/Pty.cpp b/src/Pty.cpp
+index 4b696c78..8a6a401b 100644
+--- a/src/Pty.cpp
++++ b/src/Pty.cpp
+@@ -35,14 +35,14 @@
+ 
+ using Konsole::Pty;
+ 
+-Pty::Pty(int masterFd, QObject* aParent)
+-    : KPtyProcess(masterFd, aParent)
++Pty::Pty(int masterFd, QObject* aParent, bool openpty)
++    : KPtyProcess(masterFd, aParent), _openpty(openpty)
+ {
+     init();
+ }
+ 
+-Pty::Pty(QObject* aParent)
+-    : KPtyProcess(aParent)
++Pty::Pty(QObject* aParent, bool openpty)
++    : KPtyProcess(aParent), _openpty(openpty)
+ {
+     init();
+ }
+@@ -65,6 +65,17 @@ void Pty::init()
+     setPtyChannels(KPtyProcess::AllChannels);
+ 
+     connect(pty(), SIGNAL(readyRead()) , this , SLOT(dataReceived()));
++
++    
++    if (_openpty) {
++        KPtyDevice * ptyDevice = pty();
++        const char * slaveName = ptyDevice->ttyName();
++        //Different from Cygwin, here we can't close the slave, otherwise, reading from the master will return no data.
++        //ptyDevice->closeSlave();
++
++        fprintf(stdout, "%s\n", slaveName);
++        fflush(stdout);
++    } 
+ }
+ 
+ Pty::~Pty()
+@@ -73,6 +84,8 @@ Pty::~Pty()
+ 
+ void Pty::sendData(const char* data, int length)
+ {
++    //printf("%s() at line %d of file %s\n", __FUNCTION__, __LINE__, __FILE__);
++
+     if (length == 0)
+         return;
+ 
+@@ -84,12 +97,16 @@ void Pty::sendData(const char* data, int length)
+ 
+ void Pty::dataReceived()
+ {
++    //printf("%s() at line %d of file %s\n", __FUNCTION__, __LINE__, __FILE__);
++
+     QByteArray data = pty()->readAll();
+     emit receivedData(data.constData(), data.count());
+ }
+ 
+ void Pty::setWindowSize(int columns, int lines)
+ {
++    //printf("%s() at line %d of file %s\n", __FUNCTION__, __LINE__, __FILE__);
++
+     _windowColumns = columns;
+     _windowLines = lines;
+ 
+@@ -224,6 +241,10 @@ int Pty::start(const QString& programName,
+                const QStringList& programArguments,
+                const QStringList& environmentList)
+ {
++    if (_openpty) {
++        return 0;
++    }
++
+     clearProgram();
+ 
+     // For historical reasons, the first argument in programArguments is the
+@@ -284,6 +305,9 @@ int Pty::foregroundProcessGroup() const
+ 
+ void Pty::setupChildProcess()
+ {
++    if (_openpty) {
++        return;
++    }
+     KPtyProcess::setupChildProcess();
+ 
+     // reset all signal handlers
+diff --git a/src/Pty.h b/src/Pty.h
+index 73b45361..3cdf7622 100644
+--- a/src/Pty.h
++++ b/src/Pty.h
+@@ -63,13 +63,13 @@ public:
+      * To start the terminal process, call the run() method with the
+      * name of the program to start and appropriate arguments.
+      */
+-    explicit Pty(QObject* parent = 0);
++    explicit Pty(QObject* parent = 0, bool openpty = false);
+ 
+     /**
+      * Construct a process using an open pty master.
+      * See KPtyProcess::KPtyProcess()
+      */
+-    explicit Pty(int ptyMasterFd, QObject* parent = 0);
++    explicit Pty(int ptyMasterFd, QObject* parent = 0, bool openpty = false);
+ 
+     ~Pty();
+ 
+@@ -179,7 +179,7 @@ private:
+     // takes a list of key=value pairs and adds them
+     // to the environment for the process
+     void addEnvironmentVariables(const QStringList& environment);
+-
++    bool _openpty;
+     int  _windowColumns;
+     int  _windowLines;
+     char _eraseChar;
+diff --git a/src/Session.cpp b/src/Session.cpp
+index cf325b04..9b80e073 100644
+--- a/src/Session.cpp
++++ b/src/Session.cpp
+@@ -95,8 +95,9 @@ QUuid createUuid()
+     return result;
+ }
+ 
+-Session::Session(QObject* parent) :
++Session::Session(QObject* parent, bool openpty) :
+     QObject(parent)
++    ,_openpty(openpty)
+     , _shellProcess(0)
+     , _emulation(0)
+     , _monitorActivity(false)
+@@ -169,7 +170,7 @@ Session::~Session()
+ 
+ void Session::openTeletype(int fd)
+ {
+-    if (isRunning()) {
++    if (!isOpenpty() && isRunning()) {
+         kWarning() << "Attempted to open teletype in a running session.";
+         return;
+     }
+@@ -177,9 +178,9 @@ void Session::openTeletype(int fd)
+     delete _shellProcess;
+ 
+     if (fd < 0)
+-        _shellProcess = new Pty();
++        _shellProcess = new Pty(0/*parent*/, _openpty);
+     else
+-        _shellProcess = new Pty(fd);
++        _shellProcess = new Pty(fd, 0/*parent*/, _openpty);
+ 
+     _shellProcess->setUtf8Mode(_emulation->utf8());
+ 
+@@ -237,9 +238,18 @@ void Session::setDarkBackground(bool darkBackground)
+     _hasDarkBackground = darkBackground;
+ }
+ 
++bool Session::isOpenpty() const
++{
++    return _openpty;
++}
++
+ bool Session::isRunning() const
+ {
+-    return _shellProcess && (_shellProcess->state() == QProcess::Running);
++    if (isOpenpty()) {
++        return _shellProcess;
++    } else {
++        return _shellProcess && (_shellProcess->state() == QProcess::Running);
++    }
+ }
+ 
+ void Session::setCodec(QTextCodec* codec)
+@@ -423,7 +433,7 @@ QString Session::shellSessionId() const
+ void Session::run()
+ {
+     // extra safeguard for potential bug.
+-    if (isRunning()) {
++    if (!isOpenpty() && isRunning()) {
+         kWarning() << "Attempted to re-run an already running session.";
+         return;
+     }
+@@ -746,7 +756,7 @@ bool Session::kill(int signal)
+ 
+ void Session::close()
+ {
+-    if (isRunning()) {
++    if (!isOpenpty() && isRunning()) {
+         if (!closeInNormalWay())
+             closeInForceWay();
+     } else {
+@@ -1255,6 +1265,8 @@ void Session::zmodemFinished()
+ 
+ void Session::onReceiveBlock(const char* buf, int len)
+ {
++    //printf("Session::onReceiveBlock, len = %d\n", len);
++
+     _emulation->receiveData(buf, len);
+ }
+ 
+diff --git a/src/Session.h b/src/Session.h
+index 76a098b8..dc59d375 100644
+--- a/src/Session.h
++++ b/src/Session.h
+@@ -86,7 +86,7 @@ public:
+      * falls back to using the program specified in the SHELL environment
+      * variable.
+      */
+-    explicit Session(QObject* parent = 0);
++    explicit Session(QObject* parent = 0, bool openpty = false);
+     ~Session();
+ 
+     /**
+@@ -101,6 +101,10 @@ public:
+      */
+     void openTeletype(int masterFd);
+ 
++    /**
++     * return true is the session is a openpty session.
++     */
++    bool isOpenpty() const;
+     /**
+      * Returns true if the session is currently running.  This will be true
+      * after run() has been called successfully.
+@@ -693,6 +697,8 @@ private:
+     bool updateForegroundProcessInfo();
+     ProcessInfo* updateWorkingDirectory();
+ 
++    bool _openpty;
++
+     QUuid            _uniqueIdentifier; // SHELL_SESSION_ID
+ 
+     Pty*          _shellProcess;
+diff --git a/src/SessionController.cpp b/src/SessionController.cpp
+index ccae55f4..13a5989f 100644
+--- a/src/SessionController.cpp
++++ b/src/SessionController.cpp
+@@ -763,7 +763,7 @@ bool SessionController::confirmClose() const
+ }
+ bool SessionController::confirmForceClose() const
+ {
+-    if (_session->isRunning()) {
++    if (!_session->isOpenpty() && _session->isRunning()) {
+         QString title = _session->program();
+ 
+         // hard coded for now.  In future make it possible for the user to specify which programs
+diff --git a/src/SessionManager.cpp b/src/SessionManager.cpp
+index f3481744..0774a7cc 100644
+--- a/src/SessionManager.cpp
++++ b/src/SessionManager.cpp
+@@ -85,7 +85,7 @@ const QList<Session*> SessionManager::sessions() const
+     return _sessions;
+ }
+ 
+-Session* SessionManager::createSession(Profile::Ptr profile)
++Session* SessionManager::createSession(Profile::Ptr profile, bool openpty)
+ {
+     if (!profile)
+         profile = ProfileManager::instance()->defaultProfile();
+@@ -95,7 +95,7 @@ Session* SessionManager::createSession(Profile::Ptr profile)
+         ProfileManager::instance()->addProfile(profile);
+ 
+     //configuration information found, create a new session based on this
+-    Session* session = new Session();
++    Session* session = new Session(0/*parent*/, openpty);
+     Q_ASSERT(session);
+     applyProfile(session, profile, false);
+ 
+diff --git a/src/SessionManager.h b/src/SessionManager.h
+index 8afa2c21..619f942f 100644
+--- a/src/SessionManager.h
++++ b/src/SessionManager.h
+@@ -76,7 +76,7 @@ public:
+      * @param profile A profile containing the settings for the new session.  If @p profile
+      * is null the default profile (see ProfileManager::defaultProfile()) will be used.
+      */
+-    Session* createSession(Profile::Ptr profile = Profile::Ptr());
++    Session* createSession(Profile::Ptr profile = Profile::Ptr(), bool openpty = false);
+ 
+     /** Sets the profile associated with a session. */
+     void setSessionProfile(Session* session, Profile::Ptr profile);
+diff --git a/src/main.cpp b/src/main.cpp
+index 431e4b19..d9d7fd7e 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -46,11 +46,18 @@ bool shouldUseNewProcess();
+ // restore sessions saved by KDE.
+ void restoreSession(Application& app);
+ 
++bool is_use_openpty = false;
++
+ // ***
+ // Entry point into the Konsole terminal application.
+ // ***
+ extern "C" int KDE_EXPORT kdemain(int argc, char** argv)
+ {
++    if (getenv("OPENPTY") != NULL) {
++      is_use_openpty = true;
++      unsetenv("OPENPTY");
++    }
++
+     KAboutData about("konsole", 0,
+                      ki18n("Konsole"),
+                      KONSOLE_VERSION,

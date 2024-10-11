@@ -6,9 +6,9 @@ index 64cdd2f4a1b..7571fbcc3bf 100644
    int relocated = cpp_relocated ();
    size_t len;
  
-+	bool host_is_mingw = false;
++	bool host_is_win32 = false;
 +#ifdef _WIN32
-+	host_is_mingw = true;
++	host_is_win32 = true;
 +#endif
 +
    if (iprefix && (len = cpp_GCC_INCLUDE_DIR_len) != 0)
@@ -18,7 +18,7 @@ index 64cdd2f4a1b..7571fbcc3bf 100644
  	{
  	  char *str;
  
-+		if (host_is_mingw) {
++		if (host_is_win32) {
 +			if (p->fname[0] == '/') {
 +				// should never happen
 +				continue;

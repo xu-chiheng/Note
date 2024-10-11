@@ -93,7 +93,7 @@
 # But Tor Browser require "Turn on Sniffing" to be OFF, this conflicts with Tun mode.
 # The solution is setting "Turn on Sniffing" to be OFF only when using Tor Browser.
 
-# v2rayN 6.60 2024-09-23 Settings
+# v2rayN 6.60.0 2024-09-23 Settings
 
 # Settings --> Option Setting --> Core basic settings
 # Turn on Sniffing       ON or OFF       ON to make "Tun mode" work, OFF to make "Tor Browser" to connect, no way to let them both work.
@@ -103,9 +103,9 @@
 # Auto hide startup      ON
 
 # Toolbar at bottom
-# System proxy : Set system proxy
-# Enable Tun     ON or OFF               Tun mode(sing-box Virtual NIC)
-
+# Enable Tun             ON or OFF
+# System proxy           Set system proxy
+# Routing                V3 Global
 
 # Tor Browser
 # "Tor Network Settings", check "I use a proxy to connect to the Internet",

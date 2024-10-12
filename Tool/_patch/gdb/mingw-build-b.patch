@@ -1,0 +1,15 @@
+diff --git a/sim/ppc/hw_sem.c b/sim/ppc/hw_sem.c
+index 9495b8591b9..13e704a549d 100644
+--- a/sim/ppc/hw_sem.c
++++ b/sim/ppc/hw_sem.c
+@@ -24,8 +24,10 @@
+ #include "device_table.h"
+ 
+ #include <string.h>
++#ifdef HAVE_SYSV_SEM
+ #include <sys/ipc.h>
+ #include <sys/sem.h>
++#endif
+ 
+ #include <errno.h>
+ 

@@ -1,0 +1,28 @@
+diff --git a/sim/m32c/opc2c.c b/sim/m32c/opc2c.c
+index 9b24f5f17ec..68d9a507105 100644
+--- a/sim/m32c/opc2c.c
++++ b/sim/m32c/opc2c.c
+@@ -510,6 +510,7 @@ main (int argc, char **argv)
+   int lineno = 0;
+   int i;
+   size_t len;
++  const size_t line_buffer_size = 4096;
+ 
+   if (argc > 2 && strcmp (argv[1], "-l") == 0)
+     {
+@@ -537,11 +538,13 @@ main (int argc, char **argv)
+   opcodes = (opcode **) malloc (sizeof (opcode *));
+   op = &prefix_text;
+   op->lineno = 1;
+-  linebuf = NULL;
++  linebuf = malloc(line_buffer_size);;
+   len = 0;
+-  while (getline (&linebuf, &len, in) >= 0)
++  while (fgets(linebuf, line_buffer_size, in) != NULL)
+     {
+       char *line = linebuf;
++      len = strlen(linebuf);
++      (void)len;
+ 
+       lineno++;
+       if (strncmp (line, "  /** ", 6) == 0

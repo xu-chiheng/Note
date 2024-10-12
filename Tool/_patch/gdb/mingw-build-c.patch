@@ -1,0 +1,15 @@
+diff --git a/sim/ppc/hw_shm.c b/sim/ppc/hw_shm.c
+index 0f78ae8c4a9..54bfd04c0cb 100644
+--- a/sim/ppc/hw_shm.c
++++ b/sim/ppc/hw_shm.c
+@@ -24,8 +24,10 @@
+ #include "device_table.h"
+ 
+ #include <string.h>
++#ifdef HAVE_SYSV_SHM
+ #include <sys/ipc.h>
+ #include <sys/shm.h>
++#endif
+ 
+ 
+ /* DEVICE

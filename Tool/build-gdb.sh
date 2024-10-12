@@ -71,12 +71,6 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 		# https://sourceware.org/gdb/wiki/BuildingNatively
 		--disable-binutils --disable-ld --disable-gold --disable-gas --disable-gprof
 	)
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-mingw64 )
-			# have problems to build simulators
-			CONFIGURE_OPTIONS+=( --disable-sim )
-			;;
-	esac
 
 	time_command configure_build_install_package \
 		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${CONFIGURE_OPTIONS[@]}"

@@ -1,0 +1,368 @@
+diff --git a/bfd/configure b/bfd/configure
+index d98e330df8b..29de3669618 100755
+--- a/bfd/configure
++++ b/bfd/configure
+@@ -12055,7 +12055,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"
+@@ -12894,7 +12894,7 @@ _ACEOF
+ 
+ 
+ case "${host}" in
+-*-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-cygwin* | *-*-windows*)
++*-*-msdos* | *-*-go32* | *-*-mingw* | *-*-cygwin* | *-*-windows*)
+ 
+ $as_echo "#define USE_BINARY_FOPEN 1" >>confdefs.h
+  ;;
+diff --git a/binutils/configure b/binutils/configure
+index 1f855268c6f..af4e7bb7aaa 100755
+--- a/binutils/configure
++++ b/binutils/configure
+@@ -12121,7 +12121,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"
+@@ -13667,7 +13667,7 @@ fi
+ 
+ 
+ case "${host}" in
+-*-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-cygwin* | *-*-windows*)
++*-*-msdos* | *-*-go32* | *-*-mingw* | *-*-cygwin* | *-*-windows*)
+ 
+ $as_echo "#define USE_BINARY_FOPEN 1" >>confdefs.h
+  ;;
+@@ -14484,7 +14484,7 @@ do
+ 	esac
+ 
+ 	case $targ in
+-	arm-wince-pe* | arm-*-wince | arm*-*-cegcc* | arm*-*-mingw32ce*)
++	arm-wince-pe* | arm-*-wince | arm*-*-cegcc* | arm*-*-mingw*ce*)
+   	  BUILD_DLLTOOL='$(DLLTOOL_PROG)$(EXEEXT)'
+ 	  if test -z "$DLLTOOL_DEFAULT"; then
+ 	    DLLTOOL_DEFAULT="-DDLLTOOL_DEFAULT_ARM_WINCE"
+@@ -14512,7 +14512,7 @@ do
+ 	  BUILD_WINDMC='$(WINDMC_PROG)$(EXEEXT)'
+ 	  BUILD_DLLWRAP='$(DLLWRAP_PROG)$(EXEEXT)'
+ 	  ;;
+-	i[3-7]86-*-pe* | i[3-7]86-*-cygwin* | i[3-7]86-*-mingw32** | i[3-7]86-*-netbsdpe*)
++	i[3-7]86-*-pe* | i[3-7]86-*-cygwin* | i[3-7]86-*-mingw** | i[3-7]86-*-netbsdpe*)
+   	  BUILD_DLLTOOL='$(DLLTOOL_PROG)$(EXEEXT)'
+ 	  if test -z "$DLLTOOL_DEFAULT"; then
+ 	    DLLTOOL_DEFAULT="-DDLLTOOL_DEFAULT_I386"
+diff --git a/binutils/configure.ac b/binutils/configure.ac
+index b8ab642e068..598682fbe16 100644
+--- a/binutils/configure.ac
++++ b/binutils/configure.ac
+@@ -329,7 +329,7 @@ do
+ 	esac
+ 
+ 	case $targ in
+-	arm-wince-pe* | arm-*-wince | arm*-*-cegcc* | arm*-*-mingw32ce*)
++	arm-wince-pe* | arm-*-wince | arm*-*-cegcc* | arm*-*-mingw*ce*)
+   	  BUILD_DLLTOOL='$(DLLTOOL_PROG)$(EXEEXT)'
+ 	  if test -z "$DLLTOOL_DEFAULT"; then
+ 	    DLLTOOL_DEFAULT="-DDLLTOOL_DEFAULT_ARM_WINCE"
+@@ -358,7 +358,7 @@ do
+ 	  BUILD_DLLWRAP='$(DLLWRAP_PROG)$(EXEEXT)'
+ 	  ;;
+ changequote(,)dnl
+-	i[3-7]86-*-pe* | i[3-7]86-*-cygwin* | i[3-7]86-*-mingw32** | i[3-7]86-*-netbsdpe*)
++	i[3-7]86-*-pe* | i[3-7]86-*-cygwin* | i[3-7]86-*-mingw** | i[3-7]86-*-netbsdpe*)
+ changequote([,])dnl
+   	  BUILD_DLLTOOL='$(DLLTOOL_PROG)$(EXEEXT)'
+ 	  if test -z "$DLLTOOL_DEFAULT"; then
+diff --git a/gas/configure b/gas/configure
+index 7a67ce8bd6b..f28cc76da98 100755
+--- a/gas/configure
++++ b/gas/configure
+@@ -11604,7 +11604,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"
+@@ -11682,7 +11682,7 @@ fi
+ # If we are on a DOS filesystem, we must use gdb.ini rather than
+ # .gdbinit.
+ case "${host}" in
+-  *-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-windows*)
++  *-*-msdos* | *-*-go32* | *-*-mingw* | *-*-windows*)
+     GDBINIT="gdb.ini"
+     ac_config_files="$ac_config_files gdb.ini:gdbinit.in"
+ 
+@@ -13869,7 +13869,7 @@ _ACEOF
+ 
+ 
+ case "${host}" in
+-*-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-cygwin* | *-*-windows*)
++*-*-msdos* | *-*-go32* | *-*-mingw* | *-*-cygwin* | *-*-windows*)
+ 
+ $as_echo "#define USE_BINARY_FOPEN 1" >>confdefs.h
+  ;;
+diff --git a/gas/configure.ac b/gas/configure.ac
+index 78efba88e23..e005fdfa043 100644
+--- a/gas/configure.ac
++++ b/gas/configure.ac
+@@ -175,7 +175,7 @@ AH_VERBATIM([00_CONFIG_H_CHECK],
+ # If we are on a DOS filesystem, we must use gdb.ini rather than
+ # .gdbinit.
+ case "${host}" in
+-  *-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-windows*)
++  *-*-msdos* | *-*-go32* | *-*-mingw* | *-*-windows*)
+     GDBINIT="gdb.ini"
+     AC_CONFIG_FILES(gdb.ini:gdbinit.in)
+     ;;
+diff --git a/gdb/configure b/gdb/configure
+index a5c6fab118c..3cdb4784cdb 100755
+--- a/gdb/configure
++++ b/gdb/configure
+@@ -13407,7 +13407,7 @@ fi
+ 
+   WIN32APILIBS=
+   case ${host} in
+-    *mingw32*)
++    *mingw*)
+ 
+ $as_echo "#define USE_WIN32API 1" >>confdefs.h
+ 
+@@ -16887,7 +16887,7 @@ build_warnings="-Wall -Wpointer-arith \
+ "
+ 
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     # Enable -Wno-format by default when using gcc on mingw since many
+     # GCC versions complain about %I64.
+     build_warnings="$build_warnings -Wno-format" ;;
+@@ -17120,7 +17120,7 @@ SER_HARDWIRE="ser-base.o ser-unix.o ser-pipe.o ser-tcp.o"
+ case ${host} in
+   *go32* ) SER_HARDWIRE=ser-go32.o ;;
+   *djgpp* ) SER_HARDWIRE=ser-go32.o ;;
+-  *mingw32*) SER_HARDWIRE="ser-base.o ser-tcp.o ser-mingw.o" ;;
++  *mingw*) SER_HARDWIRE="ser-base.o ser-tcp.o ser-mingw.o" ;;
+   *) SER_HARDWIRE="$SER_HARDWIRE ser-uds.o" ;;
+ esac
+ 
+diff --git a/gdb/configure.ac b/gdb/configure.ac
+index 67aa628c47d..0311c08b23b 100644
+--- a/gdb/configure.ac
++++ b/gdb/configure.ac
+@@ -1854,7 +1854,7 @@ SER_HARDWIRE="ser-base.o ser-unix.o ser-pipe.o ser-tcp.o"
+ case ${host} in
+   *go32* ) SER_HARDWIRE=ser-go32.o ;;
+   *djgpp* ) SER_HARDWIRE=ser-go32.o ;;
+-  *mingw32*) SER_HARDWIRE="ser-base.o ser-tcp.o ser-mingw.o" ;;
++  *mingw*) SER_HARDWIRE="ser-base.o ser-tcp.o ser-mingw.o" ;;
+   *) SER_HARDWIRE="$SER_HARDWIRE ser-uds.o" ;;
+ esac
+ AC_SUBST(SER_HARDWIRE)
+diff --git a/gdbserver/configure b/gdbserver/configure
+index b9d4653ae5e..0fcf32b8511 100755
+--- a/gdbserver/configure
++++ b/gdbserver/configure
+@@ -6668,7 +6668,7 @@ fi
+ 
+   WIN32APILIBS=
+   case ${host} in
+-    *mingw32*)
++    *mingw*)
+ 
+ $as_echo "#define USE_WIN32API 1" >>confdefs.h
+ 
+@@ -9656,7 +9656,7 @@ build_warnings="-Wall -Wpointer-arith \
+ "
+ 
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     # Enable -Wno-format by default when using gcc on mingw since many
+     # GCC versions complain about %I64.
+     build_warnings="$build_warnings -Wno-format" ;;
+diff --git a/gdbsupport/configure b/gdbsupport/configure
+index 60643c80b5a..e0a576ee555 100755
+--- a/gdbsupport/configure
++++ b/gdbsupport/configure
+@@ -7681,7 +7681,7 @@ fi
+ 
+   WIN32APILIBS=
+   case ${host} in
+-    *mingw32*)
++    *mingw*)
+ 
+ $as_echo "#define USE_WIN32API 1" >>confdefs.h
+ 
+@@ -10141,7 +10141,7 @@ build_warnings="-Wall -Wpointer-arith \
+ "
+ 
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     # Enable -Wno-format by default when using gcc on mingw since many
+     # GCC versions complain about %I64.
+     build_warnings="$build_warnings -Wno-format" ;;
+@@ -10294,7 +10294,7 @@ _ACEOF
+ 
+ 
+ case ${host} in
+-  *mingw32*)
++  *mingw*)
+ 
+ $as_echo "#define USE_WIN32API 1" >>confdefs.h
+ 
+diff --git a/gdbsupport/configure.ac b/gdbsupport/configure.ac
+index a8fcfe24c32..35270cc5cdc 100644
+--- a/gdbsupport/configure.ac
++++ b/gdbsupport/configure.ac
+@@ -64,7 +64,7 @@ AC_DEFINE_UNQUOTED(TARGET_WORD_SIZE, $TARGET_WORD_SIZE,
+    [Define to the word size for the target.])
+ 
+ case ${host} in
+-  *mingw32*)
++  *mingw*)
+     AC_DEFINE(USE_WIN32API, 1,
+               [Define if we should use the Windows API, instead of the
+ 	       POSIX API.  On Windows, we use the Windows API when
+diff --git a/gold/configure b/gold/configure
+index b9f062b68eb..d603b0f8cbd 100755
+--- a/gold/configure
++++ b/gold/configure
+@@ -7940,7 +7940,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"
+diff --git a/gprof/configure b/gprof/configure
+index 7f39d609287..c38283d77c3 100755
+--- a/gprof/configure
++++ b/gprof/configure
+@@ -11906,7 +11906,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"
+diff --git a/ld/configure b/ld/configure
+index d8f8b2de18e..bf84b08521c 100755
+--- a/ld/configure
++++ b/ld/configure
+@@ -15504,7 +15504,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"
+@@ -16302,7 +16302,7 @@ done
+ 
+ 
+ case "${host}" in
+-*-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-cygwin* | *-*-windows*)
++*-*-msdos* | *-*-go32* | *-*-mingw* | *-*-cygwin* | *-*-windows*)
+ 
+ $as_echo "#define USE_BINARY_FOPEN 1" >>confdefs.h
+  ;;
+diff --git a/libiberty/configure b/libiberty/configure
+index f7449d6a368..f49f01e9e14 100755
+--- a/libiberty/configure
++++ b/libiberty/configure
+@@ -6616,8 +6616,8 @@ esac
+ 
+     ;;
+ 
+-  *-*-mingw32*)
+-    # Under mingw32, sys_nerr and sys_errlist exist, but they are
++  *-*-mingw*)
++    # Under mingw, sys_nerr and sys_errlist exist, but they are
+     # macros, so the test below won't find them.
+     libiberty_cv_var_sys_nerr=yes
+     libiberty_cv_var_sys_errlist=yes
+diff --git a/libiberty/configure.ac b/libiberty/configure.ac
+index a85ff25501a..0b0f4da7f9b 100644
+--- a/libiberty/configure.ac
++++ b/libiberty/configure.ac
+@@ -617,8 +617,8 @@ if test -z "${setobjs}"; then
+     AC_LIBOBJ([vsnprintf])
+     ;;
+ 
+-  *-*-mingw32*)
+-    # Under mingw32, sys_nerr and sys_errlist exist, but they are
++  *-*-mingw*)
++    # Under mingw, sys_nerr and sys_errlist exist, but they are
+     # macros, so the test below won't find them.
+     libiberty_cv_var_sys_nerr=yes
+     libiberty_cv_var_sys_errlist=yes
+diff --git a/opcodes/configure b/opcodes/configure
+index 470231ebc80..850c680c070 100755
+--- a/opcodes/configure
++++ b/opcodes/configure
+@@ -11274,7 +11274,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"
+diff --git a/sim/configure b/sim/configure
+index 8dec72cf3b4..3c6d767ded9 100755
+--- a/sim/configure
++++ b/sim/configure
+@@ -14665,7 +14665,7 @@ build_warnings="-Wall -Wdeclaration-after-statement -Wpointer-arith
+ # Enable -Wno-format by default when using gcc on mingw since many
+ # GCC versions complain about %I64.
+ case "${host}" in
+-  *-*-mingw32*) build_warnings="$build_warnings -Wno-format" ;;
++  *-*-mingw*) build_warnings="$build_warnings -Wno-format" ;;
+   *) build_warnings="$build_warnings -Wformat-nonliteral" ;;
+ esac
+ 
+diff --git a/sim/ppc/configure b/sim/ppc/configure
+index 0bab1af8139..c98537d0a40 100755
+--- a/sim/ppc/configure
++++ b/sim/ppc/configure
+@@ -3546,7 +3546,7 @@ fi
+ 
+ 
+ case ${host} in
+-  *mingw32*)
++  *mingw*)
+ 
+ $as_echo "#define USE_WIN32API 1" >>confdefs.h
+ 
+diff --git a/sim/ppc/configure.ac b/sim/ppc/configure.ac
+index 42ccda3811a..2facf877687 100644
+--- a/sim/ppc/configure.ac
++++ b/sim/ppc/configure.ac
+@@ -468,7 +468,7 @@ fi],[sim_xor_endian=""])dnl
+ 
+ 
+ case ${host} in
+-  *mingw32*)
++  *mingw*)
+     AC_DEFINE(USE_WIN32API, 1,
+               [Define if we should use the Windows API, instead of the 
+ 	       POSIX API.  On Windows, we use the Windows API when 

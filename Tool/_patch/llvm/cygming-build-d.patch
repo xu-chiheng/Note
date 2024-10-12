@@ -1,17 +1,18 @@
 diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
-index d681b1ccab62..d68fc7408323 100644
+index d681b1ccab62..18520660198a 100644
 --- a/llvm/CMakeLists.txt
 +++ b/llvm/CMakeLists.txt
-@@ -855,6 +855,14 @@ else()
+@@ -855,6 +855,15 @@ else()
    option(LLVM_BUILD_LLVM_DYLIB "Build libllvm dynamic library" ${LLVM_BUILD_LLVM_DYLIB_default})
  endif()
  
-+if ((WIN32 OR CYGWIN) AND NOT LLVM_ENABLE_PIC)
-+	message(FATAL_ERROR "on Windows, LLVM_ENABLE_PIC should not be turned off.")
-+endif()
-+
-+if ((WIN32 OR CYGWIN) AND (LLVM_BUILD_LLVM_DYLIB OR LLVM_LINK_LLVM_DYLIB))
-+	message(FATAL_ERROR "on Windows, no matter BUILD_SHARED_LIBS is on or off, LLVM_BUILD_LLVM_DYLIB or LLVM_LINK_LLVM_DYLIB should not be turned on.")
++if(WIN32 OR CYGWIN)
++	if(NOT LLVM_ENABLE_PIC)
++		message(FATAL_ERROR "on Windows, LLVM_ENABLE_PIC should not be turned off.")
++	endif()
++	if(LLVM_BUILD_LLVM_DYLIB OR LLVM_LINK_LLVM_DYLIB)
++		message(FATAL_ERROR "on Windows, no matter BUILD_SHARED_LIBS is on or off, LLVM_BUILD_LLVM_DYLIB or LLVM_LINK_LLVM_DYLIB should not be turned on.")
++	endif()
 +endif()
 +
  if (LLVM_LINK_LLVM_DYLIB AND BUILD_SHARED_LIBS)

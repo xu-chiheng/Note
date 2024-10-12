@@ -11,4 +11,4 @@ https://src.fedoraproject.org/rpms/gdb.git
 16.0.0    6179272353d3b4384a2ac306fe11aa024f344d47 2024-08-24
 
 
-patch_apply . ../_patch/{binutils/cygming-build-44,gdb/mingw-{use-win32api,ser-hardware}}.patch
+patch_apply . ../_patch/{binutils/cygming-PICFLAG-44,gdb/mingw-{use-win32api,ser-hardware}}.patch

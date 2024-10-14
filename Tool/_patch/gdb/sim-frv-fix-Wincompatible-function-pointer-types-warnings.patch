@@ -1,0 +1,427 @@
+diff --git a/cpu/frv.cpu b/cpu/frv.cpu
+index d2fe7c602cc..fb637a6151a 100644
+--- a/cpu/frv.cpu
++++ b/cpu/frv.cpu
+@@ -2933,7 +2933,7 @@
+   (name h-acc40U)
+   (comment "40 bit unsigned accumulator")
+   (attrs PROFILE VIRTUAL)
+-  (type register UDI (64))
++  (type register DI (64))
+   (indices extern-keyword acc-names)
+   ; The accumlator is made up of two 32 bit registers, accgi/acci.
+   ; We want to extract this as a combined 40 unsigned bits
+diff --git a/sim/frv/cpu.c b/sim/frv/cpu.c
+index b28bcd72d66..58404522d15 100644
+--- a/sim/frv/cpu.c
++++ b/sim/frv/cpu.c
+@@ -622,7 +622,7 @@ frvbf_h_acc40S_set (SIM_CPU *current_cpu, UINT regno, DI newval)
+ 
+ /* Get the value of h-acc40U.  */
+ 
+-UDI
++DI
+ frvbf_h_acc40U_get (SIM_CPU *current_cpu, UINT regno)
+ {
+   return GET_H_ACC40U (regno);
+@@ -631,7 +631,7 @@ frvbf_h_acc40U_get (SIM_CPU *current_cpu, UINT regno)
+ /* Set a value for h-acc40U.  */
+ 
+ void
+-frvbf_h_acc40U_set (SIM_CPU *current_cpu, UINT regno, UDI newval)
++frvbf_h_acc40U_set (SIM_CPU *current_cpu, UINT regno, DI newval)
+ {
+   SET_H_ACC40U (regno, newval);
+ }
+diff --git a/sim/frv/cpu.h b/sim/frv/cpu.h
+index ab5f2d1b539..6a021e7a61d 100644
+--- a/sim/frv/cpu.h
++++ b/sim/frv/cpu.h
+@@ -351,8 +351,8 @@ USI frvbf_h_accg_get (SIM_CPU *, UINT);
+ void frvbf_h_accg_set (SIM_CPU *, UINT, USI);
+ DI frvbf_h_acc40S_get (SIM_CPU *, UINT);
+ void frvbf_h_acc40S_set (SIM_CPU *, UINT, DI);
+-UDI frvbf_h_acc40U_get (SIM_CPU *, UINT);
+-void frvbf_h_acc40U_set (SIM_CPU *, UINT, UDI);
++DI frvbf_h_acc40U_get (SIM_CPU *, UINT);
++void frvbf_h_acc40U_set (SIM_CPU *, UINT, DI);
+ DI frvbf_h_iacc0_get (SIM_CPU *, UINT);
+ void frvbf_h_iacc0_set (SIM_CPU *, UINT, DI);
+ UQI frvbf_h_iccr_get (SIM_CPU *, UINT);
+@@ -1330,13 +1330,13 @@ union sem_fields {
+     unsigned char in_CCi;
+     unsigned char in_FRinti;
+     unsigned char in_FRintj;
+-    unsigned char in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1;
++    unsigned char in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1;
+     unsigned char in_h_fr_hi_UHI_add__INT_index_of__INT_FRinti_0;
+     unsigned char in_h_fr_hi_UHI_add__INT_index_of__INT_FRintj_0;
+     unsigned char in_h_fr_lo_UHI_add__INT_index_of__INT_FRinti_0;
+     unsigned char in_h_fr_lo_UHI_add__INT_index_of__INT_FRintj_0;
+     unsigned char out_ACC40Uk;
+-    unsigned char out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1;
++    unsigned char out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1;
+   } sfmt_cmmachu;
+   struct { /*  */
+     UINT f_ACC40Sk;
+@@ -1490,9 +1490,9 @@ union sem_fields {
+     unsigned char in_CCi;
+     unsigned char in_FRintieven;
+     unsigned char in_FRintjeven;
+-    unsigned char in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1;
+-    unsigned char in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_2;
+-    unsigned char in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_3;
++    unsigned char in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1;
++    unsigned char in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_2;
++    unsigned char in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_3;
+     unsigned char in_h_fr_hi_UHI_add__INT_index_of__INT_FRintieven_0;
+     unsigned char in_h_fr_hi_UHI_add__INT_index_of__INT_FRintieven_1;
+     unsigned char in_h_fr_hi_UHI_add__INT_index_of__INT_FRintjeven_0;
+@@ -1502,9 +1502,9 @@ union sem_fields {
+     unsigned char in_h_fr_lo_UHI_add__INT_index_of__INT_FRintjeven_0;
+     unsigned char in_h_fr_lo_UHI_add__INT_index_of__INT_FRintjeven_1;
+     unsigned char out_ACC40Uk;
+-    unsigned char out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1;
+-    unsigned char out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_2;
+-    unsigned char out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_3;
++    unsigned char out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1;
++    unsigned char out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_2;
++    unsigned char out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_3;
+   } sfmt_cmqmachu;
+   struct { /*  */
+     UINT f_ACC40Sk;
+diff --git a/sim/frv/decode.c b/sim/frv/decode.c
+index 5db4b94006c..fa3bea7675a 100644
+--- a/sim/frv/decode.c
++++ b/sim/frv/decode.c
+@@ -11216,13 +11216,13 @@ frvbf_decode (SIM_CPU *current_cpu, IADDR pc,
+       FLD (in_ACC40Uk) = f_ACC40Uk;
+       FLD (in_FRinti) = f_FRi;
+       FLD (in_FRintj) = f_FRj;
+-      FLD (in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
++      FLD (in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
+       FLD (in_h_fr_hi_UHI_add__INT_index_of__INT_FRinti_0) = ((FLD (f_FRi)) + (0));
+       FLD (in_h_fr_hi_UHI_add__INT_index_of__INT_FRintj_0) = ((FLD (f_FRj)) + (0));
+       FLD (in_h_fr_lo_UHI_add__INT_index_of__INT_FRinti_0) = ((FLD (f_FRi)) + (0));
+       FLD (in_h_fr_lo_UHI_add__INT_index_of__INT_FRintj_0) = ((FLD (f_FRj)) + (0));
+       FLD (out_ACC40Uk) = f_ACC40Uk;
+-      FLD (out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
++      FLD (out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
+     }
+ #endif
+ #undef FLD
+@@ -11308,13 +11308,13 @@ frvbf_decode (SIM_CPU *current_cpu, IADDR pc,
+       FLD (in_CCi) = f_CCi;
+       FLD (in_FRinti) = f_FRi;
+       FLD (in_FRintj) = f_FRj;
+-      FLD (in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
++      FLD (in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
+       FLD (in_h_fr_hi_UHI_add__INT_index_of__INT_FRinti_0) = ((FLD (f_FRi)) + (0));
+       FLD (in_h_fr_hi_UHI_add__INT_index_of__INT_FRintj_0) = ((FLD (f_FRj)) + (0));
+       FLD (in_h_fr_lo_UHI_add__INT_index_of__INT_FRinti_0) = ((FLD (f_FRi)) + (0));
+       FLD (in_h_fr_lo_UHI_add__INT_index_of__INT_FRintj_0) = ((FLD (f_FRj)) + (0));
+       FLD (out_ACC40Uk) = f_ACC40Uk;
+-      FLD (out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
++      FLD (out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
+     }
+ #endif
+ #undef FLD
+@@ -11394,9 +11394,9 @@ frvbf_decode (SIM_CPU *current_cpu, IADDR pc,
+       FLD (in_ACC40Uk) = f_ACC40Uk;
+       FLD (in_FRintieven) = f_FRi;
+       FLD (in_FRintjeven) = f_FRj;
+-      FLD (in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
+-      FLD (in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_2) = ((FLD (f_ACC40Uk)) + (2));
+-      FLD (in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_3) = ((FLD (f_ACC40Uk)) + (3));
++      FLD (in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
++      FLD (in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_2) = ((FLD (f_ACC40Uk)) + (2));
++      FLD (in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_3) = ((FLD (f_ACC40Uk)) + (3));
+       FLD (in_h_fr_hi_UHI_add__INT_index_of__INT_FRintieven_0) = ((FLD (f_FRi)) + (0));
+       FLD (in_h_fr_hi_UHI_add__INT_index_of__INT_FRintieven_1) = ((FLD (f_FRi)) + (1));
+       FLD (in_h_fr_hi_UHI_add__INT_index_of__INT_FRintjeven_0) = ((FLD (f_FRj)) + (0));
+@@ -11406,9 +11406,9 @@ frvbf_decode (SIM_CPU *current_cpu, IADDR pc,
+       FLD (in_h_fr_lo_UHI_add__INT_index_of__INT_FRintjeven_0) = ((FLD (f_FRj)) + (0));
+       FLD (in_h_fr_lo_UHI_add__INT_index_of__INT_FRintjeven_1) = ((FLD (f_FRj)) + (1));
+       FLD (out_ACC40Uk) = f_ACC40Uk;
+-      FLD (out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
+-      FLD (out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_2) = ((FLD (f_ACC40Uk)) + (2));
+-      FLD (out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_3) = ((FLD (f_ACC40Uk)) + (3));
++      FLD (out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
++      FLD (out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_2) = ((FLD (f_ACC40Uk)) + (2));
++      FLD (out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_3) = ((FLD (f_ACC40Uk)) + (3));
+     }
+ #endif
+ #undef FLD
+@@ -11502,9 +11502,9 @@ frvbf_decode (SIM_CPU *current_cpu, IADDR pc,
+       FLD (in_CCi) = f_CCi;
+       FLD (in_FRintieven) = f_FRi;
+       FLD (in_FRintjeven) = f_FRj;
+-      FLD (in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
+-      FLD (in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_2) = ((FLD (f_ACC40Uk)) + (2));
+-      FLD (in_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_3) = ((FLD (f_ACC40Uk)) + (3));
++      FLD (in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
++      FLD (in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_2) = ((FLD (f_ACC40Uk)) + (2));
++      FLD (in_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_3) = ((FLD (f_ACC40Uk)) + (3));
+       FLD (in_h_fr_hi_UHI_add__INT_index_of__INT_FRintieven_0) = ((FLD (f_FRi)) + (0));
+       FLD (in_h_fr_hi_UHI_add__INT_index_of__INT_FRintieven_1) = ((FLD (f_FRi)) + (1));
+       FLD (in_h_fr_hi_UHI_add__INT_index_of__INT_FRintjeven_0) = ((FLD (f_FRj)) + (0));
+@@ -11514,9 +11514,9 @@ frvbf_decode (SIM_CPU *current_cpu, IADDR pc,
+       FLD (in_h_fr_lo_UHI_add__INT_index_of__INT_FRintjeven_0) = ((FLD (f_FRj)) + (0));
+       FLD (in_h_fr_lo_UHI_add__INT_index_of__INT_FRintjeven_1) = ((FLD (f_FRj)) + (1));
+       FLD (out_ACC40Uk) = f_ACC40Uk;
+-      FLD (out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
+-      FLD (out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_2) = ((FLD (f_ACC40Uk)) + (2));
+-      FLD (out_h_acc40U_UDI_add__INT_index_of__INT_ACC40Uk_3) = ((FLD (f_ACC40Uk)) + (3));
++      FLD (out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_1) = ((FLD (f_ACC40Uk)) + (1));
++      FLD (out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_2) = ((FLD (f_ACC40Uk)) + (2));
++      FLD (out_h_acc40U_DI_add__INT_index_of__INT_ACC40Uk_3) = ((FLD (f_ACC40Uk)) + (3));
+     }
+ #endif
+ #undef FLD
+diff --git a/sim/frv/sem.c b/sim/frv/sem.c
+index 6fa847b827d..a18f892f43d 100644
+--- a/sim/frv/sem.c
++++ b/sim/frv/sem.c
+@@ -24375,7 +24375,7 @@ frvbf_media_overflow (current_cpu, 8);
+ if (GTDI (tmp_tmp, MAKEDI (255, 0xffffffff))) {
+ {
+   {
+-    UDI opval = MAKEDI (255, 0xffffffff);
++    DI opval = MAKEDI (255, 0xffffffff);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 12);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -24386,7 +24386,7 @@ frvbf_media_overflow (current_cpu, 4);
+ if (LTDI (tmp_tmp, MAKEDI (0, 0))) {
+ {
+   {
+-    UDI opval = MAKEDI (0, 0);
++    DI opval = MAKEDI (0, 0);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 12);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -24395,7 +24395,7 @@ frvbf_media_overflow (current_cpu, 4);
+ }
+ } else {
+   {
+-    UDI opval = tmp_tmp;
++    DI opval = tmp_tmp;
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 12);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -24581,7 +24581,7 @@ frvbf_media_overflow (current_cpu, 8);
+ if (GTDI (tmp_tmp, MAKEDI (255, 0xffffffff))) {
+ {
+   {
+-    UDI opval = MAKEDI (255, 0xffffffff);
++    DI opval = MAKEDI (255, 0xffffffff);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 12);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -24592,7 +24592,7 @@ frvbf_media_overflow (current_cpu, 4);
+ if (LTDI (tmp_tmp, MAKEDI (0, 0))) {
+ {
+   {
+-    UDI opval = MAKEDI (0, 0);
++    DI opval = MAKEDI (0, 0);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 12);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -24601,7 +24601,7 @@ frvbf_media_overflow (current_cpu, 4);
+ }
+ } else {
+   {
+-    UDI opval = tmp_tmp;
++    DI opval = tmp_tmp;
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 12);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -24790,7 +24790,7 @@ frvbf_media_overflow (current_cpu, 8);
+ if (GTDI (tmp_tmp, MAKEDI (255, 0xffffffff))) {
+ {
+   {
+-    UDI opval = MAKEDI (255, 0xffffffff);
++    DI opval = MAKEDI (255, 0xffffffff);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 14);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -24801,7 +24801,7 @@ frvbf_media_overflow (current_cpu, 4);
+ if (LTDI (tmp_tmp, MAKEDI (0, 0))) {
+ {
+   {
+-    UDI opval = MAKEDI (0, 0);
++    DI opval = MAKEDI (0, 0);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 14);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -24810,7 +24810,7 @@ frvbf_media_overflow (current_cpu, 4);
+ }
+ } else {
+   {
+-    UDI opval = tmp_tmp;
++    DI opval = tmp_tmp;
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 14);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25078,7 +25078,7 @@ frvbf_media_overflow (current_cpu, 8);
+ if (GTDI (tmp_tmp, MAKEDI (255, 0xffffffff))) {
+ {
+   {
+-    UDI opval = MAKEDI (255, 0xffffffff);
++    DI opval = MAKEDI (255, 0xffffffff);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 18);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25089,7 +25089,7 @@ frvbf_media_overflow (current_cpu, 4);
+ if (LTDI (tmp_tmp, MAKEDI (0, 0))) {
+ {
+   {
+-    UDI opval = MAKEDI (0, 0);
++    DI opval = MAKEDI (0, 0);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 18);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25098,7 +25098,7 @@ frvbf_media_overflow (current_cpu, 4);
+ }
+ } else {
+   {
+-    UDI opval = tmp_tmp;
++    DI opval = tmp_tmp;
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 18);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25118,7 +25118,7 @@ frvbf_media_overflow (current_cpu, 4);
+ if (GTDI (tmp_tmp, MAKEDI (255, 0xffffffff))) {
+ {
+   {
+-    UDI opval = MAKEDI (255, 0xffffffff);
++    DI opval = MAKEDI (255, 0xffffffff);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 2), opval);
+     written |= (1 << 19);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25129,7 +25129,7 @@ frvbf_media_overflow (current_cpu, 2);
+ if (LTDI (tmp_tmp, MAKEDI (0, 0))) {
+ {
+   {
+-    UDI opval = MAKEDI (0, 0);
++    DI opval = MAKEDI (0, 0);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 2), opval);
+     written |= (1 << 19);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25138,7 +25138,7 @@ frvbf_media_overflow (current_cpu, 2);
+ }
+ } else {
+   {
+-    UDI opval = tmp_tmp;
++    DI opval = tmp_tmp;
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 2), opval);
+     written |= (1 << 19);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25152,7 +25152,7 @@ frvbf_media_overflow (current_cpu, 2);
+ if (GTDI (tmp_tmp, MAKEDI (255, 0xffffffff))) {
+ {
+   {
+-    UDI opval = MAKEDI (255, 0xffffffff);
++    DI opval = MAKEDI (255, 0xffffffff);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 3), opval);
+     written |= (1 << 20);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25163,7 +25163,7 @@ frvbf_media_overflow (current_cpu, 1);
+ if (LTDI (tmp_tmp, MAKEDI (0, 0))) {
+ {
+   {
+-    UDI opval = MAKEDI (0, 0);
++    DI opval = MAKEDI (0, 0);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 3), opval);
+     written |= (1 << 20);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25172,7 +25172,7 @@ frvbf_media_overflow (current_cpu, 1);
+ }
+ } else {
+   {
+-    UDI opval = tmp_tmp;
++    DI opval = tmp_tmp;
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 3), opval);
+     written |= (1 << 20);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25443,7 +25443,7 @@ frvbf_media_overflow (current_cpu, 8);
+ if (GTDI (tmp_tmp, MAKEDI (255, 0xffffffff))) {
+ {
+   {
+-    UDI opval = MAKEDI (255, 0xffffffff);
++    DI opval = MAKEDI (255, 0xffffffff);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 20);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25454,7 +25454,7 @@ frvbf_media_overflow (current_cpu, 4);
+ if (LTDI (tmp_tmp, MAKEDI (0, 0))) {
+ {
+   {
+-    UDI opval = MAKEDI (0, 0);
++    DI opval = MAKEDI (0, 0);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 20);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25463,7 +25463,7 @@ frvbf_media_overflow (current_cpu, 4);
+ }
+ } else {
+   {
+-    UDI opval = tmp_tmp;
++    DI opval = tmp_tmp;
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 1), opval);
+     written |= (1 << 20);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25483,7 +25483,7 @@ frvbf_media_overflow (current_cpu, 4);
+ if (GTDI (tmp_tmp, MAKEDI (255, 0xffffffff))) {
+ {
+   {
+-    UDI opval = MAKEDI (255, 0xffffffff);
++    DI opval = MAKEDI (255, 0xffffffff);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 2), opval);
+     written |= (1 << 21);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25494,7 +25494,7 @@ frvbf_media_overflow (current_cpu, 2);
+ if (LTDI (tmp_tmp, MAKEDI (0, 0))) {
+ {
+   {
+-    UDI opval = MAKEDI (0, 0);
++    DI opval = MAKEDI (0, 0);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 2), opval);
+     written |= (1 << 21);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25503,7 +25503,7 @@ frvbf_media_overflow (current_cpu, 2);
+ }
+ } else {
+   {
+-    UDI opval = tmp_tmp;
++    DI opval = tmp_tmp;
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 2), opval);
+     written |= (1 << 21);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25517,7 +25517,7 @@ frvbf_media_overflow (current_cpu, 2);
+ if (GTDI (tmp_tmp, MAKEDI (255, 0xffffffff))) {
+ {
+   {
+-    UDI opval = MAKEDI (255, 0xffffffff);
++    DI opval = MAKEDI (255, 0xffffffff);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 3), opval);
+     written |= (1 << 22);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25528,7 +25528,7 @@ frvbf_media_overflow (current_cpu, 1);
+ if (LTDI (tmp_tmp, MAKEDI (0, 0))) {
+ {
+   {
+-    UDI opval = MAKEDI (0, 0);
++    DI opval = MAKEDI (0, 0);
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 3), opval);
+     written |= (1 << 22);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);
+@@ -25537,7 +25537,7 @@ frvbf_media_overflow (current_cpu, 1);
+ }
+ } else {
+   {
+-    UDI opval = tmp_tmp;
++    DI opval = tmp_tmp;
+     sim_queue_fn_di_write (current_cpu, frvbf_h_acc40U_set, ADDSI (FLD (f_ACC40Uk), 3), opval);
+     written |= (1 << 22);
+     CGEN_TRACE_RESULT (current_cpu, abuf, "acc40U", 'D', opval);

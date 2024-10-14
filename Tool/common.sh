@@ -150,7 +150,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 
 	case "${host_triple}" in
 		*-cygwin )
-			local cygwin_c_cxx_common_flags=(  )
+			local cygwin_c_cxx_common_flags=( )
 			# cygwin_c_cxx_common_flags+=( -mcmodel=small )
 			cflags+=(   "${cygwin_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${cygwin_c_cxx_common_flags[@]}" )
@@ -160,7 +160,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 			fi
 			;;
 		*-mingw* )
-			local mingw_c_cxx_common_flags=(  )
+			local mingw_c_cxx_common_flags=( )
 			# mingw_c_cxx_common_flags+=( -mcmodel=medium )
 			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
 			cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )

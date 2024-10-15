@@ -50,6 +50,7 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 		riscv64-linux-gnu
 
 		# MinGW Clang will have memory errors, if there are too many targets.
+		# If that happens, you'd better reboot Windows to reset system state.
 
 		# loongarch64-linux-gnu
 		# ppc64le-linux-gnu

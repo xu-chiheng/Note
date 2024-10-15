@@ -39,6 +39,18 @@ In file included from ../../../../gcc/gcc/tsystem.h:44,
       |               ^~~~~~~~~~
 compilation terminated.
 
+USER_H_INC_NEXT_PRE = @user_headers_inc_next_pre@
+USER_H_INC_NEXT_POST = @user_headers_inc_next_post@
+
+	case ${target} in
+		*-mingw64*)
+			user_headers_inc_next_post="${user_headers_inc_next_post} float.h"
+			user_headers_inc_next_pre="${user_headers_inc_next_pre} stddef.h stdarg.h"
+
+
+
+
+
 
 mingw-replace-w64.patch
 Search and repalce all "-w64-"

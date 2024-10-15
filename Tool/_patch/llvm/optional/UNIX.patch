@@ -1,0 +1,109 @@
+diff --git a/bolt/tools/merge-fdata/CMakeLists.txt b/bolt/tools/merge-fdata/CMakeLists.txt
+index f6a87a226898..fe380a6ad625 100644
+--- a/bolt/tools/merge-fdata/CMakeLists.txt
++++ b/bolt/tools/merge-fdata/CMakeLists.txt
+@@ -12,6 +12,6 @@ add_bolt_tool(merge-fdata
+ add_dependencies(bolt merge-fdata)
+ 
+ # Emit relocations for BOLT meta test (bolt/test/runtime/meta-merge-fdata.test)
+-if (BOLT_INCLUDE_TESTS AND UNIX AND NOT APPLE)
++if (BOLT_INCLUDE_TESTS AND UNIX AND NOT CYGWIN AND NOT APPLE)
+   target_link_options(merge-fdata PRIVATE LINKER:--emit-relocs)
+ endif()
+diff --git a/clang/tools/libclang/CMakeLists.txt b/clang/tools/libclang/CMakeLists.txt
+index 76f0d3b224b4..8827b5841c37 100644
+--- a/clang/tools/libclang/CMakeLists.txt
++++ b/clang/tools/libclang/CMakeLists.txt
+@@ -97,7 +97,7 @@ if(MSVC)
+   set(LLVM_EXPORTED_SYMBOL_FILE)
+ endif()
+ 
+-if (UNIX AND NOT APPLE AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "AIX")
++if (UNIX AND NOT CYGWIN AND NOT APPLE AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "AIX")
+   set(LLVM_EXPORTED_SYMBOL_FILE)
+   set(USE_VERSION_SCRIPT ${LLVM_HAVE_LINK_VERSION_SCRIPT})
+ endif()
+diff --git a/libcxx/CMakeLists.txt b/libcxx/CMakeLists.txt
+index f1942e963ccc..cb5332800a4c 100644
+--- a/libcxx/CMakeLists.txt
++++ b/libcxx/CMakeLists.txt
+@@ -261,7 +261,7 @@ if (LIBCXX_STATICALLY_LINK_ABI_IN_SHARED_LIBRARY
+     OR NOT LIBCXX_ENABLE_SHARED
+     OR LIBCXX_CXX_ABI STREQUAL "none")
+   set(ENABLE_LINKER_SCRIPT_DEFAULT_VALUE OFF)
+-elseif((UNIX OR FUCHSIA) AND NOT APPLE)
++elseif((UNIX OR FUCHSIA) AND NOT CYGWIN AND NOT APPLE)
+   set(ENABLE_LINKER_SCRIPT_DEFAULT_VALUE ON)
+ else()
+   set(ENABLE_LINKER_SCRIPT_DEFAULT_VALUE OFF)
+diff --git a/lldb/source/API/CMakeLists.txt b/lldb/source/API/CMakeLists.txt
+index a32bc58507d8..bdc8fc601ca6 100644
+--- a/lldb/source/API/CMakeLists.txt
++++ b/lldb/source/API/CMakeLists.txt
+@@ -149,7 +149,7 @@ add_lldb_library(liblldb SHARED ${option_framework}
+ # which depends on lib/libLLVM*.so (BUILD_SHARED_LIBS) or lib/libLLVM-10git.so
+ # (LLVM_LINK_LLVM_DYLIB). Add an additional rpath $ORIGIN/../../../../lib so
+ # that _lldb.so can be loaded from Python.
+-if(LLDB_ENABLE_PYTHON AND (BUILD_SHARED_LIBS OR LLVM_LINK_LLVM_DYLIB) AND UNIX AND NOT APPLE)
++if(LLDB_ENABLE_PYTHON AND (BUILD_SHARED_LIBS OR LLVM_LINK_LLVM_DYLIB) AND UNIX AND NOT CYGWIN AND NOT APPLE)
+   set_property(TARGET liblldb APPEND PROPERTY INSTALL_RPATH "\$ORIGIN/../../../../lib${LLVM_LIBDIR_SUFFIX}")
+ endif()
+ 
+diff --git a/llvm/cmake/modules/AddLLVM.cmake b/llvm/cmake/modules/AddLLVM.cmake
+index 4845c3c6ca59..02728551c1b6 100644
+--- a/llvm/cmake/modules/AddLLVM.cmake
++++ b/llvm/cmake/modules/AddLLVM.cmake
+@@ -718,7 +718,7 @@ function(llvm_add_library name)
+       set(library_name ${output_name}-${LLVM_VERSION_MAJOR}${LLVM_VERSION_SUFFIX})
+       set(api_name ${output_name}-${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}${LLVM_VERSION_SUFFIX})
+       set_target_properties(${name} PROPERTIES OUTPUT_NAME ${library_name})
+-      if(UNIX)
++      if(UNIX AND NOT CYGWIN)
+         llvm_install_library_symlink(${api_name} ${library_name} SHARED
+           COMPONENT ${name})
+         llvm_install_library_symlink(${output_name} ${library_name} SHARED
+diff --git a/llvm/cmake/modules/AddOCaml.cmake b/llvm/cmake/modules/AddOCaml.cmake
+index 2d9116b08a52..0bbb36e63712 100644
+--- a/llvm/cmake/modules/AddOCaml.cmake
++++ b/llvm/cmake/modules/AddOCaml.cmake
+@@ -148,7 +148,7 @@ function(add_ocaml_library name)
+ 
+   if( APPLE )
+     set(ocaml_rpath "@executable_path/../../../lib${LLVM_LIBDIR_SUFFIX}")
+-  elseif( UNIX )
++  elseif( UNIX AND NOT CYGWIN )
+     set(ocaml_rpath "\\$ORIGIN/../../../lib${LLVM_LIBDIR_SUFFIX}")
+   endif()
+   list(APPEND ocaml_flags "-ldopt" "-Wl,-rpath,${ocaml_rpath}")
+diff --git a/llvm/cmake/modules/HandleLLVMOptions.cmake b/llvm/cmake/modules/HandleLLVMOptions.cmake
+index 87821669e3bf..b26df39f23b9 100644
+--- a/llvm/cmake/modules/HandleLLVMOptions.cmake
++++ b/llvm/cmake/modules/HandleLLVMOptions.cmake
+@@ -200,12 +200,12 @@ if( LLVM_REVERSE_ITERATION )
+   set( LLVM_ENABLE_REVERSE_ITERATION 1 )
+ endif()
+ 
+-if(WIN32)
++if(WIN32 OR CYGWIN)
+   set(LLVM_HAVE_LINK_VERSION_SCRIPT 0)
+   if(CYGWIN)
+     set(LLVM_ON_WIN32 0)
+     set(LLVM_ON_UNIX 1)
+-  else(CYGWIN)
++  else()
+     set(LLVM_ON_WIN32 1)
+     set(LLVM_ON_UNIX 0)
+   endif(CYGWIN)
+diff --git a/mlir/cmake/modules/AddMLIRPython.cmake b/mlir/cmake/modules/AddMLIRPython.cmake
+index 7b91f43e2d57..e96cfa0c7d2c 100644
+--- a/mlir/cmake/modules/AddMLIRPython.cmake
++++ b/mlir/cmake/modules/AddMLIRPython.cmake
+@@ -423,7 +423,7 @@ function(mlir_python_setup_extension_rpath target)
+   # For the build tree, include the LLVM lib directory and the current
+   # directory for RPATH searching. For install, just the current directory
+   # (assumes that needed dependencies have been installed).
+-  if(NOT APPLE AND NOT UNIX)
++  if(CYGWIN OR (NOT APPLE AND NOT UNIX))
+     return()
+   endif()
+ 

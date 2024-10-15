@@ -1,0 +1,35 @@
+diff --git a/gcc/configure b/gcc/configure
+index b2db5a154ed..6ce6e4c17ac 100755
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -32240,6 +32246,12 @@ if test "$gcc_cv_no_pie" = "yes"; then
+   NO_PIE_FLAG="-no-pie"
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    NO_PIE_FLAG=
++    ;;
++esac
++
+ 
+ # Enable Intel CET on Intel CET enabled host if jit is enabled.
+  # Check whether --enable-cet was given.
+diff --git a/gcc/configure.ac b/gcc/configure.ac
+index c7a253bd560..70e25eab70d 100644
+--- a/gcc/configure.ac
++++ b/gcc/configure.ac
+@@ -7538,6 +7545,13 @@ AC_CACHE_CHECK([for -no-pie option],
+ if test "$gcc_cv_no_pie" = "yes"; then
+   NO_PIE_FLAG="-no-pie"
+ fi
++
++case $host in
++  *-cygwin | *-mingw*)
++    NO_PIE_FLAG=
++    ;;
++esac
++
+ AC_SUBST([NO_PIE_FLAG])
+ 
+ # Enable Intel CET on Intel CET enabled host if jit is enabled.

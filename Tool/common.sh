@@ -675,10 +675,10 @@ build_and_install_cross_gcc_for_targets() {
 	local build_type="$3"
 	local host_triple="$4"
 	local package="$5"
-	local extra_languages="$8"
-	local is_build_and_install_gmp_mpfr_mpc="$9"
-	local current_datetime="${10}"
-	shift 10
+	local extra_languages="$6"
+	local is_build_and_install_gmp_mpfr_mpc="$7"
+	local current_datetime="$8"
+	shift 8
 
 	local targets=( "$@" )
 	echo "targets :"

@@ -8,7 +8,7 @@ https://src.fedoraproject.org/rpms/gcc.git
 
 13.0.0    8e08c7886eed5824bebd0e011526ec302d622844    2023-04-17    branch point
 patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,\
-_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-0,LIMITS_H_TEST-0,PICFLAG-13},cygwin-{ldflags,macro,include-w32api,no-wrap-0,no-manifest},\
+_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-0,LIMITS_H_TEST-0,{PICFLAG,NO_PIE_CFLAGS,NO_PIE_FLAG}-13},cygwin-{ldflags,macro,include-w32api,no-wrap-0,no-manifest},\
 mingw-{replace-w64-0,ldflags-w{32-0,64},no-manifest-0,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7    2024-04-24    branch point

@@ -1,0 +1,25 @@
+diff --git a/gcc/Makefile.in b/gcc/Makefile.in
+index 68fda1a7591..7e1a013cd57 100644
+--- a/gcc/Makefile.in
++++ b/gcc/Makefile.in
+@@ -3310,7 +3310,9 @@ stmp-int-hdrs: $(STMP_FIXINC) $(T_GLIMITS_H) $(T_STDINT_GCC_H) $(USER_H) fixinc_
+ 	for file in .. $(USER_H_INC_NEXT_PRE); do \
+ 	  if [ X$$file != X.. ]; then \
+             mv include/$$file include/x_$$file; \
+-            echo "#include_next <$$file>" >include/$$file; \
++            echo "#if __has_include_next(<$$file>)" >include/$$file; \
++            echo "#include_next <$$file>" >>include/$$file; \
++            echo "#endif" >>include/$$file; \
+             cat include/x_$$file >>include/$$file; \
+             rm -f include/x_$$file; \
+ 	    chmod a+r include/$$file; \
+@@ -3318,7 +3320,9 @@ stmp-int-hdrs: $(STMP_FIXINC) $(T_GLIMITS_H) $(T_STDINT_GCC_H) $(USER_H) fixinc_
+ 	done
+ 	for file in .. $(USER_H_INC_NEXT_POST); do \
+ 	  if [ X$$file != X.. ]; then \
++	    echo "#if __has_include_next(<$$file>)" >>include/$$file; \
+ 	    echo "#include_next <$$file>" >>include/$$file; \
++	    echo "#endif" >>include/$$file; \
+ 	    chmod a+r include/$$file; \
+ 	  fi; \
+ 	done

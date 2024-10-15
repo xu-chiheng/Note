@@ -7,17 +7,17 @@ https://src.fedoraproject.org/rpms/gcc.git
 
 
 13.0.0    8e08c7886eed5824bebd0e011526ec302d622844    2023-04-17    branch point
-patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,\
+patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,\
 _PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-0,LIMITS_H_TEST-0,{PICFLAG,NO_PIE_CFLAGS,NO_PIE_FLAG}-13},cygwin-{ldflags,macro,include-w32api,no-wrap-0,no-manifest},\
 mingw-{replace-w64-0,ldflags-w{32-0,64},no-manifest-0,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7    2024-04-24    branch point
-patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,\
+patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,\
 _PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-0,LIMITS_H_TEST-0,PICFLAG-14},cygwin-{ldflags,macro,include-w32api,no-wrap-0,no-manifest},\
 mingw-{replace-w64-1,ldflags-w{32-0,64},no-manifest-0,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 15.0.0    abeeccef92892fe519cc417b30ae22ce9da2d5e6    2024-08-28
-patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,\
+patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,\
 _PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1,PICFLAG-14},cygwin-{ldflags,macro,include-w32api,no-wrap-1,no-manifest},\
 mingw-{replace-w64-1,ldflags-w{32-1,64},no-manifest-1,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
@@ -29,6 +29,16 @@ so they are all windows path on MinGW.
 
 _FIXED_INCLUDE_DIR.patch
 Undefine FIXED_INCLUDE_DIR to not add "include-fixed" to include directories
+
+_copy-headers-of-gcc.patch
+Fix the build of Cygwin to MinGW cross compiler.
+In file included from ../../../../gcc/gcc/tsystem.h:44,
+                 from ../../../../gcc/libgcc/libgcc2.c:27:
+/cygdrive/e/Note/Tool/gcc-cygwin-clang-bfd-release-x86_64-pc-mingw64-build/gcc/include/stddef.h:1:15: fatal error: stddef.h: No such file or directory
+    1 | #include_next <stddef.h>
+      |               ^~~~~~~~~~
+compilation terminated.
+
 
 mingw-replace-w64.patch
 Search and repalce all "-w64-"

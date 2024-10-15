@@ -31,11 +31,6 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 {
 	dump_compiler_linker_build_type_and_compiler_flags
 
-	# GCC_VERSION=12.3.0
-	# BINUTILS_VERSION=2.36
-	GCC_VERSION=15.0.0       # abeeccef92892fe519cc417b30ae22ce9da2d5e6    2024-08-28
-	BINUTILS_VERSION=2.44    # a253bea8995323201b016fe477280c1782688ab4    2024-08-28
-
 	EXTRA_LANGUAGES=()
 
 	EXTRA_LANGUAGES+=(
@@ -67,7 +62,7 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 	print_array_elements "${TARGETS[@]}"
 
 	time_command build_and_install_cross_gcc_for_targets \
-		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${GCC_VERSION}" "${BINUTILS_VERSION}" \
+		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" \
 		"$(join_array_elements ',' "${EXTRA_LANGUAGES[@]}")" no "${CURRENT_DATETIME}" "${TARGETS[@]}"
 
 } 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"

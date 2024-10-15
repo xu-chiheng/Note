@@ -582,17 +582,16 @@ build_and_install_binutils_gcc_for_target() {
 	local build_type="$4"
 	local host_triple="$5"
 	local package="$6"
-	local version="$7"
-	local extra_languages="$8"
-	local is_build_and_install_gmp_mpfr_mpc="$9"
-	local binutils_source_dir="${10}"
-	local gcc_source_dir="${11}"
-	local gmp_mpfr_mpc_install_dir="${12}"
-	local current_datetime="${13}"
+	local extra_languages="$7"
+	local is_build_and_install_gmp_mpfr_mpc="$8"
+	local binutils_source_dir="$9"
+	local gcc_source_dir="${10}"
+	local gmp_mpfr_mpc_install_dir="${11}"
+	local current_datetime="${12}"
 
 	local gcc_install_dir="$(print_name_for_config "${gcc_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-install")"
 	local gcc_build_dir="$(print_name_for_config "${gcc_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
-	local bin_tarball="${package}-${target}-${version}.tar"
+	local bin_tarball="${package}-${target}.tar"
 	local binutils_build_dir="$(print_name_for_config "${binutils_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
 
 	local install_prefix="$(pwd)/${gcc_install_dir}"
@@ -676,8 +675,6 @@ build_and_install_cross_gcc_for_targets() {
 	local build_type="$3"
 	local host_triple="$4"
 	local package="$5"
-	local gcc_version="$6"
-	local binutils_version="$7"
 	local extra_languages="$8"
 	local is_build_and_install_gmp_mpfr_mpc="$9"
 	local current_datetime="${10}"
@@ -712,7 +709,7 @@ build_and_install_cross_gcc_for_targets() {
 	&& echo "building binutils and gcc ......" \
 	&& for target in "${targets[@]}"; do
 			time_command build_and_install_binutils_gcc_for_target \
-			"${target}" "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${gcc_version}" "${extra_languages}" \
+			"${target}" "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${extra_languages}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${binutils_source_dir}" "${gcc_source_dir}" \
 			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
 			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-output.txt")" \
@@ -758,12 +755,11 @@ generate_build_install_package() {
 	local build_type="$3"
 	local host_triple="$4"
 	local package="$5"
-	local version="$6"
-	local source_dir="$7"
-	local install_dir="$8"
-	local pushd_and_generate_command="$9"
-	shift 9
-	local bin_tarball="${package}-${version}.tar"
+	local source_dir="$6"
+	local install_dir="$7"
+	local pushd_and_generate_command="$8"
+	shift 8
+	local bin_tarball="${package}.tar"
 	local git_repo_url="$(git_repo_url_of_package "${package}")"
 
 	# https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
@@ -789,13 +785,12 @@ cmake_build_install_package() {
 	local build_type="$3"
 	local host_triple="$4"
 	local package="$5"
-	local version="$6"
-	local cc="$7"
-	local cxx="$8"
-	local cflags="$9"
-	local cxxflags="${10}"
-	local ldflags="${11}"
-	shift 11
+	local cc="$6"
+	local cxx="$7"
+	local cflags="$8"
+	local cxxflags="$9"
+	local ldflags="${10}"
+	shift 10
 
 	local source_dir="${package}"
 	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
@@ -816,7 +811,7 @@ cmake_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${version}" "${source_dir}" "${install_dir}" \
+		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
@@ -826,8 +821,7 @@ configure_build_install_package() {
 	local build_type="$3"
 	local host_triple="$4"
 	local package="$5"
-	local version="$6"
-	shift 6
+	shift 5
 
 	local source_dir="${package}"
 	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
@@ -840,7 +834,7 @@ configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${version}" "${source_dir}" "${install_dir}" \
+		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
 }
 
@@ -850,9 +844,8 @@ gcc_configure_build_install_package() {
 	local build_type="$3"
 	local host_triple="$4"
 	local package="$5"
-	local version="$6"
-	local extra_languages="$7"
-	shift 7
+	local extra_languages="$6"
+	shift 6
 
 	local source_dir="${package}"
 	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
@@ -865,7 +858,7 @@ gcc_configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${version}" "${source_dir}" "${install_dir}" \
+		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" \
 		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "$@"
 }

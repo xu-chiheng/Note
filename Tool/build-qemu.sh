@@ -53,8 +53,6 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 {
 	dump_compiler_linker_build_type_and_compiler_flags
 
-	VERSION=9.1.0    # 407f9a4b121eb65166375c410e14d7b704bc1106    2024-08-22
-
 	CONFIGURE_OPTIONS=(
 		--enable-gtk
 		--enable-sdl
@@ -63,7 +61,7 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 	)
 
 	time_command configure_build_install_package \
-		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${VERSION}" "${CONFIGURE_OPTIONS[@]}"
+		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" "${CONFIGURE_OPTIONS[@]}"
 
 } 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
 

@@ -1,0 +1,15 @@
+diff --git a/gcc/jit/jit-playback.cc b/gcc/jit/jit-playback.cc
+index 501d5700873..719eacb64b4 100644
+--- a/gcc/jit/jit-playback.cc
++++ b/gcc/jit/jit-playback.cc
+@@ -48,6 +48,10 @@ along with GCC; see the file COPYING3.  If not see
+ #include "jit-builtins.h"
+ #include "jit-tempdir.h"
+ 
++#if HAVE_DLFCN_H
++#include <dlfcn.h>
++#endif
++
+ #ifdef _WIN32
+ #include "jit-w32.h"
+ #endif

@@ -1,0 +1,15 @@
+diff --git a/gcc/jit/jit-result.cc b/gcc/jit/jit-result.cc
+index 30770d20f3d..c916a17a726 100644
+--- a/gcc/jit/jit-result.cc
++++ b/gcc/jit/jit-result.cc
+@@ -27,6 +27,10 @@ along with GCC; see the file COPYING3.  If not see
+ #include "jit-result.h"
+ #include "jit-tempdir.h"
+ 
++#if HAVE_DLFCN_H
++#include <dlfcn.h>
++#endif
++
+ #ifdef _WIN32
+ #include "jit-w32.h"
+ #endif

@@ -40,17 +40,17 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 				# --build=x86_64-pc-cygwin
 				# --host=x86_64-pc-cygwin
 				# --target=x86_64-pc-cygwin
-				--without-libiconv-prefix
-				--without-libintl-prefix
+				# --without-libiconv-prefix
+				# --without-libintl-prefix
 				# --with-gcc-major-version-only
 				--enable-shared
 				--enable-shared-libgcc
 				--enable-static
-				--enable-version-specific-runtime-libs
+				# --enable-version-specific-runtime-libs
 				# --enable-bootstrap
 				--enable-__cxa_atexit
 				# --with-dwarf2
-				--with-tune=generic
+				# --with-tune=generic
 				# --enable-languages=c,c++,fortran,lto,objc,obj-c++,jit
 				--enable-graphite
 				--enable-threads=posix
@@ -59,16 +59,16 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 				--enable-libquadmath
 				--enable-libquadmath-support
 				--disable-libssp
-				--enable-libada
+				# --enable-libada
 				--disable-symvers
 				--with-gnu-ld
 				--with-gnu-as
 				--with-cloog-include=/usr/include/cloog-isl
-				--without-libiconv-prefix
-				--without-libintl-prefix
+				# --without-libiconv-prefix
+				# --without-libintl-prefix
 				--with-system-zlib
-				--enable-linker-build-id
-				--with-default-libstdcxx-abi=gcc4-compatible
+				# --enable-linker-build-id
+				# --with-default-libstdcxx-abi=gcc4-compatible
 				--enable-libstdcxx-filesystem-ts
 			)
 			EXTRA_LANGUAGES+=(
@@ -77,7 +77,7 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 				# ada
 				objc
 				obj-c++
-				# jit
+				jit
 			)
 			;;
 		x86_64-pc-mingw64 )
@@ -88,8 +88,8 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 				# --target=x86_64-w64-mingw32
 				# --enable-bootstrap
 				# --enable-checking=release
-				--with-arch=x86-64
-				--with-tune=generic
+				# --with-arch=x86-64
+				# --with-tune=generic
 				# --enable-languages=c,lto,c++,fortran,ada,objc,obj-c++,jit
 				--enable-shared
 				--enable-static
@@ -122,7 +122,7 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 				# ada
 				objc
 				obj-c++
-				# jit
+				jit
 			)
 			;;
 		*-linux* )
@@ -158,6 +158,3 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 } 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
 
 sync .
-
-# make -k check
-

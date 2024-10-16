@@ -1,0 +1,26 @@
+diff --git a/configure b/configure
+index 082d1a45226..2469b38e1fd 100755
+--- a/configure
++++ b/configure
+@@ -9279,7 +9279,7 @@ $as_echo "$as_me: WARNING: some C libraries are required to build $language: $mi
+         # but not if building for Mingw. All code in Windows
+         # is position independent code (PIC).
+         case $target in
+-          *mingw*) ;;
++          *-cygwin | *-mingw*) ;;
+           *)
+           case ${add_this_lang}:${language}:${host_shared} in
+             yes:jit:no)
+diff --git a/configure.ac b/configure.ac
+index 749ba826405..5e4347cfeae 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2325,7 +2325,7 @@ if test -d ${srcdir}/gcc; then
+         # but not if building for Mingw. All code in Windows
+         # is position independent code (PIC).
+         case $target in
+-          *mingw*) ;;
++          *-cygwin | *-mingw*) ;;
+           *)
+           case ${add_this_lang}:${language}:${host_shared} in
+             yes:jit:no)

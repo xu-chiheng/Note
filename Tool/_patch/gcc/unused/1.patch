@@ -1,0 +1,62 @@
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index 79664c1fce7..4d77950fb5c 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -8265,11 +8265,57 @@ driver::~driver ()
+   XDELETEVEC (decoded_options);
+ }
+ 
++#ifdef __CYGWIN__
++
++int is_executable(const char *path) {
++    struct stat sb;
++    return (stat(path, &sb) == 0 && sb.st_mode & S_IXUSR);
++}
++
++char *get_absolute_path(char *argv0) {
++    if (strchr(argv0, '/')) {
++        char *resolved_path = realpath(argv0, NULL);
++        if (resolved_path) {
++            return resolved_path;
++        } else {
++            perror("realpath");
++            return NULL;
++        }
++    }
++
++    const char *path_env = env.get("PATH");
++
++    char *path_dup = xstrdup(path_env);
++    char *dir = strtok(path_dup, ":");
++
++    while (dir != NULL) {
++        char possible_path[PATH_MAX];
++        snprintf(possible_path, sizeof(possible_path), "%s/%s", dir, argv0);
++
++        if (is_executable(possible_path)) {
++            char *resolved_path = realpath(possible_path, NULL);
++            free(path_dup);
++            return resolved_path;
++        }
++
++        dir = strtok(NULL, ":");
++    }
++
++    free(path_dup);
++    return NULL;
++}
++
++#endif
++
+ /* driver::main is implemented as a series of driver:: method calls.  */
+ 
+ int
+ driver::main (int argc, char **argv)
+ {
++#ifdef __CYGWIN__
++  argv[0] = get_absolute_path(argv[0]);
++#endif
++
+   bool early_exit;
+ 
+ #ifdef _WIN32

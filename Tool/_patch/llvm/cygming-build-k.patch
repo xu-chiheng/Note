@@ -1,0 +1,13 @@
+diff --git a/llvm/cmake/modules/HandleLLVMOptions.cmake b/llvm/cmake/modules/HandleLLVMOptions.cmake
+index 87821669e3bf..e6e945925975 100644
+--- a/llvm/cmake/modules/HandleLLVMOptions.cmake
++++ b/llvm/cmake/modules/HandleLLVMOptions.cmake
+@@ -439,7 +439,7 @@ elseif(LLVM_ENABLE_PIC)
+ endif()
+ 
+ if((NOT (${CMAKE_SYSTEM_NAME} MATCHES "AIX")) AND
+-   (NOT (WIN32 OR CYGWIN) OR (MINGW AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")))
++   (NOT (WIN32 OR CYGWIN)))
+   # GCC for MinGW does nothing about -fvisibility-inlines-hidden, but warns
+   # about use of the attributes. As long as we don't use the attributes (to
+   # override the default) we shouldn't set the command line options either.

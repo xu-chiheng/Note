@@ -46,13 +46,9 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 		x86_64-elf
 		aarch64-elf
 		riscv64-elf
-
 		loongarch64-elf
 		sparc64-elf
 		mips64-elf
-
-		# MinGW Clang will have memory errors, if there are too many targets.
-		# If that happens, you'd better reboot Windows to reset system state.
 
 		# -m32
 		# i686-elf

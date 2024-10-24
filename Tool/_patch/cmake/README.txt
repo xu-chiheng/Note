@@ -8,12 +8,12 @@ https://src.fedoraproject.org/rpms/cmake.git
 
 
 
-3.30.0    86b55fd236056da7caf20674af32c117420c5814    2024-03-23
+3.30.0    0f88f57389fd636d76b7f726ac94933476d6c195    2024-07-02
 patch_apply . ../_patch/cmake/{cygming-build-{a,b,c},mingw-{cygpath_m,include}}.patch
 
 
-
-
+3.30.5    9c4a0a9ff09735b847bbbc38caf6da7f6c7238f2    2024-10-08
+patch_apply . ../_patch/cmake/{cygming-build-{b,c},mingw-{cygpath_m,include}}.patch
 
 
 

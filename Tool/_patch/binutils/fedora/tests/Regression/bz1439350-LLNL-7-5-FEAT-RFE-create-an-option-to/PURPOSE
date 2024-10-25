@@ -1,5 +1,0 @@
-PURPOSE of /tools/glibc/Regression/bz1439350-LLNL-7-5-FEAT-RFE-create-an-option-to
-Description: Test for BZ#1439350 ([LLNL 7.5 FEAT] RFE create an option to)
-Author: Milos Prchlik <mprchlik@redhat.com>
-Bug summary: [LLNL 7.5 FEAT] RFE create an option to permanently link in audit library into an executable (glibc)
-Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1439350

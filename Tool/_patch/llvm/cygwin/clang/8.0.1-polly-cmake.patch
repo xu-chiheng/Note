@@ -1,9 +1,0 @@
---- origsrc/cfe-8.0.1.src/tools/driver/CMakeLists.txt	2018-12-12 03:02:18.000000000 -0500
-+++ src/cfe-8.0.1.src/tools/driver/CMakeLists.txt	2019-08-26 18:09:50.409888000 -0400
-@@ -124,5 +124,6 @@ if(CLANG_ORDER_FILE AND
- endif()
- 
- if(WITH_POLLY AND LINK_POLLY_INTO_TOOLS)
-+  add_definitions("-DLINK_POLLY_INTO_TOOLS")
-   target_link_libraries(clang PRIVATE Polly)
- endif(WITH_POLLY AND LINK_POLLY_INTO_TOOLS)

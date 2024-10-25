@@ -1,2 +1,0 @@
-Use "strings -0 file", the output will be in loop.
-And "strings -n 0xA file" will report error as "invalid number 0xA"

@@ -1,8 +1,0 @@
-PURPOSE of /tools/binutils/Regression/bz748927-SystemTap-affected-by-stapsdt-base-1
-Description: Make sure there is .stapsdt.base field
-Author: Michal Nowak <mnowak@redhat.com>
-
-arch = s390,s390x && distro = rhel-7: False
-arch = ppc64 && distro = rhel-7: False
-arch = aarch64: False
-arch = ppc64le: False

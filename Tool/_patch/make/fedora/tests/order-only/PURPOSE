@@ -1,4 +1,0 @@
-PURPOSE of /tools/make/Regression/order-only
-Description: Regression Test for make bug
-Author: Petr Muller <pmuller@redhat.com>
-Summary: Test that make doesn't insert bogus values into order-only dependencies

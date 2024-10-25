@@ -1,5 +1,0 @@
-PURPOSE of /tools/binutils/Regression/bz1080077-RFE-Please-configure-ld-bfd-to-allow-sysroot
-Description: Test for BZ#1080077 ([RFE] - Please configure ld.bfd to allow --sysroot)
-Author: Martin Cermak <mcermak@redhat.com>
-Bug summary: [RFE] - Please configure ld.bfd to allow --sysroot
-Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1080077

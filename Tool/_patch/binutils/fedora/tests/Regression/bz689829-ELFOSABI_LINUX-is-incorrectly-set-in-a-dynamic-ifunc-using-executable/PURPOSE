@@ -1,3 +1,0 @@
-PURPOSE of /tools/binutils/Regression/bz689829-ELFOSABI_LINUX-is-incorrectly-set-in-a-dynamic-ifunc-using-executable
-Description: ELFOSABI_LINUX is incorrectly set in a dynamic ifunc-using executable
-Author: Michal Nowak <mnowak@redhat.com>

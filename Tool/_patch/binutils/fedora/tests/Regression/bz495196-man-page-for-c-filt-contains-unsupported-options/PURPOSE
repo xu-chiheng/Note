@@ -1,3 +1,0 @@
-PURPOSE of /tools/binutils/Regressions/cxxfilt/bz495196-man-page-for-c-filt-contains-unsupported-options
-Description: Checks c++filt's man page for unsupported options
-Author: Michal Nowak <mnowak@redhat.com>

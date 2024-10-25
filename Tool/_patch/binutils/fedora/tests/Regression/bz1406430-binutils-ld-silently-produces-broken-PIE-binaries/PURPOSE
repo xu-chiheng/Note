@@ -1,5 +1,0 @@
-PURPOSE of /CoreOS/binutils/Regression/bz1406430-binutils-ld-silently-produces-broken-PIE-binaries
-Description: Test for BZ#1406430 (binutils ld silently produces broken PIE binaries)
-Author: Milos Prchlik <mprchlik@redhat.com>
-Bug summary: binutils: ld silently produces broken PIE binaries when linking non-PIC objects
-Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1406430

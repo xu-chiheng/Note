@@ -1,5 +1,0 @@
-PURPOSE of /tools/binutils/Regression/bz1226864-ld-crashes-on-ppc64-when-being-used-with-oformat
-Description: Test for BZ#1226864 (ld crashes on ppc64 when being used with --oformat)
-Author: Milos Prchlik <mprchlik@redhat.com>
-Bug summary: ld crashes on ppc64 when being used with --oformat binary
-Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1226864

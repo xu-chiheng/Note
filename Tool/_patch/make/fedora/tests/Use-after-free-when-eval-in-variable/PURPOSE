@@ -1,3 +1,0 @@
-PURPOSE of /tools/make/Regression/Use-after-free-when-eval-in-variable
-Author: Marek Polacek <polacek@redhat.com>
-Summary: Use-after-free() when eval in variable assignments reassigns the same variable

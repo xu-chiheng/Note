@@ -1,5 +1,0 @@
-PURPOSE of /tools/binutils/Regression/bz1172766-ppc64-segv-in-libbfd
-Description: Test for BZ#1172766 (ppc64 segv in libbfd)
-Author: Milos Prchlik <mprchlik@redhat.com>
-Bug summary: ppc64: segv in libbfd
-Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1172766

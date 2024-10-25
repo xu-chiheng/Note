@@ -1,5 +1,0 @@
-PURPOSE of /tools/binutils/Regression/bz916214-binutils-contains-empty-man-pages
-Description: Test for BZ#916214 (binutils contains empty man pages)
-Author: Miroslav Franc <mfranc@redhat.com>
-Bug summary: binutils contains empty man pages
-Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=916214

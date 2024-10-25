@@ -1,2 +1,0 @@
-The test's Makefiles are not used in Fedora CI infrastructure.  But are kept here
- for backward compatibility with traditional beakerlib test harness in RHEL.

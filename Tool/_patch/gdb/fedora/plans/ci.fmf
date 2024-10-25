@@ -1,6 +1,0 @@
-summary: CI Gating Plan
-discover:
-    how: fmf
-    directory: tests
-execute:
-    how: tmt

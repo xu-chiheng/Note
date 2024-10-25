@@ -1,5 +1,0 @@
-PURPOSE of /tools/binutils/Regression/bz1243559-aarch64-binutils-relocation-truncated-to-fit
-Description: Test for BZ#1243559 ([aarch64][binutils] relocation truncated to fit)
-Author: Milos Prchlik <mprchlik@redhat.com>
-Bug summary: [aarch64][binutils] relocation truncated to fit: R_AARCH64_CALL26 (veneers not inserted)
-Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1243559

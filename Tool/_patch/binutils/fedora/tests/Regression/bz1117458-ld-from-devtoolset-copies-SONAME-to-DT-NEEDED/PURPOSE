@@ -1,5 +1,0 @@
-PURPOSE of /tools/binutils/Regression/bz1117458-ld-from-devtoolset-copies-SONAME-to-DT-NEEDED
-Description: Test for BZ#1117458 (ld from devtoolset copies SONAME to DT_NEEDED)
-Author: Milos Prchlik <mprchlik@redhat.com>
-Bug summary: ld from devtoolset copies SONAME to DT_NEEDED without checking if it’s empty
-Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1117458

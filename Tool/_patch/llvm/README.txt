@@ -12,8 +12,8 @@ https://src.fedoraproject.org/rpms/llvm.git
 
 
 
-on Cygwin
-stage 0 : GCC 13.2.0 or GCC 11.4.0 (pre-installed) at /usr, Clang 8.0.1 (pre-installed) at /usr does not work
+on Cygwin, Clang 8.0.1 (pre-installed) at /usr does not work, can't be used to build LLVM.
+stage 0 : GCC 11.4.0 (pre-installed) at /usr
 stage 1 : Clang 16.0.6
 stage 2 : Clang 16.0.6
 stage 3 : Clang 16.0.6

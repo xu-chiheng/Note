@@ -1,0 +1,30 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index c81a7ed17029..bafa3f7475cf 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -435,17 +484,16 @@ void toolchains::MinGW::findGccLibDir(const llvm::Triple &LiteralTriple) {
+ }
+ 
+ static llvm::ErrorOr<std::string> findGcc(const llvm::Triple &LiteralTriple,
+-                                          const llvm::Triple &T) {
++                                          const llvm::Triple &T, bool isCygwin) {
+   llvm::SmallVector<llvm::SmallString<32>, 5> Gccs;
+-  Gccs.emplace_back(LiteralTriple.str());
+-  Gccs.back() += "-gcc";
+-  Gccs.emplace_back(T.str());
+-  Gccs.back() += "-gcc";
+-  Gccs.emplace_back(T.getArchName());
+-  Gccs.back() += "-w64-mingw32-gcc";
+   Gccs.emplace_back(T.getArchName());
+-  Gccs.back() += "-w64-mingw32ucrt-gcc";
+-  Gccs.emplace_back("mingw32-gcc");
++  if (isCygwin) {
++    Gccs[0] += "-pc-cygwin-gcc";
++    Gccs.emplace_back("cygwin-gcc");
++  } else {
++    Gccs[0] += "-pc-mingw64-gcc";
++    Gccs.emplace_back("mingw64-gcc");
++  }
+   // Please do not add "gcc" here
+   for (StringRef CandidateGcc : Gccs)
+     if (llvm::ErrorOr<std::string> GPPName = llvm::sys::findProgramByName(CandidateGcc))

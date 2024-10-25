@@ -1,0 +1,62 @@
+diff --git a/clang/lib/Lex/InitHeaderSearch.cpp b/clang/lib/Lex/InitHeaderSearch.cpp
+index d4465565718e..54d10512132f 100644
+--- a/clang/lib/Lex/InitHeaderSearch.cpp
++++ b/clang/lib/Lex/InitHeaderSearch.cpp
+@@ -238,9 +238,7 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+     case llvm::Triple::ELFIAMCU:
+       break;
+     case llvm::Triple::Win32:
+-      if (triple.getEnvironment() != llvm::Triple::Cygnus)
+-        break;
+-      [[fallthrough]];
++      break;
+     default:
+       // FIXME: temporary hack: hard-coded paths.
+       AddPath("/usr/local/include", System, false);
+@@ -320,14 +318,7 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+   case llvm::Triple::RTEMS:
+     break;
+   case llvm::Triple::Win32:
+-    switch (triple.getEnvironment()) {
+-    default: llvm_unreachable("Include management is handled in the driver.");
+-    case llvm::Triple::Cygnus:
+-      AddPath("/usr/include/w32api", System, false);
+-      break;
+-    case llvm::Triple::GNU:
+-      break;
+-    }
++    llvm_unreachable("Include management is handled in the driver.");
+     break;
+   default:
+     break;
+@@ -380,17 +371,7 @@ void InitHeaderSearch::AddDefaultCPlusPlusIncludePaths(
+   llvm::Triple::OSType os = triple.getOS();
+   switch (os) {
+   case llvm::Triple::Win32:
+-    switch (triple.getEnvironment()) {
+-    default: llvm_unreachable("Include management is handled in the driver.");
+-    case llvm::Triple::Cygnus:
+-      // Cygwin-1.7
+-      AddMinGWCPlusPlusIncludePaths("/usr/lib/gcc", "i686-pc-cygwin", "4.7.3");
+-      AddMinGWCPlusPlusIncludePaths("/usr/lib/gcc", "i686-pc-cygwin", "4.5.3");
+-      AddMinGWCPlusPlusIncludePaths("/usr/lib/gcc", "i686-pc-cygwin", "4.3.4");
+-      // g++-4 / Cygwin-1.5
+-      AddMinGWCPlusPlusIncludePaths("/usr/lib/gcc", "i686-pc-cygwin", "4.3.2");
+-      break;
+-    }
++    llvm_unreachable("Include management is handled in the driver.");
+     break;
+   case llvm::Triple::DragonFly:
+     AddPath("/usr/include/c++/5.0", CXXSystem, false);
+@@ -420,10 +401,7 @@ bool InitHeaderSearch::ShouldAddDefaultIncludePaths(
+     return false;
+ 
+   case llvm::Triple::Win32:
+-    if (triple.getEnvironment() != llvm::Triple::Cygnus ||
+-        triple.isOSBinFormatMachO())
+-      return false;
+-    break;
++    return false;
+ 
+   case llvm::Triple::UnknownOS:
+     if (triple.isWasm())

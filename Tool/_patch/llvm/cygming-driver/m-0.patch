@@ -1,0 +1,16 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index 908484fcc0b8..2e7f161a5e6a 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -454,9 +454,9 @@ findClangRelativeSysroot(const Driver &D, const llvm::Triple &LiteralTriple,
+ }
+ 
+ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
+-                         const ArgList &Args)
++                         const ArgList &Args, bool isCygwin)
+     : ToolChain(D, Triple, Args), CudaInstallation(D, Triple, Args),
+-      RocmInstallation(D, Triple, Args) {
++      RocmInstallation(D, Triple, Args), isCygwin(isCygwin) {
+   getProgramPaths().push_back(getDriver().getInstalledDir());
+ 
+   // The sequence for detecting a sysroot here should be kept in sync with

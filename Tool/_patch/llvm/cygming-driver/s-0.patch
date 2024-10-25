@@ -1,0 +1,16 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index 908484fcc0b8..72af57ffc9a3 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -755,9 +755,9 @@ static bool testTriple(const Driver &D, const llvm::Triple &Triple,
+     return true;
+   llvm::Triple LiteralTriple = getLiteralTriple(D, Triple);
+   if (llvm::ErrorOr<std::string> TargetSubdir =
+-          findClangRelativeSysroot(D, LiteralTriple, Triple, SubdirName))
++          findClangRelativeSysroot(D, LiteralTriple, Triple, SubdirName, isCygwin))
+     return true;
+-  if (llvm::ErrorOr<std::string> GPPName = findGcc(LiteralTriple, Triple))
++  if (llvm::ErrorOr<std::string> GPPName = findGcc(LiteralTriple, Triple, isCygwin))
+     return true;
+   // If we neither found a colocated sysroot or a matching gcc executable,
+   // conclude that we can't know if this is the correct spelling of the triple.

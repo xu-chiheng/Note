@@ -1,0 +1,31 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index c81a7ed17029..bafa3f7475cf 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -83,14 +88,18 @@ void tools::MinGW::Linker::AddLibGCC(const ArgList &Args,
+     AddRunTimeLibs(getToolChain(), getToolChain().getDriver(), CmdArgs, Args);
+   }
+ 
+-  CmdArgs.push_back("-lmoldname");
+-  CmdArgs.push_back("-lmingwex");
+-  for (auto Lib : Args.getAllArgValues(options::OPT_l))
+-    if (StringRef(Lib).starts_with("msvcr") ||
+-        StringRef(Lib).starts_with("ucrt") ||
+-        StringRef(Lib).starts_with("crtdll"))
+-      return;
+-  CmdArgs.push_back("-lmsvcrt");
++  if (isCygwin) {
++    CmdArgs.push_back("-lcygwin");
++  } else {
++    CmdArgs.push_back("-lmoldname");
++    CmdArgs.push_back("-lmingwex");
++    for (auto Lib : Args.getAllArgValues(options::OPT_l))
++      if (StringRef(Lib).starts_with("msvcr") ||
++          StringRef(Lib).starts_with("ucrt") ||
++          StringRef(Lib).starts_with("crtdll"))
++        return;
++    CmdArgs.push_back("-lmsvcrt");
++  }
+ }
+ 
+ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,

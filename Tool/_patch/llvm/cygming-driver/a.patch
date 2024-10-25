@@ -1,0 +1,17 @@
+diff --git a/clang/lib/Driver/Driver.cpp b/clang/lib/Driver/Driver.cpp
+index 43002add3377..0f2253e4433f 100644
+--- a/clang/lib/Driver/Driver.cpp
++++ b/clang/lib/Driver/Driver.cpp
+@@ -628,8 +628,10 @@ static llvm::Triple computeTargetTriple(const Driver &D,
+ 
+     if (AT != llvm::Triple::UnknownArch && AT != Target.getArch()) {
+       Target.setArch(AT);
+-      if (Target.isWindowsGNUEnvironment())
+-        toolchains::MinGW::fixTripleArch(D, Target, Args);
++      if (Target.isWindowsGNUEnvironment()) {
++        bool isCygwin = Target.isWindowsCygwinEnvironment();
++        toolchains::MinGW::fixTripleArch(D, Target, Args, isCygwin);
++      }
+     }
+   }
+ 

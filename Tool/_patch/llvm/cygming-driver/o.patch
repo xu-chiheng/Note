@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..e1d658fbebd7 100644
+index c81a7ed17029..bafa3f7475cf 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -520,18 +520,6 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
+@@ -520,26 +575,38 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
    // correct crtbegin.o ,cetend.o would be found.
    getFilePaths().push_back(GccLibDir);
  
@@ -21,23 +21,35 @@ index c81a7ed17029..e1d658fbebd7 100644
    // Only include <base>/lib if we're not cross compiling (not even for
    // windows->windows to a different arch), or if the sysroot has been set
    // (where we presume the user has pointed it at an arch specific
-@@ -540,6 +528,20 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
+   // subdirectory).
+-  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true, isCygwin) ||
        getDriver().SysRoot.size())
      getFilePaths().push_back(Base + "lib");
  
-+	// for MinGW's crt2.o
-+	if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true)) {
-+		const char * path = getenv("LIB");
-+		if (path) {
-+			getFilePaths().push_back(path);
-+		} else {
++  if (isCygwin) {
++    // for Cygwin's crt0.o
++    if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true, isCygwin) ||
++        getDriver().SysRoot.size()) {
++      getFilePaths().push_back(getDriver().SysRoot + "/lib");
++    } else {
++      // must add library directories by -L
++    }
++  } else {
++    // for MinGW's crt2.o
++    if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true, isCygwin)) {
++      const char * path = getenv("LIB");
++        if (path) {
++          getFilePaths().push_back(path);
++        } else {
 +
-+		}
-+	} else if (getDriver().SysRoot.size()) {
-+	    getFilePaths().push_back(getDriver().SysRoot + "/lib");
-+	} else {
-+		// must add library directories by -L
-+	}
++        }
++    } else if (getDriver().SysRoot.size()) {
++      getFilePaths().push_back(getDriver().SysRoot + "/lib");
++    } else {
++      // must add library directories by -L
++    }
++  }
 +
    NativeLLVMSupport =
        Args.getLastArgValue(options::OPT_fuse_ld_EQ, CLANG_DEFAULT_LINKER)

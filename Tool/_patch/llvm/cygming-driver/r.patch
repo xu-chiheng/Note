@@ -1,0 +1,13 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index c81a7ed17029..bafa3f7475cf 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -813,7 +848,7 @@ void toolchains::MinGW::AddClangCXXStdlibIncludeArgs(
+ }
+ 
+ static bool testTriple(const Driver &D, const llvm::Triple &Triple,
+-                       const ArgList &Args) {
++                       const ArgList &Args, bool isCygwin) {
+   // If an explicit sysroot is set, that will be used and we shouldn't try to
+   // detect anything else.
+   std::string SubdirName;

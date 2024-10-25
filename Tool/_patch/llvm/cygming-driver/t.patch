@@ -1,0 +1,17 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index c81a7ed17029..bafa3f7475cf 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -836,10 +871,10 @@ static bool testTriple(const Driver &D, const llvm::Triple &Triple,
+ }
+ 
+ static llvm::Triple adjustTriple(const Driver &D, const llvm::Triple &Triple,
+-                                 const ArgList &Args) {
++                                 const ArgList &Args, bool isCygwin) {
+   // First test if the original triple can find a sysroot with the triple
+   // name.
+-  if (testTriple(D, Triple, Args))
++  if (testTriple(D, Triple, Args, isCygwin))
+     return Triple;
+   llvm::SmallVector<llvm::StringRef, 3> Archs;
+   // If not, test a couple other possible arch names that might be what was

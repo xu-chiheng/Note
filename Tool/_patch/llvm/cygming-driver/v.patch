@@ -1,0 +1,16 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index c81a7ed17029..bafa3f7475cf 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -863,9 +898,9 @@ static llvm::Triple adjustTriple(const Driver &D, const llvm::Triple &Triple,
+ }
+ 
+ void toolchains::MinGW::fixTripleArch(const Driver &D, llvm::Triple &Triple,
+-                                      const ArgList &Args) {
++                                      const ArgList &Args, bool isCygwin) {
+   if (Triple.getArch() == llvm::Triple::x86 ||
+       Triple.getArch() == llvm::Triple::arm ||
+       Triple.getArch() == llvm::Triple::thumb)
+-    Triple = adjustTriple(D, Triple, Args);
++    Triple = adjustTriple(D, Triple, Args, isCygwin);
+ }

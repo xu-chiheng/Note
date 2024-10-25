@@ -1,0 +1,13 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index c81a7ed17029..bafa3f7475cf 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -101,6 +110,8 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+   const ToolChain &TC = getToolChain();
+   const Driver &D = TC.getDriver();
+   const SanitizerArgs &Sanitize = TC.getSanitizerArgs(Args);
++  const toolchains::MinGW & toolchain = (const toolchains::MinGW &)TC;
++  bool isCygwin = toolchain.isCygwin;
+ 
+   ArgStringList CmdArgs;
+ 

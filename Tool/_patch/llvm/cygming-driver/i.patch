@@ -1,0 +1,23 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index c81a7ed17029..bafa3f7475cf 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -369,10 +414,15 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+                                          Exec, CmdArgs, Inputs, Output));
+ }
+ 
+-static bool isCrossCompiling(const llvm::Triple &T, bool RequireArchMatch) {
++static bool isCrossCompiling(const llvm::Triple &T, bool RequireArchMatch, bool isCygwin) {
+   llvm::Triple HostTriple(llvm::Triple::normalize(LLVM_HOST_TRIPLE));
+-  if (HostTriple.getOS() != llvm::Triple::Win32)
+-    return true;
++  if (isCygwin) {
++    if (!HostTriple.isWindowsCygwinEnvironment())
++      return true;
++  } else {
++    if (HostTriple.getOS() != llvm::Triple::Win32)
++      return true;
++  }
+   if (RequireArchMatch && HostTriple.getArch() != T.getArch())
+     return true;
+   return false;

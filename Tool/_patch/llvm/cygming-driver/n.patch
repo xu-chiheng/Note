@@ -1,0 +1,23 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index c81a7ed17029..bafa3f7475cf 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -499,15 +554,15 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
+   // Look for <clang-bin>/../<triplet>; if found, use <clang-bin>/.. as the
+   // base as it could still be a base for a gcc setup with libgcc.
+   else if (llvm::ErrorOr<std::string> TargetSubdir = findClangRelativeSysroot(
+-               getDriver(), LiteralTriple, getTriple(), SubdirName))
++               getDriver(), LiteralTriple, getTriple(), SubdirName, isCygwin))
+     Base = std::string(llvm::sys::path::parent_path(TargetSubdir.get()));
+   // If the install base of Clang seems to have mingw sysroot files directly
+   // in the toplevel include and lib directories, use this as base instead of
+   // looking for a triple prefixed GCC in the path.
+-  else if (looksLikeMinGWSysroot(InstallBase))
++  else if (looksLikeMinGWSysroot(InstallBase, isCygwin))
+     Base = InstallBase;
+   else if (llvm::ErrorOr<std::string> GPPName =
+-               findGcc(LiteralTriple, getTriple()))
++               findGcc(LiteralTriple, getTriple(), isCygwin))
+     Base = std::string(llvm::sys::path::parent_path(
+         llvm::sys::path::parent_path(GPPName.get())));
+   else

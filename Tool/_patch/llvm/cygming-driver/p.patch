@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index 4a33029ac4fc..210550ea82b2 100644
+index c81a7ed17029..bafa3f7475cf 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -665,52 +665,6 @@ void toolchains::MinGW::printVerboseInfo(raw_ostream &OS) const {
+@@ -630,52 +697,6 @@ void toolchains::MinGW::printVerboseInfo(raw_ostream &OS) const {
    RocmInstallation->print(OS);
  }
  

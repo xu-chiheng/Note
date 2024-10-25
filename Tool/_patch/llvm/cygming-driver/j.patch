@@ -1,0 +1,30 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index c81a7ed17029..bafa3f7475cf 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -409,17 +459,16 @@ static llvm::Triple getLiteralTriple(const Driver &D, const llvm::Triple &T) {
+ 
+ void toolchains::MinGW::findGccLibDir(const llvm::Triple &LiteralTriple) {
+   llvm::SmallVector<llvm::SmallString<32>, 5> SubdirNames;
+-  SubdirNames.emplace_back(LiteralTriple.str());
+-  SubdirNames.emplace_back(getTriple().str());
+-  SubdirNames.emplace_back(getTriple().getArchName());
+-  SubdirNames.back() += "-w64-mingw32";
+   SubdirNames.emplace_back(getTriple().getArchName());
+-  SubdirNames.back() += "-w64-mingw32ucrt";
+-  SubdirNames.emplace_back("mingw32");
+-  if (SubdirName.empty()) {
+-    SubdirName = getTriple().getArchName();
+-    SubdirName += "-w64-mingw32";
++  if (isCygwin) {
++    SubdirNames[0] += "-pc-cygwin";
++    SubdirNames.emplace_back("cygwin");
++  } else {
++    SubdirNames.back() += "-pc-mingw64";
++    SubdirNames.emplace_back("mingw64");
+   }
++  if (SubdirName.empty())
++    SubdirName = SubdirNames[0].str();
+   // lib: Arch Linux, Ubuntu, Windows
+   // lib64: openSUSE Linux
+   for (StringRef CandidateLib : {"lib", "lib64"}) {

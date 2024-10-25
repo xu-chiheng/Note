@@ -1,0 +1,52 @@
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index c81a7ed17029..bafa3f7475cf 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -690,21 +711,35 @@ void toolchains::MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+   if (DriverArgs.hasArg(options::OPT_nostdlibinc))
+     return;
+ 
+-  addSystemInclude(DriverArgs, CC1Args,
+-                   Base + SubdirName + llvm::sys::path::get_separator() +
+-                       "include");
+-
+-  // Gentoo
+-  addSystemInclude(DriverArgs, CC1Args,
+-                   Base + SubdirName + llvm::sys::path::get_separator() + "usr/include");
++  addSystemInclude(DriverArgs, CC1Args, Base + SubdirName + "/include");
+ 
+-  // Only include <base>/include if we're not cross compiling (but do allow it
+-  // if we're on Windows and building for Windows on another architecture),
+-  // or if the sysroot has been set (where we presume the user has pointed it
+-  // at an arch specific subdirectory).
+-  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/false) ||
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true, isCygwin) ||
+       getDriver().SysRoot.size())
+     addSystemInclude(DriverArgs, CC1Args, Base + "include");
++
++  if (isCygwin) {
++    if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true, isCygwin) ||
++        getDriver().SysRoot.size()) {
++      addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/local/include");
++      addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/include");
++      addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/include/w32api");
++    } else {
++      // must add include directories by -I option
++    }
++  } else {
++    if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true, isCygwin)) {
++      const char * path = getenv("INCLUDE");
++      if (path) {
++        addSystemInclude(DriverArgs, CC1Args, path);
++      } else {
++
++      }
++    } else if (getDriver().SysRoot.size()) {
++      addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/include");
++    } else {
++      // must add include directories by -I option
++    }
++  }
+ }
+ 
+ void toolchains::MinGW::addClangTargetOptions(

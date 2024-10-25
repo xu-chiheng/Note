@@ -25,31 +25,39 @@ SRC_DIR="llvm-project-llvmorg-${VERSION}"
 PATCHES=(
 # 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a    2023-01-24    branch point
 # patch_apply . \
-# ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},cygming-build-{a,b-0,c,d,e,g,h,i,j-0,k,l,m,n},\
-# cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary,searchPaths},cmodel-0,driver-0,general-{a,b,c},macro},\
-# mingw-{git-revision,ldflags,pthread,emutls-0,findgcc-0,compiler-{INCLUDE,LIB},driver-a},\
+# ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},\
+# cygming-build/{a,b-0,c,d,e,g,h,i,j-0,k,l,m,n},\
+# cygming-driver/{a,b,c,d-0,e,f,g,h,i,j,k,l-0,m-0,n-0,o,p,q,r,s-0,t,u,v,w,x-0},\
+# cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary,searchPaths},cmodel-0,general-{a,b,c},macro},\
+# mingw-{git-revision,emutls-0},\
 # pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 # 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7    2023-07-25    branch point
 # patch_apply . \
-# ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},cygming-build-{a,b-0,c,d,e,f-1,g,h,i,j-0,k,l,m,n},\
-# cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary,searchPaths},cmodel-0,driver-0,general-{a,b,c},macro,CGCall.h},\
-# mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
+# ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
+# cygming-build/{a,b-0,c,d,e,f-1,g,h,i,j-0,k,l,m,n},\
+# cygming-driver/{a,b,c,d-0,e,f,g,h,i,j,k,l-0,m-0,n-0,o,p,q,r,s-0,t,u,v,w,x-0},\
+# cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary,searchPaths},cmodel-0,general-{a,b,c},macro,CGCall.h},\
+# mingw-{git-revision,emutls-1,Value.h},\
 # pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 # 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707    2024-01-24    branch point
 # patch_apply . \
-# ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},cygming-build-{a,b-1,c,d,e,f-1,g,h,i,j-1,k,l,m,n},\
-# cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary,searchPaths},cmodel-1,driver-3,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
-# mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-0,Value.h,compiler-{INCLUDE,LIB},driver-a},\
+# ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
+# cygming-build/{a,b-1,c,d,e,f-1,g,h,i,j-1,k,l,m,n},\
+# cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l-0,m-0,n,o,p,q,r,s,t,u,v,w,x},\
+# cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary,searchPaths},cmodel-1,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c}},\
+# mingw-{git-revision,emutls-1,Value.h},\
 # pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
 # ../_patch/llvm/cygwin-disable-debug-ata.patch
 
 # 19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8    2024-07-23    branch point
 # patch_apply . \
-../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b},cygming-build-{a,b-1,c,d,e,f-1,g,h,i,j-1,k,l,m,n},\
-cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary,searchPaths},cmodel-2,driver-4,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c},TargetMachine.cpp},\
-mingw-{git-revision,ldflags,pthread,emutls-1,findgcc-1,Value.h,compiler-{INCLUDE,LIB},driver-a},\
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b},\
+cygming-build/{a,b-1,c,d,e,f-1,g,h,i,j-1,k,l,m,n},\
+cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x},\
+cygwin-{support-tls,va-list-kind,lld-{findFile,searchLibrary,searchPaths},cmodel-2,general-{a,b,c},macro,CGCall.h,X86ISelLowering.cpp,X86ISelDAGToDAG.cpp-{a,b,c},TargetMachine.cpp},\
+mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 )
 

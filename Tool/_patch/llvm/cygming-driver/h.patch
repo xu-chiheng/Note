@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..bafa3f7475cf 100644
+index c81a7ed17029..8c4c7efa4e48 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -310,11 +353,13 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -310,8 +310,10 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
        if (Args.hasArg(options::OPT_pg))
          CmdArgs.push_back("-lgmon");
  
@@ -14,8 +14,4 @@ index c81a7ed17029..bafa3f7475cf 100644
 +      }
  
        if (Sanitize.needsAsanRt()) {
--        // MinGW always links against a shared MSVCRT.
-+        // Cygwin/MinGW always links against a shared DLL.
-         CmdArgs.push_back(TC.getCompilerRTArgString(Args, "asan_dynamic",
-                                                     ToolChain::FT_Shared));
-         CmdArgs.push_back(
+         // MinGW always links against a shared MSVCRT.

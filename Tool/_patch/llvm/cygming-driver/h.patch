@@ -1,17 +1,18 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..8c4c7efa4e48 100644
+index c81a7ed17029..d194ff1ac8d8 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -310,8 +310,10 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
-       if (Args.hasArg(options::OPT_pg))
-         CmdArgs.push_back("-lgmon");
+@@ -371,8 +409,13 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
  
--      if (Args.hasArg(options::OPT_pthread))
--        CmdArgs.push_back("-lpthread");
-+      if (!isCygwin) {
-+        if (!Args.hasArg(options::OPT_no_pthread))
-+          CmdArgs.push_back("-lpthread");
-+      }
- 
-       if (Sanitize.needsAsanRt()) {
-         // MinGW always links against a shared MSVCRT.
+ static bool isCrossCompiling(const llvm::Triple &T, bool RequireArchMatch) {
+   llvm::Triple HostTriple(llvm::Triple::normalize(LLVM_HOST_TRIPLE));
++#ifdef __CYGWIN__
++  if (!HostTriple.isWindowsCygwinEnvironment())
++    return true;
++#else
+   if (HostTriple.getOS() != llvm::Triple::Win32)
+     return true;
++#endif
+   if (RequireArchMatch && HostTriple.getArch() != T.getArch())
+     return true;
+   return false;

@@ -1,57 +1,52 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..bafa3f7475cf 100644
+index c81a7ed17029..d194ff1ac8d8 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -630,52 +697,6 @@ void toolchains::MinGW::printVerboseInfo(raw_ostream &OS) const {
-   RocmInstallation->print(OS);
+@@ -690,21 +704,39 @@ void toolchains::MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+   if (DriverArgs.hasArg(options::OPT_nostdlibinc))
+     return;
+ 
+-  addSystemInclude(DriverArgs, CC1Args,
+-                   Base + SubdirName + llvm::sys::path::get_separator() +
+-                       "include");
+-
+-  // Gentoo
+-  addSystemInclude(DriverArgs, CC1Args,
+-                   Base + SubdirName + llvm::sys::path::get_separator() + "usr/include");
++  addSystemInclude(DriverArgs, CC1Args, Base + SubdirName + "/include");
+ 
+   // Only include <base>/include if we're not cross compiling (but do allow it
+   // if we're on Windows and building for Windows on another architecture),
+   // or if the sysroot has been set (where we presume the user has pointed it
+   // at an arch specific subdirectory).
+-  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/false) ||
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
+       getDriver().SysRoot.size())
+     addSystemInclude(DriverArgs, CC1Args, Base + "include");
++
++#ifdef __CYGWIN__
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
++      getDriver().SysRoot.size()) {
++    addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/local/include");
++    addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/include");
++    addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/usr/include/w32api");
++  } else {
++    // must add include directories by -I option
++  }
++#else
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true)) {
++    const char * path = getenv("INCLUDE");
++    if (path) {
++      addSystemInclude(DriverArgs, CC1Args, path);
++    } else {
++
++    }
++  } else if (getDriver().SysRoot.size()) {
++    addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/include");
++  } else {
++    // must add include directories by -I option
++  }
++#endif
  }
  
--// Include directories for various hosts:
--
--// Windows, mingw.org
--// c:\mingw\lib\gcc\mingw32\4.8.1\include\c++
--// c:\mingw\lib\gcc\mingw32\4.8.1\include\c++\mingw32
--// c:\mingw\lib\gcc\mingw32\4.8.1\include\c++\backward
--// c:\mingw\include
--// c:\mingw\mingw32\include
--
--// Windows, mingw-w64 mingw-builds
--// c:\mingw32\i686-w64-mingw32\include
--// c:\mingw32\i686-w64-mingw32\include\c++
--// c:\mingw32\i686-w64-mingw32\include\c++\i686-w64-mingw32
--// c:\mingw32\i686-w64-mingw32\include\c++\backward
--
--// Windows, mingw-w64 msys2
--// c:\msys64\mingw32\include
--// c:\msys64\mingw32\i686-w64-mingw32\include
--// c:\msys64\mingw32\include\c++\4.9.2
--// c:\msys64\mingw32\include\c++\4.9.2\i686-w64-mingw32
--// c:\msys64\mingw32\include\c++\4.9.2\backward
--
--// openSUSE
--// /usr/lib64/gcc/x86_64-w64-mingw32/5.1.0/include/c++
--// /usr/lib64/gcc/x86_64-w64-mingw32/5.1.0/include/c++/x86_64-w64-mingw32
--// /usr/lib64/gcc/x86_64-w64-mingw32/5.1.0/include/c++/backward
--// /usr/x86_64-w64-mingw32/sys-root/mingw/include
--
--// Arch Linux
--// /usr/i686-w64-mingw32/include/c++/5.1.0
--// /usr/i686-w64-mingw32/include/c++/5.1.0/i686-w64-mingw32
--// /usr/i686-w64-mingw32/include/c++/5.1.0/backward
--// /usr/i686-w64-mingw32/include
--
--// Ubuntu
--// /usr/include/c++/4.8
--// /usr/include/c++/4.8/x86_64-w64-mingw32
--// /usr/include/c++/4.8/backward
--// /usr/x86_64-w64-mingw32/include
--
--// Fedora
--// /usr/x86_64-w64-mingw32ucrt/sys-root/mingw/include/c++/x86_64-w64-mingw32ucrt
--// /usr/x86_64-w64-mingw32ucrt/sys-root/mingw/include/c++/backward
--// /usr/x86_64-w64-mingw32ucrt/sys-root/mingw/include
--// /usr/lib/gcc/x86_64-w64-mingw32ucrt/12.2.1/include-fixed
--
- void toolchains::MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
-                                                   ArgStringList &CC1Args) const {
-   if (DriverArgs.hasArg(options::OPT_nostdinc))
+ void toolchains::MinGW::addClangTargetOptions(

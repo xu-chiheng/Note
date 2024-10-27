@@ -1,42 +1,16 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..12841f4d36c9 100644
+index c81a7ed17029..d194ff1ac8d8 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -216,17 +216,28 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
-   }
+@@ -310,8 +346,10 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+       if (Args.hasArg(options::OPT_pg))
+         CmdArgs.push_back("-lgmon");
  
-   if (!Args.hasArg(options::OPT_nostdlib, options::OPT_nostartfiles)) {
--    if (Args.hasArg(options::OPT_shared) || Args.hasArg(options::OPT_mdll)) {
--      CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("dllcrt2.o")));
-+    if (isCygwin) {
-+      if (Args.hasArg(options::OPT_shared) || Args.hasArg(options::OPT_mdll)) {
-+        CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crtbeginS.o")));
-+      } else {
-+        CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crt0.o")));
-+        CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crtbegin.o")));
-+      }
-+      if (Args.hasArg(options::OPT_pg))
-+        CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("gcrt0.o")));
-     } else {
--      if (Args.hasArg(options::OPT_municode))
--        CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crt2u.o")));
--      else
--        CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crt2.o")));
-+      if (Args.hasArg(options::OPT_shared) || Args.hasArg(options::OPT_mdll)) {
-+        CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("dllcrt2.o")));
-+      } else {
-+        if (Args.hasArg(options::OPT_municode))
-+          CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crt2u.o")));
-+        else
-+          CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crt2.o")));
-+      }
-+      if (Args.hasArg(options::OPT_pg))
-+        CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("gcrt2.o")));
-+      CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crtbegin.o")));
-     }
--    if (Args.hasArg(options::OPT_pg))
--      CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("gcrt2.o")));
--    CmdArgs.push_back(Args.MakeArgString(TC.GetFilePath("crtbegin.o")));
-   }
+-      if (Args.hasArg(options::OPT_pthread))
++#ifndef __CYGWIN__
++      if (!Args.hasArg(options::OPT_no_pthread))
+         CmdArgs.push_back("-lpthread");
++#endif
  
-   Args.AddAllArgs(CmdArgs, options::OPT_L);
+       if (Sanitize.needsAsanRt()) {
+         // MinGW always links against a shared MSVCRT.

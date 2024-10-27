@@ -1,22 +1,16 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..bafa3f7475cf 100644
+index c81a7ed17029..d194ff1ac8d8 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -60,9 +60,14 @@ void tools::MinGW::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -60,9 +60,11 @@ void tools::MinGW::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
  
  void tools::MinGW::Linker::AddLibGCC(const ArgList &Args,
                                       ArgStringList &CmdArgs) const {
--  if (Args.hasArg(options::OPT_mthreads))
--    CmdArgs.push_back("-lmingwthrd");
--  CmdArgs.push_back("-lmingw32");
-+  const toolchains::MinGW & toolchain = (const toolchains::MinGW &)getToolChain();
-+  bool isCygwin = toolchain.isCygwin;
-+
-+  if (!isCygwin) {
-+    if (Args.hasArg(options::OPT_mthreads))
-+      CmdArgs.push_back("-lmingwthrd");
-+    CmdArgs.push_back("-lmingw32");
-+  }
++#ifndef __CYGWIN__
+   if (Args.hasArg(options::OPT_mthreads))
+     CmdArgs.push_back("-lmingwthrd");
+   CmdArgs.push_back("-lmingw32");
++#endif
  
    // Make use of compiler-rt if --rtlib option is used
    ToolChain::RuntimeLibType RLT = getToolChain().GetRuntimeLibType(Args);

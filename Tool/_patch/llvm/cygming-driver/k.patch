@@ -1,30 +1,22 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..bafa3f7475cf 100644
+index c81a7ed17029..d194ff1ac8d8 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -435,17 +484,16 @@ void toolchains::MinGW::findGccLibDir(const llvm::Triple &LiteralTriple) {
- }
- 
- static llvm::ErrorOr<std::string> findGcc(const llvm::Triple &LiteralTriple,
--                                          const llvm::Triple &T) {
-+                                          const llvm::Triple &T, bool isCygwin) {
-   llvm::SmallVector<llvm::SmallString<32>, 5> Gccs;
--  Gccs.emplace_back(LiteralTriple.str());
--  Gccs.back() += "-gcc";
--  Gccs.emplace_back(T.str());
--  Gccs.back() += "-gcc";
--  Gccs.emplace_back(T.getArchName());
--  Gccs.back() += "-w64-mingw32-gcc";
-   Gccs.emplace_back(T.getArchName());
--  Gccs.back() += "-w64-mingw32ucrt-gcc";
--  Gccs.emplace_back("mingw32-gcc");
-+  if (isCygwin) {
-+    Gccs.back() += "-pc-cygwin-gcc";
-+    Gccs.emplace_back("cygwin-gcc");
-+  } else {
-+    Gccs.back() += "-pc-mingw64-gcc";
-+    Gccs.emplace_back("mingw64-gcc");
-+  }
-   // Please do not add "gcc" here
-   for (StringRef CandidateGcc : Gccs)
-     if (llvm::ErrorOr<std::string> GPPName = llvm::sys::findProgramByName(CandidateGcc))
+@@ -457,12 +498,13 @@ static llvm::ErrorOr<std::string>
+ findClangRelativeSysroot(const Driver &D, const llvm::Triple &LiteralTriple,
+                          const llvm::Triple &T, std::string &SubdirName) {
+   llvm::SmallVector<llvm::SmallString<32>, 4> Subdirs;
+-  Subdirs.emplace_back(LiteralTriple.str());
+   Subdirs.emplace_back(T.str());
+   Subdirs.emplace_back(T.getArchName());
+-  Subdirs.back() += "-w64-mingw32";
+-  Subdirs.emplace_back(T.getArchName());
+-  Subdirs.back() += "-w64-mingw32ucrt";
++#ifdef __CYGWIN__
++  Subdirs.back() += "-pc-cygwin";
++#else
++  Subdirs.back() += "-pc-mingw64";
++#endif
+   StringRef ClangRoot = llvm::sys::path::parent_path(D.Dir);
+   StringRef Sep = llvm::sys::path::get_separator();
+   for (StringRef CandidateSubdir : Subdirs) {

@@ -1,23 +1,31 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..bafa3f7475cf 100644
+index c81a7ed17029..d194ff1ac8d8 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -369,10 +414,15 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
-                                          Exec, CmdArgs, Inputs, Output));
- }
+@@ -409,17 +452,16 @@ static llvm::Triple getLiteralTriple(const Driver &D, const llvm::Triple &T) {
  
--static bool isCrossCompiling(const llvm::Triple &T, bool RequireArchMatch) {
-+static bool isCrossCompiling(const llvm::Triple &T, bool RequireArchMatch, bool isCygwin) {
-   llvm::Triple HostTriple(llvm::Triple::normalize(LLVM_HOST_TRIPLE));
--  if (HostTriple.getOS() != llvm::Triple::Win32)
--    return true;
-+  if (isCygwin) {
-+    if (!HostTriple.isWindowsCygwinEnvironment())
-+      return true;
-+  } else {
-+    if (HostTriple.getOS() != llvm::Triple::Win32)
-+      return true;
-+  }
-   if (RequireArchMatch && HostTriple.getArch() != T.getArch())
-     return true;
-   return false;
+ void toolchains::MinGW::findGccLibDir(const llvm::Triple &LiteralTriple) {
+   llvm::SmallVector<llvm::SmallString<32>, 5> SubdirNames;
+-  SubdirNames.emplace_back(LiteralTriple.str());
+-  SubdirNames.emplace_back(getTriple().str());
+-  SubdirNames.emplace_back(getTriple().getArchName());
+-  SubdirNames.back() += "-w64-mingw32";
+   SubdirNames.emplace_back(getTriple().getArchName());
+-  SubdirNames.back() += "-w64-mingw32ucrt";
+-  SubdirNames.emplace_back("mingw32");
+-  if (SubdirName.empty()) {
+-    SubdirName = getTriple().getArchName();
+-    SubdirName += "-w64-mingw32";
+-  }
++#ifdef __CYGWIN__
++  SubdirNames.back() += "-pc-cygwin";
++  SubdirNames.emplace_back("cygwin");
++#else
++  SubdirNames.back() += "-pc-mingw64";
++  SubdirNames.emplace_back("mingw64");
++#endif
++  if (SubdirName.empty())
++    SubdirName = SubdirNames[0].str();
+   // lib: Arch Linux, Ubuntu, Windows
+   // lib64: openSUSE Linux
+   for (StringRef CandidateLib : {"lib", "lib64"}) {

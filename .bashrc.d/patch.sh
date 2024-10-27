@@ -102,9 +102,6 @@ patch_apply_1() {
 			elif [ ! -f "${patch}" ]; then
 				echo "${patch} is not a file"
 				return 1
-			elif ! file "${patch}" | grep "unified diff output"; then
-				echo "${patch} is not a patch file"
-				return 1
 			fi
 		done
 

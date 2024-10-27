@@ -1,22 +1,16 @@
 
-
 https://cygwin.com/cgit/cygwin-packages
 https://cygwin.com/cgit/cygwin-packages/clang
 https://cygwin.com/cgit/cygwin-packages/llvm
-
 
 https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-clang
 https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-clang/PKGBUILD
 
 https://src.fedoraproject.org/rpms/llvm.git
 
-
-
 on Cygwin, Clang 8.0.1 (pre-installed) at /usr does not work, can't be used to build LLVM.
-stage 0 : GCC 11.4.0 (pre-installed) at /usr
-stage 1 : Clang 16.0.6
-stage 2 : Clang 16.0.6
-stage 3 : Clang 16.0.6
+
+
 
 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a    2023-01-24    branch point
 patch_apply . \
@@ -95,7 +89,7 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
 cygming-build/{a,b-1,c,d,e,f-1,g,h,i,j-1,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l-0,m-0,n,o,p,q,r,s,t,u,v,w,x},\
+cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l-0,m-1,n,o,p,q,r,s,t,u,v,w,x},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,CGCall.h,regression-{a,b,c,d}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch \

@@ -17,7 +17,7 @@ index c81a7ed17029..bafa3f7475cf 100644
 -    SubdirName = getTriple().getArchName();
 -    SubdirName += "-w64-mingw32";
 +  if (isCygwin) {
-+    SubdirNames[0] += "-pc-cygwin";
++    SubdirNames.back() += "-pc-cygwin";
 +    SubdirNames.emplace_back("cygwin");
 +  } else {
 +    SubdirNames.back() += "-pc-mingw64";

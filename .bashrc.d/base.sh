@@ -154,6 +154,16 @@ set_environment_variables_at_bash_startup() {
 		fi
 	else
 		case "${HOST_TRIPLE}" in
+			*-mingw* )
+				local mingw_root_dir="$(print_mingw_root_dir)"
+				local mingw_root_dir_2="$(cygpath -m "${mingw_root_dir}")"
+				export PATH="$(join_array_elements ':' "${mingw_root_dir}/bin" "${PATH}")"
+				export INCLUDE="${mingw_root_dir_2}/include"
+				export LIB="${mingw_root_dir_2}/lib"
+				;;
+		esac
+
+		case "${HOST_TRIPLE}" in
 			*-cygwin | *-mingw* | *-linux* )
 				local packages_dir="$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")"
 				local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
@@ -185,15 +195,6 @@ set_environment_variables_at_bash_startup() {
 			*-msys )
 				# no self built package
 				true
-				;;
-		esac
-
-		case "${HOST_TRIPLE}" in
-			*-mingw* )
-				local mingw_root_dir="$(print_mingw_root_dir)"
-				local mingw_root_dir_2="$(cygpath -m "${mingw_root_dir}")"
-				export INCLUDE="${mingw_root_dir_2}/include"
-				export LIB="${mingw_root_dir_2}/lib"
 				;;
 		esac
 	fi

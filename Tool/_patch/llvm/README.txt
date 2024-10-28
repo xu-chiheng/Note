@@ -13,7 +13,7 @@ on Cygwin, Clang 8.0.1 (pre-installed) at /usr does not work, can't be used to b
 
 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a    2023-01-24    branch point
 patch_apply . \
-../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},\
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d,e},\
 cygming-build/{a,b-0,c,d,e,g,h,i,j-0,k,l,m,n},\
 cygming-driver/{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro},\
@@ -22,7 +22,7 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 17.0.0    a218c991811c2bc29539b6946920342f956fe758    2023-05-27
 patch_apply . \
-../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},\
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d,e},\
 cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
 cygming-driver/{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro,CGCall.h},\
@@ -31,10 +31,19 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7    2023-07-25    branch point
 patch_apply . \
-../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},\
 cygming-build/{a,b-0,c,d,e,f-1,g,h,i,j-0,k,l,m,n},\
 cygming-driver/{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro,CGCall.h},\
+mingw-{git-revision,emutls-1,Value.h},\
+pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
+18.0.0    9058762789c0a83560c2b567a347b993e70b05ae    2023-09-14
+patch_apply . \
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},\
+cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
+cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro,CGCall.h,regression-a},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
@@ -174,8 +183,13 @@ Prevent versioning when building LLVM
 _cmake-dump.patch
 Dump CMake variables
 
-backport-d.patch
+backport-e.patch
 Backport commit cbaa3597aaf6273e66b3f445ed36a6458143fe6a 2023-05-27, fix build
+
+backport-d.patch
+Backport commit e873280e614f8457ebbe2ffdee389b4e336739a6 2023-09-14, fix build
+Fix the build of LLVM commit bc8a42762057d7036f6871211e62b1c3efb2738a 2024-05-08 on Cygwin
+make[2]: *** No rule to make target 'tools/clang/lib/Driver/CMakeFiles/obj.clangDriver.dir/ToolChains/MSP430.cpp.o', needed by 'bin/cygclangDriver.dll'.  Stop.
 
 backport-c.patch
 Backport commit 2222fddfc0a2ff02036542511597839856289094 2024-06-29, fix build

@@ -25,25 +25,26 @@ patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d,e},\
 cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
 cygming-driver/{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro,CGCall.h},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro},\
 mingw-{git-revision,emutls-1},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7    2023-07-25    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},\
-cygming-build/{a,b-0,c,d,e,f-1,g,h,i,j-0,k,l,m,n},\
+cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
 cygming-driver/{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro,CGCall.h},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
+18.0.0    c04a05d898982614a2df80d928b97ed4f8c49b60    2023-08-14
 18.0.0    9058762789c0a83560c2b567a347b993e70b05ae    2023-09-14
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},\
 cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro,CGCall.h,regression-a},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro,regression-a},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
@@ -52,7 +53,7 @@ patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
 cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,CGCall.h,regression-a},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-a},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
@@ -61,25 +62,27 @@ patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
 cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,CGCall.h,regression-a},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-a},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
+18.0.0    ec92d74a0ef89b9dd46aee6ec8aca6bfd3c66a54    2023-12-14
 18.0.0    f49e2b05bf3ececa2fe20c5d658ab92ab974dc36    2023-12-17
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
 cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,CGCall.h,regression-{a,b}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-{a,b}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
+18.0.0    2366d53d8d8726b73408597b534d2f910c3d3e6d    2023-12-22
 18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104    2024-01-01
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
 cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,CGCall.h,regression-{a,b,c}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-{a,b,c}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
@@ -88,47 +91,44 @@ patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
 cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,l,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,CGCall.h,regression-{a,b,c}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-{a,b,c}},\
 mingw-{git-revision,emutls-1,Value.h},\
-pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
-../_patch/llvm/cygwin-disable-debug-ata.patch
+pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
+18.0.0    86eaf6083b2cd27b8811f4791ad2eb8dacbb0e5f    2024-01-20
 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707    2024-01-24    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
 cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,l,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,CGCall.h,regression-{a,b,c,d}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-{a,b,c,d}},\
 mingw-{git-revision,emutls-1,Value.h},\
-pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
-../_patch/llvm/cygwin-disable-debug-ata.patch
+pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 19.0.0    c5f839bd58e7f888acc4cb39a18e9e5bbaa9fb0a    2024-03-22
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
 cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,CGCall.h,regression-{a,b,c,d}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-{a,b,c,d}},\
 mingw-{git-revision,emutls-1,Value.h},\
-pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
-../_patch/llvm/cygwin-disable-debug-ata.patch
+pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 19.0.0    281d71604f418eb952e967d9dc4b26241b7f96aa     2024-04-17
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
 cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,CGCall.h,regression-{a,b,c,d,e}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
-pseudo-{gen-Main,lib-Grammar}.cpp}.patch \
-../_patch/llvm/cygwin-disable-debug-ata.patch
+pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 19.0.0    f65a52ab0ec22cf5c25ccf3c9d86b7635964b864    2024-06-29
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
 cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,CGCall.h,regression-{a,b,c,d,e}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
@@ -137,7 +137,7 @@ patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b},\
 cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,CGCall.h,regression-{a,b,c,d,e}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
@@ -146,7 +146,7 @@ patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b},\
 cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,CGCall.h,regression-{a,b,c,d,e}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
@@ -155,7 +155,7 @@ patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-a,\
 cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,CGCall.h,regression-{a,b,c,d,e}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
@@ -164,7 +164,7 @@ patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
 cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
-cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,CGCall.h,regression-{a,b,c,d,e}},\
+cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
@@ -187,8 +187,8 @@ backport-e.patch
 Backport commit cbaa3597aaf6273e66b3f445ed36a6458143fe6a 2023-05-27, fix build
 
 backport-d.patch
-Backport commit e873280e614f8457ebbe2ffdee389b4e336739a6 2023-09-14, fix build
-Fix the build of LLVM commit bc8a42762057d7036f6871211e62b1c3efb2738a 2024-05-08 on Cygwin
+Backport commit e873280e614f8457ebbe2ffdee389b4e336739a6 2023-09-14
+Fix the build of LLVM commit bc8a42762057d7036f6871211e62b1c3efb2738a 2024-05-08 using Clang 16/17 on Cygwin
 make[2]: *** No rule to make target 'tools/clang/lib/Driver/CMakeFiles/obj.clangDriver.dir/ToolChains/MSP430.cpp.o', needed by 'bin/cygclangDriver.dll'.  Stop.
 
 backport-c.patch
@@ -230,12 +230,6 @@ Remove some uses of macro __CYGWIN__ .
 cygwin-general-c.patch
 Override Cygwin's buggy getpagesize() to Win32 computePageSize().
 
-
-cygwin-CGCall.h.patch
-Reduced number of inline elements of CallArgList.
-This fix bootstraping on Cygwin, using GCC 13.2.0 as stage 0 compiler.
-It seems that the size of CallArgList can't exceed an unknown limit.  
-As commit 49b27b150b97c190dedf8b45bf991c4b811ed953 2023-12-09, this patch is not needed.
 
 
 cygwin-regression-a.patch
@@ -327,13 +321,6 @@ make[1]: *** [CMakeFiles/Makefile2:15466: lib/Support/CMakeFiles/LLVMSupport.dir
 make[1]: Leaving directory '/cygdrive/e/Note/Tool/llvm-cygwin-clang-release-build'
 make: *** [Makefile:156: all] Error 2
 
-
-cygwin-disable-debug-ata.patch
-Fix the regression caused by commit 7c71a09d5e712bedbed867226b3fa0bbfe789384 2024-01-10, that, in Cygwin, Clang can't bootstrap.
-Stuck at cmake configure :
--- Looking for pfm_initialize in pfm
--- Looking for pfm_initialize in pfm - not found
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 
 
 cygwin-regression-e.patch

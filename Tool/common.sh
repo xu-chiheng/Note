@@ -643,6 +643,7 @@ build_and_install_binutils_gcc_for_target() {
 		&& echo_command popd;} \
 		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-binutils-output.txt")" \
 	\
+	&& test "${PIPESTATUS[0]}" -eq 0 \
 	\
 	&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
 			"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${gcc_configure_options[@]}" \
@@ -653,6 +654,7 @@ build_and_install_binutils_gcc_for_target() {
 		&& echo_command popd;} \
 		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-gcc-output.txt")" \
 	\
+	&& test "${PIPESTATUS[0]}" -eq 0 \
 	\
 	&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
 	\

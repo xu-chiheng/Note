@@ -14,8 +14,8 @@ on Cygwin, Clang 8.0.1 (pre-installed) at /usr does not work, can't be used to b
 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a    2023-01-24    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d,e},\
-cygming-build/{a,b-0,c,d,e,g,h,i,j-0,k,l,m,n},\
-cygming-driver/{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygming-build/cygming-build-{a,b-0,c,d,e,g,h,i,j-0,k,l,m,n},\
+cygming-driver/cygming-driver-{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro},\
 mingw-{git-revision,emutls-0},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -23,8 +23,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 17.0.0    a218c991811c2bc29539b6946920342f956fe758    2023-05-27
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d,e},\
-cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
-cygming-driver/{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygming-build/cygming-build-{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
+cygming-driver/cygming-driver-{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro},\
 mingw-{git-revision,emutls-1},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -32,8 +32,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7    2023-07-25    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},\
-cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
-cygming-driver/{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygming-build/cygming-build-{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
+cygming-driver/cygming-driver-{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -42,8 +42,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 18.0.0    9058762789c0a83560c2b567a347b993e70b05ae    2023-09-14
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},\
-cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygming-build/cygming-build-{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-0,general-{a,b,c},macro,regression-a},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -51,8 +51,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 18.0.0    6f44f87011cd52367626cac111ddbb2d25784b90    2023-10-05
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
-cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygming-build/cygming-build-{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-a},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -60,8 +60,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 18.0.0    49b27b150b97c190dedf8b45bf991c4b811ed953    2023-12-09
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
-cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygming-build/cygming-build-{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-a},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -70,8 +70,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 18.0.0    f49e2b05bf3ececa2fe20c5d658ab92ab974dc36    2023-12-17
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
-cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygming-build/cygming-build-{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-{a,b}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -80,8 +80,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 18.0.0    90c397fc56b7a04dd53cdad8103de1ead9686104    2024-01-01
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
-cygming-build/{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygming-build/cygming-build-{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-{a,b,c}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -89,8 +89,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 18.0.0    8b4bb15f6d879fd8655f9e41fee224a8a59f238c    2024-01-19
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
-cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,l,m,n,o,p},\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k-0,l,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-{a,b,c}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -99,8 +99,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707    2024-01-24    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
-cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k-0,l,m,n,o,p},\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k-0,l,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-{a,b,c,d}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -108,8 +108,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 19.0.0    c5f839bd58e7f888acc4cb39a18e9e5bbaa9fb0a    2024-03-22
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
-cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-1,general-{a,b,c},macro,regression-{a,b,c,d}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -117,8 +117,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 19.0.0    281d71604f418eb952e967d9dc4b26241b7f96aa     2024-04-17
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
-cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -126,8 +126,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 19.0.0    f65a52ab0ec22cf5c25ccf3c9d86b7635964b864    2024-06-29
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},\
-cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -135,8 +135,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8    2024-07-23    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b},\
-cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -144,8 +144,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 20.0.0    db1d3b23a37c7a57fa8b9e5bc94e1b22e278d361    2024-08-03
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b},\
-cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -153,8 +153,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 20.0.0    8bd9ade6284a793c898da133723121c3bcc49ef7    2024-08-03
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-a,\
-cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
@@ -162,8 +162,8 @@ pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 20.0.0    c2cac69d0806034879d2b958a2e52e45b6c533fb    2024-08-28
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
-cygming-build/{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-cygming-driver/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-{support-tls,va-list-kind,lld-{a,b,c},cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
 mingw-{git-revision,emutls-1,Value.h},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch

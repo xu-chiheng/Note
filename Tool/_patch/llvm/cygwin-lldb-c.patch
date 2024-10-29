@@ -1,0 +1,13 @@
+diff --git a/lldb/include/lldb/API/SBDefines.h b/lldb/include/lldb/API/SBDefines.h
+index 9543ebc08a32..2f8c42161f29 100644
+--- a/lldb/include/lldb/API/SBDefines.h
++++ b/lldb/include/lldb/API/SBDefines.h
+@@ -18,7 +18,7 @@
+ #include <cstdio> // For FILE *
+ 
+ #ifndef LLDB_API
+-#if defined(_WIN32)
++#if defined(_WIN32) || defined(__CYGWIN__)
+ #if defined(LLDB_IN_LIBLLDB)
+ #define LLDB_API __declspec(dllexport)
+ #else

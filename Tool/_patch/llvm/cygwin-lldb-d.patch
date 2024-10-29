@@ -1,0 +1,14 @@
+diff --git a/lldb/include/lldb/Host/posix/HostInfoPosix.h b/lldb/include/lldb/Host/posix/HostInfoPosix.h
+index 8d070d3ac1e6..c89e346a1b89 100644
+--- a/lldb/include/lldb/Host/posix/HostInfoPosix.h
++++ b/lldb/include/lldb/Host/posix/HostInfoPosix.h
+@@ -23,6 +23,9 @@ class HostInfoPosix : public HostInfoBase {
+ public:
+   static size_t GetPageSize();
+   static bool GetHostname(std::string &s);
++  static FileSpec GetProgramFileSpec();
++  static llvm::VersionTuple GetOSVersion();
++  static std::optional<std::string> GetOSBuildString();
+   static std::optional<std::string> GetOSKernelDescription();
+ 
+   static uint32_t GetUserID();

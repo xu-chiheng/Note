@@ -1,0 +1,17 @@
+diff --git a/lldb/source/Host/posix/MainLoopPosix.cpp b/lldb/source/Host/posix/MainLoopPosix.cpp
+index 816581e70294..34bc9e452da6 100644
+--- a/lldb/source/Host/posix/MainLoopPosix.cpp
++++ b/lldb/source/Host/posix/MainLoopPosix.cpp
+@@ -6,6 +6,12 @@
+ //
+ //===----------------------------------------------------------------------===//
+ 
++#ifdef __CYGWIN__
++#define _GNU_SOURCE
++#include <poll.h>
++#include <stdlib.h>
++#endif
++
+ #include "lldb/Host/posix/MainLoopPosix.h"
+ #include "lldb/Host/Config.h"
+ #include "lldb/Host/PosixApi.h"

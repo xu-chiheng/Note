@@ -1,0 +1,26 @@
+diff --git a/lldb/source/Host/posix/ProcessLauncherPosixFork.cpp b/lldb/source/Host/posix/ProcessLauncherPosixFork.cpp
+index 4a9469bde2f1..fee0887d8eba 100644
+--- a/lldb/source/Host/posix/ProcessLauncherPosixFork.cpp
++++ b/lldb/source/Host/posix/ProcessLauncherPosixFork.cpp
+@@ -17,7 +17,9 @@
+ #include "llvm/Support/Errno.h"
+ 
+ #include <climits>
++#ifndef __CYGWIN__
+ #include <sys/ptrace.h>
++#endif
+ #include <sys/wait.h>
+ #include <unistd.h>
+ 
+@@ -192,9 +194,11 @@ struct ForkLaunchInfo {
+           close(fd);
+     }
+ 
++#ifndef __CYGWIN__
+     // Start tracing this child that is about to exec.
+     if (ptrace(PT_TRACE_ME, 0, nullptr, 0) == -1)
+       ExitWithError(error_fd, "ptrace");
++#endif
+   }
+ 
+   // Execute.  We should never return...

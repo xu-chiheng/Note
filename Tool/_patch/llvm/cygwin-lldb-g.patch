@@ -1,0 +1,17 @@
+diff --git a/lldb/source/Host/common/PseudoTerminal.cpp b/lldb/source/Host/common/PseudoTerminal.cpp
+index d53327973eb2..24b7ddde65a3 100644
+--- a/lldb/source/Host/common/PseudoTerminal.cpp
++++ b/lldb/source/Host/common/PseudoTerminal.cpp
+@@ -6,6 +6,12 @@
+ //
+ //===----------------------------------------------------------------------===//
+ 
++#ifdef __CYGWIN__
++#define _GNU_SOURCE
++#include <poll.h>
++#include <stdlib.h>
++#endif
++
+ #include "lldb/Host/PseudoTerminal.h"
+ #include "lldb/Host/Config.h"
+ #include "lldb/Host/FileSystem.h"

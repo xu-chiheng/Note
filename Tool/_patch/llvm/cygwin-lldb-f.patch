@@ -1,0 +1,33 @@
+diff --git a/lldb/source/Host/common/Host.cpp b/lldb/source/Host/common/Host.cpp
+index a064c980d445..a00fa4b611a3 100644
+--- a/lldb/source/Host/common/Host.cpp
++++ b/lldb/source/Host/common/Host.cpp
+@@ -6,6 +6,11 @@
+ //
+ //===----------------------------------------------------------------------===//
+ 
++#ifdef __CYGWIN__
++#define _GNU_SOURCE
++#include <dlfcn.h>
++#endif
++
+ // C includes
+ #include <cerrno>
+ #include <climits>
+@@ -26,13 +31,15 @@
+ #include <mach/mach_port.h>
+ #endif
+ 
+-#if defined(__linux__) || defined(__FreeBSD__) ||                              \
++#if defined(__linux__) || defined(__FreeBSD__) || defined(__CYGWIN__) ||       \
+     defined(__FreeBSD_kernel__) || defined(__APPLE__) ||                       \
+     defined(__NetBSD__) || defined(__OpenBSD__) || defined(__EMSCRIPTEN__)
+ #if !defined(__ANDROID__)
+ #include <spawn.h>
+ #endif
++#ifndef __CYGWIN__
+ #include <sys/syscall.h>
++#endif
+ #include <sys/wait.h>
+ #endif
+ 

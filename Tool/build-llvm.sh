@@ -58,7 +58,7 @@ check_llvm_static_or_shared "$4"
 		clang
 		clang-tools-extra
 		lld
-		# lldb
+		lldb
 	)
 
 	# runtime projects are not needed to build Cross Clang

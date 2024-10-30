@@ -1,0 +1,11 @@
+diff --git a/lldb/tools/lldb-instr/CMakeLists.txt b/lldb/tools/lldb-instr/CMakeLists.txt
+index a1bbd7e2b7c9..8da453b2894f 100644
+--- a/lldb/tools/lldb-instr/CMakeLists.txt
++++ b/lldb/tools/lldb-instr/CMakeLists.txt
+@@ -11,4 +11,6 @@ add_lldb_tool(lldb-instr
+     clangSerialization
+     clangTooling
+ 
++  LINK_COMPONENTS
++    Support
+   )

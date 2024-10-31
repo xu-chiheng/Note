@@ -18,7 +18,7 @@ index 4845c3c6ca59..4c1242cec252 100644
      if(git_result EQUAL 0)
 +      if (WIN32)
 +        message(STATUS "find_first_existing_vc_file git_output : ${git_output}")
-+        # /cygdrive/c/Users/Administrator/Tool/llvm/.git
++        # /c/Users/Administrator/Tool/llvm/.git
 +        execute_process(COMMAND cygpath -m "${git_output}"
 +          WORKING_DIRECTORY ${path}
 +          RESULT_VARIABLE git_result

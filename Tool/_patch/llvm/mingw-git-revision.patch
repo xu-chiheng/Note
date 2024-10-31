@@ -1,35 +1,32 @@
-diff --git a/clang/lib/Basic/Version.cpp b/clang/lib/Basic/Version.cpp
-index 4823f566bd77..4d45f9ab97b2 100644
---- a/clang/lib/Basic/Version.cpp
-+++ b/clang/lib/Basic/Version.cpp
-@@ -17,7 +17,7 @@
- #include <cstdlib>
- #include <cstring>
- 
--#include "VCSVersion.inc"
-+#include "llvm/Support/VCSRevision.h"
- 
- namespace clang {
- 
-@@ -25,8 +25,8 @@ std::string getClangRepositoryPath() {
- #if defined(CLANG_REPOSITORY_STRING)
-   return CLANG_REPOSITORY_STRING;
- #else
--#ifdef CLANG_REPOSITORY
--  return CLANG_REPOSITORY;
-+#ifdef LLVM_REPOSITORY
-+  return LLVM_REPOSITORY;
- #else
-   return "";
- #endif
-@@ -42,8 +42,8 @@ std::string getLLVMRepositoryPath() {
- }
- 
- std::string getClangRevision() {
--#ifdef CLANG_REVISION
--  return CLANG_REVISION;
-+#ifdef LLVM_REVISION
-+  return LLVM_REVISION;
- #else
-   return "";
- #endif
+diff --git a/llvm/cmake/modules/AddLLVM.cmake b/llvm/cmake/modules/AddLLVM.cmake
+index 4845c3c6ca59..4c1242cec252 100644
+--- a/llvm/cmake/modules/AddLLVM.cmake
++++ b/llvm/cmake/modules/AddLLVM.cmake
+@@ -2527,6 +2527,9 @@ endfunction()
+ #
+ # If the sources are not under version control, do not define `out_var`.
+ function(find_first_existing_vc_file path out_var)
++  message(STATUS "find_first_existing_vc_file path : ${path}")
++  # E:/Note/Tool/llvm/llvm
++  # E:/Note/Tool/llvm/clang
+   if(NOT EXISTS "${path}")
+     return()
+   endif()
+@@ -2538,6 +2541,17 @@ function(find_first_existing_vc_file path out_var)
+       OUTPUT_VARIABLE git_output
+       ERROR_QUIET)
+     if(git_result EQUAL 0)
++      if (WIN32)
++        message(STATUS "find_first_existing_vc_file git_output : ${git_output}")
++        # /cygdrive/c/Users/Administrator/Tool/llvm/.git
++        execute_process(COMMAND cygpath -m "${git_output}"
++          WORKING_DIRECTORY ${path}
++          RESULT_VARIABLE git_result
++          OUTPUT_VARIABLE git_output
++          ERROR_QUIET)
++        message(STATUS "find_first_existing_vc_file git_output : ${git_output}")
++        # C:/Users/Administrator/Tool/llvm/.git
++      endif()
+       string(STRIP "${git_output}" git_output)
+       get_filename_component(git_dir ${git_output} ABSOLUTE BASE_DIR ${path})
+       # Some branchless cases (e.g. 'repo') may not yet have .git/logs/HEAD

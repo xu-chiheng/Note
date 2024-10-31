@@ -350,10 +350,6 @@ Cygwin runtime failure: /cygdrive/e/Note/Tool/gcc-cygwin-clang-bfd-release-build
 This is because in GCC bootstrap mode, xgcc.exe is built using -O0, not -O3.
 
 
-mingw-pthread.patch
-https://github.com/llvm/llvm-project/pull/74981
-
-
 mingw-emutls.patch
 https://github.com/llvm/llvm-project/pull/74980
 

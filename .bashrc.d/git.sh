@@ -136,27 +136,27 @@ git_branch_delete_test_range_downstream() {
 }
 
 # git_clone_domain_user_repos https://github.com xu-chiheng Note/main/Note
-git_clone_domain_user_repos() {
-	local domain="$1"
-	local user="$2"
-	shift 2
-	local repo_branch_dir_array=( "$@" )
+# git_clone_domain_user_repos() {
+# 	local domain="$1"
+# 	local user="$2"
+# 	shift 2
+# 	local repo_branch_dir_array=( "$@" )
 
-	for repo_branch_dir in "${repo_branch_dir_array[@]}"; do
-		local repo_branch="$(dirname "${repo_branch_dir}")"
-		local repo="$(dirname "${repo_branch}")"
-		local branch="$(basename "${repo_branch}")"
-		local dir="$(basename "${repo_branch_dir}")"
+# 	for repo_branch_dir in "${repo_branch_dir_array[@]}"; do
+# 		local repo_branch="$(dirname "${repo_branch_dir}")"
+# 		local repo="$(dirname "${repo_branch}")"
+# 		local branch="$(basename "${repo_branch}")"
+# 		local dir="$(basename "${repo_branch_dir}")"
 
-		echo_command rm -rf "${dir}" \
-		&& echo_command git clone "${domain}/${user}/${repo}" "${dir}" \
-		&& { echo_command pushd "${dir}" \
-			&& echo_command git checkout "${branch}" \
-			&& echo_command git_update_git-tools  \
-			&& echo_command bash -i '~git-tools~'/common/backup.sh no_gc backup_to_upper_directory \
-			&& echo_command popd;}
-	done
-}
+# 		echo_command rm -rf "${dir}" \
+# 		&& echo_command git clone "${domain}/${user}/${repo}" "${dir}" \
+# 		&& { echo_command pushd "${dir}" \
+# 			&& echo_command git checkout "${branch}" \
+# 			&& echo_command git_update_git-tools  \
+# 			&& echo_command bash -i '~git-tools~'/common/backup.sh no_gc backup_to_upper_directory \
+# 			&& echo_command popd;}
+# 	done
+# }
 
 git_remove_all_files() {
 	if [ ! -d .git ]; then
@@ -169,16 +169,16 @@ git_remove_all_files() {
 	rm -rf
 }
 
-git_checkout_-f_cleanly() {
-	if [ ! -d .git ]; then
-		return 1
-	fi
+# git_checkout_-f_cleanly() {
+# 	if [ ! -d .git ]; then
+# 		return 1
+# 	fi
 
-	local revision="$1"
-	time_command git checkout -f "${revision}" \
-	&& time_command git_remove_all_files \
-	&& time_command git reset --hard HEAD
-}
+# 	local revision="$1"
+# 	time_command git checkout -f "${revision}" \
+# 	&& time_command git_remove_all_files \
+# 	&& time_command git reset --hard HEAD
+# }
 
 git_filemode_false() {
 	if [ ! -d .git ]; then
@@ -239,6 +239,7 @@ git_print_remote_branch_tag() {
 
 # How do I remove the old history from a git repository?
 # https://stackoverflow.com/questions/4515580/how-do-i-remove-the-old-history-from-a-git-repository
+# https://web.archive.org/web/20130116195128/http://bogdan.org.ua/2011/03/28/how-to-truncate-git-history-sample-script-included.html
 git_truncate() {
 	if [ ! -d .git ]; then
 		return 1
@@ -308,12 +309,8 @@ mount_point_size_available_is_bigger_than_10G() {
 	local mount_point="$1"
 	local a="$(mount_point_size_available_in_G "${mount_point}")"
 	local b="10"
-	# if [ "$a" -gt "$b" ]; then
-	if (( a > b )); then
-		true
-	else
-		false
-	fi
+	# [ "$a" -gt "$b" ]
+	(( a > b ))
 }
 
 print_hard_drives_mount_points_0() {

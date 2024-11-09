@@ -11,17 +11,17 @@ patch_apply . \
 ../_patch/binutils/{cygming-PICFLAG-2,mingw-replace-{mingw32-for-gdb-0,w64}}.patch \
 ../_patch/gdb/{mingw-build-{a,b,c},backport-{a,b,c}}.patch
 
-15.0.0    a72924552626025ad0ad032edc7f02ea345fd2b5    2023-12-07
+15.0.0    a72924552626025ad0ad032edc7f02ea345fd2b5    2023-12-07    5e43a46efc48eeb4951f498b227aee5eb71c137b^
 patch_apply . \
 ../_patch/binutils/{cygming-PICFLAG-2,mingw-replace-{mingw32-for-gdb-1,w64}}.patch \
 ../_patch/gdb/{mingw-build-{a,b,c},backport-{a,b,c}}.patch
 
-15.0.0    48a121f83cae0a625f63d3ad5f8a9149f7fa964a    2024-01-23
+15.0.0    48a121f83cae0a625f63d3ad5f8a9149f7fa964a    2024-01-23    8fed036befd8e87e9a602a5fc926db30aad69af3^
 patch_apply . \
 ../_patch/binutils/{cygming-PICFLAG-2,mingw-replace-{mingw32-for-gdb-1,w64}}.patch \
 ../_patch/gdb/{mingw-build-{a,b,c},backport-{a,b}}.patch
 
-15.0.0    9bec569fda7c76849cf3eb0e4a525f627d25f980    2024-03-21
+15.0.0    9bec569fda7c76849cf3eb0e4a525f627d25f980    2024-03-21    acaf48b921453c37fc2df4151699c912940bcd25^
 patch_apply . \
 ../_patch/binutils/{cygming-PICFLAG-2,mingw-replace-{mingw32-for-gdb-1,w64}}.patch \
 ../_patch/gdb/{mingw-build-{a,b,c},backport-a}.patch

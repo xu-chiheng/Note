@@ -46,7 +46,7 @@ cd "$(dirname "$0")"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=llvm
-check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_TRIPLE}" "${PACKAGE}"
+check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
 check_llvm_static_or_shared "$4"
 {
 	dump_compiler_linker_build_type_and_compiler_flags

@@ -27,7 +27,7 @@ cd "$(dirname "$0")"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=gcc
-check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_TRIPLE}" "${PACKAGE}"
+check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
 {
 	dump_compiler_linker_build_type_and_compiler_flags
 

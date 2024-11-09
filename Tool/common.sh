@@ -150,20 +150,20 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 
 	case "${host_triple}" in
 		*-cygwin )
-			local cygwin_c_cxx_common_flags=( )
-			# cygwin_c_cxx_common_flags+=( -mcmodel=small )
-			cflags+=(   "${cygwin_c_cxx_common_flags[@]}" )
-			cxxflags+=( "${cygwin_c_cxx_common_flags[@]}" )
+			# local cygwin_c_cxx_common_flags=( )
+			# # cygwin_c_cxx_common_flags+=( -mcmodel=small )
+			# cflags+=(   "${cygwin_c_cxx_common_flags[@]}" )
+			# cxxflags+=( "${cygwin_c_cxx_common_flags[@]}" )
 			if [ "${compiler_install_dir}" = /usr ]; then
 				# pre-installed GCC 11.4.0 and Clang 8.0.1 at /usr need this option
 				ldflags+=( -Wl,--dynamicbase )
 			fi
 			;;
 		*-mingw* )
-			local mingw_c_cxx_common_flags=( )
-			# mingw_c_cxx_common_flags+=( -mcmodel=medium )
-			cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
-			cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )
+			# local mingw_c_cxx_common_flags=( )
+			# # mingw_c_cxx_common_flags+=( -mcmodel=medium )
+			# cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
+			# cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
 			ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
 			# ldflags+=( -Wl,"$(cygpath -m "$(print_mingw_root_dir)")/lib/binmode.o" )
@@ -643,7 +643,7 @@ build_and_install_binutils_gcc_for_target() {
 		&& echo_command popd;} \
 		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-binutils-output.txt")" \
 	\
-	&& test "${PIPESTATUS[0]}" -eq 0 \
+	&& [ "${PIPESTATUS[0]}" -eq 0 ] \
 	\
 	&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
 			"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${gcc_configure_options[@]}" \
@@ -654,17 +654,19 @@ build_and_install_binutils_gcc_for_target() {
 		&& echo_command popd;} \
 		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-gcc-output.txt")" \
 	\
-	&& test "${PIPESTATUS[0]}" -eq 0 \
+	&& [ "${PIPESTATUS[0]}" -eq 0 ] \
 	\
 	&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
 	\
 	&& echo_command export PATH="${old_path}"
 }
 
-# http://wiki.osdev.org/GCC_Cross-Compiler
+# https://wiki.osdev.org/GCC_Cross-Compiler
 # https://gcc.gnu.org/install/configure.html
 # https://gcc.gnu.org/install/specific.html
 # https://github.com/richfelker/musl-cross-make
+
+# https://wiki.osdev.org/Libgcc_without_red_zone
 
 # https://wiki.gentoo.org/wiki/Crossdev
 # https://wiki.gentoo.org/wiki/Cross_build_environment
@@ -699,6 +701,10 @@ build_and_install_cross_gcc_for_targets() {
 
 	local gmp_mpfr_mpc_install_dir="$(print_name_for_config gmp-mpfr-mpc "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
 
+	local pids=()
+	local pid
+	local all_success=yes
+
 	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
 		time_command build_and_install_gmp_mpfr_mpc "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${gmp_mpfr_mpc_install_dir}" \
 		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" gmp-mpfr-mpc-output.txt)"
@@ -714,8 +720,12 @@ build_and_install_cross_gcc_for_targets() {
 			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
 			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-output.txt")" \
 			& # run in background
+			pids+=( $! )
 	done \
-	&& time_command wait \
+	&& for pid in "${pids[@]}"; do
+		wait "${pid}" || all_success=no
+	done \
+	&& [ "${all_success}" = yes ] \
 	&& echo "completed" \
 	&& time_command sync .
 }

@@ -384,6 +384,10 @@ copy_tarball_to_all_drives() {
 	local d
 	local dir
 
+	local pids=()
+	local pid
+	local all_success=yes
+
 	for d in \
 		$(
 			{
@@ -413,8 +417,12 @@ copy_tarball_to_all_drives() {
 		fi \
 		&& sync "${dir}" \
 		& # run in background
+		pids+=( $! )
 	done \
-	&& time_command wait
+	&& for pid in "${pids[@]}"; do
+		wait "${pid}" || all_success=no
+	done \
+	&& [ "${all_success}" = yes ]
 }
 
 git_branch_exists() {

@@ -32,6 +32,7 @@ cygwin-{support-tls,va-list-kind,cmodel-0,general-{a,b,c},macro},\
 mingw-{git-revision,emutls-1},\
 pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
+17.0.0    592e935e115ffb451eb9b782376711dab6558fe0    2023-05-28
 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7    2023-07-25    branch point
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},\
@@ -355,7 +356,7 @@ https://github.com/llvm/llvm-project/pull/74980
 
 
 mingw-Value.h.patch
-Fix the regression caused by commit 592e935e115ffb451eb9b782376711dab6558fe0 2023-05-26, that, in MinGW, Clang can't be built by system Clang.
+Fix the regression caused by commit 592e935e115ffb451eb9b782376711dab6558fe0 2023-05-28, that, in MinGW, Clang can't be built by system Clang.
 
 
 mingw-git-revision.patch

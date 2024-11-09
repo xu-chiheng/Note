@@ -35,8 +35,13 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 		--enable-targets=all
 		--disable-nls
 		--disable-werror
-		# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
-		--disable-gdb --disable-gdbserver --disable-gdbsupport --disable-libdecnumber --disable-readline --disable-sim
+
+		--disable-gdb
+		--disable-gdbserver
+		--disable-gdbsupport
+		--disable-libdecnumber
+		--disable-readline
+		--disable-sim
 	)
 
 	time_command configure_build_install_package \

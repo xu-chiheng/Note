@@ -66,8 +66,12 @@ check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3" "${HOST_T
 		--enable-targets=all
 		--disable-nls
 		--disable-werror
-		# https://sourceware.org/gdb/wiki/BuildingNatively
-		--disable-binutils --disable-ld --disable-gold --disable-gas --disable-gprof
+
+		--disable-binutils
+		--disable-ld
+		--disable-gold
+		--disable-gas
+		--disable-gprof
 	)
 
 	time_command configure_build_install_package \

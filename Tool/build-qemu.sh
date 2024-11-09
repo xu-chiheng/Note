@@ -23,8 +23,6 @@
 # SOFTWARE.
 
 # https://wiki.qemu.org/Hosts/W32#Native_builds_with_MSYS2
-# https://stackoverflow.com/questions/53084815/compile-qemu-under-windows-10-64-bit-for-windows-10-64-bit
-# https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-qemu/PKGBUILD
 
 # QEMU 7.1.0 can be built by GCC 12.2.0 and Clang 15.0.4 on  msys64-2022-11-07  mingw-msvcrt
 # QEMU 7.2.1 8.0.0 can also be built, but it can not load the kernel.

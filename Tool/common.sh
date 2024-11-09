@@ -599,8 +599,13 @@ build_and_install_binutils_gcc_for_target() {
 			--prefix="${install_prefix}"
 			--disable-nls
 			--disable-werror
-			# https://sourceware.org/legacy-ml/binutils/2014-01/msg00341.html
-			--disable-gdb --disable-gdbserver --disable-gdbsupport --disable-libdecnumber --disable-readline --disable-sim
+
+			--disable-gdb
+			--disable-gdbserver
+			--disable-gdbsupport
+			--disable-libdecnumber
+			--disable-readline
+			--disable-sim
 	)
 
 	# Installing GCC: Configuration
@@ -610,6 +615,7 @@ build_and_install_binutils_gcc_for_target() {
 			--build="${host_triple}"
 			--host="${host_triple}"
 			--target="${target}"
+
 			--without-headers
 			--disable-gcov
 			--disable-shared

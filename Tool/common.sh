@@ -711,20 +711,23 @@ build_and_install_cross_gcc_for_targets() {
 
 	if [ "${is_build_and_install_gmp_mpfr_mpc}" = yes ]; then
 		time_command build_and_install_gmp_mpfr_mpc "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${gmp_mpfr_mpc_install_dir}" \
-		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" gmp-mpfr-mpc-output.txt)"
+		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" gmp-mpfr-mpc-output.txt)" \
+		&& [ "${PIPESTATUS[0]}" -eq 0 ]
 	fi \
 	&& time_command check_dir_maybe_clone_from_url "${binutils_source_dir}" "${binutils_git_repo_url}" \
 	&& time_command check_dir_maybe_clone_from_url "${gcc_source_dir}" "${gcc_git_repo_url}" \
 	\
 	&& echo "building binutils and gcc ......" \
 	&& for target in "${targets[@]}"; do
+		{
 			time_command build_and_install_binutils_gcc_for_target \
 			"${target}" "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${extra_languages}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${binutils_source_dir}" "${gcc_source_dir}" \
 			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
 			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-output.txt")" \
-			& # run in background
-			pids+=( $! )
+			&& [ "${PIPESTATUS[0]}" -eq 0 ]
+		} & # run in background
+		pids+=( $! )
 	done \
 	&& for pid in "${pids[@]}"; do
 		wait "${pid}" || all_success=no

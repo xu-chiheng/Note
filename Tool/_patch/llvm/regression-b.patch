@@ -1,0 +1,25 @@
+diff --git a/llvm/lib/Transforms/Utils/SimplifyCFG.cpp b/llvm/lib/Transforms/Utils/SimplifyCFG.cpp
+index 92e2d189aff6..be1547155340 100644
+--- a/llvm/lib/Transforms/Utils/SimplifyCFG.cpp
++++ b/llvm/lib/Transforms/Utils/SimplifyCFG.cpp
+@@ -7762,20 +7762,6 @@ static bool passingValueIsAlwaysUndefined(Value *V, Instruction *I, bool PtrValu
+         return passingValueIsAlwaysUndefined(V, GEP, PtrValueMayBeModified);
+       }
+ 
+-    // Look through return.
+-    if (ReturnInst *Ret = dyn_cast<ReturnInst>(Use)) {
+-      bool HasNoUndefAttr =
+-          Ret->getFunction()->hasRetAttribute(Attribute::NoUndef);
+-      // Return undefined to a noundef return value is undefined.
+-      if (isa<UndefValue>(C) && HasNoUndefAttr)
+-        return true;
+-      // Return null to a nonnull+noundef return value is undefined.
+-      if (C->isNullValue() && HasNoUndefAttr &&
+-          Ret->getFunction()->hasRetAttribute(Attribute::NonNull)) {
+-        return !PtrValueMayBeModified;
+-      }
+-    }
+-
+     // Load from null is undefined.
+     if (LoadInst *LI = dyn_cast<LoadInst>(Use))
+       if (!LI->isVolatile())

@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..d194ff1ac8d8 100644
+index c81a7ed17029..9417bea14e8e 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -540,6 +576,30 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
+@@ -540,6 +540,33 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
        getDriver().SysRoot.size())
      getFilePaths().push_back(Base + "lib");
  
@@ -16,15 +16,18 @@ index c81a7ed17029..d194ff1ac8d8 100644
 +  }
 +#else
 +  // for MinGW's crt2.o
-+  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true)) {
-+    const char * path = getenv("LIB");
-+    if (path) {
-+      getFilePaths().push_back(path);
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
++      getDriver().SysRoot.size()) {
++    if (getDriver().SysRoot.size()) {
++      getFilePaths().push_back(getDriver().SysRoot + "/lib");
 +    } else {
++      const char * path = getenv("LIB");
++      if (path) {
++        getFilePaths().push_back(path);
++      } else {
 +
++      }
 +    }
-+  } else if (getDriver().SysRoot.size()) {
-+    getFilePaths().push_back(getDriver().SysRoot + "/lib");
 +  } else {
 +    // must add library directories by -L
 +  }

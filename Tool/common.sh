@@ -695,7 +695,7 @@ build_and_install_cross_gcc_for_targets() {
 
 	# Note: bintuils 2.37 2.38 2.39 2.40 2.41 can't handle the following line in kernel link script
 	#   .head           : { head.o (.multiboot) head.o (.*) }
-	# it can't do relocation of 32 bit code in head.o, due to commit 17c6c3b99156fe82c1e637e1a5fd9f163ac788c8
+	# it can't do relocation of 32 bit code in head.o, due to commit 17c6c3b99156fe82c1e637e1a5fd9f163ac788c8 2021-05-07
 
 	local gcc_git_repo_url="$(git_repo_url_of_package gcc)"
 	local binutils_git_repo_url="$(git_repo_url_of_package binutils)"

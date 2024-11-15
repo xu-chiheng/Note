@@ -372,6 +372,14 @@ Fix the regression caused by commit 592e935e115ffb451eb9b782376711dab6558fe0 202
 regression-b-0.patch
 regression-b.patch
 Fix the regression caused by commit a0c1b5bdda91920a66f58b0a891c551acff2d2a1 2023-12-31, that,  the kernel built by Clang can't run the tests successfully.
+assert fail .../tree_map.cpp _tree_map_empty_addr_next_node 157
+		if (n_addr == &(p->left)) {
+			next = p;
+		} else {
+			ASSERT(n_addr == &(p->right));
+			next = (tree_map_node_impl *)(p->next);
+		}
+	}
 
 mingw-git-revision.patch
 MinGW : Show git revision correctly

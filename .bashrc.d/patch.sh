@@ -125,8 +125,10 @@ patch_apply_1() {
 	if ! [ ${#failed_patches[@]} -eq 0 ]; then
 		echo "failed patches :"
 		print_array_elements "${failed_patches[@]}"
+		return 1
 	else
 		echo "all succeed"
+		return 0
 	fi
 }
 

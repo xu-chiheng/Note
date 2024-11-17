@@ -1,5 +1,5 @@
 diff --git a/llvm/cmake/modules/AddLLVM.cmake b/llvm/cmake/modules/AddLLVM.cmake
-index 4845c3c6ca59..4c1242cec252 100644
+index 99959ecfae9c..61ac71e2ee7e 100644
 --- a/llvm/cmake/modules/AddLLVM.cmake
 +++ b/llvm/cmake/modules/AddLLVM.cmake
 @@ -2527,6 +2527,9 @@ endfunction()
@@ -12,10 +12,10 @@ index 4845c3c6ca59..4c1242cec252 100644
    if(NOT EXISTS "${path}")
      return()
    endif()
-@@ -2538,6 +2541,17 @@ function(find_first_existing_vc_file path out_var)
-       OUTPUT_VARIABLE git_output
+@@ -2539,6 +2542,18 @@ function(find_first_existing_vc_file path out_var)
        ERROR_QUIET)
      if(git_result EQUAL 0)
+       string(STRIP "${git_output}" git_output)
 +      if (WIN32)
 +        message(STATUS "find_first_existing_vc_file git_output : ${git_output}")
 +        # /c/Users/Administrator/Tool/llvm/.git
@@ -24,9 +24,10 @@ index 4845c3c6ca59..4c1242cec252 100644
 +          RESULT_VARIABLE git_result
 +          OUTPUT_VARIABLE git_output
 +          ERROR_QUIET)
++        string(STRIP "${git_output}" git_output)
 +        message(STATUS "find_first_existing_vc_file git_output : ${git_output}")
 +        # C:/Users/Administrator/Tool/llvm/.git
 +      endif()
-       string(STRIP "${git_output}" git_output)
        get_filename_component(git_dir ${git_output} ABSOLUTE BASE_DIR ${path})
        # Some branchless cases (e.g. 'repo') may not yet have .git/logs/HEAD
+       if (NOT EXISTS "${git_dir}/logs/HEAD")

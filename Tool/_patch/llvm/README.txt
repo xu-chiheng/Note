@@ -387,14 +387,21 @@ MinGW : Show git revision correctly
 
 
 Issues:
-Cygwin GCC can't build debug mode LLVM using './build-llvm.sh GCC BFD Debug shared'
-/cygdrive/d/_cygwin/binutils/bin/ld.bfd: final link failed: bad value
-collect2: error: ld returned 1 exit status
-make[2]: *** [tools/clang/tools/clang-shlib/CMakeFiles/clang-cpp.dir/build.make:2039: bin/cygclang-cpp.dll] Error 1
-make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-cygwin-gcc-bfd-debug-build'
-make[1]: *** [CMakeFiles/Makefile2:49104: tools/clang/tools/clang-shlib/CMakeFiles/clang-cpp.dir/all] Error 2
+Cygwin/MinGW GCC can't build debug mode LLVM using './build-llvm.sh GCC BFD Debug shared'
 
+cd /cygdrive/e/Note/Tool/llvm-cygwin-gcc-bfd-debug-build/tools/clang/lib/ASTMatchers/Dynamic && /cygdrive/d/_cygwin/gcc/bin/g++.exe -DGTEST_HAS_RTTI=0 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/cygdrive/e/Note/Tool/llvm-cygwin-gcc-bfd-debug-build/tools/clang/lib/ASTMatchers/Dynamic -I/cygdrive/e/Note/Tool/llvm/clang/lib/ASTMatchers/Dynamic -I/cygdrive/e/Note/Tool/llvm/clang/include -I/cygdrive/e/Note/Tool/llvm-cygwin-gcc-bfd-debug-build/tools/clang/include -I/cygdrive/e/Note/Tool/llvm-cygwin-gcc-bfd-debug-build/include -I/cygdrive/e/Note/Tool/llvm/llvm/include -march=x86-64 -Og -g -Werror=date-time -fno-lifetime-dse -Wall -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wno-missing-field-initializers -pedantic -Wno-long-long -Wimplicit-fallthrough -Wno-maybe-uninitialized -Wno-nonnull -Wno-class-memaccess -Wno-redundant-move -Wno-pessimizing-move -Wno-noexcept-type -Wdelete-non-virtual-dtor -Wsuggest-override -Wno-comment -Wno-misleading-indentation -Wctad-maybe-unsupported -fno-common -Woverloaded-virtual -fno-strict-aliasing -g -std=gnu++17  -fno-exceptions -funwind-tables -fno-rtti -MD -MT tools/clang/lib/ASTMatchers/Dynamic/CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.o -MF CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.o.d -o CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.o -c /cygdrive/e/Note/Tool/llvm/clang/lib/ASTMatchers/Dynamic/Registry.cpp
+as: CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.o: too many sections (59610)
+/cygdrive/c/Users/ADMINI~1/AppData/Local/Temp/cc9sd7D7.s: Assembler messages:
+/cygdrive/c/Users/ADMINI~1/AppData/Local/Temp/cc9sd7D7.s: Fatal error: can't write 16 bytes to section .text of CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.o: 'file too big'
+as: CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.o: too many sections (59610)
+/cygdrive/c/Users/ADMINI~1/AppData/Local/Temp/cc9sd7D7.s: Fatal error: CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.o: file too big
 
+cd E:/Note/Tool/llvm-mingw-ucrt-gcc-bfd-debug-build/tools/clang/lib/ASTMatchers/Dynamic && D:/_mingw-ucrt/gcc/bin/g++.exe -DGTEST_HAS_RTTI=0 -D_FILE_OFFSET_BITS=64 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS @CMakeFiles/obj.clangDynamicASTMatchers.dir/includes_CXX.rsp -march=x86-64 -Og -g -Werror=date-time -fno-lifetime-dse -Wall -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wno-missing-field-initializers -pedantic -Wno-long-long -Wimplicit-fallthrough -Wno-maybe-uninitialized -Wno-nonnull -Wno-class-memaccess -Wno-redundant-move -Wno-pessimizing-move -Wno-noexcept-type -Wdelete-non-virtual-dtor -Wsuggest-override -Wno-comment -Wno-misleading-indentation -Wctad-maybe-unsupported -fno-common -Woverloaded-virtual -fno-strict-aliasing -g -std=c++17  -fno-exceptions -funwind-tables -fno-rtti -MD -MT tools/clang/lib/ASTMatchers/Dynamic/CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.obj -MF CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.obj.d -o CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.obj -c E:/Note/Tool/llvm/clang/lib/ASTMatchers/Dynamic/Registry.cpp
+as: CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.obj: too many sections (59629)
+C:/Users/ADMINI~1/AppData/Local/Temp/ccCPBU8f.s: Assembler messages:
+C:/Users/ADMINI~1/AppData/Local/Temp/ccCPBU8f.s: Fatal error: can't write 16 bytes to section .text of CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.obj: 'file too big'
+as: CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.obj: too many sections (59629)
+C:/Users/ADMINI~1/AppData/Local/Temp/ccCPBU8f.s: Fatal error: CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.obj: file too big
 
 
 [  7%] Generating nonterminal symbol file for cxx grammar...

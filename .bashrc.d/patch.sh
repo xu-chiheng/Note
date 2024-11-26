@@ -63,7 +63,7 @@ patch_generate() {
 
 	ln -s "${dir_a}" a \
 	&& ln -s "${dir_b}" b \
-	&& diff -Naur a b >"${patch}" \
+	&& { diff -Naur a b >"${patch}" || true ;} \
 	&& rm -rf a b
 }
 

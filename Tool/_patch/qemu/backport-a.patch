@@ -1,0 +1,13 @@
+diff --git a/include/qemu/osdep.h b/include/qemu/osdep.h
+index b9c4307779..3d6cb431ad 100644
+--- a/include/qemu/osdep.h
++++ b/include/qemu/osdep.h
+@@ -177,7 +177,7 @@ extern "C" {
+  * supports QEMU_ERROR, this will be reported at compile time; otherwise
+  * this will be reported at link time due to the missing symbol.
+  */
+-extern G_NORETURN
++G_NORETURN extern
+ void QEMU_ERROR("code path is reachable")
+     qemu_build_not_reached_always(void);
+ #if defined(__OPTIMIZE__) && !defined(__NO_INLINE__)

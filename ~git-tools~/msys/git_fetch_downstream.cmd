@@ -3,6 +3,6 @@
 @set PATH="%MSYS2_DIR%\usr\bin";%PATH%
 @set MSYSTEM=MSYS
 
-cd ../..
+@cd ../..
 
 @start mintty.exe --exec bash -i -c "time_command do_git_misc git_fetch downstream; read;"

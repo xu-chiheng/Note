@@ -2,6 +2,6 @@
 
 @set PATH="%CYGWIN_DIR%\bin";%PATH%
 
-cd ../..
+@cd ../..
 
 @start mintty.exe --exec bash -i

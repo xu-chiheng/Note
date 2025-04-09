@@ -93,7 +93,7 @@
 # But Tor Browser require "Turn on Sniffing" to be OFF, this conflicts with Tun mode.
 # The solution is setting "Turn on Sniffing" to be OFF only when using Tor Browser.
 
-# v2rayN 6.60.0 2024-09-23 Settings
+# v2rayN 7.10.5 2025-03 Settings
 
 # Settings --> Option Setting --> Core basic settings
 # Turn on Sniffing       ON or OFF       ON to make "Tun mode" work, OFF to make "Tor Browser" to connect, no way to let them both work.
@@ -182,6 +182,7 @@ getData() {
 	echo " 伪装域名(host)：${DOMAIN}"
 }
 
+# DeepSeek-R1 使用ACME脚本如何保证自动更新SSL/TLS证书？
 getCert() {
 	curl https://get.acme.sh | sh
 	source ~/.bashrc
@@ -196,7 +197,8 @@ getCert() {
 	rm -rf "${CERT_FILE}" "${KEY_FILE}"
 	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 		--key-file       "${KEY_FILE}" \
-		--fullchain-file "${CERT_FILE}"
+		--fullchain-file "${CERT_FILE}" \
+		--reloadcmd "systemctl reload nginx"
 
 	if ! { [ -f "${CERT_FILE}" ] && [ -f "${KEY_FILE}" ] ;}; then
 		echo " 获取证书失败，请到 Github Issues 反馈"

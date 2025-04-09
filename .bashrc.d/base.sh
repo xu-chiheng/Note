@@ -206,7 +206,7 @@ set_environment_variables_at_bash_startup() {
 			# 'C:\Program Files\Google\Chrome\Application'
 			'C:\Program Files (x86)\UltraISO'
 			'D:\qemu'
-			'D:\youtube-dl'
+			# 'D:\youtube-dl'
 
 		)
 		local dirs2=()

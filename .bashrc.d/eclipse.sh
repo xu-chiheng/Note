@@ -40,8 +40,6 @@ eclipse_workspace_backup_metadata_dir() {
 # About Eclipse SDK
 # The JDT and PDE are plug-in tools for the Eclipse Platform. Together, these three pieces form the Eclipse SDK download, a complete development environment for Eclipse-based tools, and for developing Eclipse itself.
 
-# time_command download_and_backup_eclipse_platform_source
-
 # Eclipse SDK的源代码放到IDE目录中，并且加入到cdt的Source Insight Project中。
 
 # How to download Eclipse's Source code?

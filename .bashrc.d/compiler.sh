@@ -31,7 +31,6 @@ maybe_create_test_branch_for_bisect() {
 	fi
 }
 
-# git remote rename origin upstream
 common_create_test_branches_for_bisect() {
 	local dir="$1"
 	local major_version_start="$2"

@@ -328,10 +328,10 @@ install() {
 	uninstall
 	linux_uninstall_firewall
 	linux_install_vps_basic_tools
-	getCert
 
 	installNginx
 	configNginx
+	getCert
 	linux_start_and_enable_service nginx
 
 	installXray

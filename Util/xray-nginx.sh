@@ -347,6 +347,8 @@ uninstall() {
 	linux_stop_and_disable_service nginx
 	linux_stop_and_disable_service xray
 	rm -rf /usr/local/etc/xray
+	rm -rf ~/.acme.sh
+	git reset --hard HEAD
 }
 
 outputVmessWS() {

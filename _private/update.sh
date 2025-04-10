@@ -65,6 +65,7 @@ do_update_all_files() {
 
 		Util/quirk
 		Util/shell
+		Util/setting/Editors
 	)
 
 	local path

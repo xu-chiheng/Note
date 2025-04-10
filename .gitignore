@@ -11,9 +11,6 @@ code.lock
 /*.deb
 /*.rpm
 
-/workspace-ultragdb
-/go
-
 /.*
 
 /Desktop
@@ -79,9 +76,8 @@ code.lock
 /Videos
 /ntuser.dat.*
 /ntuser.ini
+/Start Menu
 /「开始」菜单
-
-
 
 
 # whitelist must be put last

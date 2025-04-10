@@ -538,7 +538,7 @@ windows_clean_or_hide_home_dir_entries() {
 	local dir_entries_to_hide=(
 		.*
 		"3D Objects" AppData Contacts Desktop Downloads Favorites Links Music Pictures Public "Saved Games" Searches Videos Documents OneDrive
-		~shortcuts_ config.guess editor.sh github-recovery-codes.txt go
+		~shortcuts_ config.guess editor.sh github-recovery-codes.txt
 		keyring_*.asc
 	)
 

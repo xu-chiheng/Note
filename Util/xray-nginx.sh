@@ -1,6 +1,6 @@
 #!/usr/bin/env -S bash -i
 
-# Works on Debian 12, Ubuntu 22.04 LTS, Fedora 38-41, Rocky Linux 8-9 at 2025-04-11
+# Works on Debian 12, Ubuntu 22.04-24.04 LTS, Fedora 38-41, Rocky Linux 8-9 at 2025-05-15
 
 # VMess
 # https://guide.v2fly.org/basics/vmess.html
@@ -204,6 +204,10 @@ getCert() {
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
 installNginx() {
+	if quiet_command which nginx; then
+		return 0
+	fi
+
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt install -y nginx
@@ -212,13 +216,33 @@ installNginx() {
 		dnf install -y nginx
 	elif quiet_command which pacman; then
 		# Arch Linux, Manjaro, Parabola
-		pacman -Syu nginx
+		pacman -Sy --noconfirm nginx
 	fi
+}
+
+uninstallNginx() {
+	if ! quiet_command which nginx; then
+		return 0
+	fi
+
+	if quiet_command which apt; then
+		# Debian, Ubuntu, Raspbian
+		apt remove -y nginx
+	elif quiet_command which dnf; then
+		# Fedora, RedHat, CentOS
+		dnf remove -y nginx
+	elif quiet_command which pacman; then
+		# Arch Linux, Manjaro, Parabola
+		pacman -Rns --noconfirm nginx
+	fi
+
+	rm -rf "${NGINX_CONF_PATH}"* "${NGINX_HTDOC_PATH}"*
 }
 
 configNginx() {
 	if ! backup_or_restore_file_or_dir "${NGINX_HTDOC_PATH}" \
 		|| ! backup_or_restore_file_or_dir "${NGINX_CONF_PATH}"; then
+		echo "无法恢复Nginx配置文件"
 		exit 1
 	fi
 	cat >"${NGINX_HTDOC_PATH}/robots.txt" <<EOF
@@ -264,11 +288,25 @@ EOF
 
 # https://github.com/XTLS/Xray-install
 installXray() {
+	if quiet_command which xray; then
+		return 0
+	fi
+
 	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+}
+
+uninstallXray() {
+	if ! quiet_command which xray; then
+		return 0
+	fi
+
+	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ remove
+	rm -rf "${XRAY_CONF_PATH}"*
 }
 
 configXray() {
 	if ! backup_or_restore_file_or_dir "${XRAY_CONF_PATH}"; then
+		echo "无法恢复Xray配置文件"
 		exit 1
 	fi
 	cat >"${XRAY_CONF_PATH}/config.json" <<EOF
@@ -323,8 +361,6 @@ install() {
 	linux_uninstall_firewall
 	linux_install_vps_basic_tools
 
-	uninstall
-
 	getCert
 
 	installNginx
@@ -342,7 +378,11 @@ install() {
 
 uninstall() {
 	linux_stop_and_disable_service nginx
+	uninstallNginx
+
 	linux_stop_and_disable_service xray
+	uninstallXray
+
 	rm -rf ~/*.pem ~/*.key
 	rm -rf ~/.acme.sh
 	git reset --hard HEAD

@@ -1,6 +1,6 @@
 #!/usr/bin/env -S bash -i
 
-# Works on Debian 12, Ubuntu 22.04-24.04 LTS, Fedora 38-41, Rocky Linux 8-9 at 2025-05-15
+# Works on Debian 12, Ubuntu 24.04 LTS, Fedora 41, Almalinux 9, Rocky Linux 9 at 2025-05-15
 
 # VMess
 # https://guide.v2fly.org/basics/vmess.html
@@ -220,6 +220,23 @@ installNginx() {
 	fi
 }
 
+# On Ubuntu, Nginx reinstalled after an uninstall, miss the "/etc/nginx/nginx.conf" file
+# root@server0:~# systemctl status nginx
+# × nginx.service - A high performance web server and a reverse proxy server
+#      Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; preset: enabled)
+#      Active: failed (Result: exit-code) since Fri 2025-05-16 00:56:46 CST; 12min ago
+#        Docs: man:nginx(8)
+#     Process: 771 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=1/FAILURE)
+#         CPU: 18ms
+
+# May 16 00:56:46 server0 systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+# May 16 00:56:46 server0 nginx[771]: 2025/05/15 16:56:46 [emerg] 771#771: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+# May 16 00:56:46 server0 nginx[771]: nginx: configuration file /etc/nginx/nginx.conf test failed
+# May 16 00:56:46 server0 systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+# May 16 00:56:46 server0 systemd[1]: nginx.service: Failed with result 'exit-code'.
+# May 16 00:56:46 server0 systemd[1]: Failed to start nginx.service - A high performance web server and a reverse proxy server.
+# root@server0:~#
+
 uninstallNginx() {
 	if ! quiet_command which nginx; then
 		return 0
@@ -378,10 +395,10 @@ install() {
 
 uninstall() {
 	linux_stop_and_disable_service nginx
-	uninstallNginx
+	# uninstallNginx
 
 	linux_stop_and_disable_service xray
-	uninstallXray
+	# uninstallXray
 
 	rm -rf ~/*.pem ~/*.key
 	rm -rf ~/.acme.sh

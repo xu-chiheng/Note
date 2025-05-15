@@ -1,6 +1,6 @@
 #!/usr/bin/env -S bash -i
 
-# Works on Debian 12, Ubuntu 22.04 LTS, Fedora 38-39, Rocky Linux 8-9 at 2024-02-07
+# Works on Debian 12, Ubuntu 22.04 LTS, Fedora 38-41, Rocky Linux 8-9 at 2025-04-11
 
 # VMess
 # https://guide.v2fly.org/basics/vmess.html
@@ -63,9 +63,6 @@
 
 # 【进阶•代理模式篇】看懂就能解决99%的代理问题，详解系统代理、TUN/TAP代理、真VPN代理，clash/v2ray/singbox 虚拟网卡怎么接管系统全局流量？什么是真正的VPN？看完就知道了
 # https://www.youtube.com/watch?v=qItL005LUik&t=785s
-
-# V2Ray进阶篇2：V2Ray+Websocket+TLS+Cloudflare拯救被墙的IP/复活你的VPS/隐藏真实IP/最安全的科学上网方式/V2Ray如何套上CDN加强安全性
-# https://www.youtube.com/watch?v=-GH7DOlqe-M
 
 # V2Ray保姆级小白进阶教程 Websocket + TLS + Cloudflare CDN 免费中转拯救被墙IP
 # https://www.youtube.com/watch?v=TWJZ30L1NRk
@@ -173,7 +170,7 @@ getData() {
 			break
 		fi
 	done
-	DOMAIN=${DOMAIN,,}
+	DOMAIN="${DOMAIN,,}"
 
 	if [ "$(linux_resolve_hostname "${DOMAIN}")" != "${IP}" ]; then
 		echo "伪装域名${DOMAIN}不指向${IP}"
@@ -193,14 +190,13 @@ getCert() {
 		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
 	fi
 
-	mkdir -p /usr/local/etc/xray
 	rm -rf "${CERT_FILE}" "${KEY_FILE}"
 	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 		--key-file       "${KEY_FILE}" \
 		--fullchain-file "${CERT_FILE}" \
 		--reloadcmd "systemctl reload nginx"
 
-	if ! { [ -f "${CERT_FILE}" ] && [ -f "${KEY_FILE}" ] ;}; then
+	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ] then
 		echo " 获取证书失败，请到 Github Issues 反馈"
 		exit 1
 	fi
@@ -221,19 +217,17 @@ installNginx() {
 }
 
 configNginx() {
-	if ! backup_or_restore_file_or_dir /usr/share/nginx/html \
-		|| ! backup_or_restore_file_or_dir /etc/nginx; then
+	if ! backup_or_restore_file_or_dir "${NGINX_HTDOC_PATH}" \
+		|| ! backup_or_restore_file_or_dir "${NGINX_CONF_PATH}"; then
 		exit 1
 	fi
-	cat > /usr/share/nginx/html/robots.txt <<EOF
+	cat >"${NGINX_HTDOC_PATH}/robots.txt" <<EOF
 User-Agent: *
 Disallow: /
 EOF
 
-	rm -rf "${NGINX_CONF_PATH}"
-	mkdir -p "${NGINX_CONF_PATH}"
 	# VMESS+WS+TLS
-	cat >"${NGINX_CONF_PATH}/${DOMAIN}.conf" <<EOF
+	cat >"${NGINX_CONF_PATH}/conf.d/${DOMAIN}.conf" <<EOF
 server {
   listen ${PORT} ssl;
   listen [::]:${PORT} ssl;
@@ -268,13 +262,16 @@ EOF
 
 }
 
+# https://github.com/XTLS/Xray-install
 installXray() {
 	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
 
 configXray() {
-	mkdir -p /usr/local/etc/xray
-	cat >"${CONFIG_FILE}" <<EOF
+	if ! backup_or_restore_file_or_dir "${XRAY_CONF_PATH}"; then
+		exit 1
+	fi
+	cat >"${XRAY_CONF_PATH}/config.json" <<EOF
 {
   "inbounds": [
     {
@@ -312,10 +309,9 @@ install() {
 
 	getData
 
-	CONFIG_FILE="/usr/local/etc/xray/config.json"
-	NGINX_CONF_PATH="/etc/nginx/conf.d"
-	CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
-	KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
+	CERT_FILE=~/"${DOMAIN}.pem"
+	KEY_FILE=~/"${DOMAIN}.key"
+
 	UUID="$(linux_xray_uuid_generate)"
 	PORT="$(port_number_generate)"
 	XPORT="$(port_number_generate)"
@@ -324,14 +320,15 @@ install() {
 	linux_disable_ipv6
 	linux_enable_bbr
 	linux_disable_selinux
-
-	uninstall
 	linux_uninstall_firewall
 	linux_install_vps_basic_tools
 
+	uninstall
+
+	getCert
+
 	installNginx
 	configNginx
-	getCert
 	linux_start_and_enable_service nginx
 
 	installXray
@@ -346,7 +343,7 @@ install() {
 uninstall() {
 	linux_stop_and_disable_service nginx
 	linux_stop_and_disable_service xray
-	rm -rf /usr/local/etc/xray
+	rm -rf ~/*.pem ~/*.key
 	rm -rf ~/.acme.sh
 	git reset --hard HEAD
 }
@@ -408,8 +405,12 @@ menu() {
 	echo " 0. 退出"
 	echo 
 
+	XRAY_CONF_PATH="/usr/local/etc/xray"
+	NGINX_CONF_PATH="/etc/nginx"
+	NGINX_HTDOC_PATH="/usr/share/nginx/html"
+
 	read -p " 请选择操作[0-17]：" answer
-	case $answer in
+	case "${answer}" in
 		4)
 			install
 			;;

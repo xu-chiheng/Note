@@ -196,7 +196,7 @@ getCert() {
 		--fullchain-file "${CERT_FILE}" \
 		--reloadcmd "systemctl reload nginx"
 
-	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ] then
+	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ]; then
 		echo " 获取证书失败，请到 Github Issues 反馈"
 		exit 1
 	fi

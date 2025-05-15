@@ -360,6 +360,8 @@ EOF
 }
 
 install() {
+	uninstall
+
 	IP="$(linux_print_ipv4_address)"
 
 	getData

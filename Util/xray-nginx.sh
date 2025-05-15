@@ -259,7 +259,7 @@ uninstallNginx() {
 configNginx() {
 	if ! backup_or_restore_file_or_dir "${NGINX_HTDOC_PATH}" \
 		|| ! backup_or_restore_file_or_dir "${NGINX_CONF_PATH}"; then
-		echo "无法恢复Nginx配置文件"
+		echo "无法备份或恢复Nginx配置文件"
 		exit 1
 	fi
 	cat >"${NGINX_HTDOC_PATH}/robots.txt" <<EOF
@@ -323,7 +323,7 @@ uninstallXray() {
 
 configXray() {
 	if ! backup_or_restore_file_or_dir "${XRAY_CONF_PATH}"; then
-		echo "无法恢复Xray配置文件"
+		echo "无法备份或恢复Xray配置文件"
 		exit 1
 	fi
 	cat >"${XRAY_CONF_PATH}/config.json" <<EOF

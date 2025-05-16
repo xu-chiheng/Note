@@ -179,15 +179,60 @@ getData() {
 	echo " 伪装域名(host)：${DOMAIN}"
 }
 
+# 查看 ACME 添加的 cron 条目
+# crontab -l
+# 0 0 * * * "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null
+
+# 删除 ACME 自动添加的 cron 条目   编辑当前用户的 crontab
+# crontab -e
+
+# 更彻底的做法（如果你不打算使用 acme.sh）
+# ~/.acme.sh/acme.sh --uninstall
+# 它会自动移除安装目录、环境变量、cron 等相关内容。
+
+
+
+# 证书有效期：Let's Encrypt证书仅90天，建议每60天续期。
+
+# 使用 --force 参数测试续签流程：
+# systemctl stop nginx; ~/.acme.sh/acme.sh --renew -d example.com --force; systemctl start nginx
+# 临时关闭 nginx，再执行续签，否则
+# root@server0:~# ~/.acme.sh/acme.sh --renew -d example.com --force
+# [Fri May 16 01:29:02 PM CST 2025] The domain 'example.com' seems to already have an ECC cert, let's use it.
+# [Fri May 16 01:29:02 PM CST 2025] Renewing: 'example.com'
+# [Fri May 16 01:29:02 PM CST 2025] Renewing using Le_API=https://acme-v02.api.letsencrypt.org/directory
+# [Fri May 16 01:29:02 PM CST 2025] Using CA: https://acme-v02.api.letsencrypt.org/directory
+# [Fri May 16 01:29:02 PM CST 2025] Standalone mode.
+# [Fri May 16 01:29:02 PM CST 2025] LISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:(("nginx",pid=789,fd=7),("nginx",pid=788,fd=7))
+# LISTEN 0      511             [::]:80            [::]:*    users:(("nginx",pid=789,fd=8),("nginx",pid=788,fd=8))
+# [Fri May 16 01:29:02 PM CST 2025] tcp port 80 is already used by (("nginx",pid=789,fd=7),("nginx",pid=788,fd=7))
+# 80            [
+# [Fri May 16 01:29:02 PM CST 2025] Please stop it first
+# [Fri May 16 01:29:02 PM CST 2025] _on_before_issue.
+# root@server0:~#
+# 这是因为你在使用 --standalone 模式续期证书，但该模式要求 acme.sh 自己临时监听 80 端口，而现在你的 nginx 已经占用了 80 端口。
+# ACME 协议的 HTTP 验证（http-01 challenge）必须使用 80 端口，这是 Let's Encrypt 和其他 CA 强制的安全标准。
+
+# 查看证书信息：
+# ~/.acme.sh/acme.sh --list
+# 自动部署到 nginx/apache/postfix 等服务都可以通过设置 --reloadcmd 自动刷新配置。
+
+# 续签证书时，是否应该关闭域名的Cloudflare CDN代理模式，使得可以通过DNS验证域名？
+
 # DeepSeek-R1 使用ACME脚本如何保证自动更新SSL/TLS证书？
 getCert() {
 	curl https://get.acme.sh | sh
+	# rm -rf ~/.acme.sh
+	# git clone https://github.com/acmesh-official/acme.sh.git ~/.acme.sh
+	# ~/.acme.sh/acme.sh --install
 	source ~/.bashrc
 	~/.acme.sh/acme.sh --upgrade --auto-upgrade
 	~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 
+	# 使用 nginx 模式（acme.sh 利用 nginx 插件）
+	# 如果你用的是 acme.sh，可以使用 nginx 模式，它直接使用 nginx 配置和 socket 与 nginx 通信，自动创建临时 location 来处理 ACME 验证。
 	if ! [ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]; then
-		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
+		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --nginx # --standalone
 	fi
 
 	rm -rf "${CERT_FILE}" "${KEY_FILE}"
@@ -195,6 +240,7 @@ getCert() {
 		--key-file       "${KEY_FILE}" \
 		--fullchain-file "${CERT_FILE}" \
 		--reloadcmd "systemctl reload nginx"
+	# 自动续期的触发条件是证书 有效期少于 30 天，acme.sh 会自动续签并运行 --reloadcmd 里的服务重载命令。
 
 	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ]; then
 		echo " 获取证书失败，请到 Github Issues 反馈"
@@ -259,7 +305,7 @@ uninstallNginx() {
 configNginx() {
 	if ! backup_or_restore_file_or_dir "${NGINX_HTDOC_PATH}" \
 		|| ! backup_or_restore_file_or_dir "${NGINX_CONF_PATH}"; then
-		echo "无法备份或恢复Nginx配置文件"
+		echo " 无法备份或恢复Nginx配置文件"
 		exit 1
 	fi
 	cat >"${NGINX_HTDOC_PATH}/robots.txt" <<EOF
@@ -323,7 +369,7 @@ uninstallXray() {
 
 configXray() {
 	if ! backup_or_restore_file_or_dir "${XRAY_CONF_PATH}"; then
-		echo "无法备份或恢复Xray配置文件"
+		echo " 无法备份或恢复Xray配置文件"
 		exit 1
 	fi
 	cat >"${XRAY_CONF_PATH}/config.json" <<EOF
@@ -380,11 +426,12 @@ install() {
 	time_command linux_uninstall_firewall
 	time_command linux_install_vps_basic_tools
 
-	time_command getCert
-
 	time_command installNginx
 	time_command configNginx
 	time_command linux_start_and_enable_service nginx
+
+	# 必须在安装Nginx之后
+	time_command getCert
 
 	time_command installXray
 	time_command configXray
@@ -402,6 +449,7 @@ uninstall() {
 	time_command linux_stop_and_disable_service xray
 	# time_command uninstallXray
 
+	time_command ~/.acme.sh/acme.sh --uninstall
 	time_command rm -rf ~/{.acme.sh,*.{pem,key}}
 	time_command git reset --hard HEAD
 }

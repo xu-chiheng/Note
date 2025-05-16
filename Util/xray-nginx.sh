@@ -494,7 +494,7 @@ uninstall() {
 }
 
 outputVmessWS() {
-	local raw=$(cat <<EOF
+	local link="vmess://$(cat <<EOF
 {
   "v": "2",
   "ps": "",
@@ -508,9 +508,7 @@ outputVmessWS() {
   "path": "${WSPATH}",
   "tls": "tls"
 }
-EOF
-)
-	local link="vmess://$(echo -n ${raw} | base64 -w 0)"
+EOF | base64)"
 
 	echo  
 	echo  
@@ -525,7 +523,7 @@ EOF
 	echo "路径(path)            : ${WSPATH}"
 	echo "底层安全传输(tls)     : tls"
 	echo  
-	echo "vmess链接 : $link"
+	echo "vmess链接 : ${link}"
 	echo
 	echo
 }

@@ -261,9 +261,14 @@ EOF
 			--key-file       "${KEY_FILE}" \
 			--fullchain-file "${CERT_FILE}" \
 			--reloadcmd "systemctl reload nginx"; then
-			echo " 安装证书失败，请到 Github Issues 反馈"
-			exit 1
+			# 忽略这个错误
+			# nginx.service is not active, cannot reload.
 		fi
+	fi
+
+	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ]; then
+		echo " 安装证书失败，请到 Github Issues 反馈"
+		exit 1
 	fi
 
 	echo "增加crontab中的acme_renew.sh项，并删除acme.sh --cron项"

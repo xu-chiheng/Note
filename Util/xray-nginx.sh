@@ -410,7 +410,7 @@ install() {
 
 	time_command getData
 
-	CERT_FILE=~/"${DOMAIN}.pem"
+	CERT_FILE=~/"${DOMAIN}.crt"
 	KEY_FILE=~/"${DOMAIN}.key"
 
 	UUID="$(linux_xray_uuid_generate)"
@@ -447,7 +447,7 @@ uninstall() {
 	# time_command uninstallXray
 
 	time_command ~/.acme.sh/acme.sh --uninstall
-	time_command rm -rf ~/{.acme.sh,*.{pem,key}}
+	time_command rm -rf ~/{.acme.sh,*.{crt,key}}
 	time_command git reset --hard HEAD
 }
 

@@ -141,7 +141,6 @@
 
 how_to_use_this_script() {
 	# VPS SSH login as root
-	# git remote set-url origin git@github.com:xu-chiheng/Note.git
 	cd ~
 	rm -rf .git Note .bashrc.d Util
 	git clone https://github.com/xu-chiheng/Note -b main
@@ -190,7 +189,6 @@ getData() {
 # 更彻底的做法（如果你不打算使用 acme.sh）
 # ~/.acme.sh/acme.sh --uninstall
 # 它会自动移除安装目录、环境变量、cron 等相关内容。
-
 
 
 # 证书有效期：Let's Encrypt证书仅90天，建议每60天续期。

@@ -246,7 +246,7 @@ EOF
 	# DNS @ record(@ for root)
 	# 对于一个域名example.com的所有下级域名a.example.com  b.example.com都在一个IP上的网站可能有用，但是对于翻墙梯子没有用
 	if ! [ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]; then
-		if ! ~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone; then
+		if ! time_command ~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone; then
 			echo " 获取证书失败，请到 Github Issues 反馈"
 			exit 1
 		fi
@@ -255,7 +255,7 @@ EOF
 	# 自动续期的触发条件是证书 有效期少于 30 天，acme.sh 会自动续签并运行 --reloadcmd 里的服务重载命令。
 	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ]; then
 		rm -rf "${CERT_FILE}" "${KEY_FILE}"
-		if ! ~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
+		if ! time_command ~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 			--key-file       "${KEY_FILE}" \
 			--fullchain-file "${CERT_FILE}" \
 			--reloadcmd 'if systemctl is-active --quiet nginx; then systemctl reload nginx; fi'; then
@@ -292,13 +292,13 @@ installNginx() {
 
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
-		apt install -y nginx
+		time_command apt install -y nginx
 	elif quiet_command which dnf; then
 		# Fedora, RedHat, CentOS
-		dnf install -y nginx
+		time_command dnf install -y nginx
 	elif quiet_command which pacman; then
 		# Arch Linux, Manjaro, Parabola
-		pacman -Sy --noconfirm nginx
+		time_command pacman -Sy --noconfirm nginx
 	fi
 }
 
@@ -326,21 +326,21 @@ uninstallNginx() {
 
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
-		apt remove -y nginx
+		time_command apt remove -y nginx
 	elif quiet_command which dnf; then
 		# Fedora, RedHat, CentOS
-		dnf remove -y nginx
+		time_command dnf remove -y nginx
 	elif quiet_command which pacman; then
 		# Arch Linux, Manjaro, Parabola
-		pacman -Rns --noconfirm nginx
+		time_command pacman -Rns --noconfirm nginx
 	fi
 
 	rm -rf "${NGINX_CONF_PATH}"* "${NGINX_HTDOC_PATH}"*
 }
 
 configNginx() {
-	if ! backup_or_restore_file_or_dir "${NGINX_HTDOC_PATH}" \
-		|| ! backup_or_restore_file_or_dir "${NGINX_CONF_PATH}"; then
+	if ! time_command backup_or_restore_file_or_dir "${NGINX_HTDOC_PATH}" \
+		|| ! time_command backup_or_restore_file_or_dir "${NGINX_CONF_PATH}"; then
 		echo " 无法备份或恢复Nginx配置文件"
 		exit 1
 	fi
@@ -391,7 +391,7 @@ installXray() {
 	# 	return 0
 	# fi
 
-	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+	time_command bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
 
 uninstallXray() {
@@ -399,15 +399,16 @@ uninstallXray() {
 	# 	return 0
 	# fi
 
-	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ remove
-	rm -rf "${XRAY_CONF_PATH}"*
+	time_command bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ remove
+	time_command rm -rf "${XRAY_CONF_PATH}"*
 }
 
 configXray() {
-	if ! backup_or_restore_file_or_dir "${XRAY_CONF_PATH}"; then
+	if ! time_command backup_or_restore_file_or_dir "${XRAY_CONF_PATH}"; then
 		echo " 无法备份或恢复Xray配置文件"
 		exit 1
 	fi
+
 	cat >"${XRAY_CONF_PATH}/config.json" <<EOF
 {
   "inbounds": [

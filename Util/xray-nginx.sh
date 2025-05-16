@@ -471,10 +471,10 @@ menu() {
 	read -p " 请选择操作[0-17]：" answer
 	case "${answer}" in
 		4)
-			install
+			time_command install
 			;;
 		12)
-			uninstall
+			time_command uninstall
 			;;
 		*)
 			echo " 请选择正确的操作！"

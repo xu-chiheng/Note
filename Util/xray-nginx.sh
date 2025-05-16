@@ -172,10 +172,11 @@ getData() {
 	done
 	DOMAIN="${DOMAIN,,}"
 
-	if [ "$(linux_resolve_hostname "${DOMAIN}")" != "${IP}" ]; then
-		echo "伪装域名${DOMAIN}不指向${IP}"
-		# exit 1
-	fi
+	# 在使用Cloudflare CDN DNS代理的情况下，下面的条件无法满足
+	# if [ "$(linux_resolve_hostname "${DOMAIN}")" != "${IP}" ]; then
+	# 	echo "伪装域名${DOMAIN}不指向${IP}"
+	# 	exit 1
+	# fi
 	echo " 伪装域名(host)：${DOMAIN}"
 }
 
@@ -218,7 +219,7 @@ getData() {
 # ~/.acme.sh/acme.sh --list
 # 自动部署到 nginx/apache/postfix 等服务都可以通过设置 --reloadcmd 自动刷新配置。
 
-# 续签证书时，是否应该关闭域名的Cloudflare CDN代理模式，使得可以通过DNS验证域名？
+# 续签证书时，不需要关闭域名的Cloudflare CDN DNS代理模式，就可以通过DNS验证域名
 
 # DeepSeek-R1 使用ACME脚本如何保证自动更新SSL/TLS证书？
 getCert() {
@@ -247,19 +248,22 @@ EOF
 	# DNS @ record(@ for root)
 	# 对于一个域名example.com的所有下级域名a.example.com  b.example.com都在一个IP上的网站可能有用，但是对于翻墙梯子没有用
 	if ! [ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]; then
-		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
+		if ! ~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone; then
+			echo " 获取证书失败，请到 Github Issues 反馈"
+			exit 1
+		fi
 	fi
 
-	rm -rf "${CERT_FILE}" "${KEY_FILE}"
-	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
-		--key-file       "${KEY_FILE}" \
-		--fullchain-file "${CERT_FILE}" \
-		--reloadcmd "systemctl reload nginx"
 	# 自动续期的触发条件是证书 有效期少于 30 天，acme.sh 会自动续签并运行 --reloadcmd 里的服务重载命令。
-
 	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ]; then
-		echo " 获取证书失败，请到 Github Issues 反馈"
-		exit 1
+		rm -rf "${CERT_FILE}" "${KEY_FILE}"
+		if ! ~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
+			--key-file       "${KEY_FILE}" \
+			--fullchain-file "${CERT_FILE}" \
+			--reloadcmd "systemctl reload nginx"; then
+			echo " 安装证书失败，请到 Github Issues 反馈"
+			exit 1
+		fi
 	fi
 
 	echo "增加crontab中的acme_renew.sh项，并删除acme.sh --cron项"

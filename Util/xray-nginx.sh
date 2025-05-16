@@ -269,6 +269,7 @@ EOF
 		exit 1
 	fi
 
+	time_command crontab -l
 	echo "增加crontab中的acme_renew.sh项，并删除acme.sh --cron项"
 	crontab -l 2>/dev/null | grep -v 'acme.sh --cron' | crontab -
 	( crontab -l 2>/dev/null; echo '0 0 * * * sh -c "bash ~/.acme.sh/acme_renew.sh >/dev/null 2>&1"' ) | crontab -
@@ -278,6 +279,7 @@ EOF
 putCert() {
 	time_command ~/.acme.sh/acme.sh --uninstall
 	time_command rm -rf ~/{.acme.sh,*.{crt,key}}
+	time_command crontab -l
 	echo "删除crontab中的acme_renew.sh项"
 	crontab -l 2>/dev/null | grep -v 'acme_renew.sh' | crontab -
 	time_command crontab -l

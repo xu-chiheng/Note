@@ -229,10 +229,8 @@ getCert() {
 	~/.acme.sh/acme.sh --upgrade --auto-upgrade
 	~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 
-	# 使用 nginx 模式（acme.sh 利用 nginx 插件）
-	# 如果你用的是 acme.sh，可以使用 nginx 模式，它直接使用 nginx 配置和 socket 与 nginx 通信，自动创建临时 location 来处理 ACME 验证。
 	if ! [ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]; then
-		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --nginx # --standalone
+		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
 	fi
 
 	rm -rf "${CERT_FILE}" "${KEY_FILE}"

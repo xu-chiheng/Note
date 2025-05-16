@@ -243,6 +243,7 @@ systemctl stop nginx
 systemctl start nginx
 EOF
 	chmod +x ~/.acme.sh/acme_renew.sh
+
 	# example.com  a.example.com  b.example.com
 	# --issue -d "${DOMAIN}" -d '*'"${DOMAIN}" 
 	# DNS @ record(@ for root)
@@ -260,10 +261,9 @@ EOF
 		if ! ~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 			--key-file       "${KEY_FILE}" \
 			--fullchain-file "${CERT_FILE}" \
-			--reloadcmd "systemctl reload nginx"; then
-			# 忽略这个错误
-			# nginx.service is not active, cannot reload.
-			true
+			--reloadcmd 'if systemctl is-active --quiet nginx; then systemctl reload nginx; fi'; then
+		echo " 安装证书失败，请到 Github Issues 反馈"
+		exit 1
 		fi
 	fi
 

@@ -204,9 +204,9 @@ getCert() {
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
 installNginx() {
-	if quiet_command which nginx; then
-		return 0
-	fi
+	# if quiet_command which nginx; then
+	# 	return 0
+	# fi
 
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
@@ -238,9 +238,9 @@ installNginx() {
 # root@server0:~#
 
 uninstallNginx() {
-	if ! quiet_command which nginx; then
-		return 0
-	fi
+	# if ! quiet_command which nginx; then
+	# 	return 0
+	# fi
 
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
@@ -305,17 +305,17 @@ EOF
 
 # https://github.com/XTLS/Xray-install
 installXray() {
-	if quiet_command which xray; then
-		return 0
-	fi
+	# if quiet_command which xray; then
+	# 	return 0
+	# fi
 
 	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
 
 uninstallXray() {
-	if ! quiet_command which xray; then
-		return 0
-	fi
+	# if ! quiet_command which xray; then
+	# 	return 0
+	# fi
 
 	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ remove
 	rm -rf "${XRAY_CONF_PATH}"*

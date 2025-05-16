@@ -510,7 +510,7 @@ outputVmessWS() {
 }
 EOF
 )
-	local link="vmess://$(echo "${raw}" | base64)"
+	local link="vmess://$(echo -n "${raw}" | base64 -w 0)"
 
 	echo  
 	echo  

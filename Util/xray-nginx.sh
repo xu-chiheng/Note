@@ -155,15 +155,15 @@ how_to_use_this_script() {
 
 getData() {
 	echo
-	echo " Xray一键脚本，运行之前请确认如下条件已经具备："
-	echo "  1. 一个伪装域名"
-	echo "  2. 伪装域名DNS解析指向当前服务器ip（${IP}）"
+	echo "Xray一键脚本，运行之前请确认如下条件已经具备："
+	echo "1. 一个伪装域名"
+	echo "2. 伪装域名DNS解析指向当前服务器ip（${IP}）"
 	echo
 	while true
 	do
-		read -p " 请输入伪装域名：" DOMAIN
+		read -p "请输入伪装域名：" DOMAIN
 		if [ -z "${DOMAIN}" ]; then
-			echo " 域名输入错误，请重新输入！"
+			echo "域名输入错误，请重新输入！"
 		else
 			break
 		fi
@@ -175,7 +175,7 @@ getData() {
 	# 	echo "伪装域名${DOMAIN}不指向${IP}"
 	# 	exit 1
 	# fi
-	echo " 伪装域名(host)：${DOMAIN}"
+	echo "伪装域名(host)：${DOMAIN}"
 }
 
 # 查看 ACME 添加的 cron 条目
@@ -229,6 +229,7 @@ getCert() {
 
 	time_command ~/.acme.sh/acme.sh --upgrade --auto-upgrade
 	time_command ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
+
 	cat >~/.acme.sh/acme_renew.sh <<EOF
 #!/bin/bash
 
@@ -249,7 +250,7 @@ EOF
 	# 对于一个域名example.com的所有下级域名a.example.com  b.example.com都在一个IP上的网站可能有用，但是对于翻墙梯子没有用
 	if ! [ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]; then
 		if ! time_command ~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone; then
-			echo " 获取证书失败，请到 Github Issues 反馈"
+			echo "获取证书失败，请到 Github Issues 反馈"
 			exit 1
 		fi
 	fi
@@ -261,13 +262,13 @@ EOF
 			--key-file       "${KEY_FILE}" \
 			--fullchain-file "${CERT_FILE}" \
 			--reloadcmd 'if systemctl is-active --quiet nginx; then systemctl reload nginx; fi'; then
-		echo " 安装证书失败，请到 Github Issues 反馈"
+		echo "安装证书失败，请到 Github Issues 反馈"
 		exit 1
 		fi
 	fi
 
 	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ]; then
-		echo " 安装证书失败，请到 Github Issues 反馈"
+		echo "安装证书失败，请到 Github Issues 反馈"
 		exit 1
 	fi
 
@@ -343,7 +344,7 @@ uninstallNginx() {
 configNginx() {
 	if ! time_command backup_or_restore_file_or_dir "${NGINX_HTDOC_PATH}" \
 		|| ! time_command backup_or_restore_file_or_dir "${NGINX_CONF_PATH}"; then
-		echo " 无法备份或恢复Nginx配置文件"
+		echo "无法备份或恢复Nginx配置文件"
 		exit 1
 	fi
 
@@ -407,7 +408,7 @@ uninstallXray() {
 
 configXray() {
 	if ! time_command backup_or_restore_file_or_dir "${XRAY_CONF_PATH}"; then
-		echo " 无法备份或恢复Xray配置文件"
+		echo "无法备份或恢复Xray配置文件"
 		exit 1
 	fi
 
@@ -541,18 +542,18 @@ menu() {
 	echo "# YouTube 频道: https://www.youtube.com/@misaka-blog        #"
 	echo "#############################################################"
 	echo ""
-	echo " 4. 安装Xray-VMESS+WS+TLS(推荐)"
-	echo " -------------"
-	echo " 12. 卸载Xray"
-	echo " -------------"
-	echo " 0. 退出"
+	echo "4. 安装Xray-VMESS+WS+TLS(推荐)"
+	echo "-------------"
+	echo "12. 卸载Xray"
+	echo "-------------"
+	echo "0. 退出"
 	echo 
 
 	XRAY_CONF_PATH="/usr/local/etc/xray"
 	NGINX_CONF_PATH="/etc/nginx"
 	NGINX_HTDOC_PATH="/usr/share/nginx/html"
 
-	read -p " 请选择操作[0-17]：" answer
+	read -p "请选择操作[0-17]：" answer
 	case "${answer}" in
 		4)
 			time_command install

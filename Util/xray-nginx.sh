@@ -195,7 +195,7 @@ getData() {
 # 证书有效期：Let's Encrypt证书仅90天，建议每60天续期。
 
 # 使用 --force 参数测试续签流程：
-# ~/.acme.sh/acme.sh --renew-all
+# systemctl stop nginx; ~/.acme.sh/acme.sh --renew-all --force; systemctl start nginx
 # systemctl stop nginx; ~/.acme.sh/acme.sh --renew -d example.com --force; systemctl start nginx
 # 临时关闭 nginx，再执行续签，否则
 # root@server0:~# ~/.acme.sh/acme.sh --renew -d example.com --force
@@ -249,15 +249,15 @@ EOF
 	# DNS @ record(@ for root)
 	# 对于一个域名example.com的所有下级域名a.example.com  b.example.com都在一个IP上的网站可能有用，但是对于翻墙梯子没有用
 	if ! [ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]; then
-		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
+		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone \
+		--pre-hook  ~/.acme.sh/myhook.sh
 	fi
 
 	rm -rf "${CERT_FILE}" "${KEY_FILE}"
 	~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 		--key-file       "${KEY_FILE}" \
 		--fullchain-file "${CERT_FILE}" \
-		--pre-hook  ~/.acme.sh/myhook.sh
-		# --reloadcmd "systemctl reload nginx"
+		--reloadcmd "systemctl reload nginx"
 	# 自动续期的触发条件是证书 有效期少于 30 天，acme.sh 会自动续签并运行 --reloadcmd 里的服务重载命令。
 
 	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ]; then

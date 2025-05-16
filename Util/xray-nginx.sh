@@ -394,7 +394,7 @@ installXray() {
 	# 	return 0
 	# fi
 
-	bash -c "echo "$@"; $(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+	curl -L "${XRAY_INSTALL_SCRIPT}" | bash -s install
 }
 
 uninstallXray() {
@@ -402,7 +402,7 @@ uninstallXray() {
 	# 	return 0
 	# fi
 
-	time_command bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ remove
+	curl -L "${XRAY_INSTALL_SCRIPT}" | bash -s remove
 	time_command rm -rf "${XRAY_CONF_PATH}"*
 }
 
@@ -549,6 +549,7 @@ menu() {
 	echo "0. 退出"
 	echo 
 
+	XRAY_INSTALL_SCRIPT="https://github.com/XTLS/Xray-install/raw/main/install-release.sh"
 	XRAY_CONF_PATH="/usr/local/etc/xray"
 	NGINX_CONF_PATH="/etc/nginx"
 	NGINX_HTDOC_PATH="/usr/share/nginx/html"

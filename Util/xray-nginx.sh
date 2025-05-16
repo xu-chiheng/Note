@@ -394,7 +394,7 @@ installXray() {
 	# 	return 0
 	# fi
 
-	curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash - install
+	bash -c "echo "$@"; $(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 }
 
 uninstallXray() {
@@ -402,7 +402,7 @@ uninstallXray() {
 	# 	return 0
 	# fi
 
-	curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash - remove
+	time_command bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ remove
 	time_command rm -rf "${XRAY_CONF_PATH}"*
 }
 
@@ -510,7 +510,7 @@ outputVmessWS() {
 }
 EOF
 )
-	local link="vmess://$(echo -n "${raw}" | base64 -w 0)"
+	local link="vmess://$(echo "${raw}" | base64 -w 0)"
 
 	echo  
 	echo  

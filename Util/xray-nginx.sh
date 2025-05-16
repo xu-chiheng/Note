@@ -360,11 +360,11 @@ EOF
 }
 
 install() {
-	uninstall
+	time_command uninstall
 
 	IP="$(linux_print_ipv4_address)"
 
-	getData
+	time_command getData
 
 	CERT_FILE=~/"${DOMAIN}.pem"
 	KEY_FILE=~/"${DOMAIN}.key"
@@ -374,37 +374,37 @@ install() {
 	XPORT="$(port_number_generate)"
 	WSPATH="/$(password_generate_one)"
 
-	linux_disable_ipv6
-	linux_enable_bbr
-	linux_disable_selinux
-	linux_uninstall_firewall
-	linux_install_vps_basic_tools
+	time_command linux_disable_ipv6
+	time_command linux_enable_bbr
+	time_command linux_disable_selinux
+	time_command linux_uninstall_firewall
+	time_command linux_install_vps_basic_tools
 
-	getCert
+	time_command getCert
 
-	installNginx
-	configNginx
-	linux_start_and_enable_service nginx
+	time_command installNginx
+	time_command configNginx
+	time_command linux_start_and_enable_service nginx
 
-	installXray
-	configXray
-	linux_start_and_enable_service xray
+	time_command installXray
+	time_command configXray
+	time_command linux_start_and_enable_service xray
 
-	outputVmessWS
+	time_command outputVmessWS
 
 	reboot
 }
 
 uninstall() {
-	linux_stop_and_disable_service nginx
-	# uninstallNginx
+	time_command linux_stop_and_disable_service nginx
+	# time_command uninstallNginx
 
-	linux_stop_and_disable_service xray
-	# uninstallXray
+	time_command linux_stop_and_disable_service xray
+	# time_command uninstallXray
 
-	rm -rf ~/*.pem ~/*.key
-	rm -rf ~/.acme.sh
-	git reset --hard HEAD
+	time_command rm -rf ~/*.pem ~/*.key
+	time_command rm -rf ~/.acme.sh
+	time_command git reset --hard HEAD
 }
 
 outputVmessWS() {

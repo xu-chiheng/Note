@@ -394,7 +394,7 @@ installXray() {
 	# 	return 0
 	# fi
 
-	time_command bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+	curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash - install
 }
 
 uninstallXray() {
@@ -402,7 +402,7 @@ uninstallXray() {
 	# 	return 0
 	# fi
 
-	time_command bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ remove
+	curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash - remove
 	time_command rm -rf "${XRAY_CONF_PATH}"*
 }
 

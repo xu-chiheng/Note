@@ -424,12 +424,11 @@ install() {
 	time_command linux_uninstall_firewall
 	time_command linux_install_vps_basic_tools
 
+	time_command getCert
+
 	time_command installNginx
 	time_command configNginx
 	time_command linux_start_and_enable_service nginx
-
-	# 必须在安装Nginx之后
-	time_command getCert
 
 	time_command installXray
 	time_command configXray

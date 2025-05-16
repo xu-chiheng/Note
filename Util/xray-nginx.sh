@@ -494,7 +494,7 @@ uninstall() {
 }
 
 outputVmessWS() {
-	local raw=$(cat <<EOF
+	local link="vmess://$(base64 -w0 <<EOF
 {
   "v": "2",
   "ps": "",
@@ -509,8 +509,7 @@ outputVmessWS() {
   "tls": "tls"
 }
 EOF
-)
-	local link="vmess://$(echo "${raw}" | base64 -w 0)"
+)"
 
 	echo  
 	echo  

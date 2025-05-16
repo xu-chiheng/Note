@@ -263,6 +263,7 @@ EOF
 			--reloadcmd "systemctl reload nginx"; then
 			# 忽略这个错误
 			# nginx.service is not active, cannot reload.
+			true
 		fi
 	fi
 

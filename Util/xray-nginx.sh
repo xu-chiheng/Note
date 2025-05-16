@@ -229,28 +229,26 @@ getCert() {
 	source ~/.bashrc
 	~/.acme.sh/acme.sh --upgrade --auto-upgrade
 	~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
-	cat >~/.acme.sh/myhook.sh <<EOF
-#!/usr/bin/env bash
+	cat >~/.acme.sh/acme_renew.sh <<EOF
+#!/bin/bash
 
-pre_hook() {
-  echo "[HOOK] Stopping NGINX before renewal..."
-  systemctl stop nginx
-}
+# 停止 Nginx
+systemctl stop nginx
 
-post_hook() {
-  echo "[HOOK] Starting NGINX after renewal..."
-  systemctl start nginx
-}
+# 执行证书续期
+~/.acme.sh/acme.sh --cron --home ~/.acme.sh
+
+# 启动 Nginx
+systemctl start nginx
 EOF
-	chmod +x ~/.acme.sh/myhook.sh
-
+	chmod +x ~/.acme.sh/acme_renew.sh
+	( crontab -l ; echo '0 0 * * * sh -c "bash ~/.acme.sh/acme_renew.sh > /dev/null 2>&1"' ) | crontab -
 	# example.com  a.example.com  b.example.com
 	# --issue -d "${DOMAIN}" -d '*'"${DOMAIN}" 
 	# DNS @ record(@ for root)
 	# 对于一个域名example.com的所有下级域名a.example.com  b.example.com都在一个IP上的网站可能有用，但是对于翻墙梯子没有用
 	if ! [ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]; then
-		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone \
-		--pre-hook  ~/.acme.sh/myhook.sh
+		~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone
 	fi
 
 	rm -rf "${CERT_FILE}" "${KEY_FILE}"
@@ -264,6 +262,14 @@ EOF
 		echo " 获取证书失败，请到 Github Issues 反馈"
 		exit 1
 	fi
+}
+
+putCert() {
+	time_command ~/.acme.sh/acme.sh --uninstall
+	time_command rm -rf ~/{.acme.sh,*.{crt,key}}
+	echo "删除crontab中的acme_renew.sh项"
+	crontab -l 2>/dev/null | grep -v 'acme_renew.sh' | crontab -
+	time_command crontab -l
 }
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
@@ -467,8 +473,7 @@ uninstall() {
 	time_command linux_stop_and_disable_service xray
 	# time_command uninstallXray
 
-	time_command ~/.acme.sh/acme.sh --uninstall
-	time_command rm -rf ~/{.acme.sh,*.{crt,key}}
+	time_command putCert
 	time_command git reset --hard HEAD
 }
 

@@ -242,7 +242,6 @@ systemctl stop nginx
 systemctl start nginx
 EOF
 	chmod +x ~/.acme.sh/acme_renew.sh
-	( crontab -l ; echo '0 0 * * * sh -c "bash ~/.acme.sh/acme_renew.sh > /dev/null 2>&1"' ) | crontab -
 	# example.com  a.example.com  b.example.com
 	# --issue -d "${DOMAIN}" -d '*'"${DOMAIN}" 
 	# DNS @ record(@ for root)
@@ -262,6 +261,11 @@ EOF
 		echo " 获取证书失败，请到 Github Issues 反馈"
 		exit 1
 	fi
+
+	echo "增加crontab中的acme_renew.sh项，并删除acme.sh --cron项"
+	crontab -l 2>/dev/null | grep -v 'acme.sh --cron' | crontab -
+	( crontab -l 2>/dev/null; echo '0 0 * * * sh -c "bash ~/.acme.sh/acme_renew.sh >/dev/null 2>&1"' ) | crontab -
+	time_command crontab -l
 }
 
 putCert() {

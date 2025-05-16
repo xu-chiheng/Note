@@ -153,7 +153,6 @@ how_to_use_this_script() {
 	# 12. 卸载Xray
 }
 
-
 getData() {
 	echo
 	echo " Xray一键脚本，运行之前请确认如下条件已经具备："
@@ -344,6 +343,7 @@ configNginx() {
 		echo " 无法备份或恢复Nginx配置文件"
 		exit 1
 	fi
+
 	cat >"${NGINX_HTDOC_PATH}/robots.txt" <<EOF
 User-Agent: *
 Disallow: /
@@ -382,7 +382,6 @@ server {
   }
 }
 EOF
-
 }
 
 # https://github.com/XTLS/Xray-install

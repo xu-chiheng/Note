@@ -224,9 +224,11 @@ getCert() {
 	# rm -rf ~/.acme.sh
 	# git clone https://github.com/acmesh-official/acme.sh.git ~/.acme.sh
 	# ~/.acme.sh/acme.sh --install
-	source ~/.bashrc
-	~/.acme.sh/acme.sh --upgrade --auto-upgrade
-	~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
+
+	# source ~/.bashrc
+
+	time_command ~/.acme.sh/acme.sh --upgrade --auto-upgrade
+	time_command ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 	cat >~/.acme.sh/acme_renew.sh <<EOF
 #!/bin/bash
 

@@ -402,8 +402,7 @@ uninstall() {
 	time_command linux_stop_and_disable_service xray
 	# time_command uninstallXray
 
-	time_command rm -rf ~/*.pem ~/*.key
-	time_command rm -rf ~/.acme.sh
+	time_command rm -rf ~/{.acme.sh,*.{pem,key}}
 	time_command git reset --hard HEAD
 }
 

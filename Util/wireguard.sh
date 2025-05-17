@@ -80,7 +80,8 @@ install() {
 
 
 	linux_uninstall_firewall
-	linux_install_vps_basic_tools
+	linux_install_server_tools
+	linux_configure_sshd_keepalive
 	linux_enable_ip_forward
 	install_wireguard
 

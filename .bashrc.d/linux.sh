@@ -37,7 +37,7 @@ linux_uninstall_firewall() {
 	fi
 }
 
-linux_install_vps_basic_tools() {
+linux_install_server_tools() {
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
 		apt install -y tar socat openssl iproute2
@@ -48,6 +48,16 @@ linux_install_vps_basic_tools() {
 		# Arch Linux, Manjaro, Parabola
 		pacman -Syu tar socat openssl iproute
 	fi
+}
+
+linux_configure_sshd_keepalive() {
+	local sshd_config="/etc/ssh/sshd_config"
+	sed -i -E -e '/^\s*(ClientAliveInterval|ClientAliveCountMax)\s+.*$/d' "${sshd_config}"
+	cat >>"${sshd_config}" <<EOF
+ClientAliveInterval 60
+ClientAliveCountMax 3
+EOF
+	systemctl restart sshd
 }
 
 linux_start_and_enable_service() {
@@ -87,8 +97,10 @@ linux_sysctl_one_line() {
 	local variable="$1"
 	local value="$2"
 
-	sed -i -e "/${variable}/d" /etc/sysctl.conf
-	echo "${variable} = ${value}" >> /etc/sysctl.conf
+	local sysctl_config="/etc/sysctl.conf"
+
+	sed -i -E -e "/^\s*${variable}\s*=.*$/d" "${sysctl_config}"
+	echo "${variable} = ${value}" >>"${sysctl_config}"
 	sysctl -w "${variable}=${value}"
 }
 

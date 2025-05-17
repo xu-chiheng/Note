@@ -279,12 +279,6 @@ fix_system_quirks_one_time() {
 
 		# ssh uses wrong home directory in Cygwin - Server Fault
 		# https://serverfault.com/questions/95750/ssh-uses-wrong-home-directory-in-cygwin
-		# If your $HOME variable is set, but ssh isn't recognizing it, put this line in /etc/nsswitch.conf:
-		# db_home: /cygdrive/e/Note
-		# That will set the Cygwin home directory without requiring an /etc/passwd file to exist.
-		# https://cygwin.com/cygwin-ug-net/ntsec.html#ntsec-mapping-nsswitch
-		# sed -i -e s,'^.*\(# \)\?\(db_home:  \).*$','\2'"$HOME",g /etc/nsswitch.conf
-		# cat /etc/nsswitch.conf
 
 		# https://linux.die.net/man/1/readlink
 		# https://www.geeksforgeeks.org/readlink-command-in-linux-with-examples/
@@ -466,7 +460,7 @@ iconv_text_files_to_UTF-8_in_current_dir() {
 		echo "no from encoding"
 		return 1
 	fi
-	if iconv -l | grep "${from_encoding}"; then
+	if iconv -l | grep -E "${from_encoding}"; then
 		true
 	else
 		echo "unsupported from encoding : ${from_encoding}"

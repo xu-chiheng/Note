@@ -79,7 +79,7 @@ git_branch_delete_all_test_branches() {
 		git branch | grep -E '^  test' | xargs git branch -D
 	else
 		# remote branches
-		git branch -r | grep "${remote}/test" | xargs -I {} git push origin --delete {}
+		git branch -r | grep -E "${remote}/test" | xargs -I {} git push origin --delete {}
 	fi
 }
 
@@ -135,29 +135,6 @@ git_branch_delete_test_range_downstream() {
 	git_branch_delete_test_range "${first}" "${last}" "downstream"
 }
 
-# git_clone_domain_user_repos https://github.com xu-chiheng Note/main/Note
-# git_clone_domain_user_repos() {
-# 	local domain="$1"
-# 	local user="$2"
-# 	shift 2
-# 	local repo_branch_dir_array=( "$@" )
-
-# 	for repo_branch_dir in "${repo_branch_dir_array[@]}"; do
-# 		local repo_branch="$(dirname "${repo_branch_dir}")"
-# 		local repo="$(dirname "${repo_branch}")"
-# 		local branch="$(basename "${repo_branch}")"
-# 		local dir="$(basename "${repo_branch_dir}")"
-
-# 		echo_command rm -rf "${dir}" \
-# 		&& echo_command git clone "${domain}/${user}/${repo}" "${dir}" \
-# 		&& { echo_command pushd "${dir}" \
-# 			&& echo_command git checkout "${branch}" \
-# 			&& echo_command git_update_git-tools  \
-# 			&& echo_command bash -i '~git-tools~'/common/backup.sh no_gc backup_to_upper_directory \
-# 			&& echo_command popd;}
-# 	done
-# }
-
 git_remove_all_files() {
 	if [ ! -d .git ]; then
 		return 1
@@ -169,23 +146,12 @@ git_remove_all_files() {
 	rm -rf
 }
 
-# git_checkout_-f_cleanly() {
-# 	if [ ! -d .git ]; then
-# 		return 1
-# 	fi
-
-# 	local revision="$1"
-# 	time_command git checkout -f "${revision}" \
-# 	&& time_command git_remove_all_files \
-# 	&& time_command git reset --hard HEAD
-# }
-
 git_filemode_false() {
 	if [ ! -d .git ]; then
 		return 1
 	fi
 
-	echo_command sed -i -e 's/filemode = true/filemode = false/' .git/config
+	echo_command sed -Ei -e 's/filemode = true/filemode = false/' .git/config
 }
 
 git_filemode_true() {
@@ -193,7 +159,7 @@ git_filemode_true() {
 		return 1
 	fi
 
-	echo_command sed -i -e 's/filemode = false/filemode = true/' .git/config
+	echo_command sed -Ei -e 's/filemode = false/filemode = true/' .git/config
 }
 
 git_fsck() {
@@ -231,7 +197,7 @@ git_print_remote_branch_tag() {
 	git remote -v
 	echo
 	echo "branches :"
-	echo_multi_line $(git branch -a | sed -e 's/^* /  /' | sed -e 's/^  //')
+	echo_multi_line $(git branch -a | sed -E -e 's/^[ \*] //')
 	echo
 	echo "tags :"
 	echo_multi_line $(git tag -l)
@@ -276,7 +242,7 @@ git_truncate() {
 	&& echo_command git checkout --orphan temp "${first_commit}" \
 	&& echo_command git commit -m "Truncated history" \
 	&& echo_command git rebase --onto temp "${first_commit}" "${last_commit}" \
-	&& echo_command git branch -D $(git branch --list | grep -E '^  ' | grep -v -E '^  temp$') \
+	&& echo_command git branch -D $(git branch --list | grep -E '^  ' | grep -Ev '^  temp$') \
 	&& echo_command git checkout -b main \
 	&& echo_command git branch -D temp \
 	&& echo_command git_gc \
@@ -437,5 +403,5 @@ git_remote_exists() {
 	fi
 
 	local remote="$1"
-	git remote | quiet_command grep "^${remote}$"
+	git remote | quiet_command grep -E "^${remote}$"
 }

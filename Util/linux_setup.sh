@@ -101,7 +101,7 @@ set_fastest_mirror_and_update() {
 			# https://alt.os.linux.ubuntu.narkive.com/aew4nPfQ/archive-canonical-com-very-slow-mirror
 
 			backup_or_restore_file_or_dir /etc/apt \
-			&& sed /etc/apt/sources.list -i -E \
+			&& sed -Ei /etc/apt/sources.list \
 						-e 's,http://([a-z]+\.)?archive.ubuntu.com,https://mirrors.ustc.edu.cn,g' \
 						-e 's,http://security.ubuntu.com,https://mirrors.ustc.edu.cn,g' \
 						-e 's,^# (deb .+ partner)$,\1,g' \
@@ -112,7 +112,7 @@ set_fastest_mirror_and_update() {
 		Debian )
 			# https://wiki.debian.org/SourcesList
 			backup_or_restore_file_or_dir /etc/apt \
-			&& sed /etc/apt/sources.list -i -E \
+			&& sed -Ei /etc/apt/sources.list \
 						-e 's,cdrom:\[.*\](/| ),https://mirrors.ustc.edu.cn/debian\1,g' \
 						-e 's,http://deb.debian.org/debian(/| ),https://mirrors.ustc.edu.cn/debian\1,g' \
 			&& apt -y update \
@@ -130,14 +130,14 @@ set_fastest_mirror_and_update() {
 			# https://stackoverflow.com/questions/18668556/how-can-i-compare-numbers-in-bash
 			# https://tldp.org/LDP/abs/html/comparison-ops.html
 			backup_or_restore_file_or_dir /etc/yum.repos.d \
-			&& find /etc/yum.repos.d -type f -name 'fedora*' -a ! -name 'fedora-cisco*' -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -name 'fedora*' -a ! -name 'fedora-cisco*' -print0 | xargs -0 sed -Ei \
 						-e 's,^#\s*(baseurl=),\1,g' \
 						-e 's,^(metalink=),#\1,g' \
 						-e 's,http://download.example/pub/fedora/linux/,https://mirrors.ustc.edu.cn/fedora/,g' \
-			&& find /etc/yum.repos.d -type f -name 'fedora-cisco*' -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -name 'fedora-cisco*' -print0 | xargs -0 sed -Ei \
 						-e 's,^(metalink=),#\1,g' \
 						-e 's,^(enabled=)1,\10,g' \
-			&& find /etc/yum.repos.d -type f -name 'rpmfusion*' -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -name 'rpmfusion*' -print0 | xargs -0 sed -Ei \
 						-e 's,^#\s*(baseurl=),\1,g' \
 						-e 's,^(metalink=),#\1,g' \
 						-e 's,http://download1.rpmfusion.org/,https://mirrors.ustc.edu.cn/rpmfusion/,g' \
@@ -147,7 +147,7 @@ set_fastest_mirror_and_update() {
 		CentOSStream )
 			# CentOS中设置国内最快的mirror           https://mirrors.ustc.edu.cn/centos
 			backup_or_restore_file_or_dir /etc/yum.repos.d \
-			&& find /etc/yum.repos.d -type f -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -print0 | xargs -0 sed -Ei \
 						-e 's,^#\s*(baseurl=),\1,g' \
 						-e 's,^(mirrorlist=),#\1,g' \
 						-e 's,http://mirror.centos.org,https://mirrors.ustc.edu.cn,g' \
@@ -157,17 +157,17 @@ set_fastest_mirror_and_update() {
 		RockyLinux )
 			# should be similar to CentOSStream
 			backup_or_restore_file_or_dir /etc/yum.repos.d \
-			&& find /etc/yum.repos.d -type f -name 'rocky*' -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -name 'rocky*' -print0 | xargs -0 sed -Ei \
 						-e 's,^#\s*(baseurl=),\1,g' \
 						-e 's,^(mirrorlist=),#\1,g' \
 						-e 's,http://dl.rockylinux.org/$contentdir/,https://mirrors.ustc.edu.cn/rocky/,g' \
-			&& find /etc/yum.repos.d -type f -name elrepo.repo -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -name elrepo.repo -print0 | xargs -0 sed -Ei \
 						-e 's,http://elrepo.org/linux/,https://mirrors.ustc.edu.cn/elrepo/,g' \
-			&& find /etc/yum.repos.d -type f -name 'epel*' -a ! -name 'epel-cisco*' -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -name 'epel*' -a ! -name 'epel-cisco*' -print0 | xargs -0 sed -Ei \
 						-e 's,^#\s*(baseurl=),\1,g' \
 						-e 's,^(metalink=),#\1,g' \
 						-e 's,https://download.example/pub/epel/,https://mirrors.ustc.edu.cn/epel/,g' \
-			&& find /etc/yum.repos.d -type f -name 'epel-cisco*' -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -name 'epel-cisco*' -print0 | xargs -0 sed -Ei \
 						-e 's,^(metalink=),#\1,g' \
 						-e 's,^(enabled=)1,\10,g' \
 			&& dnf -y update \
@@ -176,16 +176,16 @@ set_fastest_mirror_and_update() {
 		AlmaLinux )
 			# should be similar to CentOSStream
 			backup_or_restore_file_or_dir /etc/yum.repos.d \
-			&& find /etc/yum.repos.d -type f -name 'almalinux*' -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -name 'almalinux*' -print0 | xargs -0 sed -Ei \
 						-e 's,^#\s*(baseurl=),\1,g' \
 						-e 's,^(mirrorlist=),#\1,g' \
 						-e 's,https://repo.almalinux.org/vault/,https://mirrors.cloud.tencent.com/almalinux/,g' \
 						-e 's,https://repo.almalinux.org/almalinux/,https://mirrors.cloud.tencent.com/almalinux/,g' \
-			&& find /etc/yum.repos.d -type f -name 'epel*' -a ! -name 'epel-cisco*' -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -name 'epel*' -a ! -name 'epel-cisco*' -print0 | xargs -0 sed -Ei \
 						-e 's,^#\s*(baseurl=),\1,g' \
 						-e 's,^(metalink=),#\1,g' \
 						-e 's,https://download.example/pub/epel/,https://mirrors.ustc.edu.cn/epel/,g' \
-			&& find /etc/yum.repos.d -type f -name 'epel-cisco*' -print0 | xargs -0 sed -i -E \
+			&& find /etc/yum.repos.d -type f -name 'epel-cisco*' -print0 | xargs -0 sed -Ei \
 						-e 's,^(metalink=),#\1,g' \
 						-e 's,^(enabled=)1,\10,g' \
 			&& dnf -y update \

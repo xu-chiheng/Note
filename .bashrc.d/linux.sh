@@ -52,7 +52,7 @@ linux_install_server_tools() {
 
 linux_configure_sshd_keepalive() {
 	local sshd_config="/etc/ssh/sshd_config"
-	sed -i -E -e '/^\s*(ClientAliveInterval|ClientAliveCountMax)\s+.*$/d' "${sshd_config}"
+	sed -Ei -e '/^\s*(ClientAliveInterval|ClientAliveCountMax)\s+.*$/d' "${sshd_config}"
 	cat >>"${sshd_config}" <<EOF
 ClientAliveInterval 60
 ClientAliveCountMax 3
@@ -75,12 +75,12 @@ linux_stop_and_disable_service() {
 }
 
 linux_print_default_nic() {
-	ip -4 route ls | grep default | head -1 | awk '{print $5}'
+	ip -4 route ls | grep -E default | head -1 | awk '{print $5}'
 }
 
 linux_print_ipv4_address() {
 	# curl ifconfig.me
-	ip addr show "$(linux_print_default_nic)" | grep 'inet ' | head -1 | awk '{print $2}' | sed -E -e 's,/.*$,,'
+	ip addr show "$(linux_print_default_nic)" | grep -E 'inet ' | head -1 | awk '{print $2}' | sed -E -e 's,/.*$,,'
 }
 
 # https://unix.stackexchange.com/questions/20784/how-can-i-resolve-a-hostname-to-an-ip-address-in-a-bash-script
@@ -99,7 +99,7 @@ linux_sysctl_one_line() {
 
 	local sysctl_config="/etc/sysctl.conf"
 
-	sed -i -E -e "/^\s*${variable}\s*=.*$/d" "${sysctl_config}"
+	sed -Ei -e "/^\s*${variable}\s*=.*$/d" "${sysctl_config}"
 	echo "${variable} = ${value}" >>"${sysctl_config}"
 	sysctl -w "${variable}=${value}"
 }
@@ -118,7 +118,7 @@ linux_sysctl_one_line() {
 linux_enable_bbr() {
 	linux_sysctl_one_line net.core.default_qdisc fq
 	linux_sysctl_one_line net.ipv4.tcp_congestion_control bbr
-	lsmod | grep bbr
+	lsmod | grep -E bbr
 }
 
 # https://www.techrepublic.com/article/how-to-disable-ipv6-on-linux/
@@ -128,7 +128,7 @@ linux_disable_ipv6() {
 	linux_sysctl_one_line net.ipv6.conf.all.disable_ipv6 1
 	linux_sysctl_one_line net.ipv6.conf.default.disable_ipv6 1
 	linux_sysctl_one_line net.ipv6.conf.lo.disable_ipv6 1
-	ip a | grep inet6
+	ip a | grep -E inet6
 }
 
 # Enable IP forwarding
@@ -152,8 +152,9 @@ linux_enable_ip_forward() {
 # https://docs.aws.amazon.com/linux/al2023/ug/disable-option-selinux.html
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
 linux_disable_selinux() {
-	if [ -f /etc/selinux/config ]; then
-		sed -i -E -e 's/^(SELINUX=).*$/\1disabled/g' /etc/selinux/config
+	local selinux_config="/etc/selinux/config"
+	if [ -f "${selinux_config}" ]; then
+		sed -Ei -e 's/^(SELINUX=).*$/\1disabled/g' "${selinux_config}"
 		# after reboot
 		# getenforce
 	fi

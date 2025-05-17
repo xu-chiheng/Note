@@ -248,7 +248,7 @@ EOF
 	# --issue -d "${DOMAIN}" -d '*'"${DOMAIN}" 
 	# DNS @ record(@ for root)
 	# 对于一个域名example.com的所有下级域名a.example.com  b.example.com都在一个IP上的网站可能有用，但是对于翻墙梯子没有用
-	if ! [ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]; then
+	if ! [ -f ~/.acme.sh/"${DOMAIN}_ecc"/ca.cer ]; then
 		if ! time_command ~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone; then
 			echo "获取证书失败，请到 Github Issues 反馈"
 			exit 1
@@ -262,8 +262,8 @@ EOF
 			--key-file       "${KEY_FILE}" \
 			--fullchain-file "${CERT_FILE}" \
 			--reloadcmd 'if systemctl is-active --quiet nginx; then systemctl reload nginx; fi'; then
-		echo "安装证书失败，请到 Github Issues 反馈"
-		exit 1
+			echo "安装证书失败，请到 Github Issues 反馈"
+			exit 1
 		fi
 	fi
 
@@ -466,7 +466,7 @@ install() {
 	time_command linux_uninstall_firewall
 	time_command linux_install_vps_basic_tools
 
-	# 必须在启动Nginx之前，因为 --standalone 模式会使用80端口，通过DNS验证域名
+	# 必须在启动Nginx之前，因为 --standalone 证书模式会临时使用80端口，通过HTTP协议，验证域名${DOMAIN}指向${IP}
 	time_command getCert
 
 	time_command installNginx

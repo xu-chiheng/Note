@@ -133,7 +133,7 @@ gpg_export_all_public_and_private_keys_with_ascii_armored_output_and_to_text_fil
 
 # https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
 gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pair_for_git() {
-	{ cat <<EOF
+	expect <<EOF
 # Set timeout for Expect commands (in seconds)
 set timeout 10
 
@@ -169,7 +169,6 @@ set timeout 180
 # Wait for the program to finish
 expect eof
 EOF
-} | expect 
 
 }
 
@@ -177,7 +176,7 @@ EOF
 # https://www.youtube.com/watch?v=8X4u9sca3Io
 # https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 ssh_generate_ed25519_no_password_authentication_key_pair_for_github() {
-	{ cat <<EOF
+	expect <<EOF
 # Set timeout for Expect commands (in seconds)
 set timeout 10
 
@@ -195,7 +194,6 @@ send "\r"
 # Wait for the program to finish
 expect eof
 EOF
-} | expect 
 
 }
 

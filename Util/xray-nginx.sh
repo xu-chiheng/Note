@@ -113,7 +113,15 @@
 # 这是sniffing的问题，关闭sniffing即可。
 # v2ray有一个sniffing功能，它可以检测http和tls流量中的域名并把它提取出来交给vps解析，然后把这些流量的数据包的目的地址重写为解析所得的地址。其本意是解决dns污染的问题，但因为tor连接用了一些不寻常的方式(比如域名和ip不匹配等)，所以此功能反而会使连接失败。
 
-
+# Xray 25.1.1 (Xray, Penetrates Everything.) e80ca67 (go1.23.4 windows/amd64)
+# A unified platform for anti-censorship.
+# 2025/04/10 04:32:48 [Info] infra/conf/serial: Reading config: &{Name:configTest5633101108505334439.json Format:json}
+# 2025/04/10 04:32:48 [Warning] common/errors: This feature WebSocket transport (with ALPN http/1.1, etc.) is deprecated and being migrated to XHTTP H2 & H3. Please update your config(s) according to release note and documentation before removal.
+# 2025/04/10 04:32:48 [Warning] core: Xray 25.1.1 started
+# 2025/04/10 04:32:48 [Warning] common/errors: This feature "host" in "headers" is deprecated and being migrated to independent "host". Please update your config(s) according to release note and documentation before removal.
+# 2025/04/10 04:32:48 from tcp:127.0.0.1:50192 accepted tcp:www.google.com:443 [socks10829 >> proxy]
+# 2025/04/10 04:32:50 from tcp:127.0.0.1:50195 accepted tcp:cachefly.cachefly.net:443 [socks10829 >> proxy]
+# 2025/04/10 04:32:51 from tcp:127.0.0.1:50197 accepted tcp:cachefly.cachefly.net:443 [socks10829 >> proxy]
 
 # 多个地点Ping服务器,网站测速 - 站长工具
 # https://ping.chinaz.com
@@ -139,7 +147,7 @@
 
 # VPS need to disable ipv6 ?
 
-how_to_use_this_script() {
+____how_to_use_this_script____() {
 	# VPS SSH login as root
 	cd ~
 	rm -rf .git Note .bashrc.d Util
@@ -152,6 +160,7 @@ how_to_use_this_script() {
 	# 4. 安装Xray-VMESS+WS+TLS(推荐)
 	# 12. 卸载Xray
 }
+unset -f ____how_to_use_this_script____
 
 getData() {
 	echo

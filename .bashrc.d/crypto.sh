@@ -22,7 +22,7 @@
 
 
 
-how_to_use_mailvelope_browser_extension() {
+____how_to_use_mailvelope_browser_extension____() {
 
 	# https://mailvelope.com/en
 	# https://github.com/mailvelope/mailvelope
@@ -51,6 +51,7 @@ how_to_use_mailvelope_browser_extension() {
 	# Your public OpenPGP key is now available at the following link: https://keys.mailvelope.com/pks/lookup?op=get&search=chiheng.xu@gmail.com
 
 }
+unset -f ____how_to_use_mailvelope_browser_extension____
 
 
 # locate a public key by email address

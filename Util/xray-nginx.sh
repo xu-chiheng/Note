@@ -27,9 +27,11 @@
 # Caddy
 # Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS
 # https://github.com/caddyserver/caddy
+# https://caddyserver.com
 
 # Nginx NGINX nginx
 # https://github.com/nginx/nginx
+# https://nginx.org
 
 # v2rayN
 # A V2Ray client for Windows, support Xray core and v2fly core
@@ -285,7 +287,7 @@ getData() {
 
 # 续签证书时，不需要关闭域名的Cloudflare CDN DNS代理模式，就可以通过DNS验证域名
 
-# DeepSeek-R1 使用ACME脚本如何保证自动更新SSL/TLS证书？
+# ChatGPT Claude Google Gemini       使用ACME脚本如何保证自动更新SSL/TLS证书？
 getCert() {
 	curl https://get.acme.sh | sh
 	# rm -rf ~/.acme.sh
@@ -298,7 +300,7 @@ getCert() {
 	time_command ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 
 	cat >~/.acme.sh/acme_renew.sh <<EOF
-#!/bin/bash
+#!/usr/bin/env bash
 
 # 停止 Nginx
 systemctl stop nginx
@@ -315,7 +317,13 @@ EOF
 	# --issue -d "${DOMAIN}" -d '*'"${DOMAIN}" 
 	# DNS @ record(@ for root)
 	# 对于一个域名example.com的所有下级域名a.example.com  b.example.com都在一个IP上的网站可能有用，但是对于翻墙梯子没有用
-	if ! [ -f ~/.acme.sh/"${DOMAIN}_ecc"/ca.cer ]; then
+
+	# ~/.acme.sh/example.com_ecc/
+	# ca.cer          ← CA 证书（中间证书）
+	# example.com.cer ← 你的域名证书
+	# example.com.key ← 私钥
+	# fullchain.cer   ← 完整链（你最常使用的）
+	if [ ! -f ~/.acme.sh/"${DOMAIN}_ecc"/fullchain.cer ]; then
 		if ! time_command ~/.acme.sh/acme.sh --issue -d "${DOMAIN}" --keylength ec-256 --standalone; then
 			echo "获取证书失败，请到 Github Issues 反馈"
 			exit 1
@@ -334,14 +342,12 @@ EOF
 		fi
 	fi
 
-	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ]; then
-		echo "安装证书失败，请到 Github Issues 反馈"
-		exit 1
-	fi
-
 	time_command crontab -l
 	echo "增加crontab中的acme_renew.sh项，并删除acme.sh项"
-	( crontab -l 2>/dev/null | grep -Ev 'acme.sh|acme_renew.sh'; echo '0 0 * * * sh -c "bash ~/.acme.sh/acme_renew.sh >/dev/null 2>&1"' ) | crontab -
+	{
+		crontab -l 2>/dev/null | grep -Ev 'acme.sh|acme_renew.sh'
+		echo '0 0 * * * sh -c "bash ~/.acme.sh/acme_renew.sh >/dev/null 2>&1"'
+	} | crontab -
 	time_command crontab -l
 }
 

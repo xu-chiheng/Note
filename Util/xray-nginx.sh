@@ -289,17 +289,13 @@ getData() {
 
 # ChatGPT Claude Google Gemini       使用ACME脚本如何保证自动更新SSL/TLS证书？
 getCert() {
-	curl https://get.acme.sh | sh
-	# rm -rf ~/.acme.sh
-	# git clone https://github.com/acmesh-official/acme.sh.git ~/.acme.sh
-	# ~/.acme.sh/acme.sh --install
+	if [ ! -d ~/.acme.sh ]; then
+		curl https://get.acme.sh | sh
+		# rm -rf ~/.acme.sh
+		# git clone https://github.com/acmesh-official/acme.sh.git ~/.acme.sh
+		# ~/.acme.sh/acme.sh --install
 
-	# source ~/.bashrc
-
-	time_command ~/.acme.sh/acme.sh --upgrade --auto-upgrade
-	time_command ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
-
-	cat >~/.acme.sh/acme_renew.sh <<EOF
+		cat >~/.acme.sh/acme_renew.sh <<EOF
 #!/usr/bin/env bash
 
 # 停止 Nginx
@@ -311,7 +307,11 @@ systemctl stop nginx
 # 启动 Nginx
 systemctl start nginx
 EOF
-	chmod +x ~/.acme.sh/acme_renew.sh
+		chmod +x ~/.acme.sh/acme_renew.sh
+	fi
+
+	time_command ~/.acme.sh/acme.sh --upgrade --auto-upgrade
+	time_command ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 
 	# example.com  a.example.com  b.example.com
 	# --issue -d "${DOMAIN}" -d '*'"${DOMAIN}" 
@@ -415,8 +415,8 @@ uninstallNginx() {
 }
 
 configNginx() {
-	if ! time_command backup_or_restore_file_or_dir "${NGINX_HTDOC_PATH}" \
-		|| ! time_command backup_or_restore_file_or_dir "${NGINX_CONF_PATH}"; then
+	if ! time_command backup_or_restore_file_or_dir "${NGINX_CONF_PATH}" \
+		|| ! time_command backup_or_restore_file_or_dir "${NGINX_HTDOC_PATH}"; then
 		echo "无法备份或恢复Nginx配置文件"
 		exit 1
 	fi

@@ -331,8 +331,8 @@ EOF
 	fi
 
 	# 自动续期的触发条件是证书 有效期少于 30 天，acme.sh 会自动续签并运行 --reloadcmd 里的服务重载命令。
-	if [ ! -f "${CERT_FILE}" ] || [ ! -f "${KEY_FILE}" ]; then
-		rm -rf "${CERT_FILE}" "${KEY_FILE}"
+	if [ ! -f "${KEY_FILE}" ] || [ ! -f "${CERT_FILE}" ]; then
+		rm -rf "${KEY_FILE}" "${CERT_FILE}"
 		if ! time_command ~/.acme.sh/acme.sh --install-cert -d "${DOMAIN}" --ecc \
 			--key-file       "${KEY_FILE}" \
 			--fullchain-file "${CERT_FILE}" \
@@ -525,8 +525,8 @@ install() {
 
 	time_command getData
 
-	CERT_FILE=~/"${DOMAIN}.crt"
 	KEY_FILE=~/"${DOMAIN}.key"
+	CERT_FILE=~/"${DOMAIN}.crt"
 
 	UUID="$(linux_xray_uuid_generate)"
 	PORT="$(port_number_generate)"

@@ -30,6 +30,7 @@
 # https://caddyserver.com
 
 # Nginx NGINX nginx
+# nginx ("engine x") is an HTTP web server, reverse proxy, content cache, load balancer, TCP/UDP proxy server, and mail proxy server.
 # https://github.com/nginx/nginx
 # https://nginx.org
 
@@ -290,8 +291,9 @@ getData() {
 # ChatGPT Claude Google Gemini       使用ACME脚本如何保证自动更新SSL/TLS证书？
 getCert() {
 	if [ ! -d ~/.acme.sh ]; then
+		rm -rf ~/.acme.sh
+
 		curl https://get.acme.sh | sh
-		# rm -rf ~/.acme.sh
 		# git clone https://github.com/acmesh-official/acme.sh.git ~/.acme.sh
 		# ~/.acme.sh/acme.sh --install
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env -S bash -i
 
+# This script has not been tested yet at 2025-05-19 .
 
 # https://teddysun.com/554.html
 # https://github.com/teddysun/across

@@ -57,7 +57,8 @@ linux_configure_sshd_keepalive() {
 ClientAliveInterval 60
 ClientAliveCountMax 3
 EOF
-	systemctl restart sshd
+	# wait reboot
+	# systemctl reload sshd
 }
 
 linux_start_and_enable_service() {

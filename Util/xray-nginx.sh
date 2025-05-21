@@ -355,7 +355,7 @@ EOF
 
 putCert() {
 	time_command ~/.acme.sh/acme.sh --uninstall
-	time_command rm -rf ~/{.acme.sh,*.{crt,key}}
+	time_command rm -rf ~/{.acme.sh,*.{key,crt}}
 	time_command crontab -l
 	echo "删除crontab中的acme_renew.sh项"
 	crontab -l 2>/dev/null | grep -Ev 'acme.sh|acme_renew.sh' | crontab -

@@ -107,7 +107,7 @@ patch_apply_1() {
 
 		for patch in "${patches[@]}"; do
 			echo "checking ${patch}"
-			if ! cat "${patch}" | ( cd "${dir}" && patch "${patch_options[@]}" --dry-run --quiet ) ; then
+			if ! ( cd "${dir}" && patch "${patch_options[@]}" --dry-run --quiet <"${patch}" ) ; then
 				echo "${patch} can not be applied"
 				return 1
 			fi
@@ -117,7 +117,7 @@ patch_apply_1() {
 	local failed_patches=()
 	for patch in "${patches[@]}"; do
 		echo "applying ${patch}"
-		if ! cat "${patch}" | ( cd "${dir}" && patch "${patch_options[@]}" ) ; then
+		if ! ( cd "${dir}" && patch "${patch_options[@]}" <"${patch}" ) ; then
 			echo "${patch} can not be applied"
 			failed_patches+=( "${patch}" )
 		fi

@@ -157,7 +157,6 @@ gpg_print_verifying_keyservers() {
 gpg_refresh_all_public_keys_from_keyservers() {
 	local keyserver
 	for keyserver in $(gpg_print_verifying_keyservers); do
-		# locate a public key by email address
 		echo_command gpg --keyserver "${keyserver}" --refresh-keys
 		echo
 	done
@@ -171,7 +170,6 @@ gpg_download_public_key_of_email_from_keyservers() {
 	fi
 	local keyserver
 	for keyserver in $(gpg_print_verifying_keyservers); do
-		# locate a public key by email address
 		echo_command gpg --keyserver "${keyserver}" --locate-keys "${email}"
 		echo
 	done

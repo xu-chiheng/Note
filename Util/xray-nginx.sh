@@ -437,7 +437,7 @@ server {
         return 404;
     }
     proxy_redirect off;
-    proxy_pass http://127.0.0.1:${XPORT}; # 假设WebSocket监听在环回地址的${XPORT}端口上
+    proxy_pass http://127.0.0.1:${XPORT}; # 假设Xray监听在环回地址的${XPORT}端口上
     proxy_http_version 1.1;
     proxy_set_header Upgrade \$http_upgrade;
     proxy_set_header Connection "upgrade";

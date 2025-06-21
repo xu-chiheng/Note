@@ -96,7 +96,7 @@
 # But Tor Browser require "Turn on Sniffing" to be OFF, this conflicts with Tun mode.
 # The solution is setting "Turn on Sniffing" to be OFF only when using Tor Browser.
 
-# v2rayN 7.10.5 2025-03 Settings
+# v2rayN 7.12.5 Settings
 
 # Settings --> Option Setting --> Core basic settings
 # Turn on Sniffing       ON or OFF       ON to make "Tun mode" work, OFF to make "Tor Browser" to connect, no way to let them both work.
@@ -129,10 +129,7 @@
 # 2025/04/10 04:32:50 from tcp:127.0.0.1:50195 accepted tcp:cachefly.cachefly.net:443 [socks10829 >> proxy]
 # 2025/04/10 04:32:51 from tcp:127.0.0.1:50197 accepted tcp:cachefly.cachefly.net:443 [socks10829 >> proxy]
 
-
-
-
-# ChatGPT Claude Google Gemini       Xray为什么要deprecate WebSocket ?
+# ChatGPT Claude Gemini       Xray为什么要deprecate WebSocket ?
 # Xray 核心团队计划或已经逐步弃用（deprecate）WebSocket（WS）协议，主要出于以下几个技术和现实层面的原因：
 
 # ---
@@ -288,7 +285,7 @@ getData() {
 
 # 续签证书时，不需要关闭域名的Cloudflare CDN DNS代理模式，就可以通过DNS验证域名
 
-# ChatGPT Claude Google Gemini       使用ACME脚本如何保证自动更新SSL/TLS证书？
+# ChatGPT Claude Gemini       使用ACME脚本如何保证自动更新SSL/TLS证书？
 getCert() {
 	if [ ! -d ~/.acme.sh ]; then
 		rm -rf ~/.acme.sh
@@ -364,10 +361,6 @@ putCert() {
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
 installNginx() {
-	# if quiet_command which nginx; then
-	# 	return 0
-	# fi
-
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
 		time_command apt install -y nginx
@@ -398,10 +391,6 @@ installNginx() {
 # root@server0:~#
 
 uninstallNginx() {
-	# if ! quiet_command which nginx; then
-	# 	return 0
-	# fi
-
 	if quiet_command which apt; then
 		# Debian, Ubuntu, Raspbian
 		time_command apt remove -y nginx
@@ -412,8 +401,6 @@ uninstallNginx() {
 		# Arch Linux, Manjaro, Parabola
 		time_command pacman -Rns --noconfirm nginx
 	fi
-
-	rm -rf "${NGINX_CONF_PATH}"* "${NGINX_HTDOC_PATH}"*
 }
 
 configNginx() {
@@ -450,7 +437,7 @@ server {
         return 404;
     }
     proxy_redirect off;
-    proxy_pass http://127.0.0.1:${XPORT}; # 假设WebSocket监听在环回地址的10000端口上
+    proxy_pass http://127.0.0.1:${XPORT}; # 假设WebSocket监听在环回地址的${XPORT}端口上
     proxy_http_version 1.1;
     proxy_set_header Upgrade \$http_upgrade;
     proxy_set_header Connection "upgrade";
@@ -465,20 +452,11 @@ EOF
 
 # https://github.com/XTLS/Xray-install
 installXray() {
-	# if quiet_command which xray; then
-	# 	return 0
-	# fi
-
 	curl -L "${XRAY_INSTALL_SCRIPT}" | bash -s install
 }
 
 uninstallXray() {
-	# if ! quiet_command which xray; then
-	# 	return 0
-	# fi
-
 	curl -L "${XRAY_INSTALL_SCRIPT}" | bash -s remove
-	time_command rm -rf "${XRAY_CONF_PATH}"*
 }
 
 configXray() {
@@ -492,7 +470,7 @@ configXray() {
   "inbounds": [
     {
       "port": ${XPORT},
-      "listen":"127.0.0.1",//只监听 127.0.0.1，避免除本机外的机器探测到开放了 10000 端口
+      "listen":"127.0.0.1",//只监听127.0.0.1，避免除本机外的机器探测到开放的${XPORT}端口
       "protocol": "vmess",
       "settings": {
         "clients": [

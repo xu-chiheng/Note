@@ -242,7 +242,6 @@ set_environment_variables_at_bash_startup() {
 		export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
 	fi
 
-
 	export SSH_AGENT_ENV=~/.ssh/ssh-agent-env
 	start_ssh-agent
 }

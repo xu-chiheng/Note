@@ -55,12 +55,30 @@ ____how_to_use_mailvelope_browser_extension____() {
 }
 unset -f ____how_to_use_mailvelope_browser_extension____
 
-gpg_upload_default_public_key_to_https://keys.openpgp.org() {
+gpg_upload_public_key_of_email_to_hkps://keys.mailvelope.com() {
+	local email="$1"
+	if [ -z "${email}" ]; then
+		echo "no email provided"
+		return 1
+	fi
+	# https://github.com/mailvelope/keyserver
+	# REST API   Upload new key
+	public_key=$(gpg --armor --export-options export-minimal --export "${email}")
+	json_data=$(jq -n --arg pk "${public_key}" '{ publicKeyArmored: $pk }')
+	curl -X POST "https://keys.mailvelope.com/api/v1/key" -H "Content-Type: application/json" -d "${json_data}"
+}
+
+gpg_upload_public_key_of_email_to_hkps://keys.openpgp.org() {
+	local email="$1"
+	if [ -z "${email}" ]; then
+		echo "no email provided"
+		return 1
+	fi
 	# https://keys.openpgp.org/about/usage
 	# https://keys.openpgp.org/about/faq
 	# You can upload keys using GnuPG’s --send-keys command, but identity information can’t be verified that way to make the key searchable by email address.
 	# Alternatively, try this shortcut for uploading your key:
-	gpg --export "$(git config user.email)" | curl -T - https://keys.openpgp.org
+	gpg --export "${email}" | curl -T - https://keys.openpgp.org
 	# Remember to verify your email address to ensure others can find your key when searching by email address
 	# https://keys.openpgp.org
 	# We found an entry for chiheng.xu@gmail.com.
@@ -72,7 +90,7 @@ gpg_upload_default_public_key_to_https://keys.openpgp.org() {
 	# https://keyserver.ubuntu.com/
 }
 
-gpg_download_public_key_of_email_from_key_servers() {
+gpg_upload_public_key_of_email_to_keyservers() {
 	local email="$1"
 	if [ -z "${email}" ]; then
 		echo "no email provided"
@@ -80,20 +98,28 @@ gpg_download_public_key_of_email_from_key_servers() {
 	fi
 	local keyserver
 	for keyserver in $(gpg_print_verifying_keyservers); do
-		# locate a public key by email address
-		echo_command gpg --keyserver "${keyserver}" --locate-keys "${email}"
+		echo_command gpg_upload_public_key_of_email_to_${keyserver} "${email}"
 		echo
 	done
 }
 
-gpg_search_default_public_key_on_key_servers() {
+gpg_upload_default_public_key_to_keyservers() {
+	gpg_upload_public_key_of_email_to_keyservers "$(git config user.email)"
+}
+
+gpg_search_public_key_of_email_on_keyservers() {
+	local email="$1"
+	if [ -z "${email}" ]; then
+		echo "no email provided"
+		return 1
+	fi
 	local keyserver
 	for keyserver in $(gpg_print_verifying_keyservers); do
 		expect <<EOF
 # Set timeout for Expect commands (in seconds)
 set timeout 10
 
-spawn gpg --keyserver "${keyserver}" --search "$(git config user.email)"
+spawn gpg --keyserver "${keyserver}" --search "${email}"
 
 expect "Enter number(s), N)ext, or Q)uit >"
 send "\r"
@@ -103,6 +129,10 @@ expect eof
 EOF
 		echo
 	done
+}
+
+gpg_search_default_public_key_on_keyservers() {
+	gpg_search_public_key_of_email_on_keyservers "$(git config user.email)"
 }
 
 gpg_print_verifying_keyservers() {
@@ -129,6 +159,20 @@ gpg_refresh_all_public_keys_from_keyservers() {
 	for keyserver in $(gpg_print_verifying_keyservers); do
 		# locate a public key by email address
 		echo_command gpg --keyserver "${keyserver}" --refresh-keys
+		echo
+	done
+}
+
+gpg_download_public_key_of_email_from_keyservers() {
+	local email="$1"
+	if [ -z "${email}" ]; then
+		echo "no email provided"
+		return 1
+	fi
+	local keyserver
+	for keyserver in $(gpg_print_verifying_keyservers); do
+		# locate a public key by email address
+		echo_command gpg --keyserver "${keyserver}" --locate-keys "${email}"
 		echo
 	done
 }

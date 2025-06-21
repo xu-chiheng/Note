@@ -241,6 +241,36 @@ set_environment_variables_at_bash_startup() {
 		# https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
 		export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
 	fi
+
+
+	export SSH_AGENT_ENV=~/.ssh/ssh-agent-env
+	start_ssh-agent
+}
+
+start_ssh-agent() {
+	if [ -f "${SSH_AGENT_ENV}" ]; then
+		quiet_command source "${SSH_AGENT_ENV}"
+		if ! quiet_command ps -p "${SSH_AGENT_PID}"; then
+			start_ssh-agent_0
+			quiet_command source "${SSH_AGENT_ENV}"
+		fi
+	else
+		start_ssh-agent_0
+		quiet_command source "${SSH_AGENT_ENV}"
+	fi
+
+	if [ ! -v SSH_AUTH_SOCK ] || [ ! -v SSH_AGENT_PID ] || [ ! -S "${SSH_AUTH_SOCK}" ] || ! quiet_command ps -p "${SSH_AGENT_PID}" ; then
+		# echo "Failed to start ssh-agent"
+		true
+	fi
+	# pgrep ssh-agent | wc -l
+}
+
+start_ssh-agent_0() {
+    # echo "Starting ssh-agent..."
+    ssh-agent -s >"${SSH_AGENT_ENV}"
+    chmod 600 "${SSH_AGENT_ENV}"
+    ssh-add
 }
 
 fix_system_quirks_one_time() {

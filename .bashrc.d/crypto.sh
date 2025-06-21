@@ -257,13 +257,12 @@ set timeout 180
 # Wait for the program to finish
 expect eof
 EOF
-
 }
 
 # Setting Up SSH Keys for GitHub
 # https://www.youtube.com/watch?v=8X4u9sca3Io
 # https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
-ssh_generate_ed25519_no_password_authentication_key_pair_for_github() {
+ssh_generate_ed25519_authentication_key_pair_for_github() {
 	expect <<EOF
 # Set timeout for Expect commands (in seconds)
 set timeout 10
@@ -271,18 +270,14 @@ set timeout 10
 spawn ssh-keygen -t ed25519 -C "$(git config user.email)"
 
 expect -re {Enter file in which to save the key (.*):}
-send "$(echo ~)/.ssh/github\r"
+send "$(echo ~)/.ssh/id_github\r"
 
-expect "Enter passphrase (empty for no passphrase):"
-send "\r"
-
-expect "Enter same passphrase again:"
-send "\r"
+# wait 3 minutes for typing of the password of private key
+set timeout 180
 
 # Wait for the program to finish
 expect eof
 EOF
-
 }
 
 

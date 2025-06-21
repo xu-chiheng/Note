@@ -270,7 +270,8 @@ start_ssh-agent_0() {
     # echo "Starting ssh-agent..."
     ssh-agent -s >"${SSH_AGENT_ENV}"
     chmod 600 "${SSH_AGENT_ENV}"
-    ssh-add
+    ssh-add ~/.ssh/id_github
+	# ssh-add -l
 }
 
 fix_system_quirks_one_time() {

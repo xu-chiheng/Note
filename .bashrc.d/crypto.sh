@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 
-
 ____how_to_use_mailvelope_browser_extension____() {
 
 	# https://mailvelope.com/en
@@ -51,14 +50,12 @@ ____how_to_use_mailvelope_browser_extension____() {
 	# Email address chiheng.xu@gmail.com successfully verified
 	# Your public OpenPGP key is now available at the following link: https://keys.mailvelope.com/pks/lookup?op=get&search=chiheng.xu@gmail.com
 
+	# If using the following command, the email address will not be verified.
+	# gpg --keyserver hkps://keys.mailvelope.com --send-keys "$(gpg_print_key_id_of_email "$(git config user.email)")"
 }
 unset -f ____how_to_use_mailvelope_browser_extension____
 
-
-# locate a public key by email address
-# gpg --locate-keys user@example.com
-
-gpg_upload_default_public_key_to_key_server() {
+gpg_upload_default_public_key_to_https://keys.openpgp.org() {
 	# https://keys.openpgp.org/about/usage
 	# https://keys.openpgp.org/about/faq
 	# You can upload keys using GnuPG’s --send-keys command, but identity information can’t be verified that way to make the key searchable by email address.
@@ -70,26 +67,90 @@ gpg_upload_default_public_key_to_key_server() {
 	# https://keys.openpgp.org/vks/v1/by-fingerprint/4E928EB96C7929323551C3ACD53FA5A3E656A74C
 
 
-
 	# The following key servers does not verify email address of public key.
 	# So, can only be used to search public key by id
 	# https://keyserver.ubuntu.com/
-
 }
 
-# Hagrid
-# Hagrid is a verifying OpenPGP key server.
-# You can find general instructions and an API documentation at the running instance at https://keys.openpgp.org.
-# https://gitlab.com/keys.openpgp.org/hagrid
-
-# Mailvelope Keyserver
-# A simple OpenPGP public key server that validates email address ownership of uploaded keys.
-# https://github.com/mailvelope/keyserver
-
-
-gpg_refresh_all_public_keys_from_keyserver() {
-	gpg --refresh-keys
+gpg_download_public_key_of_email_from_key_servers() {
+	local email="$1"
+	if [ -z "${email}" ]; then
+		echo "no email provided"
+		return 1
+	fi
+	local keyserver
+	for keyserver in $(gpg_print_verifying_keyservers); do
+		# locate a public key by email address
+		echo_command gpg --keyserver "${keyserver}" --locate-keys "${email}"
+		echo
+	done
 }
+
+gpg_search_default_public_key_on_key_servers() {
+	local keyserver
+	for keyserver in $(gpg_print_verifying_keyservers); do
+		expect <<EOF
+# Set timeout for Expect commands (in seconds)
+set timeout 10
+
+spawn gpg --keyserver "${keyserver}" --search "$(git config user.email)"
+
+expect "Enter number(s), N)ext, or Q)uit >"
+send "\r"
+
+# Wait for the program to finish
+expect eof
+EOF
+		echo
+	done
+}
+
+gpg_print_verifying_keyservers() {
+	local keyservers=(
+		# Hagrid
+		# Hagrid is a verifying OpenPGP key server.
+		# You can find general instructions and an API documentation at the running instance at https://keys.openpgp.org.
+		# https://gitlab.com/keys.openpgp.org/hagrid
+		hkps://keys.openpgp.org
+
+		# Mailvelope Keyserver
+		# A simple OpenPGP public key server that validates email address ownership of uploaded keys.
+		# https://github.com/mailvelope/keyserver
+		hkps://keys.mailvelope.com
+	)
+	local keyserver
+	for keyserver in "${keyservers[@]}"; do
+		echo "${keyserver}"
+	done
+}
+
+gpg_refresh_all_public_keys_from_keyservers() {
+	local keyserver
+	for keyserver in $(gpg_print_verifying_keyservers); do
+		# locate a public key by email address
+		echo_command gpg --keyserver "${keyserver}" --refresh-keys
+		echo
+	done
+}
+
+gpg_print_key_id_of_email() {
+	local email="$1"
+	if [ -z "${email}" ]; then
+		echo "no email provided"
+		return 1
+	fi
+	gpg --list-keys --with-colons "${email}" 2>/dev/null | awk -F: '/^pub/ {print $5}'
+}
+
+gpg_print_key_fingerprint_of_email() {
+	local email="$1"
+	if [ -z "${email}" ]; then
+		echo "no email provided"
+		return 1
+	fi
+	gpg --list-keys --with-colons "${email}" 2>/dev/null | awk -F: '/^fpr:/ {print $10}'
+}
+
 
 # https://www.digitalocean.com/community/tutorials/how-to-use-gpg-to-encrypt-and-sign-messages
 # https://www.howtogeek.com/427982/how-to-encrypt-and-decrypt-files-with-gpg-on-linux/

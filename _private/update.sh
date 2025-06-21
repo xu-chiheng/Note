@@ -16,13 +16,13 @@ do_update_all_files() {
 		.bashrc
 		.bashrc.d
 
+		.ssh/{.gitignore,README.txt,config}
+		.gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf}
+
 		config.guess
 		editor.sh
 
 		__clean_or_hide.cmd
-
-		.ssh/{.gitignore,README.txt,config}
-		.gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf}
 
 		{eclipse-workspace,runtime-EclipseApplication}/{.gitignore,{clean,cygwin,backup_metadata_dir,git_add_-f_prefs_files}.cmd}
 

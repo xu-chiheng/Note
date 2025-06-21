@@ -41,7 +41,8 @@ ____how_to_use_mailvelope_browser_extension____() {
 
 
 	# GnuPG export keys
-	gpg_export_all_public_and_private_keys_with_ascii_armored_output_and_to_text_file
+	gpg_export_all_public_keys_with_ascii_armored_output_and_to_text_file
+	gpg_export_default_private_key_with_ascii_armored_output_and_to_text_file
 
 	# https://keys.mailvelope.com
 	# https://keys.mailvelope.com/manage.html
@@ -100,35 +101,19 @@ gpg_refresh_all_public_keys_from_keyserver() {
 # }
 
 gpg_export_default_public_key_with_ascii_armored_output_and_to_text_file() {
-	{
-		# export public keys
-		gpg --export -a "$(git config user.email)";
-	}  | tee keyring_default_public.asc
+	gpg --export -a "$(git config user.email)" | tee gpg_default_public_key.asc
 }
 
-gpg_export_default_public_and_private_key_with_ascii_armored_output_and_to_text_file() {
-	{
-		# export public keys
-		gpg --export -a "$(git config user.email)";
-		# export private keys
-		gpg --export-secret-keys -a "$(git config user.email)";
-	}  | tee keyring_default_public_and_private.asc
+gpg_export_default_private_key_with_ascii_armored_output_and_to_text_file() {
+	gpg --export-secret-keys -a "$(git config user.email)" | tee gpg_default_private_key.asc
 }
 
 gpg_export_all_public_keys_with_ascii_armored_output_and_to_text_file() {
-	{
-		# export public keys
-		gpg --export -a;
-	}  | tee keyring_all_public.asc
+	gpg --export -a | tee gpg_all_public_keys.asc
 }
 
-gpg_export_all_public_and_private_keys_with_ascii_armored_output_and_to_text_file() {
-	{
-		# export public keys
-		gpg --export -a;
-		# export private keys
-		gpg --export-secret-keys -a;
-	}  | tee keyring_all_public_and_private.asc
+gpg_export_all_private_keys_with_ascii_armored_output_and_to_text_file() {
+	gpg --export-secret-keys -a | tee gpg_all_private_keys.asc
 }
 
 # https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key

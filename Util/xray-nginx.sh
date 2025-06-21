@@ -237,7 +237,7 @@ getData() {
 	done
 	DOMAIN="${DOMAIN,,}"
 
-	# 在使用Cloudflare CDN DNS代理的情况下，下面的条件无法满足
+	# 在开启Cloudflare CDN DNS代理（小云朵）的情况下，下面的条件无法满足
 	# if [ "$(linux_resolve_hostname "${DOMAIN}")" != "${IP}" ]; then
 	# 	echo "伪装域名${DOMAIN}不指向${IP}"
 	# 	exit 1
@@ -432,7 +432,7 @@ server {
   ssl_prefer_server_ciphers off;
   
   server_name           ${DOMAIN};
-  location ${WSPATH} { # 与 V2Ray 配置中的 path 保持一致
+  location ${WSPATH} { # 与Xray配置中的${WSPATH}保持一致
     if (\$http_upgrade != "websocket") { # WebSocket协商失败时返回404
         return 404;
     }

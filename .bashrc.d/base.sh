@@ -249,14 +249,14 @@ set_environment_variables_at_bash_startup() {
 start_ssh-agent() {
 	if [ -f "${SSH_AGENT_ENV}" ]; then
 		quiet_command source "${SSH_AGENT_ENV}"
-		if ! quiet_command ps -p "${SSH_AGENT_PID}"; then
+		if [ ! -v SSH_AUTH_SOCK ] || [ ! -v SSH_AGENT_PID ] || [ ! -S "${SSH_AUTH_SOCK}" ] || ! quiet_command ps -p "${SSH_AGENT_PID}"; then
 			start_ssh-agent_0
 		fi
 	else
 		start_ssh-agent_0
 	fi
 
-	if [ ! -v SSH_AUTH_SOCK ] || [ ! -v SSH_AGENT_PID ] || [ ! -S "${SSH_AUTH_SOCK}" ] || ! quiet_command ps -p "${SSH_AGENT_PID}" ; then
+	if [ ! -v SSH_AUTH_SOCK ] || [ ! -v SSH_AGENT_PID ] || [ ! -S "${SSH_AUTH_SOCK}" ] || ! quiet_command ps -p "${SSH_AGENT_PID}"; then
 		# echo "Failed to start ssh-agent"
 		true
 	fi
@@ -265,11 +265,11 @@ start_ssh-agent() {
 
 start_ssh-agent_0() {
 	# echo "Starting ssh-agent..."
-	quiet_command ssh-agent -s >"${SSH_AGENT_ENV}"
+	ssh-agent -s >"${SSH_AGENT_ENV}" 2>/dev/null
 	quiet_command source "${SSH_AGENT_ENV}"
 	quiet_command chmod 600 "${SSH_AGENT_ENV}"
-	quiet_command ssh-add ~/.ssh/id_github
-	# ssh-add -l
+	# quiet_command ssh-add ~/.ssh/id_github # need password
+	# echo_command ssh-add -l
 }
 
 fix_system_quirks_one_time() {

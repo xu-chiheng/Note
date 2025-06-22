@@ -277,10 +277,9 @@ source_ssh-agent_env_script() {
 		start_ssh-agent_and_generate_and_source_env_script
 	fi
 
-	if ! ssh-agent_is_ok; then
-		# echo "Failed to start ssh-agent"
-		true
-	fi
+	# if ! ssh-agent_is_ok; then
+	# 	echo "Failed to start ssh-agent"
+	# fi
 	# pgrep ssh-agent | wc -l
 }
 

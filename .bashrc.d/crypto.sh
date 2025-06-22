@@ -57,8 +57,8 @@ unset -f ____how_to_use_mailvelope_browser_extension____
 
 gpg_upload_public_key_of_email_to_hkps://keys.mailvelope.com() {
 	local email="$1"
-	if [ -z "${email}" ]; then
-		echo "no email provided"
+	if ! email_is_valid "${email}"; then
+		echo "no valid email provided"
 		return 1
 	fi
 	# https://github.com/mailvelope/keyserver
@@ -70,8 +70,8 @@ gpg_upload_public_key_of_email_to_hkps://keys.mailvelope.com() {
 
 gpg_upload_public_key_of_email_to_hkps://keys.openpgp.org() {
 	local email="$1"
-	if [ -z "${email}" ]; then
-		echo "no email provided"
+	if ! email_is_valid "${email}"; then
+		echo "no valid email provided"
 		return 1
 	fi
 	# https://keys.openpgp.org/about/usage
@@ -92,8 +92,8 @@ gpg_upload_public_key_of_email_to_hkps://keys.openpgp.org() {
 
 gpg_upload_public_key_of_email_to_keyservers() {
 	local email="$1"
-	if [ -z "${email}" ]; then
-		echo "no email provided"
+	if ! email_is_valid "${email}"; then
+		echo "no valid email provided"
 		return 1
 	fi
 	local keyserver
@@ -109,8 +109,8 @@ gpg_upload_default_public_key_to_keyservers() {
 
 gpg_search_public_key_of_email_on_keyservers() {
 	local email="$1"
-	if [ -z "${email}" ]; then
-		echo "no email provided"
+	if ! email_is_valid "${email}"; then
+		echo "no valid email provided"
 		return 1
 	fi
 
@@ -167,8 +167,8 @@ gpg_refresh_all_public_keys_from_keyservers() {
 
 gpg_download_public_key_of_email_from_keyservers() {
 	local email="$1"
-	if [ -z "${email}" ]; then
-		echo "no email provided"
+	if ! email_is_valid "${email}"; then
+		echo "no valid email provided"
 		return 1
 	fi
 	local keyserver
@@ -190,8 +190,8 @@ gpg_list_all_private_keys() {
 
 gpg_print_key_id_of_email() {
 	local email="$1"
-	if [ -z "${email}" ]; then
-		echo "no email provided"
+	if ! email_is_valid "${email}"; then
+		echo "no valid email provided"
 		return 1
 	fi
 	gpg --list-keys --with-colons "${email}" 2>/dev/null | awk -F: '/^pub/ {print $5}'
@@ -199,8 +199,8 @@ gpg_print_key_id_of_email() {
 
 gpg_print_key_fingerprint_of_email() {
 	local email="$1"
-	if [ -z "${email}" ]; then
-		echo "no email provided"
+	if ! email_is_valid "${email}"; then
+		echo "no valid email provided"
 		return 1
 	fi
 	gpg --list-keys --with-colons "${email}" 2>/dev/null | awk -F: '/^fpr:/ {print $10}'

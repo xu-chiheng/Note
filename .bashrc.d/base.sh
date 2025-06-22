@@ -648,6 +648,15 @@ port_number_generate() {
 	shuf -i "${start}"-65535 -n 1
 }
 
+email_is_valid() {
+	local email="$1"
+	if [ ! -z "${email}" ] && [[ "$email" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ ]]; then
+		return 0  # valid
+	else
+		return 1  # invalid
+	fi
+}
+
 # google_chrome_remove_remnant_files_after_uninstall() {
 # 	rm -rf "$(cygpath -u 'C:\Program Files\Google\Chrome')"
 # 	rm -rf ~/AppData/Local/Google/Chrome

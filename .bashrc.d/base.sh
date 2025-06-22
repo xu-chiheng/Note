@@ -242,18 +242,18 @@ set_environment_variables_at_bash_startup() {
 		export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
 	fi
 
-	export SSH_AGENT_ENV=~/.ssh/ssh-agent-env
-	start_ssh-agent
+	export SSH_AGENT_ENV=~/.ssh/ssh-agent_env
+	ssh-agent_start
 }
 
-start_ssh-agent() {
+ssh-agent_start() {
 	if [ -f "${SSH_AGENT_ENV}" ]; then
 		quiet_command source "${SSH_AGENT_ENV}"
 		if ! ssh-agent_is_ok; then
-			start_ssh-agent_0
+			ssh-agent_start_0
 		fi
 	else
-		start_ssh-agent_0
+		ssh-agent_start_0
 	fi
 
 	if ! ssh-agent_is_ok; then
@@ -263,7 +263,7 @@ start_ssh-agent() {
 	# pgrep ssh-agent | wc -l
 }
 
-start_ssh-agent_0() {
+ssh-agent_start_0() {
 	# echo "Starting ssh-agent..."
 	ssh-agent -s >"${SSH_AGENT_ENV}" 2>/dev/null
 	quiet_command source "${SSH_AGENT_ENV}"

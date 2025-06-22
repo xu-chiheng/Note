@@ -242,13 +242,13 @@ set_environment_variables_at_bash_startup() {
 		export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
 	fi
 
-	export SSH_AGENT_ENV=~/.ssh/ssh-agent_env
+	export SSH_AGENT_ENV_SCRIPT=~/.ssh/ssh-agent_env.sh
 	ssh-agent_start
 }
 
 ssh-agent_start() {
-	if [ -f "${SSH_AGENT_ENV}" ]; then
-		quiet_command source "${SSH_AGENT_ENV}"
+	if [ -f "${SSH_AGENT_ENV_SCRIPT}" ]; then
+		quiet_command source "${SSH_AGENT_ENV_SCRIPT}"
 		if ! ssh-agent_is_ok; then
 			ssh-agent_start_0
 		fi
@@ -265,9 +265,9 @@ ssh-agent_start() {
 
 ssh-agent_start_0() {
 	# echo "Starting ssh-agent..."
-	ssh-agent -s >"${SSH_AGENT_ENV}" 2>/dev/null
-	quiet_command source "${SSH_AGENT_ENV}"
-	quiet_command chmod 600 "${SSH_AGENT_ENV}"
+	ssh-agent -s >"${SSH_AGENT_ENV_SCRIPT}" 2>/dev/null
+	quiet_command source "${SSH_AGENT_ENV_SCRIPT}"
+	quiet_command chmod 600 "${SSH_AGENT_ENV_SCRIPT}"
 	# quiet_command ssh-add ~/.ssh/id_github # need password
 	# echo_command ssh-add -l
 }

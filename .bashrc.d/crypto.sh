@@ -113,20 +113,23 @@ gpg_search_public_key_of_email_on_keyservers() {
 		echo "no email provided"
 		return 1
 	fi
+
 	local keyserver
 	for keyserver in $(gpg_print_verifying_keyservers); do
-		expect <<EOF
+		expect -c "
 # Set timeout for Expect commands (in seconds)
 set timeout 10
 
-spawn gpg --keyserver "${keyserver}" --search "${email}"
+# Start gpg --search with the given keyserver and email
+spawn gpg --keyserver \"${keyserver}\" --search \"${email}\"
 
-expect "Enter number(s), N)ext, or Q)uit >"
-send "\r"
+# Match the prompt asking for a selection
+expect \"Enter number(s), N)ext, or Q)uit >\"
+send \"\r\"
 
 # Wait for the program to finish
 expect eof
-EOF
+"
 		echo
 	done
 }

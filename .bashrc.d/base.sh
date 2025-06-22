@@ -116,6 +116,27 @@ print_mingw_root_dir() {
 	esac
 }
 
+print_ssh_os_of_triple() {
+	local host_triple="$1"
+	case "${host_triple}" in
+		*-msys | *-mingw* )
+			# msys-2.0.dll
+			echo "msys"
+			;;
+		*-cygwin )
+			# cygwin1.dll
+			echo "cygwin"
+			;;
+		*-linux* )
+			echo "linux"
+			;;
+		* )
+			echo "unknown host : ${host_triple}"
+			return 1
+			;;
+	esac
+}
+
 # Note : this function can't print any message, otherwise, FileZilla and WinSCP can't connect to this VPS through SFTP(FTP over SSH).
 set_environment_variables_at_bash_startup() {
 	export HOST_TRIPLE="$(print_host_triple)"
@@ -242,7 +263,7 @@ set_environment_variables_at_bash_startup() {
 		export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
 	fi
 
-	export SSH_AGENT_ENV_SCRIPT=~/.ssh/ssh-agent_env.sh
+	export SSH_AGENT_ENV_SCRIPT=~/.ssh/"ssh-agent_env_$(print_ssh_os_of_triple "${HOST_TRIPLE}").sh"
 	source_ssh-agent_env_script
 }
 

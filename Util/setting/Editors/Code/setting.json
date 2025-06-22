@@ -37,6 +37,12 @@
 	"files.associations": {
 		"*.cygport": "shellscript",
 		"PKGBUILD": "shellscript",
-		"*.sh.txt": "shellscript"
-	}
+		"*.sh.txt": "shellscript",
+		"**/.ssh/config": "properties",
+		".minttyrc": "properties",
+		".wgetrc": "properties",
+		".curlrc": "properties"
+	},
+	"explorer.confirmDelete": false,
+	"explorer.confirmDragAndDrop": false
 }

@@ -178,6 +178,16 @@ gpg_download_public_key_of_email_from_keyservers() {
 	done
 }
 
+gpg_list_all_public_keys() {
+	gpg --list-keys
+	# gpg -k
+}
+
+gpg_list_all_private_keys() {
+	gpg --list-secret-keys
+	# gpg -K
+}
+
 gpg_print_key_id_of_email() {
 	local email="$1"
 	if [ -z "${email}" ]; then

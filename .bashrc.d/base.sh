@@ -243,17 +243,17 @@ set_environment_variables_at_bash_startup() {
 	fi
 
 	export SSH_AGENT_ENV_SCRIPT=~/.ssh/ssh-agent_env.sh
-	ssh-agent_start
+	source_ssh-agent_env_script
 }
 
-ssh-agent_start() {
+source_ssh-agent_env_script() {
 	if [ -f "${SSH_AGENT_ENV_SCRIPT}" ]; then
 		quiet_command source "${SSH_AGENT_ENV_SCRIPT}"
 		if ! ssh-agent_is_ok; then
-			ssh-agent_start_0
+			start_ssh-agent_and_generate_and_source_env_script
 		fi
 	else
-		ssh-agent_start_0
+		start_ssh-agent_and_generate_and_source_env_script
 	fi
 
 	if ! ssh-agent_is_ok; then
@@ -263,7 +263,7 @@ ssh-agent_start() {
 	# pgrep ssh-agent | wc -l
 }
 
-ssh-agent_start_0() {
+start_ssh-agent_and_generate_and_source_env_script() {
 	# echo "Starting ssh-agent..."
 	ssh-agent -s >"${SSH_AGENT_ENV_SCRIPT}" 2>/dev/null
 	quiet_command source "${SSH_AGENT_ENV_SCRIPT}"

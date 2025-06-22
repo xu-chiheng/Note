@@ -147,7 +147,7 @@ gpg_print_verifying_keyservers() {
 		hkps://keys.openpgp.org
 
 		# Mailvelope Keyserver
-		# A simple OpenPGP public key server that validates email address ownership of uploaded keys.
+		# A simple OpenPGP public key server that validates email address ownership of uploaded keys. https://keys.mailvelope.com .
 		# https://github.com/mailvelope/keyserver
 		hkps://keys.mailvelope.com
 	)

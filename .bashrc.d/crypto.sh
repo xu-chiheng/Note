@@ -221,63 +221,65 @@ gpg_export_all_private_keys_with_ascii_armored_output_and_to_text_file() {
 
 # https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
 gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pair_for_git() {
-	expect <<EOF
+	expect -c "
 # Set timeout for Expect commands (in seconds)
 set timeout 10
 
 spawn gpg --full-generate-key
 
-expect "Your selection?"
-send "1\r"
+expect \"Your selection?\"
+send \"1\r\"
 
-expect "What keysize do you want? (3072)"
-send "4096\r"
+expect \"What keysize do you want? (3072)\"
+send \"4096\r\"
 
-expect "Key is valid for? (0)"
-send "\r"
+expect \"Key is valid for? (0)\"
+send \"\r\"
 
-expect "Is this correct? (y/N)"
-send "y\r"
+expect \"Is this correct? (y/N)\"
+send \"y\r\"
 
-expect "Real name:"
-send "$(git config user.name)\r"
+expect \"Real name:\"
+send \"$(git config user.name)\r\"
 
-expect "Email address:"
-send "$(git config user.email)\r"
+expect \"Email address:\"
+send \"$(git config user.email)\r\"
 
-expect "Comment:"
-send "\r"
+expect \"Comment:\"
+send \"\r\"
 
-expect "Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?"
-send "O\r"
+expect \"Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?\"
+send \"O\r\"
 
-# wait 3 minutes for typing of the password of private key
-set timeout 180
-
-# Wait for the program to finish
-expect eof
-EOF
+# Hand over remaining interaction to the user
+interact
+"
 }
 
 # Setting Up SSH Keys for GitHub
 # https://www.youtube.com/watch?v=8X4u9sca3Io
 # https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 ssh_generate_ed25519_authentication_key_pair_for_github() {
-	expect <<EOF
-# Set timeout for Expect commands (in seconds)
+	# Define the path for the SSH key file
+	local key_file=~/.ssh/id_github
+	# Remove any existing key pair with the same name
+	rm -rf "${key_file}"{,.pub}
+	# Use expect to automate the ssh-keygen prompt for the file path,
+	# then let the user manually enter the passphrase
+	expect -c "
+# Set the timeout for expect commands (in seconds)
 set timeout 10
 
-spawn ssh-keygen -t ed25519 -C "$(git config user.email)"
+# Start the ssh-keygen command with the user's Git email as a comment
+spawn ssh-keygen -t ed25519 -C \"$(git config user.email)\"
 
-expect -re {Enter file in which to save the key (.*):}
-send "$(echo ~)/.ssh/id_github\r"
+# Match the prompt asking where to save the key
+expect -re {Enter file in which to save the key.*:}
+send \"${key_file}\r\"
 
-# wait 3 minutes for typing of the password of private key
-set timeout 180
-
-# Wait for the program to finish
-expect eof
-EOF
+# Hand over remaining interaction (passphrase input) to the user
+interact
+"
 }
 
 

@@ -1,3 +1,25 @@
+# MIT License
+
+# Copyright (c) 2025 徐持恒 Xu Chiheng
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 windows_launch_browser_in_background() {
 	local command="$1"
 	if [ -z "${command}" ]; then
@@ -13,8 +35,8 @@ windows_launch_browser_in_background() {
 		"https://chat.openai.com"
 		"https://claude.ai"
 		"https://gemini.google.com"
-		"https://copilot.microsoft.com"
-		"https://meta.ai"
+		# "https://copilot.microsoft.com"
+		# "https://meta.ai"
 	)
 
 	# no proxy
@@ -76,15 +98,32 @@ windows_launch_browser_in_background() {
 		"https://www.bing.com/translator"
 	)
 
-	local args=()
 	local browser_path
 	case "${command}" in
 		tor_browser )
 			browser_path='D:\Tor Browser\Browser\firefox.exe'
-			args+=( )
 			;;
 		firefox* )
 			browser_path='C:\Program Files\Mozilla Firefox\firefox.exe'
+			;;
+		chrome* )
+			browser_path='C:\Program Files\Google\Chrome\Application\chrome.exe'
+			;;
+		edge* )
+			browser_path='C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+			;;
+		* )
+			echo "Unknown command '${command}'!"
+			return 1
+			;;
+	esac
+
+	local args=()
+	case "${command}" in
+		tor_browser )
+			args+=( )
+			;;
+		firefox* )
 			case "${command}" in
 				*private_mode* )
 					args+=( -private )
@@ -129,7 +168,6 @@ windows_launch_browser_in_background() {
 			esac
 			case "${command}" in
 				chrome* )
-					browser_path='C:\Program Files\Google\Chrome\Application\chrome.exe'
 					case "${command}" in
 						*incognito_mode* )
 							args+=( --incognito )
@@ -158,7 +196,6 @@ windows_launch_browser_in_background() {
 					esac
 					;;
 				edge* )
-					browser_path='C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
 					case "${command}" in
 						*inprivate_mode* )
 							args+=( --inprivate )

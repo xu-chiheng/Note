@@ -436,13 +436,13 @@ parallel_make() {
 }
 
 linux_terminal_execute_raw() {
-	# konsole must specify --workdir=..., otherwise, different konsole instances will interfere
 	case "${TERMINAL_EMULATOR}" in
 		konsole )
-			nohup "${TERMINAL_EMULATOR}" --nofork  --workdir="$(pwd)" -e "$@" &
+			# konsole must specify --workdir=..., otherwise, different konsole instances will interfere
+			linux_launch_program_in_background "${TERMINAL_EMULATOR}" --nofork  --workdir="$(pwd)" -e "$@"
 			;;
 		gnome-terminal )
-			nohup "${TERMINAL_EMULATOR}" --working-directory="$(pwd)" -- "$@" &
+			linux_launch_program_in_background "${TERMINAL_EMULATOR}" --working-directory="$(pwd)" -- "$@"
 			;;
 	esac
 }
@@ -616,6 +616,10 @@ windows_launch_program_in_background() {
 	local program_dir_name="$(dirname "${program_unix_path}")"
 
 	PATH="$(join_array_elements ':' "${program_dir_name}" "${PATH}")" cmd.exe /c start /B "${program_base_name}" "$@"
+}
+
+linux_launch_program_in_background() {
+	nohup "$@" >/dev/null 2>&1 &
 }
 
 print_program_dir() {

@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-windows_launch_browser_in_background() {
+launch_browser_in_background() {
 	local command="$1"
 	if [ -z "${command}" ]; then
 		command=chrome
@@ -98,25 +98,60 @@ windows_launch_browser_in_background() {
 		"https://www.bing.com/translator"
 	)
 
-	local browser_path
-	case "${command}" in
-		tor_browser )
-			browser_path='D:\Tor Browser\Browser\firefox.exe'
-			;;
-		firefox* )
-			browser_path='C:\Program Files\Mozilla Firefox\firefox.exe'
-			;;
-		chrome* )
-			browser_path='C:\Program Files\Google\Chrome\Application\chrome.exe'
-			;;
-		edge* )
-			browser_path='C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
-			;;
-		* )
-			echo "Unknown command '${command}'!"
-			return 1
-			;;
-	esac
+	local browser
+
+	if host_triple_is_windows "${HOST_TRIPLE}"; then
+		case "${command}" in
+			tor_browser )
+				browser='D:\Tor Browser\Browser\firefox.exe'
+				;;
+			firefox* )
+				browser='C:\Program Files\Mozilla Firefox\firefox.exe'
+				;;
+			chrome* )
+				browser='C:\Program Files\Google\Chrome\Application\chrome.exe'
+				;;
+			edge* )
+				browser='C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+				;;
+			* )
+				echo "Unknown command '${command}'!"
+				return 1
+				;;
+		esac
+	elif host_triple_is_linux "${HOST_TRIPLE}"; then
+		case "${command}" in
+			# tor_browser )
+			# 	browser='/mnt/work/Tor Browser/Browser/firefox'
+			# 	;;
+			firefox* )
+				if quiet_command type firefox; then
+					browser="$(which firefox)"
+				else
+					echo "no firefox"
+					return 1
+				fi
+				browser="$(which firefox)"
+				;;
+			chrome* )
+				if quiet_command type google-chrome-stable; then
+					browser="$(which google-chrome-stable)"
+				elif quiet_command type google-chrome; then
+					browser="$(which google-chrome)"
+				else
+					echo "no chrome"
+					return 1
+				fi
+				;;
+			# edge* )
+			# 	browser="$(which msedge)"
+			# 	;;
+			* )
+				echo "Unknown command '${command}'!"
+				return 1
+				;;
+		esac
+	fi
 
 	local args=()
 	case "${command}" in
@@ -227,6 +262,9 @@ windows_launch_browser_in_background() {
 			return 1
 			;;
 	esac
-
-	windows_launch_program_in_background "${browser_path}" "${args[@]}"
+	if host_triple_is_windows "${HOST_TRIPLE}"; then
+		windows_launch_program_in_background "${browser}" "${args[@]}"
+	elif host_triple_is_linux "${HOST_TRIPLE}"; then
+		linux_launch_program_in_background   "${browser}" "${args[@]}"
+	fi
 }

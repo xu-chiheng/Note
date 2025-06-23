@@ -260,7 +260,7 @@ gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pair_for_git(
 		expect \"Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?\"
 		send \"O\r\"
 
-		# Hand over remaining interaction to the user
+		# Hand over remaining interaction (input of passphrase or password of private key) to the user
 		interact
 	"
 }
@@ -286,7 +286,7 @@ ssh_generate_ed25519_authentication_key_pair_for_github() {
 		expect -re {Enter file in which to save the key.*:}
 		send \"${key_file}\r\"
 
-		# Hand over remaining interaction (passphrase input) to the user
+		# Hand over remaining interaction (input of passphrase or password of private key) to the user
 		interact
 	"
 }

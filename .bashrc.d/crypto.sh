@@ -147,7 +147,7 @@ gpg_print_verifying_keyservers() {
 
 		# The following key servers does not verify email address of public key.
 		# So, can only be used to search public key by id
-		# https://keyserver.ubuntu.com/
+		# https://keyserver.ubuntu.com
 	)
 	local keyserver
 	for keyserver in "${keyservers[@]}"; do

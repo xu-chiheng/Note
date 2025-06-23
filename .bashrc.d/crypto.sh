@@ -22,10 +22,8 @@
 
 
 ____how_to_use_mailvelope_browser_extension____() {
-
 	# https://mailvelope.com/en
 	# https://github.com/mailvelope/mailvelope
-
 
 	# Encrypting Your E-Mails Using PGP Mailvelope For Confidentiality - YouTube
 	# https://www.youtube.com/watch?v=0l1a_cwnhDU
@@ -33,11 +31,9 @@ ____how_to_use_mailvelope_browser_extension____() {
 	# Installing, configuring, and using Mailvelope - YouTube
 	# https://www.youtube.com/watch?v=Q5k8l1Bp8Xo
 
-
 	# Options --> Security --> Remember passwords for this browser session. : Yes, keep in memory for 600 minutes.
 	# Options --> Security --> Where are decrypted messages displayed?      : On the email provider's page.
 	# Options --> Gmail API --> Gmail API Integration : ON
-
 
 	# GnuPG export keys
 	gpg_export_all_public_keys_with_ascii_armored_output_and_to_text_file
@@ -83,11 +79,6 @@ gpg_upload_public_key_of_email_to_hkps://keys.openpgp.org() {
 	# https://keys.openpgp.org
 	# We found an entry for chiheng.xu@gmail.com.
 	# https://keys.openpgp.org/vks/v1/by-fingerprint/4E928EB96C7929323551C3ACD53FA5A3E656A74C
-
-
-	# The following key servers does not verify email address of public key.
-	# So, can only be used to search public key by id
-	# https://keyserver.ubuntu.com/
 }
 
 gpg_upload_public_key_of_email_to_keyservers() {
@@ -117,19 +108,22 @@ gpg_search_public_key_of_email_on_keyservers() {
 	local keyserver
 	for keyserver in $(gpg_print_verifying_keyservers); do
 		expect -c "
-# Set timeout for Expect commands (in seconds)
-set timeout 10
+			# Set timeout for Expect commands (in seconds)
+			set timeout 10
 
-# Start gpg --search with the given keyserver and email
-spawn gpg --keyserver \"${keyserver}\" --search \"${email}\"
+			# Start gpg --search with the given keyserver and email
+			spawn gpg --keyserver \"${keyserver}\" --search \"${email}\"
 
-# Match the prompt asking for a selection
-expect \"Enter number(s), N)ext, or Q)uit >\"
-send \"\r\"
-
-# Wait for the program to finish
-expect eof
-"
+			expect {
+				# Match the prompt asking for a selection
+				\"Enter number(s), N)ext, or Q)uit >\" {
+					send \"\r\"
+					exp_continue
+				}
+				# Wait for the program to finish
+				eof
+			}
+		"
 		echo
 	done
 }
@@ -150,6 +144,10 @@ gpg_print_verifying_keyservers() {
 		# A simple OpenPGP public key server that validates email address ownership of uploaded keys. https://keys.mailvelope.com .
 		# https://github.com/mailvelope/keyserver
 		hkps://keys.mailvelope.com
+
+		# The following key servers does not verify email address of public key.
+		# So, can only be used to search public key by id
+		# https://keyserver.ubuntu.com/
 	)
 	local keyserver
 	for keyserver in "${keyservers[@]}"; do
@@ -206,10 +204,8 @@ gpg_print_key_fingerprint_of_email() {
 	gpg --list-keys --with-colons "${email}" 2>/dev/null | awk -F: '/^fpr:/ {print $10}'
 }
 
-
 # https://www.digitalocean.com/community/tutorials/how-to-use-gpg-to-encrypt-and-sign-messages
 # https://www.howtogeek.com/427982/how-to-encrypt-and-decrypt-files-with-gpg-on-linux/
-
 
 # https://stackoverflow.com/questions/50332885/how-do-i-install-and-use-gpg-agent-on-windows
 # gpg_agent_start_in_background() {
@@ -235,38 +231,38 @@ gpg_export_all_private_keys_with_ascii_armored_output_and_to_text_file() {
 # https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
 gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pair_for_git() {
 	expect -c "
-# Set timeout for Expect commands (in seconds)
-set timeout 10
+		# Set timeout for Expect commands (in seconds)
+		set timeout 10
 
-spawn gpg --full-generate-key
+		spawn gpg --full-generate-key
 
-expect \"Your selection?\"
-send \"1\r\"
+		expect \"Your selection?\"
+		send \"1\r\"
 
-expect \"What keysize do you want? (3072)\"
-send \"4096\r\"
+		expect \"What keysize do you want? (3072)\"
+		send \"4096\r\"
 
-expect \"Key is valid for? (0)\"
-send \"\r\"
+		expect \"Key is valid for? (0)\"
+		send \"\r\"
 
-expect \"Is this correct? (y/N)\"
-send \"y\r\"
+		expect \"Is this correct? (y/N)\"
+		send \"y\r\"
 
-expect \"Real name:\"
-send \"$(git config user.name)\r\"
+		expect \"Real name:\"
+		send \"$(git config user.name)\r\"
 
-expect \"Email address:\"
-send \"$(git config user.email)\r\"
+		expect \"Email address:\"
+		send \"$(git config user.email)\r\"
 
-expect \"Comment:\"
-send \"\r\"
+		expect \"Comment:\"
+		send \"\r\"
 
-expect \"Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?\"
-send \"O\r\"
+		expect \"Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?\"
+		send \"O\r\"
 
-# Hand over remaining interaction to the user
-interact
-"
+		# Hand over remaining interaction to the user
+		interact
+	"
 }
 
 # Setting Up SSH Keys for GitHub
@@ -280,19 +276,19 @@ ssh_generate_ed25519_authentication_key_pair_for_github() {
 	# Use expect to automate the ssh-keygen prompt for the file path,
 	# then let the user manually enter the passphrase
 	expect -c "
-# Set the timeout for expect commands (in seconds)
-set timeout 10
+		# Set the timeout for expect commands (in seconds)
+		set timeout 10
 
-# Start the ssh-keygen command with the user's Git email as a comment
-spawn ssh-keygen -t ed25519 -C \"$(git config user.email)\"
+		# Start the ssh-keygen command with the user's Git email as a comment
+		spawn ssh-keygen -t ed25519 -C \"$(git config user.email)\"
 
-# Match the prompt asking where to save the key
-expect -re {Enter file in which to save the key.*:}
-send \"${key_file}\r\"
+		# Match the prompt asking where to save the key
+		expect -re {Enter file in which to save the key.*:}
+		send \"${key_file}\r\"
 
-# Hand over remaining interaction (passphrase input) to the user
-interact
-"
+		# Hand over remaining interaction (passphrase input) to the user
+		interact
+	"
 }
 
 

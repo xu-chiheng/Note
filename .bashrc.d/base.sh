@@ -276,10 +276,15 @@ source_ssh-agent_env_script() {
 		fi
 	fi
 
+	# echo "Killing ssh-agent..."
+	# ssh-agent -k
+
 	# echo "Starting ssh-agent..."
 	ssh-agent -s >"${ssh_agent_env_script}" 2>/dev/null
-	quiet_command source "${ssh_agent_env_script}"
 	quiet_command chmod 600 "${ssh_agent_env_script}"
+
+	quiet_command source "${ssh_agent_env_script}"
+
 	# quiet_command ssh-add ~/.ssh/id_github # need password
 	# echo_command ssh-add -l
 

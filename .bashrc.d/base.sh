@@ -263,33 +263,30 @@ set_environment_variables_at_bash_startup() {
 		export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
 	fi
 
-	export SSH_AGENT_ENV_SCRIPT=~/.ssh/"ssh-agent_env_$(print_ssh_os_of_triple "${HOST_TRIPLE}").sh"
 	source_ssh-agent_env_script
 }
 
 source_ssh-agent_env_script() {
-	if [ -f "${SSH_AGENT_ENV_SCRIPT}" ]; then
-		quiet_command source "${SSH_AGENT_ENV_SCRIPT}"
-		if ! ssh-agent_is_ok; then
-			start_ssh-agent_and_generate_and_source_env_script
+	local ssh_agent_env_script=~/.ssh/"ssh-agent_env_$(print_ssh_os_of_triple "${HOST_TRIPLE}").sh"
+
+	if [ -f "${ssh_agent_env_script}" ]; then
+		quiet_command source "${ssh_agent_env_script}"
+		if ssh-agent_is_ok; then
+			return 0
 		fi
-	else
-		start_ssh-agent_and_generate_and_source_env_script
 	fi
+
+	# echo "Starting ssh-agent..."
+	ssh-agent -s >"${ssh_agent_env_script}" 2>/dev/null
+	quiet_command source "${ssh_agent_env_script}"
+	quiet_command chmod 600 "${ssh_agent_env_script}"
+	# quiet_command ssh-add ~/.ssh/id_github # need password
+	# echo_command ssh-add -l
 
 	# if ! ssh-agent_is_ok; then
 	# 	echo "Failed to start ssh-agent"
 	# fi
 	# pgrep ssh-agent | wc -l
-}
-
-start_ssh-agent_and_generate_and_source_env_script() {
-	# echo "Starting ssh-agent..."
-	ssh-agent -s >"${SSH_AGENT_ENV_SCRIPT}" 2>/dev/null
-	quiet_command source "${SSH_AGENT_ENV_SCRIPT}"
-	quiet_command chmod 600 "${SSH_AGENT_ENV_SCRIPT}"
-	# quiet_command ssh-add ~/.ssh/id_github # need password
-	# echo_command ssh-add -l
 }
 
 ssh-agent_is_ok() {

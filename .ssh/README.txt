@@ -19,9 +19,22 @@ known_hosts: 这个文件包含了 SSH 客户端曾经连接过的远程主机�
 
 
 
+Diffie–Hellman key exchange
+ECDH (Elliptic Curve Diffie–Hellman)
+Curve25519 X25519
+Curve448 X448
 
-Edwards-curve Digital Signature Algorithm (EdDSA)
-https://en.wikipedia.org/wiki/EdDSA
+EdDSA = Edwards-Curve Digital Signature Algorithm
+Ed25519（= EdDSA over Curve25519）
+Ed448（= EdDSA over Curve448）
+
+
+Curve / Algorithm      Bit size  Use            RSA equivalent security  Common use
+--------------------------------------------------------------------------------------
+Curve25519 (X25519)    255 bits  Key exchange   ≈ RSA 3072 bits          TLS, VPNs, Signal
+Ed25519                255 bits  Signatures     ≈ RSA 3072 bits          SSH, Git, JWTs
+Curve448 (X448)        448 bits  Key exchange   ≈ RSA 7680 bits          Higher security ECDH
+Ed448                  448 bits  Signatures     ≈ RSA 7680 bits          High-assurance signatures
 
 
 

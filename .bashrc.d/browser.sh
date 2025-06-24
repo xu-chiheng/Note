@@ -35,6 +35,7 @@ launch_browser_in_background() {
 		"https://chat.openai.com"
 		"https://claude.ai"
 		"https://gemini.google.com"
+		"https://chat.deepseek.com"
 		# "https://copilot.microsoft.com"
 		# "https://meta.ai"
 	)
@@ -43,7 +44,6 @@ launch_browser_in_background() {
 	local sites_0_1=(
 		"https://www.bilibili.com"
 		"https://outlook.live.com"
-		"https://chat.deepseek.com"
 		"https://www.doubao.com/chat"
 		"https://kimi.moonshot.cn"
 		"https://tongyi.aliyun.com/qianwen"

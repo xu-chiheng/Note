@@ -683,6 +683,21 @@ email_is_valid() {
 	fi
 }
 
+windows_power_management_hibernate() {
+	rundll32 powrProf.dll,SetSuspendState
+}
+
+windows_screen_lock() {
+	rundll32 user32.dll,LockWorkStation
+}
+
+windows_time_synchonize() {
+	# need to start "Windows Time" service
+	# https://serverfault.com/questions/294787/how-do-i-force-sync-the-time-on-windows-workstation-or-server
+	net start w32time
+	w32tm /resync
+}
+
 # google_chrome_remove_remnant_files_after_uninstall() {
 # 	rm -rf "$(cygpath -u 'C:\Program Files\Google\Chrome')"
 # 	rm -rf ~/AppData/Local/Google/Chrome

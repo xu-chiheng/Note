@@ -40,29 +40,7 @@ git_backup_directory_to_all_drives() {
 	&& echo_command mv -f "${tarball}".bak "${tarball}" \
 	&& time_command sha512_calculate_file "${tarball}".gpg \
 	&& time_command sync . \
-	&& case "${HOST_TRIPLE}" in
-			*-cygwin | *-msys | *-mingw* | *-linux* )
-				set +m; time_command copy_tarball_to_all_drives "${base}" "${tarball}";
-				;;
-			*-linux* )
-				# https://unix.stackexchange.com/questions/269078/executing-a-bash-script-function-with-sudo
-				# https://serverfault.com/questions/177699/how-can-i-execute-a-bash-function-with-sudo
-
-				# https://superuser.com/questions/305933/preventing-bash-from-displaying-done-when-a-background-command-finishes-execut
-				# https://unix.stackexchange.com/questions/306673/after-a-job-in-the-background-is-done
-				# https://www.digitalocean.com/community/tutorials/how-to-use-bash-s-job-control-to-manage-foreground-and-background-processes
-				# https://stackoverflow.com/questions/44222883/run-a-shell-script-and-immediately-background-it-however-keep-the-ability-to-in
-
-				# echo_command \
-				sudo \
-				bash -c "set +m; $(declare -f print_hard_drives_mount_points); $(declare -f time_command); $(declare -f copy_tarball_to_all_drives); time_command copy_tarball_to_all_drives"' "$@" ;' - "${base}" "${tarball}"
-				# bash -i -c "set +m; time_command copy_tarball_to_all_drives"' "$@" ;' - "${base}" "${tarball}"
-				;;
-			* )
-				echo "don't know how to copy files to all drives"
-				false
-				;;
-		esac \
+	&& time_command copy_tarball_to_all_drives "${base}" "${tarball}" \
 	&& rm -rf "${tarball}"{,.gpg}{,.sha512}
 }
 

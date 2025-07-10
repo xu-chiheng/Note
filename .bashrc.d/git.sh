@@ -339,6 +339,23 @@ remove_backuped_tarballs_by_base_names() {
 	done
 }
 
+copy_tarball_to_dir() {
+	local base="$1"
+	local tarball="$2"
+	local dir="$3"
+
+	mkdir -p "${dir}" \
+	&& rm -rf "${dir}/${base}"-*.tar{,.gpg}{,.sha512} \
+	&& if [ -f "${dir}/.trusted" ]; then
+		echo "${tarball}"'{,.sha512}'"               ======> ${dir}"
+		cp "${tarball}"{,.sha512} "${dir}"
+	else
+		echo "${tarball}"'{.gpg{,.sha512},.sha512}'" ======> ${dir}"
+		cp "${tarball}"{.gpg{,.sha512},.sha512} "${dir}"
+	fi \
+	&& sync "${dir}"
+}
+
 # https://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash
 # https://www.w3schools.io/terminal/bash-extract-file-extension/
 copy_tarball_to_all_drives() {
@@ -351,6 +368,15 @@ copy_tarball_to_all_drives() {
 	local pid
 	local all_success=yes
 
+	# https://unix.stackexchange.com/questions/269078/executing-a-bash-script-function-with-sudo
+	# https://serverfault.com/questions/177699/how-can-i-execute-a-bash-function-with-sudo
+
+	# https://superuser.com/questions/305933/preventing-bash-from-displaying-done-when-a-background-command-finishes-execut
+	# https://unix.stackexchange.com/questions/306673/after-a-job-in-the-background-is-done
+	# https://www.digitalocean.com/community/tutorials/how-to-use-bash-s-job-control-to-manage-foreground-and-background-processes
+	# https://stackoverflow.com/questions/44222883/run-a-shell-script-and-immediately-background-it-however-keep-the-ability-to-in
+
+	set +m; # disable job control（monitor mode）
 	for d in \
 		$(
 			{
@@ -369,17 +395,7 @@ copy_tarball_to_all_drives() {
 		dir="${d}/Backup"
 
 		### run in background
-		mkdir -p "${dir}" \
-		&& rm -rf "${dir}/${base}"-*.tar{,.gpg}{,.sha512} \
-		&& if [ -f "${dir}/.trusted" ]; then
-			echo "${tarball}"'{,.sha512}'"               ======> ${dir}"
-			cp "${tarball}"{,.sha512} "${dir}"
-		else
-			echo "${tarball}"'{.gpg{,.sha512},.sha512}'" ======> ${dir}"
-			cp "${tarball}"{.gpg{,.sha512},.sha512} "${dir}"
-		fi \
-		&& sync "${dir}" \
-		& # run in background
+		copy_tarball_to_dir "${base}" "${tarball}" "${dir}" & # run in background
 		pids+=( $! )
 	done \
 	&& for pid in "${pids[@]}"; do

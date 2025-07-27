@@ -125,12 +125,12 @@ linux_enable_bbr() {
 # https://www.techrepublic.com/article/how-to-disable-ipv6-on-linux/
 # https://techdocs.broadcom.com/us/en/ca-enterprise-software/it-operations-management/network-flow-analysis/23-3/installing/system-recommendations-and-requirements/linux-servers/disable-ipv6-networking-on-linux-servers.html
 # https://www.geeksforgeeks.org/how-to-disable-ipv6-in-linux/
-linux_disable_ipv6() {
-	linux_sysctl_one_line net.ipv6.conf.all.disable_ipv6 1
-	linux_sysctl_one_line net.ipv6.conf.default.disable_ipv6 1
-	linux_sysctl_one_line net.ipv6.conf.lo.disable_ipv6 1
-	ip a | grep -E inet6
-}
+# linux_disable_ipv6() {
+# 	linux_sysctl_one_line net.ipv6.conf.all.disable_ipv6 1
+# 	linux_sysctl_one_line net.ipv6.conf.default.disable_ipv6 1
+# 	linux_sysctl_one_line net.ipv6.conf.lo.disable_ipv6 1
+# 	ip a | grep -E inet6
+# }
 
 # Enable IP forwarding
 linux_enable_ip_forward() {

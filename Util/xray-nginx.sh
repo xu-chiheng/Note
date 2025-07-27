@@ -203,8 +203,6 @@
 # https://www.ip123.in
 # https://whoer.net
 
-# VPS need to disable ipv6 ?
-
 ____how_to_use_this_script____() {
 	# VPS SSH login as root
 	cd ~
@@ -513,7 +511,6 @@ install() {
 	XPORT="$(port_number_generate)"
 	WSPATH="/$(password_generate_one)"
 
-	# time_command linux_disable_ipv6
 	time_command linux_enable_bbr
 	time_command linux_disable_selinux
 	time_command linux_uninstall_firewall

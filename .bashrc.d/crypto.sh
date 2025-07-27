@@ -137,11 +137,13 @@ gpg_print_verifying_keyservers() {
 		# Hagrid
 		# Hagrid is a verifying OpenPGP key server.
 		# You can find general instructions and an API documentation at the running instance at https://keys.openpgp.org.
+		# https://keys.openpgp.org
 		# https://gitlab.com/keys.openpgp.org/hagrid
 		hkps://keys.openpgp.org
 
 		# Mailvelope Keyserver
-		# A simple OpenPGP public key server that validates email address ownership of uploaded keys. https://keys.mailvelope.com .
+		# A simple OpenPGP public key server that validates email address ownership of uploaded keys.
+		# https://keys.mailvelope.com
 		# https://github.com/mailvelope/keyserver
 		hkps://keys.mailvelope.com
 

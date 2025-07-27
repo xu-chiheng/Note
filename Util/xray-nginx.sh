@@ -513,7 +513,7 @@ install() {
 	XPORT="$(port_number_generate)"
 	WSPATH="/$(password_generate_one)"
 
-	time_command linux_disable_ipv6
+	# time_command linux_disable_ipv6
 	time_command linux_enable_bbr
 	time_command linux_disable_selinux
 	time_command linux_uninstall_firewall

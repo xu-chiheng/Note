@@ -395,6 +395,11 @@ print_array_elements() {
 	done
 }
 
+# Quietly check if a command exists
+check_command_existence() {
+	quiet_command command -v "$1"
+}
+
 quiet_command() {
 	# https://stackoverflow.com/questions/18012930/how-can-i-redirect-all-output-to-dev-null
 	# https://www.digitalocean.com/community/tutorials/dev-null-in-linux

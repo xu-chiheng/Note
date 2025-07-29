@@ -25,28 +25,34 @@ linux_xray_uuid_generate() {
 }
 
 linux_uninstall_firewall() {
-	if quiet_command which apt; then
-		# Debian, Ubuntu, Raspbian
-		apt remove -y iptables firewalld ufw
-	elif quiet_command which dnf; then
-		# Fedora, RedHat, CentOS
-		dnf remove -y iptables firewalld ufw
-	elif quiet_command which pacman; then
-		# Arch Linux, Manjaro, Parabola
-		pacman -Ry iptables firewalld ufw
+	echo "Attempting to uninstall common firewall tools..."
+
+	if check_command_existence apt; then
+		apt update -qq \
+		&& apt remove -y iptables firewalld ufw nftables
+	elif check_command_existence dnf; then
+		dnf remove -y iptables firewalld ufw nftables
+	elif check_command_existence pacman; then
+		pacman -Rns --noconfirm iptables firewalld ufw nftables
+	else
+		echo "Unsupported package manager." >&2
+		return 1
 	fi
 }
 
 linux_install_server_tools() {
-	if quiet_command which apt; then
-		# Debian, Ubuntu, Raspbian
-		apt install -y tar socat openssl iproute2
-	elif quiet_command which dnf; then
-		# Fedora, RedHat, CentOS
+	echo "Installing basic server tools..."
+
+	if check_command_existence apt; then
+		apt update -qq \
+		&& apt install -y tar socat openssl iproute2
+	elif check_command_existence dnf; then
 		dnf install -y tar socat openssl iproute
-	elif quiet_command which pacman; then
-		# Arch Linux, Manjaro, Parabola
-		pacman -Syu tar socat openssl iproute
+	elif check_command_existence pacman; then
+		pacman -Syu --noconfirm tar socat openssl iproute2
+	else
+		echo "Unsupported package manager." >&2
+		return 1
 	fi
 }
 

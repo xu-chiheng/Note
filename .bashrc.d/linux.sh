@@ -64,15 +64,57 @@ EOF
 linux_start_and_enable_service() {
 	local service="$1"
 
-	systemctl start "${service}"
-	systemctl enable "${service}"
+	if systemctl is-active --quiet "${service}"; then
+		echo "${service} is already running."
+	else
+		echo "Starting ${service}..."
+		if systemctl start "${service}"; then
+			echo "Started ${service} successfully."
+		else
+			echo "Failed to start ${service}." >&2
+			return 1
+		fi
+	fi
+
+	if systemctl is-enabled --quiet "${service}"; then
+		echo "${service} is already enabled at boot."
+	else
+		echo "Enabling ${service} to start on boot..."
+		if systemctl enable "${service}"; then
+			echo "Enabled ${service} successfully."
+		else
+			echo "Failed to enable ${service}." >&2
+			return 1
+		fi
+	fi
 }
 
 linux_stop_and_disable_service() {
 	local service="$1"
 
-	systemctl stop "${service}"
-	systemctl disable "${service}"
+	if systemctl is-active --quiet "${service}"; then
+		echo "Stopping ${service}..."
+		if systemctl stop "${service}"; then
+			echo "Stopped ${service} successfully."
+		else
+			echo "Failed to stop ${service}." >&2
+			return 1
+		fi
+	else
+		echo "${service} is already stopped."
+	fi
+
+	if systemctl is-enabled --quiet "${service}"; then
+		echo "Disabling ${service} from starting on boot..."
+		if systemctl disable "${service}"; then
+			echo "Disabled ${service} successfully."
+		else
+			echo "Failed to disable ${service}." >&2
+			return 1
+		fi
+	else
+		echo "${service} is already disabled."
+	fi
 }
 
 # Function to get the default network interface

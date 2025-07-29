@@ -12,16 +12,22 @@
 
 
 install_wireguard() {
+	echo "Attempting to install WireGuard..."
 	if check_command_existence apt; then
-		# Debian, Ubuntu, Raspbian
-		apt install -y wireguard
+		echo "Detected APT-based system (Debian/Ubuntu)"
+		apt update \
+		&& apt install -y wireguard
 	elif check_command_existence dnf; then
-		# Fedora, RedHat, CentOS
+		echo "Detected DNF-based system (Fedora/RedHat/CentOS)"
 		dnf install -y wireguard-tools
 	elif check_command_existence pacman; then
-		# Arch Linux, Manjaro, Parabola
-		pacman -Syu wireguard-tools
+		echo "Detected Pacman-based system (Arch/Manjaro)"
+		pacman -Syu --noconfirm wireguard-tools
+	else
+		echo "Unsupported package manager"
+		return 1
 	fi
+	echo "WireGuard installation completed."
 }
 
 # Create server interface

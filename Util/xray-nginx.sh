@@ -366,16 +366,22 @@ putCert() {
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
 installNginx() {
+	echo "Attempting to install Nginx..."
 	if check_command_existence apt; then
-		# Debian, Ubuntu, Raspbian
-		time_command apt install -y nginx
+		echo "Detected APT-based system (Debian/Ubuntu)"
+		time_command apt update \
+		&& time_command apt install -y nginx
 	elif check_command_existence dnf; then
-		# Fedora, RedHat, CentOS
+		echo "Detected DNF-based system (Fedora/RedHat/CentOS)"
 		time_command dnf install -y nginx
 	elif check_command_existence pacman; then
-		# Arch Linux, Manjaro, Parabola
+		echo "Detected Pacman-based system (Arch/Manjaro)"
 		time_command pacman -Sy --noconfirm nginx
+	else
+		echo "Unsupported package manager"
+		return 1
 	fi
+	echo "Nginx installation completed."
 }
 
 # On Ubuntu, Nginx reinstalled after an uninstall, miss the "/etc/nginx/nginx.conf" file
@@ -396,16 +402,22 @@ installNginx() {
 # root@server0:~#
 
 uninstallNginx() {
+	echo "Attempting to uninstall Nginx..."
 	if check_command_existence apt; then
-		# Debian, Ubuntu, Raspbian
-		time_command apt remove -y nginx
+		echo "Detected APT-based system (Debian/Ubuntu)"
+		time_command apt remove -y nginx \
+		&& time_command apt autoremove -y
 	elif check_command_existence dnf; then
-		# Fedora, RedHat, CentOS
+		echo "Detected DNF-based system (Fedora/RedHat/CentOS)"
 		time_command dnf remove -y nginx
 	elif check_command_existence pacman; then
-		# Arch Linux, Manjaro, Parabola
+		echo "Detected Pacman-based system (Arch/Manjaro)"
 		time_command pacman -Rns --noconfirm nginx
+	else
+		echo "Unsupported package manager"
+		return 1
 	fi
+	echo "Nginx uninstallation completed."
 }
 
 configNginx() {

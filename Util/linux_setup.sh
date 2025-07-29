@@ -546,19 +546,21 @@ install_samba() {
 }
 
 setup() {
+	echo "Running setup..."
 	if check_command_existence apt; then
-		# Debian, Ubuntu, Raspbian
+		echo "Detected APT-based system"
 		true
-		# apt install -y lsb-release
+		# apt update && apt install -y lsb-release
 	elif check_command_existence dnf; then
-		# Fedora, RedHat, CentOS
+		echo "Detected DNF-based system"
 		if ! check_command_existence lsb_release; then
 			dnf install -y lsb_release
 		fi
 	elif check_command_existence pacman; then
-		# Arch Linux, Manjaro, Parabola
+		echo "Detected Pacman-based system"
 		true
 	else
+		echo "Unsupported package manager"
 		echo "Unkown system $(uname -a)"
 		exit 1
 	fi

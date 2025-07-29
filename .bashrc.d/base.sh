@@ -397,6 +397,7 @@ print_array_elements() {
 
 print_command_path() {
 	command -v "$1"
+	# which "$1"
 }
 
 # Quietly check if a command exists

@@ -75,20 +75,24 @@ linux_stop_and_disable_service() {
 	systemctl disable "${service}"
 }
 
+# Function to get the default network interface
 linux_print_default_nic() {
-	ip -4 route ls | grep -E default | head -1 | awk '{print $5}'
+	ip route show default | awk '{print $5}' | head -1
 }
 
+# Function to get the IPv4 address of the default network interface
 linux_print_ipv4_address() {
-	# curl ifconfig.me
-	ip addr show "$(linux_print_default_nic)" | grep -E 'inet ' | head -1 | awk '{print $2}' | sed -E -e 's,/.*$,,'
+	ip -4 addr show "$(linux_print_default_nic)" \
+		| awk '/inet / {print $2}' \
+		| cut -d/ -f1 \
+		| head -1
 }
 
 # https://unix.stackexchange.com/questions/20784/how-can-i-resolve-a-hostname-to-an-ip-address-in-a-bash-script
 # https://www.baeldung.com/linux/bash-script-resolve-hostname
 linux_resolve_hostname() {
 	local hostname="$1"
-	ping -c 1 "${hostname}" | head -1 | awk '{print $3}' | sed -E -e 's/^\(//' | sed -E -e 's/\).*$//'
+	getent ahosts "$hostname" | awk '/STREAM/ {print $1; exit}'
 }
 
 # https://phoenixnap.com/kb/sysctl

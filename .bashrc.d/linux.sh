@@ -208,11 +208,11 @@ linux_enable_ip_forward() {
 # https://www.cyberciti.biz/faq/linux-disable-firewall-command/
 # https://www.tecmint.com/start-stop-disable-enable-firewalld-iptables-firewall/
 # disable_firwall() {
-# 	if quiet_command which firewalld; then
+# 	if check_command_existence firewalld; then
 # 		linux_stop_and_disable_service firewalld
-# 	elif quiet_command which ufw; then
+# 	elif check_command_existence ufw; then
 # 		linux_stop_and_disable_service ufw
-# 	elif quiet_command which iptables; then
+# 	elif check_command_existence iptables; then
 # 		linux_stop_and_disable_service iptables
 # 	fi
 # }

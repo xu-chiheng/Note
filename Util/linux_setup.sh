@@ -546,16 +546,16 @@ install_samba() {
 }
 
 setup() {
-	if quiet_command which apt; then
+	if check_command_existence apt; then
 		# Debian, Ubuntu, Raspbian
 		true
 		# apt install -y lsb-release
-	elif quiet_command which dnf; then
+	elif check_command_existence dnf; then
 		# Fedora, RedHat, CentOS
-		if ! quiet_command which lsb_release; then
+		if ! check_command_existence lsb_release; then
 			dnf install -y lsb_release
 		fi
-	elif quiet_command which pacman; then
+	elif check_command_existence pacman; then
 		# Arch Linux, Manjaro, Parabola
 		true
 	else
@@ -563,7 +563,7 @@ setup() {
 		exit 1
 	fi
 
-	if ! quiet_command which lsb_release; then
+	if ! check_command_existence lsb_release; then
 		echo "No lsb_release command"
 		exit 1
 	fi

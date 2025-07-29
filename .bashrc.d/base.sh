@@ -245,9 +245,9 @@ set_environment_variables_at_bash_startup() {
 			*plasma* )
 				FILE_EXPLORER=dolphin
 				TERMINAL_EMULATOR=konsole
-				if quiet_command which plasma-systemmonitor; then
+				if check_command_existence plasma-systemmonitor; then
 					TASK_MANAGER=plasma-systemmonitor
-				elif quiet_command which ksysguard; then
+				elif check_command_existence ksysguard; then
 					TASK_MANAGER=ksysguard
 				else
 					# echo "KDE has no plasma-systemmonitor or ksysguard"
@@ -395,9 +395,13 @@ print_array_elements() {
 	done
 }
 
+print_command_path() {
+	command -v "$1"
+}
+
 # Quietly check if a command exists
 check_command_existence() {
-	quiet_command command -v "$1"
+	quiet_command print_command_path "$1"
 }
 
 quiet_command() {
@@ -629,7 +633,7 @@ linux_launch_program_in_background() {
 
 print_program_dir() {
 	local program="$1"
-	dirname "$(which "${program}")"
+	dirname "$(print_command_path "${program}")"
 }
 
 print_program_dir_upper_dir() {

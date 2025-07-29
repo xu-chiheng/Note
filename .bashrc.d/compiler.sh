@@ -81,7 +81,7 @@ check_compiler_existence() {
 		echo "no compiler specified"
 		return 1
 	fi
-	if ! quiet_command which "$1"; then
+	if ! check_command_existence "$1"; then
 		echo "compiler $1 can not be found"
 		return 1
 	fi

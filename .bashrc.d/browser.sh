@@ -125,26 +125,25 @@ launch_browser_in_background() {
 			# 	browser='/mnt/work/Tor Browser/Browser/firefox'
 			# 	;;
 			firefox* )
-				if quiet_command type firefox; then
-					browser="$(which firefox)"
+				if check_command_existence firefox; then
+					browser="$(print_command_path firefox)"
 				else
 					echo "no firefox"
 					return 1
 				fi
-				browser="$(which firefox)"
 				;;
 			chrome* )
-				if quiet_command type google-chrome-stable; then
-					browser="$(which google-chrome-stable)"
-				elif quiet_command type google-chrome; then
-					browser="$(which google-chrome)"
+				if check_command_existence google-chrome-stable; then
+					browser="$(print_command_path google-chrome-stable)"
+				elif check_command_existence google-chrome; then
+					browser="$(print_command_path google-chrome)"
 				else
 					echo "no chrome"
 					return 1
 				fi
 				;;
 			# edge* )
-			# 	browser="$(which msedge)"
+			# 	browser="$(print_command_path msedge)"
 			# 	;;
 			* )
 				echo "Unknown command '${command}'!"

@@ -4,4 +4,4 @@
 
 @cd ../..
 
-@start mintty.exe --exec bash -i -c 'startxwin "$(which gitk)" --all'
+@start mintty.exe --exec bash -i -c 'startxwin "$(print_command_path gitk)" --all'

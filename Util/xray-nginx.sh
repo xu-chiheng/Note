@@ -366,13 +366,13 @@ putCert() {
 
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/
 installNginx() {
-	if quiet_command which apt; then
+	if check_command_existence apt; then
 		# Debian, Ubuntu, Raspbian
 		time_command apt install -y nginx
-	elif quiet_command which dnf; then
+	elif check_command_existence dnf; then
 		# Fedora, RedHat, CentOS
 		time_command dnf install -y nginx
-	elif quiet_command which pacman; then
+	elif check_command_existence pacman; then
 		# Arch Linux, Manjaro, Parabola
 		time_command pacman -Sy --noconfirm nginx
 	fi
@@ -396,13 +396,13 @@ installNginx() {
 # root@server0:~#
 
 uninstallNginx() {
-	if quiet_command which apt; then
+	if check_command_existence apt; then
 		# Debian, Ubuntu, Raspbian
 		time_command apt remove -y nginx
-	elif quiet_command which dnf; then
+	elif check_command_existence dnf; then
 		# Fedora, RedHat, CentOS
 		time_command dnf remove -y nginx
-	elif quiet_command which pacman; then
+	elif check_command_existence pacman; then
 		# Arch Linux, Manjaro, Parabola
 		time_command pacman -Rns --noconfirm nginx
 	fi

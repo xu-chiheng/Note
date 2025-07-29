@@ -143,12 +143,27 @@ linux_resolve_hostname() {
 linux_sysctl_one_line() {
 	local variable="$1"
 	local value="$2"
-
 	local sysctl_config="/etc/sysctl.conf"
 
-	sed -Ei -e "/^\s*${variable}\s*=.*$/d" "${sysctl_config}"
-	echo "${variable} = ${value}" >>"${sysctl_config}"
-	sysctl -w "${variable}=${value}"
+	# Validate inputs
+	if [[ -z "$variable" || -z "$value" ]]; then
+		echo "Usage: linux_sysctl_one_line <variable> <value>" >&2
+		return 1
+	fi
+
+	# Remove existing line for the variable (ignoring comments)
+	sed -Ei "/^\s*${variable}\s*=.*$/d" "$sysctl_config"
+
+	# Add the new setting
+	echo "${variable} = ${value}" >> "$sysctl_config"
+
+	# Apply it immediately
+	if sysctl -w "${variable}=${value}"; then
+		echo "Set ${variable} = ${value} successfully."
+	else
+		echo "Failed to set ${variable} at runtime." >&2
+		return 1
+	fi
 }
 
 # https://teddysun.com/489.html

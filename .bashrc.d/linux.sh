@@ -78,12 +78,23 @@ linux_start_and_enable_service() {
 
 	if systemctl is-active --quiet "${service}"; then
 		echo "${service} is already running."
+		if systemctl reload "${service}"; then
+			echo "Reloaded ${service} successfully."
+		else
+			echo "Reload failed. Attempting to restart ${service}..."
+			if systemctl restart "${service}"; then
+				echo "Restarted ${service} successfully."
+			else
+				echo "Failed to restart ${service}."
+				return 1
+			fi
+		fi
 	else
 		echo "Starting ${service}..."
 		if systemctl start "${service}"; then
 			echo "Started ${service} successfully."
 		else
-			echo "Failed to start ${service}." >&2
+			echo "Failed to start ${service}."
 			return 1
 		fi
 	fi
@@ -95,7 +106,7 @@ linux_start_and_enable_service() {
 		if systemctl enable "${service}"; then
 			echo "Enabled ${service} successfully."
 		else
-			echo "Failed to enable ${service}." >&2
+			echo "Failed to enable ${service}."
 			return 1
 		fi
 	fi
@@ -109,7 +120,7 @@ linux_stop_and_disable_service() {
 		if systemctl stop "${service}"; then
 			echo "Stopped ${service} successfully."
 		else
-			echo "Failed to stop ${service}." >&2
+			echo "Failed to stop ${service}."
 			return 1
 		fi
 	else
@@ -121,7 +132,7 @@ linux_stop_and_disable_service() {
 		if systemctl disable "${service}"; then
 			echo "Disabled ${service} successfully."
 		else
-			echo "Failed to disable ${service}." >&2
+			echo "Failed to disable ${service}."
 			return 1
 		fi
 	else
@@ -159,7 +170,7 @@ linux_sysctl_one_line() {
 
 	# Validate inputs
 	if [[ -z "$variable" || -z "$value" ]]; then
-		echo "Usage: linux_sysctl_one_line <variable> <value>" >&2
+		echo "Usage: linux_sysctl_one_line <variable> <value>"
 		return 1
 	fi
 
@@ -173,7 +184,7 @@ linux_sysctl_one_line() {
 	if sysctl -w "${variable}=${value}"; then
 		echo "Set ${variable} = ${value} successfully."
 	else
-		echo "Failed to set ${variable} at runtime." >&2
+		echo "Failed to set ${variable} at runtime."
 		return 1
 	fi
 }

@@ -369,8 +369,7 @@ installNginx() {
 	echo "Attempting to install Nginx..."
 	if check_command_existence apt; then
 		echo "Detected APT-based system (Debian/Ubuntu)"
-		time_command apt update \
-		&& time_command apt install -y nginx
+		time_command apt install -y nginx
 	elif check_command_existence dnf; then
 		echo "Detected DNF-based system (Fedora/RedHat/CentOS)"
 		time_command dnf install -y nginx
@@ -405,8 +404,7 @@ uninstallNginx() {
 	echo "Attempting to uninstall Nginx..."
 	if check_command_existence apt; then
 		echo "Detected APT-based system (Debian/Ubuntu)"
-		time_command apt remove -y nginx \
-		&& time_command apt autoremove -y
+		time_command apt remove -y nginx
 	elif check_command_existence dnf; then
 		echo "Detected DNF-based system (Fedora/RedHat/CentOS)"
 		time_command dnf remove -y nginx

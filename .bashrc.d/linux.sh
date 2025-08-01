@@ -28,8 +28,7 @@ linux_uninstall_firewall() {
 	echo "Attempting to uninstall common firewall tools..."
 	if check_command_existence apt; then
 		echo "Detected APT-based system (Debian/Ubuntu)"
-		apt update -qq \
-		&& apt remove -y iptables firewalld ufw nftables
+		apt remove -y iptables firewalld ufw nftables
 	elif check_command_existence dnf; then
 		echo "Detected DNF-based system (Fedora/RHEL)"
 		dnf remove -y iptables firewalld ufw nftables
@@ -47,8 +46,7 @@ linux_install_server_tools() {
 	echo "Installing basic server tools..."
 	if check_command_existence apt; then
 		echo "Detected APT-based system (Debian/Ubuntu)"
-		apt update -qq \
-		&& apt install -y tar socat openssl iproute2
+		apt install -y tar socat openssl iproute2
 	elif check_command_existence dnf; then
 		echo "Detected DNF-based system (Fedora/RHEL)"
 		dnf install -y tar socat openssl iproute

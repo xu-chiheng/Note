@@ -426,13 +426,35 @@ time_command() {
 	fi
 }
 
+open_files_in_editor() {
+	case "${HOST_TRIPLE}" in
+		*-cygwin | *-msys | *-mingw* )
+			local translated_file_paths=()
+			local file
+			for file in "$@"; do
+				translated_file_paths+=( "$(cygpath -w "${file}")" )
+			done
+			# echo "${translated_file_paths[@]}"
+			# https://npp-user-manual.org/docs/command-prompt/
+			notepad++ -multiInst -nosession -noPlugin -alwaysOnTop "${translated_file_paths[@]}"
+			# https://code.visualstudio.com/docs/configure/command-line
+			# code --wait --new-window "${translated_file_paths[@]}"
+			;;
+		*-linux* )
+			# code --wait --new-window "$@"
+			# gedit "$@"
+			kwrite "$@"
+			;;
+	esac
+}
+
 show_command_output_in_editor() {
 	local output="$1"
 	shift 1
 
 	time_command "$@" >"${output}" 2>&1
 
-	${EDITOR} "${output}"
+	open_files_in_editor "${output}"
 
 	rm -rf "${output}"
 }

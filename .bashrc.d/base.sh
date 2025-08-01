@@ -561,6 +561,27 @@ remove_all_dirs_in_current_dir() {
 # https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
 # https://unix.stackexchange.com/questions/230673/how-to-generate-a-random-string
 password_generate_1() {
+	# How much entropy does each [:alnum:] character provide?
+	# The [:alnum:] character class includes:
+	# 26 uppercase letters (A–Z)
+	# 26 lowercase letters (a–z)
+	# 10 digits (0–9)
+	# Total: 62 possible characters.
+	# Entropy per character is calculated as:
+	# log2(62) ≈ 5.954 bits
+	# That means each alphanumeric character contributes approximately 5.95 bits of entropy.
+
+	# How many characters are needed for 512 bits of entropy?
+	# To determine the required number of characters:
+	# 512 bits / 5.954 bits ≈ 86.03
+	# So, to reach or exceed 512 bits of entropy using only alphanumeric characters, you need at least 87 characters.
+
+	# Summary Table
+	# Target Entropy    Bits per Character    Required Length
+	# 128 bits          ≈ 5.95                22 characters
+	# 256 bits          ≈ 5.95                44 characters
+	# 512 bits          ≈ 5.95                87 characters
+
 	local number="$1"
 	if [ -z "${number}" ]; then
 		number=1;
@@ -569,9 +590,6 @@ password_generate_1() {
 	if [ -z "${length}" ]; then
 		length=100;
 	fi
-	# openssl rand -help
-	# openssl rand -base64 48
-	# openssl rand -hex 64
 	tr -cd '[:alnum:]' < /dev/urandom | fold -w"${length}" | head -n"${number}"
 }
 

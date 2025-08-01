@@ -436,7 +436,7 @@ open_files_in_editor() {
 			done
 			# echo "${translated_file_paths[@]}"
 			# https://npp-user-manual.org/docs/command-prompt/
-			notepad++ -multiInst -nosession -noPlugin -alwaysOnTop "${translated_file_paths[@]}"
+			notepad++ -multiInst -nosession -noPlugin "${translated_file_paths[@]}"
 			# https://code.visualstudio.com/docs/configure/command-line
 			# code --wait --new-window "${translated_file_paths[@]}"
 			;;

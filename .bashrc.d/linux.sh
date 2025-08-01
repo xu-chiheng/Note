@@ -224,7 +224,7 @@ linux_enable_ip_forward() {
 
 # https://www.cyberciti.biz/faq/linux-disable-firewall-command/
 # https://www.tecmint.com/start-stop-disable-enable-firewalld-iptables-firewall/
-# disable_firwall() {
+# linux_disable_firwall() {
 # 	if check_command_existence firewalld; then
 # 		linux_stop_and_disable_service firewalld
 # 	elif check_command_existence ufw; then

@@ -223,12 +223,8 @@ set_environment_variables_at_bash_startup() {
 	if host_triple_is_windows "${HOST_TRIPLE}"; then
 		local dirs=(
 			'C:\Program Files\Notepad++'
-			# 'C:\Program Files\Microsoft VS Code'
-			# 'C:\Program Files\Google\Chrome\Application'
 			'C:\Program Files (x86)\UltraISO'
 			'D:\qemu'
-			# 'D:\youtube-dl'
-
 		)
 		local dirs2=()
 		local dir
@@ -564,17 +560,27 @@ remove_all_dirs_in_current_dir() {
 # https://www.geeksforgeeks.org/create-a-password-generator-using-shell-scripting/
 # https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
 # https://unix.stackexchange.com/questions/230673/how-to-generate-a-random-string
-password_generate_one() {
+password_generate_1() {
+	local number="$1"
+	if [ -z "${number}" ]; then
+		number=1;
+	fi
+	local length="$2"
+	if [ -z "${length}" ]; then
+		length=100;
+	fi
 	# openssl rand -help
 	# openssl rand -base64 48
 	# openssl rand -hex 64
-	tr -cd '[:alnum:]' < /dev/urandom | fold -w100 | head -n1
+	tr -cd '[:alnum:]' < /dev/urandom | fold -w"${length}" | head -n"${number}"
+}
+
+password_generate_one() {
+	password_generate_1
 }
 
 password_generate() {
-	for i in $(seq 1 40); do
-		password_generate_one
-	done
+	password_generate_1 100
 }
 
 # https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory
@@ -591,7 +597,8 @@ windows_clean_or_hide_home_dir_entries() {
 		ansel source .ms-ad _build .cgdb .dotnet .fltk .fvwm .ncftp .qt .source-highlight .kde4 .templateengine
 	)
 
-	echo_multi_line "dir entries to delete :" "${dir_entries_to_delete[@]}"
+	echo "dir entries to delete :"
+	echo_multi_line "${dir_entries_to_delete[@]}"
 	echo_command rm -rf "${dir_entries_to_delete[@]}"
 
 	local dir_entries_to_hide=(
@@ -600,7 +607,8 @@ windows_clean_or_hide_home_dir_entries() {
 		~shortcuts_ config.guess editor.sh github-recovery-codes.txt
 	)
 
-	echo_multi_line "dir entries to hide :" "${dir_entries_to_hide[@]}"
+	echo "dir entries to hide :"
+	echo_multi_line "${dir_entries_to_hide[@]}"
 	local dir_entry
 	for dir_entry in "${dir_entries_to_hide[@]}"; do
 		if [ -e "${dir_entry}" ]; then

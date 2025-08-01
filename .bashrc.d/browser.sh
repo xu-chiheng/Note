@@ -69,7 +69,6 @@ launch_browser_in_background() {
 	# https://www.stayonsearch.com/using-googles-gl-parameter-to-beat-geo-targeting
 
 
-
 	local sites_1=(
 		"https://www.google.com/ncr"
 		"https://www.youtube.com/?gl=US"
@@ -121,9 +120,6 @@ launch_browser_in_background() {
 		esac
 	elif host_triple_is_linux "${HOST_TRIPLE}"; then
 		case "${command}" in
-			# tor_browser )
-			# 	browser='/mnt/work/Tor Browser/Browser/firefox'
-			# 	;;
 			firefox* )
 				if check_command_existence firefox; then
 					browser="$(print_command_path firefox)"
@@ -142,9 +138,6 @@ launch_browser_in_background() {
 					return 1
 				fi
 				;;
-			# edge* )
-			# 	browser="$(print_command_path msedge)"
-			# 	;;
 			* )
 				echo "Unknown command '${command}'!"
 				return 1

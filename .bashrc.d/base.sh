@@ -222,8 +222,6 @@ set_environment_variables_at_bash_startup() {
 
 	if host_triple_is_windows "${HOST_TRIPLE}"; then
 		local dirs=(
-			'C:\Program Files\Notepad++'
-			'C:\Program Files (x86)\UltraISO'
 			'D:\qemu'
 		)
 		local dirs2=()
@@ -436,9 +434,9 @@ open_files_in_editor() {
 			done
 			# echo "${translated_file_paths[@]}"
 			# https://npp-user-manual.org/docs/command-prompt/
-			notepad++ -multiInst -nosession -noPlugin "${translated_file_paths[@]}"
+			"$(cygpath -u 'C:\Program Files\Notepad++\notepad++')" -multiInst -nosession -noPlugin "${translated_file_paths[@]}"
 			# https://code.visualstudio.com/docs/configure/command-line
-			# code --wait --new-window "${translated_file_paths[@]}"
+			# "$(cygpath -u 'C:\Program Files\Microsoft VS Code\Code.exe')" --wait --new-window "${translated_file_paths[@]}"
 			;;
 		*-linux* )
 			# code --wait --new-window "$@"

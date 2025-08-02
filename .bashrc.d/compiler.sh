@@ -232,16 +232,6 @@ show_compiler_commands_lld() {
 	show_compiler_commands "$@" -fuse-ld=lld
 }
 
-llvm-config_print() {
-	local options=( $(print_command_options llvm-config) )
-	# print_array_elements "${options[@]}"
-	local option
-	for option in "${options[@]}"; do
-		echo_command llvm-config "${option}"
-		printf "\n\n"
-	done
-}
-
 # remove the test suite directories of GCC, LLVM, and maybe others
 remove_test_suite_dirs() {
 	case "$(basename "$(pwd)")" in

@@ -223,16 +223,14 @@ set_environment_variables_at_bash_startup() {
 	if host_triple_is_windows "${HOST_TRIPLE}"; then
 		local dirs=(
 			'D:\qemu'
+			# 'D:\youtube-dl'
 		)
 		local dirs2=()
 		local dir
 		for dir in "${dirs[@]}"; do
 			dirs2+=( "$(cygpath -u "${dir}")" )
 		done
-
 		export PATH="$(join_array_elements ':' "${PATH}" "${dirs2[@]}")"
-
-		# export BROWSER=chrome
 	elif host_triple_is_linux "${HOST_TRIPLE}"; then
 		# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
 		case "${DESKTOP_SESSION}" in

@@ -14,6 +14,7 @@ open_files_in_editor() {
 			# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
 			# https://git-scm.com/book/ms/v2/Getting-Started-First-Time-Git-Setup
 			# https://npp-user-manual.org/docs/command-prompt/
+			# Can't specify -notabbar if you want to open multiple files
 			"$(cygpath -u 'C:\Program Files\Notepad++\notepad++.exe')" -multiInst -nosession -noPlugin "${translated_file_paths[@]}"
 
 			# https://stackoverflow.com/questions/30024353/how-can-i-use-visual-studio-code-as-default-editor-for-git

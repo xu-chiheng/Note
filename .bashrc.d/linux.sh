@@ -74,39 +74,11 @@ EOF
 linux_start_and_enable_service() {
 	local service="$1"
 
-	if systemctl is-active --quiet "${service}"; then
-		echo "${service} is already running."
-		if systemctl reload "${service}"; then
-			echo "Reloaded ${service} successfully."
-		else
-			echo "Reload failed. Attempting to restart ${service}..."
-			if systemctl restart "${service}"; then
-				echo "Restarted ${service} successfully."
-			else
-				echo "Failed to restart ${service}."
-				return 1
-			fi
-		fi
-	else
-		echo "Starting ${service}..."
-		if systemctl start "${service}"; then
-			echo "Started ${service} successfully."
-		else
-			echo "Failed to start ${service}."
-			return 1
-		fi
+	if ! systemctl is-active --quiet "${service}"; then
+		systemctl start "${service}"
 	fi
-
-	if systemctl is-enabled --quiet "${service}"; then
-		echo "${service} is already enabled at boot."
-	else
-		echo "Enabling ${service} to start on boot..."
-		if systemctl enable "${service}"; then
-			echo "Enabled ${service} successfully."
-		else
-			echo "Failed to enable ${service}."
-			return 1
-		fi
+	if ! systemctl is-enabled --quiet "${service}"; then
+		systemctl enable "${service}"
 	fi
 }
 
@@ -114,27 +86,10 @@ linux_stop_and_disable_service() {
 	local service="$1"
 
 	if systemctl is-active --quiet "${service}"; then
-		echo "Stopping ${service}..."
-		if systemctl stop "${service}"; then
-			echo "Stopped ${service} successfully."
-		else
-			echo "Failed to stop ${service}."
-			return 1
-		fi
-	else
-		echo "${service} is already stopped."
+		systemctl stop "${service}";
 	fi
-
 	if systemctl is-enabled --quiet "${service}"; then
-		echo "Disabling ${service} from starting on boot..."
-		if systemctl disable "${service}"; then
-			echo "Disabled ${service} successfully."
-		else
-			echo "Failed to disable ${service}."
-			return 1
-		fi
-	else
-		echo "${service} is already disabled."
+		systemctl disable "${service}"
 	fi
 }
 

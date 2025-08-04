@@ -1,6 +1,6 @@
 #!/usr/bin/env -S bash -i
 
-# Works on Debian 12, Ubuntu 24.04 LTS, Fedora 41, Almalinux 9, Rocky Linux 9 at 2025-05-15
+# Works on Debian 12, Ubuntu 24.04 LTS, Fedora 42, Almalinux 9, Rocky Linux 9 at 2025-08-05
 
 # VMess
 # https://guide.v2fly.org/basics/vmess.html

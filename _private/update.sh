@@ -58,7 +58,7 @@ do_update_all_files() {
 
 		Tool/{linux.sh,{cygwin,msys,mingw-vcrt,mingw-ucrt,vs2022_cygwin,vs2022_msys}.cmd}
 
-		Util/download/{Cygwin,MSYS2,Visual_Studio,Linux}
+		Util/download/{Cygwin,MSYS2,Visual_Studio,Linux,Windows_10_Enterprise_ISO}
 
 		Util/other/{crypto,backup}
 		Util/{linux_setup,xray-nginx,wireguard}.sh

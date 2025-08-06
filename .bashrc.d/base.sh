@@ -764,6 +764,18 @@ windows_time_synchonize() {
 	w32tm /resync
 }
 
+windows_download_executable_from_url_and_execute() {
+	local executable="$1"
+	local url="$2"
+	shift 2
+
+	echo_command rm -rf "${executable}" \
+	&& time_command curl -L -o "${executable}" "${url}" \
+	&& echo_command chmod +x "${executable}" \
+	&& time_command ./"${executable}" "$@" \
+	&& echo_command rm -rf "${executable}"
+}
+
 # google_chrome_remove_remnant_files_after_uninstall() {
 # 	rm -rf "$(cygpath -u 'C:\Program Files\Google\Chrome')"
 # 	rm -rf ~/AppData/Local/Google/Chrome

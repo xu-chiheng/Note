@@ -131,7 +131,8 @@
 # 2025/04/10 04:32:51 from tcp:127.0.0.1:50197 accepted tcp:cachefly.cachefly.net:443 [socks10829 >> proxy]
 
 
-# ChatGPT Claude Gemini       Xray为什么要deprecate WebSocket ?
+# ChatGPT/Claude/Gemini/DeepSeek
+# Xray为什么要deprecate WebSocket ?
 # Xray 核心团队计划或已经逐步弃用（deprecate）WebSocket（WS）协议，主要出于以下几个技术和现实层面的原因：
 
 # ---
@@ -290,7 +291,8 @@ getData() {
 
 # 续签证书时，不需要关闭域名的Cloudflare CDN DNS代理模式，就可以通过DNS验证域名
 
-# ChatGPT Claude Gemini       使用ACME脚本如何保证自动更新SSL/TLS证书？
+# ChatGPT/Claude/Gemini/DeepSeek
+# 使用ACME脚本如何保证自动更新SSL/TLS证书？
 getCert() {
 	if [ ! -d ~/.acme.sh ]; then
 		rm -rf ~/.acme.sh

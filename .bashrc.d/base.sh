@@ -148,8 +148,16 @@ set_environment_variables_at_bash_startup() {
 
 	case "${HOST_TRIPLE}" in
 		*-cygwin )
-			# Based on the PS1 prompt settings from MSYS2
-			export PS1="\\[\\e]0;\\w\\a\\]\\n\\[\\e[32m\\]\\u@\\h \\[\\e[35m\\]Cygwin\\[\\e[0m\\] \\[\\e[33m\\]\\w\\[\\e[0m\\]\\n\\[\\e[1m\\]#\\[\\e[0m\\] "
+			# Based on the PS1(Prompt String 1) from MSYS2
+			local _ps1_symbol
+			if [ "${USERNAME}" = Administrator ]; then
+				_ps1_symbol='\[\e[1m\]#\[\e[0m\]'
+			else
+				_ps1_symbol='\$'
+			fi
+			export PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]Cygwin\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n'"${_ps1_symbol}"' '
+			# Decode the above code
+			# ChatGPT/Claude/Gemini/DeepSeek
 			;;
 	esac
 

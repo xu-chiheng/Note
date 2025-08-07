@@ -146,6 +146,13 @@ set_environment_variables_at_bash_startup() {
 	export LC_ALL=en_US.UTF-8
 	export EDITOR=~/editor.sh
 
+	case "${HOST_TRIPLE}" in
+		*-cygwin )
+			# Based on the PS1 prompt settings from MSYS2
+			export PS1="\\[\\e]0;\\w\\a\\]\\n\\[\\e[32m\\]\\u@\\h \\[\\e[35m\\]Cygwin\\[\\e[0m\\] \\[\\e[33m\\]\\w\\[\\e[0m\\]\\n\\[\\e[1m\\]#\\[\\e[0m\\] "
+			;;
+	esac
+
 	if host_triple_is_windows "${HOST_TRIPLE}"; then
 		case "${HOST_TRIPLE}" in
 			# https://www.joshkel.com/2018/01/18/symlinks-in-windows/

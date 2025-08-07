@@ -1,25 +1,29 @@
 
-When installing setup-x86_64.exe, it's necessary to maximize the window or drag the scrollbar to the right in order to see the dropdown list next to "Default" under "All". Only then can "Default" be changed to "Install", enabling the complete installation.
+Before downloading, ensure that Cygwin is not installed on the system. If Cygwin has been previously installed, remove its traces (or rename them), such as renaming the installation directory "D:\cygwin64" to "cygwin641", to prevent the Cygwin installer from finding the previously installed Cygwin location. This is because if Cygwin has been installed on Windows, the installer will record Cygwin's installation location in the registry (e.g., "D:\cygwin64"). When downloading Cygwin via the command line, it will automatically ignore packages that are already installed in the locations recorded in the registry.
 
 Do not add the `--include-source` option, as it will require downloading files that are approximately three times larger.
-
-Before downloading, ensure that Cygwin is not installed on the system. If Cygwin has been previously installed, remove its traces (or rename them), such as renaming the installation directory "D:\cygwin64" to "cygwin641", to prevent the Cygwin installer from finding the previously installed Cygwin location. This is because if Cygwin has been installed on Windows, the installer will record Cygwin's installation location in the registry (e.g., "D:\cygwin64"). When downloading Cygwin via the command line, it will automatically ignore packages that are already installed in the locations recorded in the registry.
 
 During the download, close or pause the use of VPN software such as FreeGate, Shadowsocks, WireGuard, v2rayN, etc., as it may significantly slow down the speed due to network traffic passing through local proxy servers (FreeGate, Shadowsocks, v2rayN) or virtual network adapters (WireGuard, v2rayN Tun mode).
 
 Downloading during the late night or early morning hours (00:00 - 07:00) typically yields the fastest network speed.
 
+When installing setup-x86_64.exe, it's necessary to maximize the window or drag the scrollbar to the right in order to see the dropdown list next to "Default" under "All". Only then can "Default" be changed to "Install", enabling the complete installation.
 
-点击setup-x86_64.exe安装时，需要将窗口最大化，或者向右拖动下面的滑动条，才能在All右边的Default处看到下拉列表，才能将Default改为Install，这样才能完全安装。
-
-不要添加 --include-source选项，否则需要下载3倍左右大小的文件。
+After the installation is complete, you will need to restart the Windows system.
 
 下载之前，系统中应该没有安装Cygwin。如果有安装过Cygwin，需要将安装的痕迹删除(或者重命名)，如将安装目录D:\cygwin64，重命名为cygwin641，让Cygwin的安装程序找不到已经安装的Cygwin的位置。
 因为如果Windows中安装过Cygwin，安装程序会在注册表中记录Cygwin的安装位置(D:\cygwin64)。使用命令行下载Cygwin时，会自动忽略掉在注册表中记录的Cygwin的安装位置中已经安装的包。
 
+不要添加“--include-source”选项，否则需要下载3倍左右大小的文件。
+
 下载时，要关闭或暂停使用FreeGate，Shadowsocks, WireGuard, v2rayN等翻墙软件，否则速度很慢，因为网络流量可能会经过本地代理服务器(FreeGate，Shadowsocks, v2rayN)或者虚拟网卡(WireGuard，v2rayN Tun mode)。
 
-在凌晨或清早(00:00 - 07:00)，下载，网速最快.
+在凌晨或清早(00:00 - 07:00)，下载，网速最快。
+
+点击setup-x86_64.exe安装时，需要将窗口最大化，或者向右拖动下面的滑动条，才能在All右边的Default处看到下拉列表，才能将Default改为Install，这样才能完全安装。
+
+安装完成之后需要重启Windows系统。
+
 
 
 https://cygwin.com/faq/faq.html#faq.setup.cli

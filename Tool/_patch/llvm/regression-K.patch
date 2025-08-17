@@ -1,22 +1,22 @@
-diff --git a/lldb/source/Plugins/ScriptInterpreter/Lua/ScriptInterpreterLua.cpp b/lldb/source/Plugins/ScriptInterpreter/Lua/ScriptInterpreterLua.cpp
-index ea74a500518e..fd85cf0a5c70 100644
---- a/lldb/source/Plugins/ScriptInterpreter/Lua/ScriptInterpreterLua.cpp
-+++ b/lldb/source/Plugins/ScriptInterpreter/Lua/ScriptInterpreterLua.cpp
-@@ -360,7 +360,7 @@ Status ScriptInterpreterLua::RegisterBreakpointCallback(
-     StructuredData::ObjectSP extra_args_sp) {
-   Status error;
-   auto data_up = std::make_unique<CommandDataLua>(extra_args_sp);
--  error = m_lua->RegisterBreakpointCallback(data_up.get(), command_body_text);
-+  error = Status::FromError(m_lua->RegisterBreakpointCallback(data_up.get(), command_body_text));
-   if (error.Fail())
-     return error;
-   auto baton_sp =
-@@ -381,7 +381,7 @@ Status ScriptInterpreterLua::RegisterWatchpointCallback(
-     StructuredData::ObjectSP extra_args_sp) {
-   Status error;
-   auto data_up = std::make_unique<WatchpointOptions::CommandData>();
--  error = m_lua->RegisterWatchpointCallback(data_up.get(), command_body_text);
-+  error = Status::FromError(m_lua->RegisterWatchpointCallback(data_up.get(), command_body_text));
-   if (error.Fail())
-     return error;
-   auto baton_sp =
+diff --git a/lldb/source/Host/windows/PipeWindows.cpp b/lldb/source/Host/windows/PipeWindows.cpp
+index e3f5b629a059..8c23a897d9f6 100644
+--- a/lldb/source/Host/windows/PipeWindows.cpp
++++ b/lldb/source/Host/windows/PipeWindows.cpp
+@@ -282,7 +282,7 @@ llvm::Expected<size_t> PipeWindows::Read(void *buf, size_t size,
+     return Status(failure_error, eErrorTypeWin32).takeError();
+ 
+   DWORD timeout_msec =
+-      timeout ? ceil<std::chrono::milliseconds>(*timeout).count() : INFINITE;
++      timeout ? std::chrono::ceil<std::chrono::milliseconds>(*timeout).count() : INFINITE;
+   DWORD wait_result =
+       ::WaitForSingleObject(m_read_overlapped.hEvent, timeout_msec);
+   if (wait_result != WAIT_OBJECT_0) {
+@@ -327,7 +327,7 @@ llvm::Expected<size_t> PipeWindows::Write(const void *buf, size_t size,
+     return Status(failure_error, eErrorTypeWin32).takeError();
+ 
+   DWORD timeout_msec =
+-      timeout ? ceil<std::chrono::milliseconds>(*timeout).count() : INFINITE;
++      timeout ? std::chrono::ceil<std::chrono::milliseconds>(*timeout).count() : INFINITE;
+   DWORD wait_result =
+       ::WaitForSingleObject(m_write_overlapped.hEvent, timeout_msec);
+   if (wait_result != WAIT_OBJECT_0) {

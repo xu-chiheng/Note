@@ -1,12 +1,22 @@
-diff --git a/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp b/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp
-index 2693bef3f5fb..62990006bb18 100644
---- a/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp
-+++ b/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp
-@@ -48,6 +48,6 @@ TEST_F(ScriptInterpreterTest, ExecuteOneLine) {
-   CommandReturnObject result(/*colors*/ false);
-   EXPECT_TRUE(script_interpreter.ExecuteOneLine("foo = 1", &result));
-   EXPECT_FALSE(script_interpreter.ExecuteOneLine("nil = foo", &result));
--  EXPECT_TRUE(result.GetErrorData().starts_with(
-+  EXPECT_TRUE(result.GetErrorString().starts_with(
-       "error: lua failed attempting to evaluate 'nil = foo'"));
- }
+diff --git a/lldb/source/Host/windows/MainLoopWindows.cpp b/lldb/source/Host/windows/MainLoopWindows.cpp
+index b4896dced0a4..cdeaa9cadeed
+--- a/lldb/source/Host/windows/MainLoopWindows.cpp
++++ b/lldb/source/Host/windows/MainLoopWindows.cpp
+@@ -20,6 +20,8 @@
+ #include <ctime>
+ #include <vector>
+ #include <winsock2.h>
++#include <thread>
++#include <atomic>
+ 
+ using namespace lldb;
+ using namespace lldb_private;
+@@ -54,7 +56,7 @@ public:
+       // Keep trying to cancel ReadFile() until the thread exits.
+       do {
+         CancelIoEx((HANDLE)m_handle, /*lpOverlapped=*/NULL);
+-      } while (WaitForSingleObject(m_monitor_thread.native_handle(), 1) ==
++      } while (WaitForSingleObject((HANDLE)(m_monitor_thread.native_handle()), 1) ==
+                WAIT_TIMEOUT);
+       m_monitor_thread.join();
+     }

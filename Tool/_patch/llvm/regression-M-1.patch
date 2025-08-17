@@ -1,14 +1,22 @@
-diff --git a/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp b/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp
-index 2693bef3f5fb..5f8cd5aef56b 100644
---- a/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp
-+++ b/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp
-@@ -48,6 +48,7 @@ TEST_F(ScriptInterpreterTest, ExecuteOneLine) {
-   CommandReturnObject result(/*colors*/ false);
-   EXPECT_TRUE(script_interpreter.ExecuteOneLine("foo = 1", &result));
-   EXPECT_FALSE(script_interpreter.ExecuteOneLine("nil = foo", &result));
--  EXPECT_TRUE(result.GetErrorData().starts_with(
--      "error: lua failed attempting to evaluate 'nil = foo'"));
-+  EXPECT_EQ(result.GetErrorString().find(
-+                "error: lua failed attempting to evaluate 'nil = foo'"),
-+            0U);
- }
+diff --git a/lldb/source/Host/windows/MainLoopWindows.cpp b/lldb/source/Host/windows/MainLoopWindows.cpp
+index a1de895c0ba9..0c69e3b72736 100644
+--- a/lldb/source/Host/windows/MainLoopWindows.cpp
++++ b/lldb/source/Host/windows/MainLoopWindows.cpp
+@@ -23,6 +23,8 @@
+ #include <winbase.h>
+ #include <winerror.h>
+ #include <winsock2.h>
++#include <thread>
++#include <atomic>
+ 
+ using namespace lldb;
+ using namespace lldb_private;
+@@ -57,7 +59,7 @@ public:
+       // Keep trying to cancel ReadFile() until the thread exits.
+       do {
+         CancelIoEx(m_handle, /*lpOverlapped=*/NULL);
+-      } while (WaitForSingleObject(m_monitor_thread.native_handle(), 1) ==
++      } while (WaitForSingleObject((HANDLE)(m_monitor_thread.native_handle()), 1) ==
+                WAIT_TIMEOUT);
+       m_monitor_thread.join();
+     }

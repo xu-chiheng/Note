@@ -1,36 +1,13 @@
-diff --git a/llvm/include/llvm/Support/Compiler.h b/llvm/include/llvm/Support/Compiler.h
-index e1d54af7dfcc..9d83411454eb 100644
---- a/llvm/include/llvm/Support/Compiler.h
-+++ b/llvm/include/llvm/Support/Compiler.h
-@@ -128,11 +128,10 @@
- #define LLVM_EXTERNAL_VISIBILITY
- #endif
- 
--#if (!(defined(_WIN32) || defined(__CYGWIN__)) ||                              \
--     (defined(__MINGW32__) && defined(__clang__)))
-+#if defined(__CYGWIN__) || defined(__MINGW32__)
- #define LLVM_LIBRARY_VISIBILITY LLVM_ATTRIBUTE_VISIBILITY_HIDDEN
- #define LLVM_ALWAYS_EXPORT LLVM_ATTRIBUTE_VISIBILITY_DEFAULT
--#elif defined(_WIN32)
-+#elif defined(_MSC_VER)
- #define LLVM_ALWAYS_EXPORT __declspec(dllexport)
- #define LLVM_LIBRARY_VISIBILITY
- #else
-@@ -170,7 +169,7 @@
- #define LLVM_ABI
- #define LLVM_TEMPLATE_ABI
- #define LLVM_EXPORT_TEMPLATE
--#elif defined(_WIN32) && !defined(__MINGW32__)
-+#elif defined(_MSC_VER)
- #if defined(LLVM_EXPORTS)
- #define LLVM_ABI __declspec(dllexport)
- #define LLVM_TEMPLATE_ABI
-@@ -180,7 +179,7 @@
- #define LLVM_TEMPLATE_ABI __declspec(dllimport)
- #define LLVM_EXPORT_TEMPLATE
- #endif
--#elif defined(__ELF__) || defined(__MINGW32__)
-+#elif defined(__ELF__) || defined(__CYGWIN__) || defined(__MINGW32__)
- #define LLVM_ABI LLVM_ATTRIBUTE_VISIBILITY_DEFAULT
- #define LLVM_TEMPLATE_ABI LLVM_ATTRIBUTE_VISIBILITY_DEFAULT
- #define LLVM_EXPORT_TEMPLATE
+diff --git a/lldb/include/lldb/lldb-types.h b/lldb/include/lldb/lldb-types.h
+index 15781ad626ef..e309fc8833ce 100644
+--- a/lldb/include/lldb/lldb-types.h
++++ b/lldb/include/lldb/lldb-types.h
+@@ -42,7 +42,7 @@ typedef void *rwlock_t;
+ typedef void *process_t;                          // Process type is HANDLE
+ typedef void *thread_t;                           // Host thread type
+ typedef void *file_t;                             // Host file type
+-typedef unsigned int __w64 socket_t;              // Host socket type
++typedef uintptr_t socket_t;                       // Host socket type
+ typedef void *thread_arg_t;                       // Host thread argument type
+ typedef unsigned thread_result_t;                 // Host thread result type
+ typedef thread_result_t (*thread_func_t)(void *); // Host thread function type

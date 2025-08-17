@@ -202,7 +202,10 @@ set_environment_variables_at_bash_startup() {
 		case "${HOST_TRIPLE}" in
 			*-cygwin | *-mingw* | *-linux* )
 				local packages_dir="$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")"
-				local packages=( gcc binutils gdb cross-gcc llvm cmake bash make )
+				local packages=(
+					gcc binutils gdb cross-gcc llvm cmake
+					# bash make
+				)
 				if host_triple_is_windows "${HOST_TRIPLE}"; then
 					# share the self built QEMU
 					true
@@ -305,102 +308,6 @@ ssh-agent_is_ok() {
 	[ -v SSH_AUTH_SOCK ] && [ -v SSH_AGENT_PID ] && [ -S "${SSH_AUTH_SOCK}" ] && quiet_command ps -p "${SSH_AGENT_PID}"
 }
 
-fix_cygwin_connect_gpg_quirk() {
-	# Cygwin has no connect.exe, use MinGW's
-	local usr_bin_connect="/usr/bin/connect.exe"
-	if [ -v MSYS2_DIR ]; then
-		local mingw_ucrt_bin_connect="$(cygpath -u "${MSYS2_DIR}")/ucrt64/bin/connect.exe"
-		if [ -f "${mingw_ucrt_bin_connect}" ]; then
-			if [ ! -f "${usr_bin_connect}" ] || ! cmp --quiet "${usr_bin_connect}" "${mingw_ucrt_bin_connect}" ; then
-				rm -rf "${usr_bin_connect}" \
-				&& cp -f "${mingw_ucrt_bin_connect}" "${usr_bin_connect}"
-			fi
-		fi
-	fi
-
-	# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
-	local usr_bin_gpg="/usr/bin/gpg.exe"
-	local usr_bin_gpg2="/usr/bin/gpg2.exe"
-	if [ -f "${usr_bin_gpg2}" ] ; then
-		if [ -f "${usr_bin_gpg}" ] && [ ! -f "${usr_bin_gpg}".backup ]; then
-			mv -f "${usr_bin_gpg}" "${usr_bin_gpg}".backup
-		fi \
-		&& if [ ! -f "${usr_bin_gpg}" ] || ! cmp --quiet "${usr_bin_gpg}" "${usr_bin_gpg2}" ; then
-			rm -rf "${usr_bin_gpg}" \
-			&& cp -f "${usr_bin_gpg2}" "${usr_bin_gpg}"
-		fi
-	fi
-}
-
-fix_mingw_binmode_commode_quirk() {
-	# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
-
-	local binmode_c='
-#include <fcntl.h>
-int _fmode = _O_BINARY; 
-'
-	local commode_c='
-// #include <corecrt_internal_stdio.h>
-int _commode = 0x0800; // _IOCOMMIT
-'
-	local mingw_root="$(print_mingw_root_dir)"
-	local mode
-	for mode in binmode commode; do
-		local tmp_src="$(mktemp --suffix=.c)"
-		local tmp_obj="$(mktemp --suffix=.o)"
-		local target_obj="${mingw_root}/lib/${mode}.o"
-		echo "${tmp_src}" "${tmp_obj}" "${target_obj}"
-		local varname="${mode}_c"
-		echo "${!varname}" >"${tmp_src}"
-		echo_command cat "${tmp_src}"
-		echo_command gcc -c -O3 -o "${tmp_obj}" "${tmp_src}"
-		echo_command strip --strip-debug --discard-all -o "${tmp_obj}" "${tmp_obj}"
-		echo_command objdump -t "${tmp_obj}"
-		if cmp "${tmp_obj}" "${target_obj}"; then
-			echo "equal"
-		else
-			echo "not equal"
-			rm -rf "${target_obj}" \
-			&& mv -f "${tmp_obj}" "${target_obj}"
-		fi
-		rm -rf "${tmp_src}" "${tmp_obj}"
-	done
-}
-
-fix_cygwin_msys_ssh_quirk() {
-	# ssh uses wrong home directory in Cygwin - Server Fault
-	# https://serverfault.com/questions/95750/ssh-uses-wrong-home-directory-in-cygwin
-
-	# https://linux.die.net/man/1/readlink
-	# https://www.geeksforgeeks.org/readlink-command-in-linux-with-examples/
-	# https://serverfault.com/questions/76042/find-out-symbolic-link-target-via-command-line
-	local home_unix_path="$(cygpath -u "${HOME}")"
-	local ssh_home_dir="/home/${USERNAME}"
-	if ! { [ -e "${ssh_home_dir}" ] && [ "$(readlink -f "${ssh_home_dir}")" = "$(readlink -f "${home_unix_path}")" ] ;}; then
-		rm -rf "${ssh_home_dir}" \
-		&& ln -s "${home_unix_path}" "${ssh_home_dir}"
-	fi
-}
-
-fix_system_quirks_one_time() {
-	if host_triple_is_windows "${HOST_TRIPLE}"; then
-		if [ ! "${HOST_TRIPLE}" = "$(~/config.guess)" ]; then
-			echo "host triple ${HOST_TRIPLE} not equal to the output of config.guess $(~/config.guess)"
-		fi
-
-		case "${HOST_TRIPLE}" in
-			*-cygwin )
-				time_command fix_cygwin_connect_gpg_quirk
-				;;
-			*-mingw* )
-				time_command fix_mingw_binmode_commode_quirk
-				;;
-		esac
-
-		time_command fix_cygwin_msys_ssh_quirk
-	fi
-}
-
 print_packages_dir_of_host_triple() {
 	local host_triple="$1"
 	case "${host_triple}" in
@@ -498,8 +405,14 @@ open_files_in_editor() {
 			# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
 			# https://git-scm.com/book/ms/v2/Getting-Started-First-Time-Git-Setup
 			# https://npp-user-manual.org/docs/command-prompt/
-			# Can't specify -notabbar if you want to open multiple files
-			"$(cygpath -u 'C:\Program Files\Notepad++\notepad++.exe')" -multiInst -nosession -noPlugin "${translated_file_paths[@]}"
+			local notepadpp_options=( -multiInst -nosession -noPlugin )
+			if [ $# -le 1 ]; then
+				notepadpp_options+=( -notabbar )
+			else
+				# Can't specify -notabbar if you want to open multiple files
+				true
+			fi
+			"$(cygpath -u 'C:\Program Files\Notepad++\notepad++.exe')" "${notepadpp_options[@]}" "${translated_file_paths[@]}"
 
 			# https://stackoverflow.com/questions/30024353/how-can-i-use-visual-studio-code-as-default-editor-for-git
 			# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
@@ -674,15 +587,15 @@ password_generate_1() {
 	# 256 bits          ≈ 5.95                44 characters
 	# 512 bits          ≈ 5.95                87 characters
 
-	local number="$1"
-	if [ -z "${number}" ]; then
-		number=1;
+	local count="$1"
+	if [ -z "${count}" ]; then
+		count=1;
 	fi
 	local length="$2"
 	if [ -z "${length}" ]; then
 		length=100;
 	fi
-	tr -cd '[:alnum:]' < /dev/urandom | fold -w"${length}" | head -n"${number}"
+	tr -cd '[:alnum:]' < /dev/urandom | fold -w"${length}" | head -n"${count}"
 }
 
 password_generate_one() {

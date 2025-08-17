@@ -383,10 +383,8 @@ copy_tarball_to_all_drives() {
 				print_hard_drives_mount_points
 
 				# data directory
-				if host_triple_is_windows "${HOST_TRIPLE}"; then
-					if [ -v DATA_DIR ] && [ ! -z "${DATA_DIR}" ]; then
-						echo "$(cygpath -u "${DATA_DIR}")"
-					fi
+				if host_triple_is_windows "${HOST_TRIPLE}" && [ -v DATA_DIR ] && [ ! -z "${DATA_DIR}" ]; then
+					echo "$(cygpath -u "${DATA_DIR}")"
 				fi
 			} | sort | uniq
 		); do

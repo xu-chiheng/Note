@@ -42,6 +42,11 @@
 # A V2Ray client for Android, support Xray core and v2fly core
 # https://github.com/2dust/v2rayNG
 
+# Shadowrocket
+# Rule based proxy utility client for iPhone/iPad.
+# Shadowrocket on the App Store.
+# https://apps.apple.com/us/app/shadowrocket/id932747118
+
 # An ACME Shell script: acme.sh
 # https://github.com/acmesh-official/acme.sh
 

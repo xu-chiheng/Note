@@ -1,0 +1,13 @@
+diff --git a/clang/tools/CMakeLists.txt b/clang/tools/CMakeLists.txt
+index 98c018e96848..f31cfc59dd52 100644
+--- a/clang/tools/CMakeLists.txt
++++ b/clang/tools/CMakeLists.txt
+@@ -23,7 +23,7 @@ add_clang_subdirectory(c-index-test)
+ add_clang_subdirectory(clang-refactor)
+ # For MinGW we only enable shared library if LLVM_LINK_LLVM_DYLIB=ON.
+ # Without that option resulting library is too close to 2^16 DLL exports limit.
+-if(UNIX OR (MSVC AND LLVM_BUILD_LLVM_DYLIB_VIS) OR (MINGW AND LLVM_LINK_LLVM_DYLIB))
++if(UNIX AND NOT CYGWIN)
+   add_clang_subdirectory(clang-shlib)
+ endif()
+ 

@@ -1,0 +1,45 @@
+diff --git a/llvm/include/llvm/Support/Compiler.h b/llvm/include/llvm/Support/Compiler.h
+index 297d3e9b0409..aa100944b822 100644
+--- a/llvm/include/llvm/Support/Compiler.h
++++ b/llvm/include/llvm/Support/Compiler.h
+@@ -132,18 +132,11 @@
+ #define LLVM_EXTERNAL_VISIBILITY
+ #endif
+ 
+-#if (!(defined(_WIN32) || defined(__CYGWIN__)) ||                              \
+-     ((defined(__MINGW32__) || defined(__CYGWIN__)) && defined(__clang__)))
++#if defined(__CYGWIN__) || defined(__MINGW32__)
+ #define LLVM_LIBRARY_VISIBILITY LLVM_ATTRIBUTE_VISIBILITY_HIDDEN
+-// Clang compilers older then 15 do not support gnu style attributes on
+-// namespaces.
+-#if defined(__clang__) && __clang_major__ < 15
+-#define LLVM_LIBRARY_VISIBILITY_NAMESPACE [[gnu::visibility("hidden")]]
+-#else
+ #define LLVM_LIBRARY_VISIBILITY_NAMESPACE LLVM_ATTRIBUTE_VISIBILITY_HIDDEN
+-#endif
+ #define LLVM_ALWAYS_EXPORT LLVM_ATTRIBUTE_VISIBILITY_DEFAULT
+-#elif defined(_WIN32)
++#elif defined(_MSC_VER)
+ #define LLVM_ALWAYS_EXPORT __declspec(dllexport)
+ #define LLVM_LIBRARY_VISIBILITY
+ #define LLVM_LIBRARY_VISIBILITY_NAMESPACE
+@@ -183,7 +176,7 @@
+ // TODO(https://github.com/llvm/llvm-project/issues/145406): eliminate need for
+ // two preprocessor definitions to gate LLVM_ABI macro definitions.
+ #if defined(LLVM_ENABLE_LLVM_EXPORT_ANNOTATIONS) && !defined(LLVM_BUILD_STATIC)
+-#if defined(_WIN32) && !defined(__MINGW32__)
++#if defined(_MSC_VER)
+ #if defined(LLVM_EXPORTS)
+ #define LLVM_ABI __declspec(dllexport)
+ #define LLVM_TEMPLATE_ABI
+@@ -195,8 +188,8 @@
+ #endif
+ #define LLVM_ABI_EXPORT __declspec(dllexport)
+ #elif __has_attribute(visibility)
+-#if defined(__ELF__) || defined(__MINGW32__) || defined(_AIX) ||               \
+-    defined(__MVS__) || defined(__CYGWIN__)
++#if defined(__ELF__) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(_AIX) ||               \
++    defined(__MVS__)
+ #define LLVM_ABI __attribute__((visibility("default")))
+ #define LLVM_TEMPLATE_ABI LLVM_ABI
+ #define LLVM_EXPORT_TEMPLATE

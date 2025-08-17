@@ -1,0 +1,12 @@
+diff --git a/lld/wasm/CMakeLists.txt b/lld/wasm/CMakeLists.txt
+index 6033bfbf9a50..ba89a6fee350 100644
+--- a/lld/wasm/CMakeLists.txt
++++ b/lld/wasm/CMakeLists.txt
+@@ -28,6 +28,7 @@ add_lld_library(lldWasm
+   Object
+   Option
+   Passes
++  ProfileData
+   Support
+   TargetParser
+ 

@@ -1,0 +1,19 @@
+diff --git a/lld/MinGW/Driver.cpp b/lld/MinGW/Driver.cpp
+index 5098dbd77b4f..79fb60ded061 100644
+--- a/lld/MinGW/Driver.cpp
++++ b/lld/MinGW/Driver.cpp
+@@ -557,7 +557,13 @@ bool link(ArrayRef<const char *> argsArr, llvm::raw_ostream &stdoutOS,
+     add("-libpath:" + StringRef(a->getValue()));
+   }
+ 
+-  StringRef dllPrefix = "lib";
++  StringRef dllPrefix;
++#ifdef __CYGWIN__
++  dllPrefix = "cyg";
++#else
++  dllPrefix = "lib";
++#endif
++
+   if (auto *arg = args.getLastArg(OPT_dll_search_prefix))
+     dllPrefix = arg->getValue();
+ 

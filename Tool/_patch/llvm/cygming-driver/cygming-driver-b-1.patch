@@ -1,0 +1,18 @@
+diff --git a/clang/lib/Driver/Driver.cpp b/clang/lib/Driver/Driver.cpp
+index 55748c0bce91..68761cb7d0b8 100644
+--- a/clang/lib/Driver/Driver.cpp
++++ b/clang/lib/Driver/Driver.cpp
+@@ -6887,12 +6887,10 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
+         else
+           TC = std::make_unique<toolchains::Generic_GCC>(*this, Target, Args);
+         break;
++      case llvm::Triple::Cygnus:
+       case llvm::Triple::GNU:
+         TC = std::make_unique<toolchains::MinGW>(*this, Target, Args);
+         break;
+-      case llvm::Triple::Cygnus:
+-        TC = std::make_unique<toolchains::Cygwin>(*this, Target, Args);
+-        break;
+       case llvm::Triple::Itanium:
+         TC = std::make_unique<toolchains::CrossWindowsToolChain>(*this, Target,
+                                                                   Args);

@@ -1,0 +1,30 @@
+diff --git a/lldb/source/Host/posix/ProcessLauncherPosixFork.cpp b/lldb/source/Host/posix/ProcessLauncherPosixFork.cpp
+index 15a809784fbc..f08f1a46a0b3 100644
+--- a/lldb/source/Host/posix/ProcessLauncherPosixFork.cpp
++++ b/lldb/source/Host/posix/ProcessLauncherPosixFork.cpp
+@@ -18,7 +18,9 @@
+ 
+ #include <climits>
+ #include <fcntl.h>
++#ifndef __CYGWIN__
+ #include <sys/ptrace.h>
++#endif
+ #include <sys/wait.h>
+ #include <unistd.h>
+ 
+@@ -192,6 +194,7 @@ struct ForkLaunchInfo {
+           close(fd);
+     }
+ 
++#ifndef __CYGWIN__
+     // Start tracing this child that is about to exec.
+ #ifdef _AIX
+     if (ptrace64(PT_TRACE_ME, 0, 0, 0, nullptr) == -1)
+@@ -199,6 +202,7 @@ struct ForkLaunchInfo {
+     if (ptrace(PT_TRACE_ME, 0, nullptr, 0) == -1)
+ #endif
+       ExitWithError(error_fd, "ptrace");
++#endif
+   }
+ 
+   // Execute.  We should never return...

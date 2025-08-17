@@ -1,0 +1,16 @@
+diff --git a/lldb/source/Host/common/Host.cpp b/lldb/source/Host/common/Host.cpp
+index 5992b54318f7..54ebc3bbfa20 100644
+--- a/lldb/source/Host/common/Host.cpp
++++ b/lldb/source/Host/common/Host.cpp
+@@ -6,6 +6,11 @@
+ //
+ //===----------------------------------------------------------------------===//
+ 
++#ifdef __CYGWIN__
++#define _GNU_SOURCE
++#include <dlfcn.h>
++#endif
++
+ // C includes
+ #include <cerrno>
+ #include <climits>

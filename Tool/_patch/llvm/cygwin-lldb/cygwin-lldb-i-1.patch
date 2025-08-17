@@ -1,0 +1,112 @@
+diff --git a/lldb/source/Host/posix/HostProcessPosix.cpp b/lldb/source/Host/posix/HostProcessPosix.cpp
+index 2a118f0de951..b2508d1f3b0f 100644
+--- a/lldb/source/Host/posix/HostProcessPosix.cpp
++++ b/lldb/source/Host/posix/HostProcessPosix.cpp
+@@ -63,3 +63,107 @@ llvm::Expected<HostThread> HostProcessPosix::StartMonitoring(
+     const Host::MonitorChildProcessCallback &callback) {
+   return Host::StartMonitoringChildProcess(callback, m_process);
+ }
++
++#ifdef __CYGWIN__
++
++#include <cerrno>
++#include <cstdio>
++#include <cstring>
++#include <dirent.h>
++#include <fcntl.h>
++#include <optional>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <sys/utsname.h>
++#include <unistd.h>
++
++#include "llvm/ADT/StringSwitch.h"
++#include "llvm/Object/ELF.h"
++#include "llvm/Support/ScopedPrinter.h"
++
++#include "lldb/Utility/LLDBLog.h"
++#include "lldb/Utility/Log.h"
++#include "lldb/Utility/ProcessInfo.h"
++#include "lldb/Utility/Status.h"
++
++#include "lldb/Host/FileSystem.h"
++#include "lldb/Host/Host.h"
++#include "lldb/Host/HostInfo.h"
++#include "lldb/Host/linux/Host.h"
++#include "lldb/Host/linux/Support.h"
++#include "lldb/Utility/DataExtractor.h"
++
++using namespace lldb;
++using namespace lldb_private;
++
++namespace {
++enum class ProcessState {
++  Unknown,
++  Dead,
++  DiskSleep,
++  Idle,
++  Paging,
++  Parked,
++  Running,
++  Sleeping,
++  TracedOrStopped,
++  Zombie,
++};
++}
++
++namespace lldb_private {
++class ProcessLaunchInfo;
++}
++
++static bool GetStatusInfo(::pid_t Pid, ProcessInstanceInfo &ProcessInfo,
++                          ProcessState &State, ::pid_t &TracerPid,
++                          ::pid_t &Tgid) {
++  return true;
++}
++
++static bool IsDirNumeric(const char *dname) {
++  return true;
++}
++
++static ArchSpec GetELFProcessCPUType(llvm::StringRef exe_path) {
++  ArchSpec result;
++  return result;
++}
++
++static void GetProcessArgs(::pid_t pid, ProcessInstanceInfo &process_info) {
++
++}
++
++static void GetExePathAndArch(::pid_t pid, ProcessInstanceInfo &process_info) {
++
++}
++
++static void GetProcessEnviron(::pid_t pid, ProcessInstanceInfo &process_info) {
++
++}
++
++static bool GetProcessAndStatInfo(::pid_t pid,
++                                  ProcessInstanceInfo &process_info,
++                                  ProcessState &State, ::pid_t &tracerpid) {
++  return true;
++}
++
++uint32_t Host::FindProcessesImpl(const ProcessInstanceInfoMatch &match_info,
++                                 ProcessInstanceInfoList &process_infos) {
++  return 0;
++}
++
++bool Host::GetProcessInfo(lldb::pid_t pid, ProcessInstanceInfo &process_info) {
++  return true;
++}
++
++Status Host::ShellExpandArguments(ProcessLaunchInfo &launch_info) {
++  return Status("unimplemented");
++}
++
++std::optional<lldb::pid_t> lldb_private::getPIDForTID(lldb::pid_t tid) {
++  ::pid_t tgid = LLDB_INVALID_PROCESS_ID;
++  return tgid;
++}
++
++#endif

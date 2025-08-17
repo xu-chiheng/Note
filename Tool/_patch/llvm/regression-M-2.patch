@@ -1,0 +1,12 @@
+diff --git a/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp b/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp
+index 214de14f73ff..5f8cd5aef56b 100644
+--- a/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp
++++ b/lldb/unittests/ScriptInterpreter/Lua/ScriptInterpreterTests.cpp
+@@ -49,5 +49,6 @@ TEST_F(ScriptInterpreterTest, ExecuteOneLine) {
+   EXPECT_TRUE(script_interpreter.ExecuteOneLine("foo = 1", &result));
+   EXPECT_FALSE(script_interpreter.ExecuteOneLine("nil = foo", &result));
+   EXPECT_EQ(result.GetErrorString().find(
+-      "error: lua failed attempting to evaluate 'nil = foo'"), 0 );
++                "error: lua failed attempting to evaluate 'nil = foo'"),
++            0U);
+ }

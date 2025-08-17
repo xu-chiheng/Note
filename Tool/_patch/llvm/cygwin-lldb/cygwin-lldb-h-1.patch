@@ -1,0 +1,16 @@
+diff --git a/lldb/source/Host/posix/HostInfoPosix.cpp b/lldb/source/Host/posix/HostInfoPosix.cpp
+index 193f584900b6..dabb09d8e0f1 100644
+--- a/lldb/source/Host/posix/HostInfoPosix.cpp
++++ b/lldb/source/Host/posix/HostInfoPosix.cpp
+@@ -68,6 +68,11 @@ bool HostInfoPosix::GetHostname(std::string &s) {
+   return false;
+ }
+ 
++FileSpec HostInfoPosix::GetProgramFileSpec() {
++  FileSpec result;
++  return result;
++}
++
+ std::optional<std::string> HostInfoPosix::GetOSKernelDescription() {
+   struct utsname un;
+   if (uname(&un) < 0)

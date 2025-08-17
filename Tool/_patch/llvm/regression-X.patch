@@ -1,0 +1,22 @@
+diff --git a/lldb/source/Host/windows/PipeWindows.cpp b/lldb/source/Host/windows/PipeWindows.cpp
+index e3f5b629a059..8c23a897d9f6 100644
+--- a/lldb/source/Host/windows/PipeWindows.cpp
++++ b/lldb/source/Host/windows/PipeWindows.cpp
+@@ -282,7 +282,7 @@ llvm::Expected<size_t> PipeWindows::Read(void *buf, size_t size,
+     return Status(failure_error, eErrorTypeWin32).takeError();
+ 
+   DWORD timeout_msec =
+-      timeout ? ceil<std::chrono::milliseconds>(*timeout).count() : INFINITE;
++      timeout ? std::chrono::ceil<std::chrono::milliseconds>(*timeout).count() : INFINITE;
+   DWORD wait_result =
+       ::WaitForSingleObject(m_read_overlapped.hEvent, timeout_msec);
+   if (wait_result != WAIT_OBJECT_0) {
+@@ -327,7 +327,7 @@ llvm::Expected<size_t> PipeWindows::Write(const void *buf, size_t size,
+     return Status(failure_error, eErrorTypeWin32).takeError();
+ 
+   DWORD timeout_msec =
+-      timeout ? ceil<std::chrono::milliseconds>(*timeout).count() : INFINITE;
++      timeout ? std::chrono::ceil<std::chrono::milliseconds>(*timeout).count() : INFINITE;
+   DWORD wait_result =
+       ::WaitForSingleObject(m_write_overlapped.hEvent, timeout_msec);
+   if (wait_result != WAIT_OBJECT_0) {

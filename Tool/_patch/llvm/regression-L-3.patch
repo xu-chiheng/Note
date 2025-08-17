@@ -1,0 +1,45 @@
+diff --git a/llvm/include/llvm/Support/Compiler.h b/llvm/include/llvm/Support/Compiler.h
+index 0de789ec68c4..6ea1cfd1aa1f 100644
+--- a/llvm/include/llvm/Support/Compiler.h
++++ b/llvm/include/llvm/Support/Compiler.h
+@@ -132,18 +132,11 @@
+ #define LLVM_EXTERNAL_VISIBILITY
+ #endif
+ 
+-#if (!(defined(_WIN32) || defined(__CYGWIN__)) ||                              \
+-     (defined(__MINGW32__) && defined(__clang__)))
++#if defined(__CYGWIN__) || defined(__MINGW32__)
+ #define LLVM_LIBRARY_VISIBILITY LLVM_ATTRIBUTE_VISIBILITY_HIDDEN
+-// Clang compilers older then 15 do not support gnu style attributes on
+-// namespaces.
+-#if defined(__clang__) && __clang_major__ < 15
+-#define LLVM_LIBRARY_VISIBILITY_NAMESPACE [[gnu::visibility("hidden")]]
+-#else
+ #define LLVM_LIBRARY_VISIBILITY_NAMESPACE LLVM_ATTRIBUTE_VISIBILITY_HIDDEN
+-#endif
+ #define LLVM_ALWAYS_EXPORT LLVM_ATTRIBUTE_VISIBILITY_DEFAULT
+-#elif defined(_WIN32)
++#elif defined(_MSC_VER)
+ #define LLVM_ALWAYS_EXPORT __declspec(dllexport)
+ #define LLVM_LIBRARY_VISIBILITY
+ #define LLVM_LIBRARY_VISIBILITY_NAMESPACE
+@@ -196,7 +189,7 @@
+ #define LLVM_TEMPLATE_ABI
+ #define LLVM_EXPORT_TEMPLATE
+ #define LLVM_ABI_EXPORT
+-#elif defined(_WIN32) && !defined(__MINGW32__)
++#elif defined(_MSC_VER)
+ #if defined(LLVM_EXPORTS)
+ #define LLVM_ABI __declspec(dllexport)
+ #define LLVM_TEMPLATE_ABI
+@@ -208,8 +201,8 @@
+ #endif
+ #define LLVM_ABI_FRIEND LLVM_ABI
+ #define LLVM_ABI_EXPORT __declspec(dllexport)
+-#elif defined(__ELF__) || defined(__MINGW32__) || defined(_AIX) ||             \
+-    defined(__MVS__) || defined(__CYGWIN__)
++#elif defined(__ELF__) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(_AIX) ||             \
++    defined(__MVS__)
+ #define LLVM_ABI LLVM_ATTRIBUTE_VISIBILITY_DEFAULT
+ #define LLVM_ABI_FRIEND
+ #define LLVM_TEMPLATE_ABI LLVM_ATTRIBUTE_VISIBILITY_DEFAULT

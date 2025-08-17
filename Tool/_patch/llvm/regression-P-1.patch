@@ -1,0 +1,16 @@
+diff --git a/lldb/source/API/CMakeLists.txt b/lldb/source/API/CMakeLists.txt
+index 4751ed319b25..4003076ba2d5 100644
+--- a/lldb/source/API/CMakeLists.txt
++++ b/lldb/source/API/CMakeLists.txt
+@@ -325,9 +325,11 @@ foreach(header
+   list(APPEND lldb_staged_headers ${staged_header})
+ endforeach()
+ 
++if(NOT CYGWIN)
+ add_custom_command(TARGET liblldb POST_BUILD
+   COMMAND "${Python3_EXECUTABLE}" ${LLDB_SOURCE_DIR}/scripts/version-header-fix.py -i ${LLDB_SOURCE_DIR}/include/lldb/lldb-defines.h -o ${lldb_header_staging_dir}/lldb-defines.h -m ${LLDB_VERSION_MAJOR} -n ${LLDB_VERSION_MINOR} -p ${LLDB_VERSION_PATCH}
+ )
++endif()
+ add_custom_target(liblldb-header-staging DEPENDS ${lldb_staged_headers})
+ add_dependencies(liblldb liblldb-header-staging)
+ 

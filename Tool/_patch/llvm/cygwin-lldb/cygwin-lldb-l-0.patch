@@ -12,7 +12,7 @@ index f9e19ed35acc..d4f5e03f5055 100644
  // This test file intentionally doesn't initialize the FileSystem.
  // Everything in this file should be able to run without requiring
 diff --git a/lldb/unittests/Host/FileSystemTest.cpp b/lldb/unittests/Host/FileSystemTest.cpp
-index e3c2b5a5ab49..80893848ee89 100644
+index 58887f6b2467..c2b18c6c2d20 100644
 --- a/lldb/unittests/Host/FileSystemTest.cpp
 +++ b/lldb/unittests/Host/FileSystemTest.cpp
 @@ -12,7 +12,7 @@
@@ -24,21 +24,8 @@ index e3c2b5a5ab49..80893848ee89 100644
  
  using namespace lldb_private;
  using namespace llvm;
-diff --git a/lldb/unittests/Host/HostTest.cpp b/lldb/unittests/Host/HostTest.cpp
-index 1424e4472edd..fab51edbc6e3 100644
---- a/lldb/unittests/Host/HostTest.cpp
-+++ b/lldb/unittests/Host/HostTest.cpp
-@@ -26,7 +26,7 @@ using namespace lldb_private;
- using namespace llvm;
- 
- // From TestMain.cpp.
--extern const char *TestMainArgv0;
-+static const char *TestMainArgv0;
- 
- static cl::opt<uint64_t> test_arg("test-arg");
- 
 diff --git a/lldb/unittests/TestingSupport/TestUtilities.cpp b/lldb/unittests/TestingSupport/TestUtilities.cpp
-index b53822e38324..6d734971daf3 100644
+index efdc6c5eb234..f185b7352255 100644
 --- a/lldb/unittests/TestingSupport/TestUtilities.cpp
 +++ b/lldb/unittests/TestingSupport/TestUtilities.cpp
 @@ -17,7 +17,7 @@

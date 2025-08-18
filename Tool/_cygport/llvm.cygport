@@ -8,7 +8,9 @@ NAME="llvm"
 # VERSION=16.0.6
 # VERSION=17.0.6
 # VERSION=18.1.8
-VERSION=19.1.2
+# VERSION=19.1.7
+VERSION=20.1.8
+# VERSION=21.1.1
 RELEASE=1
 
 # package metadata
@@ -22,51 +24,103 @@ LICENSE="Apache License v2.0 with LLVM Exceptions"
 SRC_URI="https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${VERSION}.tar.gz"
 SRC_DIR="llvm-project-llvmorg-${VERSION}"
 
-PATCHES=(
+LLVM_16_PATCHES=(
 # 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a    2023-01-24    branch point
 # 17.0.0    84de01908b58f3aa25cc3dc700a8a1b01b5263f0    2023-03-23    c4125a37806aa2f663018f4f8dc5bbd5159c51c1^
 # patch_apply . \
-# ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d,e,f},\
-# cygming-build/cygming-build-{a,b-0,c,d,e,g,h,i,j-0,k,l,m,n},\
-# cygming-driver/cygming-driver-{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
-# cygwin-{lld/cygwin-lld-{a,b,c},lldb/cygwin-lldb-{a,c,d,e,f,g,h,i,j,k,l,m,n}},\
-# cygwin-{support-tls,va-list-kind,cmodel-0,general-{a,b,c},macro},\
-# mingw-{git-revision,emutls-0},\
-# pseudo-{gen-Main,lib-Grammar}.cpp}.patch
-
-# 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7    2023-07-25    branch point
-# patch_apply . \
-# ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c,d},regression-a,\
-# cygming-build/cygming-build-{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
-# cygming-driver/cygming-driver-{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
-# cygwin-{lld/cygwin-lld-{a,b,c},lldb/cygwin-lldb-{a,c,d,e,f,g,h,i,j,k,l,m,n}},\
-# cygwin-{support-tls,va-list-kind,cmodel-0,general-{a,b,c},macro},\
-# mingw-{git-revision,emutls-1},\
-# pseudo-{gen-Main,lib-Grammar}.cpp}.patch
-
-# 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707    2024-01-24    branch point
-# patch_apply . \
-# ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b,c},regression-a,\
-# cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-# cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k-0,l,m,n,o,p},\
-# cygwin-{lld/cygwin-lld-{a,b,c},lldb/cygwin-lldb-{a,c,d,e,f,g,h,i,j,k,l,m,n}},\
-# cygwin-{support-tls,va-list-kind,cmodel-1,general-{a,b,c},macro,regression-{a,b,c,d}},\
-# mingw-{git-revision,emutls-1},\
-# pseudo-{gen-Main,lib-Grammar}.cpp}.patch
-
-# 19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8    2024-07-23    branch point
-# patch_apply . \
-../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,backport-{a,b},regression-{a,b-0},\
-cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
-cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
-cygwin-{lld/cygwin-lld-{a,b,c},lldb/cygwin-lldb-{a,b,c,d,e,f,g,h,i,j,k,l,m,n}},\
-cygwin-{support-tls,va-list-kind,cmodel-2,general-{a,b,c},macro,regression-{a,b,c,d,e}},\
-mingw-{git-revision,emutls-1},\
-pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
+backport/backport-{a,b,c,d,e,f},\
+cygming-build/cygming-build-{a,b-0,c,d,e,g,h,i,j-0,k,l,m,n},\
+cygming-driver/cygming-driver-{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygwin-lld/cygwin-lld-{a,b,c},\
+cygwin-lldb/cygwin-lldb-{a,c,d,e,f,g,h,i,j,k,l,m,n,o},\
+cygwin/cygwin-{support-tls,va-list-kind,cmodel-0,general-{a,b,c},macro},\
+mingw/mingw-{git-revision,emutls-0},\
+pseudo/pseudo-{gen-Main,lib-Grammar}.cpp}.patch
 
 )
 
-PATCH_URI="${PATCHES[*]}"
+LLVM_17_PATCHES=(
+# 17.0.0    d0b54bb50e5110a004b41fc06dadf3fee70834b7    2023-07-25    branch point
+# patch_apply . \
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
+backport/backport-{a,b,c,d},\
+regression/regression-a,\
+cygming-build/cygming-build-{a,b-0,c,d,e,f,g,h,i,j-0,k,l,m,n},\
+cygming-driver/cygming-driver-{a-0,b,c,d,e,f,g,h,i,j,k-0,m,n,o,p},\
+cygwin-lld/cygwin-lld-{a,b,c},\
+cygwin-lldb/cygwin-lldb-{a,c,d,e,f,g,h,i,j,k,l,m,n,o},\
+cygwin/cygwin-{support-tls,va-list-kind,cmodel-0,general-{a,b,c},macro},\
+mingw/mingw-{git-revision,emutls-1},\
+pseudo/pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
+)
+
+LLVM_18_PATCHES=(
+# 18.0.0    93248729cfae82a5ca2323d4a8e15aa3b9b9c707    2024-01-24    branch point
+# patch_apply . \
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
+backport/backport-{a,b,c},\
+regression/regression-a,\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k-0,l,m,n,o,p},\
+cygwin-lld/cygwin-lld-{a,b,c},\
+cygwin-lldb/cygwin-lldb-{a,c,d,e,f,g,h,i,j,k,l,m,n,o},\
+cygwin/cygwin-{support-tls,va-list-kind,cmodel-1,general-{a,b,c},macro},\
+cygwin-regression/cygwin-regression-{a,b,c,d},\
+mingw/mingw-{git-revision,emutls-1},\
+pseudo/pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
+)
+
+LLVM_19_PATCHES=(
+# 19.0.0    f2ccf80136a01ca69f766becafb329db6c54c0c8    2024-07-23    branch point
+# patch_apply . \
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
+backport/backport-{a,b},\
+regression/regression-{a,b-0},\
+cygming-build/cygming-build-{a,b,c,d,e,f,g,h,i,j,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygwin-lld/cygwin-lld-{a,b,c},\
+cygwin-lldb/cygwin-lldb-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o},\
+cygwin/cygwin-{support-tls,va-list-kind,cmodel-2,general-{a,b,c},macro},\
+cygwin-regression/cygwin-regression-{a,b,c,d,e},\
+mingw/mingw-{git-revision,emutls-1},\
+pseudo/pseudo-{gen-Main,lib-Grammar}.cpp}.patch
+
+)
+
+LLVM_20_PATCHES=(
+# 20.0.0    8c2574832ed2064996389e4259eaf0bea0fa7951    2025-01-29    branch point
+# patch_apply . \
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
+regression/regression-{a,b,d-2,g-1},\
+cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n},\
+cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygwin-lld/cygwin-lld-{a,b,c},\
+cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,f-1,g,h-1,i-1,j,k-1,l,m,n,o},\
+cygwin/cygwin-{support-tls,va-list-kind,cmodel-2,general-{a,b,c},macro},\
+cygwin-regression/cygwin-regression-{a,b,c,d,e},\
+mingw/mingw-{git-revision,emutls-1}}.patch
+
+)
+
+LLVM_21_PATCHES=(
+# 21.0.0    94b15a1ece37963c9804fc7f0c498d140ea5fd9d    2025-07-15    branch point
+# patch_apply . \
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
+regression/regression-{a,b-1,d-5,g-2,h-1,i,j,k,m-1},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-1,l,m,n},\
+cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygwin-lld/cygwin-lld-{a,b-1,c},\
+cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,f-2,g,h-1,i-1,j,k-2,l,m,o},\
+cygwin/cygwin-{cmodel-2,general-{a-1,b,c-1},macro},\
+cygwin-regression/cygwin-regression-{a,b,c,d,e},\
+mingw/mingw-{git-revision,emutls-1}}.patch
+
+)
+
+PATCH_URI="${LLVM_20_PATCHES[*]}"
 
 # CYGCMAKE_SOURCE="llvm"
 # CYGCMAKE_SOURCE="../src/${SRC_DIR}/llvm"
@@ -76,7 +130,7 @@ CYGCMAKE_SOURCE="$(pwd)/${NAME}-${VERSION}-${RELEASE}.${ARCH}/src/${SRC_DIR}/llv
 
 CMAKE_OPTIONS=(
 		-DLLVM_TARGETS_TO_BUILD=all
-		-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld"
+		-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb"
 		-DLLVM_ENABLE_RUNTIMES=
 		-DLLVM_BUILD_RUNTIME=ON
 

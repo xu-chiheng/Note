@@ -1,31 +1,16 @@
-diff --git a/lldb/unittests/Utility/VASprintfTest.cpp b/lldb/unittests/Utility/VASprintfTest.cpp
-index a04cd27362df..43b19625a687 100644
---- a/lldb/unittests/Utility/VASprintfTest.cpp
-+++ b/lldb/unittests/Utility/VASprintfTest.cpp
-@@ -47,6 +47,21 @@ TEST(VASprintfTest, BufferResize) {
-   EXPECT_EQ(TestStr.size(), SmallBuffer.size());
- }
+diff --git a/lldb/CMakeLists.txt b/lldb/CMakeLists.txt
+index 20d584c48bad..5fe7290e4536 100644
+--- a/lldb/CMakeLists.txt
++++ b/lldb/CMakeLists.txt
+@@ -53,6 +53,11 @@ if (WIN32)
+   add_definitions(-D_ENABLE_EXTENDED_ALIGNED_STORAGE)
+ endif()
  
-+#ifdef __CYGWIN__
-+// [ 98%] Built target HostTests
-+// /usr/bin/ld.bfd: CMakeFiles/UtilityTests.dir/VASprintfTest.cpp.o:VASprintfTest.cpp:(.text+0x7a5): undefined reference to `libintl_setlocale'
-+// /usr/bin/ld.bfd: CMakeFiles/UtilityTests.dir/VASprintfTest.cpp.o:VASprintfTest.cpp:(.text+0x86e): undefined reference to `libintl_setlocale'
-+// /usr/bin/ld.bfd: CMakeFiles/UtilityTests.dir/VASprintfTest.cpp.o:VASprintfTest.cpp:(.text+0xb38): undefined reference to `libintl_setlocale'
-+// /cygdrive/d/_cygwin/llvm/bin/llvm-ranlib.exe ../../../../../../lib/liblldbPluginInstrumentationRuntimeASanLibsanitizers.a
-+// make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-cygwin-clang-bfd-release-build'
-+// clang++: error: linker command failed with exit code 1 (use -v to see invocation)
-+// make[2]: *** [tools/lldb/unittests/Utility/CMakeFiles/UtilityTests.dir/build.make:1028: tools/lldb/unittests/Utility/UtilityTests.exe] Error 1
-+// make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-cygwin-clang-bfd-release-build'
-+// make[1]: *** [CMakeFiles/Makefile2:156282: tools/lldb/unittests/Utility/CMakeFiles/UtilityTests.dir/all] Error 2
-+// make[1]: *** Waiting for unfinished jobs....
-+// make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-cygwin-clang-bfd-release-build'
-+// [ 98%] Linking CXX static library ../../../../../../lib/liblldbPluginSymbolFileBreakpad.a
-+#else
- TEST(VASprintfTest, EncodingError) {
-   // Save the current locale first.
-   std::string Current(::setlocale(LC_ALL, nullptr));
-@@ -64,3 +79,4 @@ TEST(VASprintfTest, EncodingError) {
-   // Ensure we've restored the original locale once tested
-   ASSERT_TRUE(setlocale(LC_ALL, Current.c_str()));
- }
-+#endif
++if (CYGWIN)
++  add_definitions(-D_GNU_SOURCE)
++  add_definitions(-D__addr_t_defined)
++endif()
++
+ if (LLDB_ENABLE_PYTHON)
+   set(cachestring_LLDB_PYTHON_RELATIVE_PATH
+     "Path where Python modules are installed, relative to LLDB's install prefix")

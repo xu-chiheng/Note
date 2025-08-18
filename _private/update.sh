@@ -53,7 +53,6 @@ do_update_all_files() {
 		Tool/_cygport/{.gitignore,cygwin.cmd,llvm.cygport}
 
 		Tool/_doc
-		Tool/_quirk
 		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu}
 
 		Tool/{linux.sh,{cygwin,msys,mingw-vcrt,mingw-ucrt,vs2022_cygwin,vs2022_msys}.cmd}

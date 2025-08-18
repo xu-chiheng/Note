@@ -743,13 +743,15 @@ windows_download_executable_from_url_and_execute() {
 	local executable="$1"
 	local url="$2"
 	shift 2
-
 	# using Cygwin's /usr/bin/curl will have problem
 	# curl: (77) error setting certificate file: /etc/pki/tls/certs/ca-bundle.crt
 	# Since Windows 10, a native curl.exe is included. You can invoke it directly
 	# This version uses Windows' certificate store and avoids the issue.
+	local curl
+	curl="/usr/bin/curl"
+	# curl="$(cygpath -u 'C:\Windows\System32\curl.exe')"
 	echo_command rm -rf "${executable}" \
-	&& time_command "$(cygpath -u 'C:\Windows\System32\curl.exe')" -L -o "${executable}" "${url}" \
+	&& time_command "${curl}" -L -o "${executable}" "${url}" \
 	&& echo_command chmod +x "${executable}" \
 	&& time_command ./"${executable}" "$@" \
 	&& echo_command rm -rf "${executable}"

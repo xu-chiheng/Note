@@ -2,18 +2,6 @@ diff --git a/lldb/source/Host/common/Host.cpp b/lldb/source/Host/common/Host.cpp
 index c52e11ad6ddf..911be31727f4 100644
 --- a/lldb/source/Host/common/Host.cpp
 +++ b/lldb/source/Host/common/Host.cpp
-@@ -6,6 +6,11 @@
- //
- //===----------------------------------------------------------------------===//
- 
-+#ifdef __CYGWIN__
-+#define _GNU_SOURCE
-+#include <dlfcn.h>
-+#endif
-+
- // C includes
- #include <cerrno>
- #include <climits>
 @@ -18,7 +23,9 @@
  #include <netdb.h>
  #include <pwd.h>

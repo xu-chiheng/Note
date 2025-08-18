@@ -1,22 +1,23 @@
 diff --git a/clang/tools/libclang/CIndexer.cpp b/clang/tools/libclang/CIndexer.cpp
-index 12d9d418dea5..e7c1bed8b740 100644
+index 77da2e4fa5ea..ad4cbf552f60 100644
 --- a/clang/tools/libclang/CIndexer.cpp
 +++ b/clang/tools/libclang/CIndexer.cpp
-@@ -27,12 +27,10 @@
+@@ -25,13 +25,7 @@
+ #include <cstdio>
  #include <mutex>
  
- #ifdef __CYGWIN__
+-#ifdef __CYGWIN__
 -#include <cygwin/version.h>
- #include <sys/cygwin.h>
+-#include <sys/cygwin.h>
 -#define _WIN32 1
- #endif
- 
+-#endif
+-
 -#ifdef _WIN32
 +#if defined(_WIN32) || defined(__CYGWIN__)
  #include <windows.h>
  #elif defined(_AIX)
  #include <errno.h>
-@@ -105,7 +103,7 @@ const std::string &CIndexer::getClangResourcesPath() {
+@@ -104,23 +98,13 @@ const std::string &CIndexer::getClangResourcesPath() {
    SmallString<128> LibClangPath;
  
    // Find the location where this library lives (libclang.dylib).
@@ -25,15 +26,19 @@ index 12d9d418dea5..e7c1bed8b740 100644
    MEMORY_BASIC_INFORMATION mbi;
    char path[MAX_PATH];
    VirtualQuery((void *)(uintptr_t)clang_createTranslationUnit, &mbi,
-@@ -115,11 +113,7 @@ const std::string &CIndexer::getClangResourcesPath() {
- #ifdef __CYGWIN__
-   char w32path[MAX_PATH];
-   strcpy(w32path, path);
+                sizeof(mbi));
+   GetModuleFileNameA((HINSTANCE)mbi.AllocationBase, path, MAX_PATH);
+ 
+-#ifdef __CYGWIN__
+-  char w32path[MAX_PATH];
+-  strcpy(w32path, path);
 -#if CYGWIN_VERSION_API_MAJOR > 0 || CYGWIN_VERSION_API_MINOR >= 181
-   cygwin_conv_path(CCP_WIN_A_TO_POSIX, w32path, path, MAX_PATH);
+-  cygwin_conv_path(CCP_WIN_A_TO_POSIX, w32path, path, MAX_PATH);
 -#else
 -  cygwin_conv_to_full_posix_path(w32path, path);
 -#endif
- #endif
- 
+-#endif
+-
    LibClangPath += path;
+ #elif defined(_AIX)
+   getClangResourcesPathImplAIX(LibClangPath);

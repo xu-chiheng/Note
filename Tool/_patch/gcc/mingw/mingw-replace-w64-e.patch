@@ -1,0 +1,13 @@
+diff --git a/gcc/config/aarch64/aarch64-coff.h b/gcc/config/aarch64/aarch64-coff.h
+index 72607262e1b..1f68759fe3d 100644
+--- a/gcc/config/aarch64/aarch64-coff.h
++++ b/gcc/config/aarch64/aarch64-coff.h
+@@ -62,7 +62,7 @@
+   fprintf (STREAM, "\t.space\t%d  // skip\n", (int) (NBYTES))
+ 
+ /* Definitions that are not yet supported by binutils for the
+-   aarch64-w64-mingw32 target.  */
++   aarch64-pc-mingw64 target.  */
+ #define ASM_OUTPUT_TYPE_DIRECTIVE(STREAM, NAME, TYPE)
+ #define ASM_DECLARE_FUNCTION_SIZE(FILE, FNAME, DECL)
+ 

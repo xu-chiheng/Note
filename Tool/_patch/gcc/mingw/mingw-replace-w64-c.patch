@@ -1,0 +1,13 @@
+diff --git a/contrib/config-list.mk b/contrib/config-list.mk
+index fc9fc9902bf..67bc457cb0e 100644
+--- a/contrib/config-list.mk
++++ b/contrib/config-list.mk
+@@ -106,7 +106,7 @@ LIST = \
+   x86_64-apple-darwin10 x86_64-apple-darwin15 x86_64-apple-darwin21 \
+   x86_64-gnu x86_64-pc-linux-gnuOPT-with-fpmath=avx \
+   x86_64-elfOPT-with-fpmath=sse x86_64-freebsd13 x86_64-netbsd \
+-  x86_64-w64-mingw32 \
++  x86_64-pc-mingw64 \
+   x86_64-mingw32OPT-enable-sjlj-exceptions=yes x86_64-rtems \
+   xstormy16-elf xtensa-elf \
+   xtensa-linux

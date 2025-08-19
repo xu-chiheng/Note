@@ -1,0 +1,10 @@
+diff --git a/gcc/testsuite/gnat.dg/sin_cos.adb b/gcc/testsuite/gnat.dg/sin_cos.adb
+index 6e18df99753..4d05b939dcf 100644
+--- a/gcc/testsuite/gnat.dg/sin_cos.adb
++++ b/gcc/testsuite/gnat.dg/sin_cos.adb
+@@ -11,4 +11,4 @@ package body Sin_Cos is
+    end;
+ end Sin_Cos;
+ 
+---  { dg-final { scan-assembler "sincos\|cexp" { target *-linux-gnu* *-w64-mingw* *-*-vxworks* } } }
++--  { dg-final { scan-assembler "sincos\|cexp" { target *-linux-gnu* *-pc-mingw64 *-*-vxworks* } } }

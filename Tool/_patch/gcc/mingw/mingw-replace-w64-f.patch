@@ -1,0 +1,13 @@
+diff --git a/gcc/config/mingw/mingw32.h b/gcc/config/mingw/mingw32.h
+index 10bcd293527..b590cfeda2b 100644
+--- a/gcc/config/mingw/mingw32.h
++++ b/gcc/config/mingw/mingw32.h
+@@ -152,7 +152,7 @@ along with GCC; see the file COPYING3.  If not see
+    ??? It probably doesn't work, because the linker emulation defaults
+    to i386pep, the 64-bit mode that does not support
+    --large-address-aware, and x86_64-pc-mingw32 does not override the
+-   emulation to i386pe for -m32, unlike x86_64-w64-mingw32.  */
++   emulation to i386pe for -m32, unlike x86_64-pc-mingw64.  */
+ # define LINK_SPEC_LARGE_ADDR_AWARE \
+   "%{!shared:%{!mdll:%{m32:--large-address-aware}}}"
+ #else

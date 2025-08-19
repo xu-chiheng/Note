@@ -1,0 +1,22 @@
+diff --git a/configure.ac b/configure.ac
+index 3e120b027e9..71d7f6c2c40 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -889,7 +889,7 @@ case "${target}" in
+   ia64*-*-*vms*)
+     noconfigdirs="$noconfigdirs target-libffi"
+     ;;
+-  i[[3456789]]86-w64-mingw*)
++  i[[3456789]]86-*-mingw64*)
+     noconfigdirs="$noconfigdirs target-libffi"
+     ;;
+   i[[3456789]]86-*-mingw*)
+@@ -1251,7 +1251,7 @@ case "${target}" in
+     # No ld support yet.
+     noconfigdirs="$noconfigdirs libgui itcl ld"
+     ;;
+-  i[[3456789]]86-w64-mingw*)
++  i[[3456789]]86-*-mingw64*)
+     ;;
+   i[[3456789]]86-*-mingw*)
+     target_configdirs="$target_configdirs target-winsup"

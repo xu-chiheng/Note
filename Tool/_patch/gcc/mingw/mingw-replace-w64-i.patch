@@ -1,0 +1,21 @@
+diff --git a/libgm2/configure.host b/libgm2/configure.host
+index 2806fd6872b..8c7ad00c954 100644
+--- a/libgm2/configure.host
++++ b/libgm2/configure.host
+@@ -270,13 +270,13 @@ case "${host_os}" in
+   hpux*)
+     os_include_dir="os/hpux"
+     ;;
+-  mingw32*)
++  mingw*)
+     case "$host" in
+-      *-w64-*)
++      *-mingw64*)
+         os_include_dir="os/mingw32-w64"
+         error_constants_dir="os/mingw32-w64"
+         ;;
+-      *)
++      *-mingw32*)
+         os_include_dir="os/mingw32"
+         error_constants_dir="os/mingw32"
+         ;;

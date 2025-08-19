@@ -1,0 +1,13 @@
+diff --git a/lldb/CMakeLists.txt b/lldb/CMakeLists.txt
+index 484b29b5c52a..bbf5ba41b322 100644
+--- a/lldb/CMakeLists.txt
++++ b/lldb/CMakeLists.txt
+@@ -45,7 +45,7 @@ endif()
+ 
+ if (WIN32 OR CYGWIN)
+   add_definitions(-D_ENABLE_EXTENDED_ALIGNED_STORAGE)
+-  if (NOT MSVC)
++  if (MINGW)
+     # _BSD_SOURCE is required for MinGW's getopt.h to define optreset
+     add_definitions(-D_BSD_SOURCE)
+   endif()

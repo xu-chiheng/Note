@@ -1,0 +1,17 @@
+diff --git a/libada/configure b/libada/configure
+index ac4dad3ad3b..7d4bcbdda93 100755
+--- a/libada/configure
++++ b/libada/configure
+@@ -3250,6 +3250,12 @@ case "${CFLAGS}" in
+ 	;;
+ esac
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # These must be passed down, or are needed by gcc/libgcc.mvars

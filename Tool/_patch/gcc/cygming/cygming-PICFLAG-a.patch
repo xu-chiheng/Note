@@ -1,0 +1,30 @@
+diff --git a/c++tools/configure b/c++tools/configure
+index 006efe07b35..a0555d0abce 100755
+--- a/c++tools/configure
++++ b/c++tools/configure
+@@ -3008,6 +3008,12 @@ if test "${enable_host_pie+set}" = set; then :
+   enableval=$enable_host_pie; PICFLAG=-fPIE; LD_PICFLAG=-pie
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # Enable --enable-host-bind-now
+@@ -3016,6 +3022,12 @@ if test "${enable_host_bind_now+set}" = set; then :
+   enableval=$enable_host_bind_now; LD_PICFLAG="$LD_PICFLAG -Wl,-z,now"
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    LD_PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ 

@@ -1,0 +1,32 @@
+diff --git a/c++tools/configure.ac b/c++tools/configure.ac
+index 2b56256b395..453827e6d74 100644
+--- a/c++tools/configure.ac
++++ b/c++tools/configure.ac
+@@ -109,6 +109,13 @@ AC_ARG_ENABLE(host-pie,
+ [AS_HELP_STRING([--enable-host-pie],
+ 		[build host code as PIE])],
+ [PICFLAG=-fPIE; LD_PICFLAG=-pie], [])
++
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ # Enable --enable-host-bind-now
+@@ -117,6 +124,13 @@ AC_ARG_ENABLE(host-bind-now,
+        [link host code as BIND_NOW])],
+ [LD_PICFLAG="$LD_PICFLAG -Wl,-z,now"], [])
+ AC_SUBST(enable_host_bind_now)
++
++case $host in
++  *-cygwin | *-mingw*)
++    LD_PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(LD_PICFLAG)
+ 
+ # Check if O_CLOEXEC is defined by fcntl

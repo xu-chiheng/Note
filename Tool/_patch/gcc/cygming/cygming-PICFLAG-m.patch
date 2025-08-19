@@ -1,0 +1,17 @@
+diff --git a/libcpp/configure b/libcpp/configure
+index 32d6aaa3069..dd49a4a1ab4 100755
+--- a/libcpp/configure
++++ b/libcpp/configure
+@@ -9177,6 +9177,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # Enable Intel CET on Intel CET enabled host if jit is enabled.

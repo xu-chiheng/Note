@@ -1,0 +1,18 @@
+diff --git a/libgcc/configure.ac b/libgcc/configure.ac
+index 4e8c036990f..2a9920b79f8 100644
+--- a/libgcc/configure.ac
++++ b/libgcc/configure.ac
+@@ -96,6 +96,13 @@ AC_ARG_WITH(aix-soname,
+ AC_SUBST(with_aix_soname)
+ 
+ GCC_PICFLAG
++
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ AC_MSG_CHECKING([for --enable-version-specific-runtime-libs])

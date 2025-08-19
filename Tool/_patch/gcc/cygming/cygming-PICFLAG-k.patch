@@ -1,0 +1,17 @@
+diff --git a/libcody/configure b/libcody/configure
+index 0e536c0ccb0..2a6ad0a870d 100755
+--- a/libcody/configure
++++ b/libcody/configure
+@@ -2668,6 +2668,12 @@ else
+ fi
+ 
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    LD_PICFLAG=
++    ;;
++esac
+ 
+ 
+ # Check whether --enable-exceptions was given.

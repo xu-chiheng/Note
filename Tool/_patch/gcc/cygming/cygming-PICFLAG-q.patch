@@ -1,0 +1,17 @@
+diff --git a/libgcc/configure b/libgcc/configure
+index cff1eff9625..fc498b59f91 100755
+--- a/libgcc/configure
++++ b/libgcc/configure
+@@ -2442,6 +2442,12 @@ case "${CFLAGS}" in
+ 	;;
+ esac
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --enable-version-specific-runtime-libs" >&5

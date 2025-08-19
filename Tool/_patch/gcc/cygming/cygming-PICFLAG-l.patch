@@ -1,0 +1,18 @@
+diff --git a/libcody/configure.ac b/libcody/configure.ac
+index 14e8dd4a226..1f15a9c9898 100644
+--- a/libcody/configure.ac
++++ b/libcody/configure.ac
+@@ -86,6 +86,13 @@ else
+   LD_PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    LD_PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ AC_SUBST(LD_PICFLAG)
+ 

@@ -1,0 +1,17 @@
+diff --git a/zlib/configure b/zlib/configure
+index 92c462d04c6..575ce742814 100755
+--- a/zlib/configure
++++ b/zlib/configure
+@@ -11675,6 +11675,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ ac_config_files="$ac_config_files Makefile"
+ 

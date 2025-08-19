@@ -1,0 +1,17 @@
+diff --git a/configure b/configure
+index 3b0abeb8b2e..7e54a399e10 100755
+--- a/configure
++++ b/configure
+@@ -8873,6 +8873,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # If we are building PIC/PIE host executables, and we are building dependent

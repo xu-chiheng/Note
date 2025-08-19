@@ -1,0 +1,17 @@
+diff --git a/libdecnumber/configure b/libdecnumber/configure
+index 84bc4ffc767..1e3f8789b87 100755
+--- a/libdecnumber/configure
++++ b/libdecnumber/configure
+@@ -5211,6 +5211,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # Enable Intel CET on Intel CET enabled host if jit is enabled.

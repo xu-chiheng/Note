@@ -1,0 +1,44 @@
+diff --git a/gcc/configure.ac b/gcc/configure.ac
+index d7cf0b92cd8..42d5f9c2d60 100644
+--- a/gcc/configure.ac
++++ b/gcc/configure.ac
+@@ -476,6 +476,13 @@ AC_SUBST(GDCFLAGS)
+ 
+ # Determine PICFLAG for target gnatlib.
+ GCC_PICFLAG_FOR_TARGET
++
++case $target in
++  *-cygwin | *-mingw*)
++    PICFLAG_FOR_TARGET=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG_FOR_TARGET)
+ 
+ # -------------------------
+@@ -7792,6 +7799,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST([PICFLAG])
+ 
+ if test x$enable_host_pie = xyes; then
+@@ -7806,6 +7819,12 @@ if test x$enable_host_bind_now = xyes; then
+   LD_PICFLAG="$LD_PICFLAG -Wl,-z,now"
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    LD_PICFLAG=
++    ;;
++esac
++
+ AC_SUBST([LD_PICFLAG])
+ 
+ # Enable Intel CET on Intel CET enabled host if jit is enabled.

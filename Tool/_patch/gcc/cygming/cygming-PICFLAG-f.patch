@@ -1,0 +1,19 @@
+diff --git a/fixincludes/configure.ac b/fixincludes/configure.ac
+index 4e78511d20f..1bd2df18146 100644
+--- a/fixincludes/configure.ac
++++ b/fixincludes/configure.ac
+@@ -73,6 +73,14 @@ AC_ARG_ENABLE(host-pie,
+ [AS_HELP_STRING([--enable-host-pie],
+        [build host code as PIE])],
+ [PICFLAG=-fPIE; LD_PICFLAG=-pie], [])
++
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    LD_PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ AC_SUBST(LD_PICFLAG)
+ 

@@ -1,0 +1,17 @@
+diff --git a/libcpp/configure.ac b/libcpp/configure.ac
+index b883fec776f..c60d43e10ef 100644
+--- a/libcpp/configure.ac
++++ b/libcpp/configure.ac
+@@ -222,6 +222,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ # Enable Intel CET on Intel CET enabled host if jit is enabled.

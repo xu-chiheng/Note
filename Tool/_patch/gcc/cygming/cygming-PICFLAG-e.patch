@@ -1,0 +1,18 @@
+diff --git a/fixincludes/configure b/fixincludes/configure
+index 662c94dc112..d880c7dd4a8 100755
+--- a/fixincludes/configure
++++ b/fixincludes/configure
+@@ -4845,6 +4845,13 @@ if test "${enable_host_pie+set}" = set; then :
+   enableval=$enable_host_pie; PICFLAG=-fPIE; LD_PICFLAG=-pie
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    LD_PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ 

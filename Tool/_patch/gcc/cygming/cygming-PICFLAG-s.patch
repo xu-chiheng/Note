@@ -1,0 +1,17 @@
+diff --git a/libiberty/configure b/libiberty/configure
+index 5c69fee56c1..1f0095dcba5 100755
+--- a/libiberty/configure
++++ b/libiberty/configure
+@@ -5414,6 +5414,12 @@ if [ "${shared}" != "yes" ]; then
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ NOASANFLAG=
+ case " ${CFLAGS} " in

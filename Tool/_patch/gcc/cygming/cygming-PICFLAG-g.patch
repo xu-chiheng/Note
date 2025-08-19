@@ -1,0 +1,43 @@
+diff --git a/gcc/configure b/gcc/configure
+index 23da7d55d62..82c05a6558a 100755
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -5562,6 +5562,12 @@ case "${CFLAGS_FOR_TARGET}" in
+ 	;;
+ esac
+ 
++case $target in
++  *-cygwin | *-mingw*)
++    PICFLAG_FOR_TARGET=
++    ;;
++esac
++
+ 
+ 
+ # -------------------------
+@@ -34545,6 +34551,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ if test x$enable_host_pie = xyes; then
+@@ -34559,6 +34571,12 @@ if test x$enable_host_bind_now = xyes; then
+   LD_PICFLAG="$LD_PICFLAG -Wl,-z,now"
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    LD_PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # Enable Intel CET on Intel CET enabled host if jit is enabled.

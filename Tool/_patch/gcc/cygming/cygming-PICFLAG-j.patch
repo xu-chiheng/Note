@@ -1,0 +1,18 @@
+diff --git a/libada/configure.ac b/libada/configure.ac
+index 8b5f4ca8fc2..9320aa70aa8 100644
+--- a/libada/configure.ac
++++ b/libada/configure.ac
+@@ -143,6 +143,13 @@ esac
+ AC_SUBST([enable_shared])
+ 
+ GCC_PICFLAG
++
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST([PICFLAG])
+ 
+ # These must be passed down, or are needed by gcc/libgcc.mvars

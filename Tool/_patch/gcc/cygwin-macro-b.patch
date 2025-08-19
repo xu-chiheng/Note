@@ -1,0 +1,13 @@
+diff --git a/gcc/ada/mingw32.h b/gcc/ada/mingw32.h
+index 97ac3cc61bf..91b09dfb993 100644
+--- a/gcc/ada/mingw32.h
++++ b/gcc/ada/mingw32.h
+@@ -47,7 +47,7 @@
+ #ifndef __CYGWIN__
+ #include <tchar.h>
+ #endif
+-#if defined (__CYGWIN__) && !defined (__CYGWIN32__) && !defined (IN_RTS)
++#if defined (__CYGWIN64__) && !defined (IN_RTS)
+ /* Note: windows.h on cygwin-64 includes x86intrin.h which uses malloc.
+    That fails to compile, if malloc is poisoned, i.e. if !IN_RTS.  */
+ #define _X86INTRIN_H_INCLUDED

@@ -1,0 +1,18 @@
+diff --git a/gcc/config.in b/gcc/config.in
+index f3de4ba6776..51f6d011a0d 100644
+--- a/gcc/config.in
++++ b/gcc/config.in
+@@ -2553,13 +2553,6 @@
+ #endif
+ 
+ 
+-/* Define if you want to generate code by default that assumes that the Cygwin
+-   DLL exports wrappers to support libstdc++ function replacement. */
+-#ifndef USED_FOR_TARGET
+-#undef USE_CYGWIN_LIBSTDCXX_WRAPPERS
+-#endif
+-
+-
+ /* Define 0/1 if your linker supports hidden thunks in linkonce sections. */
+ #ifndef USED_FOR_TARGET
+ #undef USE_HIDDEN_LINKONCE

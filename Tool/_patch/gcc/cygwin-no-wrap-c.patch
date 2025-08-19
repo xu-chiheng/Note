@@ -1,0 +1,33 @@
+diff --git a/gcc/config/i386/cygwin-w64.h b/gcc/config/i386/cygwin-w64.h
+index aa7d8662fcc..53952403064 100644
+--- a/gcc/config/i386/cygwin-w64.h
++++ b/gcc/config/i386/cygwin-w64.h
+@@ -24,20 +24,6 @@ along with GCC; see the file COPYING3.  If not see
+ #undef ASM_SPEC
+ #define ASM_SPEC "%{m32:--32} %{m64:--64}"
+ 
+-/* To implement C++ function replacement we always wrap the cxx
+-   malloc-like operators.  See N2800 #17.6.4.6 [replacement.functions] */
+-#undef CXX_WRAP_SPEC_LIST
+-#define CXX_WRAP_SPEC_LIST " \
+-  --wrap _Znwm \
+-  --wrap _Znam \
+-  --wrap _ZdlPv \
+-  --wrap _ZdaPv \
+-  --wrap _ZnwmRKSt9nothrow_t \
+-  --wrap _ZnamRKSt9nothrow_t \
+-  --wrap _ZdlPvRKSt9nothrow_t \
+-  --wrap _ZdaPvRKSt9nothrow_t \
+-"
+-
+ #undef SPEC_32
+ #undef SPEC_64
+ #define SPEC_32 "m32"
+@@ -60,7 +46,6 @@ along with GCC; see the file COPYING3.  If not see
+ #define LINK_SPEC SUB_LINK_SPEC "\
+   %{mwindows:--subsystem windows} \
+   %{mconsole:--subsystem console} \
+-  " CXX_WRAP_SPEC " \
+   %{shared: %{mdll: %eshared and mdll are not compatible}} \
+   %{shared: --shared} %{mdll:--dll} \
+   %{static:-Bstatic} %{!static:-Bdynamic} \

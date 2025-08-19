@@ -1,0 +1,13 @@
+diff --git a/include/libiberty.h b/include/libiberty.h
+index d4e8791b14b..82a7064c068 100644
+--- a/include/libiberty.h
++++ b/include/libiberty.h
+@@ -107,7 +107,7 @@ extern int countargv (char * const *);
+ #if !HAVE_DECL_BASENAME
+ #if defined (__GNU_LIBRARY__ ) || defined (__linux__) \
+  || defined (__FreeBSD__) || defined (__OpenBSD__) || defined (__NetBSD__) \
+- || defined (__CYGWIN__) || defined (__CYGWIN32__) || defined (__MINGW32__) \
++ || defined (__CYGWIN__) || defined (__MINGW32__) \
+  || defined (__DragonFly__) || defined (HAVE_DECL_BASENAME)
+ extern char *basename (const char *) ATTRIBUTE_RETURNS_NONNULL ATTRIBUTE_NONNULL(1);
+ #else

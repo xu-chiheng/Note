@@ -1,0 +1,13 @@
+diff --git a/gcc/ada/cstreams.c b/gcc/ada/cstreams.c
+index ca94ce749ec..7401fe0835c 100644
+--- a/gcc/ada/cstreams.c
++++ b/gcc/ada/cstreams.c
+@@ -38,7 +38,7 @@
+ /* the define above will make off_t a 64bit type on GNU/Linux */
+ 
+ /* Tell Cygwin's <stdio.h> to expose fileno_unlocked() */
+-#if defined(__CYGWIN__) && !defined(__CYGWIN32__) && !defined(_GNU_SOURCE)
++#if defined(__CYGWIN64__) && !defined(_GNU_SOURCE)
+ #define _GNU_SOURCE
+ #endif
+ 

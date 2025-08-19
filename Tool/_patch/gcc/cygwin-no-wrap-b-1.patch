@@ -1,0 +1,15 @@
+diff --git a/gcc/config/mingw/cygming.opt b/gcc/config/mingw/cygming.opt
+index b7b0bc5f619..2cde4a051cb 100644
+--- a/gcc/config/mingw/cygming.opt
++++ b/gcc/config/mingw/cygming.opt
+@@ -46,10 +46,6 @@ mpe-aligned-commons
+ Target Var(use_pe_aligned_common) Init(HAVE_GAS_ALIGNED_COMM)
+ Use the GNU extension to the PE format for aligned common data.
+ 
+-muse-libstdc-wrappers
+-Target Condition({defined (USE_CYGWIN_LIBSTDCXX_WRAPPERS)})
+-Compile code that relies on Cygwin DLL wrappers to support C++ operator new/delete replacement.
+-
+ fset-stack-executable
+ Common Var(flag_setstackexecutable) Init(1) Optimization
+ For nested functions on stack executable permission is set.

@@ -27,18 +27,3 @@ index 6fd9e77f20a..99a85e54d3c 100644
      target_configdirs="$target_configdirs target-winsup"
      ;;
    *-*-cygwin*)
-@@ -3591,12 +3591,12 @@ case " $target_configdirs " in
- esac
- 
- case "$target" in
--  x86_64-*mingw* | *-w64-mingw*)
-+  *-mingw64*)
-   # MinGW-w64 does not use newlib, nor does it use winsup. It may,
-   # however, use a symlink named 'mingw' in ${prefix} .
-     FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -L${prefix}/${target}/lib -L${prefix}/mingw/lib -isystem ${prefix}/${target}/include -isystem ${prefix}/mingw/include'
-     ;;
--  *-mingw*)
-+  *-mingw32*)
-   # MinGW can't be handled as Cygwin above since it does not use newlib.
-     FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -L$$r/$(TARGET_SUBDIR)/winsup/mingw -L$$r/$(TARGET_SUBDIR)/winsup/w32api/lib -isystem $$s/winsup/mingw/include -isystem $$s/winsup/w32api/include'
-     ;;

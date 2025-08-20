@@ -1,0 +1,13 @@
+diff --git a/lldb/unittests/Host/FileSystemTest.cpp b/lldb/unittests/Host/FileSystemTest.cpp
+index 58887f6b2467..c2b18c6c2d20 100644
+--- a/lldb/unittests/Host/FileSystemTest.cpp
++++ b/lldb/unittests/Host/FileSystemTest.cpp
+@@ -12,7 +12,7 @@
+ #include "lldb/Host/FileSystem.h"
+ #include "llvm/Support/Errc.h"
+ 
+-extern const char *TestMainArgv0;
++static const char *TestMainArgv0;
+ 
+ using namespace lldb_private;
+ using namespace llvm;

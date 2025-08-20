@@ -1,0 +1,13 @@
+diff --git a/lldb/unittests/TestingSupport/TestUtilities.cpp b/lldb/unittests/TestingSupport/TestUtilities.cpp
+index efdc6c5eb234..f185b7352255 100644
+--- a/lldb/unittests/TestingSupport/TestUtilities.cpp
++++ b/lldb/unittests/TestingSupport/TestUtilities.cpp
+@@ -17,7 +17,7 @@
+ 
+ using namespace lldb_private;
+ 
+-extern const char *TestMainArgv0;
++static const char *TestMainArgv0;
+ 
+ std::once_flag TestUtilities::g_debugger_initialize_flag;
+ std::string lldb_private::GetInputFilePath(const llvm::Twine &name) {

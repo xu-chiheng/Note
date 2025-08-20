@@ -1,0 +1,13 @@
+diff --git a/lldb/unittests/Host/HostTest.cpp b/lldb/unittests/Host/HostTest.cpp
+index 1424e4472edd..fab51edbc6e3 100644
+--- a/lldb/unittests/Host/HostTest.cpp
++++ b/lldb/unittests/Host/HostTest.cpp
+@@ -26,7 +26,7 @@ using namespace lldb_private;
+ using namespace llvm;
+ 
+ // From TestMain.cpp.
+-extern const char *TestMainArgv0;
++static const char *TestMainArgv0;
+ 
+ static cl::opt<uint64_t> test_arg("test-arg");
+ 

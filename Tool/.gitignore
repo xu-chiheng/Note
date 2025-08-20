@@ -33,6 +33,7 @@
 /__mingw-ucrt*
 /__cygwin*
 /__linux*
+/_temp
 
 /a.out
 /a.exe

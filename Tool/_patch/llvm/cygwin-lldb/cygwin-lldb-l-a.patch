@@ -1,0 +1,13 @@
+diff --git a/lldb/unittests/Core/ModuleSpecTest.cpp b/lldb/unittests/Core/ModuleSpecTest.cpp
+index f9e19ed35acc..d4f5e03f5055 100644
+--- a/lldb/unittests/Core/ModuleSpecTest.cpp
++++ b/lldb/unittests/Core/ModuleSpecTest.cpp
+@@ -22,7 +22,7 @@
+ using namespace lldb;
+ using namespace lldb_private;
+ 
+-extern const char *TestMainArgv0;
++static const char *TestMainArgv0;
+ 
+ // This test file intentionally doesn't initialize the FileSystem.
+ // Everything in this file should be able to run without requiring

@@ -1,0 +1,17 @@
+diff --git a/configure.ac b/configure.ac
+index 6fd9e77f20a..8b0d4a9803e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2049,6 +2049,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ # If we are building PIC/PIE host executables, and we are building dependent

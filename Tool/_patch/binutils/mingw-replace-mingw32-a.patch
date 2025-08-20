@@ -1,0 +1,22 @@
+diff --git a/bfd/configure b/bfd/configure
+index 6c56ffee111..c55af90b710 100755
+--- a/bfd/configure
++++ b/bfd/configure
+@@ -12244,7 +12244,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"
+@@ -15179,7 +15179,7 @@ _ACEOF
+ 
+ 
+ case "${host}" in
+-*-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-cygwin* | *-*-windows*)
++*-*-msdos* | *-*-go32* | *-*-mingw* | *-*-cygwin* | *-*-windows*)
+ 
+ $as_echo "#define USE_BINARY_FOPEN 1" >>confdefs.h
+  ;;

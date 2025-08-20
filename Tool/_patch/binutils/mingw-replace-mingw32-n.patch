@@ -1,0 +1,15 @@
+diff --git a/libiberty/configure b/libiberty/configure
+index 5c69fee56c1..4953418d3c7 100755
+--- a/libiberty/configure
++++ b/libiberty/configure
+@@ -6852,8 +6852,8 @@ esac
+ 
+     ;;
+ 
+-  *-*-mingw32*)
+-    # Under mingw32, sys_nerr and sys_errlist exist, but they are
++  *-*-mingw*)
++    # Under mingw, sys_nerr and sys_errlist exist, but they are
+     # macros, so the test below won't find them.
+     libiberty_cv_var_sys_nerr=yes
+     libiberty_cv_var_sys_errlist=yes

@@ -1,0 +1,13 @@
+diff --git a/sim/configure b/sim/configure
+index 4ea50838ba8..4ef421a8813 100755
+--- a/sim/configure
++++ b/sim/configure
+@@ -16568,7 +16568,7 @@ build_build_warnings="
+ "
+ 
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     # Enable -Wno-format by default when using gcc on mingw since many
+     # GCC versions complain about %I64.
+     build_warnings="$build_warnings -Wno-format" ;;

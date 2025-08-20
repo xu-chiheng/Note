@@ -1,0 +1,40 @@
+diff --git a/binutils/configure b/binutils/configure
+index 2f50a9f0b7d..7972da9c4ed 100755
+--- a/binutils/configure
++++ b/binutils/configure
+@@ -12194,7 +12194,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"
+@@ -15676,7 +15676,7 @@ fi
+ 
+ 
+ case "${host}" in
+-*-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-cygwin* | *-*-windows*)
++*-*-msdos* | *-*-go32* | *-*-mingw* | *-*-cygwin* | *-*-windows*)
+ 
+ $as_echo "#define USE_BINARY_FOPEN 1" >>confdefs.h
+  ;;
+@@ -16211,7 +16211,7 @@ do
+ 	BUILD_WINDMC='$(WINDMC_PROG)$(EXEEXT)'
+ 	BUILD_DLLWRAP='$(DLLWRAP_PROG)$(EXEEXT)'
+ 	;;
+-    arm-wince-pe* | arm-*-wince | arm*-*-cegcc* | arm*-*-mingw32ce*)
++    arm-wince-pe* | arm-*-wince | arm*-*-cegcc* | arm*-*-mingw*ce*)
+ 	BUILD_DLLTOOL='$(DLLTOOL_PROG)$(EXEEXT)'
+ 	if test -z "$DLLTOOL_DEFAULT"; then
+ 	    DLLTOOL_DEFAULT="-DDLLTOOL_DEFAULT_ARM_WINCE"
+@@ -16229,7 +16229,7 @@ do
+ 	BUILD_WINDRES='$(WINDRES_PROG)$(EXEEXT)'
+ 	BUILD_WINDMC='$(WINDMC_PROG)$(EXEEXT)'
+ 	;;
+-    i[3-7]86-*-pe* | i[3-7]86-*-cygwin* | i[3-7]86-*-mingw32** | all)
++    i[3-7]86-*-pe* | i[3-7]86-*-cygwin* | i[3-7]86-*-mingw** | all)
+ 	BUILD_DLLTOOL='$(DLLTOOL_PROG)$(EXEEXT)'
+ 	if test -z "$DLLTOOL_DEFAULT"; then
+ 	    DLLTOOL_DEFAULT="-DDLLTOOL_DEFAULT_I386"

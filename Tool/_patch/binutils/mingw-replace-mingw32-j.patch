@@ -1,0 +1,13 @@
+diff --git a/gdbsupport/configure.ac b/gdbsupport/configure.ac
+index 80e24eac479..b5a6e36680c 100644
+--- a/gdbsupport/configure.ac
++++ b/gdbsupport/configure.ac
+@@ -72,7 +72,7 @@ if test "$development" = true ; then
+ fi
+ 
+ case ${host} in
+-  *mingw32*)
++  *mingw*)
+     AC_DEFINE(USE_WIN32API, 1,
+               [Define if we should use the Windows API, instead of the
+ 	       POSIX API.  On Windows, we use the Windows API when

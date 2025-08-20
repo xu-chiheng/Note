@@ -1,0 +1,13 @@
+diff --git a/gold/configure b/gold/configure
+index c92f4478776..c150cd515d9 100755
+--- a/gold/configure
++++ b/gold/configure
+@@ -9933,7 +9933,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"

@@ -1,0 +1,17 @@
+diff --git a/libdecnumber/configure b/libdecnumber/configure
+index e4600c10e55..dbbea22ad21 100755
+--- a/libdecnumber/configure
++++ b/libdecnumber/configure
+@@ -5069,6 +5069,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ 
+ 
+ # Output.

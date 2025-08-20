@@ -1,0 +1,22 @@
+diff --git a/binutils/configure.ac b/binutils/configure.ac
+index b03e36c9e0e..45d4cf15e92 100644
+--- a/binutils/configure.ac
++++ b/binutils/configure.ac
+@@ -377,7 +377,7 @@ changequote([,])dnl
+ 	BUILD_WINDMC='$(WINDMC_PROG)$(EXEEXT)'
+ 	BUILD_DLLWRAP='$(DLLWRAP_PROG)$(EXEEXT)'
+ 	;;
+-    arm-wince-pe* | arm-*-wince | arm*-*-cegcc* | arm*-*-mingw32ce*)
++    arm-wince-pe* | arm-*-wince | arm*-*-cegcc* | arm*-*-mingw*ce*)
+ 	BUILD_DLLTOOL='$(DLLTOOL_PROG)$(EXEEXT)'
+ 	if test -z "$DLLTOOL_DEFAULT"; then
+ 	    DLLTOOL_DEFAULT="-DDLLTOOL_DEFAULT_ARM_WINCE"
+@@ -396,7 +396,7 @@ changequote([,])dnl
+ 	BUILD_WINDMC='$(WINDMC_PROG)$(EXEEXT)'
+ 	;;
+ changequote(,)dnl
+-    i[3-7]86-*-pe* | i[3-7]86-*-cygwin* | i[3-7]86-*-mingw32** | all)
++    i[3-7]86-*-pe* | i[3-7]86-*-cygwin* | i[3-7]86-*-mingw** | all)
+ changequote([,])dnl
+ 	BUILD_DLLTOOL='$(DLLTOOL_PROG)$(EXEEXT)'
+ 	if test -z "$DLLTOOL_DEFAULT"; then

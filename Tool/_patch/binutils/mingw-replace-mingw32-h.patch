@@ -1,0 +1,22 @@
+diff --git a/gdbserver/configure b/gdbserver/configure
+index 0942ef173d4..364ca40e3a3 100755
+--- a/gdbserver/configure
++++ b/gdbserver/configure
+@@ -8230,7 +8230,7 @@ fi
+ 
+   WIN32APILIBS=
+   case ${host} in
+-    *mingw32*)
++    *mingw*)
+ 
+ $as_echo "#define USE_WIN32API 1" >>confdefs.h
+ 
+@@ -13715,7 +13715,7 @@ if test "$GDB_COMPILER_TYPE" != gcc; then
+ fi
+ 
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     # Enable -Wno-format by default when using gcc on mingw since many
+     # GCC versions complain about %I64.
+     build_warnings="$build_warnings -Wno-format" ;;

@@ -1,0 +1,13 @@
+diff --git a/gas/configure.ac b/gas/configure.ac
+index 7403ec71cd0..d789b73371e 100644
+--- a/gas/configure.ac
++++ b/gas/configure.ac
+@@ -185,7 +185,7 @@ AH_VERBATIM([00_CONFIG_H_CHECK],
+ # If we are on a DOS filesystem, we must use gdb.ini rather than
+ # .gdbinit.
+ case "${host}" in
+-  *-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-windows*)
++  *-*-msdos* | *-*-go32* | *-*-mingw* | *-*-windows*)
+     GDBINIT="gdb.ini"
+     AC_CONFIG_FILES(gdb.ini:gdbinit.in)
+     ;;

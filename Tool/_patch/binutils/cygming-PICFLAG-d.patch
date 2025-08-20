@@ -1,0 +1,17 @@
+diff --git a/libdecnumber/configure.ac b/libdecnumber/configure.ac
+index 2e95b829dc0..ce201797f8c 100644
+--- a/libdecnumber/configure.ac
++++ b/libdecnumber/configure.ac
+@@ -116,6 +116,12 @@ else
+   PICFLAG=
+ fi
+ 
++case $host in
++  *-cygwin | *-mingw*)
++    PICFLAG=
++    ;;
++esac
++
+ AC_SUBST(PICFLAG)
+ 
+ # Output.

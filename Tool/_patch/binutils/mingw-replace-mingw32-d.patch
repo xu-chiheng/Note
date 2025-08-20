@@ -1,0 +1,31 @@
+diff --git a/gas/configure b/gas/configure
+index ace1a17365f..6ba9f0f70d4 100755
+--- a/gas/configure
++++ b/gas/configure
+@@ -11752,7 +11752,7 @@ fi
+ 
+ # Disable -Wformat by default when using gcc on mingw
+ case "${host}" in
+-  *-*-mingw32*)
++  *-*-mingw*)
+     if test "${GCC}" = yes -a -z "${ERROR_ON_WARNING}" ; then
+       GCC_WARN_CFLAGS="$GCC_WARN_CFLAGS -Wno-format"
+       GCC_WARN_CFLAGS_FOR_BUILD="$GCC_WARN_CFLAGS_FOR_BUILD -Wno-format"
+@@ -11830,7 +11830,7 @@ fi
+ # If we are on a DOS filesystem, we must use gdb.ini rather than
+ # .gdbinit.
+ case "${host}" in
+-  *-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-windows*)
++  *-*-msdos* | *-*-go32* | *-*-mingw* | *-*-windows*)
+     GDBINIT="gdb.ini"
+     ac_config_files="$ac_config_files gdb.ini:gdbinit.in"
+ 
+@@ -15926,7 +15926,7 @@ _ACEOF
+ 
+ 
+ case "${host}" in
+-*-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-cygwin* | *-*-windows*)
++*-*-msdos* | *-*-go32* | *-*-mingw* | *-*-cygwin* | *-*-windows*)
+ 
+ $as_echo "#define USE_BINARY_FOPEN 1" >>confdefs.h
+  ;;

@@ -1,0 +1,15 @@
+diff --git a/llvm/lib/Transforms/Vectorize/SLPVectorizer.cpp b/llvm/lib/Transforms/Vectorize/SLPVectorizer.cpp
+index 02fea2eaf9d4..69d595dfe0db 100644
+--- a/llvm/lib/Transforms/Vectorize/SLPVectorizer.cpp
++++ b/llvm/lib/Transforms/Vectorize/SLPVectorizer.cpp
+@@ -5292,8 +5292,8 @@ BoUpSLP::canVectorizeLoads(ArrayRef<Value *> VL, const Value *VL0,
+     if (!hasFullVectorsOrPowerOf2(TTI, ScalarTy, VL.size()))
+       return false;
+ 
+-    unsigned Sz = DL->getTypeSizeInBits(ScalarTy);
+-    unsigned MinVF = getMinVF(2 * Sz);
++    unsigned Sz_ = DL->getTypeSizeInBits(ScalarTy);
++    unsigned MinVF = getMinVF(2 * Sz_);
+     DemandedElts.clearAllBits();
+     // Iterate through possible vectorization factors and check if vectorized +
+     // shuffles is better than just gather.

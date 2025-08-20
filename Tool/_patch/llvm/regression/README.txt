@@ -81,3 +81,15 @@ regression-l.patch
 regression-m.patch
 Fix the regression caused by commit 1a7b7e24bcc1041ae0fb90abcfb73d36d76f4a07 2025-07-01, that build fails on MinGW.
 
+regression-n.patch
+Fix the regression caused by commit a12ca57c1cb070be8e0048004c6b4e820029b6ee 2025-02-25, that build fails on Cygwin using GCC 16.0.0 20250819.
+/cygdrive/e/Note/Tool/llvm/llvm/lib/Transforms/Vectorize/SLPVectorizer.cpp: In lambda function:
+/cygdrive/e/Note/Tool/llvm/llvm/lib/Transforms/Vectorize/SLPVectorizer.cpp:5295:14: error: declaration of 'unsigned int Sz' shadows a parameter
+ 5295 |     unsigned Sz = DL->getTypeSizeInBits(ScalarTy);
+      |              ^~
+/cygdrive/e/Note/Tool/llvm/llvm/lib/Transforms/Vectorize/SLPVectorizer.cpp:5246:44: note: 'const unsigned int& Sz' previously declared here
+ 5246 |     APInt DemandedElts = APInt::getAllOnes(Sz);
+      |                                            ^~
+
+
+

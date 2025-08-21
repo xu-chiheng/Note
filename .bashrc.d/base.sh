@@ -185,9 +185,7 @@ set_environment_variables_at_bash_startup() {
 	if host_triple_is_windows "${HOST_TRIPLE}" && [ -v VSINSTALLDIR ]; then
 		# Visual Studio, MSVC bin dirs has been prepended to PATH
 		# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
-		if [ -v VCPKG_DIR ]; then
-			export PATH="$(join_array_elements ':' "$(cygpath -u "${VCPKG_DIR}")" "${PATH}")"
-		fi
+		true
 	else
 		case "${HOST_TRIPLE}" in
 			*-mingw* )

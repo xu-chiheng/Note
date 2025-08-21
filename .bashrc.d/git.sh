@@ -384,7 +384,11 @@ copy_tarball_to_all_drives() {
 
 				# data directory
 				if host_triple_is_windows "${HOST_TRIPLE}" && [ -v DATA_DIR ] && [ ! -z "${DATA_DIR}" ]; then
-					echo "$(cygpath -u "${DATA_DIR}")"
+					# DATA_DIR=D:\Data            # optional, only for my personal data backup
+					local data_dir="$(cygpath -u "${DATA_DIR}")"
+					if [ -d "${data_dir}" ]; then
+						echo "${data_dir}"
+					fi
 				fi
 			} | sort | uniq
 		); do

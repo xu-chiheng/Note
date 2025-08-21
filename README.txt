@@ -9,9 +9,7 @@ Set the following Windows environment variables :
 CYGWIN_DIR=D:\cygwin64
 MSYS2_DIR=D:\msys64
 VS2022_DIR=C:\Program Files\Microsoft Visual Studio\2022\Enterprise
-VCPKG_DIR=D:\vcpkg          # optional
 HOME=%USERPROFILE%          # can be any directory, like 'E:\Note'
-DATA_DIR=D:\Data            # optional, only for my personal data backup
 
 I also use one of the following commands to make a link :
 ln -s ~ "$(cygpath -u 'E:\Note')"     # using Cygwin or MSYS2/MinGW bash in mintty terminal

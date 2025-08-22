@@ -117,19 +117,17 @@ PACKAGE=llvm
 	VS2022_BUILD_DIR="${SOURCE_DIR}-vs2022-build"
 	# NINJA_BUILD_DIR="${SOURCE_DIR}-ninja-build"
 
-	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/devenv-command-line-switches?view=vs-2022
-	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/build-devenv-exe?view=vs-2022
+	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/devenv-command-line-switches
+	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/build-devenv-exe
 	# https://stackoverflow.com/questions/18902628/using-devenv-exe-from-the-command-line-and-specifying-the-platform
 
-	# devenv.exe LLVM.sln -build "Debug|x64"   -Out "../llvm-$(print_current_datetime)-output.txt"
-	# devenv.exe LLVM.sln -build "Release|x64" -Out "../llvm-$(print_current_datetime)-output.txt"
-	# devenv.exe LLVM.sln -clean
+	# time_command devenv.exe LLVM.sln -build "Release|x64" -out "../llvm-$(print_current_datetime)-output.txt"
+	# time_command devenv.exe LLVM.sln -clean
 
-	# https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference?view=vs-2022
-	# https://learn.microsoft.com/en-us/visualstudio/msbuild/obtaining-build-logs-with-msbuild?view=vs-2022
+	# https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference
+	# https://learn.microsoft.com/en-us/visualstudio/msbuild/obtaining-build-logs-with-msbuild
 
-	# msbuild.exe -m LLVM.sln -property:Configuration=Debug   -fl -flp:logfile="../llvm-$(print_current_datetime)-output.txt";verbosity=diagnostic
-	# msbuild.exe -m LLVM.sln -property:Configuration=Release -fl -flp:logfile="../llvm-$(print_current_datetime)-output.txt";verbosity=diagnostic
+	# time_command msbuild.exe LLVM.sln -maxCpuCount -interactive "-property:Configuration=Release;Platform=x64" -verbosity:normal 2>&1 | tee "../llvm-$(print_current_datetime)-output.txt"
 
 	rm -rf "${VS2022_BUILD_DIR}" \
 	&& { time_command pushd_and_cmake "${VS2022_BUILD_DIR}" "${CMAKE_OPTIONS[@]}" \

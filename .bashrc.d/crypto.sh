@@ -37,7 +37,7 @@ ____how_to_use_mailvelope_browser_extension____() {
 
 	# GnuPG export keys
 	gpg_export_all_public_keys_with_ascii_armored_output_and_to_text_file
-	gpg_export_default_private_key_with_ascii_armored_output_and_to_text_file
+	gpg_export_all_private_keys_with_ascii_armored_output_and_to_text_file
 
 	# https://keys.mailvelope.com
 	# https://keys.mailvelope.com/manage.html

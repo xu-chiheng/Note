@@ -56,12 +56,14 @@ fix_cygwin_gpg_quirk() {
 fix_cygwin_python_quirk() {
 	local usr_bin_python_version="/usr/bin/python3.12.exe"
 	local usr_bin_python
-	for usr_bin_python in "/usr/bin/python.exe" "/usr/bin/python3.exe"; do
-		if [ ! -f "${usr_bin_python}" ]; then
-			rm -rf "${usr_bin_python}" \
-			&& cp -f "${usr_bin_python_version}" "${usr_bin_python}"
-		fi
-	done
+	if [ -f "${usr_bin_python_version}" ]; then
+		for usr_bin_python in "/usr/bin/python.exe" "/usr/bin/python3.exe"; do
+			if [ ! -f "${usr_bin_python}" ]; then
+				rm -rf "${usr_bin_python}" \
+				&& cp -f "${usr_bin_python_version}" "${usr_bin_python}"
+			fi
+		done
+	fi
 }
 
 fix_mingw_mode_quirk() {
@@ -85,12 +87,11 @@ int _commode = 0x0800; // _IOCOMMIT
 		local varname="${mode}_c"
 		echo "${!varname}" >"${tmp_src}"
 		echo_command cat "${tmp_src}"
-		echo_command gcc -c -O3 -o "${tmp_obj}" "${tmp_src}"
-		echo_command strip --strip-debug --discard-all -o "${tmp_obj}" "${tmp_obj}"
+		echo_command gcc -c -O3 -fno-ident -o "${tmp_obj}" "${tmp_src}"
+		echo_command strip --strip-debug --discard-all --discard-locals -o "${tmp_obj}" "${tmp_obj}"
+		echo_command objcopy --remove-section=.text --remove-section=.bss "${tmp_obj}"
 		echo_command objdump -h -t "${tmp_obj}"
 		echo_command objdump -s -j .data "${tmp_obj}"
-		# echo_command objdump -s -j .bss "${tmp_obj}"
-		# echo_command objdump -d "${tmp_obj}"
 		if echo_command cmp "${tmp_obj}" "${target_obj}"; then
 			echo "equal"
 		else
@@ -99,6 +100,8 @@ int _commode = 0x0800; // _IOCOMMIT
 			&& mv -f "${tmp_obj}" "${target_obj}"
 		fi
 		rm -rf "${tmp_src}" "${tmp_obj}"
+		echo
+		echo
 	done
 }
 

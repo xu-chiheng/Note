@@ -90,8 +90,10 @@ int _commode = 0x0800; // _IOCOMMIT
 		echo_command gcc -c -O3 -fno-ident -o "${tmp_obj}" "${tmp_src}"
 		echo_command strip --strip-debug --discard-all --discard-locals -o "${tmp_obj}" "${tmp_obj}"
 		echo_command objcopy --remove-section=.text --remove-section=.bss "${tmp_obj}"
-		echo_command objdump -h -t "${tmp_obj}"
-		echo_command objdump -s -j .data "${tmp_obj}"
+		echo_command objdump -h -t "${tmp_obj}" | grep -v '^$'
+		echo
+		echo_command objdump -s -j .data "${tmp_obj}" | grep -v '^$'
+		echo
 		if echo_command cmp "${tmp_obj}" "${target_obj}"; then
 			echo "equal"
 		else

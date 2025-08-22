@@ -521,13 +521,13 @@ build_and_install_gmp_mpfr_mpc() {
 
 	# GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers. 
 	# https://gmplib.org
-	local gmp_version=6.2.1
+	local gmp_version=6.3.0
 	# The MPFR library is a C library for multiple-precision floating-point computations with correct rounding. 
 	# https://www.mpfr.org
-	local mpfr_version=4.1.0
+	local mpfr_version=4.2.2
 	# GNU MPC is a C library for the arithmetic of complex numbers with arbitrarily high precision and correct rounding of the result. 
 	# https://www.multiprecision.org
-	local mpc_version=1.2.1
+	local mpc_version=1.3.1
 
 	local gmp_tarball="gmp-${gmp_version}.tar.xz"
 	local mpfr_tarball="mpfr-${mpfr_version}.tar.xz"

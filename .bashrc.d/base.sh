@@ -186,6 +186,21 @@ set_environment_variables_at_bash_startup() {
 		# Visual Studio, MSVC bin dirs has been prepended to PATH
 		# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
 		true
+
+		# winget search python
+
+		# from Python.org
+		# winget install --id Python.Python.3.13
+
+		# # which python
+		# /cygdrive/c/Users/Administrator/AppData/Local/Programs/Python/Python313/python
+
+		# from Microsoft Store, does not work
+		# winget install python
+		# python -c "import sys; print(sys.executable)"
+		# C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps
+		# export PATH="$(join_array_elements ':' "$(dirname "$(readlink "$(cygpath -u "${LOCALAPPDATA}\Microsoft\WindowsApps")"/python.exe)")" "${PATH}")"
+		# python3.13.exe
 	else
 		case "${HOST_TRIPLE}" in
 			*-mingw* )

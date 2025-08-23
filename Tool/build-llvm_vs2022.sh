@@ -26,6 +26,11 @@ cd "$(dirname "$0")"
 . "./common.sh"
 
 # https://clang.llvm.org/get_started.html
+# https://llvm.org/docs/GettingStartedVS.html
+# https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild
+# https://learn.microsoft.com/en-us/cpp/build/clang-support-cmake
+# https://stackoverflow.com/questions/57480964/how-to-create-visual-studio-projects-that-use-llvm
+# https://phasetw0.com/llvm/getting-started-on-windows
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE=llvm
@@ -114,8 +119,11 @@ PACKAGE=llvm
 		# -DBUILD_SHARED_LIBS=ON
 	)
 
+	BUILD_TYPE=Release
 	VS2022_BUILD_DIR="${SOURCE_DIR}-vs2022-build"
-	# NINJA_BUILD_DIR="${SOURCE_DIR}-ninja-build"
+
+	DEST_DIR="$(pwd)/__vs2002"
+	TARBALL="${PACKAGE}.tar"
 
 	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/devenv-command-line-switches
 	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/build-devenv-exe
@@ -127,11 +135,11 @@ PACKAGE=llvm
 	# https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference
 	# https://learn.microsoft.com/en-us/visualstudio/msbuild/obtaining-build-logs-with-msbuild
 
-	# time_command msbuild.exe LLVM.sln -maxCpuCount -interactive "-property:Configuration=Release;Platform=x64" -verbosity:normal 2>&1 | tee "../~$(print_current_datetime)-llvm-vs2022-output.txt"
-
 	rm -rf "${VS2022_BUILD_DIR}" \
 	&& { time_command pushd_and_cmake "${VS2022_BUILD_DIR}" "${CMAKE_OPTIONS[@]}" \
 	&& echo "double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE" \
+	&& time_command msbuild.exe LLVM.sln -maxCpuCount -interactive "-property:Configuration=${BUILD_TYPE};Platform=x64" -verbosity:normal \
+	&& maybe_make_tarball_and_calculate_sha512_1 "${DEST_DIR}" "${TARBALL}" "${BUILD_TYPE}" \
 	&& echo_command popd;}
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-vs2022-output.txt"

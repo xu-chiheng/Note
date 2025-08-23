@@ -145,6 +145,10 @@ set_environment_variables_at_bash_startup() {
 	export LANG=en_US.UTF-8
 	export LC_ALL=en_US.UTF-8
 	export EDITOR=~/editor.sh
+	# global UTF-8 mode (files, strings, I/O).
+	export PYTHONUTF8=1
+	# just enforces UTF-8 for stdin/stdout/stderr.
+	# export PYTHONIOENCODING=utf-8
 
 	case "${HOST_TRIPLE}" in
 		*-cygwin )
@@ -761,8 +765,8 @@ windows_download_executable_from_url_and_execute() {
 	# Since Windows 10, a native curl.exe is included. You can invoke it directly
 	# This version uses Windows' certificate store and avoids the issue.
 	local curl
-	curl="/usr/bin/curl"
-	# curl="$(cygpath -u 'C:\Windows\System32\curl.exe')"
+	# curl="/usr/bin/curl"
+	curl="$(cygpath -u 'C:\Windows\System32\curl.exe')"
 	echo_command rm -rf "${executable}" \
 	&& time_command "${curl}" -L -o "${executable}" "${url}" \
 	&& echo_command chmod +x "${executable}" \

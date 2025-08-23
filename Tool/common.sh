@@ -363,6 +363,24 @@ print_name_for_config() {
 	join_array_elements '-' "${result[@]}" "$@"
 }
 
+maybe_make_tarball_and_calculate_sha512_1() {
+	local dest_dir="$1"
+	local tarball="$2"
+	local install_dir="$3"
+
+	# # tar -cvf /cygdrive/e/Note/Tool/__vs2002/llvm.tar bin lib share  # at /cygdrive/e/Note/Tool/llvm-vs2022-build/Release started
+	# tar.exe: Failed to open '/cygdrive/e/Note/Tool/__vs2002/llvm.tar'
+
+	echo_command mkdir -p "${dest_dir}" \
+	&& echo_command rm -rf "${dest_dir}/${tarball}"{,.sha512} \
+	&& { echo_command pushd "${install_dir}" \
+		&& echo_command rm -rf ../"${tarball}" \
+		&& time_command tar -cvf ../"${tarball}" * \
+		&& echo_command mv -f ../"${tarball}" "${dest_dir}/${tarball}" \
+		&& echo_command popd;} \
+	&& time_command sha512_calculate_file "${dest_dir}/${tarball}"
+}
+
 maybe_make_tarball_and_calculate_sha512() {
 	local compiler="$1"
 	local linker="$2"
@@ -378,12 +396,7 @@ maybe_make_tarball_and_calculate_sha512() {
 	local host_os="$(print_host_os_of_triple "${host_triple}")"
 	local dest_dir="$(pwd)/__${host_os}-${compiler,,}-${linker,,}"
 
-	echo_command mkdir -p "${dest_dir}" \
-	&& echo_command rm -rf "${dest_dir}/${tarball}"{,.sha512} \
-	&& { echo_command pushd "${install_dir}" \
-		&& time_command tar -cvf "${dest_dir}/${tarball}" * \
-		&& echo_command popd;} \
-	&& time_command sha512_calculate_file "${dest_dir}/${tarball}"
+	maybe_make_tarball_and_calculate_sha512_1 "${dest_dir}" "${tarball}" "${install_dir}"
 }
 
 download_and_verify_source_tarball() {

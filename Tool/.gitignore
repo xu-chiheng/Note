@@ -33,6 +33,7 @@
 /__mingw-ucrt*
 /__cygwin*
 /__linux*
+/__vs2002
 /_temp
 
 /a.out

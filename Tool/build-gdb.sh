@@ -22,6 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+cd "$(dirname "$0")"
+. "./common.sh"
 
 # Clang/LLVM 20 commit 2dec83cc8e21a72e8718b5b3f009a19d6634fad3 2024-08-15
 # [clang] Turn -Wenum-constexpr-conversion into a hard error (#102364)
@@ -52,9 +54,6 @@
 #    96 |                                 static_cast<bool>(T (-1) < T (0))>::type;
 #       |                                                   ^
 
-
-cd "$(dirname "$0")"
-. "./common.sh"
 
 CURRENT_DATETIME="$(print_current_datetime)"
 PACKAGE="gdb"

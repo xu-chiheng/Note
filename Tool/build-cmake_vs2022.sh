@@ -36,12 +36,15 @@ PACKAGE="cmake"
 		"../${SOURCE_DIR}"
 	)
 
-	VS2022_BUILD_DIR="${SOURCE_DIR}-vs2022-build"
+	BUILD_TYPE=Release
+	BUILD_DIR="${SOURCE_DIR}-vs2022-build"
 
-	rm -rf "${VS2022_BUILD_DIR}" \
-	&& { time_command pushd_and_cmake "${VS2022_BUILD_DIR}" "${CMAKE_OPTIONS[@]}" \
-	&& echo "double click the CMake.sln file, in Visual Studio IDE, set cmake as startup project, and build/debug cmake in IDE" \
-	&& echo_command popd;}
+	DEST_DIR="$(pwd)/$(print_visual_studio_tarball_dest_dir)"
+	TARBALL="${PACKAGE}.tar"
+
+	# Double click the CMake.sln file, in Visual Studio IDE, set cmake as startup project, and build/debug cmake in IDE
+
+	time_command visual_studio_pushd_cmake_msbuild_package "${BUILD_DIR}" CMake.sln "${BUILD_TYPE}" "${DEST_DIR}" "${TARBALL}" "bin/${BUILD_TYPE}" "${CMAKE_OPTIONS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-vs2022-output.txt"
 

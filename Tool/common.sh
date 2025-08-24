@@ -907,6 +907,10 @@ gcc_configure_build_install_package() {
 		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "$@"
 }
 
+print_visual_studio_tarball_dest_dir() {
+	echo "__vs2002"
+}
+
 # https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild?#custom_llvm_location
 visual_studio_set_custom_llvm_location_and_toolset() {
 	local llvm_install_dir="$(print_visual_studio_custom_llvm_location)"
@@ -938,3 +942,20 @@ visual_studio_msbuild_solution_build_type() {
 	local build_type="$2"
 	time_command msbuild.exe "${solution}" -maxCpuCount -interactive -property:"Configuration=${build_type}" -verbosity:normal
 }
+
+visual_studio_pushd_cmake_msbuild_package() {
+	local build_dir="$1"
+	local solution="$2"
+	local build_type="$3"
+	local dest_dir="$4"
+	local tarball="$5"
+	local install_dir="$6"
+	shift 6
+
+	rm -rf "${build_dir}" \
+	&& { time_command pushd_and_cmake_2 "${build_dir}" "$@" \
+	&& time_command visual_studio_msbuild_solution_build_type "${solution}" "${build_type}" \
+	&& time_command quiet_command make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}" \
+	&& echo_command popd;}
+}
+

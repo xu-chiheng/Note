@@ -129,9 +129,9 @@ PACKAGE=llvm
 	)
 
 	BUILD_TYPE=Release
-	VS2022_BUILD_DIR="${SOURCE_DIR}-vs2022-build"
+	BUILD_DIR="${SOURCE_DIR}-vs2022-build"
 
-	DEST_DIR="$(pwd)/__vs2002"
+	DEST_DIR="$(pwd)/$(print_visual_studio_tarball_dest_dir)"
 	TARBALL="${PACKAGE}.tar"
 
 	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/devenv-command-line-switches
@@ -143,11 +143,7 @@ PACKAGE=llvm
 
 	# Double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE.
 
-	rm -rf "${VS2022_BUILD_DIR}" \
-	&& { time_command pushd_and_cmake_2 "${VS2022_BUILD_DIR}" "${CMAKE_OPTIONS[@]}" \
-	&& time_command visual_studio_msbuild_solution_build_type LLVM.sln "${BUILD_TYPE}" \
-	&& time_command quiet_command make_tarball_and_calculate_sha512 "${DEST_DIR}" "${TARBALL}" "${BUILD_TYPE}" \
-	&& echo_command popd;}
+	time_command visual_studio_pushd_cmake_msbuild_package "${BUILD_DIR}" LLVM.sln "${BUILD_TYPE}" "${DEST_DIR}" "${TARBALL}" "${BUILD_TYPE}" "${CMAKE_OPTIONS[@]}"
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-vs2022-output.txt"
 

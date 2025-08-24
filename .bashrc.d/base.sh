@@ -137,6 +137,10 @@ print_ssh_os_of_triple() {
 	esac
 }
 
+print_visual_studio_custom_llvm_location() {
+	echo 'D:\_vs2022\llvm'
+}
+
 # Note : this function can't print any message, otherwise, FileZilla and WinSCP can't connect to this VPS through SFTP(FTP over SSH).
 set_environment_variables_at_bash_startup() {
 	export HOST_TRIPLE="$(print_host_triple)"
@@ -190,19 +194,7 @@ set_environment_variables_at_bash_startup() {
 		# Visual Studio, MSVC bin dirs has been prepended to PATH
 		# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
 
-		true
-
-		# local packages_dir="$(cygpath -u 'D:\_vs2022')"
-		# local packages=(
-		# 	llvm cmake
-		# )
-		# local package
-		# # PATH
-		# local bin_dirs=()
-		# for package in "${packages[@]}"; do
-		# 	bin_dirs+=( "${packages_dir}/${package}/bin" )
-		# done
-		# export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
+		export PATH="$(join_array_elements ':' "$(cygpath -u "$(print_visual_studio_custom_llvm_location)")/bin" "${PATH}")"
 
 		# winget search python
 

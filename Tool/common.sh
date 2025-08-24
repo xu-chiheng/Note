@@ -426,6 +426,20 @@ pushd_and_cmake() {
 	&& time_command cmake "$@"
 }
 
+pushd_and_cmake_2() {
+	local build_dir="$1"
+	shift 1
+
+	echo "cmake options :"
+	print_array_elements "$@"
+
+	echo_command rm -rf "${build_dir}" \
+	&& echo_command mkdir "${build_dir}" \
+	&& echo_command pushd "${build_dir}" \
+	&& echo_command visual_studio_set_a_custom_LLVM_location_and_toolset \
+	&& time_command cmake "$@"
+}
+
 pushd_and_configure() {
 	local build_dir="$1"
 	local source_dir="$2"

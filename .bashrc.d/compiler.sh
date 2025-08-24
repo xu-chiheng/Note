@@ -270,3 +270,36 @@ gnu_toolchain_run_test_suite() {
 llvm_run_test_suite() {
 	time_command make -k check-llvm 2>&1 | tee "../~$(print_current_datetime)-$(basename "$(pwd)")-test-output.txt"
 }
+
+# https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild?#custom_llvm_location
+visual_studio_set_a_custom_LLVM_location_and_toolset() {
+	local llvm_install_dir="$(print_visual_studio_custom_llvm_location)"
+	local llvm_install_dir_2="$(cygpath -u "${llvm_install_dir}")"
+	local llvm_install_dir_clang_cl="${llvm_install_dir_2}/bin/clang-cl.exe"
+	if [ ! -d "${llvm_install_dir_2}" ] || [ ! -f "${llvm_install_dir_clang_cl}" ]; then
+		return
+	fi
+
+	local llvm_tools_version="$("${llvm_install_dir_clang_cl}" -v 2>&1 \
+		| grep -oE "clang version [0-9]+\.[0-9]+\.[0-9]+" \
+		| awk '{print $3}')"
+
+	cat >Directory.build.props <<EOF
+<Project>
+  <PropertyGroup>
+    <LLVMInstallDir>${llvm_install_dir}</LLVMInstallDir>
+    <LLVMToolsVersion>${llvm_tools_version}</LLVMToolsVersion>
+  </PropertyGroup>
+</Project>
+EOF
+
+}
+
+visual_studio_msbuild_solution_build_type() {
+	local solution="$1"
+	local build_type="$2"
+	time_command msbuild.exe "${solution}" -maxCpuCount -interactive -property:"Configuration=${build_type}" -verbosity:normal
+}
+
+
+

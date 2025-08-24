@@ -147,8 +147,8 @@ PACKAGE=llvm
 	# Double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE.
 
 	rm -rf "${VS2022_BUILD_DIR}" \
-	&& { time_command pushd_and_cmake "${VS2022_BUILD_DIR}" "${CMAKE_OPTIONS[@]}" \
-	&& time_command msbuild.exe LLVM.sln -maxCpuCount -interactive -property:"Configuration=${BUILD_TYPE};Platform=x64" -verbosity:normal \
+	&& { time_command pushd_and_cmake_2 "${VS2022_BUILD_DIR}" "${CMAKE_OPTIONS[@]}" \
+	&& time_command visual_studio_msbuild_solution_build_type LLVM.sln "${BUILD_TYPE}" \
 	&& time_command quiet_command make_tarball_and_calculate_sha512 "${DEST_DIR}" "${TARBALL}" "${BUILD_TYPE}" \
 	&& echo_command popd;}
 

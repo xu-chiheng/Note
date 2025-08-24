@@ -59,6 +59,15 @@ PACKAGE=llvm
 
 	CMAKE_OPTIONS=(
 		-G "Visual Studio 17 2022"
+
+		# v143 - Visual Studio 2022 (MSVC 14.3x)
+		# v142 - Visual Studio 2019 (MSVC 14.2x)
+		# v141 - Visual Studio 2017 (MSVC 14.1x)
+		# v140 - Visual Studio 2015 (MSVC 14.0)
+		# v120 - Visual Studio 2013 (MSVC 12.0)
+		# v110 - Visual Studio 2012 (MSVC 11.0)
+		# -T v143
+
 		-T ClangCL
 
 		# https://vcpkg.io
@@ -135,11 +144,12 @@ PACKAGE=llvm
 	# https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference
 	# https://learn.microsoft.com/en-us/visualstudio/msbuild/obtaining-build-logs-with-msbuild
 
+	# Double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE.
+
 	rm -rf "${VS2022_BUILD_DIR}" \
 	&& { time_command pushd_and_cmake "${VS2022_BUILD_DIR}" "${CMAKE_OPTIONS[@]}" \
-	&& echo "double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE" \
-	&& time_command msbuild.exe LLVM.sln -maxCpuCount -interactive "-property:Configuration=${BUILD_TYPE};Platform=x64" -verbosity:normal \
-	&& maybe_make_tarball_and_calculate_sha512_1 "${DEST_DIR}" "${TARBALL}" "${BUILD_TYPE}" \
+	&& time_command msbuild.exe LLVM.sln -maxCpuCount -interactive -property:"Configuration=${BUILD_TYPE};Platform=x64" -verbosity:normal \
+	&& time_command quiet_command make_tarball_and_calculate_sha512 "${DEST_DIR}" "${TARBALL}" "${BUILD_TYPE}" \
 	&& echo_command popd;}
 
 } 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-vs2022-output.txt"

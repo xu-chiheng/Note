@@ -363,7 +363,7 @@ print_name_for_config() {
 	join_array_elements '-' "${result[@]}" "$@"
 }
 
-maybe_make_tarball_and_calculate_sha512_1() {
+make_tarball_and_calculate_sha512() {
 	local dest_dir="$1"
 	local tarball="$2"
 	local install_dir="$3"
@@ -396,7 +396,7 @@ maybe_make_tarball_and_calculate_sha512() {
 	local host_os="$(print_host_os_of_triple "${host_triple}")"
 	local dest_dir="$(pwd)/__${host_os}-${compiler,,}-${linker,,}"
 
-	maybe_make_tarball_and_calculate_sha512_1 "${dest_dir}" "${tarball}" "${install_dir}"
+	make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}"
 }
 
 download_and_verify_source_tarball() {

@@ -153,13 +153,13 @@ set_environment_variables_at_bash_startup() {
 	case "${HOST_TRIPLE}" in
 		*-cygwin )
 			# Based on the PS1(Prompt String 1) from MSYS2
-			local _ps1_symbol
+			local ps1_symbol
 			if [ "${USERNAME}" = Administrator ]; then
-				_ps1_symbol='\[\e[1m\]#\[\e[0m\]'
+				ps1_symbol='\[\e[1m\]#\[\e[0m\]'
 			else
-				_ps1_symbol='\$'
+				ps1_symbol='\$'
 			fi
-			export PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]Cygwin\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n'"${_ps1_symbol}"' '
+			export PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]Cygwin\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n'"${ps1_symbol}"' '
 			# Decode the above code
 			# ChatGPT/Claude/Gemini/DeepSeek
 			;;
@@ -189,7 +189,20 @@ set_environment_variables_at_bash_startup() {
 	if host_triple_is_windows "${HOST_TRIPLE}" && [ -v VSINSTALLDIR ]; then
 		# Visual Studio, MSVC bin dirs has been prepended to PATH
 		# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
+
 		true
+
+		# local packages_dir="$(cygpath -u 'D:\_vs2022')"
+		# local packages=(
+		# 	llvm cmake
+		# )
+		# local package
+		# # PATH
+		# local bin_dirs=()
+		# for package in "${packages[@]}"; do
+		# 	bin_dirs+=( "${packages_dir}/${package}/bin" )
+		# done
+		# export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
 
 		# winget search python
 

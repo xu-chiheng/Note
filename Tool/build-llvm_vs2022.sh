@@ -138,11 +138,8 @@ PACKAGE=llvm
 	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/build-devenv-exe
 	# https://stackoverflow.com/questions/18902628/using-devenv-exe-from-the-command-line-and-specifying-the-platform
 
-	# time_command devenv.exe LLVM.sln -build "Release|x64" -out "../~$(print_current_datetime)-llvm-vs2022-output.txt"
+	# time_command devenv.exe LLVM.sln -build Release -out "../~$(print_current_datetime)-llvm-vs2022-output.txt"
 	# time_command devenv.exe LLVM.sln -clean
-
-	# https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference
-	# https://learn.microsoft.com/en-us/visualstudio/msbuild/obtaining-build-logs-with-msbuild
 
 	# Double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE.
 

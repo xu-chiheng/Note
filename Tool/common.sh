@@ -955,7 +955,7 @@ visual_studio_pushd_cmake_msbuild_package() {
 	rm -rf "${build_dir}" \
 	&& { time_command pushd_and_cmake_2 "${build_dir}" "$@" \
 	&& time_command visual_studio_msbuild_solution_build_type "${solution}" "${build_type}" \
-	&& time_command quiet_command make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}" \
+	&& time_command make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}" \
 	&& echo_command popd;}
 }
 

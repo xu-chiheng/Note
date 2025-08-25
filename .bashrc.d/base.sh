@@ -141,19 +141,7 @@ print_visual_studio_custom_llvm_location() {
 	echo 'D:\_vs2022\llvm'
 }
 
-# Note : this function can't print any message, otherwise, FileZilla and WinSCP can't connect to this VPS through SFTP(FTP over SSH).
-set_environment_variables_at_bash_startup() {
-	export HOST_TRIPLE="$(print_host_triple)"
-	export TZ=Asia/Shanghai
-	# export TZ=America/Los_Angeles
-	export LANG=en_US.UTF-8
-	export LC_ALL=en_US.UTF-8
-	export EDITOR=~/editor.sh
-	# global UTF-8 mode (files, strings, I/O).
-	export PYTHONUTF8=1
-	# just enforces UTF-8 for stdin/stdout/stderr.
-	# export PYTHONIOENCODING=utf-8
-
+set_PS1_at_bash_startup() {
 	local ps1_symbol='\$'
 	if { host_triple_is_windows "${HOST_TRIPLE}" && [ "${USERNAME}" = Administrator ]; } \
 		|| { host_triple_is_linux "${HOST_TRIPLE}" && [ "$(id -u)" -eq 0 ]; }; then
@@ -199,7 +187,9 @@ set_environment_variables_at_bash_startup() {
 	export PS1='\[\e]0;'"${system} "'\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]'"${system}"'\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n'"${ps1_symbol}"' '
 	# Decode the above code
 	# ChatGPT/Claude/Gemini/DeepSeek
+}
 
+set_cygwin_CYGWIN_msys_MSYS_at_bash_startup() {
 	if host_triple_is_windows "${HOST_TRIPLE}"; then
 		case "${HOST_TRIPLE}" in
 			# https://www.joshkel.com/2018/01/18/symlinks-in-windows/
@@ -220,7 +210,21 @@ set_environment_variables_at_bash_startup() {
 				;;
 		esac
 	fi
+}
 
+set_mingw_PATH_INCLUDE_LIB_at_bash_startup() {
+	case "${HOST_TRIPLE}" in
+		*-mingw* )
+			local mingw_root_dir="$(print_mingw_root_dir)"
+			local mingw_root_dir_2="$(cygpath -m "${mingw_root_dir}")"
+			export PATH="$(join_array_elements ':' "${mingw_root_dir}/bin" "${PATH}")"
+			export INCLUDE="${mingw_root_dir_2}/include"
+			export LIB="${mingw_root_dir_2}/lib"
+			;;
+	esac
+}
+
+set_PATH_and_linux_LD_LIBRARY_PATH_at_bash_startup() {
 	if host_triple_is_windows "${HOST_TRIPLE}" && [ -v VSINSTALLDIR ]; then
 		# Visual Studio, MSVC bin dirs has been prepended to PATH
 		# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
@@ -242,16 +246,6 @@ set_environment_variables_at_bash_startup() {
 		# export PATH="$(join_array_elements ':' "$(dirname "$(readlink "$(cygpath -u "${LOCALAPPDATA}\Microsoft\WindowsApps")"/python.exe)")" "${PATH}")"
 		# python3.13.exe
 	else
-		case "${HOST_TRIPLE}" in
-			*-mingw* )
-				local mingw_root_dir="$(print_mingw_root_dir)"
-				local mingw_root_dir_2="$(cygpath -m "${mingw_root_dir}")"
-				export PATH="$(join_array_elements ':' "${mingw_root_dir}/bin" "${PATH}")"
-				export INCLUDE="${mingw_root_dir_2}/include"
-				export LIB="${mingw_root_dir_2}/lib"
-				;;
-		esac
-
 		case "${HOST_TRIPLE}" in
 			*-cygwin | *-mingw* | *-linux* )
 				local packages_dir="$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")"
@@ -302,7 +296,11 @@ set_environment_variables_at_bash_startup() {
 			dirs2+=( "$(cygpath -u "${dir}")" )
 		done
 		export PATH="$(join_array_elements ':' "${PATH}" "${dirs2[@]}")"
-	elif host_triple_is_linux "${HOST_TRIPLE}"; then
+	fi
+}
+
+set_linux_other_environment_variables_at_bash_startup() {
+	if host_triple_is_linux "${HOST_TRIPLE}"; then
 		# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
 		case "${DESKTOP_SESSION}" in
 			*plasma* )
@@ -325,6 +323,26 @@ set_environment_variables_at_bash_startup() {
 		# https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
 		export FILE_EXPLORER TERMINAL_EMULATOR TASK_MANAGER
 	fi
+}
+
+# Note : this function can't print any message, otherwise, FileZilla and WinSCP can't connect to this VPS through SFTP(FTP over SSH).
+set_environment_variables_at_bash_startup() {
+	export HOST_TRIPLE="$(print_host_triple)"
+	export TZ=Asia/Shanghai
+	# export TZ=America/Los_Angeles
+	export LANG=en_US.UTF-8
+	export LC_ALL=en_US.UTF-8
+	export EDITOR=~/editor.sh
+	# global UTF-8 mode (files, strings, I/O).
+	export PYTHONUTF8=1
+	# just enforces UTF-8 for stdin/stdout/stderr.
+	# export PYTHONIOENCODING=utf-8
+
+	set_PS1_at_bash_startup
+	set_cygwin_CYGWIN_msys_MSYS_at_bash_startup
+	set_mingw_PATH_INCLUDE_LIB_at_bash_startup
+	set_PATH_and_linux_LD_LIBRARY_PATH_at_bash_startup
+	set_linux_other_environment_variables_at_bash_startup
 
 	source_ssh-agent_env_script
 }

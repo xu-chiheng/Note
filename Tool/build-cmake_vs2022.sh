@@ -26,6 +26,7 @@ cd "$(dirname "$0")"
 . "./common.sh"
 
 CURRENT_DATETIME="$(print_current_datetime)"
+HOST_OS="$(print_host_os_of_triple "${HOST_TRIPLE}")"
 PACKAGE="cmake"
 {
 	SOURCE_DIR="${PACKAGE}"
@@ -37,15 +38,15 @@ PACKAGE="cmake"
 	)
 
 	BUILD_TYPE=Release
-	BUILD_DIR="${SOURCE_DIR}-vs2022-build"
+	BUILD_DIR="${SOURCE_DIR}-${HOST_OS}-build"
 
-	DEST_DIR="$(pwd)/__$(print_host_os_of_triple "${HOST_TRIPLE}")"
+	DEST_DIR="$(pwd)/__${HOST_OS}"
 	TARBALL="${PACKAGE}.tar"
 
 	# Double click the CMake.sln file, in Visual Studio IDE, set cmake as startup project, and build/debug cmake in IDE
 
 	time_command visual_studio_pushd_cmake_msbuild_package "${BUILD_DIR}" CMake.sln "${BUILD_TYPE}" "${DEST_DIR}" "${TARBALL}" "bin/${BUILD_TYPE}" "${CMAKE_OPTIONS[@]}"
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-vs2022-output.txt"
+} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-${HOST_OS}-output.txt"
 
 sync .

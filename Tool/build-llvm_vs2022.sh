@@ -33,6 +33,7 @@ cd "$(dirname "$0")"
 # https://phasetw0.com/llvm/getting-started-on-windows
 
 CURRENT_DATETIME="$(print_current_datetime)"
+HOST_OS="$(print_host_os_of_triple "${HOST_TRIPLE}")"
 PACKAGE=llvm
 {
 	SOURCE_DIR="${PACKAGE}"
@@ -129,9 +130,9 @@ PACKAGE=llvm
 	)
 
 	BUILD_TYPE=Release
-	BUILD_DIR="${SOURCE_DIR}-vs2022-build"
+	BUILD_DIR="${SOURCE_DIR}-${HOST_OS}-build"
 
-	DEST_DIR="$(pwd)/__$(print_host_os_of_triple "${HOST_TRIPLE}")"
+	DEST_DIR="$(pwd)/__${HOST_OS}"
 	TARBALL="${PACKAGE}.tar"
 
 	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/devenv-command-line-switches
@@ -145,6 +146,6 @@ PACKAGE=llvm
 
 	time_command visual_studio_pushd_cmake_msbuild_package "${BUILD_DIR}" LLVM.sln "${BUILD_TYPE}" "${DEST_DIR}" "${TARBALL}" "${BUILD_TYPE}" "${CMAKE_OPTIONS[@]}"
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-vs2022-output.txt"
+} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-${HOST_OS}-output.txt"
 
 sync .

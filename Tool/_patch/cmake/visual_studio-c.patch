@@ -1,0 +1,22 @@
+diff --git a/Tests/CMakeLists.txt b/Tests/CMakeLists.txt
+index 15a1e2c0c3..a8a17b7f75 100644
+--- a/Tests/CMakeLists.txt
++++ b/Tests/CMakeLists.txt
+@@ -234,6 +237,9 @@ if(BUILD_TESTING)
+   #---------------------------------------------------------------------------
+   # Add tests below here.
+ 
++if(NOT MSVC)
++  # Prevent Visual Studio CMake to find Cygwin's Qt
++
+   if(NOT DEFINED CMake_TEST_Qt6)
+     set(CMake_TEST_Qt6 1)
+   endif()
+@@ -247,6 +253,7 @@ if(BUILD_TESTING)
+   if(CMake_TEST_Qt5)
+     find_package(Qt5Widgets QUIET NO_MODULE)
+   endif()
++endif()
+ 
+   # Collect a list of all test build directories.
+   set(TEST_BUILD_DIRS)

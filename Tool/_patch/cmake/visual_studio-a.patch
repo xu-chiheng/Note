@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cab0fcba38..c4638d0cfa 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -20,6 +20,11 @@ if(MSVC AND NOT CMAKE_VERSION VERSION_LESS 3.15)
+   endforeach()
+ endif()
+ 
++if(MSVC)
++  # Enable Visual Studio Parallel Compilation
++  add_compile_options(/MP)
++endif()
++
+ # Make sure we can find internal find_package modules only used for
+ # building CMake and not for shipping externally
+ list(INSERT CMAKE_MODULE_PATH 0 ${CMake_SOURCE_DIR}/Source/Modules)

@@ -1,0 +1,15 @@
+diff --git a/Tests/CMakeLists.txt b/Tests/CMakeLists.txt
+index 15a1e2c0c3..a8a17b7f75 100644
+--- a/Tests/CMakeLists.txt
++++ b/Tests/CMakeLists.txt
+@@ -29,7 +29,10 @@ macro(ADD_TEST_MACRO NAME)
+   list(APPEND TEST_BUILD_DIRS "${CMake_BINARY_DIR}/Tests/${dir}")
+ endmacro()
+ 
++if(NOT MSVC)
++# Prevent Visual Studio CMake to find Cygwin's Fortran
+ include(${CMAKE_CURRENT_SOURCE_DIR}/CheckFortran.cmake)
++endif()
+ include(${CMAKE_CURRENT_SOURCE_DIR}/CheckSwift.cmake)
+ 
+ # Isolate tests from user-wide configuration.

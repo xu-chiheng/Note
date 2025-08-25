@@ -433,6 +433,9 @@ pushd_and_cmake_2() {
 	echo "cmake options :"
 	print_array_elements "$@"
 
+	echo_command which cmake | grep -v '^$'
+	echo_command cmake --version | grep -v '^$'
+
 	echo_command rm -rf "${build_dir}" \
 	&& echo_command mkdir "${build_dir}" \
 	&& echo_command pushd "${build_dir}" \

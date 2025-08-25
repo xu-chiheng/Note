@@ -360,7 +360,7 @@ cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-1},\
 cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d,e,f,h,i,k,l-{a,b,c},m,n,o,p},\
-cygwin-{support-tls,va-list-kind,cmodel-2,general-{a,b,c},macro},\
+cygwin/cygwin-{support-tls,va-list-kind,cmodel-2,general-{a,b,c},macro},\
 cygwin-regression/cygwin-regression-{a,b,c,d,e},\
 mingw/mingw-{git-revision,emutls-1}}.patch
 
@@ -368,7 +368,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b,d-2,e-2,g-1},\
-cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d,e,f,h,i,k,l-{a,b,c},m,n,o,p},\
@@ -380,7 +380,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b,d-2,g-1},\
-cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d,e,f,h,i,k,l-{a,b,c},m,n,o,p},\
@@ -392,7 +392,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b,d-2,g-1},\
-cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,f,h-1,i,k-1,l-{a,b,c},m,n,o,p},\
@@ -404,7 +404,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b,d-2,g-1},\
-cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,f-1,h-1,i-1,k-1,l-{a,b,c},m,n,o,p},\
@@ -416,7 +416,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b-1,d-2,g-1,n},\
-cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,f-1,h-1,i-1,k-1,l-{a,b,c},m,n,o,p},\
@@ -428,7 +428,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b-1,d-2,g-1,k,n},\
-cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,f-1,h-1,i-1,k-1,l-{a,b,c},m,n,o,p},\
@@ -441,7 +441,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b-1,d-2,g-1,k,n},\
-cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-1,l-{a,b,c,d},m,n,o,p},\
@@ -453,7 +453,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b-1,d-2,g-2,k,n},\
-cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-2,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-2,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\
@@ -465,7 +465,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b-1,d-2,g-2,h,k,n},\
-cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-2,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-2,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\
@@ -477,7 +477,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b-1,d-3,g-2,h,k,n},\
-cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b-1,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\
@@ -489,7 +489,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b-1,d-4,g-2,h-1,k,l,m,n},\
-cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k,l,m,n,o-1},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k,l,m,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b-1,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\
@@ -501,7 +501,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b-1,d-5,g-2,h-1,i,k,l,m,n},\
-cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-1,l,m,n,o-1},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-1,l,m,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b-1,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\
@@ -514,7 +514,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b-1,d-5,g-2,h-1,i,j,k,m-1,n},\
-cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-1,l,m,n,o-1},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-1,l,m,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b-1,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\
@@ -526,7 +526,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
 regression/regression-{a,b-1,d-5,g-2,h-2,i,m-1,n},\
-cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-1,l,m,n,o-1},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-1,l,m,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b-1,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\

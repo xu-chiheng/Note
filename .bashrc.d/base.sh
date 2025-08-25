@@ -154,20 +154,51 @@ set_environment_variables_at_bash_startup() {
 	# just enforces UTF-8 for stdin/stdout/stderr.
 	# export PYTHONIOENCODING=utf-8
 
+	local ps1_symbol='\$'
+	if { host_triple_is_windows "${HOST_TRIPLE}" && [ "${USERNAME}" = Administrator ]; } \
+		|| { host_triple_is_linux "${HOST_TRIPLE}" && [ "$(id -u)" -eq 0 ]; }; then
+		ps1_symbol='\[\e[1m\]#\[\e[0m\]'
+	fi
+	local system="Unknown"
 	case "${HOST_TRIPLE}" in
 		*-cygwin )
-			# Based on the PS1(Prompt String 1) from MSYS2
-			local ps1_symbol
-			if [ "${USERNAME}" = Administrator ]; then
-				ps1_symbol='\[\e[1m\]#\[\e[0m\]'
+			if [ -v VSINSTALLDIR ]; then
+				system="Visual Studio + Cygwin"
 			else
-				ps1_symbol='\$'
+				system="Cygwin"
 			fi
-			export PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]Cygwin\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n'"${ps1_symbol}"' '
-			# Decode the above code
-			# ChatGPT/Claude/Gemini/DeepSeek
+			;;
+		*-msys )
+			if [ -v VSINSTALLDIR ]; then
+				system="Visual Studio + Msys"
+			else
+				system="Msys"
+			fi
+			;;
+		*-mingw* )
+			case "${MSYSTEM}" in
+				MINGW64 )
+					# msvcrt.dll
+					system="MinGW VCRT"
+					;;
+				UCRT64 )
+					# ucrtbase.dll
+					system="MinGW UCRT"
+					;;
+				* )
+					system="MinGW"
+					true
+					;;
+			esac
+			;;
+		*-linux* )
+			system="Linux"
 			;;
 	esac
+	# Based on the PS1(Prompt String 1) of MSYS2
+	export PS1='\[\e]0;'"${system} "'\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]'"${system}"'\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n'"${ps1_symbol}"' '
+	# Decode the above code
+	# ChatGPT/Claude/Gemini/DeepSeek
 
 	if host_triple_is_windows "${HOST_TRIPLE}"; then
 		case "${HOST_TRIPLE}" in

@@ -1,5 +1,5 @@
 
-These are the scripts I used to build GCC/Cross-GCC, Clang/LLVM, and QEMU on Cygwin and MSYS2/MinGW.
+Scripts and patches to build CMake, GCC/Cross-GCC, Clang/LLVM, and QEMU on Cygwin, MSYS2/MinGW and Visual Studio.
 
 The scripts are started by bash -i, they will source the ~/.bashrc file at startup, so they can use the convenient bash functions defined there.
 

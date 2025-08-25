@@ -29,11 +29,11 @@
 /*.bz2
 /*.gz
 /*.zst
-/__mingw-vcrt*
-/__mingw-ucrt*
+/__mingw_vcrt*
+/__mingw_ucrt*
 /__cygwin*
 /__linux*
-/__vs2002
+/__visual_studio
 /_temp
 
 /a.out

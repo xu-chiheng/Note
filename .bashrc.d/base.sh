@@ -382,18 +382,36 @@ ssh-agent_is_ok() {
 print_packages_dir_of_host_triple() {
 	local host_triple="$1"
 	case "${host_triple}" in
-		*-cygwin )
-			echo "$(cygpath -u 'D:\_cygwin')"
+		*-cygwin | *-msys )
+			local visual_studio_package_dir='D:\_visual_studio'
+			case "${host_triple}" in
+				*-cygwin )
+					# cygwin1.dll
+					if [ -v VSINSTALLDIR ]; then
+						echo "$(cygpath -u "${visual_studio_package_dir}")"
+					else
+						echo "$(cygpath -u 'D:\_cygwin')"
+					fi
+					;;
+				*-msys )
+					# msys-2.0.dll
+					if [ -v VSINSTALLDIR ]; then
+						echo "$(cygpath -u "${visual_studio_package_dir}")"
+					else
+						echo "no packages dir for host : ${host_triple}"
+						return 1
+					fi
+			esac
 			;;
 		*-mingw* )
 			case "${MSYSTEM}" in
 				MINGW64 )
 					# msvcrt.dll
-					echo "$(cygpath -u 'D:\_mingw-vcrt')"
+					echo "$(cygpath -u 'D:\_mingw_vcrt')"
 					;;
 				UCRT64 )
 					# ucrtbase.dll
-					echo "$(cygpath -u 'D:\_mingw-ucrt')"
+					echo "$(cygpath -u 'D:\_mingw_ucrt')"
 					;;
 				* )
 					echo "unknown MSYSTEM : ${MSYSTEM}"

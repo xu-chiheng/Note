@@ -318,25 +318,41 @@ check_dir_maybe_clone_from_url() {
 print_host_os_of_triple() {
 	local host_triple="$1"
 	case "${host_triple}" in
+		*-cygwin | *-msys )
+			local visual_studio_pseudo_os_name='visual_studio'
+			case "${host_triple}" in
+				*-cygwin )
+					# cygwin1.dll
+					if [ -v VSINSTALLDIR ]; then
+						echo "${visual_studio_pseudo_os_name}"
+					else
+						echo "cygwin"
+					fi
+					;;
+				*-msys )
+					# msys-2.0.dll
+					if [ -v VSINSTALLDIR ]; then
+						echo "${visual_studio_pseudo_os_name}"
+					else
+						echo "msys"
+					fi
+			esac
+			;;
 		*-mingw* )
 			case "${MSYSTEM}" in
 				MINGW64 )
 					# msvcrt.dll
-					echo "mingw-vcrt"
+					echo "mingw_vcrt"
 					;;
 				UCRT64 )
 					# ucrtbase.dll
-					echo "mingw-ucrt"
+					echo "mingw_ucrt"
 					;;
 				* )
 					echo "unknown MSYSTEM : ${MSYSTEM}"
 					return 1
 					;;
 			esac
-			;;
-		*-cygwin )
-			# cygwin1.dll
-			echo "cygwin"
 			;;
 		*-linux* )
 			echo "linux"

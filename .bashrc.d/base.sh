@@ -137,10 +137,6 @@ print_ssh_os_of_triple() {
 	esac
 }
 
-print_visual_studio_custom_llvm_location() {
-	echo 'D:\_vs2022\llvm'
-}
-
 set_PS1_at_bash_startup() {
 	local ps1_symbol='\$'
 	if { host_triple_is_windows "${HOST_TRIPLE}" && [ "${USERNAME}" = Administrator ]; } \
@@ -150,15 +146,17 @@ set_PS1_at_bash_startup() {
 	local system="Unknown"
 	case "${HOST_TRIPLE}" in
 		*-cygwin )
+			# cygwin1.dll
 			if [ -v VSINSTALLDIR ]; then
-				system="Visual Studio + Cygwin"
+				system="Visual_Studio + Cygwin"
 			else
 				system="Cygwin"
 			fi
 			;;
 		*-msys )
+			# msys-2.0.dll
 			if [ -v VSINSTALLDIR ]; then
-				system="Visual Studio + Msys"
+				system="Visual_Studio + Msys"
 			else
 				system="Msys"
 			fi
@@ -167,11 +165,11 @@ set_PS1_at_bash_startup() {
 			case "${MSYSTEM}" in
 				MINGW64 )
 					# msvcrt.dll
-					system="MinGW VCRT"
+					system="MinGW_VCRT"
 					;;
 				UCRT64 )
 					# ucrtbase.dll
-					system="MinGW UCRT"
+					system="MinGW_UCRT"
 					;;
 				* )
 					system="MinGW"
@@ -229,7 +227,7 @@ set_PATH_and_linux_LD_LIBRARY_PATH_at_bash_startup() {
 		# Visual Studio, MSVC bin dirs has been prepended to PATH
 		# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
 
-		export PATH="$(join_array_elements ':' "$(cygpath -u "$(print_visual_studio_custom_llvm_location)")/bin" "${PATH}")"
+		export PATH="$(join_array_elements ':' "$(print_visual_studio_custom_llvm_location)/bin" "${PATH}")"
 
 		# winget search python
 
@@ -377,6 +375,14 @@ source_ssh-agent_env_script() {
 
 ssh-agent_is_ok() {
 	[ -v SSH_AUTH_SOCK ] && [ -v SSH_AGENT_PID ] && [ -S "${SSH_AUTH_SOCK}" ] && quiet_command ps -p "${SSH_AGENT_PID}"
+}
+
+print_visual_studio_custom_llvm_location() {
+	echo "$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")/llvm"
+}
+
+print_visual_studio_custom_cmake_location() {
+	echo "$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")/cmake"
 }
 
 print_packages_dir_of_host_triple() {

@@ -39,7 +39,7 @@ PACKAGE="cmake"
 	BUILD_TYPE=Release
 	BUILD_DIR="${SOURCE_DIR}-vs2022-build"
 
-	DEST_DIR="$(pwd)/$(print_visual_studio_tarball_dest_dir)"
+	DEST_DIR="$(pwd)/__$(print_host_os_of_triple "${HOST_TRIPLE}")"
 	TARBALL="${PACKAGE}.tar"
 
 	# Double click the CMake.sln file, in Visual Studio IDE, set cmake as startup project, and build/debug cmake in IDE

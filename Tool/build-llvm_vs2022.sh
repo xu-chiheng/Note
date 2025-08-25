@@ -131,7 +131,7 @@ PACKAGE=llvm
 	BUILD_TYPE=Release
 	BUILD_DIR="${SOURCE_DIR}-vs2022-build"
 
-	DEST_DIR="$(pwd)/$(print_visual_studio_tarball_dest_dir)"
+	DEST_DIR="$(pwd)/__$(print_host_os_of_triple "${HOST_TRIPLE}")"
 	TARBALL="${PACKAGE}.tar"
 
 	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/devenv-command-line-switches

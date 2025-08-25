@@ -926,16 +926,12 @@ gcc_configure_build_install_package() {
 		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "$@"
 }
 
-print_visual_studio_tarball_dest_dir() {
-	echo "__vs2002"
-}
-
 # https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild?#custom_llvm_location
 visual_studio_set_custom_llvm_location_and_toolset() {
 	local llvm_install_dir="$(print_visual_studio_custom_llvm_location)"
-	local llvm_install_dir_2="$(cygpath -u "${llvm_install_dir}")"
-	local llvm_install_dir_clang_cl="${llvm_install_dir_2}/bin/clang-cl.exe"
-	if [ ! -d "${llvm_install_dir_2}" ] || [ ! -f "${llvm_install_dir_clang_cl}" ]; then
+	local llvm_install_dir_2="$(cygpath -w "${llvm_install_dir}")"
+	local llvm_install_dir_clang_cl="${llvm_install_dir}/bin/clang-cl.exe"
+	if [ ! -d "${llvm_install_dir}" ] || [ ! -f "${llvm_install_dir_clang_cl}" ]; then
 		return
 	fi
 
@@ -946,7 +942,7 @@ visual_studio_set_custom_llvm_location_and_toolset() {
 	cat >Directory.build.props <<EOF
 <Project>
   <PropertyGroup>
-    <LLVMInstallDir>${llvm_install_dir}</LLVMInstallDir>
+    <LLVMInstallDir>${llvm_install_dir_2}</LLVMInstallDir>
     <LLVMToolsVersion>${llvm_tools_version}</LLVMToolsVersion>
   </PropertyGroup>
 </Project>

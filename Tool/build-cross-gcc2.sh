@@ -25,43 +25,46 @@
 cd "$(dirname "$0")"
 . "./common.sh"
 
-CURRENT_DATETIME="$(print_current_datetime)"
-PACKAGE=gcc
-check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
-{
-	dump_compiler_linker_build_type_and_compiler_flags
+build() {
 
-	EXTRA_LANGUAGES=()
+	local current_datetime="$(print_current_datetime)"
+	local package="gcc"
+	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
+	{
+		dump_compiler_linker_build_type_and_compiler_flags "${package}"
 
-	EXTRA_LANGUAGES+=(
-		lto
-		fortran
-		# ada
-		objc
-		obj-c++
-		# jit
-	)
+		local extra_languages=(
+			lto
+			fortran
+			# ada
+			objc
+			obj-c++
+			# jit
+		)
 
-	TARGETS=(
-		x86_64-pc-cygwin
-		x86_64-pc-mingw64
-		x86_64-linux-gnu
-		aarch64-linux-gnu
-		riscv64-linux-gnu
-		loongarch64-linux-gnu
-		ppc64le-linux-gnu
-		sparc64-linux-gnu
-		mips64-linux-gnu
-	)
+		local targets=(
+			x86_64-pc-cygwin
+			x86_64-pc-mingw64
+			x86_64-linux-gnu
+			aarch64-linux-gnu
+			riscv64-linux-gnu
+			loongarch64-linux-gnu
+			ppc64le-linux-gnu
+			sparc64-linux-gnu
+			mips64-linux-gnu
+		)
 
-	# remove ${HOST_TRIPLE}
-	TARGETS=( ${TARGETS[@]/${HOST_TRIPLE}} )
-	print_array_elements "${TARGETS[@]}"
+		# remove ${HOST_TRIPLE}
+		targets=( ${targets[@]/${HOST_TRIPLE}} )
+		print_array_elements "${targets[@]}"
 
-	time_command build_and_install_cross_gcc_for_targets \
-		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" \
-		"$(join_array_elements ',' "${EXTRA_LANGUAGES[@]}")" no "${CURRENT_DATETIME}" "${TARGETS[@]}"
+		time_command build_and_install_cross_gcc_for_targets \
+			"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${package}" \
+			"$(join_array_elements ',' "${extra_languages[@]}")" no "${current_datetime}" "${targets[@]}"
 
-} 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
+	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
 
-sync .
+	sync .
+	}
+
+build "$@"

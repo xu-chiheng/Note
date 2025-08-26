@@ -44,94 +44,99 @@ cd "$(dirname "$0")"
 # 2023 LLVM Dev Mtg - Understanding the LLVM build
 # https://www.youtube.com/watch?v=Dnubzx8-E1M
 
-CURRENT_DATETIME="$(print_current_datetime)"
-PACKAGE=llvm
-check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
-check_llvm_static_or_shared "$4"
-{
-	dump_compiler_linker_build_type_and_compiler_flags
-	dump_llvm_static_or_shared
+build() {
 
-	SOURCE_DIR="${PACKAGE}"
+	local current_datetime="$(print_current_datetime)"
+	local package="llvm"
+	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
+	check_llvm_static_or_shared "$4"
+	{
+		dump_compiler_linker_build_type_and_compiler_flags "${package}"
+		dump_llvm_static_or_shared
 
-	PROJECTS=(
-		clang
-		clang-tools-extra
-		lld
-		lldb
-	)
+		local source_dir="${package}"
 
-	# runtime projects are not needed to build Cross Clang
-	RUNTIMES=(
-		# compiler-rt
-		# libcxx
-		# libcxxabi
-		# libunwind
-	)
+		local projects=(
+			clang
+			clang-tools-extra
+			lld
+			lldb
+		)
 
-	TARGETS=(
-		all
-		# host
-	)
+		# runtime projects are not needed to build Cross Clang
+		local runtimes=(
+			# compiler-rt
+			# libcxx
+			# libcxxabi
+			# libunwind
+		)
 
-	CMAKE_OPTIONS=(
-		"../${SOURCE_DIR}/llvm"
+		local targets=(
+			all
+			# host
+		)
 
-		-DLLVM_TARGETS_TO_BUILD="$(join_array_elements ';' "${TARGETS[@]}")"
-		-DLLVM_ENABLE_PROJECTS="$(join_array_elements ';' "${PROJECTS[@]}")"
-		-DLLVM_ENABLE_RUNTIMES="$(join_array_elements ';' "${RUNTIMES[@]}")"
-		-DLLVM_BUILD_RUNTIME=ON
+		local cmake_options=(
+			"../${source_dir}/llvm"
 
-		-DLLVM_OPTIMIZED_TABLEGEN=ON
-		-DLLVM_ENABLE_WERROR=OFF
-		-DLLVM_ENABLE_ASSERTIONS=OFF
-		-DLLVM_ENABLE_BACKTRACES=OFF
-		-DLLVM_ENABLE_LIBXML2=ON
-		-DLLVM_ENABLE_PLUGINS=OFF
-		-DLLVM_ENABLE_MODULES=OFF
+			-DLLVM_TARGETS_TO_BUILD="$(join_array_elements ';' "${targets[@]}")"
+			-DLLVM_ENABLE_PROJECTS="$(join_array_elements ';' "${projects[@]}")"
+			-DLLVM_ENABLE_RUNTIMES="$(join_array_elements ';' "${runtimes[@]}")"
+			-DLLVM_BUILD_RUNTIME=ON
 
-		-DLLVM_BUILD_TESTS=ON
-		-DLLVM_INCLUDE_TESTS=ON
-		-DLLVM_BUILD_BENCHMARKS=OFF
-		-DLLVM_INCLUDE_BENCHMARKS=OFF
-		-DLLVM_BUILD_EXAMPLES=OFF
-		-DLLVM_INCLUDE_EXAMPLES=OFF
-		-DLLVM_INCLUDE_DOCS=OFF
+			-DLLVM_OPTIMIZED_TABLEGEN=ON
+			-DLLVM_ENABLE_WERROR=OFF
+			-DLLVM_ENABLE_ASSERTIONS=OFF
+			-DLLVM_ENABLE_BACKTRACES=OFF
+			-DLLVM_ENABLE_LIBXML2=ON
+			-DLLVM_ENABLE_PLUGINS=OFF
+			-DLLVM_ENABLE_MODULES=OFF
 
-		-DCLANG_BUILD_TOOLS=ON
-		-DCLANG_ENABLE_ARCMT=ON
-		-DCLANG_ENABLE_STATIC_ANALYZER=ON
-		-DCLANG_INCLUDE_TESTS=ON
-		-DCLANG_BUILD_EXAMPLES=OFF
-		-DCLANG_INCLUDE_DOCS=OFF
+			-DLLVM_BUILD_TESTS=ON
+			-DLLVM_INCLUDE_TESTS=ON
+			-DLLVM_BUILD_BENCHMARKS=OFF
+			-DLLVM_INCLUDE_BENCHMARKS=OFF
+			-DLLVM_BUILD_EXAMPLES=OFF
+			-DLLVM_INCLUDE_EXAMPLES=OFF
+			-DLLVM_INCLUDE_DOCS=OFF
 
-		-DLLVM_USE_SYMLINKS=OFF
-		-DLLVM_INSTALL_UTILS=ON
+			-DCLANG_BUILD_TOOLS=ON
+			-DCLANG_ENABLE_ARCMT=ON
+			-DCLANG_ENABLE_STATIC_ANALYZER=ON
+			-DCLANG_INCLUDE_TESTS=ON
+			-DCLANG_BUILD_EXAMPLES=OFF
+			-DCLANG_INCLUDE_DOCS=OFF
 
-		-DLLVM_BUILD_LLVM_C_DYLIB=OFF
+			-DLLVM_USE_SYMLINKS=OFF
+			-DLLVM_INSTALL_UTILS=ON
 
-		# LLVM_BUILD_LLVM_DYLIB
-		# LLVM_LINK_LLVM_DYLIB
-		# LLVM_ENABLE_PIC
-	)
+			-DLLVM_BUILD_LLVM_C_DYLIB=OFF
 
-	case "${LLVM_STATIC_OR_SHARED}" in
-		static )
-			CMAKE_OPTIONS+=(
-				-DBUILD_SHARED_LIBS=OFF
-			)
-			;;
-		shared )
-			CMAKE_OPTIONS+=(
-				-DBUILD_SHARED_LIBS=ON
-			)
-			;;
-	esac
+			# LLVM_BUILD_LLVM_DYLIB
+			# LLVM_LINK_LLVM_DYLIB
+			# LLVM_ENABLE_PIC
+		)
 
-	time_command cmake_build_install_package \
-		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" \
-		"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${CMAKE_OPTIONS[@]}"
+		case "${LLVM_STATIC_OR_SHARED}" in
+			static )
+				cmake_options+=(
+					-DBUILD_SHARED_LIBS=OFF
+				)
+				;;
+			shared )
+				cmake_options+=(
+					-DBUILD_SHARED_LIBS=ON
+				)
+				;;
+		esac
 
-} 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
+		time_command cmake_build_install_package \
+			"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${package}" \
+			"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${cmake_options[@]}"
 
-sync .
+	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
+
+	sync .
+}
+
+build "$@"

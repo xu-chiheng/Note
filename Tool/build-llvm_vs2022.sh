@@ -32,120 +32,125 @@ cd "$(dirname "$0")"
 # https://stackoverflow.com/questions/57480964/how-to-create-visual-studio-projects-that-use-llvm
 # https://phasetw0.com/llvm/getting-started-on-windows
 
-CURRENT_DATETIME="$(print_current_datetime)"
-HOST_OS="$(print_host_os_of_triple "${HOST_TRIPLE}")"
-PACKAGE=llvm
-{
-	SOURCE_DIR="${PACKAGE}"
+build() {
 
-	PROJECTS=(
-		clang
-		clang-tools-extra
-		lld
-		lldb
-	)
+	local current_datetime="$(print_current_datetime)"
+	local host_os="$(print_host_os_of_triple "${HOST_TRIPLE}")"
+	local package="llvm"
+	{
+		local source_dir="${package}"
 
-	# runtime projects are not needed to build Cross Clang
-	RUNTIMES=(
-		# compiler-rt
-		# libcxx
-		# libcxxabi
-		# libunwind
-	)
+		local projects=(
+			clang
+			clang-tools-extra
+			lld
+			lldb
+		)
 
-	TARGETS=(
-		all
-		# host
-	)
+		# runtime projects are not needed to build Cross Clang
+		local runtimes=(
+			# compiler-rt
+			# libcxx
+			# libcxxabi
+			# libunwind
+		)
 
-	CMAKE_OPTIONS=(
-		-G "Visual Studio 17 2022"
+		local targets=(
+			all
+			# host
+		)
 
-		# v143 - Visual Studio 2022 (MSVC 14.3x)
-		# v142 - Visual Studio 2019 (MSVC 14.2x)
-		# v141 - Visual Studio 2017 (MSVC 14.1x)
-		# v140 - Visual Studio 2015 (MSVC 14.0)
-		# v120 - Visual Studio 2013 (MSVC 12.0)
-		# v110 - Visual Studio 2012 (MSVC 11.0)
-		# -T v143
+		local cmake_options=(
+			-G "Visual Studio 17 2022"
 
-		-T ClangCL
+			# v143 - Visual Studio 2022 (MSVC 14.3x)
+			# v142 - Visual Studio 2019 (MSVC 14.2x)
+			# v141 - Visual Studio 2017 (MSVC 14.1x)
+			# v140 - Visual Studio 2015 (MSVC 14.0)
+			# v120 - Visual Studio 2013 (MSVC 12.0)
+			# v110 - Visual Studio 2012 (MSVC 11.0)
+			# -T v143
 
-		# https://vcpkg.io
-		# https://vcpkg.io/en/getting-started.html
-		# https://learn.microsoft.com/en-us/vcpkg/
-		# https://github.com/microsoft/vcpkg
+			-T ClangCL
 
-		# $ vcpkg integrate install
-		# Applied user-wide integration for this vcpkg root.
-		# CMake projects should use: "-DCMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake"
-		# All MSBuild C++ projects can now #include any installed libraries. Linking will be handled automatically. Installing new libraries will make them instantly available.
-		# -DCMAKE_TOOLCHAIN_FILE="$(cygpath -m "${VCPKG_DIR}")/scripts/buildsystems/vcpkg.cmake"
+			# https://vcpkg.io
+			# https://vcpkg.io/en/getting-started.html
+			# https://learn.microsoft.com/en-us/vcpkg/
+			# https://github.com/microsoft/vcpkg
 
-		# vcpkg install zlib libxml2
-		# -- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
-		# -- Could NOT find LibXml2 (missing: LIBXML2_LIBRARY LIBXML2_INCLUDE_DIR)
-		# -DZLIB_LIBRARY="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/lib/zlib.lib"
-		# -DZLIB_INCLUDE_DIR="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/include"
-		# -DLIBXML2_LIBRARY="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/lib/libxml2.lib"
-		# -DLIBXML2_INCLUDE_DIR="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/include/libxml2"
+			# $ vcpkg integrate install
+			# Applied user-wide integration for this vcpkg root.
+			# CMake projects should use: "-DCMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+			# All MSBuild C++ projects can now #include any installed libraries. Linking will be handled automatically. Installing new libraries will make them instantly available.
+			# -DCMAKE_TOOLCHAIN_FILE="$(cygpath -m "${VCPKG_DIR}")/scripts/buildsystems/vcpkg.cmake"
 
-		# vcpkg install libbacktrace
-		# -- Could NOT find Backtrace (missing: Backtrace_LIBRARY Backtrace_INCLUDE_DIR)
+			# vcpkg install zlib libxml2
+			# -- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+			# -- Could NOT find LibXml2 (missing: LIBXML2_LIBRARY LIBXML2_INCLUDE_DIR)
+			# -DZLIB_LIBRARY="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/lib/zlib.lib"
+			# -DZLIB_INCLUDE_DIR="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/include"
+			# -DLIBXML2_LIBRARY="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/lib/libxml2.lib"
+			# -DLIBXML2_INCLUDE_DIR="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/include/libxml2"
 
-		"../${SOURCE_DIR}/llvm"
+			# vcpkg install libbacktrace
+			# -- Could NOT find Backtrace (missing: Backtrace_LIBRARY Backtrace_INCLUDE_DIR)
 
-		-DLLVM_TARGETS_TO_BUILD="$(join_array_elements ';' "${TARGETS[@]}")"
-		-DLLVM_ENABLE_PROJECTS="$(join_array_elements ';' "${PROJECTS[@]}")"
-		-DLLVM_ENABLE_RUNTIMES="$(join_array_elements ';' "${RUNTIMES[@]}")"
-		-DLLVM_BUILD_RUNTIME=ON
+			"../${source_dir}/llvm"
 
-		-DLLVM_BUILD_TESTS=ON
-		-DLLVM_INCLUDE_TESTS=ON
-		-DLLVM_BUILD_BENCHMARKS=OFF
-		-DLLVM_INCLUDE_BENCHMARKS=OFF
-		-DLLVM_BUILD_EXAMPLES=OFF
-		-DLLVM_INCLUDE_EXAMPLES=OFF
-		-DLLVM_INCLUDE_DOCS=OFF
+			-DLLVM_TARGETS_TO_BUILD="$(join_array_elements ';' "${targets[@]}")"
+			-DLLVM_ENABLE_PROJECTS="$(join_array_elements ';' "${projects[@]}")"
+			-DLLVM_ENABLE_RUNTIMES="$(join_array_elements ';' "${runtimes[@]}")"
+			-DLLVM_BUILD_RUNTIME=ON
 
-		-DCLANG_BUILD_TOOLS=ON
-		-DCLANG_ENABLE_ARCMT=ON
-		-DCLANG_ENABLE_STATIC_ANALYZER=ON
-		-DCLANG_INCLUDE_TESTS=ON
-		-DCLANG_BUILD_EXAMPLES=OFF
-		-DCLANG_INCLUDE_DOCS=OFF
+			-DLLVM_BUILD_TESTS=ON
+			-DLLVM_INCLUDE_TESTS=ON
+			-DLLVM_BUILD_BENCHMARKS=OFF
+			-DLLVM_INCLUDE_BENCHMARKS=OFF
+			-DLLVM_BUILD_EXAMPLES=OFF
+			-DLLVM_INCLUDE_EXAMPLES=OFF
+			-DLLVM_INCLUDE_DOCS=OFF
 
-		-DLLVM_USE_SYMLINKS=OFF
-		-DLLVM_INSTALL_UTILS=ON
+			-DCLANG_BUILD_TOOLS=ON
+			-DCLANG_ENABLE_ARCMT=ON
+			-DCLANG_ENABLE_STATIC_ANALYZER=ON
+			-DCLANG_INCLUDE_TESTS=ON
+			-DCLANG_BUILD_EXAMPLES=OFF
+			-DCLANG_INCLUDE_DOCS=OFF
 
-		-DLLVM_BUILD_LLVM_C_DYLIB=OFF
+			-DLLVM_USE_SYMLINKS=OFF
+			-DLLVM_INSTALL_UTILS=ON
 
-		# LLVM_BUILD_LLVM_DYLIB
-		# LLVM_LINK_LLVM_DYLIB
-		# LLVM_ENABLE_PIC
+			-DLLVM_BUILD_LLVM_C_DYLIB=OFF
 
-		-DBUILD_SHARED_LIBS=OFF
-		# MSVC does not support this option
-		# -DBUILD_SHARED_LIBS=ON
-	)
+			# LLVM_BUILD_LLVM_DYLIB
+			# LLVM_LINK_LLVM_DYLIB
+			# LLVM_ENABLE_PIC
 
-	BUILD_TYPE=Release
-	BUILD_DIR="${SOURCE_DIR}-${HOST_OS}-build"
+			-DBUILD_SHARED_LIBS=OFF
+			# MSVC does not support this option
+			# -DBUILD_SHARED_LIBS=ON
+		)
 
-	DEST_DIR="$(pwd)/__${HOST_OS}"
-	TARBALL="${PACKAGE}.tar"
+		local build_type=Release
+		local build_dir="${source_dir}-${host_os}-build"
 
-	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/devenv-command-line-switches
-	# https://learn.microsoft.com/en-us/visualstudio/ide/reference/build-devenv-exe
-	# https://stackoverflow.com/questions/18902628/using-devenv-exe-from-the-command-line-and-specifying-the-platform
+		local dest_dir="$(pwd)/__${host_os}"
+		local tarball="${package}.tar"
 
-	# time_command devenv.exe LLVM.sln -build Release -out "../~$(print_current_datetime)-llvm-vs2022-output.txt"
-	# time_command devenv.exe LLVM.sln -clean
+		# https://learn.microsoft.com/en-us/visualstudio/ide/reference/devenv-command-line-switches
+		# https://learn.microsoft.com/en-us/visualstudio/ide/reference/build-devenv-exe
+		# https://stackoverflow.com/questions/18902628/using-devenv-exe-from-the-command-line-and-specifying-the-platform
 
-	# Double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE.
+		# time_command devenv.exe LLVM.sln -build Release -out "../~$(print_current_datetime)-llvm-vs2022-output.txt"
+		# time_command devenv.exe LLVM.sln -clean
 
-	time_command visual_studio_pushd_cmake_msbuild_package "${BUILD_DIR}" LLVM.sln "${BUILD_TYPE}" "${DEST_DIR}" "${TARBALL}" "${BUILD_TYPE}" "${CMAKE_OPTIONS[@]}"
+		# Double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE.
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-${HOST_OS}-output.txt"
+		time_command visual_studio_pushd_cmake_msbuild_package "${build_dir}" LLVM.sln "${build_type}" "${dest_dir}" "${tarball}" "${build_type}" "${cmake_options[@]}"
 
-sync .
+	} 2>&1 | tee "~${current_datetime}-${package}-${host_os}-output.txt"
+
+	sync .
+}
+
+build "$@"

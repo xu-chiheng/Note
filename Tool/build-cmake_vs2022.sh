@@ -25,28 +25,33 @@
 cd "$(dirname "$0")"
 . "./common.sh"
 
-CURRENT_DATETIME="$(print_current_datetime)"
-HOST_OS="$(print_host_os_of_triple "${HOST_TRIPLE}")"
-PACKAGE="cmake"
-{
-	SOURCE_DIR="${PACKAGE}"
+build() {
 
-	CMAKE_OPTIONS=(
-		-G "Visual Studio 17 2022"
-		-T ClangCL
-		"../${SOURCE_DIR}"
-	)
+	local current_datetime="$(print_current_datetime)"
+	local host_os="$(print_host_os_of_triple "${HOST_TRIPLE}")"
+	local package="cmake"
+	{
+		local source_dir="${package}"
 
-	BUILD_TYPE=Release
-	BUILD_DIR="${SOURCE_DIR}-${HOST_OS}-build"
+		local cmake_options=(
+			-G "Visual Studio 17 2022"
+			-T ClangCL
+			"../${source_dir}"
+		)
 
-	DEST_DIR="$(pwd)/__${HOST_OS}"
-	TARBALL="${PACKAGE}.tar"
+		local build_type=Release
+		local build_dir="${source_dir}-${host_os}-build"
 
-	# Double click the CMake.sln file, in Visual Studio IDE, set cmake as startup project, and build/debug cmake in IDE
+		local dest_dir="$(pwd)/__${host_os}"
+		local tarball="${package}.tar"
 
-	time_command visual_studio_pushd_cmake_msbuild_package "${BUILD_DIR}" CMake.sln "${BUILD_TYPE}" "${DEST_DIR}" "${TARBALL}" "bin/${BUILD_TYPE}" "${CMAKE_OPTIONS[@]}"
+		# Double click the CMake.sln file, in Visual Studio IDE, set cmake as startup project, and build/debug cmake in IDE
 
-} 2>&1 | tee "~${CURRENT_DATETIME}-${PACKAGE}-${HOST_OS}-output.txt"
+		time_command visual_studio_pushd_cmake_msbuild_package "${build_dir}" CMake.sln "${build_type}" "${dest_dir}" "${tarball}" "bin/${build_type}" "${cmake_options[@]}"
 
-sync .
+	} 2>&1 | tee "~${current_datetime}-${package}-${host_os}-output.txt"
+
+	sync .
+}
+
+build "$@"

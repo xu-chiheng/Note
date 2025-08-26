@@ -25,136 +25,141 @@
 cd "$(dirname "$0")"
 . "./common.sh"
 
-CURRENT_DATETIME="$(print_current_datetime)"
-PACKAGE="gcc"
-check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
-{
-	dump_compiler_linker_build_type_and_compiler_flags
+build() {
 
-	EXTRA_LANGUAGES=()
+	local current_datetime="$(print_current_datetime)"
+	local package="gcc"
+	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
+	{
+		dump_compiler_linker_build_type_and_compiler_flags "${package}"
 
-	case "${HOST_TRIPLE}" in
-		x86_64-pc-cygwin )
-			CONFIGURE_OPTIONS=(
-				# ${HOST_TRIPLE} is the same as the output of config.guess
-				# --build=x86_64-pc-cygwin
-				# --host=x86_64-pc-cygwin
-				# --target=x86_64-pc-cygwin
-				# --without-libiconv-prefix
-				# --without-libintl-prefix
-				# --with-gcc-major-version-only
-				--enable-shared
-				--enable-shared-libgcc
-				--enable-static
-				# --enable-version-specific-runtime-libs
-				# --enable-bootstrap
-				--enable-__cxa_atexit
-				# --with-dwarf2
-				# --with-tune=generic
-				# --enable-languages=c,c++,fortran,lto,objc,obj-c++,jit
-				--enable-graphite
-				--enable-threads=posix
-				--enable-libatomic
-				--enable-libgomp
-				--enable-libquadmath
-				--enable-libquadmath-support
-				--disable-libssp
-				# --enable-libada
-				--disable-symvers
-				--with-gnu-ld
-				--with-gnu-as
-				--with-cloog-include=/usr/include/cloog-isl
-				# --without-libiconv-prefix
-				# --without-libintl-prefix
-				--with-system-zlib
-				# --enable-linker-build-id
-				# --with-default-libstdcxx-abi=gcc4-compatible
-				--enable-libstdcxx-filesystem-ts
-			)
-			EXTRA_LANGUAGES+=(
-				lto
-				fortran
-				# ada
-				objc
-				obj-c++
-				jit
-			)
-			;;
-		x86_64-pc-mingw64 )
-			CONFIGURE_OPTIONS=(
-				# ${HOST_TRIPLE} is the same as the output of config.guess
-				# --build=x86_64-w64-mingw32
-				# --host=x86_64-w64-mingw32
-				# --target=x86_64-w64-mingw32
-				# --enable-bootstrap
-				# --enable-checking=release
-				# --with-arch=x86-64
-				# --with-tune=generic
-				# --enable-languages=c,lto,c++,fortran,ada,objc,obj-c++,jit
-				--enable-shared
-				--enable-static
-				--enable-libatomic
-				--enable-threads=posix
-				--enable-graphite
-				--enable-fully-dynamic-string
-				--enable-libstdcxx-filesystem-ts
-				--enable-libstdcxx-time
-				--disable-libstdcxx-pch
-				--enable-lto
-				--enable-libgomp
-				--disable-libssp
-				--disable-multilib
-				--disable-rpath
-				# --disable-win32-registry
-				# --disable-nls
-				# --disable-werror
-				--disable-symvers
-				--with-libiconv
-				--with-system-zlib
-				--with-{gmp,mpfr,mpc,isl}="$(print_mingw_root_dir)"
-				--with-gnu-as
-				--with-gnu-ld
-				--disable-libstdcxx-debug
-			)
-			EXTRA_LANGUAGES+=(
-				lto
-				fortran
-				# ada
-				objc
-				obj-c++
-				jit
-			)
-			;;
-		*-linux* )
-			CONFIGURE_OPTIONS=(
-				# On Linux, ${HOST_TRIPLE} is not the same as the output of config.guess
-				--build="${HOST_TRIPLE}"
-				--host="${HOST_TRIPLE}"
-				--target="${HOST_TRIPLE}"
-				--enable-shared
-				--enable-shared-libgcc
-				--enable-static
-				--disable-multilib
-			)
-			EXTRA_LANGUAGES+=(
-				lto
-				fortran
-				# ada
-				objc
-				obj-c++
-				# jit
-			)
-			;;
-		* )
-			echo "unknown host : ${HOST_TRIPLE}"
-			exit 1
-			;;
-	esac
+		local configure_options=()
+		local extra_languages=()
+		case "${HOST_TRIPLE}" in
+			x86_64-pc-cygwin )
+				configure_options+=(
+					# ${HOST_TRIPLE} is the same as the output of config.guess
+					# --build=x86_64-pc-cygwin
+					# --host=x86_64-pc-cygwin
+					# --target=x86_64-pc-cygwin
+					# --without-libiconv-prefix
+					# --without-libintl-prefix
+					# --with-gcc-major-version-only
+					--enable-shared
+					--enable-shared-libgcc
+					--enable-static
+					# --enable-version-specific-runtime-libs
+					# --enable-bootstrap
+					--enable-__cxa_atexit
+					# --with-dwarf2
+					# --with-tune=generic
+					# --enable-languages=c,c++,fortran,lto,objc,obj-c++,jit
+					--enable-graphite
+					--enable-threads=posix
+					--enable-libatomic
+					--enable-libgomp
+					--enable-libquadmath
+					--enable-libquadmath-support
+					--disable-libssp
+					# --enable-libada
+					--disable-symvers
+					--with-gnu-ld
+					--with-gnu-as
+					--with-cloog-include=/usr/include/cloog-isl
+					# --without-libiconv-prefix
+					# --without-libintl-prefix
+					--with-system-zlib
+					# --enable-linker-build-id
+					# --with-default-libstdcxx-abi=gcc4-compatible
+					--enable-libstdcxx-filesystem-ts
+				)
+				extra_languages+=(
+					lto
+					fortran
+					# ada
+					objc
+					obj-c++
+					jit
+				)
+				;;
+			x86_64-pc-mingw64 )
+				configure_options+=(
+					# ${HOST_TRIPLE} is the same as the output of config.guess
+					# --build=x86_64-w64-mingw32
+					# --host=x86_64-w64-mingw32
+					# --target=x86_64-w64-mingw32
+					# --enable-bootstrap
+					# --enable-checking=release
+					# --with-arch=x86-64
+					# --with-tune=generic
+					# --enable-languages=c,lto,c++,fortran,ada,objc,obj-c++,jit
+					--enable-shared
+					--enable-static
+					--enable-libatomic
+					--enable-threads=posix
+					--enable-graphite
+					--enable-fully-dynamic-string
+					--enable-libstdcxx-filesystem-ts
+					--enable-libstdcxx-time
+					--disable-libstdcxx-pch
+					--enable-lto
+					--enable-libgomp
+					--disable-libssp
+					--disable-multilib
+					--disable-rpath
+					# --disable-win32-registry
+					# --disable-nls
+					# --disable-werror
+					--disable-symvers
+					--with-libiconv
+					--with-system-zlib
+					--with-{gmp,mpfr,mpc,isl}="$(print_mingw_root_dir)"
+					--with-gnu-as
+					--with-gnu-ld
+					--disable-libstdcxx-debug
+				)
+				extra_languages+=(
+					lto
+					fortran
+					# ada
+					objc
+					obj-c++
+					jit
+				)
+				;;
+			*-linux* )
+				configure_options+=(
+					# On Linux, ${HOST_TRIPLE} is not the same as the output of config.guess
+					--build="${HOST_TRIPLE}"
+					--host="${HOST_TRIPLE}"
+					--target="${HOST_TRIPLE}"
+					--enable-shared
+					--enable-shared-libgcc
+					--enable-static
+					--disable-multilib
+				)
+				extra_languages+=(
+					lto
+					fortran
+					# ada
+					objc
+					obj-c++
+					# jit
+				)
+				;;
+			* )
+				echo "unknown host : ${HOST_TRIPLE}"
+				exit 1
+				;;
+		esac
 
-	time_command gcc_configure_build_install_package \
-		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" \
-		"$(join_array_elements ',' "${EXTRA_LANGUAGES[@]}")" "${CONFIGURE_OPTIONS[@]}"
+		time_command gcc_configure_build_install_package \
+			"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${package}" \
+			"$(join_array_elements ',' "${extra_languages[@]}")" "${configure_options[@]}"
 
-} 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
+	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
 
-sync .
+	sync .
+}
+
+build "$@"

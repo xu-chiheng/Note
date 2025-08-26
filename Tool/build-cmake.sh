@@ -25,22 +25,27 @@
 cd "$(dirname "$0")"
 . "./common.sh"
 
-CURRENT_DATETIME="$(print_current_datetime)"
-PACKAGE="cmake"
-check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
-{
-	dump_compiler_linker_build_type_and_compiler_flags
+build() {
 
-	SOURCE_DIR="${PACKAGE}"
+	local current_datetime="$(print_current_datetime)"
+	local package="cmake"
+	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
+	{
+		dump_compiler_linker_build_type_and_compiler_flags "${package}"
 
-	CMAKE_OPTIONS=(
-		"../${SOURCE_DIR}"
-	)
+		local source_dir="${package}"
 
-	time_command cmake_build_install_package \
-		"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${PACKAGE}" \
-		"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${CMAKE_OPTIONS[@]}"
+		local cmake_options=(
+			"../${source_dir}"
+		)
 
-} 2>&1 | tee "$(print_name_for_config "~${CURRENT_DATETIME}-${PACKAGE}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
+		time_command cmake_build_install_package \
+			"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${package}" \
+			"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${cmake_options[@]}"
 
-sync .
+	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
+
+	sync .
+}
+
+build "$@"

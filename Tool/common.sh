@@ -188,8 +188,9 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 }
 
 dump_compiler_linker_build_type_and_compiler_flags() {
+	local package="$1"
+	echo "package     : ${package}"
 	echo "HOST_TRIPLE : ${HOST_TRIPLE}"
-	echo "PACKAGE     : ${PACKAGE}"
 	echo "COMPILER    : ${COMPILER}"
 	echo "LINKER      : ${LINKER}"
 	echo "BUILD_TYPE  : ${BUILD_TYPE}"

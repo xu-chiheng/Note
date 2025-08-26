@@ -644,11 +644,11 @@ build_and_install_gmp_mpfr_mpc() {
 
 build_and_install_binutils_gcc_for_target() {
 	local target="$1"
-	local compiler="$2"
-	local linker="$3"
-	local build_type="$4"
-	local host_triple="$5"
-	local package="$6"
+	local package="$2"
+	local host_triple="$3"
+	local compiler="$4"
+	local linker="$5"
+	local build_type="$6"
 	local extra_languages="$7"
 	local is_build_and_install_gmp_mpfr_mpc="$8"
 	local binutils_source_dir="$9"
@@ -747,11 +747,11 @@ build_and_install_binutils_gcc_for_target() {
 # https://wiki.gentoo.org/wiki/Cross_build_environment
 # https://wiki.gentoo.org/wiki/Embedded_Handbook/General/Creating_a_cross-compiler
 build_and_install_cross_gcc_for_targets() {
-	local compiler="$1"
-	local linker="$2"
-	local build_type="$3"
-	local host_triple="$4"
-	local package="$5"
+	local package="$1"
+	local host_triple="$2"
+	local compiler="$3"
+	local linker="$4"
+	local build_type="$5"
 	local extra_languages="$6"
 	local is_build_and_install_gmp_mpfr_mpc="$7"
 	local current_datetime="$8"
@@ -786,7 +786,7 @@ build_and_install_cross_gcc_for_targets() {
 	&& for target in "${targets[@]}"; do
 		{
 			time_command build_and_install_binutils_gcc_for_target \
-			"${target}" "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${extra_languages}" \
+			"${target}" "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${extra_languages}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${binutils_source_dir}" "${gcc_source_dir}" \
 			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
 			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-output.txt")" \
@@ -803,8 +803,8 @@ build_and_install_cross_gcc_for_targets() {
 }
 
 pre_generate_package_action() {
-	local host_triple="$1"
-	local package="$2"
+	local package="$1"
+	local host_triple="$2"
 	local source_dir="$3"
 	local install_dir="$4"
 
@@ -812,8 +812,8 @@ pre_generate_package_action() {
 }
 
 post_build_package_action() {
-	local host_triple="$1"
-	local package="$2"
+	local package="$1"
+	local host_triple="$2"
 	local source_dir="$3"
 	local install_dir="$4"
 
@@ -821,8 +821,8 @@ post_build_package_action() {
 }
 
 post_install_package_action() {
-	local host_triple="$1"
-	local package="$2"
+	local package="$1"
+	local host_triple="$2"
 	local source_dir="$3"
 	local install_dir="$4"
 
@@ -832,11 +832,11 @@ post_install_package_action() {
 }
 
 generate_build_install_package() {
-	local compiler="$1"
-	local linker="$2"
-	local build_type="$3"
-	local host_triple="$4"
-	local package="$5"
+	local package="$1"
+	local host_triple="$2"
+	local compiler="$3"
+	local linker="$4"
+	local build_type="$5"
 	local source_dir="$6"
 	local install_dir="$7"
 	local cc="$8"
@@ -873,26 +873,26 @@ generate_build_install_package() {
 
 		time_command check_dir_maybe_clone_from_url "${source_dir}" "${git_repo_url}" \
 		&& echo_command rm -rf "${install_dir}" \
-		&& echo_command pre_generate_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		&& echo_command pre_generate_package_action "${package}" "${host_triple}" "${source_dir}" "${install_dir}" \
 		&& { time_command "${pushd_and_generate_command}" "$@" \
 			&& time_command parallel_make \
 			&& echo_command pushd .. \
-			&& echo_command post_build_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+			&& echo_command post_build_package_action "${package}" "${host_triple}" "${source_dir}" "${install_dir}" \
 			&& echo_command popd \
 			&& time_command parallel_make install \
 			&& echo_command popd;} \
-		&& echo_command post_install_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		&& echo_command post_install_package_action "${package}" "${host_triple}" "${source_dir}" "${install_dir}" \
 		&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${bin_tarball}" "${install_dir}" \
 		&& time_command sync .
 	)
 }
 
 cmake_build_install_package() {
-	local compiler="$1"
-	local linker="$2"
-	local build_type="$3"
-	local host_triple="$4"
-	local package="$5"
+	local package="$1"
+	local host_triple="$2"
+	local compiler="$3"
+	local linker="$4"
+	local build_type="$5"
 	local cc="$6"
 	local cxx="$7"
 	local cflags="$8"
@@ -919,17 +919,17 @@ cmake_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${source_dir}" "${install_dir}" \
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
 		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
 configure_build_install_package() {
-	local compiler="$1"
-	local linker="$2"
-	local build_type="$3"
-	local host_triple="$4"
-	local package="$5"
+	local package="$1"
+	local host_triple="$2"
+	local compiler="$3"
+	local linker="$4"
+	local build_type="$5"
 	local cc="$6"
 	local cxx="$7"
 	local cflags="$8"
@@ -948,17 +948,17 @@ configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${source_dir}" "${install_dir}" \
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
 		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
 }
 
 gcc_configure_build_install_package() {
-	local compiler="$1"
-	local linker="$2"
-	local build_type="$3"
-	local host_triple="$4"
-	local package="$5"
+	local package="$1"
+	local host_triple="$2"
+	local compiler="$3"
+	local linker="$4"
+	local build_type="$5"
 	local extra_languages="$6"
 	local cc="$7"
 	local cxx="$8"
@@ -978,7 +978,7 @@ gcc_configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${source_dir}" "${install_dir}" \
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" \
 		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "$@"

@@ -26,13 +26,14 @@ cd "$(dirname "$0")"
 . "./common.sh"
 
 build() {
-
 	local current_datetime="$(print_current_datetime)"
 	local package="gcc"
 	local host_triple compiler linker build_type cc cxx cflags cxxflags ldflags
 	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
 	{
-		dump_compiler_linker_build_type_and_compiler_flags "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
+		dump_compiler_linker_build_type_and_compiler_flags \
+			"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
+			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
 		local configure_options=()
 		local extra_languages=()
@@ -155,7 +156,7 @@ build() {
 		esac
 
 		time_command gcc_configure_build_install_package \
-			"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" \
+			"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
 			"$(join_array_elements ',' "${extra_languages[@]}")" "${configure_options[@]}"
 

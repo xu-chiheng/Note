@@ -45,7 +45,6 @@ cd "$(dirname "$0")"
 # https://www.youtube.com/watch?v=Dnubzx8-E1M
 
 build() {
-
 	local current_datetime="$(print_current_datetime)"
 	local package="llvm"
 	local host_triple compiler linker build_type cc cxx cflags cxxflags ldflags
@@ -53,7 +52,9 @@ build() {
 	local llvm_static_or_shared
 	check_llvm_static_or_shared "$4"
 	{
-		dump_compiler_linker_build_type_and_compiler_flags "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
+		dump_compiler_linker_build_type_and_compiler_flags \
+			"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
+			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 		dump_llvm_static_or_shared "${llvm_static_or_shared}"
 
 		local source_dir="${package}"
@@ -133,7 +134,7 @@ build() {
 		esac
 
 		time_command cmake_build_install_package \
-			"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" \
+			"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
 			"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${cmake_options[@]}"
 
 	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" output.txt)"

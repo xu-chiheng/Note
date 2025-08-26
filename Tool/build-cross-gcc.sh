@@ -26,13 +26,14 @@ cd "$(dirname "$0")"
 . "./common.sh"
 
 build() {
-
 	local current_datetime="$(print_current_datetime)"
 	local package="gcc"
 	local host_triple compiler linker build_type cc cxx cflags cxxflags ldflags
 	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
 	{
-		dump_compiler_linker_build_type_and_compiler_flags "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
+		dump_compiler_linker_build_type_and_compiler_flags \
+			"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
+			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
 		local extra_languages=(
 			lto
@@ -58,12 +59,12 @@ build() {
 		)
 
 		time_command build_and_install_cross_gcc_for_targets \
-			"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" \
+			"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
 			"$(join_array_elements ',' "${extra_languages[@]}")" no "${current_datetime}" "${targets[@]}"
 
 	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" output.txt)"
 
 	sync .
-	}
+}
 
 build "$@"

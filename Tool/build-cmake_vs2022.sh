@@ -26,7 +26,6 @@ cd "$(dirname "$0")"
 . "./common.sh"
 
 build() {
-
 	local current_datetime="$(print_current_datetime)"
 	local host_os generator toolset
 	visual_studio_cmake_generator_toolset

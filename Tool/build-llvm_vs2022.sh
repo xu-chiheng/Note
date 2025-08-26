@@ -35,7 +35,8 @@ cd "$(dirname "$0")"
 build() {
 
 	local current_datetime="$(print_current_datetime)"
-	local host_os="$(print_host_os_of_triple "${HOST_TRIPLE}")"
+	local host_os generator toolset
+	visual_studio_cmake_generator_toolset
 	local package="llvm"
 	{
 		local source_dir="${package}"
@@ -61,17 +62,8 @@ build() {
 		)
 
 		local cmake_options=(
-			-G "Visual Studio 17 2022"
-
-			# v143 - Visual Studio 2022 (MSVC 14.3x)
-			# v142 - Visual Studio 2019 (MSVC 14.2x)
-			# v141 - Visual Studio 2017 (MSVC 14.1x)
-			# v140 - Visual Studio 2015 (MSVC 14.0)
-			# v120 - Visual Studio 2013 (MSVC 12.0)
-			# v110 - Visual Studio 2012 (MSVC 11.0)
-			# -T v143
-
-			-T ClangCL
+			-G "${generator}"
+			-T "${toolset}"
 
 			# https://vcpkg.io
 			# https://vcpkg.io/en/getting-started.html

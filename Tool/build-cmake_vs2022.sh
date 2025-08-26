@@ -28,14 +28,15 @@ cd "$(dirname "$0")"
 build() {
 
 	local current_datetime="$(print_current_datetime)"
-	local host_os="$(print_host_os_of_triple "${HOST_TRIPLE}")"
+	local host_os generator toolset
+	visual_studio_cmake_generator_toolset
 	local package="cmake"
 	{
 		local source_dir="${package}"
 
 		local cmake_options=(
-			-G "Visual Studio 17 2022"
-			-T ClangCL
+			-G "${generator}"
+			-T "${toolset}"
 			"../${source_dir}"
 		)
 

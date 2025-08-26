@@ -29,9 +29,10 @@ build() {
 
 	local current_datetime="$(print_current_datetime)"
 	local package="cmake"
+	local host_triple compiler linker build_type cc cxx cflags cxxflags ldflags
 	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
 	{
-		dump_compiler_linker_build_type_and_compiler_flags "${package}"
+		dump_compiler_linker_build_type_and_compiler_flags "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
 		local source_dir="${package}"
 
@@ -40,10 +41,10 @@ build() {
 		)
 
 		time_command cmake_build_install_package \
-			"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${package}" \
-			"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${cmake_options[@]}"
+			"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" \
+			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${cmake_options[@]}"
 
-	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
+	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" output.txt)"
 
 	sync .
 }

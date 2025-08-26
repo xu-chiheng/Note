@@ -48,11 +48,13 @@ build() {
 
 	local current_datetime="$(print_current_datetime)"
 	local package="llvm"
+	local host_triple compiler linker build_type cc cxx cflags cxxflags ldflags
 	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
+	local llvm_static_or_shared
 	check_llvm_static_or_shared "$4"
 	{
-		dump_compiler_linker_build_type_and_compiler_flags "${package}"
-		dump_llvm_static_or_shared
+		dump_compiler_linker_build_type_and_compiler_flags "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
+		dump_llvm_static_or_shared "${llvm_static_or_shared}"
 
 		local source_dir="${package}"
 
@@ -117,7 +119,7 @@ build() {
 			# LLVM_ENABLE_PIC
 		)
 
-		case "${LLVM_STATIC_OR_SHARED}" in
+		case "${llvm_static_or_shared}" in
 			static )
 				cmake_options+=(
 					-DBUILD_SHARED_LIBS=OFF
@@ -131,10 +133,10 @@ build() {
 		esac
 
 		time_command cmake_build_install_package \
-			"${COMPILER}" "${LINKER}" "${BUILD_TYPE}" "${HOST_TRIPLE}" "${package}" \
+			"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" \
 			"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${cmake_options[@]}"
 
-	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${HOST_TRIPLE}" "${COMPILER}" "${LINKER}" "${BUILD_TYPE}" output.txt)"
+	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" output.txt)"
 
 	sync .
 }

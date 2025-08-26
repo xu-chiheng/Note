@@ -21,99 +21,96 @@
 # SOFTWARE.
 
 check_compiler_linker_build_type_and_set_compiler_flags() {
-	local compiler="$1"
-	local linker="$2"
-	local build_type="$3"
-	local cc=
-	local cxx=
-	local cflags=()
-	local cxxflags=()
-	local ldflags=()
+	local _compiler="$1"
+	local _linker="$2"
+	local _build_type="$3"
 
-	if [ -z "${compiler}" ]; then
-		compiler=GCC
+	local _cc=
+	local _cxx=
+	local _cflags=()
+	local _cxxflags=()
+	local _ldflags=()
+
+	local _host_triple="${HOST_TRIPLE}"
+
+	if [ -z "${_compiler}" ]; then
+		_compiler=GCC
 	fi
-	case "${compiler}" in
+	case "${_compiler}" in
 		GCC | Clang )
 			true
 			;;
 		* )
-			echo "unknown compiler : ${compiler}"
+			echo "unknown compiler : ${_compiler}"
 			echo "valid compiler : GCC Clang"
 			exit 1
 			;;
 	esac
 
-	if [ -z "${linker}" ]; then
-		linker=BFD
+	if [ -z "${_linker}" ]; then
+		_linker=BFD
 	fi
-	case "${linker}" in
+	case "${_linker}" in
 		BFD | LLD )
 			true
 			;;
 		* )
-			echo "unknown linker : ${linker}"
+			echo "unknown linker : ${_linker}"
 			echo "valid linker : BFD LLD"
 			exit 1
 			;;
 	esac
 
-	if [ -z "${build_type}" ]; then
-		build_type=Release
+	if [ -z "${_build_type}" ]; then
+		_build_type=Release
 	fi
-	case "${build_type}" in
+	case "${_build_type}" in
 		Release | Debug )
 			true
 			;;
 		* )
-			echo "unknown build type : ${build_type}"
+			echo "unknown build type : ${_build_type}"
 			echo "valid build type : Release Debug"
 			exit 1
 			;;
 	esac
 
-	case "${compiler}" in
+	case "${_compiler}" in
 		GCC )
-			cc=gcc
-			cxx=g++
+			_cc=gcc
+			_cxx=g++
 			;;
 		Clang )
-			cc=clang
-			cxx=clang++
+			_cc=clang
+			_cxx=clang++
 			;;
 	esac
 
-	case "${linker}" in
+	case "${_linker}" in
 		BFD )
-			ldflags+=( -fuse-ld=bfd )
+			_ldflags+=( -fuse-ld=bfd )
 			;;
 		LLD )
 			# MinGW GCC/Clang can use this option
-			ldflags+=( -fuse-ld=lld )
+			_ldflags+=( -fuse-ld=lld )
 			;;
 	esac
 
-	local cc_dir="$(print_program_dir "${cc}")"
-	local cxx_dir="$(print_program_dir "${cxx}")"
+	local _cc_dir="$(print_program_dir "${_cc}")"
+	local _cxx_dir="$(print_program_dir "${_cxx}")"
 
-	if [ "${cc_dir}" != "${cxx_dir}" ]; then
-		echo "the dirs of C compiler ${cc} at ${cc_dir} and C++ compiler ${cxx} at ${cxx_dir} is not the same"
+	if [ "${_cc_dir}" != "${_cxx_dir}" ]; then
+		echo "the dirs of C compiler ${_cc} at ${_cc_dir} and C++ compiler ${_cxx} at ${_cxx_dir} is not the same"
 		exit 1
 	fi
-	if [ "$(basename "${cc_dir}")" != bin ]; then
+	if [ "$(basename "${_cc_dir}")" != bin ]; then
 		echo "compiler is not in a bin directory"
 		exit 1
 	fi
-	local compiler_install_dir="$(dirname "${cc_dir}")"
+	# local _compiler_install_dir="$(dirname "${_cc_dir}")"
 
-	# Disable color errors globally?
-	# http://clang-developers.42468.n3.nabble.com/Disable-color-errors-globally-td4065317.html
-	export TERM=dumb
-	# VERBOSE=1 make
-	export VERBOSE=1
-
-	local cpu_arch_flags=()
-	case "${HOST_TRIPLE}" in
+	local _cpu_arch_flags=()
+	case "${_host_triple}" in
 		x86_64-* )
 			# https://www.phoronix.com/news/GCC-11-x86-64-Feature-Levels
 			# x86-64: CMOV, CMPXCHG8B, FPU, FXSR, MMX, FXSR, SCE, SSE, SSE2
@@ -123,106 +120,127 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 
 			# only GCC 11+ and Clang 12+ support this
 			# local cpu_arch_flags=( -march=x86-64-v3 )
-			cpu_arch_flags+=( -march=x86-64 )
+			_cpu_arch_flags+=( -march=x86-64 )
 			;;
 	esac
-	cflags+=(   "${cpu_arch_flags[@]}" )
-	cxxflags+=( "${cpu_arch_flags[@]}" )
+	_cflags+=(   "${_cpu_arch_flags[@]}" )
+	_cxxflags+=( "${_cpu_arch_flags[@]}" )
 
-	case "${build_type}" in
+	case "${_build_type}" in
 		Release )
-			local release_c_cxx_common_flags=( -O3 )
-			cflags+=(   "${release_c_cxx_common_flags[@]}" )
-			cxxflags+=( "${release_c_cxx_common_flags[@]}" )
-			ldflags+=( -Wl,--strip-all )
+			local _release_c_cxx_common_flags=( -O3 )
+			_cflags+=(   "${_release_c_cxx_common_flags[@]}" )
+			_cxxflags+=( "${_release_c_cxx_common_flags[@]}" )
+			_ldflags+=( -Wl,--strip-all )
 			;;
 		Debug )
 			# https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
 			# https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
-			local debug_c_cxx_common_flags=( -Og -g )
-			cflags+=(   "${debug_c_cxx_common_flags[@]}" )
-			cxxflags+=( "${debug_c_cxx_common_flags[@]}" )
-			ldflags+=()
+			local _debug_c_cxx_common_flags=( -Og -g )
+			_cflags+=(   "${_debug_c_cxx_common_flags[@]}" )
+			_cxxflags+=( "${_debug_c_cxx_common_flags[@]}" )
+			_ldflags+=()
 			;;
 	esac
 
-	case "${HOST_TRIPLE}" in
+	case "${_host_triple}" in
 		*-cygwin )
-			# local cygwin_c_cxx_common_flags=( )
-			# # cygwin_c_cxx_common_flags+=( -mcmodel=small )
-			# cflags+=(   "${cygwin_c_cxx_common_flags[@]}" )
-			# cxxflags+=( "${cygwin_c_cxx_common_flags[@]}" )
-			if [ "${compiler_install_dir}" = /usr ]; then
+			# local _cygwin_c_cxx_common_flags=( )
+			# # _cygwin_c_cxx_common_flags+=( -mcmodel=small )
+			# _cflags+=(   "${_cygwin_c_cxx_common_flags[@]}" )
+			# _cxxflags+=( "${_cygwin_c_cxx_common_flags[@]}" )
+			if [ "${_compiler_install_dir}" = /usr ]; then
 				# pre-installed GCC 11.4.0 and Clang 8.0.1 at /usr need this option
-				ldflags+=( -Wl,--dynamicbase )
+				_ldflags+=( -Wl,--dynamicbase )
 			fi
 			;;
 		*-mingw* )
-			# local mingw_c_cxx_common_flags=( )
-			# # mingw_c_cxx_common_flags+=( -mcmodel=medium )
-			# cflags+=(   "${mingw_c_cxx_common_flags[@]}" )
-			# cxxflags+=( "${mingw_c_cxx_common_flags[@]}" )
+			# local _mingw_c_cxx_common_flags=( )
+			# # _mingw_c_cxx_common_flags+=( -mcmodel=medium )
+			# _cflags+=(   "${_mingw_c_cxx_common_flags[@]}" )
+			# _cxxflags+=( "${_mingw_c_cxx_common_flags[@]}" )
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
-			ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
-			# ldflags+=( -Wl,"$(cygpath -m "$(print_mingw_root_dir)")/lib/binmode.o" )
+			_ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
+			# _ldflags+=( -Wl,"$(cygpath -m "$(print_mingw_root_dir)")/lib/binmode.o" )
 			;;
 	esac
 
 	# case "${compiler}" in
 	# 	Clang )
-	# 		local clang_c_cxx_common_flags=( -Wno-unknown-warning-option -Wno-unknown-attributes -Qunused-arguments )
-	# 		cflags+=(   "${clang_c_cxx_common_flags[@]}" )
-	# 		cxxflags+=( "${clang_c_cxx_common_flags[@]}" )
+	# 		local _clang_c_cxx_common_flags=( -Wno-unknown-warning-option -Wno-unknown-attributes -Qunused-arguments )
+	# 		_cflags+=(   "${_clang_c_cxx_common_flags[@]}" )
+	# 		_cxxflags+=( "${_clang_c_cxx_common_flags[@]}" )
 	# 		;;
 	# esac
 
-	COMPILER="${compiler}"
-	LINKER="${linker}"
-	BUILD_TYPE="${build_type}"
-	CC="${cc}"
-	CXX="${cxx}"
-	CFLAGS="${cflags[*]}"
-	CXXFLAGS="${cxxflags[*]}"
-	LDFLAGS="${ldflags[*]}"
-	export CC CXX CFLAGS CXXFLAGS LDFLAGS
+	# printf -v is not affected by local; it always assigns to the variable in the current scope, and if the variable exists in the outer scope, it will directly modify the outer variable.
+	printf -v host_triple '%s' "${_host_triple}"
+	printf -v compiler    '%s' "${_compiler}"
+	printf -v linker      '%s' "${_linker}"
+	printf -v build_type  '%s' "${_build_type}"
+	printf -v cc          '%s' "${_cc}"
+	printf -v cxx         '%s' "${_cxx}"
+	printf -v cflags      '%s' "${_cflags[*]}"
+	printf -v cxxflags    '%s' "${_cxxflags[*]}"
+	printf -v ldflags     '%s' "${_ldflags[*]}"
 }
 
 dump_compiler_linker_build_type_and_compiler_flags() {
-	local package="$1"
+	local package="$1" host_triple="$2" compiler="$3" linker="$4" build_type="$5" cc="$6" cxx="$7" cflags="$8" cxxflags="$9" ldflags="${10}"
 	echo "package     : ${package}"
-	echo "HOST_TRIPLE : ${HOST_TRIPLE}"
-	echo "COMPILER    : ${COMPILER}"
-	echo "LINKER      : ${LINKER}"
-	echo "BUILD_TYPE  : ${BUILD_TYPE}"
-	echo "CC          : ${CC} $(print_compiler_version "${CC}") $(print_command_path "${CC}")"
-	echo "CXX         : ${CXX} $(print_compiler_version "${CXX}") $(print_command_path "${CXX}")"
-	echo "CFLAGS      : ${CFLAGS}"
-	echo "CXXFLAGS    : ${CXXFLAGS}"
-	echo "LDFLAGS     : ${LDFLAGS}"
+	echo "host_triple : ${host_triple}"
+	echo "compiler    : ${compiler}"
+	echo "linker      : ${linker}"
+	echo "build_type  : ${build_type}"
+	echo "cc          : ${cc} $(print_compiler_version "${cc}") $(print_command_path "${cc}")"
+	echo "cxx         : ${cxx} $(print_compiler_version "${cxx}") $(print_command_path "${cxx}")"
+	echo "cflags      : ${cflags}"
+	echo "cxxflags    : ${cxxflags}"
+	echo "ldflags     : ${ldflags}"
 }
 
 # control whether llvm, as library, is static or shared
 check_llvm_static_or_shared() {
-	local llvm_static_or_shared="$1"
-	if [ -z "${llvm_static_or_shared}" ]; then
-		llvm_static_or_shared=shared
+	local _llvm_static_or_shared="$1"
+
+	if [ -z "${_llvm_static_or_shared}" ]; then
+		_llvm_static_or_shared=shared
 	fi
-	case "${llvm_static_or_shared}" in
+	case "${_llvm_static_or_shared}" in
 		static | shared )
 			true
 			;;
 		* )
-			echo "unknown arg : ${llvm_static_or_shared}"
+			echo "unknown arg : ${_llvm_static_or_shared}"
 			echo "valid arg : static shared"
 			exit 1
 			;;
 	esac
-	export LLVM_STATIC_OR_SHARED="${llvm_static_or_shared}"
+
+	printf -v llvm_static_or_shared '%s' "${_llvm_static_or_shared}"
 }
 
 dump_llvm_static_or_shared() {
-	echo "LLVM_STATIC_OR_SHARED : ${LLVM_STATIC_OR_SHARED}"
+	local llvm_static_or_shared="$1"
+	echo "llvm_static_or_shared : ${llvm_static_or_shared}"
 }
+
+visual_studio_cmake_generator_toolset() {
+	local _host_os="$(print_host_os_of_triple "${HOST_TRIPLE}")"
+	local _generator="Visual Studio 17 2022"
+	local _toolset="ClangCL"
+	# v143 - Visual Studio 2022 (MSVC 14.3x)
+	# v142 - Visual Studio 2019 (MSVC 14.2x)
+	# v141 - Visual Studio 2017 (MSVC 14.1x)
+	# v140 - Visual Studio 2015 (MSVC 14.0)
+	# v120 - Visual Studio 2013 (MSVC 12.0)
+	# v110 - Visual Studio 2012 (MSVC 11.0)
+
+	printf -v host_os   '%s' "${_host_os}"
+	printf -v generator '%s' "${_generator}"
+	printf -v toolset   '%s' "${_toolset}"
+}
+
 
 print_gcc_install_dir() {
 	print_program_dir_upper_dir gcc
@@ -821,26 +839,52 @@ generate_build_install_package() {
 	local package="$5"
 	local source_dir="$6"
 	local install_dir="$7"
-	local pushd_and_generate_command="$8"
-	shift 8
+	local cc="$8"
+	local cxx="$9"
+	local cflags="${10}"
+	local cxxflags="${11}"
+	local ldflags="${12}"
+	local pushd_and_generate_command="${13}"
+	shift 13
 	local bin_tarball="${package}.tar"
 	local git_repo_url="$(git_repo_url_of_package "${package}")"
 
 	# https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
 
-	time_command check_dir_maybe_clone_from_url "${source_dir}" "${git_repo_url}" \
-	&& echo_command rm -rf "${install_dir}" \
-	&& echo_command pre_generate_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
-	&& { time_command "${pushd_and_generate_command}" "$@" \
-		&& time_command parallel_make \
-		&& echo_command pushd .. \
-		&& echo_command post_build_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
-		&& echo_command popd \
-		&& time_command parallel_make install \
-		&& echo_command popd;} \
-	&& echo_command post_install_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
-	&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${bin_tarball}" "${install_dir}" \
-	&& time_command sync .
+	(
+		# put in a subshell to prevent pollution in the global namespace
+
+		# Disable color errors globally?
+		# http://clang-developers.42468.n3.nabble.com/Disable-color-errors-globally-td4065317.html
+		export TERM=dumb
+		# VERBOSE=1 make
+		export VERBOSE=1
+		CC="${cc}"
+		CXX="${cxx}"
+		CFLAGS="${cflags}"
+		CXXFLAGS="${cxxflags}"
+		LDFLAGS="${ldflags}"
+		export CC CXX CFLAGS CXXFLAGS LDFLAGS
+
+		echo "exported environment variables :"
+		for var in TERM VERBOSE CC CXX CFLAGS CXXFLAGS LDFLAGS; do
+			echo "$var='${!var}'"
+		done
+
+		time_command check_dir_maybe_clone_from_url "${source_dir}" "${git_repo_url}" \
+		&& echo_command rm -rf "${install_dir}" \
+		&& echo_command pre_generate_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		&& { time_command "${pushd_and_generate_command}" "$@" \
+			&& time_command parallel_make \
+			&& echo_command pushd .. \
+			&& echo_command post_build_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+			&& echo_command popd \
+			&& time_command parallel_make install \
+			&& echo_command popd;} \
+		&& echo_command post_install_package_action "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${bin_tarball}" "${install_dir}" \
+		&& time_command sync .
+	)
 }
 
 cmake_build_install_package() {
@@ -876,6 +920,7 @@ cmake_build_install_package() {
 
 	time_command generate_build_install_package \
 		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
 		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
@@ -885,7 +930,12 @@ configure_build_install_package() {
 	local build_type="$3"
 	local host_triple="$4"
 	local package="$5"
-	shift 5
+	local cc="$6"
+	local cxx="$7"
+	local cflags="$8"
+	local cxxflags="$9"
+	local ldflags="${10}"
+	shift 10
 
 	local source_dir="${package}"
 	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
@@ -899,6 +949,7 @@ configure_build_install_package() {
 
 	time_command generate_build_install_package \
 		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
 		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
 }
 
@@ -909,7 +960,12 @@ gcc_configure_build_install_package() {
 	local host_triple="$4"
 	local package="$5"
 	local extra_languages="$6"
-	shift 6
+	local cc="$7"
+	local cxx="$8"
+	local cflags="$9"
+	local cxxflags="${10}"
+	local ldflags="${11}"
+	shift 11
 
 	local source_dir="${package}"
 	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
@@ -923,6 +979,7 @@ gcc_configure_build_install_package() {
 
 	time_command generate_build_install_package \
 		"${compiler}" "${linker}" "${build_type}" "${host_triple}" "${package}" "${source_dir}" "${install_dir}" \
+		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" \
 		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "$@"
 }

@@ -91,5 +91,14 @@ Fix the regression caused by commit a12ca57c1cb070be8e0048004c6b4e820029b6ee 202
  5246 |     APInt DemandedElts = APInt::getAllOnes(Sz);
       |                                            ^~
 
+regression-o.patch
+Fix the regression caused by commit 7615503409f19ad7e2e2f946437919d0689d4b3e 2025-07-14, that build fails on Visual Studio.
+       “E:\Note\Tool\llvm-visual_studio-build\LLVM.sln”(默认目标) (1) ->
+       “E:\Note\Tool\llvm-visual_studio-build\tools\clang\test\Analysis\LifetimeSafety\benchmark_venv_setup.vcxproj.metaproj”(默认目标) (1501) ->
+       “E:\Note\Tool\llvm-visual_studio-build\tools\clang\test\Analysis\LifetimeSafety\benchmark_venv_setup.vcxproj”(默认目标) (1504) ->
+       (CustomBuild 目标) ->
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(237,5): error MSB8066: Custom build for 'E:\Note\Tool\llvm-visual_studio-build\CMakeFiles\d147c9e9362f1dc0f4e6b3a8a8ad82b9\pyvenv.cfg.rule' exited with code 1. [E:\Note\Tool\llvm-visual_studio-build\tools\clang\test\Analysis\LifetimeSafety\benchmark_venv_setup.vcxproj]
+
+
 
 

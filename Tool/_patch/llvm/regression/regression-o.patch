@@ -1,0 +1,17 @@
+diff --git a/clang/test/Analysis/LifetimeSafety/CMakeLists.txt b/clang/test/Analysis/LifetimeSafety/CMakeLists.txt
+index ce37a2965566..045e100a4c92 100644
+--- a/clang/test/Analysis/LifetimeSafety/CMakeLists.txt
++++ b/clang/test/Analysis/LifetimeSafety/CMakeLists.txt
+@@ -16,6 +16,7 @@ set(LIFETIME_BENCHMARK_OUTPUT_DIR
+   "${CMAKE_CURRENT_BINARY_DIR}/benchmark_results")
+ 
+ 
++if(NOT MSVC)
+ if(EXISTS ${LIFETIME_BENCHMARK_SCRIPT} AND EXISTS ${LIFETIME_BENCHMARK_REQUIREMENTS})
+ 
+   # Set up the virtual environment and install packages
+@@ -47,3 +48,4 @@ if(EXISTS ${LIFETIME_BENCHMARK_SCRIPT} AND EXISTS ${LIFETIME_BENCHMARK_REQUIREME
+   set_target_properties(benchmark_lifetime_safety_analysis 
+     PROPERTIES FOLDER "Clang/Benchmarks")
+ endif()
++endif()

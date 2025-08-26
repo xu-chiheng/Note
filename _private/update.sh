@@ -55,7 +55,7 @@ do_update_all_files() {
 		Tool/_doc
 		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu}
 
-		Tool/{linux.sh,{cygwin,msys,mingw-vcrt,mingw-ucrt,vs2022_cygwin,vs2022_msys}.cmd}
+		Tool/{linux.sh,{cygwin,msys,mingw_vcrt,mingw_ucrt,vs2022_cygwin,vs2022_msys}.cmd}
 
 		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_2022_Enterprise,Windows_10_22H2_Enterprise_ISO}
 

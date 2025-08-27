@@ -66,13 +66,16 @@ print_host_triple_0() {
 }
 
 print_host_triple() {
-	local host_triple="$(print_host_triple_0)"
-	if host_triple_is_linux "${HOST_TRIPLE}"; then
-		# x86_64-pc-linux-gnu  ---> x86_64-linux-gnu
-		echo "${host_triple}" | sed -E -e 's/^([^-]+)-([^-]+)-(([^-]+)(-([^-]+))?)$/\1-\3/g'
-	else
-		echo "${host_triple}"
-	fi
+	local host_triple_0="$(print_host_triple_0)"
+	case "${host_triple_0}" in
+		*-linux* )
+			# x86_64-pc-linux-gnu  ---> x86_64-linux-gnu
+			echo "${host_triple_0}" | sed -E -e 's/^([^-]+)-([^-]+)-(([^-]+)(-([^-]+))?)$/\1-\3/g'
+			;;
+		* )
+			echo "${host_triple_0}"
+			;;
+	esac
 }
 
 host_triple_is_windows() {
@@ -101,13 +104,33 @@ host_triple_is_linux() {
 
 print_mingw_root_dir() {
 	case "${MSYSTEM}" in
+		MINGW32 )
+			# msvcrt.dll 32-bit
+			echo "/mingw32"
+			;;
 		MINGW64 )
-			# msvcrt.dll
+			# msvcrt.dll 64-bit
 			echo "/mingw64"
 			;;
 		UCRT64 )
-			# ucrtbase.dll
+			# ucrtbase.dll 64-bit
 			echo "/ucrt64"
+			;;
+		CLANG64 )
+			# clang + ucrtbase.dll 64-bit
+			echo "/clang64"
+			;;
+		CLANG32 )
+			# clang + ucrtbase.dll 32-bit
+			echo "/clang32"
+			;;
+		CLANGARM64 )
+			# clang + ucrtbase.dll ARM64
+			echo "/clangarm64"
+			;;
+		MSYS )
+			# MSYS2 runtime
+			echo "/usr"
 			;;
 		* )
 			echo "unknown MSYSTEM : ${MSYSTEM}"

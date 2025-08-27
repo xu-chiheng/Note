@@ -62,7 +62,8 @@ build() {
 
 		time_command build_and_install_cross_gcc_for_targets \
 			"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
-			"$(join_array_elements ',' "${extra_languages[@]}")" no "${current_datetime}" "${targets[@]}"
+			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "$(join_array_elements ',' "${extra_languages[@]}")" \
+			no "${current_datetime}" "${targets[@]}"
 
 	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" output.txt)"
 

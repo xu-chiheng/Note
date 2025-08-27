@@ -511,12 +511,16 @@ extract_configure_build_and_install_package() {
 	shift 5
 
 	local source_dir="${package}"
+	(
+		# put in a subshell to prevent pollution in the global namespace
+		echo_command export_environment_variable_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
-	time_command extract_tarball "${tarball}" "${extracted_dir}" "${source_dir}" \
-	&& { time_command pushd_and_configure "${build_dir}" "${source_dir}" "$@" \
-		&& time_command parallel_make \
-		&& time_command parallel_make install \
-		&& echo_command popd;}
+		time_command extract_tarball "${tarball}" "${extracted_dir}" "${source_dir}" \
+		&& { time_command pushd_and_configure "${build_dir}" "${source_dir}" "$@" \
+			&& time_command parallel_make \
+			&& time_command parallel_make install \
+			&& echo_command popd;}
+	)
 }
 
 gcc_pushd_and_configure() {
@@ -649,12 +653,17 @@ build_and_install_binutils_gcc_for_target() {
 	local compiler="$4"
 	local linker="$5"
 	local build_type="$6"
-	local extra_languages="$7"
-	local is_build_and_install_gmp_mpfr_mpc="$8"
-	local binutils_source_dir="$9"
-	local gcc_source_dir="${10}"
-	local gmp_mpfr_mpc_install_dir="${11}"
-	local current_datetime="${12}"
+	local cc="$7"
+	local cxx="$8"
+	local cflags="$9"
+	local cxxflags="${10}"
+	local ldflags="${11}"
+	local extra_languages="${12}"
+	local is_build_and_install_gmp_mpfr_mpc="${13}"
+	local binutils_source_dir="${14}"
+	local gcc_source_dir="${15}"
+	local gmp_mpfr_mpc_install_dir="${16}"
+	local current_datetime="${17}"
 
 	local gcc_install_dir="$(print_name_for_config "${gcc_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-install")"
 	local gcc_build_dir="$(print_name_for_config "${gcc_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
@@ -703,37 +712,41 @@ build_and_install_binutils_gcc_for_target() {
 		c
 		c++
 	)
+	(
+		# put in a subshell to prevent pollution in the global namespace
+		echo_command export_environment_variable_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
-	# The $PREFIX/bin dir _must_ be in the PATH.
-	local old_path="${PATH}"
+		# The $PREFIX/bin dir _must_ be in the PATH.
+		local old_path="${PATH}"
 
-	echo_command rm -rf "${gcc_install_dir}" \
-	\
-	&& echo_command export PATH="$(join_array_elements ':' "$(pwd)/${gcc_install_dir}/bin" "${PATH}" )" \
-	\
-	&& { time_command pushd_and_configure "${binutils_build_dir}" "${binutils_source_dir}" \
-			"${binutils_configure_options[@]}" \
-		&& time_command parallel_make \
-		&& time_command parallel_make install \
-		&& echo_command popd;} \
-		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-binutils-output.txt")" \
-	\
-	&& [ "${PIPESTATUS[0]}" -eq 0 ] \
-	\
-	&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
-			"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${gcc_configure_options[@]}" \
-		&& time_command parallel_make all-gcc \
-		&& time_command parallel_make all-target-libgcc \
-		&& time_command parallel_make install-gcc \
-		&& time_command parallel_make install-target-libgcc \
-		&& echo_command popd;} \
-		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-gcc-output.txt")" \
-	\
-	&& [ "${PIPESTATUS[0]}" -eq 0 ] \
-	\
-	&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
-	\
-	&& echo_command export PATH="${old_path}"
+		echo_command rm -rf "${gcc_install_dir}" \
+		\
+		&& echo_command export PATH="$(join_array_elements ':' "$(pwd)/${gcc_install_dir}/bin" "${PATH}" )" \
+		\
+		&& { time_command pushd_and_configure "${binutils_build_dir}" "${binutils_source_dir}" \
+				"${binutils_configure_options[@]}" \
+			&& time_command parallel_make \
+			&& time_command parallel_make install \
+			&& echo_command popd;} \
+			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-binutils-output.txt")" \
+		\
+		&& [ "${PIPESTATUS[0]}" -eq 0 ] \
+		\
+		&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
+				"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${gcc_configure_options[@]}" \
+			&& time_command parallel_make all-gcc \
+			&& time_command parallel_make all-target-libgcc \
+			&& time_command parallel_make install-gcc \
+			&& time_command parallel_make install-target-libgcc \
+			&& echo_command popd;} \
+			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-gcc-output.txt")" \
+		\
+		&& [ "${PIPESTATUS[0]}" -eq 0 ] \
+		\
+		&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${host_triple}" "${bin_tarball}" "${gcc_install_dir}" \
+		\
+		&& echo_command export PATH="${old_path}"
+	)
 }
 
 # https://wiki.osdev.org/GCC_Cross-Compiler
@@ -752,10 +765,15 @@ build_and_install_cross_gcc_for_targets() {
 	local compiler="$3"
 	local linker="$4"
 	local build_type="$5"
-	local extra_languages="$6"
-	local is_build_and_install_gmp_mpfr_mpc="$7"
-	local current_datetime="$8"
-	shift 8
+	local cc="$6"
+	local cxx="$7"
+	local cflags="$8"
+	local cxxflags="$9"
+	local ldflags="${10}"
+	local extra_languages="${11}"
+	local is_build_and_install_gmp_mpfr_mpc="${12}"
+	local current_datetime="${13}"
+	shift 13
 
 	local targets=( "$@" )
 	echo "targets :"
@@ -786,7 +804,8 @@ build_and_install_cross_gcc_for_targets() {
 	&& for target in "${targets[@]}"; do
 		{
 			time_command build_and_install_binutils_gcc_for_target \
-			"${target}" "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${extra_languages}" \
+			"${target}" "${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
+			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${extra_languages}" \
 			"${is_build_and_install_gmp_mpfr_mpc}" "${binutils_source_dir}" "${gcc_source_dir}" \
 			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
 			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-output.txt")" \
@@ -831,6 +850,33 @@ post_install_package_action() {
 	fi
 }
 
+export_environment_variable_for_build() {
+	local cc="$1"
+	local cxx="$2"
+	local cflags="$3"
+	local cxxflags="$4"
+	local ldflags="$5"
+
+	# Disable color errors globally?
+	# http://clang-developers.42468.n3.nabble.com/Disable-color-errors-globally-td4065317.html
+	export TERM=dumb
+	# VERBOSE=1 make
+	export VERBOSE=1
+	CC="${cc}"
+	CXX="${cxx}"
+	CFLAGS="${cflags}"
+	CXXFLAGS="${cxxflags}"
+	LDFLAGS="${ldflags}"
+	export CC CXX CFLAGS CXXFLAGS LDFLAGS
+
+
+	echo "exported environment variables :"
+	for var in TERM VERBOSE CC CXX CFLAGS CXXFLAGS LDFLAGS; do
+		echo "		$var='${!var}'"
+	done
+}
+
+
 generate_build_install_package() {
 	local package="$1"
 	local host_triple="$2"
@@ -853,23 +899,7 @@ generate_build_install_package() {
 
 	(
 		# put in a subshell to prevent pollution in the global namespace
-
-		# Disable color errors globally?
-		# http://clang-developers.42468.n3.nabble.com/Disable-color-errors-globally-td4065317.html
-		export TERM=dumb
-		# VERBOSE=1 make
-		export VERBOSE=1
-		CC="${cc}"
-		CXX="${cxx}"
-		CFLAGS="${cflags}"
-		CXXFLAGS="${cxxflags}"
-		LDFLAGS="${ldflags}"
-		export CC CXX CFLAGS CXXFLAGS LDFLAGS
-
-		echo "exported environment variables :"
-		for var in TERM VERBOSE CC CXX CFLAGS CXXFLAGS LDFLAGS; do
-			echo "		$var='${!var}'"
-		done
+		echo_command export_environment_variable_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
 		time_command check_dir_maybe_clone_from_url "${source_dir}" "${git_repo_url}" \
 		&& echo_command rm -rf "${install_dir}" \

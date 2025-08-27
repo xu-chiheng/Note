@@ -5,7 +5,7 @@ inherit cmake
 
 # package name
 NAME="llvm"
-VERSION=20.1.8
+VERSION=21.1.1
 RELEASE=1
 
 # package metadata
@@ -19,22 +19,22 @@ LICENSE="Apache License v2.0 with LLVM Exceptions"
 SRC_URI="https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${VERSION}.tar.gz"
 SRC_DIR="llvm-project-llvmorg-${VERSION}"
 
-LLVM_20_PATCHES=(
-# 20.0.0    8c2574832ed2064996389e4259eaf0bea0fa7951    2025-01-29    branch point
+_PATCHES=(
+# 21.0.0    94b15a1ece37963c9804fc7f0c498d140ea5fd9d    2025-07-15    branch point
 # patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
-regression/regression-{a,b,d-2,g-1},\
-cygming-build/cygming-build-{a-1,b,c,d,e,f,g,h,i,j-1,k,l,m,n},\
-cygming-driver/cygming-driver-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
-cygwin-lld/cygwin-lld-{a,b,c},\
-cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,f-1,h-1,i-1,k-1,l-{a,b,c},m,n,o,p},\
-cygwin/cygwin-{support-tls,va-list-kind,cmodel-2,general-{a,b,c},macro},\
+regression/regression-{a,b-1,d-5,g-2,h-1,i,j,k,m-1,n,o},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-1,l,m,n,o-2},\
+cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygwin-lld/cygwin-lld-{a,b-1,c},\
+cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\
+cygwin/cygwin-{cmodel-2,general-{a-1,b,c-1},macro},\
 cygwin-regression/cygwin-regression-{a,b,c,d,e},\
 mingw/mingw-{git-revision,emutls-1}}.patch
 
 )
 
-PATCH_URI="${LLVM_20_PATCHES[*]}"
+PATCH_URI="${_PATCHES[*]}"
 
 # CYGCMAKE_SOURCE="llvm"
 # CYGCMAKE_SOURCE="../src/${SRC_DIR}/llvm"

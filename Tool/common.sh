@@ -21,16 +21,8 @@
 # SOFTWARE.
 
 check_compiler_linker_build_type_and_set_compiler_flags() {
-	local _compiler="$1"
-	local _linker="$2"
-	local _build_type="$3"
-
-	local _cc=
-	local _cxx=
-	local _cflags=()
-	local _cxxflags=()
-	local _ldflags=()
-
+	local _compiler="$1" _linker="$2" _build_type="$3"
+	local _cc= _cxx= _cflags=() _cxxflags=() _ldflags=()
 	local _host_triple="${HOST_TRIPLE}"
 
 	if [ -z "${_compiler}" ]; then
@@ -221,26 +213,20 @@ check_llvm_static_or_shared() {
 }
 
 dump_llvm_static_or_shared() {
-	local llvm_static_or_shared="$1"
-	echo "llvm_static_or_shared : ${llvm_static_or_shared}"
+	echo "llvm_static_or_shared : $1"
 }
 
 visual_studio_cmake_generator_toolset() {
-	local _host_os="$(print_host_os_of_triple "${HOST_TRIPLE}")"
-	local _generator="Visual Studio 17 2022"
-	local _toolset="ClangCL"
+	printf -v host_os   '%s' "$(print_host_os_of_triple "${HOST_TRIPLE}")"
+	printf -v generator '%s' "Visual Studio 17 2022"
+	printf -v toolset   '%s' "ClangCL"
 	# v143 - Visual Studio 2022 (MSVC 14.3x)
 	# v142 - Visual Studio 2019 (MSVC 14.2x)
 	# v141 - Visual Studio 2017 (MSVC 14.1x)
 	# v140 - Visual Studio 2015 (MSVC 14.0)
 	# v120 - Visual Studio 2013 (MSVC 12.0)
 	# v110 - Visual Studio 2012 (MSVC 11.0)
-
-	printf -v host_os   '%s' "${_host_os}"
-	printf -v generator '%s' "${_generator}"
-	printf -v toolset   '%s' "${_toolset}"
 }
-
 
 print_gcc_install_dir() {
 	print_program_dir_upper_dir gcc
@@ -326,8 +312,7 @@ git_repo_url_of_package() {
 }
 
 check_dir_maybe_clone_from_url() {
-	local dir="$1"
-	local git_repo_url="$2"
+	local dir="$1" git_repo_url="$2"
 
 	if [ ! -d "${dir}" ]; then
 		time_command git clone --origin upstream --no-checkout "${git_repo_url}" "${dir}"
@@ -384,12 +369,7 @@ print_host_os_of_triple() {
 }
 
 print_name_for_config() {
-	local prefix="$1"
-	local host_triple="$2"
-	local compiler="$3"
-	local linker="$4"
-	local build_type="$5"
-	local suffix="$6"
+	local prefix="$1" host_triple="$2" compiler="$3" linker="$4" build_type="$5" suffix="$6"
 	shift 6
 
 	local host_os="$(print_host_os_of_triple "${host_triple}")"
@@ -399,9 +379,7 @@ print_name_for_config() {
 }
 
 make_tarball_and_calculate_sha512() {
-	local dest_dir="$1"
-	local tarball="$2"
-	local install_dir="$3"
+	local dest_dir="$1" tarball="$2" install_dir="$3"
 
 	# # tar -cvf /cygdrive/e/Note/Tool/__vs2002/llvm.tar bin lib share  # at /cygdrive/e/Note/Tool/llvm-vs2022-build/Release started
 	# tar.exe: Failed to open '/cygdrive/e/Note/Tool/__vs2002/llvm.tar'
@@ -417,12 +395,7 @@ make_tarball_and_calculate_sha512() {
 }
 
 maybe_make_tarball_and_calculate_sha512() {
-	local compiler="$1"
-	local linker="$2"
-	local build_type="$3"
-	local host_triple="$4"
-	local tarball="$5"
-	local install_dir="$6"
+	local compiler="$1" linker="$2" build_type="$3" host_triple="$4" tarball="$5" install_dir="$6"
 
 	if [ "${build_type}" != Release ]; then
 		return 0
@@ -479,8 +452,7 @@ pushd_and_cmake_2() {
 }
 
 pushd_and_configure() {
-	local build_dir="$1"
-	local source_dir="$2"
+	local build_dir="$1" source_dir="$2"
 	shift 2
 
 	echo "configure options :"
@@ -493,9 +465,7 @@ pushd_and_configure() {
 }
 
 extract_tarball() {
-	local tarball="$1"
-	local extracted_dir="$2"
-	local source_dir="$3"
+	local tarball="$1" extracted_dir="$2" source_dir="$3"
 
 	echo_command rm -rf "${extracted_dir}" "${source_dir}" \
 	&& time_command tar -xvf "${tarball}" \
@@ -503,17 +473,13 @@ extract_tarball() {
 }
 
 extract_configure_build_and_install_package() {
-	local package="$1"
-	local tarball="$2"
-	local extracted_dir="$3"
-	local build_dir="$4"
-	local install_dir="$5"
+	local package="$1" tarball="$2" extracted_dir="$3" build_dir="$4" install_dir="$5"
 	shift 5
 
 	local source_dir="${package}"
 	(
 		# put in a subshell to prevent pollution in the global namespace
-		echo_command export_environment_variable_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
+		echo_command export_environment_variables_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
 		time_command extract_tarball "${tarball}" "${extracted_dir}" "${source_dir}" \
 		&& { time_command pushd_and_configure "${build_dir}" "${source_dir}" "$@" \
@@ -524,10 +490,7 @@ extract_configure_build_and_install_package() {
 }
 
 gcc_pushd_and_configure() {
-	local build_dir="$1"
-	local source_dir="$2"
-	local install_dir="$3"
-	local languages="$4"
+	local build_dir="$1" source_dir="$2" install_dir="$3" languages="$4"
 	shift 4
 
 	local install_prefix="$(pwd)/${install_dir}"
@@ -547,9 +510,7 @@ gcc_pushd_and_configure() {
 }
 
 copy_dependent_dlls_to_install_exe_dir() {
-	local host_triple="$1"
-	local install_dir="$2"
-	local install_exe_dir="$3"
+	local host_triple="$1" install_dir="$2" install_exe_dir="$3"
 	local root_dirs=()
 	local bin_dirs=()
 	case "${host_triple}" in
@@ -581,12 +542,7 @@ copy_dependent_dlls_to_install_exe_dir() {
 }
 
 build_and_install_gmp_mpfr_mpc() {
-	local package="$1"
-	local host_triple="$2"
-	local compiler="$3"
-	local linker="$4"
-	local build_type="$5"
-	local gmp_mpfr_mpc_install_dir="$6"
+	local package="$1" host_triple="$2" compiler="$3" linker="$4" build_type="$5" gmp_mpfr_mpc_install_dir="$6"
 
 	# GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers. 
 	# https://gmplib.org
@@ -647,23 +603,10 @@ build_and_install_gmp_mpfr_mpc() {
 # # https://www.linuxfromscratch.org/lfs/view/stable/chapter05/gcc-libstdc++.html
 
 build_and_install_binutils_gcc_for_target() {
-	local target="$1"
-	local package="$2"
-	local host_triple="$3"
-	local compiler="$4"
-	local linker="$5"
-	local build_type="$6"
-	local cc="$7"
-	local cxx="$8"
-	local cflags="$9"
-	local cxxflags="${10}"
-	local ldflags="${11}"
-	local extra_languages="${12}"
-	local is_build_and_install_gmp_mpfr_mpc="${13}"
-	local binutils_source_dir="${14}"
-	local gcc_source_dir="${15}"
-	local gmp_mpfr_mpc_install_dir="${16}"
-	local current_datetime="${17}"
+	local target="$1" package="$2" host_triple="$3" compiler="$4" linker="$5" build_type="$6"
+	local cc="$7" cxx="$8" cflags="$9" cxxflags="${10}" ldflags="${11}" extra_languages="${12}"
+	local is_build_and_install_gmp_mpfr_mpc="${13}" binutils_source_dir="${14}" gcc_source_dir="${15}"
+	local gmp_mpfr_mpc_install_dir="${16}" current_datetime="${17}"
 
 	local gcc_install_dir="$(print_name_for_config "${gcc_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-install")"
 	local gcc_build_dir="$(print_name_for_config "${gcc_source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
@@ -714,7 +657,7 @@ build_and_install_binutils_gcc_for_target() {
 	)
 	(
 		# put in a subshell to prevent pollution in the global namespace
-		echo_command export_environment_variable_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
+		echo_command export_environment_variables_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
 		# The $PREFIX/bin dir _must_ be in the PATH.
 		local old_path="${PATH}"
@@ -760,19 +703,9 @@ build_and_install_binutils_gcc_for_target() {
 # https://wiki.gentoo.org/wiki/Cross_build_environment
 # https://wiki.gentoo.org/wiki/Embedded_Handbook/General/Creating_a_cross-compiler
 build_and_install_cross_gcc_for_targets() {
-	local package="$1"
-	local host_triple="$2"
-	local compiler="$3"
-	local linker="$4"
-	local build_type="$5"
-	local cc="$6"
-	local cxx="$7"
-	local cflags="$8"
-	local cxxflags="$9"
-	local ldflags="${10}"
-	local extra_languages="${11}"
-	local is_build_and_install_gmp_mpfr_mpc="${12}"
-	local current_datetime="${13}"
+	local package="$1" host_triple="$2" compiler="$3" linker="$4" build_type="$5"
+	local cc="$6" cxx="$7" cflags="$8" cxxflags="$9" ldflags="${10}" extra_languages="${11}"
+	local is_build_and_install_gmp_mpfr_mpc="${12}" current_datetime="${13}"
 	shift 13
 
 	local targets=( "$@" )
@@ -822,40 +755,27 @@ build_and_install_cross_gcc_for_targets() {
 }
 
 pre_generate_package_action() {
-	local package="$1"
-	local host_triple="$2"
-	local source_dir="$3"
-	local install_dir="$4"
+	local package="$1" host_triple="$2" source_dir="$3" install_dir="$4"
 
 	true
 }
 
 post_build_package_action() {
-	local package="$1"
-	local host_triple="$2"
-	local source_dir="$3"
-	local install_dir="$4"
+	local package="$1" host_triple="$2" source_dir="$3" install_dir="$4"
 
 	true
 }
 
 post_install_package_action() {
-	local package="$1"
-	local host_triple="$2"
-	local source_dir="$3"
-	local install_dir="$4"
+	local package="$1" host_triple="$2" source_dir="$3" install_dir="$4"
 
 	if [ "${host_triple}" = x86_64-pc-mingw64 ] && [ "${package}" = qemu ]; then
 		echo_command copy_dependent_dlls_to_install_exe_dir "${host_triple}" "${install_dir}" "."
 	fi
 }
 
-export_environment_variable_for_build() {
-	local cc="$1"
-	local cxx="$2"
-	local cflags="$3"
-	local cxxflags="$4"
-	local ldflags="$5"
+export_environment_variables_for_build() {
+	local cc="$1" cxx="$2" cflags="$3" cxxflags="$4" ldflags="$5"
 
 	# Disable color errors globally?
 	# http://clang-developers.42468.n3.nabble.com/Disable-color-errors-globally-td4065317.html
@@ -869,28 +789,16 @@ export_environment_variable_for_build() {
 	LDFLAGS="${ldflags}"
 	export CC CXX CFLAGS CXXFLAGS LDFLAGS
 
-
 	echo "exported environment variables :"
 	for var in TERM VERBOSE CC CXX CFLAGS CXXFLAGS LDFLAGS; do
 		echo "		$var='${!var}'"
 	done
 }
 
-
 generate_build_install_package() {
-	local package="$1"
-	local host_triple="$2"
-	local compiler="$3"
-	local linker="$4"
-	local build_type="$5"
-	local cc="$6"
-	local cxx="$7"
-	local cflags="$8"
-	local cxxflags="$9"
-	local ldflags="${10}"
-	local source_dir="${11}"
-	local install_dir="${12}"
-	local pushd_and_generate_command="${13}"
+	local package="$1" host_triple="$2" compiler="$3" linker="$4" build_type="$5"
+	local cc="$6" cxx="$7" cflags="$8" cxxflags="$9" ldflags="${10}"
+	local source_dir="${11}" install_dir="${12}" pushd_and_generate_command="${13}"
 	shift 13
 	local bin_tarball="${package}.tar"
 	local git_repo_url="$(git_repo_url_of_package "${package}")"
@@ -899,7 +807,7 @@ generate_build_install_package() {
 
 	(
 		# put in a subshell to prevent pollution in the global namespace
-		echo_command export_environment_variable_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
+		echo_command export_environment_variables_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
 		time_command check_dir_maybe_clone_from_url "${source_dir}" "${git_repo_url}" \
 		&& echo_command rm -rf "${install_dir}" \
@@ -917,22 +825,22 @@ generate_build_install_package() {
 	)
 }
 
+get_build_dir_and_install_dir() {
+	local source_dir="$1" host_triple="$2" compiler="$3" linker="$4" build_type="$5"
+
+	printf -v build_dir   '%s' "$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
+	printf -v install_dir '%s' "$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
+
+}
+
 cmake_build_install_package() {
-	local package="$1"
-	local host_triple="$2"
-	local compiler="$3"
-	local linker="$4"
-	local build_type="$5"
-	local cc="$6"
-	local cxx="$7"
-	local cflags="$8"
-	local cxxflags="$9"
-	local ldflags="${10}"
+	local package="$1" host_triple="$2" compiler="$3" linker="$4" build_type="$5"
+	local cc="$6" cxx="$7" cflags="$8" cxxflags="$9" ldflags="${10}"
 	shift 10
 
 	local source_dir="${package}"
-	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
-	local install_dir="$(print_name_for_config  "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
+	local build_dir install_dir
+	get_build_dir_and_install_dir "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}"
 
 	local install_prefix="$(pwd)/${install_dir}"
 
@@ -956,21 +864,13 @@ cmake_build_install_package() {
 }
 
 configure_build_install_package() {
-	local package="$1"
-	local host_triple="$2"
-	local compiler="$3"
-	local linker="$4"
-	local build_type="$5"
-	local cc="$6"
-	local cxx="$7"
-	local cflags="$8"
-	local cxxflags="$9"
-	local ldflags="${10}"
+	local package="$1" host_triple="$2" compiler="$3" linker="$4" build_type="$5"
+	local cc="$6" cxx="$7" cflags="$8" cxxflags="$9" ldflags="${10}"
 	shift 10
 
 	local source_dir="${package}"
-	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
-	local install_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
+	local build_dir install_dir
+	get_build_dir_and_install_dir "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}"
 
 	local install_prefix="$(pwd)/${install_dir}"
 
@@ -986,22 +886,13 @@ configure_build_install_package() {
 }
 
 gcc_configure_build_install_package() {
-	local package="$1"
-	local host_triple="$2"
-	local compiler="$3"
-	local linker="$4"
-	local build_type="$5"
-	local cc="$6"
-	local cxx="$7"
-	local cflags="$8"
-	local cxxflags="$9"
-	local ldflags="${10}"
-	local extra_languages="${11}"
+	local package="$1" host_triple="$2" compiler="$3" linker="$4" build_type="$5"
+	local cc="$6" cxx="$7" cflags="$8" cxxflags="$9" ldflags="${10}" extra_languages="${11}"
 	shift 11
 
 	local source_dir="${package}"
-	local build_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" build)"
-	local install_dir="$(print_name_for_config "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" install)"
+	local build_dir install_dir
+	get_build_dir_and_install_dir "${source_dir}" "${host_triple}" "${compiler}" "${linker}" "${build_type}"
 
 	local languages=(
 		# all
@@ -1044,18 +935,12 @@ EOF
 # https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference
 # https://learn.microsoft.com/en-us/visualstudio/msbuild/obtaining-build-logs-with-msbuild
 visual_studio_msbuild_solution_build_type() {
-	local solution="$1"
-	local build_type="$2"
+	local solution="$1" build_type="$2"
 	time_command msbuild.exe "${solution}" -maxCpuCount -interactive -property:"Configuration=${build_type}" -verbosity:normal
 }
 
 visual_studio_pushd_cmake_msbuild_package() {
-	local build_dir="$1"
-	local solution="$2"
-	local build_type="$3"
-	local dest_dir="$4"
-	local tarball="$5"
-	local install_dir="$6"
+	local build_dir="$1" solution="$2" build_type="$3" dest_dir="$4" tarball="$5" install_dir="$6"
 	shift 6
 
 	rm -rf "${build_dir}" \

@@ -131,8 +131,7 @@ print_ssh_os_of_triple() {
 			echo "linux"
 			;;
 		* )
-			echo "unknown host : ${host_triple}"
-			return 1
+			echo "unknown"
 			;;
 	esac
 }
@@ -222,67 +221,83 @@ set_mingw_PATH_INCLUDE_LIB_at_bash_startup() {
 	esac
 }
 
-set_PATH_and_linux_LD_LIBRARY_PATH_at_bash_startup() {
-	if host_triple_is_windows "${HOST_TRIPLE}" && [ -v VSINSTALLDIR ]; then
-		# Visual Studio, MSVC bin dirs has been prepended to PATH
-		# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
+set_visual_studio_PATH_at_bash_startup() {
+	case "${HOST_TRIPLE}" in
+		*-cygwin | *-msys )
+			# cygwin1.dll or msys-2.0.dll
+			if [ -v VSINSTALLDIR ]; then
+				export PATH="$(join_array_elements ':' "$(print_visual_studio_custom_llvm_location)/bin" "${PATH}")"
 
-		export PATH="$(join_array_elements ':' "$(print_visual_studio_custom_llvm_location)/bin" "${PATH}")"
+				# winget search python
 
-		# winget search python
+				# from Python.org
+				# winget install --id Python.Python.3.13
 
-		# from Python.org
-		# winget install --id Python.Python.3.13
+				# # which python
+				# /cygdrive/c/Users/Administrator/AppData/Local/Programs/Python/Python313/python
 
-		# # which python
-		# /cygdrive/c/Users/Administrator/AppData/Local/Programs/Python/Python313/python
+				# from Microsoft Store, does not work
+				# winget install python
+				# python -c "import sys; print(sys.executable)"
+				# C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps
+				# export PATH="$(join_array_elements ':' "$(dirname "$(readlink "$(cygpath -u "${LOCALAPPDATA}\Microsoft\WindowsApps")"/python.exe)")" "${PATH}")"
+				# python3.13.exe
+			fi
+			;;
+	esac
+}
 
-		# from Microsoft Store, does not work
-		# winget install python
-		# python -c "import sys; print(sys.executable)"
-		# C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps
-		# export PATH="$(join_array_elements ':' "$(dirname "$(readlink "$(cygpath -u "${LOCALAPPDATA}\Microsoft\WindowsApps")"/python.exe)")" "${PATH}")"
-		# python3.13.exe
-	else
-		case "${HOST_TRIPLE}" in
-			*-cygwin | *-mingw* | *-linux* )
-				local packages_dir="$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")"
-				local packages=(
-					gcc binutils gdb cross-gcc llvm cmake
-					# bash make
-				)
-				if host_triple_is_windows "${HOST_TRIPLE}"; then
-					# share the self built QEMU
-					true
-				else
-					packages+=( qemu )
-				fi
-
-				local package
-
-				# PATH
-				local bin_dirs=()
-				for package in "${packages[@]}"; do
-					bin_dirs+=( "${packages_dir}/${package}/bin" )
-				done
-				export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
-
-				if host_triple_is_linux "${HOST_TRIPLE}"; then
-					# LD_LIBRARY_PATH
-					local lib_dirs=()
-					for package in "${packages[@]}"; do
-						lib_dirs+=( "${packages_dir}/${package}/lib" )
-					done
-					export LD_LIBRARY_PATH="$(join_array_elements ':' "${lib_dirs[@]}" "${LD_LIBRARY_PATH}")"
-				fi
-				;;
-			*-msys )
-				# no self built package
+set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup() {
+	case "${HOST_TRIPLE}" in
+		*-cygwin | *-msys )
+			# cygwin1.dll or msys-2.0.dll
+			if [ -v VSINSTALLDIR ]; then
+				# Visual Studio, MSVC bin dirs has been prepended to PATH
+				# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
+				return;
+			fi
+			;;
+	esac
+	case "${HOST_TRIPLE}" in
+		*-cygwin | *-mingw* | *-linux* )
+			local packages_dir="$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")"
+			local packages=(
+				gcc binutils gdb cross-gcc llvm cmake
+				# bash make
+			)
+			if host_triple_is_windows "${HOST_TRIPLE}"; then
+				# share the self built QEMU
 				true
-				;;
-		esac
-	fi
+			else
+				packages+=( qemu )
+			fi
 
+			local package
+
+			# PATH
+			local bin_dirs=()
+			for package in "${packages[@]}"; do
+				bin_dirs+=( "${packages_dir}/${package}/bin" )
+			done
+			export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
+
+			if host_triple_is_linux "${HOST_TRIPLE}"; then
+				# LD_LIBRARY_PATH
+				local lib_dirs=()
+				for package in "${packages[@]}"; do
+					lib_dirs+=( "${packages_dir}/${package}/lib" )
+				done
+				export LD_LIBRARY_PATH="$(join_array_elements ':' "${lib_dirs[@]}" "${LD_LIBRARY_PATH}")"
+			fi
+			;;
+		*-msys )
+			# no self built package
+			true
+			;;
+	esac
+}
+
+set_common_windows_packages_PATH_at_bash_startup() {
 	if host_triple_is_windows "${HOST_TRIPLE}"; then
 		local dirs=(
 			'D:\qemu'
@@ -297,7 +312,7 @@ set_PATH_and_linux_LD_LIBRARY_PATH_at_bash_startup() {
 	fi
 }
 
-set_linux_other_environment_variables_at_bash_startup() {
+set_other_linux_environment_variables_at_bash_startup() {
 	if host_triple_is_linux "${HOST_TRIPLE}"; then
 		# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
 		case "${DESKTOP_SESSION}" in
@@ -336,11 +351,14 @@ set_environment_variables_at_bash_startup() {
 	# just enforces UTF-8 for stdin/stdout/stderr.
 	# export PYTHONIOENCODING=utf-8
 
+	# the order is important here
 	set_PS1_at_bash_startup
 	set_cygwin_CYGWIN_msys_MSYS_at_bash_startup
 	set_mingw_PATH_INCLUDE_LIB_at_bash_startup
-	set_PATH_and_linux_LD_LIBRARY_PATH_at_bash_startup
-	set_linux_other_environment_variables_at_bash_startup
+	set_visual_studio_PATH_at_bash_startup
+	set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup
+	set_common_windows_packages_PATH_at_bash_startup
+	set_other_linux_environment_variables_at_bash_startup
 
 	source_ssh-agent_env_script
 }

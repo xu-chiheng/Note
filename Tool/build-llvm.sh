@@ -135,7 +135,7 @@ build() {
 
 		time_command cmake_build_install_package \
 			"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
-			"${CC}" "${CXX}" "${CFLAGS}" "${CXXFLAGS}" "${LDFLAGS}" "${cmake_options[@]}"
+			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${cmake_options[@]}"
 
 	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" output.txt)"
 

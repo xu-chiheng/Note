@@ -837,13 +837,13 @@ generate_build_install_package() {
 	local compiler="$3"
 	local linker="$4"
 	local build_type="$5"
-	local source_dir="$6"
-	local install_dir="$7"
-	local cc="$8"
-	local cxx="$9"
-	local cflags="${10}"
-	local cxxflags="${11}"
-	local ldflags="${12}"
+	local cc="$6"
+	local cxx="$7"
+	local cflags="$8"
+	local cxxflags="$9"
+	local ldflags="${10}"
+	local source_dir="${11}"
+	local install_dir="${12}"
 	local pushd_and_generate_command="${13}"
 	shift 13
 	local bin_tarball="${package}.tar"
@@ -868,7 +868,7 @@ generate_build_install_package() {
 
 		echo "exported environment variables :"
 		for var in TERM VERBOSE CC CXX CFLAGS CXXFLAGS LDFLAGS; do
-			echo "$var='${!var}'"
+			echo "		$var='${!var}'"
 		done
 
 		time_command check_dir_maybe_clone_from_url "${source_dir}" "${git_repo_url}" \
@@ -919,8 +919,9 @@ cmake_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${source_dir}" "${install_dir}" \
+		"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
+		"${source_dir}" "${install_dir}" \
 		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
@@ -948,8 +949,9 @@ configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${source_dir}" "${install_dir}" \
+		"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
+		"${source_dir}" "${install_dir}" \
 		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
 }
 
@@ -959,12 +961,12 @@ gcc_configure_build_install_package() {
 	local compiler="$3"
 	local linker="$4"
 	local build_type="$5"
-	local extra_languages="$6"
-	local cc="$7"
-	local cxx="$8"
-	local cflags="$9"
-	local cxxflags="${10}"
-	local ldflags="${11}"
+	local cc="$6"
+	local cxx="$7"
+	local cflags="$8"
+	local cxxflags="$9"
+	local ldflags="${10}"
+	local extra_languages="${11}"
 	shift 11
 
 	local source_dir="${package}"
@@ -978,8 +980,9 @@ gcc_configure_build_install_package() {
 	)
 
 	time_command generate_build_install_package \
-		"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" "${source_dir}" "${install_dir}" \
+		"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
+		"${source_dir}" "${install_dir}" \
 		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" \
 		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "$@"
 }

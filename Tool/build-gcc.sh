@@ -28,19 +28,19 @@ cd "$(dirname "$0")"
 build() {
 	local current_datetime="$(print_current_datetime)"
 	local package="gcc"
-	local host_triple compiler linker build_type cc cxx cflags cxxflags ldflags
+	local compiler linker build_type cc cxx cflags cxxflags ldflags
 	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
 	{
 		dump_compiler_linker_build_type_and_compiler_flags \
-			"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
+			"${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
 		local configure_options=()
 		local extra_languages=()
-		case "${host_triple}" in
+		case "${HOST_TRIPLE}" in
 			x86_64-pc-cygwin )
 				configure_options+=(
-					# ${host_triple} is the same as the output of config.guess
+					# ${HOST_TRIPLE} is the same as the output of config.guess
 					# --build=x86_64-pc-cygwin
 					# --host=x86_64-pc-cygwin
 					# --target=x86_64-pc-cygwin
@@ -86,7 +86,7 @@ build() {
 				;;
 			x86_64-pc-mingw64 )
 				configure_options+=(
-					# ${host_triple} is the same as the output of config.guess
+					# ${HOST_TRIPLE} is the same as the output of config.guess
 					# --build=x86_64-w64-mingw32
 					# --host=x86_64-w64-mingw32
 					# --target=x86_64-w64-mingw32
@@ -131,10 +131,10 @@ build() {
 				;;
 			*-linux* )
 				configure_options+=(
-					# On Linux, ${host_triple} is not the same as the output of config.guess
-					--build="${host_triple}"
-					--host="${host_triple}"
-					--target="${host_triple}"
+					# On Linux, ${HOST_TRIPLE} is not the same as the output of config.guess
+					--build="${HOST_TRIPLE}"
+					--host="${HOST_TRIPLE}"
+					--target="${HOST_TRIPLE}"
 					--enable-shared
 					--enable-shared-libgcc
 					--enable-static
@@ -150,17 +150,17 @@ build() {
 				)
 				;;
 			* )
-				echo "unknown host : ${host_triple}"
+				echo "unknown host : ${HOST_TRIPLE}"
 				exit 1
 				;;
 		esac
 
 		time_command gcc_configure_build_install_package \
-			"${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" \
+			"${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
 			"$(join_array_elements ',' "${extra_languages[@]}")" "${configure_options[@]}"
 
-	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${host_triple}" "${compiler}" "${linker}" "${build_type}" output.txt)"
+	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${compiler}" "${linker}" "${build_type}" output.txt)"
 
 	sync .
 }

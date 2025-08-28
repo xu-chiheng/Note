@@ -442,7 +442,7 @@ print_packages_dir_of_host_triple() {
 					if [ -v VSINSTALLDIR ]; then
 						echo "$(cygpath -u "${visual_studio_package_dir}")"
 					else
-						echo "no packages dir for host : ${host_triple}"
+						echo "no packages dir for host : ${HOST_TRIPLE}"
 						return 1
 					fi
 			esac

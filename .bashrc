@@ -23,7 +23,7 @@
 #-------------------------------------------------------------
 # Source global definitions (if any)
 #-------------------------------------------------------------
-source_etc_bashrc() {
+maybe_source_etc_bashrc() {
 	if [ -f /etc/bashrc ]; then
 		. /etc/bashrc   # --> Read /etc/bashrc, if present.
 	fi
@@ -34,8 +34,8 @@ source_.bashrc.d_scripts(){
 		. "${file}"
 	done
 }
-# https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files
 
+# https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files
 maybe_set_environment_variables_at_bash_startup() {
 	if [ ! -v HOST_TRIPLE ]; then
 		# uncomment the following line, to see the time consumed
@@ -44,8 +44,12 @@ maybe_set_environment_variables_at_bash_startup() {
 }
 
 # time \
-source_etc_bashrc
+maybe_source_etc_bashrc
 # time \
 source_.bashrc.d_scripts
 # time_command \
 maybe_set_environment_variables_at_bash_startup
+
+unset -f maybe_source_etc_bashrc
+unset -f source_.bashrc.d_scripts
+unset -f maybe_set_environment_variables_at_bash_startup

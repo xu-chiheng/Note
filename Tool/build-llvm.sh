@@ -57,8 +57,6 @@ build() {
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 		dump_llvm_static_or_shared "${llvm_static_or_shared}"
 
-		local source_dir="${package}"
-
 		local projects=(
 			clang
 			clang-tools-extra
@@ -80,7 +78,7 @@ build() {
 		)
 
 		local cmake_options=(
-			"../${source_dir}/llvm"
+			"../${package}/llvm"
 
 			-DLLVM_TARGETS_TO_BUILD="$(join_array_elements ';' "${targets[@]}")"
 			-DLLVM_ENABLE_PROJECTS="$(join_array_elements ';' "${projects[@]}")"

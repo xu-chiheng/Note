@@ -312,13 +312,13 @@ git_repo_url_of_package() {
 }
 
 check_dir_maybe_clone_from_url() {
-	local package="$1" source_dir="$2"
+	local package="$1"
 	local git_repo_url="$(git_repo_url_of_package "${package}")"
 
-	if [ ! -d "${source_dir}" ]; then
-		echo "the following command need to executed to download ${package} source to ${source_dir} :"
-		echo git clone "${git_repo_url}" "${source_dir}"
-		echo "patches in $(pwd)/_patch/${package} need to be applied manually to ${source_dir}."
+	if [ ! -d "${package}" ]; then
+		echo "the following command need to executed to download ${package} source to ${package} directory :"
+		echo git clone "${git_repo_url}" "${package}"
+		echo "patches in $(pwd)/_patch/${package} need to be applied manually to ${package}."
 		exit
 	fi
 }
@@ -407,7 +407,7 @@ pushd_and_cmake_2() {
 }
 
 pushd_and_configure() {
-	local build_dir="$1" source_dir="$2"
+	local package="$1" build_dir="$2"
 	shift 2
 
 	echo "configure options :"
@@ -416,28 +416,27 @@ pushd_and_configure() {
 	echo_command rm -rf "${build_dir}" \
 	&& echo_command mkdir "${build_dir}" \
 	&& echo_command pushd "${build_dir}" \
-	&& time_command ../"${source_dir}"/configure "$@"
+	&& time_command ../"${package}"/configure "$@"
 }
 
 extract_tarball() {
-	local tarball="$1" extracted_dir="$2" source_dir="$3"
+	local package="$1" tarball="$2" extracted_dir="$3"
 
-	echo_command rm -rf "${extracted_dir}" "${source_dir}" \
+	echo_command rm -rf "${extracted_dir}" "${package}" \
 	&& time_command tar -xvf "${tarball}" \
-	&& echo_command mv "${extracted_dir}" "${source_dir}"
+	&& echo_command mv "${extracted_dir}" "${package}"
 }
 
 extract_configure_build_and_install_package() {
 	local package="$1" tarball="$2" extracted_dir="$3" build_dir="$4" install_dir="$5"
 	shift 5
 
-	local source_dir="${package}"
 	(
 		# put in a subshell to prevent pollution in the global namespace
 		echo_command export_environment_variables_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
-		time_command extract_tarball "${tarball}" "${extracted_dir}" "${source_dir}" \
-		&& { time_command pushd_and_configure "${build_dir}" "${source_dir}" "$@" \
+		time_command extract_tarball "${package}" "${tarball}" "${extracted_dir}" \
+		&& { time_command pushd_and_configure "${package}" "${build_dir}" "$@" \
 			&& time_command parallel_make \
 			&& time_command parallel_make install \
 			&& echo_command popd;}
@@ -445,7 +444,7 @@ extract_configure_build_and_install_package() {
 }
 
 gcc_pushd_and_configure() {
-	local build_dir="$1" source_dir="$2" install_dir="$3" languages="$4"
+	local package="$1" build_dir="$2" install_dir="$3" languages="$4"
 	shift 4
 
 	local install_prefix="$(pwd)/${install_dir}"
@@ -461,7 +460,7 @@ gcc_pushd_and_configure() {
 			--disable-fixincludes
 	)
 
-	time_command pushd_and_configure "${build_dir}" "${source_dir}" "${gcc_generic_configure_options[@]}" "$@"
+	time_command pushd_and_configure "${package}" "${build_dir}" "${gcc_generic_configure_options[@]}" "$@"
 }
 
 copy_dependent_dlls_to_install_exe_dir() {
@@ -621,8 +620,7 @@ build_and_install_binutils_gcc_for_target() {
 		\
 		&& echo_command export PATH="$(join_array_elements ':' "$(pwd)/${gcc_install_dir}/bin" "${PATH}" )" \
 		\
-		&& { time_command pushd_and_configure "${binutils_build_dir}" "${binutils_source_dir}" \
-				"${binutils_configure_options[@]}" \
+		&& { time_command pushd_and_configure "binutils" "${binutils_build_dir}" "${binutils_configure_options[@]}" \
 			&& time_command parallel_make \
 			&& time_command parallel_make install \
 			&& echo_command popd;} \
@@ -630,7 +628,7 @@ build_and_install_binutils_gcc_for_target() {
 		\
 		&& [ "${PIPESTATUS[0]}" -eq 0 ] \
 		\
-		&& { time_command gcc_pushd_and_configure "${gcc_build_dir}" "${gcc_source_dir}" "${gcc_install_dir}" \
+		&& { time_command gcc_pushd_and_configure "gcc" "${gcc_build_dir}" "${gcc_install_dir}" \
 				"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "${gcc_configure_options[@]}" \
 			&& time_command parallel_make all-gcc \
 			&& time_command parallel_make all-target-libgcc \
@@ -682,8 +680,8 @@ build_and_install_cross_gcc_for_targets() {
 		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${compiler}" "${linker}" "${build_type}" gmp-mpfr-mpc-output.txt)" \
 		&& [ "${PIPESTATUS[0]}" -eq 0 ]
 	fi \
-	&& time_command check_dir_maybe_clone_from_url "binutils" "${binutils_source_dir}" \
-	&& time_command check_dir_maybe_clone_from_url "gcc" "${gcc_source_dir}" \
+	&& time_command check_dir_maybe_clone_from_url "binutils" \
+	&& time_command check_dir_maybe_clone_from_url "gcc" \
 	\
 	&& echo "building binutils and gcc ......" \
 	&& for target in "${targets[@]}"; do
@@ -707,19 +705,19 @@ build_and_install_cross_gcc_for_targets() {
 }
 
 pre_generate_package_action() {
-	local package="$1" source_dir="$2" install_dir="$3"
+	local package="$1" install_dir="$2"
 
 	true
 }
 
 post_build_package_action() {
-	local package="$1" source_dir="$2" install_dir="$3"
+	local package="$1" install_dir="$2"
 
 	true
 }
 
 post_install_package_action() {
-	local package="$1" source_dir="$2" install_dir="$3"
+	local package="$1" install_dir="$2"
 
 	if [ "${HOST_TRIPLE}" = x86_64-pc-mingw64 ] && [ "${package}" = qemu ]; then
 		echo_command copy_dependent_dlls_to_install_exe_dir "${install_dir}" "."
@@ -752,8 +750,8 @@ export_environment_variables_for_build() {
 generate_build_install_package() {
 	local package="$1" compiler="$2" linker="$3" build_type="$4"
 	local cc="$5" cxx="$6" cflags="$7" cxxflags="$8" ldflags="$9"
-	local source_dir="${10}" install_dir="${11}" pushd_and_generate_command="${12}"
-	shift 12
+	local install_dir="${10}" pushd_and_generate_command="${11}"
+	shift 11
 	local tarball="${package}.tar"
 
 	# https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
@@ -762,27 +760,27 @@ generate_build_install_package() {
 		# put in a subshell to prevent pollution in the global namespace
 		echo_command export_environment_variables_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
-		time_command check_dir_maybe_clone_from_url "${package}" "${source_dir}" \
+		time_command check_dir_maybe_clone_from_url "${package}" \
 		&& echo_command rm -rf "${install_dir}" \
-		&& echo_command pre_generate_package_action "${package}" "${source_dir}" "${install_dir}" \
+		&& echo_command pre_generate_package_action "${package}" "${install_dir}" \
 		&& { time_command "${pushd_and_generate_command}" "$@" \
 			&& time_command parallel_make \
 			&& echo_command pushd .. \
-			&& echo_command post_build_package_action "${package}" "${source_dir}" "${install_dir}" \
+			&& echo_command post_build_package_action "${package}" "${install_dir}" \
 			&& echo_command popd \
 			&& time_command parallel_make install \
 			&& echo_command popd;} \
-		&& echo_command post_install_package_action "${package}" "${source_dir}" "${install_dir}" \
+		&& echo_command post_install_package_action "${package}" "${install_dir}" \
 		&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${tarball}" "${install_dir}" \
 		&& time_command sync .
 	)
 }
 
 get_build_dir_and_install_dir() {
-	local source_dir="$1" compiler="$2" linker="$3" build_type="$4"
+	local package="$1" compiler="$2" linker="$3" build_type="$4"
 
-	printf -v build_dir   '%s' "$(print_name_for_config "${source_dir}" "${compiler}" "${linker}" "${build_type}" build)"
-	printf -v install_dir '%s' "$(print_name_for_config "${source_dir}" "${compiler}" "${linker}" "${build_type}" install)"
+	printf -v build_dir   '%s' "$(print_name_for_config "${package}" "${compiler}" "${linker}" "${build_type}" build)"
+	printf -v install_dir '%s' "$(print_name_for_config "${package}" "${compiler}" "${linker}" "${build_type}" install)"
 
 }
 
@@ -791,9 +789,8 @@ cmake_build_install_package() {
 	local cc="$5" cxx="$6" cflags="$7" cxxflags="$8" ldflags="$9"
 	shift 9
 
-	local source_dir="${package}"
 	local build_dir install_dir
-	get_build_dir_and_install_dir "${source_dir}" "${compiler}" "${linker}" "${build_type}"
+	get_build_dir_and_install_dir "${package}" "${compiler}" "${linker}" "${build_type}"
 
 	local install_prefix="$(pwd)/${install_dir}"
 
@@ -812,8 +809,7 @@ cmake_build_install_package() {
 	time_command generate_build_install_package \
 		"${package}" "${compiler}" "${linker}" "${build_type}" \
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
-		"${source_dir}" "${install_dir}" \
-		pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
+		"${install_dir}" pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
 }
 
 configure_build_install_package() {
@@ -821,9 +817,8 @@ configure_build_install_package() {
 	local cc="$5" cxx="$6" cflags="$7" cxxflags="$8" ldflags="$9"
 	shift 9
 
-	local source_dir="${package}"
 	local build_dir install_dir
-	get_build_dir_and_install_dir "${source_dir}" "${compiler}" "${linker}" "${build_type}"
+	get_build_dir_and_install_dir "${package}" "${compiler}" "${linker}" "${build_type}"
 
 	local install_prefix="$(pwd)/${install_dir}"
 
@@ -834,8 +829,7 @@ configure_build_install_package() {
 	time_command generate_build_install_package \
 		"${package}" "${compiler}" "${linker}" "${build_type}" \
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
-		"${source_dir}" "${install_dir}" \
-		pushd_and_configure "${build_dir}" "${source_dir}" "${generic_configure_options[@]}" "$@"
+		"${install_dir}" pushd_and_configure "${package}" "${build_dir}" "${generic_configure_options[@]}" "$@"
 }
 
 gcc_configure_build_install_package() {
@@ -843,9 +837,8 @@ gcc_configure_build_install_package() {
 	local cc="$5" cxx="$6" cflags="$7" cxxflags="$8" ldflags="$9" extra_languages="${10}"
 	shift 10
 
-	local source_dir="${package}"
 	local build_dir install_dir
-	get_build_dir_and_install_dir "${source_dir}" "${compiler}" "${linker}" "${build_type}"
+	get_build_dir_and_install_dir "${package}" "${compiler}" "${linker}" "${build_type}"
 
 	local languages=(
 		# all
@@ -856,8 +849,7 @@ gcc_configure_build_install_package() {
 	time_command generate_build_install_package \
 		"${package}" "${compiler}" "${linker}" "${build_type}" \
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
-		"${source_dir}" "${install_dir}" \
-		gcc_pushd_and_configure "${build_dir}" "${source_dir}" "${install_dir}" \
+		"${install_dir}" gcc_pushd_and_configure "${package}" "${build_dir}" "${install_dir}" \
 		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "$@"
 }
 

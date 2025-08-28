@@ -35,10 +35,8 @@ build() {
 			"${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
-		local source_dir="${package}"
-
 		local cmake_options=(
-			"../${source_dir}"
+			"../${package}"
 		)
 
 		time_command cmake_build_install_package \

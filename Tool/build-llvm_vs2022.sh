@@ -38,8 +38,6 @@ build() {
 	visual_studio_cmake_generator_toolset
 	local package="llvm"
 	{
-		local source_dir="${package}"
-
 		local projects=(
 			clang
 			clang-tools-extra
@@ -86,7 +84,7 @@ build() {
 			# vcpkg install libbacktrace
 			# -- Could NOT find Backtrace (missing: Backtrace_LIBRARY Backtrace_INCLUDE_DIR)
 
-			"../${source_dir}/llvm"
+			"../${package}/llvm"
 
 			-DLLVM_TARGETS_TO_BUILD="$(join_array_elements ';' "${targets[@]}")"
 			-DLLVM_ENABLE_PROJECTS="$(join_array_elements ';' "${projects[@]}")"
@@ -123,7 +121,7 @@ build() {
 		)
 
 		local build_type=Release
-		local build_dir="${source_dir}-${host_os,,}-build"
+		local build_dir="${package}-${host_os,,}-build"
 
 		local dest_dir="$(pwd)/__${host_os,,}"
 		local tarball="${package}.tar"

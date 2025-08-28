@@ -31,16 +31,14 @@ build() {
 	visual_studio_cmake_generator_toolset
 	local package="cmake"
 	{
-		local source_dir="${package}"
-
 		local cmake_options=(
 			-G "${generator}"
 			-T "${toolset}"
-			"../${source_dir}"
+			"../${package}"
 		)
 
 		local build_type=Release
-		local build_dir="${source_dir}-${host_os,,}-build"
+		local build_dir="${package}-${host_os,,}-build"
 
 		local dest_dir="$(pwd)/__${host_os,,}"
 		local tarball="${package}.tar"

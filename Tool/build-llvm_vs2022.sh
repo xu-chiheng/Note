@@ -123,9 +123,9 @@ build() {
 		)
 
 		local build_type=Release
-		local build_dir="${source_dir}-${host_os}-build"
+		local build_dir="${source_dir}-${host_os,,}-build"
 
-		local dest_dir="$(pwd)/__${host_os}"
+		local dest_dir="$(pwd)/__${host_os,,}"
 		local tarball="${package}.tar"
 
 		# https://learn.microsoft.com/en-us/visualstudio/ide/reference/devenv-command-line-switches
@@ -139,7 +139,7 @@ build() {
 
 		time_command visual_studio_pushd_cmake_msbuild_package "${build_dir}" LLVM.sln "${build_type}" "${dest_dir}" "${tarball}" "${build_type}" "${cmake_options[@]}"
 
-	} 2>&1 | tee "~${current_datetime}-${package}-${host_os}-output.txt"
+	} 2>&1 | tee "~${current_datetime}-${package}-${host_os,,}-output.txt"
 
 	sync .
 }

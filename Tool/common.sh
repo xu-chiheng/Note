@@ -23,7 +23,6 @@
 check_compiler_linker_build_type_and_set_compiler_flags() {
 	local _compiler="$1" _linker="$2" _build_type="$3"
 	local _cc= _cxx= _cflags=() _cxxflags=() _ldflags=()
-	local _host_triple="${HOST_TRIPLE}"
 
 	if [ -z "${_compiler}" ]; then
 		_compiler=GCC
@@ -102,7 +101,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 	# local _compiler_install_dir="$(dirname "${_cc_dir}")"
 
 	local _cpu_arch_flags=()
-	case "${_host_triple}" in
+	case "${HOST_TRIPLE}" in
 		x86_64-* )
 			# https://www.phoronix.com/news/GCC-11-x86-64-Feature-Levels
 			# x86-64: CMOV, CMPXCHG8B, FPU, FXSR, MMX, FXSR, SCE, SSE, SSE2
@@ -135,7 +134,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 			;;
 	esac
 
-	case "${_host_triple}" in
+	case "${HOST_TRIPLE}" in
 		*-cygwin )
 			# local _cygwin_c_cxx_common_flags=( )
 			# # _cygwin_c_cxx_common_flags+=( -mcmodel=small )
@@ -178,8 +177,10 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 
 dump_compiler_linker_build_type_and_compiler_flags() {
 	local package="$1" compiler="$2" linker="$3" build_type="$4" cc="$5" cxx="$6" cflags="$7" cxxflags="$8" ldflags="$9"
+	local host_os="$(print_host_os_of_host_triple)"
+	echo "HOST_TRIPLE : ${HOST_TRIPLE}"
 	echo "package     : ${package}"
-	echo "host_triple : ${HOST_TRIPLE}"
+	echo "host_os     : ${host_os}"
 	echo "compiler    : ${compiler}"
 	echo "linker      : ${linker}"
 	echo "build_type  : ${build_type}"
@@ -216,7 +217,7 @@ dump_llvm_static_or_shared() {
 }
 
 visual_studio_cmake_generator_toolset() {
-	printf -v host_os   '%s' "$(print_host_os_of_triple)"
+	printf -v host_os   '%s' "$(print_host_os_of_host_triple)"
 	printf -v generator '%s' "Visual Studio 17 2022"
 	printf -v toolset   '%s' "ClangCL"
 	# v143 - Visual Studio 2022 (MSVC 14.3x)
@@ -318,60 +319,12 @@ check_dir_maybe_clone_from_url() {
 	fi
 }
 
-print_host_os_of_triple() {
-	case "${HOST_TRIPLE}" in
-		*-cygwin | *-msys )
-			local visual_studio_pseudo_os_name='visual_studio'
-			case "${HOST_TRIPLE}" in
-				*-cygwin )
-					# cygwin1.dll
-					if [ -v VSINSTALLDIR ]; then
-						echo "${visual_studio_pseudo_os_name}"
-					else
-						echo "cygwin"
-					fi
-					;;
-				*-msys )
-					# msys-2.0.dll
-					if [ -v VSINSTALLDIR ]; then
-						echo "${visual_studio_pseudo_os_name}"
-					else
-						echo "msys"
-					fi
-			esac
-			;;
-		*-mingw* )
-			case "${MSYSTEM}" in
-				MINGW64 )
-					# msvcrt.dll
-					echo "mingw_vcrt"
-					;;
-				UCRT64 )
-					# ucrtbase.dll
-					echo "mingw_ucrt"
-					;;
-				* )
-					echo "unknown MSYSTEM : ${MSYSTEM}"
-					return 1
-					;;
-			esac
-			;;
-		*-linux* )
-			echo "linux"
-			;;
-		* )
-			echo "unknown host : ${HOST_TRIPLE}"
-			return 1
-			;;
-	esac
-}
-
 print_name_for_config() {
 	local prefix="$1" compiler="$2" linker="$3" build_type="$4" suffix="$5"
 	shift 5
 
-	local host_os="$(print_host_os_of_triple)"
-	local result=( "${prefix}" "${host_os}" "${compiler,,}" "${linker,,}" "${build_type,,}" "${suffix}" )
+	local host_os="$(print_host_os_of_host_triple)"
+	local result=( "${prefix}" "${host_os,,}" "${compiler,,}" "${linker,,}" "${build_type,,}" "${suffix}" )
 
 	join_array_elements '-' "${result[@]}" "$@"
 }
@@ -399,8 +352,8 @@ maybe_make_tarball_and_calculate_sha512() {
 		return 0
 	fi
 
-	local host_os="$(print_host_os_of_triple)"
-	local dest_dir="$(pwd)/__${host_os}-${compiler,,}-${linker,,}"
+	local host_os="$(print_host_os_of_host_triple)"
+	local dest_dir="$(pwd)/__${host_os,,}-${compiler,,}-${linker,,}"
 
 	make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}"
 }

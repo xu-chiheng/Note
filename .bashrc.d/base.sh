@@ -50,18 +50,18 @@ print_host_triple_0() {
 						MSYS_NT-* )
 							echo "x86_64-pc-msys"
 							return 0
-						;;
+							;;
 						MINGW64_NT-* )
 							echo "x86_64-pc-mingw64"
 							return 0
-						;;
+							;;
 					esac
 					;;
 			esac
 			;;
 	esac
 
-	# fallback
+	# fall back
 	~/config.guess
 }
 
@@ -131,27 +131,74 @@ print_mingw_root_dir() {
 			echo "/usr"
 			;;
 		* )
-			echo "unknown MSYSTEM : ${MSYSTEM}"
-			return 1
+			# unknown
+			echo "/mingw_unknown"
 			;;
 	esac
 }
 
-print_ssh_os_of_triple() {
+print_ssh_os_of_host_triple() {
 	case "${HOST_TRIPLE}" in
 		*-msys | *-mingw* )
 			# msys-2.0.dll
-			echo "msys"
+			echo "Msys"
 			;;
 		*-cygwin )
 			# cygwin1.dll
-			echo "cygwin"
+			echo "Cygwin"
 			;;
 		*-linux* )
-			echo "linux"
+			echo "Linux"
 			;;
 		* )
-			echo "unknown"
+			echo "Unknown"
+			;;
+	esac
+}
+
+print_host_os_of_host_triple() {
+	case "${HOST_TRIPLE}" in
+		*-cygwin | *-msys )
+			local visual_studio_pseudo_os_name='Visual_Studio'
+			case "${HOST_TRIPLE}" in
+				*-cygwin )
+					# cygwin1.dll
+					if [ -v VSINSTALLDIR ]; then
+						echo "${visual_studio_pseudo_os_name}"
+					else
+						echo "Cygwin"
+					fi
+					;;
+				*-msys )
+					# msys-2.0.dll
+					if [ -v VSINSTALLDIR ]; then
+						echo "${visual_studio_pseudo_os_name}"
+					else
+						echo "Msys"
+					fi
+			esac
+			;;
+		*-mingw* )
+			case "${MSYSTEM}" in
+				MINGW64 )
+					# msvcrt.dll
+					echo "MinGW_VCRT"
+					;;
+				UCRT64 )
+					# ucrtbase.dll
+					echo "MinGW_UCRT"
+					;;
+				* )
+					# unknown
+					echo "MinGW_Unknown"
+					;;
+			esac
+			;;
+		*-linux* )
+			echo "Linux"
+			;;
+		* )
+			echo "Unknown"
 			;;
 	esac
 }
@@ -162,41 +209,20 @@ set_PS1_at_bash_startup() {
 		|| { host_triple_is_linux && [ "$(id -u)" -eq 0 ]; }; then
 		ps1_symbol='\[\e[1m\]#\[\e[0m\]'
 	fi
-	local system="Unknown"
+	local host_os="$(print_host_os_of_host_triple)"
+	local system="${host_os}"
 	case "${HOST_TRIPLE}" in
 		*-cygwin )
 			# cygwin1.dll
 			if [ -v VSINSTALLDIR ]; then
-				system="Visual_Studio + Cygwin"
-			else
-				system="Cygwin"
+				system+=" + Cygwin"
 			fi
 			;;
 		*-msys )
 			# msys-2.0.dll
 			if [ -v VSINSTALLDIR ]; then
-				system="Visual_Studio + Msys"
-			else
-				system="Msys"
+				system+=" + Msys"
 			fi
-			;;
-		*-mingw* )
-			case "${MSYSTEM}" in
-				MINGW64 )
-					# msvcrt.dll
-					system="MinGW_VCRT"
-					;;
-				UCRT64 )
-					# ucrtbase.dll
-					system="MinGW_UCRT"
-					;;
-				* )
-					system="MinGW"
-					;;
-			esac
-			;;
-		*-linux* )
-			system="Linux"
 			;;
 	esac
 	# Based on the PS1(Prompt String 1) of MSYS2
@@ -385,7 +411,8 @@ set_environment_variables_at_bash_startup() {
 }
 
 source_ssh-agent_env_script() {
-	local ssh_agent_env_script=~/.ssh/"ssh-agent_env_$(print_ssh_os_of_triple).sh"
+	local ssh_os="$(print_ssh_os_of_host_triple)"
+	local ssh_agent_env_script=~/.ssh/"ssh-agent_env_${ssh_os,,}.sh"
 
 	if [ -f "${ssh_agent_env_script}" ]; then
 		quiet_command source "${ssh_agent_env_script}"
@@ -425,50 +452,13 @@ print_visual_studio_custom_cmake_location() {
 }
 
 print_packages_dir_of_host_triple() {
+	local host_os="$(print_host_os_of_host_triple)"
 	case "${HOST_TRIPLE}" in
-		*-cygwin | *-msys )
-			local visual_studio_package_dir='D:\_visual_studio'
-			case "${HOST_TRIPLE}" in
-				*-cygwin )
-					# cygwin1.dll
-					if [ -v VSINSTALLDIR ]; then
-						echo "$(cygpath -u "${visual_studio_package_dir}")"
-					else
-						echo "$(cygpath -u 'D:\_cygwin')"
-					fi
-					;;
-				*-msys )
-					# msys-2.0.dll
-					if [ -v VSINSTALLDIR ]; then
-						echo "$(cygpath -u "${visual_studio_package_dir}")"
-					else
-						echo "no packages dir for host : ${HOST_TRIPLE}"
-						return 1
-					fi
-			esac
-			;;
-		*-mingw* )
-			case "${MSYSTEM}" in
-				MINGW64 )
-					# msvcrt.dll
-					echo "$(cygpath -u 'D:\_mingw_vcrt')"
-					;;
-				UCRT64 )
-					# ucrtbase.dll
-					echo "$(cygpath -u 'D:\_mingw_ucrt')"
-					;;
-				* )
-					echo "unknown MSYSTEM : ${MSYSTEM}"
-					return 1
-					;;
-			esac
-			;;
-		*-linux* )
-			echo "/mnt/work/_linux"
+		*-cygwin | *-msys | *-mingw*  )
+			echo "$(cygpath -u "D:\_${host_os,,}")"
 			;;
 		* )
-			echo "unknown host : ${HOST_TRIPLE}"
-			return 1
+			echo "/mnt/work/_${host_os,,}"
 			;;
 	esac
 }
@@ -558,8 +548,9 @@ open_files_in_editor() {
 			kwrite "$@"
 			;;
 		* )
-			echo "unknown host : ${HOST_TRIPLE}"
-			return 1
+			# unknown
+			# assume KDE environment
+			kwrite "$@"
 			;;
 	esac
 }

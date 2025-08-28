@@ -40,16 +40,16 @@ build() {
 		)
 
 		local build_type=Release
-		local build_dir="${source_dir}-${host_os}-build"
+		local build_dir="${source_dir}-${host_os,,}-build"
 
-		local dest_dir="$(pwd)/__${host_os}"
+		local dest_dir="$(pwd)/__${host_os,,}"
 		local tarball="${package}.tar"
 
 		# Double click the CMake.sln file, in Visual Studio IDE, set cmake as startup project, and build/debug cmake in IDE
 
 		time_command visual_studio_pushd_cmake_msbuild_package "${build_dir}" CMake.sln "${build_type}" "${dest_dir}" "${tarball}" "bin/${build_type}" "${cmake_options[@]}"
 
-	} 2>&1 | tee "~${current_datetime}-${package}-${host_os}-output.txt"
+	} 2>&1 | tee "~${current_datetime}-${package}-${host_os,,}-output.txt"
 
 	sync .
 }

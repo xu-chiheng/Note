@@ -23,18 +23,29 @@
 #-------------------------------------------------------------
 # Source global definitions (if any)
 #-------------------------------------------------------------
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc   # --> Read /etc/bashrc, if present.
-fi
+source_etc_bashrc() {
+	if [ -f /etc/bashrc ]; then
+		. /etc/bashrc   # --> Read /etc/bashrc, if present.
+	fi
+}
 
-for file in ~/.bashrc.d/*.sh ; do
-	. "${file}"
-done
-
+source_.bashrc.d_scripts(){
+	for file in ~/.bashrc.d/*.sh ; do
+		. "${file}"
+	done
+}
 # https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files
 
-if [ ! -v HOST_TRIPLE ]; then
-	# uncomment the following line, to see the time consumed
-	# time_command \
-	set_environment_variables_at_bash_startup
-fi
+maybe_set_environment_variables_at_bash_startup() {
+	if [ ! -v HOST_TRIPLE ]; then
+		# uncomment the following line, to see the time consumed
+		set_environment_variables_at_bash_startup
+	fi
+}
+
+# time \
+source_etc_bashrc
+# time \
+source_.bashrc.d_scripts
+# time_command \
+maybe_set_environment_variables_at_bash_startup

@@ -61,12 +61,10 @@ Search and repalce all "-w64-"
 mingw-libgcc-no-libc.patch
 Fix build of cross gcc of target x86_64-pc-mingw64 with no libc.
 
-cygming-STMP_FIXINC-0.patch
-cygming-STMP_FIXINC-1.patch
+cygming-STMP_FIXINC.patch
 No STMP_FIXINC for Cygwin and MinGW
 
-cygming-LIMITS_H_TEST-0.patch
-cygming-LIMITS_H_TEST-1.patch
+cygming-LIMITS_H_TEST.patch
 Fix build of cross gcc of target x86_64-pc-cygwin with no libc.
 
 cygwin-include-w32api.patch
@@ -77,8 +75,7 @@ Fix build on Cygwin.
 configure: error:
 Enabling language "jit" requires --enable-host-shared.
 
-cygwin-jit-playback.cc.patch
-cygwin-jit-result.cc.patch
+cygwin-jit-{a,b}.patch
 Fix build on Cygwin.
 
 mingw-include-lib-a.patch

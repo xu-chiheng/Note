@@ -312,10 +312,14 @@ git_repo_url_of_package() {
 }
 
 check_dir_maybe_clone_from_url() {
-	local dir="$1" git_repo_url="$2"
+	local package="$1" source_dir="$2"
+	local git_repo_url="$(git_repo_url_of_package "${package}")"
 
-	if [ ! -d "${dir}" ]; then
-		time_command git clone --origin upstream --no-checkout "${git_repo_url}" "${dir}"
+	if [ ! -d "${source_dir}" ]; then
+		echo "the following command need to executed to download ${package} source to ${source_dir} :"
+		echo git clone "${git_repo_url}" "${source_dir}"
+		echo "patches in $(pwd)/_patch/${package} need to be applied manually to ${source_dir}."
+		exit
 	fi
 }
 
@@ -513,9 +517,9 @@ build_and_install_gmp_mpfr_mpc() {
 	local mpfr_extracted_dir="mpfr-${mpfr_version}"
 	local mpc_extracted_dir="mpc-${mpc_version}"
 
-	local gmp_build_dir="$(print_name_for_config gmp "${compiler}" "${linker}" "${build_type}" build)"
+	local gmp_build_dir="$(print_name_for_config  gmp  "${compiler}" "${linker}" "${build_type}" build)"
 	local mpfr_build_dir="$(print_name_for_config mpfr "${compiler}" "${linker}" "${build_type}" build)"
-	local mpc_build_dir="$(print_name_for_config mpc "${compiler}" "${linker}" "${build_type}" build)"
+	local mpc_build_dir="$(print_name_for_config  mpc  "${compiler}" "${linker}" "${build_type}" build)"
 
 	# local mirror_site=https://mirrors.aliyun.com
 	# local mirror_site=https://mirrors.tuna.tsinghua.edu.cn
@@ -561,7 +565,7 @@ build_and_install_binutils_gcc_for_target() {
 
 	local gcc_install_dir="$(print_name_for_config "${gcc_source_dir}" "${compiler}" "${linker}" "${build_type}" "${target}-install")"
 	local gcc_build_dir="$(print_name_for_config "${gcc_source_dir}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
-	local bin_tarball="${package}-${target}.tar"
+	local tarball="${package}-${target}.tar"
 	local binutils_build_dir="$(print_name_for_config "${binutils_source_dir}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
 
 	local install_prefix="$(pwd)/${gcc_install_dir}"
@@ -637,7 +641,7 @@ build_and_install_binutils_gcc_for_target() {
 		\
 		&& [ "${PIPESTATUS[0]}" -eq 0 ] \
 		\
-		&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${bin_tarball}" "${gcc_install_dir}" \
+		&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${tarball}" "${gcc_install_dir}" \
 		\
 		&& echo_command export PATH="${old_path}"
 	)
@@ -664,9 +668,6 @@ build_and_install_cross_gcc_for_targets() {
 	print_array_elements "${targets[@]}"
 	local target
 
-	local gcc_git_repo_url="$(git_repo_url_of_package gcc)"
-	local binutils_git_repo_url="$(git_repo_url_of_package binutils)"
-
 	local gcc_source_dir="gcc"
 	local binutils_source_dir="binutils"
 
@@ -681,8 +682,8 @@ build_and_install_cross_gcc_for_targets() {
 		2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${compiler}" "${linker}" "${build_type}" gmp-mpfr-mpc-output.txt)" \
 		&& [ "${PIPESTATUS[0]}" -eq 0 ]
 	fi \
-	&& time_command check_dir_maybe_clone_from_url "${binutils_source_dir}" "${binutils_git_repo_url}" \
-	&& time_command check_dir_maybe_clone_from_url "${gcc_source_dir}" "${gcc_git_repo_url}" \
+	&& time_command check_dir_maybe_clone_from_url "binutils" "${binutils_source_dir}" \
+	&& time_command check_dir_maybe_clone_from_url "gcc" "${gcc_source_dir}" \
 	\
 	&& echo "building binutils and gcc ......" \
 	&& for target in "${targets[@]}"; do
@@ -741,9 +742,11 @@ export_environment_variables_for_build() {
 	export CC CXX CFLAGS CXXFLAGS LDFLAGS
 
 	echo "exported environment variables :"
+	local temp_array=()
 	for var in TERM VERBOSE CC CXX CFLAGS CXXFLAGS LDFLAGS; do
-		echo "		$var='${!var}'"
+		temp_array+=( "$var='${!var}'" )
 	done
+	print_array_elements "${temp_array[@]}"
 }
 
 generate_build_install_package() {
@@ -751,8 +754,7 @@ generate_build_install_package() {
 	local cc="$5" cxx="$6" cflags="$7" cxxflags="$8" ldflags="$9"
 	local source_dir="${10}" install_dir="${11}" pushd_and_generate_command="${12}"
 	shift 12
-	local bin_tarball="${package}.tar"
-	local git_repo_url="$(git_repo_url_of_package "${package}")"
+	local tarball="${package}.tar"
 
 	# https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
 
@@ -760,7 +762,7 @@ generate_build_install_package() {
 		# put in a subshell to prevent pollution in the global namespace
 		echo_command export_environment_variables_for_build "${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
-		time_command check_dir_maybe_clone_from_url "${source_dir}" "${git_repo_url}" \
+		time_command check_dir_maybe_clone_from_url "${package}" "${source_dir}" \
 		&& echo_command rm -rf "${install_dir}" \
 		&& echo_command pre_generate_package_action "${package}" "${source_dir}" "${install_dir}" \
 		&& { time_command "${pushd_and_generate_command}" "$@" \
@@ -771,7 +773,7 @@ generate_build_install_package() {
 			&& time_command parallel_make install \
 			&& echo_command popd;} \
 		&& echo_command post_install_package_action "${package}" "${source_dir}" "${install_dir}" \
-		&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${bin_tarball}" "${install_dir}" \
+		&& time_command maybe_make_tarball_and_calculate_sha512 "${compiler}" "${linker}" "${build_type}" "${tarball}" "${install_dir}" \
 		&& time_command sync .
 	)
 }

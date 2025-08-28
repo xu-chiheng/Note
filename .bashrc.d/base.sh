@@ -79,8 +79,7 @@ print_host_triple() {
 }
 
 host_triple_is_windows() {
-	local host_triple="$1"
-	case "${host_triple}" in
+	case "${HOST_TRIPLE}" in
 		*-cygwin | *-msys | *-mingw* )
 			true
 			;;
@@ -91,8 +90,7 @@ host_triple_is_windows() {
 }
 
 host_triple_is_linux() {
-	local host_triple="$1"
-	case "${host_triple}" in
+	case "${HOST_TRIPLE}" in
 		*-linux* )
 			true
 			;;
@@ -140,8 +138,7 @@ print_mingw_root_dir() {
 }
 
 print_ssh_os_of_triple() {
-	local host_triple="$1"
-	case "${host_triple}" in
+	case "${HOST_TRIPLE}" in
 		*-msys | *-mingw* )
 			# msys-2.0.dll
 			echo "msys"
@@ -161,8 +158,8 @@ print_ssh_os_of_triple() {
 
 set_PS1_at_bash_startup() {
 	local ps1_symbol='\$'
-	if { host_triple_is_windows "${HOST_TRIPLE}" && [ "${USERNAME}" = Administrator ]; } \
-		|| { host_triple_is_linux "${HOST_TRIPLE}" && [ "$(id -u)" -eq 0 ]; }; then
+	if { host_triple_is_windows && [ "${USERNAME}" = Administrator ]; } \
+		|| { host_triple_is_linux && [ "$(id -u)" -eq 0 ]; }; then
 		ps1_symbol='\[\e[1m\]#\[\e[0m\]'
 	fi
 	local system="Unknown"
@@ -195,7 +192,6 @@ set_PS1_at_bash_startup() {
 					;;
 				* )
 					system="MinGW"
-					true
 					;;
 			esac
 			;;
@@ -210,7 +206,8 @@ set_PS1_at_bash_startup() {
 }
 
 set_cygwin_CYGWIN_msys_MSYS_at_bash_startup() {
-	if host_triple_is_windows "${HOST_TRIPLE}"; then
+	if host_triple_is_windows; then
+		local value="winsymlinks:native"
 		case "${HOST_TRIPLE}" in
 			# https://www.joshkel.com/2018/01/18/symlinks-in-windows/
 			# https://www.cygwin.com/cygwin-ug-net/using.html#pathnames-symlinks
@@ -222,11 +219,11 @@ set_cygwin_CYGWIN_msys_MSYS_at_bash_startup() {
 			*-cygwin )
 				# For Cygwin, add an environment variable, CYGWIN, and make sure it contains winsymlinks:nativestrict. See the Cygwin manual for details. (If you don’t do this, then Cygwin defaults to emulating symlinks by using special file contents that it understands but non-Cygwin software doesn’t.)
 				# default setting works
-				export CYGWIN=winsymlinks:native
+				export CYGWIN="${value}"
 				;;
 			*-msys | *-mingw* )
 				# For MSYS / MinGW (this includes the command-line utilities that used in the git-bash shell), add an environment variable, MSYS, and make sure it contains winsymlinks:nativestrict. (If you don’t do this, then symlinks are “emulated” by copying files and directories. This can be surprising, to say the least.)
-				export MSYS=winsymlinks:native
+				export MSYS="${value}"
 				;;
 		esac
 	fi
@@ -252,6 +249,7 @@ set_visual_studio_PATH_at_bash_startup() {
 				export PATH="$(join_array_elements ':' "$(print_visual_studio_custom_llvm_location)/bin" "${PATH}")"
 
 				# winget search python
+				# winget search python | grep -E '^Python [0-9]+\.[0-9]+\s+Python.Python.'
 
 				# from Python.org
 				# winget install --id Python.Python.3.13
@@ -283,12 +281,12 @@ set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup() {
 	esac
 	case "${HOST_TRIPLE}" in
 		*-cygwin | *-mingw* | *-linux* )
-			local packages_dir="$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")"
+			local packages_dir="$(print_packages_dir_of_host_triple)"
 			local packages=(
 				gcc binutils gdb cross-gcc llvm cmake
 				# bash make
 			)
-			if host_triple_is_windows "${HOST_TRIPLE}"; then
+			if host_triple_is_windows; then
 				# share the self built QEMU
 				true
 			else
@@ -304,7 +302,7 @@ set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup() {
 			done
 			export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
 
-			if host_triple_is_linux "${HOST_TRIPLE}"; then
+			if host_triple_is_linux; then
 				# LD_LIBRARY_PATH
 				local lib_dirs=()
 				for package in "${packages[@]}"; do
@@ -321,7 +319,7 @@ set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup() {
 }
 
 set_common_windows_packages_PATH_at_bash_startup() {
-	if host_triple_is_windows "${HOST_TRIPLE}"; then
+	if host_triple_is_windows; then
 		local dirs=(
 			'D:\qemu'
 			# 'D:\youtube-dl'
@@ -336,7 +334,7 @@ set_common_windows_packages_PATH_at_bash_startup() {
 }
 
 set_other_linux_environment_variables_at_bash_startup() {
-	if host_triple_is_linux "${HOST_TRIPLE}"; then
+	if host_triple_is_linux; then
 		# https://superuser.com/questions/96151/how-do-i-check-whether-i-am-using-kde-or-gnome
 		case "${DESKTOP_SESSION}" in
 			*plasma* )
@@ -387,7 +385,7 @@ set_environment_variables_at_bash_startup() {
 }
 
 source_ssh-agent_env_script() {
-	local ssh_agent_env_script=~/.ssh/"ssh-agent_env_$(print_ssh_os_of_triple "${HOST_TRIPLE}").sh"
+	local ssh_agent_env_script=~/.ssh/"ssh-agent_env_$(print_ssh_os_of_triple).sh"
 
 	if [ -f "${ssh_agent_env_script}" ]; then
 		quiet_command source "${ssh_agent_env_script}"
@@ -419,19 +417,18 @@ ssh-agent_is_ok() {
 }
 
 print_visual_studio_custom_llvm_location() {
-	echo "$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")/llvm"
+	echo "$(print_packages_dir_of_host_triple)/llvm"
 }
 
 print_visual_studio_custom_cmake_location() {
-	echo "$(print_packages_dir_of_host_triple "${HOST_TRIPLE}")/cmake"
+	echo "$(print_packages_dir_of_host_triple)/cmake"
 }
 
 print_packages_dir_of_host_triple() {
-	local host_triple="$1"
-	case "${host_triple}" in
+	case "${HOST_TRIPLE}" in
 		*-cygwin | *-msys )
 			local visual_studio_package_dir='D:\_visual_studio'
-			case "${host_triple}" in
+			case "${HOST_TRIPLE}" in
 				*-cygwin )
 					# cygwin1.dll
 					if [ -v VSINSTALLDIR ]; then
@@ -470,7 +467,7 @@ print_packages_dir_of_host_triple() {
 			echo "/mnt/work/_linux"
 			;;
 		* )
-			echo "unknown host : ${host_triple}"
+			echo "unknown host : ${HOST_TRIPLE}"
 			return 1
 			;;
 	esac
@@ -744,7 +741,7 @@ password_generate() {
 
 # https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory
 windows_clean_or_hide_home_dir_entries() {
-	if ! host_triple_is_windows "${HOST_TRIPLE}"; then
+	if ! host_triple_is_windows; then
 		echo "unsupported host ${HOST_TRIPLE}"
 		return 1
 	fi
@@ -782,7 +779,7 @@ windows_clean_or_hide_home_dir_entries() {
 # https://stackoverflow.com/questions/21031171/how-to-run-a-command-in-the-background-on-windows
 # https://stackoverflow.com/questions/31164253/how-to-open-url-in-microsoft-edge-from-the-command-line
 windows_launch_program_in_background() {
-	if ! host_triple_is_windows "${HOST_TRIPLE}"; then
+	if ! host_triple_is_windows; then
 		echo "unsupported host ${HOST_TRIPLE}"
 		return 1
 	fi

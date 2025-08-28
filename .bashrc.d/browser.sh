@@ -99,7 +99,7 @@ launch_browser_in_background() {
 
 	local browser
 
-	if host_triple_is_windows "${HOST_TRIPLE}"; then
+	if host_triple_is_windows; then
 		case "${command}" in
 			tor_browser )
 				browser='D:\Tor Browser\Browser\firefox.exe'
@@ -118,7 +118,7 @@ launch_browser_in_background() {
 				return 1
 				;;
 		esac
-	elif host_triple_is_linux "${HOST_TRIPLE}"; then
+	elif host_triple_is_linux; then
 		case "${command}" in
 			firefox* )
 				if check_command_existence firefox; then
@@ -254,9 +254,9 @@ launch_browser_in_background() {
 			return 1
 			;;
 	esac
-	if host_triple_is_windows "${HOST_TRIPLE}"; then
+	if host_triple_is_windows; then
 		windows_launch_program_in_background "${browser}" "${args[@]}"
-	elif host_triple_is_linux "${HOST_TRIPLE}"; then
+	elif host_triple_is_linux; then
 		linux_launch_program_in_background   "${browser}" "${args[@]}"
 	fi
 }

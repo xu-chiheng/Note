@@ -308,7 +308,7 @@ print_hard_drives_mount_points() {
 }
 
 hide_or_unhide_backup_dirs() {
-	if ! host_triple_is_windows "${HOST_TRIPLE}"; then
+	if ! host_triple_is_windows; then
 		echo "unsupported host ${HOST_TRIPLE}"
 		return 1
 	fi
@@ -383,7 +383,7 @@ copy_tarball_to_all_drives() {
 				print_hard_drives_mount_points
 
 				# data directory
-				if host_triple_is_windows "${HOST_TRIPLE}" && [ -v DATA_DIR ] && [ ! -z "${DATA_DIR}" ]; then
+				if host_triple_is_windows && [ -v DATA_DIR ] && [ ! -z "${DATA_DIR}" ]; then
 					# DATA_DIR=D:\Data            # optional, only for my personal data backup
 					local data_dir="$(cygpath -u "${DATA_DIR}")"
 					if [ -d "${data_dir}" ]; then

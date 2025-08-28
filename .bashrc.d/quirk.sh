@@ -123,7 +123,7 @@ fix_cygwin_msys_ssh_quirk() {
 }
 
 fix_system_quirks_one_time() {
-	if host_triple_is_windows "${HOST_TRIPLE}"; then
+	if host_triple_is_windows; then
 		if [ ! "${HOST_TRIPLE}" = "$(~/config.guess)" ]; then
 			echo "host triple ${HOST_TRIPLE} not equal to the output of config.guess $(~/config.guess)"
 		fi

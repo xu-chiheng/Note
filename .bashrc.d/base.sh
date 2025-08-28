@@ -157,26 +157,23 @@ print_ssh_os_of_host_triple() {
 }
 
 print_host_os_of_host_triple() {
+	local visual_studio_pseudo_os_name='Visual_Studio'
 	case "${HOST_TRIPLE}" in
-		*-cygwin | *-msys )
-			local visual_studio_pseudo_os_name='Visual_Studio'
-			case "${HOST_TRIPLE}" in
-				*-cygwin )
-					# cygwin1.dll
-					if [ -v VSINSTALLDIR ]; then
-						echo "${visual_studio_pseudo_os_name}"
-					else
-						echo "Cygwin"
-					fi
-					;;
-				*-msys )
-					# msys-2.0.dll
-					if [ -v VSINSTALLDIR ]; then
-						echo "${visual_studio_pseudo_os_name}"
-					else
-						echo "Msys"
-					fi
-			esac
+		*-cygwin )
+			# cygwin1.dll
+			if [ -v VSINSTALLDIR ]; then
+				echo "${visual_studio_pseudo_os_name}"
+			else
+				echo "Cygwin"
+			fi
+			;;
+		*-msys )
+			# msys-2.0.dll
+			if [ -v VSINSTALLDIR ]; then
+				echo "${visual_studio_pseudo_os_name}"
+			else
+				echo "Msys"
+			fi
 			;;
 		*-mingw* )
 			case "${MSYSTEM}" in

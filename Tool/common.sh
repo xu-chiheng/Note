@@ -635,13 +635,12 @@ build_and_install_gmp_mpfr_mpc() {
 build_and_install_binutils_gcc_for_target() {
 	local target="$1" package="$2" compiler="$3" linker="$4" build_type="$5"
 	local cc="$6" cxx="$7" cflags="$8" cxxflags="$9" ldflags="${10}" extra_languages="${11}"
-	local is_build_and_install_gmp_mpfr_mpc="${12}" binutils_source_dir="${13}" gcc_source_dir="${14}"
-	local gmp_mpfr_mpc_install_dir="${15}" current_datetime="${16}"
+	local is_build_and_install_gmp_mpfr_mpc="${12}" gmp_mpfr_mpc_install_dir="${13}" current_datetime="${14}"
 
-	local gcc_install_dir="$(print_name_for_config "${gcc_source_dir}" "${compiler}" "${linker}" "${build_type}" "${target}-install")"
-	local gcc_build_dir="$(print_name_for_config "${gcc_source_dir}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
+	local gcc_install_dir="$(print_name_for_config "gcc" "${compiler}" "${linker}" "${build_type}" "${target}-install")"
+	local gcc_build_dir="$(print_name_for_config   "gcc" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
 	local tarball="${package}-${target}.tar"
-	local binutils_build_dir="$(print_name_for_config "${binutils_source_dir}" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
+	local binutils_build_dir="$(print_name_for_config "binutils" "${compiler}" "${linker}" "${build_type}" "${target}-build")"
 
 	local install_prefix="$(pwd)/${gcc_install_dir}"
 
@@ -742,9 +741,6 @@ build_and_install_cross_gcc_for_targets() {
 	print_array_elements "${targets[@]}"
 	local target
 
-	local gcc_source_dir="gcc"
-	local binutils_source_dir="binutils"
-
 	local gmp_mpfr_mpc_install_dir="$(print_name_for_config gmp-mpfr-mpc "${compiler}" "${linker}" "${build_type}" install)"
 
 	local pids=()
@@ -765,8 +761,7 @@ build_and_install_cross_gcc_for_targets() {
 			time_command build_and_install_binutils_gcc_for_target \
 			"${target}" "${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${extra_languages}" \
-			"${is_build_and_install_gmp_mpfr_mpc}" "${binutils_source_dir}" "${gcc_source_dir}" \
-			"${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
+			"${is_build_and_install_gmp_mpfr_mpc}" "${gmp_mpfr_mpc_install_dir}" "${current_datetime}" \
 			2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${compiler}" "${linker}" "${build_type}" "${target}-output.txt")" \
 			&& [ "${PIPESTATUS[0]}" -eq 0 ]
 		} & # run in background

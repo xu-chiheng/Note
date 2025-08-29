@@ -33,7 +33,7 @@
 /__mingw_ucrt*
 /__cygwin*
 /__linux*
-/__visual_studio
+/__visual_studio*
 /_temp
 
 /a.out

@@ -34,11 +34,13 @@ cd "$(dirname "$0")"
 
 build() {
 	local current_datetime="$(print_current_datetime)"
-	local host_os="$(print_host_os_of_host_triple)"
-	local generator toolset
-	visual_studio_cmake_generator_toolset
 	local package="llvm"
+	local tool build_type generator toolset
+	visual_studio_check_tool_build_type_and_set_generator_toolset "$1" "$2"
 	{
+		visual_studio_dump_tool_build_type_and_generator_toolset \
+			"${package}" "${tool}" "${build_type}" "${generator}" "${toolset}"
+
 		local projects=(
 			clang
 			clang-tools-extra
@@ -62,6 +64,7 @@ build() {
 		local cmake_options=(
 			-G "${generator}"
 			-T "${toolset}"
+			"../${package}/llvm"
 
 			# https://vcpkg.io
 			# https://vcpkg.io/en/getting-started.html
@@ -84,8 +87,6 @@ build() {
 
 			# vcpkg install libbacktrace
 			# -- Could NOT find Backtrace (missing: Backtrace_LIBRARY Backtrace_INCLUDE_DIR)
-
-			"../${package}/llvm"
 
 			-DLLVM_TARGETS_TO_BUILD="$(join_array_elements ';' "${targets[@]}")"
 			-DLLVM_ENABLE_PROJECTS="$(join_array_elements ';' "${projects[@]}")"
@@ -121,12 +122,6 @@ build() {
 			# -DBUILD_SHARED_LIBS=ON
 		)
 
-		local build_type=Release
-		local build_dir="${package}-${host_os,,}-build"
-
-		local dest_dir="$(pwd)/__${host_os,,}"
-		local tarball="${package}.tar"
-
 		# https://learn.microsoft.com/en-us/visualstudio/ide/reference/devenv-command-line-switches
 		# https://learn.microsoft.com/en-us/visualstudio/ide/reference/build-devenv-exe
 		# https://stackoverflow.com/questions/18902628/using-devenv-exe-from-the-command-line-and-specifying-the-platform
@@ -135,10 +130,9 @@ build() {
 		# time_command devenv.exe LLVM.sln -clean
 
 		# Double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE.
+		time_command visual_studio_pushd_cmake_msbuild_package "${package}" "${tool}" "${build_type}" LLVM.sln "${build_type}" "${cmake_options[@]}"
 
-		time_command visual_studio_pushd_cmake_msbuild_package "${build_dir}" LLVM.sln "${build_type}" "${dest_dir}" "${tarball}" "${build_type}" "${cmake_options[@]}"
-
-	} 2>&1 | tee "~${current_datetime}-${package}-${host_os,,}-output.txt"
+	} 2>&1 | tee "$(print_name_for_config_2 "~${current_datetime}-${package}" "${tool}" "${build_type}" output.txt)"
 
 	sync .
 }

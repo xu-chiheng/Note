@@ -27,28 +27,23 @@ cd "$(dirname "$0")"
 
 build() {
 	local current_datetime="$(print_current_datetime)"
-	local host_os="$(print_host_os_of_host_triple)"
-	local generator toolset
-	visual_studio_cmake_generator_toolset
 	local package="cmake"
+	local tool build_type generator toolset
+	visual_studio_check_tool_build_type_and_set_generator_toolset "$1" "$2"
 	{
+		visual_studio_dump_tool_build_type_and_generator_toolset \
+			"${package}" "${tool}" "${build_type}" "${generator}" "${toolset}"
+
 		local cmake_options=(
 			-G "${generator}"
 			-T "${toolset}"
 			"../${package}"
 		)
 
-		local build_type=Release
-		local build_dir="${package}-${host_os,,}-build"
-
-		local dest_dir="$(pwd)/__${host_os,,}"
-		local tarball="${package}.tar"
-
 		# Double click the CMake.sln file, in Visual Studio IDE, set cmake as startup project, and build/debug cmake in IDE
+		time_command visual_studio_pushd_cmake_msbuild_package "${package}" "${tool}" "${build_type}" CMake.sln "bin/${build_type}" "${cmake_options[@]}"
 
-		time_command visual_studio_pushd_cmake_msbuild_package "${build_dir}" CMake.sln "${build_type}" "${dest_dir}" "${tarball}" "bin/${build_type}" "${cmake_options[@]}"
-
-	} 2>&1 | tee "~${current_datetime}-${package}-${host_os,,}-output.txt"
+	} 2>&1 | tee "$(print_name_for_config_2 "~${current_datetime}-${package}" "${tool}" "${build_type}" output.txt)"
 
 	sync .
 }

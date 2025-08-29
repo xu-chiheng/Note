@@ -216,15 +216,69 @@ dump_llvm_static_or_shared() {
 	echo "llvm_static_or_shared : $1"
 }
 
-visual_studio_cmake_generator_toolset() {
-	printf -v generator '%s' "Visual Studio 17 2022"
-	printf -v toolset   '%s' "ClangCL"
-	# v143 - Visual Studio 2022 (MSVC 14.3x)
-	# v142 - Visual Studio 2019 (MSVC 14.2x)
-	# v141 - Visual Studio 2017 (MSVC 14.1x)
-	# v140 - Visual Studio 2015 (MSVC 14.0)
-	# v120 - Visual Studio 2013 (MSVC 12.0)
-	# v110 - Visual Studio 2012 (MSVC 11.0)
+visual_studio_check_tool_build_type_and_set_generator_toolset() {
+	local _tool="$1" _build_type="$2"
+	local _generator _toolset
+	_generator="Visual Studio 17 2022"
+	if [ -z "${_tool}" ]; then
+		_tool=Clang
+	fi
+	case "${_tool}" in
+		Clang | MSVC )
+			true
+			;;
+		* )
+			echo "unknown tool : ${_tool}"
+			echo "valid tool : Clang MSVC"
+			exit 1
+			;;
+	esac
+
+	if [ -z "${_build_type}" ]; then
+		_build_type=Release
+	fi
+	case "${_build_type}" in
+		Release | Debug )
+			true
+			;;
+		* )
+			echo "unknown build type : ${_build_type}"
+			echo "valid build type : Release Debug"
+			exit 1
+			;;
+	esac
+
+	case "${_tool}" in
+		Clang )
+			_toolset="ClangCL"
+			;;
+		MSVC )
+			_toolset="v143"
+			# v143 - Visual Studio 2022 (MSVC 14.3x)
+			# v142 - Visual Studio 2019 (MSVC 14.2x)
+			# v141 - Visual Studio 2017 (MSVC 14.1x)
+			# v140 - Visual Studio 2015 (MSVC 14.0)
+			# v120 - Visual Studio 2013 (MSVC 12.0)
+			# v110 - Visual Studio 2012 (MSVC 11.0)
+			;;
+	esac
+
+	printf -v tool       '%s' "${_tool}"
+	printf -v build_type '%s' "${_build_type}"
+	printf -v generator  '%s' "${_generator}"
+	printf -v toolset    '%s' "${_toolset}"
+}
+
+visual_studio_dump_tool_build_type_and_generator_toolset() {
+	local package="$1" tool="$2" build_type="$3" generator="$4" toolset="$5"
+	local host_os="$(print_host_os_of_host_triple)"
+	echo "HOST_TRIPLE : ${HOST_TRIPLE}"
+	echo "package     : ${package}"
+	echo "host_os     : ${host_os}"
+	echo "tool        : ${tool}"
+	echo "build_type  : ${build_type}"
+	echo "generator   : ${generator}"
+	echo "toolset     : ${toolset}"
 }
 
 print_gcc_install_dir() {
@@ -332,6 +386,16 @@ print_name_for_config() {
 	join_array_elements '-' "${result[@]}" "$@"
 }
 
+print_name_for_config_2() {
+	local prefix="$1" tool="$2" build_type="$3" suffix="$4"
+	shift 4
+
+	local host_os="$(print_host_os_of_host_triple)"
+	local result=( "${prefix}" "${host_os,,}" "${tool,,}" "${build_type,,}" "${suffix}" )
+
+	join_array_elements '-' "${result[@]}" "$@"
+}
+
 make_tarball_and_calculate_sha512() {
 	local dest_dir="$1" tarball="$2" install_dir="$3"
 
@@ -357,6 +421,19 @@ maybe_make_tarball_and_calculate_sha512() {
 
 	local host_os="$(print_host_os_of_host_triple)"
 	local dest_dir="$(pwd)/__${host_os,,}-${compiler,,}-${linker,,}"
+
+	make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}"
+}
+
+maybe_make_tarball_and_calculate_sha512_2() {
+	local tool="$1" build_type="$2" tarball="$3" install_dir="$4"
+
+	if [ "${build_type}" != Release ]; then
+		return 0
+	fi
+
+	local host_os="$(print_host_os_of_host_triple)"
+	local dest_dir="$(cd .. && pwd)/__${host_os,,}-${tool,,}"
 
 	make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}"
 }
@@ -401,7 +478,7 @@ pushd_and_cmake_2() {
 	echo_command rm -rf "${build_dir}" \
 	&& echo_command mkdir "${build_dir}" \
 	&& echo_command pushd "${build_dir}" \
-	&& echo_command visual_studio_set_custom_llvm_location_and_toolset \
+	&& echo_command visual_studio_set_custom_llvm_location_and_version \
 	&& time_command cmake "$@"
 }
 
@@ -853,7 +930,7 @@ gcc_configure_build_install_package() {
 }
 
 # https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild?#custom_llvm_location
-visual_studio_set_custom_llvm_location_and_toolset() {
+visual_studio_set_custom_llvm_location_and_version() {
 	local llvm_install_dir="$(print_visual_studio_custom_llvm_location)"
 	local llvm_install_dir_2="$(cygpath -w "${llvm_install_dir}")"
 	local llvm_install_dir_clang_cl="${llvm_install_dir}/bin/clang-cl.exe"
@@ -884,13 +961,18 @@ visual_studio_msbuild_solution_build_type() {
 }
 
 visual_studio_pushd_cmake_msbuild_package() {
-	local build_dir="$1" solution="$2" build_type="$3" dest_dir="$4" tarball="$5" install_dir="$6"
-	shift 6
+	local package="$1" tool="$2" build_type="$3" solution="$4" install_dir="$5"
+	shift 5
+
+	local host_os="$(print_host_os_of_host_triple)"
+	local build_dir="${package}-${host_os,,}-${tool,,}-build"
+
+	local tarball="${package}.tar"
 
 	rm -rf "${build_dir}" \
 	&& { time_command pushd_and_cmake_2 "${build_dir}" "$@" \
 	&& time_command visual_studio_msbuild_solution_build_type "${solution}" "${build_type}" \
-	&& time_command make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}" \
+	&& time_command maybe_make_tarball_and_calculate_sha512_2 "${tool}" "${build_type}" "${tarball}" "${install_dir}" \
 	&& echo_command popd;}
 }
 

@@ -132,7 +132,7 @@ print_mingw_root_dir() {
 			;;
 		* )
 			# unknown
-			echo "/mingw_unknown"
+			echo "/mingw"
 			;;
 	esac
 }
@@ -177,17 +177,17 @@ print_host_os_of_host_triple() {
 			;;
 		*-mingw* )
 			case "${MSYSTEM}" in
-				MINGW64 )
-					# msvcrt.dll
-					echo "MinGW_VCRT"
-					;;
 				UCRT64 )
 					# ucrtbase.dll
 					echo "MinGW_UCRT"
 					;;
+				MINGW64 )
+					# msvcrt.dll
+					echo "MinGW_VCRT"
+					;;
 				* )
 					# unknown
-					echo "MinGW_Unknown"
+					echo "MinGW"
 					;;
 			esac
 			;;

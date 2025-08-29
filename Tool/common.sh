@@ -217,7 +217,6 @@ dump_llvm_static_or_shared() {
 }
 
 visual_studio_cmake_generator_toolset() {
-	printf -v host_os   '%s' "$(print_host_os_of_host_triple)"
 	printf -v generator '%s' "Visual Studio 17 2022"
 	printf -v toolset   '%s' "ClangCL"
 	# v143 - Visual Studio 2022 (MSVC 14.3x)

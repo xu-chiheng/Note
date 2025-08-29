@@ -27,7 +27,8 @@ cd "$(dirname "$0")"
 
 build() {
 	local current_datetime="$(print_current_datetime)"
-	local host_os generator toolset
+	local host_os="$(print_host_os_of_host_triple)"
+	local generator toolset
 	visual_studio_cmake_generator_toolset
 	local package="cmake"
 	{

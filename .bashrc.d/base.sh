@@ -162,7 +162,17 @@ print_host_os_of_host_triple() {
 			# cygwin1.dll or msys-2.0.dll
 			if [ -v VSINSTALLDIR ]; then
 				# Visual Studio
-				echo "VS"
+				local year=""
+				case "${VisualStudioVersion}" in
+					17.*) year="2022" ;;
+					16.*) year="2019" ;;
+					15.*) year="2017" ;;
+					14.*) year="2015" ;;
+					12.*) year="2013" ;;
+					11.*) year="2012" ;;
+					10.*) year="2010" ;;
+				esac
+				echo "VS${year}"
 			else
 				case "${HOST_TRIPLE}" in
 					*-cygwin )
@@ -211,13 +221,13 @@ set_PS1_at_bash_startup() {
 		*-cygwin )
 			# cygwin1.dll
 			if [ -v VSINSTALLDIR ]; then
-				system+=" + Cygwin"
+				system+="_Cygwin"
 			fi
 			;;
 		*-msys )
 			# msys-2.0.dll
 			if [ -v VSINSTALLDIR ]; then
-				system+=" + Msys"
+				system+="_Msys"
 			fi
 			;;
 	esac

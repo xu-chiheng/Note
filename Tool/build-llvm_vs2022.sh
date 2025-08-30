@@ -35,7 +35,39 @@ cd "$(dirname "$0")"
 # VCToolsVersion="14.44.35207"
 # VSCMD_VER="17.14.11"
 # VisualStudioVersion="17.0"
+# Windows SDK version 10.0.26100.0
 # MSVC 19.44.35214.0
+# Clang 19.1.5 with MSVC-like command-line
+
+# https://vcpkg.io
+# https://vcpkg.io/en/getting-started.html
+# https://learn.microsoft.com/en-us/vcpkg/
+# https://github.com/microsoft/vcpkg
+
+# # vcpkg integrate install
+# Applied user-wide integration for this vcpkg root.
+# CMake projects should use: "-DCMAKE_TOOLCHAIN_FILE=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/vcpkg/scripts/buildsystems/vcpkg.cmake"
+# All MSBuild C++ projects can now #include any installed libraries. Linking will be handled automatically. Installing new libraries will make them instantly available.
+# -DCMAKE_TOOLCHAIN_FILE="$(cygpath -m "$(dirname "$(which vcpkg)")")/scripts/buildsystems/vcpkg.cmake"
+
+# vcpkg install zlib libxml2
+# -- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+# -- Could NOT find LibXml2 (missing: LIBXML2_LIBRARY LIBXML2_INCLUDE_DIR)
+# -DZLIB_LIBRARY="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/lib/zlib.lib"
+# -DZLIB_INCLUDE_DIR="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/include"
+# -DLIBXML2_LIBRARY="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/lib/libxml2.lib"
+# -DLIBXML2_INCLUDE_DIR="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/include/libxml2"
+
+# # vcpkg install zlib libxml2
+# error: Could not locate a manifest (vcpkg.json) above the current working directory.
+# This vcpkg distribution does not have a classic mode instance.
+# See https://learn.microsoft.com/vcpkg/troubleshoot/build-failures?WT.mc_id=vcpkg_inproduct_cli for more information.
+
+# https://learn.microsoft.com/en-us/vcpkg/get_started/get-started-vs
+# https://learn.microsoft.com/en-us/vcpkg/concepts/manifest-mode
+
+# vcpkg install libbacktrace
+# -- Could NOT find Backtrace (missing: Backtrace_LIBRARY Backtrace_INCLUDE_DIR)
 
 build() {
 	local current_datetime="$(print_current_datetime)"
@@ -70,28 +102,6 @@ build() {
 			-G "${generator}"
 			-T "${toolset}"
 			"../${package}/llvm"
-
-			# https://vcpkg.io
-			# https://vcpkg.io/en/getting-started.html
-			# https://learn.microsoft.com/en-us/vcpkg/
-			# https://github.com/microsoft/vcpkg
-
-			# $ vcpkg integrate install
-			# Applied user-wide integration for this vcpkg root.
-			# CMake projects should use: "-DCMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake"
-			# All MSBuild C++ projects can now #include any installed libraries. Linking will be handled automatically. Installing new libraries will make them instantly available.
-			# -DCMAKE_TOOLCHAIN_FILE="$(cygpath -m "${VCPKG_DIR}")/scripts/buildsystems/vcpkg.cmake"
-
-			# vcpkg install zlib libxml2
-			# -- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
-			# -- Could NOT find LibXml2 (missing: LIBXML2_LIBRARY LIBXML2_INCLUDE_DIR)
-			# -DZLIB_LIBRARY="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/lib/zlib.lib"
-			# -DZLIB_INCLUDE_DIR="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/include"
-			# -DLIBXML2_LIBRARY="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/lib/libxml2.lib"
-			# -DLIBXML2_INCLUDE_DIR="$(cygpath -m "${VCPKG_DIR}")/installed/x86-windows/include/libxml2"
-
-			# vcpkg install libbacktrace
-			# -- Could NOT find Backtrace (missing: Backtrace_LIBRARY Backtrace_INCLUDE_DIR)
 
 			-DLLVM_TARGETS_TO_BUILD="$(join_array_elements ';' "${targets[@]}")"
 			-DLLVM_ENABLE_PROJECTS="$(join_array_elements ';' "${projects[@]}")"

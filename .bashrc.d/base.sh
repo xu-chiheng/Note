@@ -157,22 +157,21 @@ print_ssh_os_of_host_triple() {
 }
 
 print_host_os_of_host_triple() {
-	local visual_studio_pseudo_os_name='VS'
 	case "${HOST_TRIPLE}" in
-		*-cygwin )
-			# cygwin1.dll
+		*-cygwin | *-msys )
+			# cygwin1.dll or msys-2.0.dll
 			if [ -v VSINSTALLDIR ]; then
-				echo "${visual_studio_pseudo_os_name}"
+				# Visual Studio
+				echo "VS"
 			else
-				echo "Cygwin"
-			fi
-			;;
-		*-msys )
-			# msys-2.0.dll
-			if [ -v VSINSTALLDIR ]; then
-				echo "${visual_studio_pseudo_os_name}"
-			else
-				echo "Msys"
+				case "${HOST_TRIPLE}" in
+					*-cygwin )
+						echo "Cygwin"
+						;;
+					*-msys )
+						echo "Msys"
+						;;
+				esac
 			fi
 			;;
 		*-mingw* )
@@ -260,6 +259,39 @@ set_mingw_PATH_INCLUDE_LIB_at_bash_startup() {
 			export PATH="$(join_array_elements ':' "${mingw_root_dir}/bin" "${PATH}")"
 			export INCLUDE="${mingw_root_dir_2}/include"
 			export LIB="${mingw_root_dir_2}/lib"
+			;;
+	esac
+}
+
+set_visual_studio_MSVC_CL_at_bash_startup() {
+	case "${HOST_TRIPLE}" in
+		*-cygwin | *-msys )
+			# cygwin1.dll or msys-2.0.dll
+			if [ -v VSINSTALLDIR ]; then
+				# https://learn.microsoft.com/en-us/cpp/build/reference/cl-environment-variables
+				# https://learn.microsoft.com/en-us/cpp/build/reference/utf-8-set-source-and-executable-character-sets-to-utf-8
+				# https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-by-category
+				# https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line
+				# https://stackoverflow.com/questions/84404/using-visual-studios-cl-from-a-normal-command-line
+				# for VS MSVC(cl.exe, not clang-cl.exe)
+				case "${HOST_TRIPLE}" in
+					*-cygwin )
+						export CL="/utf-8"
+						;;
+					*-msys )
+						# MSYS2 will modify CL from "/utf-8" to 'D:/msys64/utf-8' if invoke cl.exe from bash
+						# cl : Command line warning D9024 : unrecognized source file type 'D:/msys64/utf-8', object file assumed
+
+						# # which python; CL="/utf-8" python -c "import os; print(os.environ.get('CL'))"
+						# /c/Users/Administrator/AppData/Local/Programs/Python/Python313/python
+						# D:/msys64/utf-8
+
+						export CL="-utf-8"
+						;;
+				esac
+				# CL environment variable only exported in .bashrc, not set globally as a Windows environment variable
+				# Visual Studio IDE(devenv.exe) does not get that variable, unless the IDE is launched from command line
+			fi
 			;;
 	esac
 }
@@ -399,6 +431,7 @@ set_environment_variables_at_bash_startup() {
 	set_PS1_at_bash_startup
 	set_cygwin_CYGWIN_msys_MSYS_at_bash_startup
 	set_mingw_PATH_INCLUDE_LIB_at_bash_startup
+	set_visual_studio_MSVC_CL_at_bash_startup
 	set_visual_studio_PATH_at_bash_startup
 	set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup
 	set_common_windows_packages_PATH_at_bash_startup

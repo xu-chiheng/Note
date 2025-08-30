@@ -32,6 +32,11 @@ cd "$(dirname "$0")"
 # https://stackoverflow.com/questions/57480964/how-to-create-visual-studio-projects-that-use-llvm
 # https://phasetw0.com/llvm/getting-started-on-windows
 
+# VCToolsVersion="14.44.35207"
+# VSCMD_VER="17.14.11"
+# VisualStudioVersion="17.0"
+# MSVC 19.44.35214.0
+
 build() {
 	local current_datetime="$(print_current_datetime)"
 	local package="llvm"
@@ -119,6 +124,7 @@ build() {
 
 			-DBUILD_SHARED_LIBS=OFF
 			# MSVC does not support this option
+			# message(FATAL_ERROR "BUILD_SHARED_LIBS options is not supported on Windows.")
 			# -DBUILD_SHARED_LIBS=ON
 		)
 

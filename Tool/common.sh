@@ -874,9 +874,9 @@ cmake_build_install_package() {
 			-DCMAKE_CXX_COMPILER="${cxx}"
 			-DCMAKE_C_FLAGS="${cflags}"
 			-DCMAKE_CXX_FLAGS="${cxxflags}"
-			-DCMAKE_EXE_LINKER_FLAGS="${ldflags}" \
-			-DCMAKE_SHARED_LINKER_FLAGS="${ldflags}" \
-			-DCMAKE_MODULE_LINKER_FLAGS="${ldflags}" \
+			-DCMAKE_EXE_LINKER_FLAGS="${ldflags}"
+			-DCMAKE_SHARED_LINKER_FLAGS="${ldflags}"
+			-DCMAKE_MODULE_LINKER_FLAGS="${ldflags}"
 
 			# CMAKE_EXE_LINKER_FLAGS: Linker flags used for all executable targets.
 			# CMAKE_SHARED_LINKER_FLAGS: Linker flags used for all shared library targets (.so, .dll).

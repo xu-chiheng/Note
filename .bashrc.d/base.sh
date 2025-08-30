@@ -157,7 +157,7 @@ print_ssh_os_of_host_triple() {
 }
 
 print_host_os_of_host_triple() {
-	local visual_studio_pseudo_os_name='Visual_Studio'
+	local visual_studio_pseudo_os_name='VS'
 	case "${HOST_TRIPLE}" in
 		*-cygwin )
 			# cygwin1.dll

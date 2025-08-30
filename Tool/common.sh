@@ -872,9 +872,16 @@ cmake_build_install_package() {
 
 			-DCMAKE_C_COMPILER="${cc}"
 			-DCMAKE_CXX_COMPILER="${cxx}"
-			-DCMAKE_ASM_COMPILER="${cxx}"
 			-DCMAKE_C_FLAGS="${cflags}"
 			-DCMAKE_CXX_FLAGS="${cxxflags}"
+			-DCMAKE_EXE_LINKER_FLAGS="${ldflags}" \
+			-DCMAKE_SHARED_LINKER_FLAGS="${ldflags}" \
+			-DCMAKE_MODULE_LINKER_FLAGS="${ldflags}" \
+
+			# CMAKE_EXE_LINKER_FLAGS: Linker flags used for all executable targets.
+			# CMAKE_SHARED_LINKER_FLAGS: Linker flags used for all shared library targets (.so, .dll).
+			# CMAKE_MODULE_LINKER_FLAGS: Linker flags used for all module library targets (usually dynamically loadable runtime libraries).
+			# CMAKE_STATIC_LINKER_FLAGS: Flags for the static library (.a, .lib) “linker” (archiver). (Note: strictly speaking, creating a static library is archiving rather than linking, but sometimes specific flags are still applied.)
 	)
 
 	time_command generate_build_install_package \
@@ -960,7 +967,14 @@ visual_studio_pushd_cmake_msbuild_package() {
 	shift 5
 
 	local host_os="$(print_host_os_of_host_triple)"
-	local build_dir="${package}-${host_os,,}-${tool,,}-build"
+	local build_dir="${package}-${host_os,,}-${tool,,}"
+	# Note : Must keep "${build_dir}" as short as possible, to prevent the following errors when building LLVM :
+    #    “E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\MainThreadChecker\lldbPluginInstrumentationRuntimeMainThreadChecker.vcxproj”(默认目标) (2110) ->
+    #    (InitializeBuildStatus 目标) ->
+    #      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(385,5): error MSB3491: 未能向文件“lldbPluginInstrumentationRuntimeMainThreadChecker.dir\Release\lldbPlug.81AF65F2.tlog\lldbPluginInstrumentationRuntimeMainThreadChecker.lastbuildstate”写入行。路径: lldbPluginInstrumentationRuntimeMainThreadChecker.dir\Release\lldbPlug.81AF65F2.tlog\lldbPluginInstrumentationRuntimeMainThreadChecker.lastbuildstate 超过 OS 最大路径限制。完全限定的文件名必须少于 260 个字符。  [E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\MainThreadChecker\lldbPluginInstrumentationRuntimeMainThreadChecker.vcxproj]
+
+    #    “E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\ASanLibsanitizers\lldbPluginInstrumentationRuntimeASanLibsanitizers.vcxproj”(默认目标) (2163) ->
+    #      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(385,5): error MSB3491: 未能向文件“lldbPluginInstrumentationRuntimeASanLibsanitizers.dir\Release\lldbPlug.09DE11CF.tlog\lldbPluginInstrumentationRuntimeASanLibsanitizers.lastbuildstate”写入行。路径: lldbPluginInstrumentationRuntimeASanLibsanitizers.dir\Release\lldbPlug.09DE11CF.tlog\lldbPluginInstrumentationRuntimeASanLibsanitizers.lastbuildstate 超过 OS 最大路径限制。完全限定的文件名必须少于 260 个字符。  [E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\ASanLibsanitizers\lldbPluginInstrumentationRuntimeASanLibsanitizers.vcxproj]
 
 	local tarball="${package}.tar"
 

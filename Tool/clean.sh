@@ -17,6 +17,7 @@ clean() {
 
 			-or -name '*-build'
 			-or -name '*-install'
+			-or -name '*-vs-*'
 		')'
 		-and
 		-not

@@ -377,33 +377,36 @@ check_dir_maybe_clone_from_url() {
 }
 
 print_name_for_config() {
-	local prefix="$1" compiler="$2" linker="$3" build_type="$4" suffix="$5"
-	shift 5
-
-	local host_os="$(print_host_os_of_host_triple)"
-	local result=( "${prefix}" "${host_os,,}" "${compiler,,}" "${linker,,}" "${build_type,,}" "${suffix}" )
-
-	join_array_elements '-' "${result[@]}" "$@"
-}
-
-print_name_for_config_1() {
-	local prefix="$1" tool="$2" suffix="$3"
-	shift 3
-
-	local host_os="$(print_host_os_of_host_triple)"
-	local result=( "${prefix}" "${host_os,,}" "${tool,,}" "${suffix}" )
-
-	join_array_elements '-' "${result[@]}" "$@"
-}
-
-print_name_for_config_2() {
-	local prefix="$1" tool="$2" build_type="$3" suffix="$4"
+	local result=( "$1" )
+	local compiler="$2" linker="$3" build_type="$4"
 	shift 4
 
 	local host_os="$(print_host_os_of_host_triple)"
-	local result=( "${prefix}" "${host_os,,}" "${tool,,}" "${build_type,,}" "${suffix}" )
+	result+=( "${host_os,,}" "${compiler,,}" "${linker,,}" "${build_type,,}" "$@" )
 
-	join_array_elements '-' "${result[@]}" "$@"
+	join_array_elements '-' "${result[@]}"
+}
+
+print_name_for_config_1() {
+	local result=( "$1" )
+	local tool="$2"
+	shift 2
+
+	local host_os="$(print_host_os_of_host_triple)"
+	result+=( "${host_os,,}" "${tool,,}" "$@" )
+
+	join_array_elements '-' "${result[@]}"
+}
+
+print_name_for_config_2() {
+	local result=( "$1" )
+	local tool="$2" build_type="$3"
+	shift 3
+
+	local host_os="$(print_host_os_of_host_triple)"
+	result+=( "${host_os,,}" "${tool,,}" "${build_type,,}" "$@" )
+
+	join_array_elements '-' "${result[@]}"
 }
 
 make_tarball_and_calculate_sha512() {
@@ -435,7 +438,7 @@ maybe_make_tarball_and_calculate_sha512() {
 	make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}"
 }
 
-maybe_make_tarball_and_calculate_sha512_2() {
+maybe_make_tarball_and_calculate_sha512_1() {
 	local tool="$1" build_type="$2" tarball="$3" install_dir="$4"
 
 	if [ "${build_type}" != Release ]; then
@@ -785,18 +788,6 @@ build_and_install_cross_gcc_for_targets() {
 	&& time_command sync .
 }
 
-pre_generate_package_action() {
-	local package="$1" install_dir="$2"
-
-	true
-}
-
-post_build_package_action() {
-	local package="$1" install_dir="$2"
-
-	true
-}
-
 post_install_package_action() {
 	local package="$1" install_dir="$2"
 
@@ -843,12 +834,8 @@ generate_build_install_package() {
 
 		time_command check_dir_maybe_clone_from_url "${package}" \
 		&& echo_command rm -rf "${install_dir}" \
-		&& echo_command pre_generate_package_action "${package}" "${install_dir}" \
 		&& { time_command "${pushd_and_generate_command}" "$@" \
 			&& time_command parallel_make \
-			&& echo_command pushd .. \
-			&& echo_command post_build_package_action "${package}" "${install_dir}" \
-			&& echo_command popd \
 			&& time_command parallel_make install \
 			&& echo_command popd;} \
 		&& echo_command post_install_package_action "${package}" "${install_dir}" \
@@ -939,7 +926,7 @@ cmake_build_install_package_1() {
 	&& time_command msbuild.exe "${solution}" -maxCpuCount -interactive -property:"Configuration=${build_type}" -verbosity:normal \
 	&& time_command cmake --build . --target INSTALL --config "${build_type}" \
 	&& echo_command popd;} \
-	&& time_command maybe_make_tarball_and_calculate_sha512_2 "${tool}" "${build_type}" "${tarball}" "${install_dir}"
+	&& time_command maybe_make_tarball_and_calculate_sha512_1 "${tool}" "${build_type}" "${tarball}" "${install_dir}"
 }
 
 configure_build_install_package() {
@@ -985,7 +972,7 @@ gcc_configure_build_install_package() {
 
 # https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild?#custom_llvm_location
 visual_studio_set_custom_llvm_location_and_version() {
-	local llvm_install_dir="$(print_visual_studio_custom_llvm_location)"
+	local llvm_install_dir="$(print_packages_dir_of_host_triple)/llvm"
 	local llvm_install_dir_2="$(cygpath -w "${llvm_install_dir}")"
 	local llvm_install_dir_clang_cl="${llvm_install_dir}/bin/clang-cl.exe"
 	if [ ! -d "${llvm_install_dir}" ] || [ ! -f "${llvm_install_dir_clang_cl}" ]; then
@@ -995,6 +982,9 @@ visual_studio_set_custom_llvm_location_and_version() {
 	local llvm_tools_version="$("${llvm_install_dir_clang_cl}" -v 2>&1 \
 		| grep -oE "clang version [0-9]+\.[0-9]+\.[0-9]+" \
 		| awk '{print $3}')"
+
+	echo "LLVMInstallDir   : ${llvm_install_dir_2}"
+	echo "LLVMToolsVersion : ${llvm_tools_version}"
 
 	cat >Directory.build.props <<EOF
 <Project>

@@ -306,16 +306,25 @@ set_visual_studio_msvc_CL_at_bash_startup() {
 	esac
 }
 
-set_visual_studio_PATH_at_bash_startup() {
+set_visual_studio_packages_PATH_at_bash_startup() {
 	case "${HOST_TRIPLE}" in
 		*-cygwin | *-msys )
 			# cygwin1.dll or msys-2.0.dll
 			if [ -v VSINSTALLDIR ]; then
-				local bin_dirs=(
-					"$(print_visual_studio_custom_llvm_location)/bin"
-					"$(print_visual_studio_custom_cmake_location)/bin"
+				# Visual Studio, MSVC bin dirs has been prepended to PATH
+				# prepend packages bin dirs to PATH, to shadow the MSVC bin dirs
+				local packages_dir="$(print_packages_dir_of_host_triple)"
+				local packages=(
+					llvm cmake
 				)
 
+				local package
+
+				# PATH
+				local bin_dirs=()
+				for package in "${packages[@]}"; do
+					bin_dirs+=( "${packages_dir}/${package}/bin" )
+				done
 				export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
 
 				# winget search python
@@ -343,8 +352,6 @@ set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup() {
 		*-cygwin | *-msys )
 			# cygwin1.dll or msys-2.0.dll
 			if [ -v VSINSTALLDIR ]; then
-				# Visual Studio, MSVC bin dirs has been prepended to PATH
-				# if prepend packages bin dirs to PATH, will shadow the MSVC bin dirs
 				return;
 			fi
 			;;
@@ -447,7 +454,7 @@ set_environment_variables_at_bash_startup() {
 	set_cygwin_CYGWIN_msys_MSYS_at_bash_startup
 	set_mingw_PATH_INCLUDE_LIB_at_bash_startup
 	set_visual_studio_msvc_CL_at_bash_startup
-	set_visual_studio_PATH_at_bash_startup
+	set_visual_studio_packages_PATH_at_bash_startup
 	set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup
 	set_common_windows_packages_PATH_at_bash_startup
 	set_other_linux_environment_variables_at_bash_startup
@@ -486,14 +493,6 @@ source_ssh-agent_env_script() {
 
 ssh-agent_is_ok() {
 	[ -v SSH_AUTH_SOCK ] && [ -v SSH_AGENT_PID ] && [ -S "${SSH_AUTH_SOCK}" ] && quiet_command ps -p "${SSH_AGENT_PID}"
-}
-
-print_visual_studio_custom_llvm_location() {
-	echo "$(print_packages_dir_of_host_triple)/llvm"
-}
-
-print_visual_studio_custom_cmake_location() {
-	echo "$(print_packages_dir_of_host_triple)/cmake"
 }
 
 print_packages_dir_of_host_triple() {

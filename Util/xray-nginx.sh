@@ -37,6 +37,9 @@
 # v2rayN
 # A V2Ray client for Windows, support Xray core and v2fly core
 # https://github.com/2dust/v2rayN
+# https://github.com/2dust/v2rayNG/releases
+# https://apkpure.com/cn/v2rayng/com.v2ray.ang
+# https://apkpure.com/cn/v2rayng/com.v2ray.ang/download
 
 # v2rayNG
 # A V2Ray client for Android, support Xray core and v2fly core

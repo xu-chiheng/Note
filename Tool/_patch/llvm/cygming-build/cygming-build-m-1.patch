@@ -1,0 +1,15 @@
+diff --git a/llvm/cmake/modules/HandleLLVMOptions.cmake b/llvm/cmake/modules/HandleLLVMOptions.cmake
+index 97aa1317bc21..a9da015d71e1 100644
+--- a/llvm/cmake/modules/HandleLLVMOptions.cmake
++++ b/llvm/cmake/modules/HandleLLVMOptions.cmake
+@@ -1148,7 +1148,9 @@ endif()
+ # FIXME: With MSVS, consider compiling with /Gy and linking with /OPT:REF?
+ # But MinSizeRel seems to add that automatically, so maybe disable these
+ # flags instead if LLVM_NO_DEAD_STRIP is set.
+-if(NOT CYGWIN AND NOT MSVC)
++if(CYGWIN OR MINGW)
++  # no -ffunction-sections and -fdata-sections
++elseif(NOT MSVC)
+   if(NOT "${CMAKE_SYSTEM_NAME}" MATCHES "Darwin" AND
+      NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG")
+     if (CMAKE_CXX_COMPILER_ID MATCHES "XL")

@@ -546,6 +546,19 @@ cygwin/cygwin-{cmodel-2,general-{a-1,b,c-1},macro},\
 cygwin-regression/cygwin-regression-{a,b,c,d,e},\
 mingw/mingw-{git-revision,emutls-1}}.patch
 
+22.0.0    b161e8d7dff06d8fb410de897f1a3f0c561ec509    2025-08-31
+patch_apply . \
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
+regression/regression-{a,b-1,d-5,g-2,h-2,i,m-1,n,o},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-2,l,m-1,n,o-2},\
+cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygwin-lld/cygwin-lld-{a,b-1,c},\
+cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\
+cygwin/cygwin-{cmodel-2,general-{a-1,b,c-1},macro},\
+cygwin-regression/cygwin-regression-{a,b,c,d,e},\
+mingw/mingw-{git-revision,emutls-1}}.patch
+
+
 
 clang -v
 git show -s

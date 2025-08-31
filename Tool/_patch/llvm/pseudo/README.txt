@@ -1,4 +1,13 @@
 
+On Cygwin, the stack size reserved used to be small, this will cause problems.
+
+
+
+
+
+
+
+
 [  7%] Generating nonterminal symbol file for cxx grammar...
 [  7%] Generating bnf string file for cxx grammar...
 cd /cygdrive/e/Note/Tool/llvm-release-build/tools/clang/tools/extra/pseudo/include && ../../../../../../bin/clang-pseudo-gen.exe --grammar /cygdrive/e/Note/Tool/llvm/clang-tools-extra/pseudo/include/../lib/cxx/cxx.bnf --emit-symbol-list -o /cygdrive/e/Note/Tool/llvm-release-build/tools/clang/tools/extra/pseudo/include/CXXSymbols.inc

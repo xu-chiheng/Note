@@ -1,0 +1,15 @@
+diff --git a/llvm/lib/Support/Unix/Process.inc b/llvm/lib/Support/Unix/Process.inc
+index c6e79af44b9b..f220b4d83159 100644
+--- a/llvm/lib/Support/Unix/Process.inc
++++ b/llvm/lib/Support/Unix/Process.inc
+@@ -69,7 +69,9 @@ Process::Pid Process::getProcessId() {
+ // On Cygwin, getpagesize() returns 64k(AllocationGranularity) and
+ // offset in mmap(3) should be aligned to the AllocationGranularity.
+ Expected<unsigned> Process::getPageSize() {
+-#if defined(HAVE_GETAUXVAL)
++#if defined(__CYGWIN__)
++  static const int page_size = computePageSize();
++#elif defined(HAVE_GETAUXVAL)
+   static const int page_size = ::getauxval(AT_PAGESZ);
+ #elif defined(HAVE_GETPAGESIZE)
+   static const int page_size = ::getpagesize();

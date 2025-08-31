@@ -76,17 +76,23 @@ code.lock
 /Videos
 /ntuser.dat.*
 /ntuser.ini
-# 以下是“Start Menu”在全球使用最广泛的十种语言中的本地化显示名称：
+# localized display name of "Start Menu"
 /Start Menu
 /「开始」菜单
+/「開始」功能表
 /Menú Inicio
+/Menu Iniciar
+/Menu Démarrer
+/Startmenü
+/Menu Start
+/Menu Avvio
+/Пуск
+/スタート メニュー
+/시작 메뉴
 /قائمة ابدأ
 /प्रारंभ मेनू
 /স্টার্ট মেনু
-/Menu Iniciar
-/Пуск
-/スタート メニュー
-/Startmenü
+/Başlat Menüsü
 
 
 # whitelist must be put last

@@ -25,7 +25,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 	local _cc= _cxx= _cflags=() _cxxflags=() _ldflags=()
 
 	if [ -z "${_compiler}" ]; then
-		_compiler=GCC
+		_compiler=Clang
 	fi
 	case "${_compiler}" in
 		GCC | Clang )

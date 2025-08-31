@@ -99,8 +99,6 @@ build() {
 		)
 
 		local cmake_options=(
-			-G "${generator}"
-			-T "${toolset}"
 			"../${package}/llvm"
 
 			-DLLVM_TARGETS_TO_BUILD="$(join_array_elements ';' "${targets[@]}")"
@@ -145,8 +143,7 @@ build() {
 		# time_command devenv.exe LLVM.sln -build Release -out "../~$(print_current_datetime)-llvm-vs2022-output.txt"
 		# time_command devenv.exe LLVM.sln -clean
 
-		# Double click the LLVM.sln file, in Visual Studio IDE, set clang as startup project, and build/debug clang in IDE.
-		time_command visual_studio_pushd_cmake_msbuild_package "${package}" "${tool}" "${build_type}" LLVM.sln "${build_type}" "${cmake_options[@]}"
+		time_command cmake_build_install_package_1 "${package}" "${tool}" "${build_type}" "${generator}" "${toolset}" LLVM.sln "${cmake_options[@]}"
 
 	} 2>&1 | tee "$(print_name_for_config_2 "~${current_datetime}-${package}" "${tool}" "${build_type}" output.txt)"
 

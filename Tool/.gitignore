@@ -26,7 +26,6 @@
 /gnome-terminal
 /*-build
 /*-install
-/*-vs2022-*
 /*.xz
 /*.tar
 /*.bz2

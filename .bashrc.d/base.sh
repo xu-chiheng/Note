@@ -209,7 +209,7 @@ print_host_os_of_host_triple() {
 	esac
 }
 
-set_PS1_at_bash_startup() {
+set_bash_PS1_for_terminal_emulator_at_bash_startup() {
 	local ps1_symbol='\$'
 	if { host_triple_is_windows && [ "${USERNAME}" = Administrator ]; } \
 		|| { host_triple_is_linux && [ "$(id -u)" -eq 0 ]; }; then
@@ -273,7 +273,7 @@ set_mingw_PATH_INCLUDE_LIB_at_bash_startup() {
 	esac
 }
 
-set_visual_studio_MSVC_CL_at_bash_startup() {
+set_visual_studio_msvc_CL_at_bash_startup() {
 	case "${HOST_TRIPLE}" in
 		*-cygwin | *-msys )
 			# cygwin1.dll or msys-2.0.dll
@@ -292,14 +292,14 @@ set_visual_studio_MSVC_CL_at_bash_startup() {
 						# MSYS2 will modify CL from "/utf-8" to 'D:/msys64/utf-8' if invoke cl.exe from bash
 						# cl : Command line warning D9024 : unrecognized source file type 'D:/msys64/utf-8', object file assumed
 
-						# # which python; CL="/utf-8" python -c "import os; print(os.environ.get('CL'))"
+						# # which python; CL="/utf-8" python -c "import os; print(os.environ.get('CL'))";
 						# /c/Users/Administrator/AppData/Local/Programs/Python/Python313/python
 						# D:/msys64/utf-8
 
 						export CL="-utf-8"
 						;;
 				esac
-				# CL environment variable only exported in .bashrc, not set globally as a Windows environment variable
+				# CL environment variable only exported in ~/.bashrc at bash startup, not set globally as a Windows environment variable
 				# Visual Studio IDE(devenv.exe) does not get that variable, unless the IDE is launched from command line
 			fi
 			;;
@@ -311,7 +311,12 @@ set_visual_studio_PATH_at_bash_startup() {
 		*-cygwin | *-msys )
 			# cygwin1.dll or msys-2.0.dll
 			if [ -v VSINSTALLDIR ]; then
-				export PATH="$(join_array_elements ':' "$(print_visual_studio_custom_llvm_location)/bin" "${PATH}")"
+				local bin_dirs=(
+					"$(print_visual_studio_custom_llvm_location)/bin"
+					"$(print_visual_studio_custom_cmake_location)/bin"
+				)
+
+				export PATH="$(join_array_elements ':' "${bin_dirs[@]}" "${PATH}")"
 
 				# winget search python
 				# winget search python | grep -E '^Python [0-9]+\.[0-9]+\s+Python.Python.'
@@ -438,10 +443,10 @@ set_environment_variables_at_bash_startup() {
 	# export PYTHONIOENCODING=utf-8
 
 	# the order is important here
-	set_PS1_at_bash_startup
+	set_bash_PS1_for_terminal_emulator_at_bash_startup
 	set_cygwin_CYGWIN_msys_MSYS_at_bash_startup
 	set_mingw_PATH_INCLUDE_LIB_at_bash_startup
-	set_visual_studio_MSVC_CL_at_bash_startup
+	set_visual_studio_msvc_CL_at_bash_startup
 	set_visual_studio_PATH_at_bash_startup
 	set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup
 	set_common_windows_packages_PATH_at_bash_startup

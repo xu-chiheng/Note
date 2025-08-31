@@ -35,13 +35,10 @@ build() {
 			"${package}" "${tool}" "${build_type}" "${generator}" "${toolset}"
 
 		local cmake_options=(
-			-G "${generator}"
-			-T "${toolset}"
 			"../${package}"
 		)
 
-		# Double click the CMake.sln file, in Visual Studio IDE, set cmake as startup project, and build/debug cmake in IDE
-		time_command visual_studio_pushd_cmake_msbuild_package "${package}" "${tool}" "${build_type}" CMake.sln "bin/${build_type}" "${cmake_options[@]}"
+		time_command cmake_build_install_package_1 "${package}" "${tool}" "${build_type}" "${generator}" "${toolset}" CMake.sln "${cmake_options[@]}"
 
 	} 2>&1 | tee "$(print_name_for_config_2 "~${current_datetime}-${package}" "${tool}" "${build_type}" output.txt)"
 

@@ -386,6 +386,16 @@ print_name_for_config() {
 	join_array_elements '-' "${result[@]}" "$@"
 }
 
+print_name_for_config_1() {
+	local prefix="$1" tool="$2" suffix="$3"
+	shift 3
+
+	local host_os="$(print_host_os_of_host_triple)"
+	local result=( "${prefix}" "${host_os,,}" "${tool,,}" "${suffix}" )
+
+	join_array_elements '-' "${result[@]}" "$@"
+}
+
 print_name_for_config_2() {
 	local prefix="$1" tool="$2" build_type="$3" suffix="$4"
 	shift 4
@@ -433,7 +443,7 @@ maybe_make_tarball_and_calculate_sha512_2() {
 	fi
 
 	local host_os="$(print_host_os_of_host_triple)"
-	local dest_dir="$(cd .. && pwd)/__${host_os,,}-${tool,,}"
+	local dest_dir="$(pwd)/__${host_os,,}-${tool,,}"
 
 	make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}"
 }
@@ -465,7 +475,7 @@ pushd_and_cmake() {
 	&& time_command cmake "$@"
 }
 
-pushd_and_cmake_2() {
+pushd_and_cmake_1() {
 	local build_dir="$1"
 	shift 1
 
@@ -852,7 +862,21 @@ get_build_dir_and_install_dir() {
 
 	printf -v build_dir   '%s' "$(print_name_for_config "${package}" "${compiler}" "${linker}" "${build_type}" build)"
 	printf -v install_dir '%s' "$(print_name_for_config "${package}" "${compiler}" "${linker}" "${build_type}" install)"
+}
 
+get_build_dir_and_install_dir_1() {
+	local package="$1" tool="$2"
+
+	# Note : Must keep "${build_dir}" as short as possible, to prevent the following errors when building LLVM :
+    #    “E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\MainThreadChecker\lldbPluginInstrumentationRuntimeMainThreadChecker.vcxproj”(默认目标) (2110) ->
+    #    (InitializeBuildStatus 目标) ->
+    #      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(385,5): error MSB3491: 未能向文件“lldbPluginInstrumentationRuntimeMainThreadChecker.dir\Release\lldbPlug.81AF65F2.tlog\lldbPluginInstrumentationRuntimeMainThreadChecker.lastbuildstate”写入行。路径: lldbPluginInstrumentationRuntimeMainThreadChecker.dir\Release\lldbPlug.81AF65F2.tlog\lldbPluginInstrumentationRuntimeMainThreadChecker.lastbuildstate 超过 OS 最大路径限制。完全限定的文件名必须少于 260 个字符。  [E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\MainThreadChecker\lldbPluginInstrumentationRuntimeMainThreadChecker.vcxproj]
+
+    #    “E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\ASanLibsanitizers\lldbPluginInstrumentationRuntimeASanLibsanitizers.vcxproj”(默认目标) (2163) ->
+    #      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(385,5): error MSB3491: 未能向文件“lldbPluginInstrumentationRuntimeASanLibsanitizers.dir\Release\lldbPlug.09DE11CF.tlog\lldbPluginInstrumentationRuntimeASanLibsanitizers.lastbuildstate”写入行。路径: lldbPluginInstrumentationRuntimeASanLibsanitizers.dir\Release\lldbPlug.09DE11CF.tlog\lldbPluginInstrumentationRuntimeASanLibsanitizers.lastbuildstate 超过 OS 最大路径限制。完全限定的文件名必须少于 260 个字符。  [E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\ASanLibsanitizers\lldbPluginInstrumentationRuntimeASanLibsanitizers.vcxproj]
+
+	printf -v build_dir   '%s' "$(print_name_for_config_1 "${package}" "${tool}" build)"
+	printf -v install_dir '%s' "$(print_name_for_config_1 "${package}" "${tool}" install)"
 }
 
 cmake_build_install_package() {
@@ -888,6 +912,34 @@ cmake_build_install_package() {
 		"${package}" "${compiler}" "${linker}" "${build_type}" \
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
 		"${install_dir}" pushd_and_cmake "${build_dir}" "${generic_cmake_options[@]}" "$@"
+}
+
+cmake_build_install_package_1() {
+	local package="$1" tool="$2" build_type="$3" generator="$4" toolset="$5" solution="$6"
+	shift 6
+
+	local build_dir install_dir
+	get_build_dir_and_install_dir_1 "${package}" "${tool}"
+
+	local install_prefix="$(pwd)/${install_dir}"
+
+	local generic_cmake_options=(
+			-G "${generator}"
+			-T "${toolset}"
+			-DCMAKE_BUILD_TYPE="${build_type}"
+			-DCMAKE_INSTALL_PREFIX="$(cygpath -m "${install_prefix}")"
+	)
+	local tarball="${package}.tar"
+
+	# https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference
+	# https://learn.microsoft.com/en-us/visualstudio/msbuild/obtaining-build-logs-with-msbuild
+
+	rm -rf "${build_dir}" \
+	&& { time_command pushd_and_cmake_1 "${build_dir}" "${generic_cmake_options[@]}" "$@" \
+	&& time_command msbuild.exe "${solution}" -maxCpuCount -interactive -property:"Configuration=${build_type}" -verbosity:normal \
+	&& time_command cmake --build . --target INSTALL --config "${build_type}" \
+	&& echo_command popd;} \
+	&& time_command maybe_make_tarball_and_calculate_sha512_2 "${tool}" "${build_type}" "${tarball}" "${install_dir}"
 }
 
 configure_build_install_package() {
@@ -953,35 +1005,5 @@ visual_studio_set_custom_llvm_location_and_version() {
 </Project>
 EOF
 
-}
-
-# https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference
-# https://learn.microsoft.com/en-us/visualstudio/msbuild/obtaining-build-logs-with-msbuild
-visual_studio_msbuild_solution_build_type() {
-	local solution="$1" build_type="$2"
-	time_command msbuild.exe "${solution}" -maxCpuCount -interactive -property:"Configuration=${build_type}" -verbosity:normal
-}
-
-visual_studio_pushd_cmake_msbuild_package() {
-	local package="$1" tool="$2" build_type="$3" solution="$4" install_dir="$5"
-	shift 5
-
-	local host_os="$(print_host_os_of_host_triple)"
-	local build_dir="${package}-${host_os,,}-${tool,,}"
-	# Note : Must keep "${build_dir}" as short as possible, to prevent the following errors when building LLVM :
-    #    “E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\MainThreadChecker\lldbPluginInstrumentationRuntimeMainThreadChecker.vcxproj”(默认目标) (2110) ->
-    #    (InitializeBuildStatus 目标) ->
-    #      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(385,5): error MSB3491: 未能向文件“lldbPluginInstrumentationRuntimeMainThreadChecker.dir\Release\lldbPlug.81AF65F2.tlog\lldbPluginInstrumentationRuntimeMainThreadChecker.lastbuildstate”写入行。路径: lldbPluginInstrumentationRuntimeMainThreadChecker.dir\Release\lldbPlug.81AF65F2.tlog\lldbPluginInstrumentationRuntimeMainThreadChecker.lastbuildstate 超过 OS 最大路径限制。完全限定的文件名必须少于 260 个字符。  [E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\MainThreadChecker\lldbPluginInstrumentationRuntimeMainThreadChecker.vcxproj]
-
-    #    “E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\ASanLibsanitizers\lldbPluginInstrumentationRuntimeASanLibsanitizers.vcxproj”(默认目标) (2163) ->
-    #      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(385,5): error MSB3491: 未能向文件“lldbPluginInstrumentationRuntimeASanLibsanitizers.dir\Release\lldbPlug.09DE11CF.tlog\lldbPluginInstrumentationRuntimeASanLibsanitizers.lastbuildstate”写入行。路径: lldbPluginInstrumentationRuntimeASanLibsanitizers.dir\Release\lldbPlug.09DE11CF.tlog\lldbPluginInstrumentationRuntimeASanLibsanitizers.lastbuildstate 超过 OS 最大路径限制。完全限定的文件名必须少于 260 个字符。  [E:\Note\Tool\llvm-visual_studio-clang-build\tools\lldb\source\Plugins\InstrumentationRuntime\ASanLibsanitizers\lldbPluginInstrumentationRuntimeASanLibsanitizers.vcxproj]
-
-	local tarball="${package}.tar"
-
-	rm -rf "${build_dir}" \
-	&& { time_command pushd_and_cmake_2 "${build_dir}" "$@" \
-	&& time_command visual_studio_msbuild_solution_build_type "${solution}" "${build_type}" \
-	&& time_command maybe_make_tarball_and_calculate_sha512_2 "${tool}" "${build_type}" "${tarball}" "${install_dir}" \
-	&& echo_command popd;}
 }
 

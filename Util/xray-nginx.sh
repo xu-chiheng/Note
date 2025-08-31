@@ -37,13 +37,14 @@
 # v2rayN
 # A V2Ray client for Windows, support Xray core and v2fly core
 # https://github.com/2dust/v2rayN
-# https://github.com/2dust/v2rayNG/releases
-# https://apkpure.com/cn/v2rayng/com.v2ray.ang
-# https://apkpure.com/cn/v2rayng/com.v2ray.ang/download
+# https://github.com/2dust/v2rayN/releases
 
 # v2rayNG
 # A V2Ray client for Android, support Xray core and v2fly core
 # https://github.com/2dust/v2rayNG
+# https://github.com/2dust/v2rayNG/releases
+# https://apkpure.com/v2rayng/com.v2ray.ang
+# https://apkpure.com/v2rayng/com.v2ray.ang/download
 
 # Shadowrocket
 # Rule based proxy utility client for iPhone/iPad.

@@ -306,7 +306,7 @@ set_visual_studio_msvc_CL_at_bash_startup() {
 	esac
 }
 
-set_visual_studio_packages_PATH_at_bash_startup() {
+set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup() {
 	case "${HOST_TRIPLE}" in
 		*-cygwin | *-msys )
 			# cygwin1.dll or msys-2.0.dll
@@ -342,16 +342,6 @@ set_visual_studio_packages_PATH_at_bash_startup() {
 				# C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps
 				# export PATH="$(join_array_elements ':' "$(dirname "$(readlink "$(cygpath -u "${LOCALAPPDATA}\Microsoft\WindowsApps")"/python.exe)")" "${PATH}")"
 				# python3.13.exe
-			fi
-			;;
-	esac
-}
-
-set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup() {
-	case "${HOST_TRIPLE}" in
-		*-cygwin | *-msys )
-			# cygwin1.dll or msys-2.0.dll
-			if [ -v VSINSTALLDIR ]; then
 				return;
 			fi
 			;;
@@ -454,7 +444,6 @@ set_environment_variables_at_bash_startup() {
 	set_cygwin_CYGWIN_msys_MSYS_at_bash_startup
 	set_mingw_PATH_INCLUDE_LIB_at_bash_startup
 	set_visual_studio_msvc_CL_at_bash_startup
-	set_visual_studio_packages_PATH_at_bash_startup
 	set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup
 	set_common_windows_packages_PATH_at_bash_startup
 	set_other_linux_environment_variables_at_bash_startup

@@ -219,7 +219,6 @@ dump_llvm_static_or_shared() {
 visual_studio_check_tool_build_type_and_set_generator_toolset() {
 	local _tool="$1" _build_type="$2"
 	local _generator _toolset
-	_generator="Visual Studio 17 2022"
 	if [ -z "${_tool}" ]; then
 		_tool=Clang
 	fi
@@ -248,18 +247,24 @@ visual_studio_check_tool_build_type_and_set_generator_toolset() {
 			;;
 	esac
 
+    local major="$(print_visual_studio_major_version)"
+    local year="$(print_visual_studio_release_year)"
+	_generator="Visual Studio ${major} ${year}"
+
 	case "${_tool}" in
 		Clang )
 			_toolset="ClangCL"
 			;;
 		MSVC )
-			_toolset="v143"
-			# v143 - Visual Studio 2022 (MSVC 14.3x)
-			# v142 - Visual Studio 2019 (MSVC 14.2x)
-			# v141 - Visual Studio 2017 (MSVC 14.1x)
-			# v140 - Visual Studio 2015 (MSVC 14.0)
-			# v120 - Visual Studio 2013 (MSVC 12.0)
-			# v110 - Visual Studio 2012 (MSVC 11.0)
+			_toolset="unknown"
+			case "${year}" in
+				2022) _toolset="v143" ;;
+				2019) _toolset="v142" ;;
+				2017) _toolset="v141" ;;
+				2015) _toolset="v140" ;;
+				2013) _toolset="v120" ;;
+				2012) _toolset="v110" ;;
+			esac
 			;;
 	esac
 
@@ -272,13 +277,29 @@ visual_studio_check_tool_build_type_and_set_generator_toolset() {
 visual_studio_dump_tool_build_type_and_generator_toolset() {
 	local package="$1" tool="$2" build_type="$3" generator="$4" toolset="$5"
 	local host_os="$(print_host_os_of_host_triple)"
+	local compiler linker
+	case "${tool}" in
+		Clang ) compiler="clang-cl.exe" linker="lld-link.exe" ;;
+		MSVC ) compiler="cl.exe" linker="link.exe" ;;
+	esac
+	local description="Unknown"
+	case "${toolset}" in
+		ClangCL ) description="Clang with MSVC-like command-line" ;;
+		v143 ) description="Visual Studio 2022 (MSVC 14.3x)" ;;
+		v142 ) description="Visual Studio 2019 (MSVC 14.2x)" ;;
+		v141 ) description="Visual Studio 2017 (MSVC 14.1x)" ;;
+		v140 ) description="Visual Studio 2015 (MSVC 14.0)" ;;
+		v120 ) description="Visual Studio 2013 (MSVC 12.0)" ;;
+		v110 ) description="Visual Studio 2012 (MSVC 11.0)" ;;
+	esac
+	
 	echo "HOST_TRIPLE : ${HOST_TRIPLE}"
 	echo "package     : ${package}"
 	echo "host_os     : ${host_os}"
-	echo "tool        : ${tool}"
+	echo "tool        : ${tool} (compiler : ${compiler}, linker : ${linker})"
 	echo "build_type  : ${build_type}"
 	echo "generator   : ${generator}"
-	echo "toolset     : ${toolset}"
+	echo "toolset     : ${toolset} (${description})"
 }
 
 print_gcc_install_dir() {

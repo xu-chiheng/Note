@@ -156,22 +156,33 @@ print_ssh_os_of_host_triple() {
 	esac
 }
 
+print_visual_studio_major_version() {
+    local major="${VisualStudioVersion%%.*}"
+    echo "${major}"
+}
+
+print_visual_studio_release_year() {
+    local major="$(print_visual_studio_major_version)"
+    local year="Unknown"
+    case "${major}" in
+        17) year="2022" ;;
+        16) year="2019" ;;
+        15) year="2017" ;;
+        14) year="2015" ;;
+        12) year="2013" ;;
+        11) year="2012" ;;
+        10) year="2010" ;;
+    esac
+    echo "${year}"
+}
+
 print_host_os_of_host_triple() {
 	case "${HOST_TRIPLE}" in
 		*-cygwin | *-msys )
 			# cygwin1.dll or msys-2.0.dll
 			if [ -v VSINSTALLDIR ]; then
 				# Visual Studio
-				local year=""
-				case "${VisualStudioVersion}" in
-					17.*) year="2022" ;;
-					16.*) year="2019" ;;
-					15.*) year="2017" ;;
-					14.*) year="2015" ;;
-					12.*) year="2013" ;;
-					11.*) year="2012" ;;
-					10.*) year="2010" ;;
-				esac
+				local year="$(print_visual_studio_release_year)"
 				echo "VS${year}"
 			else
 				case "${HOST_TRIPLE}" in

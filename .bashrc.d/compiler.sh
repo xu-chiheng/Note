@@ -115,10 +115,10 @@ print_compiler_predefined_macros() {
 	fi
 
 	case "$1" in
-		g++ | clang++ | *-g++ )
+		g++ | clang++ | *-g++ | *-clang++ )
 			"$@" -E -dM -x c++ - </dev/null | sort
 			;;
-		gcc | clang | *-gcc )
+		gcc | clang | *-gcc | *-clang )
 			"$@" -E -dM -x c - </dev/null | sort
 			;;
 		cl )
@@ -148,11 +148,17 @@ print_compiler_include_dirs() {
 	fi
 
 	case "$1" in
-		*g++ | *c++ )
+		g++ | clang++ | *-g++ | *-clang++ )
 			echo | "$@" -E -Wp,-v -xc++ - 2>&1
 			;;
-		*gcc | *clang )
+		gcc | clang | *-gcc | *-clang )
 			echo | "$@" -E -Wp,-v -xc - 2>&1
+			;;
+		cl )
+			echo "${INCLUDE}"
+			;;
+		clang-cl )
+			echo | "$@" -nologo -E -v -xc++ - 2>&1
 			;;
 		* )
 			echo "unknown compiler : $1"

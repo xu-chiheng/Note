@@ -115,19 +115,23 @@ print_compiler_predefined_macros() {
 	fi
 
 	case "$1" in
-		*g++ | *c++ )
+		g++ | clang++ | *-g++ )
 			"$@" -E -dM -x c++ - </dev/null | sort
 			;;
-		*gcc | *clang )
+		gcc | clang | *-gcc )
 			"$@" -E -dM -x c - </dev/null | sort
 			;;
-		*cl )
+		cl )
 			# https://stackoverflow.com/questions/3665537/how-to-find-out-cl-exes-built-in-macros
 			# https://developercommunity.visualstudio.com/t/provide-the-ability-to-list-predefined-macros-and/934925
-			rm -rf empty.* \
-			&& touch empty.cpp \
-			&& "$@" /EP /Zc:preprocessor /PD empty.cpp 2>/dev/null | sort \
-			&& rm -rf empty.*
+			local tmpfile="$(mktemp --suffix=.cpp)"
+			"$@" -EP -Zc:preprocessor -PD "$(cygpath -w "${tmpfile}")" 2>/dev/null | dos2unix | grep -v '^$' | sort \
+			&& rm -f "${tmpfile}"
+			;;
+		clang-cl )
+			local tmpfile="$(mktemp --suffix=.cpp)"
+			"$@" -EP -d1PP "$(cygpath -w "${tmpfile}")" 2>/dev/null | dos2unix | grep -v '^$' | sort \
+			&& rm -f "${tmpfile}"
 			;;
 		* )
 			echo "unknown compiler : $1"

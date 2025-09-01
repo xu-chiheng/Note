@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..9417bea14e8e 100644
+index 1bb9bcfe6aab..2d270f687f86 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -540,6 +540,33 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
+@@ -554,6 +554,30 @@ toolchains::MinGW::MinGW(const Driver &D, const llvm::Triple &Triple,
        getDriver().SysRoot.size())
      getFilePaths().push_back(Base + "lib");
  
@@ -16,23 +16,20 @@ index c81a7ed17029..9417bea14e8e 100644
 +  }
 +#else
 +  // for MinGW's crt2.o
-+  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
-+      getDriver().SysRoot.size()) {
-+    if (getDriver().SysRoot.size()) {
-+      getFilePaths().push_back(getDriver().SysRoot + "/lib");
-+    } else {
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true)) {
 +      const char * path = getenv("LIB");
 +      if (path) {
 +        getFilePaths().push_back(path);
 +      } else {
 +
 +      }
-+    }
++  } else if (getDriver().SysRoot.size()) {
++      getFilePaths().push_back(getDriver().SysRoot + "/lib");
 +  } else {
 +    // must add library directories by -L
 +  }
 +#endif
 +
    NativeLLVMSupport =
-       Args.getLastArgValue(options::OPT_fuse_ld_EQ, CLANG_DEFAULT_LINKER)
+       Args.getLastArgValue(options::OPT_fuse_ld_EQ, D.getPreferredLinker())
            .equals_insensitive("lld");

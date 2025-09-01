@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..1bfb8ee6c446 100644
+index 1bb9bcfe6aab..ac16e73ce87d 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -690,21 +690,42 @@ void toolchains::MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+@@ -704,21 +704,39 @@ void toolchains::MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
    if (DriverArgs.hasArg(options::OPT_nostdlibinc))
      return;
  
@@ -34,18 +34,15 @@ index c81a7ed17029..1bfb8ee6c446 100644
 +    // must add include directories by -I option
 +  }
 +#else
-+  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true) ||
-+      getDriver().SysRoot.size()) {
-+    if (getDriver().SysRoot.size()) {
-+      addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/include");
-+    } else {
++  if (!::isCrossCompiling(getTriple(), /*RequireArchMatch=*/true)) {
 +      const char * path = getenv("INCLUDE");
 +      if (path) {
 +        addSystemInclude(DriverArgs, CC1Args, path);
 +      } else {
 +
 +      }
-+    }
++  } else if (getDriver().SysRoot.size()) {
++      addSystemInclude(DriverArgs, CC1Args, getDriver().SysRoot + "/include");
 +  } else {
 +    // must add include directories by -I option
 +  }

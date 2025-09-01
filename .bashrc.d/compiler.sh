@@ -179,51 +179,61 @@ print_gcc_configure_options() {
 	print_array_elements $(gcc -v 2>&1 | grep -E '^Configured with: ' | sed -E -e 's/^.+\/configure //' )
 }
 
-print_hello_world_program_in_c() {
-	cat <<EOF
-#include <stdio.h>
-int main(int argc, char ** argv)
-{
-	printf("Hello, World!\n");
-	return 0;
-}
-EOF
-}
-
-print_hello_world_program_in_cxx() {
-	cat <<EOF
-#include <iostream>
-int main(int argc, char ** argv)
-{
-	std::cout << "Hello, World!" << std::endl;
-	return 0;
-}
-EOF
-}
-
 # Display the programs invoked by the compiler.
 # Show commands to run and use verbose output
 show_compiler_commands() {
 	if ! check_compiler_existence "$1"; then
 		return 1
 	fi
-
-	local print_hello_world_program_command
+	local hello_world_source
 	local source_file_name
-
+	local hello_world_in_c='
+#include <stdio.h>
+int main(int argc, char ** argv)
+{
+	printf("Hello, World!\n");
+	return 0;
+}
+'
+	local hello_world_in_cxx='
+#include <iostream>
+int main(int argc, char ** argv)
+{
+	std::cout << "Hello, World!" << std::endl;
+	return 0;
+}
+'
+	local options=()
 	case "$1" in
-		*g++ | *c++ | *cl )
-			print_hello_world_program_command=print_hello_world_program_in_cxx
+		g++ | clang++ | *-g++ | *-clang++ )
+			hello_world_source="${hello_world_in_cxx}"
 			source_file_name=main.cpp
+			options+=( -v -Wl,-v )
+			;;
+		gcc | clang | *-gcc | *-clang )
+			hello_world_source="${hello_world_in_c}"
+			source_file_name=main.c
+			options+=( -v -Wl,-v )
+			;;
+		cl )
+			# only use link.exe as linker
+			hello_world_source="${hello_world_in_cxx}"
+			source_file_name=main.cpp
+			options+=( -nologo -EHsc )
+			;;
+		clang-cl )
+			# like clang/clang++, clang-cl support -fuse-ld=lld and -fuse-ld=link to use lld-link.exe and link.exe as linker respectively.
+			hello_world_source="${hello_world_in_cxx}"
+			source_file_name=main.cpp
+			options+=( -v )
 			;;
 		* )
-			print_hello_world_program_command=print_hello_world_program_in_c
-			source_file_name=main.c
+			echo "unknown compiler : $1"
+			return 1
 			;;
 	esac
-
-	"${print_hello_world_program_command}" | tee "${source_file_name}"
-	echo_command "$@" -v -Wl,-v "${source_file_name}"
+	echo "${hello_world_source}" | tee "${source_file_name}"
+	echo_command "$@" "${options[@]}" "${source_file_name}"
 }
 
 show_compiler_commands_bfd() {

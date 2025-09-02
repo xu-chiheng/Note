@@ -10,10 +10,13 @@ clean() {
 		'('
 			-name '*output.txt'
 
-			-or -name 'a.exe'
-			-or -name 'a.out'
-			-or -name 'main.cpp'
-			-or -name 'main.c'
+			-or -name '*.cpp'
+			-or -name '*.c'
+			-or -name '*.out'
+			-or -name '*.exe'
+			-or -name '*.dll'
+			-or -name '*.o'
+			-or -name '*.obj'
 
 			-or -name '*-build'
 			-or -name '*-install'
@@ -21,7 +24,6 @@ clean() {
 		-and
 		-not
 		'('
-			# remove manually
 			-name '*.sha512'
 			-or -name '*.cmd'
 			-or -name '*.sh'

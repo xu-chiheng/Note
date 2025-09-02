@@ -38,10 +38,13 @@
 /__vs2022-*
 /_temp
 
-/a.out
-/a.exe
-/main.cpp
-/main.c
+/*.cpp
+/*.c
+/*.out
+/*.exe
+/*.dll
+/*.o
+/*.obj
 
 
 !/*.sha512

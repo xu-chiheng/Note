@@ -33,21 +33,7 @@ do_update_all_files() {
 		Tool/README.txt
 		Tool/.gitignore
 
-		Tool/build-llvm.sh
-		Tool/build-llvm_vs2022.sh
-
-		Tool/build-cross-gcc.sh
-		Tool/build-cross-gcc2.sh
-		Tool/build-binutils.sh
-		Tool/build-gcc.sh
-		Tool/build-gdb.sh
-
-		Tool/build-qemu.sh
-
-		Tool/build-cmake.sh
-		Tool/build-cmake_vs2022.sh
-
-		Tool/build-python.sh
+		Tool/build-{llvm{,_vs2022},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs2022},python}.sh
 
 		Tool/clean.sh
 		Tool/common.sh

@@ -1,0 +1,17 @@
+--- origsrc/Python-3.6.12/Modules/socketmodule.c	2020-08-15 08:43:26.000000000 +0200
++++ Modules/socketmodule.c	2020-12-28 12:51:04.537110800 +0100
+@@ -981,6 +981,14 @@ init_sockobject(PySocketSockObject *s,
+             }
+         }
+     }
++#ifdef __CYGWIN__
++    /* Temporarily work around AF_UNIX credential passing issues */
++    if (s->sock_family == AF_UNIX && s->sock_fd != -1) {
++        if (setsockopt(s->sock_fd, SOL_SOCKET, SO_PEERCRED, 0, 0) == -1) {
++            /* ignore error returns */;
++        }
++    }
++#endif
+     return 0;
+ }
+ 

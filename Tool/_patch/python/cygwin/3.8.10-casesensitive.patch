@@ -1,0 +1,11 @@
+--- origsrc/Python-3.8.10/Lib/test/test_importlib/util.py	2021-05-03 11:47:56.000000000 +0200
++++ src/Python-3.8.10/Lib/test/test_importlib/util.py	2021-05-19 22:36:38.191128000 +0200
+@@ -93,7 +93,7 @@ def test_both(test_class, base=None, **k
+ CASE_INSENSITIVE_FS = True
+ # Windows is the only OS that is *always* case-insensitive
+ # (OS X *can* be case-sensitive).
+-if sys.platform not in ('win32', 'cygwin'):
++if sys.platform not in ('win32'):
+     changed_name = __file__.upper()
+     if changed_name == __file__:
+         changed_name = __file__.lower()

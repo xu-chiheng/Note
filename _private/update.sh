@@ -47,13 +47,15 @@ do_update_all_files() {
 		Tool/build-cmake.sh
 		Tool/build-cmake_vs2022.sh
 
+		Tool/build-python.sh
+
 		Tool/clean.sh
 		Tool/common.sh
 
 		Tool/_cygport/{.gitignore,cygwin.cmd,llvm.cygport}
 
 		Tool/_doc
-		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu}
+		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python}
 
 		Tool/{linux.sh,{cygwin,msys,mingw_ucrt,mingw_vcrt,vs2022_cygwin,vs2022_msys}.cmd}
 

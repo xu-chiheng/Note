@@ -1,0 +1,13 @@
+--- origsrc/Python-3.8.7/Lib/socket.py	2020-12-21 17:25:24.000000000 +0100
++++ Lib/socket.py	2021-01-31 21:42:50.187307400 +0100
+@@ -553,7 +553,9 @@
+         return socket(0, 0, 0, info)
+     __all__.append("fromshare")
+ 
+-if hasattr(_socket, "socketpair"):
++## not using Cygwin socketpair
++## if hasattr(_socket, "socketpair"):
++if False:
+ 
+     def socketpair(family=None, type=SOCK_STREAM, proto=0):
+         """socketpair([family[, type[, proto]]]) -> (socket object, socket object)

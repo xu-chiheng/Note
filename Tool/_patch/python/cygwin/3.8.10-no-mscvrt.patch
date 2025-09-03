@@ -1,0 +1,11 @@
+--- origsrc/Python-3.8.10/Lib/_pyio.py	2021-05-03 11:47:56.000000000 +0200
++++ src/Python-3.8.10/Lib/_pyio.py	2021-05-19 07:43:27.297006100 +0200
+@@ -10,7 +10,7 @@ import stat
+ import sys
+ # Import _thread instead of threading to reduce startup cost
+ from _thread import allocate_lock as Lock
+-if sys.platform in {'win32', 'cygwin'}:
++if sys.platform in {'win32'}:
+     from msvcrt import setmode as _setmode
+ else:
+     _setmode = None

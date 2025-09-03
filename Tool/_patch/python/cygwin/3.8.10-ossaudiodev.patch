@@ -1,0 +1,31 @@
+--- origsrc/Python-3.8.10/Modules/ossaudiodev.c	2021-05-03 11:47:56.000000000 +0200
++++ src/Python-3.8.10/Modules/ossaudiodev.c	2021-05-20 11:37:45.886398900 +0200
+@@ -959,7 +959,7 @@ static PyGetSetDef oss_getsetlist[] = {
+ };
+ 
+ static PyTypeObject OSSAudioType = {
+-    PyVarObject_HEAD_INIT(&PyType_Type, 0)
++    PyVarObject_HEAD_INIT(NULL, 0)
+     "ossaudiodev.oss_audio_device", /*tp_name*/
+     sizeof(oss_audio_t),        /*tp_basicsize*/
+     0,                          /*tp_itemsize*/
+@@ -993,7 +993,7 @@ static PyTypeObject OSSAudioType = {
+ };
+ 
+ static PyTypeObject OSSMixerType = {
+-    PyVarObject_HEAD_INIT(&PyType_Type, 0)
++    PyVarObject_HEAD_INIT(NULL, 0)
+     "ossaudiodev.oss_mixer_device", /*tp_name*/
+     sizeof(oss_mixer_t),            /*tp_basicsize*/
+     0,                              /*tp_itemsize*/
+--- origsrc/Python-3.8.10/setup.py	2021-05-18 22:26:28.398116900 +0200
++++ src/Python-3.8.10/setup.py	2021-05-20 11:39:21.411982800 +0200
+@@ -1457,7 +1457,7 @@ class PyBuildExt(build_ext):
+             self.missing.extend(['resource', 'termios'])
+ 
+         # Platform-specific libraries
+-        if HOST_PLATFORM.startswith(('linux', 'freebsd', 'gnukfreebsd')):
++        if HOST_PLATFORM.startswith(('linux', 'freebsd', 'gnukfreebsd',"cygwin")):
+             self.add(Extension('ossaudiodev', ['ossaudiodev.c']))
+         elif not AIX:
+             self.missing.append('ossaudiodev')

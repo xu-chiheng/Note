@@ -942,7 +942,7 @@ cmake_build_install_package_1() {
 	# https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference
 	# https://learn.microsoft.com/en-us/visualstudio/msbuild/obtaining-build-logs-with-msbuild
 
-	rm -rf "${install_dir}" \
+	echo_command rm -rf "${install_dir}" \
 	&& { time_command pushd_and_cmake_1 "${build_dir}" "${generic_cmake_options[@]}" "$@" \
 	&& time_command msbuild.exe "${solution}" -maxCpuCount -interactive -property:"Configuration=${build_type}" -verbosity:normal \
 	&& time_command cmake --build . --target INSTALL --config "${build_type}" \

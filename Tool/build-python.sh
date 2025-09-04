@@ -25,6 +25,21 @@
 cd "$(dirname "$0")"
 . "./common.sh"
 
+
+
+# Ubuntu build-essential
+# https://devguide.python.org/getting-started/setup-building/
+# https://stackoverflow.com/questions/8097161/how-would-i-build-python-myself-from-source-code-on-ubuntu
+# https://superuser.com/questions/1412975/how-to-build-and-install-python-3-7-x-from-source-on-debian-9-8
+# https://www.build-python-from-source.com/
+# https://stackoverflow.com/questions/51216675/building-python-from-the-source-as-64-bit
+# https://web.archive.org/web/20220907075854/https://cpython-core-tutorial.readthedocs.io/en/latest/build_cpython_windows.html
+
+# How to compile the Python interpreter from scratch on Microsoft Windows
+# https://www.youtube.com/watch?v=GqZT9EY4MGQ
+
+
+
 build() {
 	local current_datetime="$(print_current_datetime)"
 	local package="python"
@@ -36,7 +51,7 @@ build() {
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
 		local configure_options=(
-			# --enable-optimizations --with-lto --with-computed-gotos
+			--with-computed-gotos
 		)
 
 		time_command configure_build_install_package \

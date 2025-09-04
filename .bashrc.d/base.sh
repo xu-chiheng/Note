@@ -499,7 +499,7 @@ print_packages_dir_of_host_triple() {
 	local host_os="$(print_host_os_of_host_triple)"
 	case "${HOST_TRIPLE}" in
 		*-cygwin | *-msys | *-mingw*  )
-			echo "$(cygpath -u "D:\_${host_os,,}")"
+			echo "$(cygpath -u 'D:\_'"${host_os,,}")"
 			;;
 		* )
 			echo "/mnt/work/_${host_os,,}"

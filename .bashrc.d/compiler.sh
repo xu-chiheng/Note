@@ -76,6 +76,10 @@ gdb_create_test_branches_for_bisect() {
 	common_create_test_branches_for_bisect gdb 15 "remotes/origin/gdb-" "-branch" master
 }
 
+python_create_test_branches_for_bisect() {
+	common_create_test_branches_for_bisect python 14 "remotes/origin/3." "" main
+}
+
 check_compiler_existence() {
 	if [ -z "$1" ]; then
 		echo "no compiler specified"

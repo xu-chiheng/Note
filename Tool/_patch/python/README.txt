@@ -1,0 +1,8 @@
+
+
+
+3.14    b092705907c758d4f9742028652c9802f9f03dd3    2025-05-06
+patch_apply . ../_patch/python/1.patch
+
+3.15    0a0cbd43a7404b2a5b86ca032764e4524bdecd83    2025-09-02
+

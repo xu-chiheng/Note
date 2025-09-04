@@ -1,0 +1,285 @@
+diff --git a/Lib/compileall.py b/Lib/compileall.py
+index 67fe370451e..779483af902 100644
+--- a/Lib/compileall.py
++++ b/Lib/compileall.py
+@@ -98,7 +98,10 @@ def compile_dir(dir, maxlevels=None, ddir=None, force=False,
+     success = True
+     if workers != 1 and ProcessPoolExecutor is not None:
+         import multiprocessing
+-        if multiprocessing.get_start_method() == 'fork':
++        if sys.platform == "cygwin":
++            # Force spawn under Cygwin to avoid BrokenPipeError from fork/forkserver
++            mp_context = multiprocessing.get_context("spawn")
++        elif multiprocessing.get_start_method() == 'fork':
+             mp_context = multiprocessing.get_context('forkserver')
+         else:
+             mp_context = None
+diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
+index 99504911a3d..6716f3bd8c8 100644
+--- a/Lib/ctypes/util.py
++++ b/Lib/ctypes/util.py
+@@ -173,6 +173,25 @@ def find_library(name):
+         fname = f"{directory}/lib{name}.so"
+         return fname if os.path.isfile(fname) else None
+ 
++elif sys.platform == "cygwin":
++    def find_library(name):
++        for libdir in ['/usr/lib', '/usr/local/lib']:
++            for libext in ['lib%s.dll.a' % name, 'lib%s.a' % name]:
++                implib = os.path.join(libdir, libext)
++                if not os.path.exists(implib):
++                    continue
++                cmd = "dlltool -I " + implib + " 2>/dev/null"
++                f = os.popen(cmd)
++                try:
++                    data = f.read()
++                finally:
++                    f.close()
++                res = data.replace("\n","")
++                if not res:
++                    continue
++                return res
++        return None
++
+ elif os.name == "posix":
+     # Andreas Degert's find functions, using gcc, /sbin/ldconfig, objdump
+     import re, tempfile
+@@ -503,6 +522,10 @@ def test():
+             print(f"crypt\t:: {cdll.LoadLibrary(find_library('crypt'))}")
+             print(f"crypto\t:: {find_library('crypto')}")
+             print(f"crypto\t:: {cdll.LoadLibrary(find_library('crypto'))}")
++        elif sys.platform == "cygwin":
++            print(cdll.LoadLibrary("cygbz2-1.dll"))
++            print(cdll.LoadLibrary("cygcrypt-2.dll"))
++            print(find_library("crypt"))
+         else:
+             print(cdll.LoadLibrary("libm.so"))
+             print(cdll.LoadLibrary("libcrypt.so"))
+diff --git a/Lib/socket.py b/Lib/socket.py
+index 727b0e75f03..ac73d07b7d4 100644
+--- a/Lib/socket.py
++++ b/Lib/socket.py
+@@ -655,7 +655,9 @@ def _fallback_socketpair(family=AF_INET, type=SOCK_STREAM, proto=0):
+ 
+     return (ssock, csock)
+ 
+-if hasattr(_socket, "socketpair"):
++## not using Cygwin socketpair
++## if hasattr(_socket, "socketpair"):
++if False:
+     def socketpair(family=None, type=SOCK_STREAM, proto=0):
+         if family is None:
+             try:
+diff --git a/Lib/test/test_importlib/util.py b/Lib/test/test_importlib/util.py
+index edbe78545a2..818c3b1b3f0 100644
+--- a/Lib/test/test_importlib/util.py
++++ b/Lib/test/test_importlib/util.py
+@@ -104,7 +104,7 @@ def test_both(test_class, base=None, **kwargs):
+ CASE_INSENSITIVE_FS = True
+ # Windows is the only OS that is *always* case-insensitive
+ # (OS X *can* be case-sensitive).
+-if sys.platform not in ('win32', 'cygwin'):
++if sys.platform not in ('win32'):
+     changed_name = __file__.upper()
+     if changed_name == __file__:
+         changed_name = __file__.lower()
+diff --git a/Misc/platform_triplet.c b/Misc/platform_triplet.c
+index f5cd73bdea8..e1990885010 100644
+--- a/Misc/platform_triplet.c
++++ b/Misc/platform_triplet.c
+@@ -265,6 +265,14 @@ PLATFORM_TRIPLET=darwin
+ #  endif
+ #elif defined(__VXWORKS__)
+ PLATFORM_TRIPLET=vxworks
++#elif defined(__CYGWIN__)
++# if defined(__x86_64__)
++PLATFORM_TRIPLET=x86_64-cygwin
++# elif defined(__i386__)
++PLATFORM_TRIPLET=i386-cygwin
++# else
++#   error unknown platform triplet
++# endif
+ #elif defined(__wasm32__)
+ #  if defined(__EMSCRIPTEN__)
+ PLATFORM_TRIPLET=wasm32-emscripten
+diff --git a/Modules/_hacl/Lib_Memzero0.c b/Modules/_hacl/Lib_Memzero0.c
+index 28abd1aa4e2..0c3b1df08ea 100644
+--- a/Modules/_hacl/Lib_Memzero0.c
++++ b/Modules/_hacl/Lib_Memzero0.c
+@@ -31,7 +31,7 @@
+ #include <string.h>
+ #endif
+ 
+-#if defined(__FreeBSD__) || defined(__NetBSD__)
++#if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__CYGWIN__)
+ #include <strings.h>
+ #endif
+ 
+@@ -57,7 +57,7 @@ void Lib_Memzero0_memzero0(void *dst, uint64_t len) {
+     SecureZeroMemory(dst, len_);
+   #elif defined(__APPLE__) && defined(__MACH__) && APPLE_HAS_MEMSET_S
+     memset_s(dst, len_, 0, len_);
+-  #elif (defined(__linux__) && !defined(LINUX_NO_EXPLICIT_BZERO)) || defined(__FreeBSD__) || defined(__OpenBSD__)
++  #elif (defined(__linux__) && !defined(LINUX_NO_EXPLICIT_BZERO)) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__CYGWIN__)
+     explicit_bzero(dst, len_);
+   #elif defined(__NetBSD__)
+     explicit_memset(dst, 0, len_);
+diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
+index 922694fa367..f2dc9cccefa 100644
+--- a/Modules/posixmodule.c
++++ b/Modules/posixmodule.c
+@@ -248,7 +248,7 @@
+ #    define USE_XATTRS
+ #    include <linux/limits.h>  // Needed for XATTR_SIZE_MAX on musl libc.
+ #  endif
+-#  if defined(__CYGWIN__)
++#  if 0 // defined(__CYGWIN__) // no XATTR_SIZE_MAX
+ #    define USE_XATTRS
+ #    include <cygwin/limits.h>  // Needed for XATTR_SIZE_MAX and XATTR_LIST_MAX.
+ #  endif
+diff --git a/Modules/selectmodule.c b/Modules/selectmodule.c
+index d234d504cb5..47bf401f245 100644
+--- a/Modules/selectmodule.c
++++ b/Modules/selectmodule.c
+@@ -43,7 +43,7 @@
+    Users who want even more than the boosted limit should #define
+    FD_SETSIZE higher before this; e.g., via compiler /D switch.
+ */
+-#if defined(MS_WINDOWS) && !defined(FD_SETSIZE)
++#if (defined(MS_WINDOWS) || defined(__CYGWIN__)) && !defined(FD_SETSIZE)
+ #define FD_SETSIZE 512
+ #endif
+ 
+diff --git a/Modules/socketmodule.c b/Modules/socketmodule.c
+index 47958379263..81527c72896 100644
+--- a/Modules/socketmodule.c
++++ b/Modules/socketmodule.c
+@@ -1155,6 +1155,14 @@ init_sockobject(socket_state *state, PySocketSockObject *s,
+         }
+     }
+     s->state = state;
++#ifdef __CYGWIN__
++    /* Temporarily work around AF_UNIX credential passing issues */
++    if (s->sock_family == AF_UNIX && s->sock_fd != -1) {
++        if (setsockopt(s->sock_fd, SOL_SOCKET, SO_PEERCRED, 0, 0) == -1) {
++            /* ignore error returns */;
++        }
++    }
++#endif
+     return 0;
+ }
+ 
+diff --git a/Modules/timemodule.c b/Modules/timemodule.c
+index 1bfbf3f6a0b..32145754264 100644
+--- a/Modules/timemodule.c
++++ b/Modules/timemodule.c
+@@ -190,7 +190,7 @@ time_clockid_converter(PyObject *obj, clockid_t *p)
+ #elif defined(__DragonFly__)
+     long clk_id = PyLong_AsLong(obj);
+ #else
+-    int clk_id = PyLong_AsInt(obj);
++    intptr_t clk_id = PyLong_AsInt(obj);
+ #endif
+     if (clk_id == -1 && PyErr_Occurred()) {
+         PyErr_Format(PyExc_TypeError,
+diff --git a/Python/dynload_shlib.c b/Python/dynload_shlib.c
+index 583c9b752df..0c81f37c581 100644
+--- a/Python/dynload_shlib.c
++++ b/Python/dynload_shlib.c
+@@ -38,6 +38,8 @@
+ 
+ const char *_PyImport_DynLoadFiletab[] = {
+ #ifdef __CYGWIN__
++    "." SOABI ".dll",
++    ".abi" PYTHON_ABI_STRING ".dll",
+     ".dll",
+ #else  /* !__CYGWIN__ */
+     "." SOABI ".so",
+diff --git a/Tools/c-analyzer/distutils/cygwinccompiler.py b/Tools/c-analyzer/distutils/cygwinccompiler.py
+index a8409179d67..030feea9c54 100644
+--- a/Tools/c-analyzer/distutils/cygwinccompiler.py
++++ b/Tools/c-analyzer/distutils/cygwinccompiler.py
+@@ -86,9 +86,7 @@ class CygwinCCompiler(UnixCCompiler):
+     compiler_type = 'cygwin'
+     obj_extension = ".o"
+     static_lib_extension = ".a"
+-    shared_lib_extension = ".dll"
+-    static_lib_format = "lib%s%s"
+-    shared_lib_format = "%s%s"
++    shared_lib_extension = ".dll.a"
+     exe_extension = ".exe"
+ 
+     def __init__(self, verbose=0, dry_run=0, force=0):
+diff --git a/Tools/c-analyzer/distutils/unixccompiler.py b/Tools/c-analyzer/distutils/unixccompiler.py
+index 1cb1964214e..34edab6ac09 100644
+--- a/Tools/c-analyzer/distutils/unixccompiler.py
++++ b/Tools/c-analyzer/distutils/unixccompiler.py
+@@ -74,6 +74,16 @@ class UnixCCompiler(CCompiler):
+     xcode_stub_lib_format = dylib_lib_format
+     if sys.platform == "cygwin":
+         exe_extension = ".exe"
++        dylib_lib_extension = ".dll.a"
++
++    def _fix_lib_args(self, libraries, library_dirs, runtime_library_dirs):
++        """Remove standard library path from rpath"""
++        libraries, library_dirs, runtime_library_dirs = super()._fix_lib_args(
++            libraries, library_dirs, runtime_library_dirs)
++        libdir = sysconfig.get_config_var('LIBDIR')
++        if runtime_library_dirs and (libdir in runtime_library_dirs):
++            runtime_library_dirs.remove(libdir)
++        return libraries, library_dirs, runtime_library_dirs
+ 
+     def preprocess(self, source, output_file=None, macros=None,
+                    include_dirs=None, extra_preargs=None, extra_postargs=None):
+diff --git a/configure b/configure
+index c51192f12c8..0b8afc84174 100755
+--- a/configure
++++ b/configure
+@@ -7446,6 +7446,9 @@ else case e in #(
+     EXEEXT=.mjs ;; #(
+   WASI) :
+     EXEEXT=.wasm ;; #(
++  CYGWIN* | MINGW*) :
++    EXEEXT=.exe
++   ;;
+   *) :
+     EXEEXT=
+    ;;
+@@ -13629,9 +13632,9 @@ then :
+ 
+ 
+ fi;;
+-	CYGWIN*)
+-		LDSHARED="gcc -shared -Wl,--enable-auto-image-base"
+-		LDCXXSHARED="g++ -shared -Wl,--enable-auto-image-base";;
++	CYGWIN* | MINGW*)
++		LDSHARED='$(CC) -shared'
++		LDCXXSHARED='$(CXX) -shared';;
+ 	*)	LDSHARED="ld";;
+ 	esac
+ fi
+diff --git a/configure.ac b/configure.ac
+index a7b2f62579b..39c6dd4864d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1345,6 +1345,7 @@ AC_ARG_WITH([suffix],
+   AS_CASE([$ac_sys_system],
+     [Emscripten], [EXEEXT=.mjs],
+     [WASI], [EXEEXT=.wasm],
++    [CYGWIN* | MINGW*], [EXEEXT=.exe],
+     [EXEEXT=]
+   )
+ ])
+@@ -3523,9 +3524,9 @@ then
+ 		AS_VAR_IF([enable_wasm_dynamic_linking], [yes], [
+ 			dnl not implemented yet
+ 		]);;
+-	CYGWIN*)
+-		LDSHARED="gcc -shared -Wl,--enable-auto-image-base"
+-		LDCXXSHARED="g++ -shared -Wl,--enable-auto-image-base";;
++	CYGWIN* | MINGW*)
++		LDSHARED='$(CC) -shared'
++		LDCXXSHARED='$(CXX) -shared';;
+ 	*)	LDSHARED="ld";;
+ 	esac
+ fi

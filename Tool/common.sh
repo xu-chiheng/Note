@@ -25,7 +25,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 	local _cc= _cxx= _cflags=() _cxxflags=() _ldflags=()
 
 	if [ -z "${_compiler}" ]; then
-		_compiler=Clang
+		_compiler=GCC
 	fi
 	case "${_compiler}" in
 		GCC | Clang )
@@ -220,7 +220,7 @@ visual_studio_check_tool_build_type_and_set_generator_toolset() {
 	local _tool="$1" _build_type="$2"
 	local _generator _toolset
 	if [ -z "${_tool}" ]; then
-		_tool=Clang
+		_tool=MSVC
 	fi
 	case "${_tool}" in
 		Clang | MSVC )

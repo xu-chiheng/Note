@@ -1,0 +1,15 @@
+diff --git a/clang/lib/Basic/Targets/ARM.cpp b/clang/lib/Basic/Targets/ARM.cpp
+index 7423626d7c3c..18ebe2b490bd 100644
+--- a/clang/lib/Basic/Targets/ARM.cpp
++++ b/clang/lib/Basic/Targets/ARM.cpp
+@@ -1467,10 +1467,7 @@ void CygwinARMTargetInfo::getTargetDefines(const LangOptions &Opts,
+   ARMleTargetInfo::getTargetDefines(Opts, Builder);
+   Builder.defineMacro("_ARM_");
+   Builder.defineMacro("__CYGWIN__");
+-  Builder.defineMacro("__CYGWIN32__");
+   DefineStd(Builder, "unix", Opts);
+-  if (Opts.CPlusPlus)
+-    Builder.defineMacro("_GNU_SOURCE");
+ }
+ 
+ DarwinARMTargetInfo::DarwinARMTargetInfo(const llvm::Triple &Triple,

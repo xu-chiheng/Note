@@ -1,29 +1,39 @@
 diff --git a/Source/cmLocalGenerator.cxx b/Source/cmLocalGenerator.cxx
-index 2638af1d28..eb7de3938c 100644
+index 2638af1d28..435eed1217 100644
 --- a/Source/cmLocalGenerator.cxx
 +++ b/Source/cmLocalGenerator.cxx
-@@ -1257,6 +1294,25 @@ std::vector<BT<std::string>> cmLocalGenerator::GetIncludeDirectoriesImplicit(
+@@ -1257,6 +1294,35 @@ std::vector<BT<std::string>> cmLocalGenerator::GetIncludeDirectoriesImplicit(
        // Only exclude this hard coded path for backwards compatibility.
        implicitExclude.emplace("/usr/include");
      }
 +#ifdef __MINGW32__
-+	const char * path = getenv("INCLUDE");
-+	if (path) {
-+		implicitExclude.insert(path);
-+	} else {
-+		const char * msystem = getenv("MSYSTEM");
-+		if (msystem) {
-+			if (strcmp(msystem, "UCRT64") == 0) {
-+				implicitExclude.insert(cygpath_m("/ucrt64/include"));
-+			} else if (strcmp(msystem, "MINGW64") == 0) {
-+				implicitExclude.insert(cygpath_m("/mingw64/include"));
-+			} else {
++    const char * path = getenv("INCLUDE");
++    if (path) {
++        implicitExclude.insert(path);
++    } else {
++        const char * msystem = getenv("MSYSTEM");
++        const char * mingw_root = "/mingw"; // fallback
++        
++        if (msystem) {
++            if (strcmp(msystem, "UCRT64") == 0) {
++                mingw_root = "/ucrt64";
++            } else if (strcmp(msystem, "MINGW64") == 0) {
++                mingw_root = "/mingw64";
++            } else if (strcmp(msystem, "MINGW32") == 0) {
++                mingw_root = "/mingw32";
++            } else if (strcmp(msystem, "CLANG64") == 0) {
++                mingw_root = "/clang64";
++            } else if (strcmp(msystem, "CLANG32") == 0) {
++                mingw_root = "/clang32";
++            } else if (strcmp(msystem, "CLANGARM64") == 0) {
++                mingw_root = "/clangarm64";
++            }
++        }
 +
-+			}
-+		} else {
-+
-+		}
-+	}
++        std::string include_dir = mingw_root;
++        include_dir += "/include";
++        implicitExclude.insert(include_dir);
++    }
 +#endif
  
      for (std::string const& i : impDirVec) {

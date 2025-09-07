@@ -1,0 +1,1488 @@
+diff --git a/Include/exports.h b/Include/exports.h
+index 0c646d5beb6..2d108625248 100644
+--- a/Include/exports.h
++++ b/Include/exports.h
+@@ -20,7 +20,7 @@
+   Cygwin is the only other autoconf platform requiring special
+   linkage handling and it uses __declspec().
+ */
+-#if defined(__CYGWIN__)
++#if defined(__CYGWIN__) || defined(__MINGW32__)
+ #       define HAVE_DECLSPEC_DLL
+ #endif
+ 
+@@ -54,14 +54,14 @@
+ #endif
+ 
+ /* only get special linkage if built as shared or platform is Cygwin */
+-#if defined(Py_ENABLE_SHARED) || defined(__CYGWIN__)
++#if defined(Py_ENABLE_SHARED) || defined(__CYGWIN__) || defined(__MINGW32__)
+ #       if defined(HAVE_DECLSPEC_DLL)
+ #               if defined(Py_BUILD_CORE) && !defined(Py_BUILD_CORE_MODULE)
+ #                       define PyAPI_FUNC(RTYPE) Py_EXPORTED_SYMBOL RTYPE
+ #                       define PyAPI_DATA(RTYPE) extern Py_EXPORTED_SYMBOL RTYPE
+         /* module init functions inside the core need no external linkage */
+         /* except for Cygwin to handle embedding */
+-#                       if defined(__CYGWIN__)
++#                       if defined(__CYGWIN__) || defined(__MINGW32__)
+ #                               define PyMODINIT_FUNC Py_EXPORTED_SYMBOL PyObject*
+ #                       else /* __CYGWIN__ */
+ #                               define PyMODINIT_FUNC PyObject*
+@@ -72,7 +72,7 @@
+         /* Under Cygwin, auto-import functions to prevent compilation */
+         /* failures similar to those described at the bottom of 4.1: */
+         /* http://docs.python.org/extending/windows.html#a-cookbook-approach */
+-#                       if !defined(__CYGWIN__)
++#                       if !(defined(__CYGWIN__) || defined(__MINGW32__))
+ #                               define PyAPI_FUNC(RTYPE) Py_IMPORTED_SYMBOL RTYPE
+ #                       endif /* !__CYGWIN__ */
+ #                       define PyAPI_DATA(RTYPE) extern Py_IMPORTED_SYMBOL RTYPE
+diff --git a/Include/internal/pycore_debug_offsets.h b/Include/internal/pycore_debug_offsets.h
+index 59d2c9d5377..6d1b0a630cd 100644
+--- a/Include/internal/pycore_debug_offsets.h
++++ b/Include/internal/pycore_debug_offsets.h
+@@ -25,7 +25,7 @@ extern "C" {
+ 
+ // Please note that section names are truncated to eight bytes
+ // on Windows!
+-#if defined(MS_WINDOWS)
++#if defined(_MSC_VER)
+ #define _GENERATE_DEBUG_SECTION_WINDOWS(name)                       \
+    _Pragma(Py_STRINGIFY(section(Py_STRINGIFY(name), read, write))) \
+    __declspec(allocate(Py_STRINGIFY(name)))
+diff --git a/Include/internal/pycore_fileutils.h b/Include/internal/pycore_fileutils.h
+index 2c6d6daa019..4ce15166617 100644
+--- a/Include/internal/pycore_fileutils.h
++++ b/Include/internal/pycore_fileutils.h
+@@ -13,7 +13,7 @@ extern "C" {
+ 
+ 
+ /* A routine to check if a file descriptor can be select()-ed. */
+-#ifdef _MSC_VER
++#ifdef MS_WINDOWS
+     /* On Windows, any socket fd can be select()-ed, no matter how high */
+     #define _PyIsSelectable_fd(FD) (1)
+ #else
+diff --git a/Include/osdefs.h b/Include/osdefs.h
+index 2599e87a9d7..8c068270274 100644
+--- a/Include/osdefs.h
++++ b/Include/osdefs.h
+@@ -16,7 +16,6 @@ extern "C" {
+ #ifdef MS_WINDOWS
+ #  define SEP L'\\'
+ #  define ALTSEP L'/'
+-#  define MAXPATHLEN 256
+ #  define DELIM L';'
+ #endif
+ 
+diff --git a/Include/pyport.h b/Include/pyport.h
+index 3eac119bf8e..22fb8d9df0b 100644
+--- a/Include/pyport.h
++++ b/Include/pyport.h
+@@ -77,6 +77,46 @@
+ #endif
+ 
+ 
++#ifdef __MINGW32__
++/* Translate GCC[mingw*] platform specific defines to those
++ * used in python code.
++ */
++#if !defined(MS_WIN64) && defined(_WIN64)
++#  define MS_WIN64
++#endif
++#if !defined(MS_WIN32) && defined(_WIN32)
++#  define MS_WIN32
++#endif
++#if !defined(MS_WINDOWS) && defined(MS_WIN32)
++#  define MS_WINDOWS
++#endif
++
++#if defined(Py_BUILD_CORE) || defined(Py_BUILD_CORE_BUILTIN) || defined(Py_BUILD_CORE_MODULE)
++#include <winapifamily.h>
++
++#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
++#define MS_WINDOWS_DESKTOP
++#endif
++#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
++#define MS_WINDOWS_APP
++#endif
++#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_SYSTEM)
++#define MS_WINDOWS_SYSTEM
++#endif
++#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_GAMES)
++#define MS_WINDOWS_GAMES
++#endif
++
++/* Define to 1 if you support windows console io */
++#if defined(MS_WINDOWS_DESKTOP) || defined(MS_WINDOWS_APP) || defined(MS_WINDOWS_SYSTEM)
++#define HAVE_WINDOWS_CONSOLE_IO 1
++#endif
++#endif /* Py_BUILD_CORE || Py_BUILD_CORE_BUILTIN || Py_BUILD_CORE_MODULE */
++
++#undef HAVE_WINDOWS_CONSOLE_IO
++
++#endif /* __MINGW32__*/
++
+ /**************************************************************************
+ Symbols and macros to supply platform-independent interfaces to basic
+ C language & library operations whose spellings vary across platforms.
+diff --git a/Include/pythonrun.h b/Include/pythonrun.h
+index fad2b3c7747..90cf1793e3f 100644
+--- a/Include/pythonrun.h
++++ b/Include/pythonrun.h
+@@ -27,7 +27,7 @@ PyAPI_DATA(int) (*PyOS_InputHook)(void);
+  * stack consumption of PyEval_EvalDefault */
+ #if defined(_Py_ADDRESS_SANITIZER) || defined(_Py_THREAD_SANITIZER)
+ #  define PYOS_LOG2_STACK_MARGIN 12
+-#elif defined(Py_DEBUG) && defined(WIN32)
++#elif defined(Py_DEBUG) && defined(_WIN32)
+ #  define PYOS_LOG2_STACK_MARGIN 12
+ #elif defined(__wasi__)
+    /* Web assembly has two stacks, so this isn't really a size */
+@@ -45,7 +45,7 @@ PyAPI_DATA(int) (*PyOS_InputHook)(void);
+ #endif
+ 
+ 
+-#if defined(WIN32)
++#if defined(_WIN32)
+ #define USE_STACKCHECK
+ #endif
+ 
+diff --git a/Lib/_pyio.py b/Lib/_pyio.py
+index a870de5b532..c080903f909 100644
+--- a/Lib/_pyio.py
++++ b/Lib/_pyio.py
+@@ -10,7 +10,7 @@
+ import sys
+ # Import _thread instead of threading to reduce startup cost
+ from _thread import allocate_lock as Lock
+-if sys.platform in {'win32', 'cygwin'}:
++if sys.platform in {'win32'}:
+     from msvcrt import setmode as _setmode
+ else:
+     _setmode = None
+diff --git a/Lib/compileall.py b/Lib/compileall.py
+index 67fe370451e..779483af902 100644
+--- a/Lib/compileall.py
++++ b/Lib/compileall.py
+@@ -98,7 +98,10 @@ def compile_dir(dir, maxlevels=None, ddir=None, force=False,
+     success = True
+     if workers != 1 and ProcessPoolExecutor is not None:
+         import multiprocessing
+-        if multiprocessing.get_start_method() == 'fork':
++        if sys.platform == "cygwin":
++            # Force spawn under Cygwin to avoid BrokenPipeError from fork/forkserver
++            mp_context = multiprocessing.get_context("spawn")
++        elif multiprocessing.get_start_method() == 'fork':
+             mp_context = multiprocessing.get_context('forkserver')
+         else:
+             mp_context = None
+diff --git a/Lib/ctypes/__init__.py b/Lib/ctypes/__init__.py
+index 823a3692fd1..682478589bd 100644
+--- a/Lib/ctypes/__init__.py
++++ b/Lib/ctypes/__init__.py
+@@ -552,6 +552,8 @@ def LoadLibrary(self, name):
+ elif _sys.platform == "android":
+     pythonapi = PyDLL("libpython%d.%d.so" % _sys.version_info[:2])
+ elif _sys.platform == "cygwin":
++    pythonapi = PyDLL("cygpython%d.%d.dll" % _sys.version_info[:2])
++elif _sys.platform == "mingw":
+     pythonapi = PyDLL("libpython%d.%d.dll" % _sys.version_info[:2])
+ else:
+     pythonapi = PyDLL(None)
+diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
+index 99504911a3d..6716f3bd8c8 100644
+--- a/Lib/ctypes/util.py
++++ b/Lib/ctypes/util.py
+@@ -173,6 +173,25 @@ def find_library(name):
+         fname = f"{directory}/lib{name}.so"
+         return fname if os.path.isfile(fname) else None
+ 
++elif sys.platform == "cygwin":
++    def find_library(name):
++        for libdir in ['/usr/lib', '/usr/local/lib']:
++            for libext in ['lib%s.dll.a' % name, 'lib%s.a' % name]:
++                implib = os.path.join(libdir, libext)
++                if not os.path.exists(implib):
++                    continue
++                cmd = "dlltool -I " + implib + " 2>/dev/null"
++                f = os.popen(cmd)
++                try:
++                    data = f.read()
++                finally:
++                    f.close()
++                res = data.replace("\n","")
++                if not res:
++                    continue
++                return res
++        return None
++
+ elif os.name == "posix":
+     # Andreas Degert's find functions, using gcc, /sbin/ldconfig, objdump
+     import re, tempfile
+@@ -503,6 +522,10 @@ def test():
+             print(f"crypt\t:: {cdll.LoadLibrary(find_library('crypt'))}")
+             print(f"crypto\t:: {find_library('crypto')}")
+             print(f"crypto\t:: {cdll.LoadLibrary(find_library('crypto'))}")
++        elif sys.platform == "cygwin":
++            print(cdll.LoadLibrary("cygbz2-1.dll"))
++            print(cdll.LoadLibrary("cygcrypt-2.dll"))
++            print(find_library("crypt"))
+         else:
+             print(cdll.LoadLibrary("libm.so"))
+             print(cdll.LoadLibrary("libcrypt.so"))
+diff --git a/Lib/socket.py b/Lib/socket.py
+index 727b0e75f03..05e5e673c6e 100644
+--- a/Lib/socket.py
++++ b/Lib/socket.py
+@@ -655,7 +655,9 @@ def _fallback_socketpair(family=AF_INET, type=SOCK_STREAM, proto=0):
+ 
+     return (ssock, csock)
+ 
+-if hasattr(_socket, "socketpair"):
++## not using Cygwin socketpair
++## if hasattr(_socket, "socketpair"):
++if False:
+     def socketpair(family=None, type=SOCK_STREAM, proto=0):
+         if family is None:
+             try:
+@@ -929,7 +931,7 @@ def create_server(address, *, family=AF_INET, backlog=None, reuse_port=False,
+         # connections. Also, it may set the process in a state where
+         # it'll no longer respond to any signals or graceful kills.
+         # See: https://learn.microsoft.com/windows/win32/winsock/using-so-reuseaddr-and-so-exclusiveaddruse
+-        if os.name not in ('nt', 'cygwin') and \
++        if not ((os.name == 'nt') or (sys.platform == 'cygwin')) and \
+                 hasattr(_socket, 'SO_REUSEADDR'):
+             try:
+                 sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+diff --git a/Lib/test/test_importlib/util.py b/Lib/test/test_importlib/util.py
+index edbe78545a2..818c3b1b3f0 100644
+--- a/Lib/test/test_importlib/util.py
++++ b/Lib/test/test_importlib/util.py
+@@ -104,7 +104,7 @@ def test_both(test_class, base=None, **kwargs):
+ CASE_INSENSITIVE_FS = True
+ # Windows is the only OS that is *always* case-insensitive
+ # (OS X *can* be case-sensitive).
+-if sys.platform not in ('win32', 'cygwin'):
++if sys.platform not in ('win32'):
+     changed_name = __file__.upper()
+     if changed_name == __file__:
+         changed_name = __file__.lower()
+diff --git a/Misc/platform_triplet.c b/Misc/platform_triplet.c
+index f5cd73bdea8..d062f2fd579 100644
+--- a/Misc/platform_triplet.c
++++ b/Misc/platform_triplet.c
+@@ -265,6 +265,22 @@ PLATFORM_TRIPLET=darwin
+ #  endif
+ #elif defined(__VXWORKS__)
+ PLATFORM_TRIPLET=vxworks
++#elif defined(__CYGWIN__)
++# if defined(__x86_64__)
++PLATFORM_TRIPLET=x86_64-cygwin
++# elif defined(__i386__)
++PLATFORM_TRIPLET=i386-cygwin
++# else
++#   error unknown platform triplet
++# endif
++#elif defined(__MINGW32__)
++# if defined(__x86_64__)
++PLATFORM_TRIPLET=x86_64-mingw
++# elif defined(__i386__)
++PLATFORM_TRIPLET=i386-mingw
++# else
++#   error unknown platform triplet
++# endif
+ #elif defined(__wasm32__)
+ #  if defined(__EMSCRIPTEN__)
+ PLATFORM_TRIPLET=wasm32-emscripten
+diff --git a/Modules/_ctypes/callproc.c b/Modules/_ctypes/callproc.c
+index 856b0376e5e..ee8619f0643 100644
+--- a/Modules/_ctypes/callproc.c
++++ b/Modules/_ctypes/callproc.c
+@@ -1159,7 +1159,7 @@ GetComError(ctypes_state *st, HRESULT errcode, GUID *riid, IUnknown *pIunk)
+ }
+ #endif
+ 
+-#if (defined(__x86_64__) && (defined(__MINGW64__) || defined(__CYGWIN__))) || \
++#if (defined(__x86_64__) && (defined(__CYGWIN__) || defined(__MINGW32__))) || \
+     defined(__aarch64__) || defined(__riscv)
+ #define CTYPES_PASS_BY_REF_HACK
+ #define POW2(x) (((x & ~(x - 1)) == x) ? x : 0)
+diff --git a/Modules/_gdbmmodule.c b/Modules/_gdbmmodule.c
+index ab2ebdba924..fee9d02f6f7 100644
+--- a/Modules/_gdbmmodule.c
++++ b/Modules/_gdbmmodule.c
+@@ -16,7 +16,7 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ 
+-#if defined(WIN32) && !defined(__CYGWIN__)
++#if defined(_WIN32)
+ #include "gdbmerrno.h"
+ extern const char * gdbm_strerror(gdbm_error);
+ #endif
+diff --git a/Modules/_hacl/Lib_Memzero0.c b/Modules/_hacl/Lib_Memzero0.c
+index 28abd1aa4e2..0c3b1df08ea 100644
+--- a/Modules/_hacl/Lib_Memzero0.c
++++ b/Modules/_hacl/Lib_Memzero0.c
+@@ -31,7 +31,7 @@
+ #include <string.h>
+ #endif
+ 
+-#if defined(__FreeBSD__) || defined(__NetBSD__)
++#if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__CYGWIN__)
+ #include <strings.h>
+ #endif
+ 
+@@ -57,7 +57,7 @@ void Lib_Memzero0_memzero0(void *dst, uint64_t len) {
+     SecureZeroMemory(dst, len_);
+   #elif defined(__APPLE__) && defined(__MACH__) && APPLE_HAS_MEMSET_S
+     memset_s(dst, len_, 0, len_);
+-  #elif (defined(__linux__) && !defined(LINUX_NO_EXPLICIT_BZERO)) || defined(__FreeBSD__) || defined(__OpenBSD__)
++  #elif (defined(__linux__) && !defined(LINUX_NO_EXPLICIT_BZERO)) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__CYGWIN__)
+     explicit_bzero(dst, len_);
+   #elif defined(__NetBSD__)
+     explicit_memset(dst, 0, len_);
+diff --git a/Modules/_io/fileio.c b/Modules/_io/fileio.c
+index 8fcb27049d6..492e42fcfbb 100644
+--- a/Modules/_io/fileio.c
++++ b/Modules/_io/fileio.c
+@@ -499,7 +499,7 @@ _io_FileIO___init___impl(fileio *self, PyObject *nameobj, const char *mode,
+ #endif /* defined(S_ISDIR) */
+     }
+ 
+-#if defined(MS_WINDOWS) || defined(__CYGWIN__)
++#if defined(MS_WINDOWS) || defined(__CYGWIN__) || defined(__MINGW32__)
+     /* don't translate newlines (\r\n <=> \n) */
+     _setmode(self->fd, O_BINARY);
+ #endif
+diff --git a/Modules/_multiprocessing/multiprocessing.c b/Modules/_multiprocessing/multiprocessing.c
+index cee8cf7b9a8..8e09cea70ab 100644
+--- a/Modules/_multiprocessing/multiprocessing.c
++++ b/Modules/_multiprocessing/multiprocessing.c
+@@ -181,7 +181,7 @@ static PyMethodDef module_methods[] = {
+     _MULTIPROCESSING_RECV_METHODDEF
+     _MULTIPROCESSING_SEND_METHODDEF
+ #endif
+-#if !defined(POSIX_SEMAPHORES_NOT_ENABLED)
++#if defined(MS_WINDOWS) || !defined(POSIX_SEMAPHORES_NOT_ENABLED)
+     _MULTIPROCESSING_SEM_UNLINK_METHODDEF
+ #endif
+     {NULL}
+diff --git a/Modules/_threadmodule.c b/Modules/_threadmodule.c
+index 9776a32755d..61091065ce9 100644
+--- a/Modules/_threadmodule.c
++++ b/Modules/_threadmodule.c
+@@ -2543,6 +2543,7 @@ _thread_set_name_impl(PyObject *module, PyObject *name_obj)
+         return NULL;
+     }
+ 
++#ifdef _PYTHREAD_NAME_MAXLEN
+     if (len > _PYTHREAD_NAME_MAXLEN) {
+         // Truncate the name
+         Py_UCS4 ch = name[_PYTHREAD_NAME_MAXLEN-1];
+@@ -2553,6 +2554,7 @@ _thread_set_name_impl(PyObject *module, PyObject *name_obj)
+             name[_PYTHREAD_NAME_MAXLEN] = 0;
+         }
+     }
++#endif
+ 
+     HRESULT hr = pSetThreadDescription(GetCurrentThread(), name);
+     PyMem_Free(name);
+diff --git a/Modules/_tkinter.c b/Modules/_tkinter.c
+index 77695401919..4ce506d8ea9 100644
+--- a/Modules/_tkinter.c
++++ b/Modules/_tkinter.c
+@@ -77,7 +77,7 @@ typedef int Tcl_Size;
+ #define TCL_SIZE_MAX INT_MAX
+ #endif
+ 
+-#if !(defined(MS_WINDOWS) || defined(__CYGWIN__))
++#if !(defined(MS_WINDOWS) || defined(__CYGWIN__) || defined(__MINGW32__))
+ #define HAVE_CREATEFILEHANDLER
+ #endif
+ 
+diff --git a/Modules/expat/expat_external.h b/Modules/expat/expat_external.h
+index 567872b0983..2eb480b710d 100644
+--- a/Modules/expat/expat_external.h
++++ b/Modules/expat/expat_external.h
+@@ -92,7 +92,7 @@
+ #  ifndef XML_BUILDING_EXPAT
+ /* using Expat from an application */
+ 
+-#    if defined(_MSC_EXTENSIONS) && ! defined(__BEOS__) && ! defined(__CYGWIN__)
++#    if defined(_MSC_EXTENSIONS) && ! defined(__BEOS__) && ! (defined(__CYGWIN__) || defined(__MINGW32__))
+ #      define XMLIMPORT __declspec(dllimport)
+ #    endif
+ 
+diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
+index 922694fa367..a2d8006cd0f 100644
+--- a/Modules/posixmodule.c
++++ b/Modules/posixmodule.c
+@@ -37,6 +37,11 @@
+ #  include "winreparse.h"         // _Py_REPARSE_DATA_BUFFER
+ #endif
+ 
++#ifdef __MINGW32__
++#undef HAVE_OPENPTY
++#undef HAVE__GETPTY
++#undef HAVE_DEV_PTMX
++#endif
+ 
+ // --- System includes ------------------------------------------------------
+ 
+@@ -222,7 +227,7 @@
+ #endif
+ 
+ 
+-#ifdef _MSC_VER
++#ifdef MS_WINDOWS
+ #  ifdef HAVE_DIRECT_H
+ #    include <direct.h>
+ #  endif
+@@ -233,7 +238,7 @@
+ #    include <process.h>          // getpid(), _cwait()
+ #  endif
+ #  include <malloc.h>
+-#endif /* _MSC_VER */
++#endif /* MS_WINDOWS */
+ 
+ 
+ #ifdef HAVE__GETPTY
+@@ -248,7 +253,7 @@
+ #    define USE_XATTRS
+ #    include <linux/limits.h>  // Needed for XATTR_SIZE_MAX on musl libc.
+ #  endif
+-#  if defined(__CYGWIN__)
++#  if 0 // defined(__CYGWIN__) // no XATTR_SIZE_MAX
+ #    define USE_XATTRS
+ #    include <cygwin/limits.h>  // Needed for XATTR_SIZE_MAX and XATTR_LIST_MAX.
+ #  endif
+@@ -296,6 +301,26 @@
+ #  define HAVE_PIPE       1
+ #  define HAVE_FSYNC      1
+ #  define fsync _commit
++#elif defined(__MINGW32__)	/* GCC for windows hosts */
++/* getlogin is detected by configure on mingw-w64 */
++#  undef HAVE_GETLOGIN
++/*#    define HAVE_GETCWD     1 - detected by configure*/
++#  define HAVE_GETPPID    1
++#  define HAVE_GETLOGIN   1
++#  define HAVE_SPAWNV     1
++#  define HAVE_WSPAWNV    1
++#  define HAVE_WEXECV     1
++/*#    define HAVE_EXECV	     1 - detected by configure*/
++#  define HAVE_PIPE	     1
++#  define HAVE_POPEN	     1
++#  define HAVE_SYSTEM	   1
++#  define HAVE_CWAIT      1
++#  define HAVE_FSYNC      1
++#  define fsync _commit
++#  include <winioctl.h>
++#  ifndef _MAX_ENV
++#    define _MAX_ENV	32767
++#  endif
+ #endif
+ 
+ 
+@@ -1730,9 +1755,9 @@ _Py_Sigset_Converter(PyObject *obj, void *addr)
+ */
+ #include <crt_externs.h>
+ #define USE_DARWIN_NS_GET_ENVIRON 1
+-#elif !defined(_MSC_VER) && (!defined(__WATCOMC__) || defined(__QNX__) || defined(__VXWORKS__))
++#elif !defined(MS_WINDOWS) && (!defined(__WATCOMC__) || defined(__QNX__) || defined(__VXWORKS__))
+ extern char **environ;
+-#endif /* !_MSC_VER */
++#endif /* !MS_WINDOWS */
+ 
+ static PyObject *
+ convertenviron(void)
+diff --git a/Modules/selectmodule.c b/Modules/selectmodule.c
+index d234d504cb5..22bb3c9ba55 100644
+--- a/Modules/selectmodule.c
++++ b/Modules/selectmodule.c
+@@ -43,7 +43,7 @@
+    Users who want even more than the boosted limit should #define
+    FD_SETSIZE higher before this; e.g., via compiler /D switch.
+ */
+-#if defined(MS_WINDOWS) && !defined(FD_SETSIZE)
++#if (defined(MS_WINDOWS) || defined(__CYGWIN__) || defined(__MINGW32__)) && !defined(FD_SETSIZE)
+ #define FD_SETSIZE 512
+ #endif
+ 
+@@ -167,9 +167,9 @@ seq2set(PyObject *seq, fd_set *set, pylist fd2obj[FD_SETSIZE + 1])
+         v = PyObject_AsFileDescriptor( o );
+         if (v == -1) goto finally;
+ 
+-#if defined(_MSC_VER)
++#if defined(MS_WINDOWS)
+         max = 0;                             /* not used for Win32 */
+-#else  /* !_MSC_VER */
++#else  /* !MS_WINDOWS */
+         if (!_PyIsSelectable_fd(v)) {
+             PyErr_SetString(PyExc_ValueError,
+                         "filedescriptor out of range in select()");
+diff --git a/Modules/signalmodule.c b/Modules/signalmodule.c
+index 54bcd3270ef..ad6c9e2882a 100644
+--- a/Modules/signalmodule.c
++++ b/Modules/signalmodule.c
+@@ -22,6 +22,11 @@
+ #  include "socketmodule.h"       // SOCKET_T
+ #endif
+ 
++#ifdef __MINGW32__
++#undef HAVE_ALARM
++#undef HAVE_PAUSE
++#endif
++
+ #ifdef HAVE_UNISTD_H
+ #  include <unistd.h>             // alarm()
+ #endif
+diff --git a/Modules/socketmodule.c b/Modules/socketmodule.c
+index 47958379263..81527c72896 100644
+--- a/Modules/socketmodule.c
++++ b/Modules/socketmodule.c
+@@ -1155,6 +1155,14 @@ init_sockobject(socket_state *state, PySocketSockObject *s,
+         }
+     }
+     s->state = state;
++#ifdef __CYGWIN__
++    /* Temporarily work around AF_UNIX credential passing issues */
++    if (s->sock_family == AF_UNIX && s->sock_fd != -1) {
++        if (setsockopt(s->sock_fd, SOL_SOCKET, SO_PEERCRED, 0, 0) == -1) {
++            /* ignore error returns */;
++        }
++    }
++#endif
+     return 0;
+ }
+ 
+diff --git a/Modules/timemodule.c b/Modules/timemodule.c
+index 1bfbf3f6a0b..1c53c493833 100644
+--- a/Modules/timemodule.c
++++ b/Modules/timemodule.c
+@@ -190,7 +190,7 @@ time_clockid_converter(PyObject *obj, clockid_t *p)
+ #elif defined(__DragonFly__)
+     long clk_id = PyLong_AsLong(obj);
+ #else
+-    int clk_id = PyLong_AsInt(obj);
++    clockid_t clk_id = PyLong_AsInt(obj);
+ #endif
+     if (clk_id == -1 && PyErr_Occurred()) {
+         PyErr_Format(PyExc_TypeError,
+@@ -888,7 +888,7 @@ time_strftime(PyObject *module, PyObject *args)
+ //
+ // Android works with negative years on the emulator, but fails on some
+ // physical devices (#123017).
+-#if defined(_MSC_VER) || (defined(__sun) && defined(__SVR4)) || defined(_AIX) \
++#if defined(MS_WINDOWS) || (defined(__sun) && defined(__SVR4)) || defined(_AIX) \
+     || defined(__VXWORKS__) || defined(__ANDROID__)
+     if (buf.tm_year + 1900 < 1 || 9999 < buf.tm_year + 1900) {
+         PyErr_SetString(PyExc_ValueError,
+diff --git a/Objects/exceptions.c b/Objects/exceptions.c
+index b17cac83551..eb469042f8c 100644
+--- a/Objects/exceptions.c
++++ b/Objects/exceptions.c
+@@ -1907,8 +1907,12 @@ PyOSErrorObject_CAST(PyObject *self)
+ }
+ 
+ #ifdef MS_WINDOWS
++#ifdef __MINGW32__
++#include "../PC/errmap.h"
++#else
+ #include "errmap.h"
+ #endif
++#endif
+ 
+ /* Where a function has a single filename, such as open() or some
+  * of the os module functions, PyErr_SetFromErrnoWithFilename() is
+diff --git a/Objects/mimalloc/prim/unix/prim.c b/Objects/mimalloc/prim/unix/prim.c
+index 1598ebabf0a..37ac0028657 100644
+--- a/Objects/mimalloc/prim/unix/prim.c
++++ b/Objects/mimalloc/prim/unix/prim.c
+@@ -51,7 +51,7 @@ terms of the MIT license. A copy of the license can be found in the file
+   #include <sys/sysctl.h>
+ #endif
+ 
+-#if !defined(__HAIKU__) && !defined(__APPLE__) && !defined(__CYGWIN__) && !defined(_AIX) && !defined(__OpenBSD__) && !defined(__FreeBSD__) && !defined(__sun) && !defined(__NetBSD__)
++#if !defined(__HAIKU__) && !defined(__APPLE__) && !defined(__CYGWIN__) && !defined(__MINGW32__) && !defined(_AIX) && !defined(__OpenBSD__) && !defined(__FreeBSD__) && !defined(__sun) && !defined(__NetBSD__)
+   #define MI_HAS_SYSCALL_H
+   #include <sys/syscall.h>
+ #endif
+@@ -421,7 +421,7 @@ int _mi_prim_protect(void* start, size_t size, bool protect) {
+ // Huge page allocation
+ //---------------------------------------------
+ 
+-#if (MI_INTPTR_SIZE >= 8) && !defined(__HAIKU__) && !defined(__CYGWIN__)
++#if (MI_INTPTR_SIZE >= 8) && !defined(__HAIKU__) && !defined(__CYGWIN__) && !defined(__MINGW32__)
+ 
+ #ifndef MPOL_PREFERRED
+ #define MPOL_PREFERRED 1
+diff --git a/PC/config.c b/PC/config.c
+index 6ce2131c7b8..3826a65a40b 100644
+--- a/PC/config.c
++++ b/PC/config.c
+@@ -33,7 +33,7 @@ extern PyObject* PyInit__sha3(void);
+ /* other cryptographic primitives */
+ extern PyObject* PyInit__hmac(void);
+ 
+-#ifdef WIN32
++#ifdef _WIN32
+ extern PyObject* PyInit_msvcrt(void);
+ extern PyObject* PyInit__locale(void);
+ #endif
+@@ -121,7 +121,7 @@ struct _inittab _PyImport_Inittab[] = {
+     /* other cryptographic primitives */
+     {"_hmac", PyInit__hmac},
+ 
+-#ifdef WIN32
++#ifdef _WIN32
+     {"msvcrt", PyInit_msvcrt},
+     {"_locale", PyInit__locale},
+ #endif
+diff --git a/Python/ceval.c b/Python/ceval.c
+index 490b653f132..63a45b1fdc6 100644
+--- a/Python/ceval.c
++++ b/Python/ceval.c
+@@ -432,7 +432,7 @@ void
+ _Py_InitializeRecursionLimits(PyThreadState *tstate)
+ {
+     _PyThreadStateImpl *_tstate = (_PyThreadStateImpl *)tstate;
+-#ifdef WIN32
++#ifdef _WIN32
+     ULONG_PTR low, high;
+     GetCurrentThreadStackLimits(&low, &high);
+     _tstate->c_stack_top = (uintptr_t)high;
+diff --git a/Python/dynamic_annotations.c b/Python/dynamic_annotations.c
+index 7febaa09df1..70d5b3dc720 100644
+--- a/Python/dynamic_annotations.c
++++ b/Python/dynamic_annotations.c
+@@ -27,7 +27,7 @@
+  * Author: Kostya Serebryany
+  */
+ 
+-#ifdef _MSC_VER
++#ifdef MS_WINDOWS
+ # include <windows.h>
+ #endif
+ 
+diff --git a/Python/dynload_shlib.c b/Python/dynload_shlib.c
+index 583c9b752df..2fd4697f043 100644
+--- a/Python/dynload_shlib.c
++++ b/Python/dynload_shlib.c
+@@ -37,7 +37,9 @@
+ */
+ 
+ const char *_PyImport_DynLoadFiletab[] = {
+-#ifdef __CYGWIN__
++#if defined(__CYGWIN__) || defined(__MINGW32__)
++    "." SOABI ".dll",
++    ".abi" PYTHON_ABI_STRING ".dll",
+     ".dll",
+ #else  /* !__CYGWIN__ */
+     "." SOABI ".so",
+diff --git a/Python/frozenmain.c b/Python/frozenmain.c
+index ec4566bd4f8..bdc54fdc053 100644
+--- a/Python/frozenmain.c
++++ b/Python/frozenmain.c
+@@ -9,7 +9,7 @@
+ #endif
+ 
+ 
+-#ifdef MS_WINDOWS
++#ifdef _MSC_VER
+ extern void PyWinFreeze_ExeInit(void);
+ extern void PyWinFreeze_ExeTerm(void);
+ extern int PyInitFrozenExtensions(void);
+@@ -44,7 +44,7 @@ Py_FrozenMain(int argc, char **argv)
+         inspect = 1;
+     }
+ 
+-#ifdef MS_WINDOWS
++#ifdef _MSC_VER
+     PyInitFrozenExtensions();
+ #endif /* MS_WINDOWS */
+ 
+@@ -60,7 +60,7 @@ Py_FrozenMain(int argc, char **argv)
+         exit(1);
+     }
+ 
+-#ifdef MS_WINDOWS
++#ifdef _MSC_VER
+     PyWinFreeze_ExeInit();
+ #endif
+ 
+@@ -86,7 +86,7 @@ Py_FrozenMain(int argc, char **argv)
+         sts = PyRun_AnyFile(stdin, "<stdin>") != 0;
+     }
+ 
+-#ifdef MS_WINDOWS
++#ifdef _MSC_VER
+     PyWinFreeze_ExeTerm();
+ #endif
+ 
+diff --git a/Python/initconfig.c b/Python/initconfig.c
+index e8270911721..cd6eb6ca91e 100644
+--- a/Python/initconfig.c
++++ b/Python/initconfig.c
+@@ -17,7 +17,7 @@
+ 
+ #include <locale.h>               // setlocale()
+ #include <stdlib.h>               // getenv()
+-#if defined(MS_WINDOWS) || defined(__CYGWIN__)
++#if defined(MS_WINDOWS) || defined(__CYGWIN__) || defined(__MINGW32__)
+ #  ifdef HAVE_IO_H
+ #    include <io.h>
+ #  endif
+@@ -450,7 +450,7 @@ static const char usage_envvars[] =
+ "PYTHONWARNINGS  : warning control (-W)\n"
+ ;
+ 
+-#if defined(MS_WINDOWS)
++#if defined(_MSC_VER)
+ #  define PYTHONHOMEHELP "<prefix>\\python{major}{minor}"
+ #else
+ #  define PYTHONHOMEHELP "<prefix>/lib/pythonX.X"
+@@ -2748,7 +2748,7 @@ config_read(PyConfig *config, int compute_path_config)
+ static void
+ config_init_stdio(const PyConfig *config)
+ {
+-#if defined(MS_WINDOWS) || defined(__CYGWIN__)
++#if defined(MS_WINDOWS) || defined(__CYGWIN__) || defined(__MINGW32__)
+     /* don't translate newlines (\r\n <=> \n) */
+     _setmode(fileno(stdin), O_BINARY);
+     _setmode(fileno(stdout), O_BINARY);
+diff --git a/Python/pylifecycle.c b/Python/pylifecycle.c
+index c4c1d9fd9e1..c73bede942b 100644
+--- a/Python/pylifecycle.c
++++ b/Python/pylifecycle.c
+@@ -263,6 +263,20 @@ static const char C_LOCALE_COERCION_WARNING[] =
+     "Python detected LC_CTYPE=C: LC_CTYPE coerced to %.20s (set another locale "
+     "or PYTHONCOERCECLOCALE=0 to disable this locale coercion behavior).\n";
+ 
++#ifdef _WIN32
++#include <errno.h>
++static int setenv(const char *name, const char *value, int overwrite) {
++    if (!overwrite && getenv(name) != NULL) {
++        return 0;
++    }
++    if (_putenv_s(name, value) != 0) {
++        errno = EINVAL; // POSIX setenv usually returns EINVAL on error
++        return -1;
++    }
++    return 0;
++}
++#endif
++
+ static int
+ _coerce_default_locale_settings(int warn, const _LocaleCoercionTarget *target)
+ {
+diff --git a/Python/sysmodule.c b/Python/sysmodule.c
+index 00dce4527fb..c16df179fab 100644
+--- a/Python/sysmodule.c
++++ b/Python/sysmodule.c
+@@ -53,7 +53,7 @@ Data members:
+ #  include <windows.h>
+ #endif /* MS_WINDOWS */
+ 
+-#ifdef MS_COREDLL
++#if defined(MS_WINDOWS) && defined(Py_ENABLE_SHARED)
+ extern void *PyWin_DLLhModule;
+ /* A string loaded from the DLL at startup: */
+ extern const char *PyWin_DLLVersionString;
+@@ -3790,7 +3790,7 @@ _PySys_InitCore(PyThreadState *tstate, PyObject *sysdict)
+     SET_SYS_FROM_STRING("byteorder", "little");
+ #endif
+ 
+-#ifdef MS_COREDLL
++#if defined(MS_WINDOWS) && defined(Py_ENABLE_SHARED)
+     SET_SYS("dllhandle", PyLong_FromVoidPtr(PyWin_DLLhModule));
+     SET_SYS_FROM_STRING("winver", PyWin_DLLVersionString);
+ #endif
+@@ -3818,7 +3818,7 @@ _PySys_InitCore(PyThreadState *tstate, PyObject *sysdict)
+     ENSURE_INFO_TYPE(FlagsType, flags_desc);
+     SET_SYS("flags", make_flags(tstate->interp));
+ 
+-#if defined(MS_WINDOWS)
++#if defined(_MSC_VER)
+     /* getwindowsversion */
+     ENSURE_INFO_TYPE(WindowsVersionType, windows_version_desc);
+ 
+diff --git a/Python/thread_pthread.h b/Python/thread_pthread.h
+index da405824244..c709f73380c 100644
+--- a/Python/thread_pthread.h
++++ b/Python/thread_pthread.h
+@@ -409,6 +409,9 @@ PyThread_get_thread_native_id(void)
+ #elif defined(__DragonFly__)
+     lwpid_t native_id;
+     native_id = lwp_gettid();
++#elif defined(__CYGWIN__) || defined(__MINGW32__)
++    pthread_t native_id;
++    native_id = pthread_self();
+ #endif
+     return (unsigned long) native_id;
+ }
+@@ -436,6 +439,8 @@ PyThread_hang_thread(void)
+     while (1) {
+ #if defined(__wasi__)
+         sleep(9999999);  // WASI doesn't have pause() ?!
++#elif defined(_WIN32)
++        Sleep(INFINITE);
+ #else
+         pause();
+ #endif
+diff --git a/Tools/c-analyzer/c_parser/preprocessor/__init__.py b/Tools/c-analyzer/c_parser/preprocessor/__init__.py
+index 30a86cbd7dc..767b1e0a29c 100644
+--- a/Tools/c-analyzer/c_parser/preprocessor/__init__.py
++++ b/Tools/c-analyzer/c_parser/preprocessor/__init__.py
+@@ -230,7 +230,7 @@ def handling_errors(ignore_exc=None, *, log_err=None):
+     'unix': _gcc.preprocess,
+     'msvc': None,
+     'cygwin': None,
+-    'mingw32': None,
++    'mingw': None,
+     'bcpp': None,
+     # aliases/extras:
+     'gcc': _gcc.preprocess,
+diff --git a/Tools/c-analyzer/distutils/ccompiler.py b/Tools/c-analyzer/distutils/ccompiler.py
+index 13e43103b94..8a8f889ed29 100644
+--- a/Tools/c-analyzer/distutils/ccompiler.py
++++ b/Tools/c-analyzer/distutils/ccompiler.py
+@@ -372,8 +372,8 @@ def get_default_compiler(osname=None, platform=None):
+                                "Microsoft Visual C++"),
+                    'cygwin':  ('cygwinccompiler', 'CygwinCCompiler',
+                                "Cygwin port of GNU C Compiler for Win32"),
+-                   'mingw32': ('cygwinccompiler', 'Mingw32CCompiler',
+-                               "Mingw32 port of GNU C Compiler for Win32"),
++                   'mingw': ('cygwinccompiler', 'MinGWCCompiler',
++                               "MinGW port of GNU C Compiler for Win32"),
+                    'bcpp':    ('bcppcompiler', 'BCPPCompiler',
+                                "Borland C++ Compiler"),
+                  }
+diff --git a/Tools/c-analyzer/distutils/cygwinccompiler.py b/Tools/c-analyzer/distutils/cygwinccompiler.py
+index a8409179d67..018da6f034b 100644
+--- a/Tools/c-analyzer/distutils/cygwinccompiler.py
++++ b/Tools/c-analyzer/distutils/cygwinccompiler.py
+@@ -2,7 +2,7 @@
+ 
+ Provides the CygwinCCompiler class, a subclass of UnixCCompiler that
+ handles the Cygwin port of the GNU C compiler to Windows.  It also contains
+-the Mingw32CCompiler class which handles the mingw32 port of GCC (same as
++the MinGWCCompiler class which handles the mingw32 port of GCC (same as
+ cygwin in no-cygwin mode).
+ """
+ 
+@@ -54,232 +54,35 @@
+ from distutils.version import LooseVersion
+ from distutils.spawn import find_executable
+ 
+-def get_msvcr():
+-    """Include the appropriate MSVC runtime library if Python was built
+-    with MSVC 7.0 or later.
+-    """
+-    msc_pos = sys.version.find('MSC v.')
+-    if msc_pos != -1:
+-        msc_ver = sys.version[msc_pos+6:msc_pos+10]
+-        if msc_ver == '1300':
+-            # MSVC 7.0
+-            return ['msvcr70']
+-        elif msc_ver == '1310':
+-            # MSVC 7.1
+-            return ['msvcr71']
+-        elif msc_ver == '1400':
+-            # VS2005 / MSVC 8.0
+-            return ['msvcr80']
+-        elif msc_ver == '1500':
+-            # VS2008 / MSVC 9.0
+-            return ['msvcr90']
+-        elif msc_ver == '1600':
+-            # VS2010 / MSVC 10.0
+-            return ['msvcr100']
+-        else:
+-            raise ValueError("Unknown MS Compiler version %s " % msc_ver)
+-
+-
+ class CygwinCCompiler(UnixCCompiler):
+     """ Handles the Cygwin port of the GNU C compiler to Windows.
+     """
+     compiler_type = 'cygwin'
+     obj_extension = ".o"
+     static_lib_extension = ".a"
+-    shared_lib_extension = ".dll"
+-    static_lib_format = "lib%s%s"
+-    shared_lib_format = "%s%s"
++    shared_lib_extension = ".dll.a"
+     exe_extension = ".exe"
+ 
+     def __init__(self, verbose=0, dry_run=0, force=0):
+ 
+         UnixCCompiler.__init__(self, verbose, dry_run, force)
+ 
+-        status, details = check_config_h()
+-        self.debug_print("Python's GCC status: %s (details: %s)" %
+-                         (status, details))
+-        if status is not CONFIG_H_OK:
+-            self.warn(
+-                "Python's pyconfig.h doesn't seem to support your compiler. "
+-                "Reason: %s. "
+-                "Compiling may fail because of undefined preprocessor macros."
+-                % details)
+-
+-        self.gcc_version, self.ld_version, self.dllwrap_version = \
+-            get_versions()
+-        self.debug_print(self.compiler_type + ": gcc %s, ld %s, dllwrap %s\n" %
+-                         (self.gcc_version,
+-                          self.ld_version,
+-                          self.dllwrap_version) )
+-
+-        # ld_version >= "2.10.90" and < "2.13" should also be able to use
+-        # gcc -mdll instead of dllwrap
+-        # Older dllwraps had own version numbers, newer ones use the
+-        # same as the rest of binutils ( also ld )
+-        # dllwrap 2.10.90 is buggy
+-        if self.ld_version >= "2.10.90":
+-            self.linker_dll = "gcc"
+-        else:
+-            self.linker_dll = "dllwrap"
+-
+-        # ld_version >= "2.13" support -shared so use it instead of
+-        # -mdll -static
+-        if self.ld_version >= "2.13":
+-            shared_option = "-shared"
+-        else:
+-            shared_option = "-mdll -static"
+-
+         # Hard-code GCC because that's what this is all about.
+         # XXX optimization, warnings etc. should be customizable.
+-        self.set_executables(compiler='gcc -mcygwin -O -Wall',
+-                             compiler_so='gcc -mcygwin -mdll -O -Wall',
+-                             compiler_cxx='g++ -mcygwin -O -Wall',
+-                             linker_exe='gcc -mcygwin',
+-                             linker_so=('%s -mcygwin %s' %
+-                                        (self.linker_dll, shared_option)))
+-
+-        # cygwin and mingw32 need different sets of libraries
+-        if self.gcc_version == "2.91.57":
+-            # cygwin shouldn't need msvcrt, but without the dlls will crash
+-            # (gcc version 2.91.57) -- perhaps something about initialization
+-            self.dll_libraries=["msvcrt"]
+-            self.warn(
+-                "Consider upgrading to a newer version of gcc")
+-        else:
+-            # Include the appropriate MSVC runtime library if Python was built
+-            # with MSVC 7.0 or later.
+-            self.dll_libraries = get_msvcr()
++        self.set_executables(compiler='gcc -O2 -Wall',
++                             compiler_so='gcc -O2 -Wall',
++                             compiler_cxx='g++ -O2 -Wall',
++                             linker_exe='gcc',
++                             linker_so='gcc -shared')
++        self.dll_libraries=[]
+ 
+ 
+ # the same as cygwin plus some additional parameters
+-class Mingw32CCompiler(CygwinCCompiler):
+-    """ Handles the Mingw32 port of the GNU C compiler to Windows.
++class MinGWCCompiler(CygwinCCompiler):
++    """ Handles the MinGW port of the GNU C compiler to Windows.
+     """
+-    compiler_type = 'mingw32'
++    compiler_type = 'mingw'
+ 
+     def __init__(self, verbose=0, dry_run=0, force=0):
+ 
+         CygwinCCompiler.__init__ (self, verbose, dry_run, force)
+-
+-        # ld_version >= "2.13" support -shared so use it instead of
+-        # -mdll -static
+-        if self.ld_version >= "2.13":
+-            shared_option = "-shared"
+-        else:
+-            shared_option = "-mdll -static"
+-
+-        # A real mingw32 doesn't need to specify a different entry point,
+-        # but cygwin 2.91.57 in no-cygwin-mode needs it.
+-        if self.gcc_version <= "2.91.57":
+-            entry_point = '--entry _DllMain@12'
+-        else:
+-            entry_point = ''
+-
+-        if is_cygwingcc():
+-            raise CCompilerError(
+-                'Cygwin gcc cannot be used with --compiler=mingw32')
+-
+-        self.set_executables(compiler='gcc -O -Wall',
+-                             compiler_so='gcc -mdll -O -Wall',
+-                             compiler_cxx='g++ -O -Wall',
+-                             linker_exe='gcc',
+-                             linker_so='%s %s %s'
+-                                        % (self.linker_dll, shared_option,
+-                                           entry_point))
+-        # Maybe we should also append -mthreads, but then the finished
+-        # dlls need another dll (mingwm10.dll see Mingw32 docs)
+-        # (-mthreads: Support thread-safe exception handling on `Mingw32')
+-
+-        # no additional libraries needed
+-        self.dll_libraries=[]
+-
+-        # Include the appropriate MSVC runtime library if Python was built
+-        # with MSVC 7.0 or later.
+-        self.dll_libraries = get_msvcr()
+-
+-# Because these compilers aren't configured in Python's pyconfig.h file by
+-# default, we should at least warn the user if he is using an unmodified
+-# version.
+-
+-CONFIG_H_OK = "ok"
+-CONFIG_H_NOTOK = "not ok"
+-CONFIG_H_UNCERTAIN = "uncertain"
+-
+-def check_config_h():
+-    """Check if the current Python installation appears amenable to building
+-    extensions with GCC.
+-
+-    Returns a tuple (status, details), where 'status' is one of the following
+-    constants:
+-
+-    - CONFIG_H_OK: all is well, go ahead and compile
+-    - CONFIG_H_NOTOK: doesn't look good
+-    - CONFIG_H_UNCERTAIN: not sure -- unable to read pyconfig.h
+-
+-    'details' is a human-readable string explaining the situation.
+-
+-    Note there are two ways to conclude "OK": either 'sys.version' contains
+-    the string "GCC" (implying that this Python was built with GCC), or the
+-    installed "pyconfig.h" contains the string "__GNUC__".
+-    """
+-
+-    # XXX since this function also checks sys.version, it's not strictly a
+-    # "pyconfig.h" check -- should probably be renamed...
+-
+-    import sysconfig
+-
+-    # if sys.version contains GCC then python was compiled with GCC, and the
+-    # pyconfig.h file should be OK
+-    if "GCC" in sys.version:
+-        return CONFIG_H_OK, "sys.version mentions 'GCC'"
+-
+-    # let's see if __GNUC__ is mentioned in python.h
+-    fn = sysconfig.get_config_h_filename()
+-    try:
+-        config_h = open(fn)
+-        try:
+-            if "__GNUC__" in config_h.read():
+-                return CONFIG_H_OK, "'%s' mentions '__GNUC__'" % fn
+-            else:
+-                return CONFIG_H_NOTOK, "'%s' does not mention '__GNUC__'" % fn
+-        finally:
+-            config_h.close()
+-    except OSError as exc:
+-        return (CONFIG_H_UNCERTAIN,
+-                "couldn't read '%s': %s" % (fn, exc.strerror))
+-
+-RE_VERSION = re.compile(br'(\d+\.\d+(\.\d+)*)')
+-
+-def _find_exe_version(cmd):
+-    """Find the version of an executable by running `cmd` in the shell.
+-
+-    If the command is not found, or the output does not match
+-    `RE_VERSION`, returns None.
+-    """
+-    executable = cmd.split()[0]
+-    if find_executable(executable) is None:
+-        return None
+-    out = Popen(cmd, shell=True, stdout=PIPE).stdout
+-    try:
+-        out_string = out.read()
+-    finally:
+-        out.close()
+-    result = RE_VERSION.search(out_string)
+-    if result is None:
+-        return None
+-    # LooseVersion works with strings
+-    # so we need to decode our bytes
+-    return LooseVersion(result.group(1).decode())
+-
+-def get_versions():
+-    """ Try to find out the versions of gcc, ld and dllwrap.
+-
+-    If not possible it returns None for it.
+-    """
+-    commands = ['gcc -dumpversion', 'ld -v', 'dllwrap --version']
+-    return tuple([_find_exe_version(cmd) for cmd in commands])
+-
+-def is_cygwingcc():
+-    '''Try to determine if the gcc that would be used is from cygwin.'''
+-    out_string = check_output(['gcc', '-dumpmachine'])
+-    return out_string.strip().endswith(b'cygwin')
+diff --git a/Tools/c-analyzer/distutils/msvc9compiler.py b/Tools/c-analyzer/distutils/msvc9compiler.py
+index 38fff9b2d53..3c627fa8643 100644
+--- a/Tools/c-analyzer/distutils/msvc9compiler.py
++++ b/Tools/c-analyzer/distutils/msvc9compiler.py
+@@ -141,7 +141,7 @@ def load_macros(self, version):
+             """Python was built with Visual Studio 2008;
+ extensions must be built with a compiler than can generate compatible binaries.
+ Visual Studio 2008 was not found on this system. If you have Cygwin installed,
+-you can try compiling with MingW32, by passing "-c mingw32" to setup.py.""")
++you can try compiling with MinGW, by passing "-c mingw" to setup.py.""")
+ 
+         if version >= 9.0:
+             self.set_macro("FrameworkVersion", self.vsbase, "clr version")
+diff --git a/Tools/c-analyzer/distutils/msvccompiler.py b/Tools/c-analyzer/distutils/msvccompiler.py
+index c0864b1f95d..b6c0cf11af0 100644
+--- a/Tools/c-analyzer/distutils/msvccompiler.py
++++ b/Tools/c-analyzer/distutils/msvccompiler.py
+@@ -123,7 +123,7 @@ def load_macros(self, version):
+             """Python was built with Visual Studio 2003;
+ extensions must be built with a compiler than can generate compatible binaries.
+ Visual Studio 2003 was not found on this system. If you have Cygwin installed,
+-you can try compiling with MingW32, by passing "-c mingw32" to setup.py.""")
++you can try compiling with MinGW, by passing "-c mingw" to setup.py.""")
+ 
+         p = r"Software\Microsoft\NET Framework Setup\Product"
+         for base in HKEYS:
+diff --git a/Tools/c-analyzer/distutils/unixccompiler.py b/Tools/c-analyzer/distutils/unixccompiler.py
+index 1cb1964214e..1eec422dca9 100644
+--- a/Tools/c-analyzer/distutils/unixccompiler.py
++++ b/Tools/c-analyzer/distutils/unixccompiler.py
+@@ -72,8 +72,21 @@ class UnixCCompiler(CCompiler):
+     xcode_stub_lib_extension = ".tbd"
+     static_lib_format = shared_lib_format = dylib_lib_format = "lib%s%s"
+     xcode_stub_lib_format = dylib_lib_format
+-    if sys.platform == "cygwin":
++    if sys.platform == "cygwin" || sys.platform == "mingw":
+         exe_extension = ".exe"
++        dylib_lib_extension = ".dll.a"
++
++    if sys.platform == "cygwin":
++        shared_lib_format = "cyg%s%s"
++
++    def _fix_lib_args(self, libraries, library_dirs, runtime_library_dirs):
++        """Remove standard library path from rpath"""
++        libraries, library_dirs, runtime_library_dirs = super()._fix_lib_args(
++            libraries, library_dirs, runtime_library_dirs)
++        libdir = sysconfig.get_config_var('LIBDIR')
++        if runtime_library_dirs and (libdir in runtime_library_dirs):
++            runtime_library_dirs.remove(libdir)
++        return libraries, library_dirs, runtime_library_dirs
+ 
+     def preprocess(self, source, output_file=None, macros=None,
+                    include_dirs=None, extra_preargs=None, extra_postargs=None):
+diff --git a/configure b/configure
+index c51192f12c8..e04d81ec4b3 100755
+--- a/configure
++++ b/configure
+@@ -4113,6 +4113,9 @@ then
+ 	*-*-cygwin*)
+ 		ac_sys_system=Cygwin
+ 		;;
++	*-*-mingw*)
++		ac_sys_system=MinGW
++		;;
+ 	*-apple-ios*)
+ 		ac_sys_system=iOS
+ 		;;
+@@ -4155,6 +4158,7 @@ then
+ 	linux-android*) MACHDEP="android";;
+ 	linux*) MACHDEP="linux";;
+ 	cygwin*) MACHDEP="cygwin";;
++	mingw*) MACHDEP="mingw";;
+ 	darwin*) MACHDEP="darwin";;
+ 	'')	MACHDEP="unknown";;
+     esac
+@@ -4589,7 +4593,7 @@ if test "$cross_compiling" = yes; then
+ 			_host_ident=$host_cpu
+ 		esac
+ 		;;
+-	*-*-cygwin*)
++	*-*-cygwin* | *-*-mingw*)
+ 		_host_ident=
+ 		;;
+ 	*-apple-ios*)
+@@ -7446,6 +7450,9 @@ else case e in #(
+     EXEEXT=.mjs ;; #(
+   WASI) :
+     EXEEXT=.wasm ;; #(
++  CYGWIN* | MINGW*) :
++    EXEEXT=.exe
++   ;;
+   *) :
+     EXEEXT=
+    ;;
+@@ -7600,7 +7607,7 @@ fi
+ if test -z "$enable_shared"
+ then
+   case $ac_sys_system in
+-  CYGWIN*)
++  CYGWIN* | MINGW*)
+     enable_shared="yes";;
+   *)
+     enable_shared="no";;
+@@ -7705,6 +7712,11 @@ printf "%s\n" "#define Py_ENABLE_SHARED 1" >>confdefs.h
+ 
+   case $ac_sys_system in
+     CYGWIN*)
++      LDLIBRARY='libpython$(LDVERSION).dll.a'
++      BLDLIBRARY='-L. -lpython$(LDVERSION)'
++      DLLLIBRARY='cygpython$(LDVERSION).dll'
++      ;;
++    MINGW*)
+       LDLIBRARY='libpython$(LDVERSION).dll.a'
+       BLDLIBRARY='-L. -lpython$(LDVERSION)'
+       DLLLIBRARY='libpython$(LDVERSION).dll'
+@@ -7764,9 +7776,9 @@ printf "%s\n" "#define Py_ENABLE_SHARED 1" >>confdefs.h
+ else # shared is disabled
+   PY_ENABLE_SHARED=0
+   case $ac_sys_system in
+-    CYGWIN*)
++    CYGWIN* | MINGW*)
+       BLDLIBRARY='$(LIBRARY)'
+-      LDLIBRARY='libpython$(LDVERSION).dll.a'
++      LDLIBRARY='libpython$(LDVERSION).a'
+       ;;
+   esac
+ fi
+@@ -8223,7 +8235,7 @@ printf "%s\n" "$MKDIR_P" >&6; }
+ 
+ if test -z "$LN" ; then
+ 	case $ac_sys_system in
+-		CYGWIN*) LN="ln -s";;
++		CYGWIN* | MINGW*) LN="ln -s";;
+ 		*) LN=ln;;
+ 	esac
+ fi
+@@ -13491,7 +13503,7 @@ if test -z "$SHLIB_SUFFIX"; then
+ 	  		*)    SHLIB_SUFFIX=.sl;;
+ 		esac
+ 		;;
+-	CYGWIN*)   SHLIB_SUFFIX=.dll;;
++	CYGWIN* | MINGW*)   SHLIB_SUFFIX=.dll;;
+ 	*)	   SHLIB_SUFFIX=.so;;
+ 	esac
+ fi
+@@ -13629,9 +13641,9 @@ then :
+ 
+ 
+ fi;;
+-	CYGWIN*)
+-		LDSHARED="gcc -shared -Wl,--enable-auto-image-base"
+-		LDCXXSHARED="g++ -shared -Wl,--enable-auto-image-base";;
++	CYGWIN* | MINGW*)
++		LDSHARED='$(CC) -shared'
++		LDCXXSHARED='$(CXX) -shared';;
+ 	*)	LDSHARED="ld";;
+ 	esac
+ fi
+@@ -13750,7 +13762,7 @@ printf "%s\n" "#define THREAD_STACK_SIZE 0x$stack_size" >>confdefs.h
+ 		    fi
+         fi
+ 		;;
+-	CYGWIN*)
++	CYGWIN* | MINGW*)
+ 		if test $enable_shared = "no"
+ 		then
+ 			LINKFORSHARED='-Wl,--out-implib=$(LDLIBRARY)'
+@@ -13776,7 +13788,7 @@ printf %s "checking CFLAGSFORSHARED... " >&6; }
+ if test ! "$LIBRARY" = "$LDLIBRARY"
+ then
+ 	case $ac_sys_system in
+-	CYGWIN*)
++	CYGWIN* | MINGW*)
+ 		# Cygwin needs CCSHARED when building extension DLLs
+ 		# but not when building the interpreter DLL.
+ 		CFLAGSFORSHARED='';;
+@@ -17998,7 +18010,7 @@ if test "x$ac_cv_func_pthread_sigmask" = xyes
+ then :
+   printf "%s\n" "#define HAVE_PTHREAD_SIGMASK 1" >>confdefs.h
+  case $ac_sys_system in
+-        CYGWIN*)
++        CYGWIN* | MINGW*)
+ 
+ printf "%s\n" "#define HAVE_BROKEN_PTHREAD_SIGMASK 1" >>confdefs.h
+ 
+@@ -26262,7 +26274,7 @@ MODULE_DEPS_SHARED='$(MODULE_DEPS_STATIC) $(EXPORTSYMS)'
+ LIBPYTHON=''
+ 
+ # On Android and Cygwin the shared libraries must be linked with libpython.
+-if test "$PY_ENABLE_SHARED" = "1" && ( test -n "$ANDROID_API_LEVEL" || test "$MACHDEP" = "cygwin"); then
++if test "$PY_ENABLE_SHARED" = "1" && ( test -n "$ANDROID_API_LEVEL" || test "$MACHDEP" = "cygwin" || test "$MACHDEP" = "mingw"); then
+   MODULE_DEPS_SHARED="$MODULE_DEPS_SHARED \$(LDLIBRARY)"
+   LIBPYTHON="\$(BLDLIBRARY)"
+ fi
+@@ -29227,6 +29239,9 @@ ac_fn_c_check_type "$LINENO" "socklen_t" "ac_cv_type_socklen_t" "
+ #ifdef HAVE_SYS_SOCKET_H
+ #include <sys/socket.h>
+ #endif
++#ifdef __MINGW32__
++#include <ws2tcpip.h>
++#endif
+ 
+ "
+ if test "x$ac_cv_type_socklen_t" = xyes
+@@ -30650,7 +30665,7 @@ case $ac_sys_system in #(
+     py_cv_module_=n/a
+ 
+    ;; #(
+-  CYGWIN*) :
++  CYGWIN* | MINGW*) :
+ 
+ 
+     py_cv_module__scproxy=n/a
+diff --git a/configure.ac b/configure.ac
+index a7b2f62579b..00c100b716f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -327,6 +327,9 @@ then
+ 	*-*-cygwin*)
+ 		ac_sys_system=Cygwin
+ 		;;
++	*-*-mingw*)
++		ac_sys_system=MinGW
++		;;
+ 	*-apple-ios*)
+ 		ac_sys_system=iOS
+ 		;;
+@@ -369,6 +372,7 @@ then
+ 	linux-android*) MACHDEP="android";;
+ 	linux*) MACHDEP="linux";;
+ 	cygwin*) MACHDEP="cygwin";;
++	mingw*) MACHDEP="mingw";;
+ 	darwin*) MACHDEP="darwin";;
+ 	'')	MACHDEP="unknown";;
+     esac
+@@ -771,7 +775,7 @@ if test "$cross_compiling" = yes; then
+ 			_host_ident=$host_cpu
+ 		esac
+ 		;;
+-	*-*-cygwin*)
++	*-*-cygwin* | *-*-mingw*)
+ 		_host_ident=
+ 		;;
+ 	*-apple-ios*)
+@@ -1345,6 +1349,7 @@ AC_ARG_WITH([suffix],
+   AS_CASE([$ac_sys_system],
+     [Emscripten], [EXEEXT=.mjs],
+     [WASI], [EXEEXT=.wasm],
++    [CYGWIN* | MINGW*], [EXEEXT=.exe],
+     [EXEEXT=]
+   )
+ ])
+@@ -1477,7 +1482,7 @@ AC_ARG_ENABLE([shared],
+ if test -z "$enable_shared"
+ then
+   case $ac_sys_system in
+-  CYGWIN*)
++  CYGWIN* | MINGW*)
+     enable_shared="yes";;
+   *)
+     enable_shared="no";;
+@@ -1554,6 +1559,11 @@ if test $enable_shared = "yes"; then
+             [Defined if Python is built as a shared library.])
+   case $ac_sys_system in
+     CYGWIN*)
++      LDLIBRARY='libpython$(LDVERSION).dll.a'
++      BLDLIBRARY='-L. -lpython$(LDVERSION)'
++      DLLLIBRARY='cygpython$(LDVERSION).dll'
++      ;;
++    MINGW*)
+       LDLIBRARY='libpython$(LDVERSION).dll.a'
+       BLDLIBRARY='-L. -lpython$(LDVERSION)'
+       DLLLIBRARY='libpython$(LDVERSION).dll'
+@@ -1613,9 +1623,9 @@ if test $enable_shared = "yes"; then
+ else # shared is disabled
+   PY_ENABLE_SHARED=0
+   case $ac_sys_system in
+-    CYGWIN*)
++    CYGWIN* | MINGW*)
+       BLDLIBRARY='$(LIBRARY)'
+-      LDLIBRARY='libpython$(LDVERSION).dll.a'
++      LDLIBRARY='libpython$(LDVERSION).a'
+       ;;
+   esac
+ fi
+@@ -1701,7 +1711,7 @@ AC_PROG_MKDIR_P
+ AC_SUBST([LN])
+ if test -z "$LN" ; then
+ 	case $ac_sys_system in
+-		CYGWIN*) LN="ln -s";;
++		CYGWIN* | MINGW*) LN="ln -s";;
+ 		*) LN=ln;;
+ 	esac
+ fi
+@@ -3389,7 +3399,7 @@ if test -z "$SHLIB_SUFFIX"; then
+ 	  		*)    SHLIB_SUFFIX=.sl;;
+ 		esac
+ 		;;
+-	CYGWIN*)   SHLIB_SUFFIX=.dll;;
++	CYGWIN* | MINGW*)   SHLIB_SUFFIX=.dll;;
+ 	*)	   SHLIB_SUFFIX=.so;;
+ 	esac
+ fi
+@@ -3523,9 +3533,9 @@ then
+ 		AS_VAR_IF([enable_wasm_dynamic_linking], [yes], [
+ 			dnl not implemented yet
+ 		]);;
+-	CYGWIN*)
+-		LDSHARED="gcc -shared -Wl,--enable-auto-image-base"
+-		LDCXXSHARED="g++ -shared -Wl,--enable-auto-image-base";;
++	CYGWIN* | MINGW*)
++		LDSHARED='$(CC) -shared'
++		LDCXXSHARED='$(CXX) -shared';;
+ 	*)	LDSHARED="ld";;
+ 	esac
+ fi
+@@ -3637,7 +3647,7 @@ then
+ 		    fi
+         fi
+ 		;;
+-	CYGWIN*)
++	CYGWIN* | MINGW*)
+ 		if test $enable_shared = "no"
+ 		then
+ 			LINKFORSHARED='-Wl,--out-implib=$(LDLIBRARY)'
+@@ -3661,7 +3671,7 @@ AC_MSG_CHECKING([CFLAGSFORSHARED])
+ if test ! "$LIBRARY" = "$LDLIBRARY"
+ then
+ 	case $ac_sys_system in
+-	CYGWIN*)
++	CYGWIN* | MINGW*)
+ 		# Cygwin needs CCSHARED when building extension DLLs
+ 		# but not when building the interpreter DLL.
+ 		CFLAGSFORSHARED='';;
+@@ -4682,7 +4692,7 @@ if test "$posix_threads" = "yes"; then
+       fi
+       AC_CHECK_FUNCS([pthread_sigmask],
+         [case $ac_sys_system in
+-        CYGWIN*)
++        CYGWIN* | MINGW*)
+           AC_DEFINE([HAVE_BROKEN_PTHREAD_SIGMASK], [1],
+             [Define if pthread_sigmask() does not work on your system.])
+             ;;
+@@ -6233,7 +6243,7 @@ MODULE_DEPS_SHARED='$(MODULE_DEPS_STATIC) $(EXPORTSYMS)'
+ LIBPYTHON=''
+ 
+ # On Android and Cygwin the shared libraries must be linked with libpython.
+-if test "$PY_ENABLE_SHARED" = "1" && ( test -n "$ANDROID_API_LEVEL" || test "$MACHDEP" = "cygwin"); then
++if test "$PY_ENABLE_SHARED" = "1" && ( test -n "$ANDROID_API_LEVEL" || test "$MACHDEP" = "cygwin" || test "$MACHDEP" = "mingw"); then
+   MODULE_DEPS_SHARED="$MODULE_DEPS_SHARED \$(LDLIBRARY)"
+   LIBPYTHON="\$(BLDLIBRARY)"
+ fi
+@@ -6941,6 +6951,9 @@ AC_CHECK_TYPES([socklen_t], [],
+ #ifdef HAVE_SYS_SOCKET_H
+ #include <sys/socket.h>
+ #endif
++#ifdef __MINGW32__
++#include <ws2tcpip.h>
++#endif
+ ])
+ 
+ AC_CACHE_CHECK([for broken mbstowcs], [ac_cv_broken_mbstowcs],
+@@ -7634,7 +7647,7 @@ AS_CASE([$ac_sys_system],
+       [syslog],
+     )
+   ],
+-  [CYGWIN*], [PY_STDLIB_MOD_SET_NA([_scproxy])],
++  [CYGWIN* | MINGW*], [PY_STDLIB_MOD_SET_NA([_scproxy])],
+   [QNX*], [PY_STDLIB_MOD_SET_NA([_scproxy])],
+   [FreeBSD*], [PY_STDLIB_MOD_SET_NA([_scproxy])],
+   [Emscripten], [

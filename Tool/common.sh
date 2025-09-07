@@ -433,15 +433,10 @@ print_name_for_config_2() {
 make_tarball_and_calculate_sha512() {
 	local dest_dir="$1" tarball="$2" install_dir="$3"
 
-	# # tar -cvf /cygdrive/e/Note/Tool/__vs2002/llvm.tar bin lib share  # at /cygdrive/e/Note/Tool/llvm-vs2022-build/Release started
-	# tar.exe: Failed to open '/cygdrive/e/Note/Tool/__vs2002/llvm.tar'
-
 	echo_command mkdir -p "${dest_dir}" \
 	&& echo_command rm -rf "${dest_dir}/${tarball}"{,.sha512} \
 	&& { echo_command pushd "${install_dir}" \
-		&& echo_command rm -rf ../"${tarball}" \
-		&& time_command tar -cvf ../"${tarball}" * \
-		&& echo_command mv -f ../"${tarball}" "${dest_dir}/${tarball}" \
+		&& time_command tar -cvf "${dest_dir}/${tarball}" * \
 		&& echo_command popd;} \
 	&& time_command sha512_calculate_file "${dest_dir}/${tarball}"
 }

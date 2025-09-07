@@ -343,6 +343,8 @@ set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup() {
 
 				# from Python.org
 				# winget install --id Python.Python.3.13
+				# winget list | grep Python
+				# winget uninstall Python.Python.3.13
 
 				# # which python
 				# /cygdrive/c/Users/Administrator/AppData/Local/Programs/Python/Python313/python

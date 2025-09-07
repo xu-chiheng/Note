@@ -1,0 +1,5420 @@
+diff --git a/.github/workflows/mingw.yml b/.github/workflows/mingw.yml
+new file mode 100644
+index 00000000000..360218a39f1
+--- /dev/null
++++ b/.github/workflows/mingw.yml
+@@ -0,0 +1,323 @@
++name: Build
++on: [push, pull_request, workflow_dispatch]
++
++jobs:
++  build:
++    runs-on: ${{ matrix.runner }}
++    strategy:
++      fail-fast: false
++      matrix:
++        msystem: ['MINGW64','MINGW32','UCRT64','CLANG64','CLANGARM64']
++        include:
++          - msystem: MINGW64
++            prefix: mingw-w64-x86_64
++            runner: windows-2022
++          - msystem: MINGW32
++            prefix: mingw-w64-i686
++            runner: windows-2022
++          - msystem: UCRT64
++            prefix: mingw-w64-ucrt-x86_64
++            runner: windows-2022
++          - msystem: CLANG64
++            prefix: mingw-w64-clang-x86_64
++            runner: windows-2022
++          - msystem: CLANGARM64
++            prefix: mingw-w64-clang-aarch64
++            runner: windows-11-arm
++    steps:
++      - name: Setup git
++        run: |
++          git config --global core.autocrlf false
++          git config --global core.eol lf
++      - uses: actions/checkout@v4
++      - uses: msys2/setup-msys2@v2
++        with:
++          msystem: ${{ matrix.msystem }}
++          release: ${{ matrix.msystem == 'CLANGARM64' }}
++          update: true
++          install: >-
++            make
++            binutils
++            autoconf
++            autoconf-archive
++            automake-wrapper
++            tar
++            gzip
++            ${{ matrix.prefix }}-toolchain
++            ${{ matrix.prefix }}-expat
++            ${{ matrix.prefix }}-bzip2
++            ${{ matrix.prefix }}-libffi
++            ${{ matrix.prefix }}-mpdecimal
++            ${{ matrix.prefix }}-ncurses
++            ${{ matrix.prefix }}-openssl
++            ${{ matrix.prefix }}-sqlite3
++            ${{ matrix.prefix }}-tcl
++            ${{ matrix.prefix }}-tk
++            ${{ matrix.prefix }}-zlib
++            ${{ matrix.prefix }}-xz
++            ${{ matrix.prefix }}-tzdata
++
++      - name: Build Python
++        shell: msys2 {0}
++        run: |
++          set -ex
++
++          if [[ "${{ matrix.msystem }}" == CLANG* ]]; then
++            export CC=clang
++            export CXX=clang++
++          fi
++          autoreconf -vfi
++
++          rm -Rf _build && mkdir _build && cd _build
++
++          ../configure \
++            --prefix=${MINGW_PREFIX} \
++            --host=${MINGW_CHOST} \
++            --build=${MINGW_CHOST} \
++            --enable-shared \
++            --with-system-expat \
++            --with-system-libmpdec \
++            --without-ensurepip \
++            --enable-loadable-sqlite-extensions \
++            --with-tzpath=${MINGW_PREFIX}/share/zoneinfo \
++            --enable-optimizations
++
++          make -j8
++
++      - name: Run Smoke Test (build)
++        shell: msys2 {0}
++        run: |
++          SMOKETESTS="$(pwd)/mingw_smoketests.py"
++          cd _build
++          ./python.exe "$SMOKETESTS"
++          MSYSTEM= ./python.exe "$SMOKETESTS"
++
++      - name: Run tests
++        shell: msys2 {0}
++        run: |
++          IGNOREFILE="$(pwd)/mingw_ignorefile.txt"
++          IGNOREFILE_EXTRA="$IGNOREFILE"
++          if [[ "${{ matrix.msystem }}" == "MINGW32" ]] || [[ "${{ matrix.msystem }}" == "MINGW64" ]]; then
++            IGNOREFILE_EXTRA="$(pwd)/mingw_ignorefile_msvcrt.txt"
++          fi
++          cd _build
++          MSYSTEM= ./python.exe -m test -j8 --ignorefile "$IGNOREFILE" --ignorefile "$IGNOREFILE_EXTRA" -W
++
++      - name: Run broken tests
++        continue-on-error: true
++        shell: msys2 {0}
++        run: |
++          IGNOREFILE="$(pwd)/mingw_ignorefile.txt"
++          IGNOREFILE_EXTRA="$IGNOREFILE"
++          if [[ "${{ matrix.msystem }}" == "MINGW32" ]] || [[ "${{ matrix.msystem }}" == "MINGW64" ]]; then
++            IGNOREFILE_EXTRA="$(pwd)/mingw_ignorefile_msvcrt.txt"
++          fi
++          cd _build
++          MSYSTEM= ./python.exe -m test -j8 --matchfile "$IGNOREFILE" --matchfile "$IGNOREFILE_EXTRA" -W
++
++      - name: Install
++        shell: msys2 {0}
++        run: |
++          set -ex
++          cd _build
++
++          pkgdir=python_pkgdir
++
++          make -j1 install DESTDIR="${pkgdir}"
++
++          # Fix shebangs
++          _pybasever=$(./python.exe -c "import sys; print(f'{sys.version_info[0]}.{sys.version_info[1]}');")
++          for fscripts in 2to3 2to3-${_pybasever} idle3 idle${_pybasever} pydoc3 pydoc${_pybasever}; do
++              sed -i "s|$(cygpath -w ${MINGW_PREFIX} | sed 's|\\|\\\\|g')/bin/python${_pybasever}.exe|/usr/bin/env python${_pybasever}.exe|g" "${pkgdir}${MINGW_PREFIX}"/bin/${fscripts}
++          done
++          sed -i "s|#!${MINGW_PREFIX}/bin/python${_pybasever}.exe|#!/usr/bin/env python${_pybasever}.exe|" "${pkgdir}${MINGW_PREFIX}"/lib/python${_pybasever}/config-${_pybasever}/python-config.py
++
++          # Create version-less aliases
++          cp "${pkgdir}${MINGW_PREFIX}"/bin/python3.exe "${pkgdir}${MINGW_PREFIX}"/bin/python.exe
++          cp "${pkgdir}${MINGW_PREFIX}"/bin/python3w.exe "${pkgdir}${MINGW_PREFIX}"/bin/pythonw.exe
++          cp "${pkgdir}${MINGW_PREFIX}"/bin/python3-config "${pkgdir}${MINGW_PREFIX}"/bin/python-config
++          cp "${pkgdir}${MINGW_PREFIX}"/bin/idle3 "${pkgdir}${MINGW_PREFIX}"/bin/idle
++          cp "${pkgdir}${MINGW_PREFIX}"/bin/pydoc3 "${pkgdir}${MINGW_PREFIX}"/bin/pydoc
++
++          # copy to /
++          cp -rf "${pkgdir}"/* /
++
++      - name: Run Smoke Test (installed)
++        shell: msys2 {0}
++        run: |
++          SMOKETESTS="$(pwd)/mingw_smoketests.py"
++          ${MINGW_PREFIX}/bin/python.exe "$SMOKETESTS"
++          MSYSTEM= ${MINGW_PREFIX}/bin/python.exe "$SMOKETESTS"
++
++      - name: Compress
++        if: always()
++        shell: msys2 {0}
++        run: |
++          cd _build
++          tar -zcf python.tar.gz python_pkgdir/
++
++      - name: Upload
++        uses: actions/upload-artifact@v4
++        if: always()
++        with:
++          name: build-${{ matrix.msystem }}
++          path: _build/python.tar.gz
++
++  cross-gcc-x86_64:
++    runs-on: ubuntu-latest
++    container:
++      image: ubuntu:24.10
++    steps:
++      - uses: actions/checkout@v4
++      - name: Install deps
++        run: |
++          apt-get update
++          DEBIAN_FRONTEND=noninteractive apt-get install -y \
++            gcc-mingw-w64-x86-64 \
++            g++-mingw-w64-x86-64 \
++            autoconf-archive \
++            autoconf \
++            automake \
++            zip \
++            make \
++            pkg-config
++
++      - uses: actions/setup-python@v5
++        with:
++          python-version: '3.12'
++
++      - name: Check Python Version
++        run: |
++          which python
++          python --version
++
++      - name: Build
++        run: |
++          autoreconf -vfi
++
++          mkdir _build && cd _build
++
++          export PKG_CONFIG_LIBDIR=/dev/null
++          unset PKG_CONFIG_PATH
++
++          ../configure \
++            --host=x86_64-w64-mingw32 \
++            --build=x86_64-pc-linux-gnu \
++            --enable-shared \
++            --without-ensurepip \
++            --enable-loadable-sqlite-extensions \
++            --with-build-python=yes
++
++          make -j8
++
++          make install DESTDIR="$(pwd)/install"
++
++      - name: 'Zip files'
++        run: |
++          zip -r install.zip _build/install
++
++      - name: Upload
++        uses: actions/upload-artifact@v4
++        with:
++          name: build-cross-gcc-x86_64
++          path: install.zip
++
++  cross-gcc-x86_64-test:
++    needs: [cross-gcc-x86_64]
++    runs-on: windows-latest
++    steps:
++      - uses: actions/download-artifact@v4
++        with:
++          name: build-cross-gcc-x86_64
++
++      - name: 'Run tests'
++        run: |
++          7z x install.zip
++          ./_build/install/usr/local/bin/python3.exe -c "import sysconfig, pprint; pprint.pprint(sysconfig.get_config_vars())"
++
++
++  cross-llvm-mingw:
++    runs-on: ubuntu-latest
++    container:
++      image: mstorsjo/llvm-mingw:latest
++    strategy:
++      fail-fast: false
++      matrix:
++        arch: ['x86_64', 'i686', 'aarch64', 'armv7']
++    steps:
++      - uses: actions/checkout@v4
++
++      - name: Install deps
++        run: |
++          export DEBIAN_FRONTEND=noninteractive
++          apt-get update -qq
++          apt-get install -qqy software-properties-common
++          add-apt-repository --yes ppa:deadsnakes/ppa
++          apt-get update -qq
++          apt-get install -qqy autoconf-archive python3.12-dev python3.12
++
++      - name: Build
++        run: |
++          autoreconf -vfi
++
++          mkdir _build && cd _build
++
++          export PKG_CONFIG_LIBDIR=/dev/null
++          unset PKG_CONFIG_PATH
++
++          export CC=${{ matrix.arch }}-w64-mingw32-clang
++          export CXX=${CC}++
++          ../configure \
++            --host=${{ matrix.arch }}-w64-mingw32 \
++            --build=x86_64-pc-linux-gnu \
++            --enable-shared \
++            --without-ensurepip \
++            --without-c-locale-coercion \
++            --enable-loadable-sqlite-extensions \
++            --with-build-python=yes
++
++          make -j8
++
++          make install DESTDIR="$(pwd)/install"
++
++      - name: 'Zip files'
++        run: |
++          zip -r install.zip _build/install
++
++      - name: Upload
++        uses: actions/upload-artifact@v4
++        with:
++          name: build-cross-llvm-mingw-${{ matrix.arch }}
++          path: install.zip
++
++  cross-llvm-mingw-test:
++    needs: [cross-llvm-mingw]
++    runs-on: ${{ matrix.runner }}
++    strategy:
++      fail-fast: false
++      matrix:
++        arch: ['x86_64', 'i686', 'aarch64', 'armv7']
++        include:
++          - arch: x86_64
++            runner: windows-latest
++          - arch: i686
++            runner: windows-latest
++          - arch: aarch64
++            runner: windows-11-arm
++          # we can test this for now, but Windows 11 24H2 dropped support for
++          # arm32
++          - arch: armv7
++            runner: windows-11-arm
++    steps:
++      - uses: actions/download-artifact@v4
++        with:
++          name: build-cross-llvm-mingw-${{ matrix.arch }}
++
++      - name: 'Run tests'
++        run: |
++          if (Test-Path ./_build) {rm -r -fo ./_build}
++          Add-Type -AssemblyName System.IO.Compression.FileSystem ;
++          [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD\install.zip", "$PWD")
++          ./_build/install/usr/local/bin/python3.exe -c "import sysconfig, pprint; pprint.pprint(sysconfig.get_config_vars())"
++
++
+diff --git a/Include/bytesobject.h b/Include/bytesobject.h
+index ee448cd02bd..d10ec3f86cb 100644
+--- a/Include/bytesobject.h
++++ b/Include/bytesobject.h
+@@ -35,9 +35,9 @@ PyAPI_FUNC(PyObject *) PyBytes_FromStringAndSize(const char *, Py_ssize_t);
+ PyAPI_FUNC(PyObject *) PyBytes_FromString(const char *);
+ PyAPI_FUNC(PyObject *) PyBytes_FromObject(PyObject *);
+ PyAPI_FUNC(PyObject *) PyBytes_FromFormatV(const char*, va_list)
+-                                Py_GCC_ATTRIBUTE((format(printf, 1, 0)));
++                                Py_PRINTF(1, 0);
+ PyAPI_FUNC(PyObject *) PyBytes_FromFormat(const char*, ...)
+-                                Py_GCC_ATTRIBUTE((format(printf, 1, 2)));
++                                Py_PRINTF(1, 2);
+ PyAPI_FUNC(Py_ssize_t) PyBytes_Size(PyObject *);
+ PyAPI_FUNC(char *) PyBytes_AsString(PyObject *);
+ PyAPI_FUNC(PyObject *) PyBytes_Repr(PyObject *, int);
+diff --git a/Include/fileobject.h b/Include/fileobject.h
+index 2deef544d66..ae4bdac2edc 100644
+--- a/Include/fileobject.h
++++ b/Include/fileobject.h
+@@ -30,7 +30,7 @@ Py_DEPRECATED(3.12) PyAPI_DATA(int) Py_UTF8Mode;
+ #endif
+ 
+ /* A routine to check if a file descriptor can be select()-ed. */
+-#ifdef _MSC_VER
++#ifdef MS_WINDOWS
+     /* On Windows, any socket fd can be select()-ed, no matter how high */
+     #define _PyIsSelectable_fd(FD) (1)
+ #else
+diff --git a/Include/internal/pycore_condvar.h b/Include/internal/pycore_condvar.h
+index 2177bed31fc..c46486f0947 100644
+--- a/Include/internal/pycore_condvar.h
++++ b/Include/internal/pycore_condvar.h
+@@ -5,6 +5,12 @@
+ #  error "this header requires Py_BUILD_CORE define"
+ #endif
+ 
++#ifdef __MINGW32__
++# if !defined(HAVE_PTHREAD_H) || defined(NT_THREADS)
++#  undef _POSIX_THREADS
++# endif
++#endif
++
+ #ifndef _POSIX_THREADS
+ /* This means pthreads are not implemented in libc headers, hence the macro
+    not present in unistd.h. But they still can be implemented as an external
+@@ -41,6 +47,10 @@
+ #  define WIN32_LEAN_AND_MEAN
+ #endif
+ #include <windows.h>              // CRITICAL_SECTION
++/* winpthreads are involved via windows header, so need undef _POSIX_THREADS after header include */
++#if defined(_POSIX_THREADS)
++#undef _POSIX_THREADS
++#endif
+ 
+ /* options */
+ /* non-emulated condition variables are provided for those that want
+diff --git a/Include/iscygpty.h b/Include/iscygpty.h
+new file mode 100644
+index 00000000000..82fd0affbd4
+--- /dev/null
++++ b/Include/iscygpty.h
+@@ -0,0 +1,41 @@
++/*
++ * iscygpty.h -- part of ptycheck
++ * https://github.com/k-takata/ptycheck
++ *
++ * Copyright (c) 2015-2017 K.Takata
++ *
++ * You can redistribute it and/or modify it under the terms of either
++ * the MIT license (as described below) or the Vim license.
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining
++ * a copy of this software and associated documentation files (the
++ * "Software"), to deal in the Software without restriction, including
++ * without limitation the rights to use, copy, modify, merge, publish,
++ * distribute, sublicense, and/or sell copies of the Software, and to
++ * permit persons to whom the Software is furnished to do so, subject to
++ * the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be
++ * included in all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
++ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
++ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
++ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
++ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++ */
++
++#ifndef _ISCYGPTY_H
++#define _ISCYGPTY_H
++
++#ifdef _WIN32
++int is_cygpty(int fd);
++int is_cygpty_used(void);
++#else
++#define is_cygpty(fd)		0
++#define is_cygpty_used()	0
++#endif
++
++#endif /* _ISCYGPTY_H */
+diff --git a/Include/osdefs.h b/Include/osdefs.h
+index 3243944a148..99d49777a69 100644
+--- a/Include/osdefs.h
++++ b/Include/osdefs.h
+@@ -10,7 +10,6 @@ extern "C" {
+ #ifdef MS_WINDOWS
+ #define SEP L'\\'
+ #define ALTSEP L'/'
+-#define MAXPATHLEN 256
+ #define DELIM L';'
+ #endif
+ 
+diff --git a/Include/py_curses.h b/Include/py_curses.h
+index e46b08e9cc4..34228fbba55 100644
+--- a/Include/py_curses.h
++++ b/Include/py_curses.h
+@@ -36,6 +36,13 @@
+ #include <curses.h>
+ #endif
+ 
++#if defined(__MINGW32__)
++#include <windows.h>
++#if !defined(_ISPAD)
++#define _ISPAD 0x10
++#endif
++#endif
++
+ #ifdef HAVE_NCURSES_H
+ /* configure was checking <curses.h>, but we will
+    use <ncurses.h>, which has some or all these features. */
+diff --git a/Include/pyerrors.h b/Include/pyerrors.h
+index d089fa71779..f8e604eef54 100644
+--- a/Include/pyerrors.h
++++ b/Include/pyerrors.h
+@@ -321,9 +321,9 @@ PyAPI_FUNC(int) PyUnicodeTranslateError_SetReason(
+     );
+ 
+ PyAPI_FUNC(int) PyOS_snprintf(char *str, size_t size, const char  *format, ...)
+-                        Py_GCC_ATTRIBUTE((format(printf, 3, 4)));
++                        Py_PRINTF(3, 4);
+ PyAPI_FUNC(int) PyOS_vsnprintf(char *str, size_t size, const char  *format, va_list va)
+-                        Py_GCC_ATTRIBUTE((format(printf, 3, 0)));
++                        Py_PRINTF(3, 0);
+ 
+ #ifndef Py_LIMITED_API
+ #  define Py_CPYTHON_ERRORS_H
+diff --git a/Include/pylifecycle.h b/Include/pylifecycle.h
+index e4c3b09c963..21346baf73e 100644
+--- a/Include/pylifecycle.h
++++ b/Include/pylifecycle.h
+@@ -21,6 +21,15 @@ PyAPI_FUNC(int) Py_IsInitialized(void);
+ PyAPI_FUNC(PyThreadState *) Py_NewInterpreter(void);
+ PyAPI_FUNC(void) Py_EndInterpreter(PyThreadState *);
+ 
++PyAPI_FUNC(wchar_t) Py_GetAltSepW(const wchar_t *);
++PyAPI_FUNC(wchar_t) Py_GetSepW(const wchar_t *);
++PyAPI_FUNC(char) Py_GetSepA(const char *);
++
++PyAPI_FUNC(void) Py_NormalizeSepsW(wchar_t *);
++PyAPI_FUNC(void) Py_NormalizeSepsA(char *);
++
++PyAPI_FUNC(void) Py_NormalizeSepsPathcchW(wchar_t *);
++
+ 
+ /* Py_PyAtExit is for the atexit module, Py_AtExit is for low-level
+  * exit functions.
+diff --git a/Include/pyport.h b/Include/pyport.h
+index e2bac3bf504..df363d0daa2 100644
+--- a/Include/pyport.h
++++ b/Include/pyport.h
+@@ -53,6 +53,44 @@
+ #endif
+ 
+ 
++#ifdef __MINGW32__
++/* Translate GCC[mingw*] platform specific defines to those
++ * used in python code.
++ */
++#if !defined(MS_WIN64) && defined(_WIN64)
++#  define MS_WIN64
++#endif
++#if !defined(MS_WIN32) && defined(_WIN32)
++#  define MS_WIN32
++#endif
++#if !defined(MS_WINDOWS) && defined(MS_WIN32)
++#  define MS_WINDOWS
++#endif
++
++#if defined(Py_BUILD_CORE) || defined(Py_BUILD_CORE_BUILTIN) || defined(Py_BUILD_CORE_MODULE)
++#include <winapifamily.h>
++
++#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
++#define MS_WINDOWS_DESKTOP
++#endif
++#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
++#define MS_WINDOWS_APP
++#endif
++#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_SYSTEM)
++#define MS_WINDOWS_SYSTEM
++#endif
++#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_GAMES)
++#define MS_WINDOWS_GAMES
++#endif
++
++/* Define to 1 if you support windows console io */
++#if defined(MS_WINDOWS_DESKTOP) || defined(MS_WINDOWS_APP) || defined(MS_WINDOWS_SYSTEM)
++#define HAVE_WINDOWS_CONSOLE_IO 1
++#endif
++#endif /* Py_BUILD_CORE || Py_BUILD_CORE_BUILTIN || Py_BUILD_CORE_MODULE */
++
++#endif /* __MINGW32__*/
++
+ /**************************************************************************
+ Symbols and macros to supply platform-independent interfaces to basic
+ C language & library operations whose spellings vary across platforms.
+@@ -494,12 +532,12 @@ extern char * _getpty(int *, int, mode_t, int);
+ */
+ 
+ /*
+-  All windows ports, except cygwin, are handled in PC/pyconfig.h.
++  Only MSVC windows ports is handled in PC/pyconfig.h.
+ 
+-  Cygwin is the only other autoconf platform requiring special
++  Cygwin and Mingw is the only other autoconf platform requiring special
+   linkage handling and it uses __declspec().
+ */
+-#if defined(__CYGWIN__)
++#if defined(__CYGWIN__) || defined(__MINGW32__)
+ #       define HAVE_DECLSPEC_DLL
+ #endif
+ 
+@@ -512,21 +550,23 @@ extern char * _getpty(int *, int, mode_t, int);
+ #                       define PyAPI_FUNC(RTYPE) Py_EXPORTED_SYMBOL RTYPE
+ #                       define PyAPI_DATA(RTYPE) extern Py_EXPORTED_SYMBOL RTYPE
+         /* module init functions inside the core need no external linkage */
+-        /* except for Cygwin to handle embedding */
+-#                       if defined(__CYGWIN__)
++        /* except for Cygwin/Mingw to handle embedding */
++#                       if defined(__CYGWIN__) || defined(__MINGW32__)
+ #                               define PyMODINIT_FUNC Py_EXPORTED_SYMBOL PyObject*
+-#                       else /* __CYGWIN__ */
++#                       else /* __CYGWIN__ || __MINGW32__*/
+ #                               define PyMODINIT_FUNC PyObject*
+-#                       endif /* __CYGWIN__ */
++#                       endif /* __CYGWIN__ || __MINGW32__*/
+ #               else /* Py_BUILD_CORE */
+         /* Building an extension module, or an embedded situation */
+         /* public Python functions and data are imported */
+         /* Under Cygwin, auto-import functions to prevent compilation */
+         /* failures similar to those described at the bottom of 4.1: */
+         /* http://docs.python.org/extending/windows.html#a-cookbook-approach */
+-#                       if !defined(__CYGWIN__)
++#                       if defined(__CYGWIN__) || defined(__MINGW32__)
++#                               define PyAPI_FUNC(RTYPE) RTYPE
++#                       else
+ #                               define PyAPI_FUNC(RTYPE) Py_IMPORTED_SYMBOL RTYPE
+-#                       endif /* !__CYGWIN__ */
++#                       endif /* __CYGWIN__ || __MINGW32__*/
+ #                       define PyAPI_DATA(RTYPE) extern Py_IMPORTED_SYMBOL RTYPE
+         /* module init functions outside the core must be exported */
+ #                       if defined(__cplusplus)
+@@ -626,6 +666,12 @@ extern char * _getpty(int *, int, mode_t, int);
+ 
+ #define Py_VA_COPY va_copy
+ 
++#if defined(__GNUC__) && ((__GNUC__ == 4 && __GNUC_MINOR__>= 4) || __GNUC__ > 4)
++#  define Py_PRINTF(X,Y) Py_GCC_ATTRIBUTE((format(gnu_printf,X,Y)))
++#else
++#  define Py_PRINTF(X,Y) Py_GCC_ATTRIBUTE((format(printf,X,Y))) 
++#endif
++
+ /*
+  * Convenient macros to deal with endianness of the platform. WORDS_BIGENDIAN is
+  * detected by configure and defined in pyconfig.h. The code in pyconfig.h
+diff --git a/Include/pythread.h b/Include/pythread.h
+index 63714437c49..5e84e3cbefc 100644
+--- a/Include/pythread.h
++++ b/Include/pythread.h
+@@ -7,6 +7,12 @@ typedef void *PyThread_type_lock;
+ extern "C" {
+ #endif
+ 
++#ifdef __MINGW32__
++# if !defined(HAVE_PTHREAD_H) || defined(NT_THREADS)
++#  undef _POSIX_THREADS
++# endif
++#endif
++
+ /* Return status codes for Python lock acquisition.  Chosen for maximum
+  * backwards compatibility, ie failure -> 0, success -> 1.  */
+ typedef enum PyLockStatus {
+diff --git a/Include/sysmodule.h b/Include/sysmodule.h
+index 96f883870b3..55c558a9037 100644
+--- a/Include/sysmodule.h
++++ b/Include/sysmodule.h
+@@ -15,9 +15,9 @@ Py_DEPRECATED(3.11) PyAPI_FUNC(void) PySys_SetArgvEx(int, wchar_t **, int);
+ Py_DEPRECATED(3.11) PyAPI_FUNC(void) PySys_SetPath(const wchar_t *);
+ 
+ PyAPI_FUNC(void) PySys_WriteStdout(const char *format, ...)
+-                 Py_GCC_ATTRIBUTE((format(printf, 1, 2)));
++                 Py_PRINTF(1, 2);
+ PyAPI_FUNC(void) PySys_WriteStderr(const char *format, ...)
+-                 Py_GCC_ATTRIBUTE((format(printf, 1, 2)));
++                 Py_PRINTF(1, 2);
+ PyAPI_FUNC(void) PySys_FormatStdout(const char *format, ...);
+ PyAPI_FUNC(void) PySys_FormatStderr(const char *format, ...);
+ 
+diff --git a/Lib/compileall.py b/Lib/compileall.py
+index d394156cedc..ef3633e9537 100644
+--- a/Lib/compileall.py
++++ b/Lib/compileall.py
+@@ -38,6 +38,8 @@ def _walk_dir(dir, maxlevels, quiet=0):
+         if name == '__pycache__':
+             continue
+         fullname = os.path.join(dir, name)
++        if sys.platform == "win32" and sys.version.find("GCC") >= 0:
++            fullname = fullname.replace('\\','/')
+         if not os.path.isdir(fullname):
+             yield fullname
+         elif (maxlevels > 0 and name != os.curdir and name != os.pardir and
+diff --git a/Lib/ctypes/__init__.py b/Lib/ctypes/__init__.py
+index 6cedee74236..7fceeb8fa4e 100644
+--- a/Lib/ctypes/__init__.py
++++ b/Lib/ctypes/__init__.py
+@@ -464,7 +464,9 @@ def LoadLibrary(self, name):
+ cdll = LibraryLoader(CDLL)
+ pydll = LibraryLoader(PyDLL)
+ 
+-if _os.name == "nt":
++if _os.name == "nt" and _sys.version.find('GCC') >= 0:
++    pythonapi = PyDLL("libpython%d.%d%s.dll" % (_sys.version_info[:2] + (_sys.abiflags,)), None)
++elif _os.name == "nt":
+     pythonapi = PyDLL("python dll", None, _sys.dllhandle)
+ elif _sys.platform == "cygwin":
+     pythonapi = PyDLL("libpython%d.%d.dll" % _sys.version_info[:2])
+diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
+index c550883e7c7..a5a2a3f5dc2 100644
+--- a/Lib/ctypes/util.py
++++ b/Lib/ctypes/util.py
+@@ -31,6 +31,12 @@ def _get_build_version():
+         # else we don't know what version of the compiler this is
+         return None
+ 
++    def find_msvcrt_mingw():
++        is_ucrt = 'clang' in sys.version.lower() or 'ucrt' in sys.version.lower()
++        if is_ucrt:
++            return None
++        return 'msvcrt.dll'
++
+     def find_msvcrt():
+         """Return the name of the VC runtime dll"""
+         version = _get_build_version()
+@@ -54,6 +60,9 @@ def find_msvcrt():
+ 
+     def find_library(name):
+         if name in ('c', 'm'):
++            import sysconfig
++            if sysconfig.get_platform().startswith('mingw'):
++                return find_msvcrt_mingw()
+             return find_msvcrt()
+         # See MSDN for the REAL search order.
+         for directory in os.environ['PATH'].split(os.pathsep):
+diff --git a/Lib/importlib/_bootstrap_external.py b/Lib/importlib/_bootstrap_external.py
+index 9b8a8dfc5aa..a177fa72cfd 100644
+--- a/Lib/importlib/_bootstrap_external.py
++++ b/Lib/importlib/_bootstrap_external.py
+@@ -42,6 +42,10 @@
+     path_separators = ['\\', '/']
+ else:
+     path_separators = ['/']
++
++if _os.environ.get('MSYSTEM', ''):
++    path_separators = path_separators[::-1]
++
+ # Assumption made in _path_join()
+ assert all(len(sep) == 1 for sep in path_separators)
+ path_sep = path_separators[0]
+diff --git a/Lib/ntpath.py b/Lib/ntpath.py
+index 1bef630bd9c..15830f903b8 100644
+--- a/Lib/ntpath.py
++++ b/Lib/ntpath.py
+@@ -11,9 +11,7 @@
+ curdir = '.'
+ pardir = '..'
+ extsep = '.'
+-sep = '\\'
+ pathsep = ';'
+-altsep = '/'
+ defpath = '.;C:\\bin'
+ devnull = 'nul'
+ 
+@@ -23,6 +21,14 @@
+ import genericpath
+ from genericpath import *
+ 
++if sys.platform == "win32" and os.environ.get("MSYSTEM", ""):
++    sep = '/'
++    altsep = '\\'
++else:
++    sep = '\\'
++    altsep = '/'
++bsep = str.encode(sep)
++baltsep = str.encode(altsep)
+ 
+ __all__ = ["normcase","isabs","join","splitdrive","splitroot","split","splitext",
+            "basename","dirname","commonprefix","getsize","getmtime",
+@@ -35,9 +41,33 @@
+ 
+ def _get_bothseps(path):
+     if isinstance(path, bytes):
+-        return b'\\/'
++        return bsep+baltsep
++    else:
++        return sep+altsep
++
++def _get_sep(path):
++    if isinstance(path, bytes):
++        return bsep
++    else:
++        return sep
++
++def _get_altsep(path):
++    if isinstance(path, bytes):
++        return baltsep
++    else:
++        return altsep
++
++def _get_colon(path):
++    if isinstance(path, bytes):
++        return b':'
++    else:
++        return ':'
++
++def _get_unc_prefix(path):
++    if isinstance(path, bytes):
++        return b'\\\\?\\UNC\\'
+     else:
+-        return '\\/'
++        return '\\\\?\\UNC\\'
+ 
+ # Normalize the case of a pathname and map slashes to backslashes.
+ # Other normalizations (such as optimizing '../' away) are not done
+@@ -59,14 +89,14 @@ def normcase(s):
+             return s
+         if isinstance(s, bytes):
+             encoding = sys.getfilesystemencoding()
+-            s = s.decode(encoding, 'surrogateescape').replace('/', '\\')
++            s = s.decode(encoding, 'surrogateescape').replace(altsep, sep)
+             s = _LCMapStringEx(_LOCALE_NAME_INVARIANT,
+                                _LCMAP_LOWERCASE, s)
+             return s.encode(encoding, 'surrogateescape')
+         else:
+             return _LCMapStringEx(_LOCALE_NAME_INVARIANT,
+                                   _LCMAP_LOWERCASE,
+-                                  s.replace('/', '\\'))
++                                  s.replace(altsep, sep))
+ except ImportError:
+     def normcase(s):
+         """Normalize case of pathname.
+@@ -75,8 +105,8 @@ def normcase(s):
+         """
+         s = os.fspath(s)
+         if isinstance(s, bytes):
+-            return os.fsencode(os.fsdecode(s).replace('/', '\\').lower())
+-        return s.replace('/', '\\').lower()
++            return os.fsencode(os.fsdecode(s).replace(altsep, sep).lower())
++        return s.replace(altsep, sep).lower()
+ 
+ 
+ # Return whether a path is absolute.
+@@ -88,14 +118,9 @@ def normcase(s):
+ def isabs(s):
+     """Test whether a path is absolute"""
+     s = os.fspath(s)
+-    if isinstance(s, bytes):
+-        sep = b'\\'
+-        altsep = b'/'
+-        colon_sep = b':\\'
+-    else:
+-        sep = '\\'
+-        altsep = '/'
+-        colon_sep = ':\\'
++    sep = _get_sep(s)
++    altsep = _get_altsep(s)
++    colon_sep = _get_colon(s) + sep
+     s = s[:3].replace(altsep, sep)
+     # Absolute: UNC, device, and paths with a drive and root.
+     # LEGACY BUG: isabs("/x") should be false since the path has no drive.
+@@ -107,14 +132,9 @@ def isabs(s):
+ # Join two (or more) paths.
+ def join(path, *paths):
+     path = os.fspath(path)
+-    if isinstance(path, bytes):
+-        sep = b'\\'
+-        seps = b'\\/'
+-        colon = b':'
+-    else:
+-        sep = '\\'
+-        seps = '\\/'
+-        colon = ':'
++    sep = _get_sep(path)
++    seps = _get_bothseps(path)
++    colon = _get_colon(path)
+     try:
+         if not paths:
+             path[:0] + sep  #23780: Ensure compatible data type even if p is null.
+@@ -189,18 +209,12 @@ def splitroot(p):
+         splitroot('Windows/notepad') == ('', '', 'Windows/notepad')
+     """
+     p = os.fspath(p)
+-    if isinstance(p, bytes):
+-        sep = b'\\'
+-        altsep = b'/'
+-        colon = b':'
+-        unc_prefix = b'\\\\?\\UNC\\'
+-        empty = b''
+-    else:
+-        sep = '\\'
+-        altsep = '/'
+-        colon = ':'
+-        unc_prefix = '\\\\?\\UNC\\'
+-        empty = ''
++    sep = _get_sep(p)
++    altsep = _get_altsep(p)
++    colon = _get_colon(p)
++    unc_prefix = _get_unc_prefix(p)
++    empty = b'' if isinstance(p, bytes) else ''
++
+     normp = p.replace(altsep, sep)
+     if normp[:1] == sep:
+         if normp[1:2] == sep:
+@@ -258,9 +272,9 @@ def split(p):
+ def splitext(p):
+     p = os.fspath(p)
+     if isinstance(p, bytes):
+-        return genericpath._splitext(p, b'\\', b'/', b'.')
++        return genericpath._splitext(p, bsep, baltsep, b'.')
+     else:
+-        return genericpath._splitext(p, '\\', '/', '.')
++        return genericpath._splitext(p, sep, altsep, '.')
+ splitext.__doc__ = genericpath._splitext.__doc__
+ 
+ 
+@@ -366,7 +380,7 @@ def expanduser(path):
+     if 'USERPROFILE' in os.environ:
+         userhome = os.environ['USERPROFILE']
+     elif not 'HOMEPATH' in os.environ:
+-        return path
++        return os.path.normpath(path)
+     else:
+         try:
+             drive = os.environ['HOMEDRIVE']
+@@ -393,7 +407,7 @@ def expanduser(path):
+     if isinstance(path, bytes):
+         userhome = os.fsencode(userhome)
+ 
+-    return userhome + path[i:]
++    return os.path.normpath(userhome) + path[i:]
+ 
+ 
+ # Expand paths containing shell variable substitutions.
+@@ -528,14 +542,12 @@ def expandvars(path):
+     def normpath(path):
+         """Normalize path, eliminating double slashes, etc."""
+         path = os.fspath(path)
++        sep = _get_sep(path)
++        altsep = _get_altsep(path)
+         if isinstance(path, bytes):
+-            sep = b'\\'
+-            altsep = b'/'
+             curdir = b'.'
+             pardir = b'..'
+         else:
+-            sep = '\\'
+-            altsep = '/'
+             curdir = '.'
+             pardir = '..'
+         path = path.replace(altsep, sep)
+@@ -582,7 +594,7 @@ def abspath(path):
+     def abspath(path):
+         """Return the absolute version of a path."""
+         try:
+-            return _getfullpathname(normpath(path))
++            return normpath(_getfullpathname(normpath(path)))
+         except (OSError, ValueError):
+             # See gh-75230, handle outside for cleaner traceback
+             pass
+@@ -773,6 +785,7 @@ def realpath(path, *, strict=False):
+                 # strip the prefix anyway.
+                 if ex.winerror == initial_winerror:
+                     path = spath
++        path = normpath(path)
+         return path
+ 
+ 
+@@ -782,12 +795,11 @@ def realpath(path, *, strict=False):
+ def relpath(path, start=None):
+     """Return a relative version of a path"""
+     path = os.fspath(path)
++    sep = _get_sep(path)
+     if isinstance(path, bytes):
+-        sep = b'\\'
+         curdir = b'.'
+         pardir = b'..'
+     else:
+-        sep = '\\'
+         curdir = '.'
+         pardir = '..'
+ 
+@@ -842,13 +854,11 @@ def commonpath(paths):
+         raise ValueError('commonpath() arg is an empty sequence')
+ 
+     paths = tuple(map(os.fspath, paths))
++    sep = _get_sep(paths[0])
++    altsep = _get_altsep(paths[0])
+     if isinstance(paths[0], bytes):
+-        sep = b'\\'
+-        altsep = b'/'
+         curdir = b'.'
+     else:
+-        sep = '\\'
+-        altsep = '/'
+         curdir = '.'
+ 
+     try:
+diff --git a/Lib/site.py b/Lib/site.py
+index aed254ad504..16c7c41cd3d 100644
+--- a/Lib/site.py
++++ b/Lib/site.py
+@@ -89,6 +89,12 @@
+ USER_BASE = None
+ 
+ 
++# Same as defined in Lib/sysconfig.py
++# redeclared since sysconfig is large for site.
++# GCC[mingw*] use posix build system
++_POSIX_BUILD = os.name == 'posix' or \
++    (os.name == "nt" and 'GCC' in sys.version)
++
+ def _trace(message):
+     if sys.flags.verbose:
+         print(message, file=sys.stderr)
+@@ -294,7 +300,7 @@ def _getuserbase():
+     def joinuser(*args):
+         return os.path.expanduser(os.path.join(*args))
+ 
+-    if os.name == "nt":
++    if os.name == "nt" and not _POSIX_BUILD:
+         base = os.environ.get("APPDATA") or "~"
+         return joinuser(base, "Python")
+ 
+@@ -304,14 +310,42 @@ def joinuser(*args):
+ 
+     return joinuser("~", ".local")
+ 
++# Copy of sysconfig.get_platform() but only for MinGW
++def _get_platform():
++    if os.name == 'nt':
++        if 'gcc' in sys.version.lower():
++            platform = 'mingw'
++            if 'amd64' in sys.version.lower():
++                platform += '_x86_64'
++            elif 'arm64' in sys.version.lower():
++                platform += '_aarch64'
++            elif 'arm' in sys.version.lower():
++                platform += '_armv7'
++            else:
++                platform += '_i686'
++
++            if 'ucrt' in sys.version.lower():
++                platform += '_ucrt'
++            else:
++                platform += "_msvcrt"
++
++            if 'clang' in sys.version.lower():
++                platform += "_llvm"
++            else:
++                platform += "_gnu"
++            
++            return platform
++    return sys.platform
+ 
+ # Same to sysconfig.get_path('purelib', os.name+'_user')
+ def _get_path(userbase):
+     version = sys.version_info
+ 
+     if os.name == 'nt':
+-        ver_nodot = sys.winver.replace('.', '')
+-        return f'{userbase}\\Python{ver_nodot}\\site-packages'
++        if not _POSIX_BUILD:
++            ver_nodot = sys.winver.replace('.', '')
++            return f'{userbase}\\Python{ver_nodot}\\site-packages'
++        return f'{userbase}/lib/python{version[0]}.{version[1]}-{_get_platform()}/site-packages'
+ 
+     if sys.platform == 'darwin' and sys._framework:
+         return f'{userbase}/lib/python/site-packages'
+@@ -382,7 +416,7 @@ def getsitepackages(prefixes=None):
+             continue
+         seen.add(prefix)
+ 
+-        if os.sep == '/':
++        if _POSIX_BUILD:
+             libdirs = [sys.platlibdir]
+             if sys.platlibdir != "lib":
+                 libdirs.append("lib")
+@@ -413,7 +447,7 @@ def setquit():
+     The repr of each object contains a hint at how it works.
+ 
+     """
+-    if os.sep == '\\':
++    if sys.platform == 'win32':
+         eof = 'Ctrl-Z plus Return'
+     else:
+         eof = 'Ctrl-D (i.e. EOF)'
+diff --git a/Lib/ssl.py b/Lib/ssl.py
+index 42ebb8ed384..791d5c548ab 100644
+--- a/Lib/ssl.py
++++ b/Lib/ssl.py
+@@ -254,7 +254,7 @@ class _TLSMessageType:
+     CHANGE_CIPHER_SPEC = 0x0101
+ 
+ 
+-if sys.platform == "win32":
++if sys.platform == "win32" and sys.version.find("GCC") == -1:
+     from _ssl import enum_certificates, enum_crls
+ 
+ from socket import socket, SOCK_STREAM, create_connection
+@@ -528,7 +528,7 @@ def _load_windows_store_certs(self, storename, purpose):
+     def load_default_certs(self, purpose=Purpose.SERVER_AUTH):
+         if not isinstance(purpose, _ASN1Object):
+             raise TypeError(purpose)
+-        if sys.platform == "win32":
++        if sys.platform == "win32" and sys.version.find("GCC") == -1:
+             for storename in self._windows_cert_stores:
+                 self._load_windows_store_certs(storename, purpose)
+         self.set_default_verify_paths()
+diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
+index acc8d4d1826..c12ce38dec5 100644
+--- a/Lib/sysconfig.py
++++ b/Lib/sysconfig.py
+@@ -2,6 +2,7 @@
+ 
+ import os
+ import sys
++import textwrap
+ import threading
+ from os.path import realpath
+ 
+@@ -48,13 +49,13 @@
+         'data': '{base}',
+         },
+     'nt': {
+-        'stdlib': '{installed_base}/Lib',
+-        'platstdlib': '{base}/Lib',
+-        'purelib': '{base}/Lib/site-packages',
+-        'platlib': '{base}/Lib/site-packages',
+-        'include': '{installed_base}/Include',
+-        'platinclude': '{installed_base}/Include',
+-        'scripts': '{base}/Scripts',
++        'stdlib': '{installed_base}/lib/python{py_version_short}',
++        'platstdlib': '{base}/lib/python{py_version_short}',
++        'purelib': '{base}/lib/python{py_version_short}/site-packages',
++        'platlib': '{base}/lib/python{py_version_short}/site-packages',
++        'include': '{installed_base}/include/python{py_version_short}',
++        'platinclude': '{installed_base}/include/python{py_version_short}',
++        'scripts': '{base}/bin',
+         'data': '{base}',
+         },
+     # Downstream distributors can overwrite the default install scheme.
+@@ -98,13 +99,18 @@
+         },
+     }
+ 
++# GCC[mingw*] use posix build system
++_POSIX_BUILD = os.name == 'posix' or \
++    (os.name == "nt" and 'GCC' in sys.version)
++
+ # For the OS-native venv scheme, we essentially provide an alias:
+-if os.name == 'nt':
++if os.name == 'nt' and not _POSIX_BUILD:
+     _INSTALL_SCHEMES['venv'] = _INSTALL_SCHEMES['nt_venv']
+ else:
+     _INSTALL_SCHEMES['venv'] = _INSTALL_SCHEMES['posix_venv']
+ 
+ 
++
+ # NOTE: site.py has copy of this function.
+ # Sync it when modify this function.
+ def _getuserbase():
+@@ -119,7 +125,7 @@ def _getuserbase():
+     def joinuser(*args):
+         return os.path.expanduser(os.path.join(*args))
+ 
+-    if os.name == "nt":
++    if os.name == "nt" and not _POSIX_BUILD:
+         base = os.environ.get("APPDATA") or "~"
+         return joinuser(base, "Python")
+ 
+@@ -135,20 +141,20 @@ def joinuser(*args):
+     _INSTALL_SCHEMES |= {
+         # NOTE: When modifying "purelib" scheme, update site._get_path() too.
+         'nt_user': {
+-            'stdlib': '{userbase}/Python{py_version_nodot_plat}',
+-            'platstdlib': '{userbase}/Python{py_version_nodot_plat}',
+-            'purelib': '{userbase}/Python{py_version_nodot_plat}/site-packages',
+-            'platlib': '{userbase}/Python{py_version_nodot_plat}/site-packages',
+-            'include': '{userbase}/Python{py_version_nodot_plat}/Include',
+-            'scripts': '{userbase}/Python{py_version_nodot_plat}/Scripts',
++            'stdlib': '{userbase}/lib/python{py_version_short_plat}',
++            'platstdlib': '{userbase}/lib/python{py_version_short_plat}',
++            'purelib': '{userbase}/lib/python{py_version_short_plat}/site-packages',
++            'platlib': '{userbase}/lib/python{py_version_short_plat}/site-packages',
++            'include': '{userbase}/include/python{py_version_short_plat}',
++            'scripts': '{userbase}/bin',
+             'data': '{userbase}',
+             },
+         'posix_user': {
+-            'stdlib': '{userbase}/{platlibdir}/python{py_version_short}',
+-            'platstdlib': '{userbase}/{platlibdir}/python{py_version_short}',
+-            'purelib': '{userbase}/lib/python{py_version_short}/site-packages',
+-            'platlib': '{userbase}/lib/python{py_version_short}/site-packages',
+-            'include': '{userbase}/include/python{py_version_short}',
++            'stdlib': '{userbase}/{platlibdir}/python{py_version_short_plat}',
++            'platstdlib': '{userbase}/{platlibdir}/python{py_version_short_plat}',
++            'purelib': '{userbase}/lib/python{py_version_short_plat}/site-packages',
++            'platlib': '{userbase}/lib/python{py_version_short_plat}/site-packages',
++            'include': '{userbase}/include/python{py_version_short_plat}',
+             'scripts': '{userbase}/bin',
+             'data': '{userbase}',
+             },
+@@ -287,7 +293,7 @@ def _expand_vars(scheme, vars):
+ 
+ 
+ def _get_preferred_schemes():
+-    if os.name == 'nt':
++    if os.name == 'nt' and not _POSIX_BUILD:
+         return {
+             'prefix': 'nt',
+             'home': 'posix_home',
+@@ -445,6 +451,14 @@ def _parse_makefile(filename, vars=None, keep_unresolved=True):
+         if isinstance(v, str):
+             done[k] = v.strip()
+ 
++    # any keys that have one with the same name suffixed with _b2h
++    # need to be replaced with the value of the _b2h key.
++    # This converts from MSYS*/Cygwin paths to Windows paths.
++    for k, v in dict(done).items():
++        if isinstance(k, str):
++            if k.endswith("_b2h"):
++                done[k[:-4]]=v
++ 
+     # save the results in the global dictionary
+     vars.update(done)
+     return vars
+@@ -524,11 +538,30 @@ def _generate_posix_vars():
+     os.makedirs(pybuilddir, exist_ok=True)
+     destfile = os.path.join(pybuilddir, name + '.py')
+ 
++    replacement = """
++        keys_to_replace = [
++            'BINDIR', 'BINLIBDEST', 'CONFINCLUDEDIR',
++            'CONFINCLUDEPY', 'DESTDIRS', 'DESTLIB', 'DESTSHARED',
++            'INCLDIRSTOMAKE', 'INCLUDEDIR', 'INCLUDEPY',
++            'LIBDEST', 'LIBDIR', 'LIBPC', 'LIBPL', 'MACHDESTLIB',
++            'MANDIR', 'SCRIPTDIR', 'datarootdir', 'exec_prefix',
++            'TZPATH',
++        ]
++
++        prefix = build_time_vars['BINDIR'][:-4]
++
++        for key in keys_to_replace:
++            value = build_time_vars[key]
++            build_time_vars[key] = value.replace(prefix, sys.base_prefix)
++    """
++
+     with open(destfile, 'w', encoding='utf8') as f:
++        f.write('import sys\n')
+         f.write('# system configuration generated and used by'
+                 ' the sysconfig module\n')
+         f.write('build_time_vars = ')
+         pprint.pprint(vars, stream=f)
++        f.write('\n%s' % textwrap.dedent(replacement))
+ 
+     # Create file used for sys.path fixup -- see Modules/getpath.c
+     with open('pybuilddir.txt', 'w', encoding='utf8') as f:
+@@ -556,7 +589,7 @@ def _init_non_posix(vars):
+     except IndexError:
+         pass
+     vars['EXE'] = '.exe'
+-    vars['VERSION'] = _PY_VERSION_SHORT_NO_DOT
++    vars['VERSION'] = _PY_VERSION_SHORT
+     vars['BINDIR'] = os.path.dirname(_safe_realpath(sys.executable))
+     vars['TZPATH'] = ''
+ 
+@@ -602,7 +635,7 @@ def parse_config_h(fp, vars=None):
+ def get_config_h_filename():
+     """Return the path of pyconfig.h."""
+     if _PYTHON_BUILD:
+-        if os.name == "nt":
++        if os.name == "nt" and not _POSIX_BUILD:
+             inc_dir = os.path.join(_PROJECT_BASE, "PC")
+         else:
+             inc_dir = _PROJECT_BASE
+@@ -669,11 +702,15 @@ def _init_config_vars():
+         _CONFIG_VARS['py_version_nodot_plat'] = sys.winver.replace('.', '')
+     except AttributeError:
+         _CONFIG_VARS['py_version_nodot_plat'] = ''
++    if os.name == 'nt' and _POSIX_BUILD:
++        _CONFIG_VARS['py_version_short_plat'] = f'{_PY_VERSION_SHORT}-{get_platform()}'
++    else:
++        _CONFIG_VARS['py_version_short_plat'] = _PY_VERSION_SHORT
+ 
+-    if os.name == 'nt':
++    if os.name == 'nt' and not _POSIX_BUILD:
+         _init_non_posix(_CONFIG_VARS)
+         _CONFIG_VARS['VPATH'] = sys._vpath
+-    if os.name == 'posix':
++    if _POSIX_BUILD:
+         _init_posix(_CONFIG_VARS)
+     if _HAS_USER_BASE:
+         # Setting 'userbase' is done below the call to the
+@@ -683,7 +720,7 @@ def _init_config_vars():
+ 
+     # Always convert srcdir to an absolute path
+     srcdir = _CONFIG_VARS.get('srcdir', _PROJECT_BASE)
+-    if os.name == 'posix':
++    if _POSIX_BUILD:
+         if _PYTHON_BUILD:
+             # If srcdir is a relative path (typically '.' or '..')
+             # then it should be interpreted relative to the directory
+@@ -756,7 +793,7 @@ def get_config_var(name):
+     """
+     return get_config_vars().get(name)
+ 
+-
++# make sure to change site._get_platform() while changing this function
+ def get_platform():
+     """Return a string that identifies the current platform.
+ 
+@@ -780,6 +817,28 @@ def get_platform():
+ 
+     """
+     if os.name == 'nt':
++        if 'gcc' in sys.version.lower():
++            platform = 'mingw'
++            if 'amd64' in sys.version.lower():
++                platform += '_x86_64'
++            elif 'arm64' in sys.version.lower():
++                platform += '_aarch64'
++            elif 'arm' in sys.version.lower():
++                platform += '_armv7'
++            else:
++                platform += '_i686'
++
++            if 'ucrt' in sys.version.lower():
++                platform += '_ucrt'
++            else:
++                platform += "_msvcrt"
++
++            if 'clang' in sys.version.lower():
++                platform += "_llvm"
++            else:
++                platform += "_gnu"
++            
++            return platform
+         if 'amd64' in sys.version.lower():
+             return 'win-amd64'
+         if '(arm)' in sys.version.lower():
+diff --git a/Lib/test/__main__.py b/Lib/test/__main__.py
+index 82b50ad2c6e..25bac39e24a 100644
+--- a/Lib/test/__main__.py
++++ b/Lib/test/__main__.py
+@@ -1,2 +1,10 @@
++import os
++import sys
++
+ from test.libregrtest.main import main
++
++if sys.platform == "win32":
++    # Enable DLL loading from PATH.
++    os.environ["PYTHONLEGACYWINDOWSDLLLOADING"] = "1"
++
+ main(_add_python_opts=True)
+diff --git a/Lib/test/test_bytes.py b/Lib/test/test_bytes.py
+index b27d43695ee..f18d38c6dc0 100644
+--- a/Lib/test/test_bytes.py
++++ b/Lib/test/test_bytes.py
+@@ -1168,7 +1168,7 @@ def test_from_format(self):
+ 
+         if os.name == 'nt':
+             # Windows (MSCRT)
+-            ptr_format = '0x%0{}X'.format(2 * sizeof_ptr)
++            ptr_format = '0x%0{}x'.format(2 * sizeof_ptr)
+             def ptr_formatter(ptr):
+                 return (ptr_format % ptr)
+         else:
+diff --git a/Lib/test/test_getpath.py b/Lib/test/test_getpath.py
+index 3b613a569b9..f63e4204a78 100644
+--- a/Lib/test/test_getpath.py
++++ b/Lib/test/test_getpath.py
+@@ -837,6 +837,7 @@ def test_symlink_buildpath_macos(self):
+     ENV_PYTHONHOME="",
+     ENV_PYTHONEXECUTABLE="",
+     ENV___PYVENV_LAUNCHER__="",
++    ENV_MSYSTEM="",
+     argv0="",
+     py_setpath="",
+     real_executable="",
+@@ -876,6 +877,7 @@ def __init__(self, *a, argv0=None, config=None, **kw):
+         self.update(DEFAULT_NAMESPACE)
+         self["config"] = DEFAULT_CONFIG.copy()
+         self["os_name"] = "nt"
++        self["is_mingw"] = 0
+         self["PLATLIBDIR"] = "DLLs"
+         self["PYWINVER"] = "9.8-XY"
+         self["VPATH"] = r"..\.."
+@@ -911,6 +913,9 @@ def __missing__(self, key):
+         except AttributeError:
+             raise KeyError(key) from None
+ 
++    def normpath(self, path):
++        return ntpath.normpath(path)
++
+     def abspath(self, path):
+         if self.isabs(path):
+             return path
+@@ -1052,6 +1057,7 @@ def __init__(self, *a, argv0=None, config=None, **kw):
+         self.update(DEFAULT_NAMESPACE)
+         self["config"] = DEFAULT_CONFIG.copy()
+         self["os_name"] = "posix"
++        self["is_mingw"] = 0
+         self["PLATLIBDIR"] = "lib"
+         self["WITH_NEXT_FRAMEWORK"] = 0
+         super().__init__(*a, **kw)
+@@ -1088,6 +1094,9 @@ def __missing__(self, key):
+         except AttributeError:
+             raise KeyError(key) from None
+ 
++    def normpath(self, path):
++        return path
++
+     def abspath(self, path):
+         if self.isabs(path):
+             return path
+diff --git a/Lib/test/test_importlib/test_windows.py b/Lib/test/test_importlib/test_windows.py
+index 40b8aa1787f..0b1254c2d75 100644
+--- a/Lib/test/test_importlib/test_windows.py
++++ b/Lib/test/test_importlib/test_windows.py
+@@ -24,6 +24,29 @@ def get_platform():
+             'x64' : 'win-amd64',
+             'arm' : 'win-arm32',
+         }
++    if os.name == 'nt':
++        if "gcc" in sys.version.lower():
++            platform = "mingw"
++            if "amd64" in sys.version.lower():
++                platform += "_x86_64"
++            elif "arm64" in sys.version.lower():
++                platform += "_aarch64"
++            elif "arm" in sys.version.lower():
++                platform += "_armv7"
++            else:
++                platform += "_i686"
++
++            if "ucrt" in sys.version.lower():
++                platform += "_ucrt"
++            else:
++                platform += "_msvcrt"
++
++            if "clang" in sys.version.lower():
++                platform += "_llvm"
++            else:
++                platform += "_gnu"
++
++            return platform
+     if ('VSCMD_ARG_TGT_ARCH' in os.environ and
+         os.environ['VSCMD_ARG_TGT_ARCH'] in TARGET_TO_PLAT):
+         return TARGET_TO_PLAT[os.environ['VSCMD_ARG_TGT_ARCH']]
+diff --git a/Lib/test/test_sysconfig.py b/Lib/test/test_sysconfig.py
+index 67647e1b787..a883037c119 100644
+--- a/Lib/test/test_sysconfig.py
++++ b/Lib/test/test_sysconfig.py
+@@ -19,7 +19,7 @@
+ from sysconfig import (get_paths, get_platform, get_config_vars,
+                        get_path, get_path_names, _INSTALL_SCHEMES,
+                        get_default_scheme, get_scheme_names, get_config_var,
+-                       _expand_vars, _get_preferred_schemes, _main)
++                       _expand_vars, _get_preferred_schemes, _main, _POSIX_BUILD)
+ import _osx_support
+ 
+ 
+@@ -197,7 +197,7 @@ def test_nt_venv_scheme(self):
+         self.assertEqual(libpath, sysconfig.get_path('purelib', scheme='nt_venv', vars=vars))
+ 
+     def test_venv_scheme(self):
+-        if sys.platform == 'win32':
++        if not _POSIX_BUILD and sys.platform == 'win32':
+             self.assertEqual(
+                 sysconfig.get_path('scripts', scheme='venv'),
+                 sysconfig.get_path('scripts', scheme='nt_venv')
+@@ -388,6 +388,10 @@ def test_user_similar(self):
+             if HAS_USER_BASE:
+                 user_path = get_path(name, 'posix_user')
+                 expected = os.path.normpath(global_path.replace(base, user, 1))
++                if os.name == 'nt' and _POSIX_BUILD:
++                    expected = expected.replace(
++                        f'python{sysconfig.get_python_version()}',
++                        f'python{sysconfig.get_python_version()}-{get_platform()}')
+                 # bpo-44860: platlib of posix_user doesn't use sys.platlibdir,
+                 # whereas posix_prefix does.
+                 if name == 'platlib':
+diff --git a/Lib/test/test_tools/test_makefile.py b/Lib/test/test_tools/test_makefile.py
+index f1f0cd87ba7..596e50dfbe2 100644
+--- a/Lib/test/test_tools/test_makefile.py
++++ b/Lib/test/test_tools/test_makefile.py
+@@ -33,11 +33,12 @@ def list_test_dirs(self):
+                     if '\t' not in line:
+                         break
+                     result.append(line.replace('\\', '').strip())
++        result = [os.path.normpath(d) for d in result if d]
+         return result
+ 
+     def test_makefile_test_folders(self):
+         test_dirs = self.list_test_dirs()
+-        idle_test = 'idlelib/idle_test'
++        idle_test = os.path.join('idlelib', 'idle_test')
+         self.assertIn(idle_test, test_dirs)
+ 
+         used = [idle_test]
+diff --git a/Lib/test/test_wmi.py b/Lib/test/test_wmi.py
+index 111f990656c..3dc452e79fe 100644
+--- a/Lib/test/test_wmi.py
++++ b/Lib/test/test_wmi.py
+@@ -8,7 +8,7 @@
+ 
+ 
+ # Do this first so test will be skipped if module doesn't exist
+-_wmi = import_helper.import_module('_wmi', required_on=['win'])
++_wmi = import_helper.import_module('_wmi')
+ 
+ 
+ def wmi_exec_query(query):
+diff --git a/Lib/venv/__init__.py b/Lib/venv/__init__.py
+index aeb522c3199..7266f83fef2 100644
+--- a/Lib/venv/__init__.py
++++ b/Lib/venv/__init__.py
+@@ -13,6 +13,7 @@
+ import types
+ import shlex
+ 
++from sysconfig import _POSIX_BUILD
+ 
+ CORE_VENV_DEPS = ('pip',)
+ logger = logging.getLogger(__name__)
+@@ -330,7 +331,7 @@ def setup_python(self, context):
+                     if not os.path.islink(path):
+                         os.chmod(path, 0o755)
+         else:
+-            if self.symlinks:
++            if self.symlinks and not _POSIX_BUILD:
+                 # For symlinking, we need a complete copy of the root directory
+                 # If symlinks fail, you'll get unnecessary copies of files, but
+                 # we assume that if you've opted into symlinks on Windows then
+@@ -354,6 +355,12 @@ def setup_python(self, context):
+                 if os.path.lexists(src):
+                     copier(src, os.path.join(binpath, suffix))
+ 
++            if _POSIX_BUILD:
++                # copy from python/pythonw so the venvlauncher magic in symlink_or_copy triggers
++                copier(os.path.join(dirname, 'python.exe'), os.path.join(binpath, 'python3.exe'))
++                copier(os.path.join(dirname, 'python.exe'), os.path.join(binpath, 'python%d.%d.exe' % sys.version_info[:2]))
++                copier(os.path.join(dirname, 'pythonw.exe'), os.path.join(binpath, 'python3w.exe'))
++
+             if sysconfig.is_python_build():
+                 # copy init.tcl
+                 for root, dirs, files in os.walk(context.python_dir):
+@@ -378,6 +385,7 @@ def _call_new_python(self, context, *py_args, **kwargs):
+         env['VIRTUAL_ENV'] = context.env_dir
+         env.pop('PYTHONHOME', None)
+         env.pop('PYTHONPATH', None)
++        env.pop("MSYSTEM", None)
+         kwargs['cwd'] = context.env_dir
+         kwargs['executable'] = context.env_exec_cmd
+         subprocess.check_output(args, **kwargs)
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index 7ca3dc62c01..68fbe7b1e7d 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -38,6 +38,7 @@ CC=		@CC@
+ CXX=		@CXX@
+ LINKCC=		@LINKCC@
+ AR=		@AR@
++WINDRES=	@WINDRES@
+ READELF=	@READELF@
+ SOABI=		@SOABI@
+ LDVERSION=	@LDVERSION@
+@@ -124,6 +125,7 @@ PY_CORE_CFLAGS=	$(PY_STDMODULE_CFLAGS) -DPy_BUILD_CORE
+ PY_CORE_LDFLAGS=$(PY_LDFLAGS) $(PY_LDFLAGS_NODIST)
+ # Strict or non-strict aliasing flags used to compile dtoa.c, see above
+ CFLAGS_ALIASING=@CFLAGS_ALIASING@
++RCFLAGS=@RCFLAGS@
+ 
+ 
+ # Machine-dependent subdirectories
+@@ -142,6 +144,12 @@ exec_prefix=	@exec_prefix@
+ # Install prefix for data files
+ datarootdir=    @datarootdir@
+ 
++# Locations needed for semi-native fixup of sysconfig.
++srcdir_b2h=		@srcdir_b2h@
++abs_srcdir_b2h=		@abs_srcdir_b2h@
++abs_builddir_b2h=	@abs_builddir_b2h@
++prefix_b2h=		@prefix_b2h@
++
+ # Expanded directories
+ BINDIR=		@bindir@
+ LIBDIR=		@libdir@
+@@ -161,10 +169,12 @@ BINLIBDEST=	@BINLIBDEST@
+ LIBDEST=	$(SCRIPTDIR)/python$(VERSION)
+ INCLUDEPY=	$(INCLUDEDIR)/python$(LDVERSION)
+ CONFINCLUDEPY=	$(CONFINCLUDEDIR)/python$(LDVERSION)
++VENVLAUNCHERDIR=	$(BINLIBDEST)/venv/scripts/nt
+ 
+ # Symbols used for using shared libraries
+ SHLIB_SUFFIX=	@SHLIB_SUFFIX@
+ EXT_SUFFIX=	@EXT_SUFFIX@
++PYD_PLATFORM_TAG = @PYD_PLATFORM_TAG@
+ LDSHARED=	@LDSHARED@ $(PY_LDFLAGS)
+ BLDSHARED=	@BLDSHARED@ $(PY_CORE_LDFLAGS)
+ LDCXXSHARED=	@LDCXXSHARED@ $(PY_LDFLAGS)
+@@ -263,6 +273,8 @@ LIBRARY_DEPS=	@LIBRARY_DEPS@
+ LINK_PYTHON_DEPS=@LINK_PYTHON_DEPS@
+ PY_ENABLE_SHARED=	@PY_ENABLE_SHARED@
+ STATIC_LIBPYTHON=	@STATIC_LIBPYTHON@
++ABI3DLLLIBRARY= libpython3.dll
++ABI3LDLIBRARY=  libpython3.dll.a
+ 
+ 
+ LIBS=		@LIBS@
+@@ -279,6 +291,9 @@ LIBOBJS=	@LIBOBJS@
+ 
+ PYTHON=		python$(EXE)
+ BUILDPYTHON=	python$(BUILDEXE)
++BUILDPYTHONW=	pythonw$(BUILDEXE)
++BUILDVENVLAUNCHER=	venvlauncher$(BUILDEXE)
++BUILDVENVWLAUNCHER=	venvwlauncher$(BUILDEXE)
+ 
+ HOSTRUNNER= @HOSTRUNNER@
+ 
+@@ -336,6 +351,10 @@ IO_OBJS=	\
+ 		Modules/_io/bytesio.o \
+ 		Modules/_io/stringio.o
+ 
++##########################################################################
++
++NCURSESW_INCLUDEDIR=	@NCURSESW_INCLUDEDIR@
++
+ ##########################################################################
+ # Parser
+ 
+@@ -383,7 +402,7 @@ PYTHON_OBJS=	\
+ 		Python/errors.o \
+ 		Python/flowgraph.o \
+ 		Python/frame.o \
+-		Python/frozenmain.o \
++		@PYTHON_OBJS_FROZENMAIN@ \
+ 		Python/future.o \
+ 		Python/getargs.o \
+ 		Python/getcompiler.o \
+@@ -399,6 +418,7 @@ PYTHON_OBJS=	\
+ 		Python/instrumentation.o \
+ 		Python/intrinsics.o \
+ 		Python/legacy_tracing.o \
++		Python/iscygpty.o \
+ 		Python/marshal.o \
+ 		Python/modsupport.o \
+ 		Python/mysnprintf.o \
+@@ -614,8 +634,8 @@ all:		@DEF_MAKE_ALL_RULE@
+ .PHONY: all
+ 
+ .PHONY: build_all
+-build_all:	check-clean-src $(BUILDPYTHON) platform sharedmods \
+-		gdbhooks Programs/_testembed scripts checksharedmods rundsymutil
++build_all:	check-clean-src $(BUILDPYTHON) $(BUILDPYTHONW) $(BUILDVENVLAUNCHER) $(BUILDVENVWLAUNCHER) platform sharedmods \
++		gdbhooks Programs/_testembed scripts checksharedmods rundsymutil $(ABI3DLLLIBRARY) $(ABI3LDLIBRARY)
+ 
+ .PHONY: build_wasm
+ build_wasm: check-clean-src $(BUILDPYTHON) platform sharedmods \
+@@ -781,9 +801,36 @@ coverage-report: regen-token regen-frozen
+ clinic: check-clean-src $(srcdir)/Modules/_blake2/blake2s_impl.c
+ 	$(PYTHON_FOR_REGEN) $(srcdir)/Tools/clinic/clinic.py --make --srcdir $(srcdir)
+ 
++python_exe.o: $(srcdir)/PC/python_exe.rc
++	$(WINDRES) $(RCFLAGS) -I$(srcdir)/Include -I$(srcdir)/PC -I. $(srcdir)/PC/python_exe.rc $@
++
++pythonw_exe.o: $(srcdir)/PC/pythonw_exe.rc
++	$(WINDRES) $(RCFLAGS) -I$(srcdir)/Include -I$(srcdir)/PC -I. $(srcdir)/PC/pythonw_exe.rc $@
++
++python_nt.o: $(srcdir)/PC/python_nt.rc
++	$(WINDRES) $(RCFLAGS) -DORIGINAL_FILENAME=\\\"$(DLLLIBRARY)\\\" -I$(srcdir)/Include -I$(srcdir)/PC -I. $(srcdir)/PC/python_nt.rc $@
++
++python3dll_nt.o: $(srcdir)/PC/python_nt.rc
++	$(WINDRES) $(RCFLAGS) -DORIGINAL_FILENAME=\\\"$(ABI3DLLLIBRARY)\\\" -I$(srcdir)/Include -I$(srcdir)/PC -I. $(srcdir)/PC/python_nt.rc $@
++
++venvlauncher.o: $(srcdir)/PC/pylauncher.rc
++	$(WINDRES) $(RCFLAGS) -DPY_ICON -I$(srcdir)/Include -I$(srcdir)/PC -I. $(srcdir)/PC/pylauncher.rc $@
++
++venvwlauncher.o: $(srcdir)/PC/pylauncher.rc
++	$(WINDRES) $(RCFLAGS) -DPYW_ICON -I$(srcdir)/Include -I$(srcdir)/PC -I. $(srcdir)/PC/pylauncher.rc $@
++
++$(BUILDPYTHONW): Programs/python.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY) pythonw_exe.o
++	$(LINKCC) $(PY_CORE_LDFLAGS) $(LINKFORSHARED) -municode -mwindows -o $@ Programs/python.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) pythonw_exe.o
++
+ # Build the interpreter
+-$(BUILDPYTHON):	Programs/python.o $(LINK_PYTHON_DEPS)
+-	$(LINKCC) $(PY_CORE_LDFLAGS) $(LINKFORSHARED) -o $@ Programs/python.o $(LINK_PYTHON_OBJS) $(LIBS) $(MODLIBS) $(SYSLIBS)
++$(BUILDPYTHON):	Programs/python.o $(LINK_PYTHON_DEPS) python_exe.o
++	$(LINKCC) $(PY_CORE_LDFLAGS) $(LINKFORSHARED) -municode -o $@ Programs/python.o $(LINK_PYTHON_OBJS) $(LIBS) $(MODLIBS) $(SYSLIBS) python_exe.o
++
++$(BUILDVENVLAUNCHER): $(BUILDPYTHON) venvlauncher.o  $(srcdir)/PC/launcher.c
++	$(LINKCC) -D_CONSOLE -DVENV_REDIRECT -DPYTHON_EXECUTABLE_WITH_VERSION="L\"python$(LDVERSION)$(EXE)\"" $(PY_STDMODULE_CFLAGS) -municode -static -static-libgcc -static-libstdc++ venvlauncher.o $(srcdir)/PC/launcher.c -o $@ -lversion
++
++$(BUILDVENVWLAUNCHER): $(BUILDPYTHONW) venvwlauncher.o  $(srcdir)/PC/launcher.c
++	$(LINKCC) -D_WINDOWS -DVENV_REDIRECT -DPYTHON_EXECUTABLE_WITH_VERSION="L\"pythonw$(LDVERSION)$(EXE)\"" $(PY_STDMODULE_CFLAGS) -mwindows -municode -static -static-libgcc -static-libstdc++ venvwlauncher.o $(srcdir)/PC/launcher.c -o $@ -lversion
+ 
+ platform: $(PYTHON_FOR_BUILD_DEPS) pybuilddir.txt
+ 	$(RUNSHARED) $(PYTHON_FOR_BUILD) -c 'import sys ; from sysconfig import get_platform ; print("%s-%d.%d" % (get_platform(), *sys.version_info[:2]))' >platform
+@@ -872,13 +919,17 @@ $(PYTHONFRAMEWORKDIR)/Versions/$(VERSION)/$(PYTHONFRAMEWORK): \
+ 
+ # This rule builds the Cygwin Python DLL and import library if configured
+ # for a shared core library; otherwise, this rule is a noop.
+-$(DLLLIBRARY) libpython$(LDVERSION).dll.a: $(LIBRARY_OBJS)
++$(DLLLIBRARY) libpython$(LDVERSION).dll.a: $(LIBRARY_OBJS) python_nt.o
+ 	if test -n "$(DLLLIBRARY)"; then \
+ 		$(LDSHARED) -Wl,--out-implib=$@ -o $(DLLLIBRARY) $^ \
+-			$(LIBS) $(MODLIBS) $(SYSLIBS); \
++			$(LIBS) $(LDFLAGS_NODIST) $(MODLIBS) $(SYSLIBS) python_nt.o; \
+ 	else true; \
+ 	fi
+ 
++$(ABI3DLLLIBRARY) $(ABI3LDLIBRARY): python3dll_nt.o $(srcdir)/PC/launcher.c
++	$(LDSHARED) -DPYTHON_DLL_NAME=\"$(DLLLIBRARY)\" $(srcdir)/PC/python3dll.c -Wl,--out-implib=$(ABI3LDLIBRARY) -o $(ABI3DLLLIBRARY) python3dll_nt.o \
++		$(LDFLAGS_NODIST);
++
+ # wasm32-emscripten browser build
+ # wasm assets directory is relative to current build dir, e.g. "./usr/local".
+ # --preload-file turns a relative asset path into an absolute path.
+@@ -1072,7 +1123,7 @@ BOOTSTRAP_HEADERS = \
+ Programs/_bootstrap_python.o: Programs/_bootstrap_python.c $(BOOTSTRAP_HEADERS) $(PYTHON_HEADERS)
+ 
+ _bootstrap_python: $(LIBRARY_OBJS_OMIT_FROZEN) Programs/_bootstrap_python.o Modules/getpath.o Modules/Setup.local
+-	$(LINKCC) $(PY_LDFLAGS_NOLTO) -o $@ $(LIBRARY_OBJS_OMIT_FROZEN) \
++	$(LINKCC) $(PY_LDFLAGS_NOLTO) -o $@ -municode -mwindows $(LIBRARY_OBJS_OMIT_FROZEN) \
+ 		Programs/_bootstrap_python.o Modules/getpath.o $(LIBS) $(MODLIBS) $(SYSLIBS)
+ 
+ 
+@@ -1378,9 +1429,15 @@ Python/dynload_hpux.o: $(srcdir)/Python/dynload_hpux.c Makefile
+ 		-DSHLIB_EXT='"$(EXT_SUFFIX)"' \
+ 		-o $@ $(srcdir)/Python/dynload_hpux.c
+ 
++Python/dynload_win.o: $(srcdir)/Python/dynload_win.c Makefile
++	$(CC) -c $(PY_CORE_CFLAGS) \
++		-DPYD_PLATFORM_TAG='"$(PYD_PLATFORM_TAG)"' \
++		-o $@ $(srcdir)/Python/dynload_win.c
++
+ Python/sysmodule.o: $(srcdir)/Python/sysmodule.c Makefile $(srcdir)/Include/pydtrace.h
+ 	$(CC) -c $(PY_CORE_CFLAGS) \
+ 		-DABIFLAGS='"$(ABIFLAGS)"' \
++		-DVPATH='"$(VPATH)"' \
+ 		$(MULTIARCH_CPPFLAGS) \
+ 		-o $@ $(srcdir)/Python/sysmodule.c
+ 
+@@ -1623,6 +1680,7 @@ PYTHON_HEADERS= \
+ 		$(srcdir)/Include/import.h \
+ 		$(srcdir)/Include/interpreteridobject.h \
+ 		$(srcdir)/Include/intrcheck.h \
++		$(srcdir)/Include/iscygpty.h \
+ 		$(srcdir)/Include/iterobject.h \
+ 		$(srcdir)/Include/listobject.h \
+ 		$(srcdir)/Include/longobject.h \
+@@ -1954,7 +2012,7 @@ sharedinstall: all
+ # This goes into $(exec_prefix)
+ .PHONY: altbininstall
+ altbininstall: $(BUILDPYTHON) @FRAMEWORKPYTHONW@
+-	@for i in $(BINDIR) $(LIBDIR); \
++	@for i in $(BINDIR) $(LIBDIR) $(VENVLAUNCHERDIR); \
+ 	do \
+ 		if test ! -d $(DESTDIR)$$i; then \
+ 			echo "Creating directory $$i"; \
+@@ -1964,6 +2022,9 @@ altbininstall: $(BUILDPYTHON) @FRAMEWORKPYTHONW@
+ 	done
+ 	if test "$(PYTHONFRAMEWORKDIR)" = "no-framework" ; then \
+ 		$(INSTALL_PROGRAM) $(BUILDPYTHON) $(DESTDIR)$(BINDIR)/python$(LDVERSION)$(EXE); \
++		$(INSTALL_PROGRAM) $(BUILDPYTHONW) $(DESTDIR)$(BINDIR)/python3w$(EXE); \
++		$(INSTALL_PROGRAM) $(BUILDVENVLAUNCHER) $(DESTDIR)$(VENVLAUNCHERDIR)/python$(EXE); \
++		$(INSTALL_PROGRAM) $(BUILDVENVWLAUNCHER) $(DESTDIR)$(VENVLAUNCHERDIR)/pythonw$(EXE); \
+ 	else \
+ 		$(INSTALL_PROGRAM) $(STRIPFLAG) Mac/pythonw $(DESTDIR)$(BINDIR)/python$(LDVERSION)$(EXE); \
+ 	fi
+@@ -1977,6 +2038,7 @@ altbininstall: $(BUILDPYTHON) @FRAMEWORKPYTHONW@
+ 		if test -f $(LDLIBRARY) && test "$(PYTHONFRAMEWORKDIR)" = "no-framework" ; then \
+ 			if test -n "$(DLLLIBRARY)" ; then \
+ 				$(INSTALL_SHARED) $(DLLLIBRARY) $(DESTDIR)$(BINDIR); \
++				$(INSTALL_SHARED) $(ABI3DLLLIBRARY) $(DESTDIR)$(BINDIR); \
+ 			else \
+ 				$(INSTALL_SHARED) $(LDLIBRARY) $(DESTDIR)$(LIBDIR)/$(INSTSONAME); \
+ 				if test $(LDLIBRARY) != $(INSTSONAME); then \
+@@ -2109,6 +2171,7 @@ LIBSUBDIRS=	asyncio \
+ 		tkinter \
+ 		tomllib \
+ 		turtledemo \
++		msilib \
+ 		unittest \
+ 		urllib \
+ 		venv venv/scripts venv/scripts/common venv/scripts/posix \
+@@ -2451,8 +2514,9 @@ libainstall: all scripts
+ 	@if test "$(STATIC_LIBPYTHON)" = 1; then \
+ 		if test -d $(LIBRARY); then :; else \
+ 			if test "$(PYTHONFRAMEWORKDIR)" = no-framework; then \
+-				if test "$(SHLIB_SUFFIX)" = .dll; then \
+-					$(INSTALL_DATA) $(LDLIBRARY) $(DESTDIR)$(LIBPL) ; \
++				if test "$(SHLIB_SUFFIX)" = .dll -o "$(SHLIB_SUFFIX)" = .pyd; then \
++					$(INSTALL_DATA) $(LDLIBRARY) $(DESTDIR)$(LIBDIR) ; \
++					$(INSTALL_DATA) $(ABI3LDLIBRARY) $(DESTDIR)$(LIBDIR) ; \
+ 				else \
+ 					$(INSTALL_DATA) $(LIBRARY) $(DESTDIR)$(LIBPL)/$(LIBRARY) ; \
+ 				fi; \
+@@ -2706,7 +2770,7 @@ clean: clean-retain-profile clean-bolt
+ 
+ .PHONY: clobber
+ clobber: clean
+-	-rm -f $(BUILDPYTHON) $(LIBRARY) $(LDLIBRARY) $(DLLLIBRARY) \
++	-rm -f $(BUILDPYTHON) $(LIBRARY) $(LDLIBRARY) $(DLLLIBRARY)$(ABI3LDLIBRARY) $(ABI3DLLLIBRARY) \
+ 		tags TAGS \
+ 		config.cache config.log pyconfig.h Modules/config.c
+ 	-rm -rf build platform
+diff --git a/Misc/config_mingw b/Misc/config_mingw
+new file mode 100644
+index 00000000000..9be43fd3a11
+--- /dev/null
++++ b/Misc/config_mingw
+@@ -0,0 +1,15 @@
++# configure defaults for mingw* hosts
++
++# mingw functions to ignore
++ac_cv_func_ftruncate=ignore	# implement it as _chsize
++
++# mingw-w64 functions to ignore
++ac_cv_func_truncate=ignore
++ac_cv_func_alarm=ignore
++
++# files to ignore
++ac_cv_file__dev_ptmx=ignore #NOTE: under MSYS environment device exist
++ac_cv_file__dev_ptc=no
++
++# force detection of winsock2 functionality - require wxp or newer
++ac_cv_func_getpeername=yes
+diff --git a/Misc/cross_mingw32 b/Misc/cross_mingw32
+new file mode 100644
+index 00000000000..03fde9e6af3
+--- /dev/null
++++ b/Misc/cross_mingw32
+@@ -0,0 +1,11 @@
++# configure defaults for mingw32 host if cross-build
++
++ac_cv_little_endian_double=yes
++ac_cv_big_endian_double=no
++ac_cv_mixed_endian_double=no
++
++ac_cv_tanh_preserves_zero_sign=yes
++
++ac_cv_wchar_t_signed=no
++
++ac_cv_have_size_t_format=no
+diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
+index 2602fe24c04..195c317ada3 100644
+--- a/Misc/python-config.sh.in
++++ b/Misc/python-config.sh.in
+@@ -1,32 +1,44 @@
+ #!/bin/sh
+ 
+-# Keep this script in sync with python-config.in
+-
+ exit_with_usage ()
+ {
+     echo "Usage: $0 --prefix|--exec-prefix|--includes|--libs|--cflags|--ldflags|--extension-suffix|--help|--abiflags|--configdir|--embed"
+-    exit $1
++    exit 1
+ }
+ 
++# Really, python-config.py (and thus .sh) should be called directly, but
++# sometimes software (e.g. GDB) calls python-config.sh as if it were the
++# Python executable, passing python-config.py as the first argument.
++# Work around that oddness by ignoring any .py passed as first arg.
++case "$1" in
++    *.py)
++        shift
++    ;;
++esac
++
+ if [ "$1" = "" ] ; then
+-    exit_with_usage 1
++    exit_with_usage
+ fi
+ 
+ # Returns the actual prefix where this script was installed to.
+ installed_prefix ()
+ {
+-    RESULT=$(dirname $(cd $(dirname "$1") && pwd -P))
+-    if which readlink >/dev/null 2>&1 ; then
+-        if readlink -f "$RESULT" >/dev/null 2>&1; then
+-          RESULT=$(readlink -f "$RESULT")
+-        fi
++    local RESULT=$(dirname $(cd $(dirname "$1") && pwd -P))
++    if [ $(which readlink) ] ; then
++        RESULT=$(readlink -f "$RESULT")
++    fi
++    # Since we don't know where the output from this script will end up
++    # we keep all paths in Windows-land since MSYS2 can handle that
++    # while native tools can't handle paths in MSYS2-land.
++    if [ "$OSTYPE" = "cygwin" ] || [ "$OSTYPE" = "msys" ] ; then
++        RESULT=$(cd "$RESULT" && pwd -W)
+     fi
+     echo $RESULT
+ }
+ 
+ prefix_real=$(installed_prefix "$0")
+ 
+-# Use sed to fix paths from their built-to locations to their installed-to
++# Use sed to fix paths from their built-to locations to their installed to
+ # locations. Keep prefix & exec_prefix using their original values in case
+ # they are referenced in other configure variables, to prevent double
+ # substitution, issue #22140.
+@@ -41,13 +53,17 @@ LIBM="@LIBM@"
+ LIBC="@LIBC@"
+ SYSLIBS="$LIBM $LIBC"
+ ABIFLAGS="@ABIFLAGS@"
++# Protect against lack of substitution.
++if [ "$ABIFLAGS" = "@""ABIFLAGS""@" ] ; then
++    ABIFLAGS=
++fi
+ LIBS="@LIBPYTHON@ @LIBS@ $SYSLIBS"
+ LIBS_EMBED="-lpython${VERSION}${ABIFLAGS} @LIBS@ $SYSLIBS"
+ BASECFLAGS="@BASECFLAGS@"
+-LDLIBRARY="@LDLIBRARY@"
+ OPT="@OPT@"
+ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
+ LDVERSION="@LDVERSION@"
++LDLIBRARY="@LDLIBRARY@"
+ LIBDEST=${prefix_real}/lib/python${VERSION}
+ LIBPL=$(echo "@LIBPL@" | sed "s#$prefix#$prefix_real#")
+ SO="@EXT_SUFFIX@"
+@@ -61,7 +77,7 @@ for ARG in $*
+ do
+     case $ARG in
+         --help)
+-            exit_with_usage 0
++            exit_with_usage
+         ;;
+         --embed)
+             PY_EMBED=1
+@@ -69,7 +85,7 @@ do
+         --prefix|--exec-prefix|--includes|--libs|--cflags|--ldflags|--extension-suffix|--abiflags|--configdir)
+         ;;
+         *)
+-            exit_with_usage 1
++            exit_with_usage
+         ;;
+     esac
+ done
+@@ -80,37 +96,37 @@ fi
+ 
+ for ARG in "$@"
+ do
+-    case "$ARG" in
++    case $ARG in
+         --prefix)
+-            echo "$prefix_real"
++            echo -ne "$prefix_real"
+         ;;
+         --exec-prefix)
+-            echo "$exec_prefix_real"
++            echo -ne "$exec_prefix_real "
+         ;;
+         --includes)
+-            echo "$INCDIR $PLATINCDIR"
++            echo -ne "$INCDIR $PLATINCDIR"
+         ;;
+         --cflags)
+-            echo "$INCDIR $PLATINCDIR $BASECFLAGS $CFLAGS $OPT"
++            echo -ne "$INCDIR $PLATINCDIR $BASECFLAGS $CFLAGS $OPT"
+         ;;
+         --libs)
+-            echo "$LIBS"
++            echo -ne "$LIBS"
+         ;;
+         --ldflags)
+             LIBPLUSED=
+             if [ "$PY_ENABLE_SHARED" = "0" ] ; then
+                 LIBPLUSED="-L$LIBPL"
+             fi
+-            echo "$LIBPLUSED -L$libdir $LIBS"
++            echo -ne "$LIBPLUSED -L$libdir $LIBS "
+         ;;
+         --extension-suffix)
+-            echo "$SO"
++            echo -ne "$SO "
+         ;;
+         --abiflags)
+-            echo "$ABIFLAGS"
++            echo -ne "$ABIFLAGS "
+         ;;
+         --configdir)
+-            echo "$LIBPL"
++            echo -ne "$LIBPL "
+         ;;
+ esac
+ done
+diff --git a/Modules/Setup.bootstrap.in b/Modules/Setup.bootstrap.in
+index 8ef0f203a82..cec80f5a9f0 100644
+--- a/Modules/Setup.bootstrap.in
++++ b/Modules/Setup.bootstrap.in
+@@ -8,15 +8,15 @@
+ # module C APIs are used in core
+ atexit atexitmodule.c
+ faulthandler faulthandler.c
+-posix posixmodule.c
+-_signal signalmodule.c
++@INITSYS@ posixmodule.c
++_signal signalmodule.c -lws2_32
+ _tracemalloc _tracemalloc.c
+ 
+ # modules used by importlib, deepfreeze, freeze, runpy, and sysconfig
+ _codecs _codecsmodule.c
+ _collections _collectionsmodule.c
+ errno errnomodule.c
+-_io _io/_iomodule.c _io/iobase.c _io/fileio.c _io/bytesio.c _io/bufferedio.c _io/textio.c _io/stringio.c
++_io _io/_iomodule.c _io/iobase.c _io/fileio.c _io/bytesio.c _io/bufferedio.c _io/textio.c _io/stringio.c _io/winconsoleio.c
+ itertools itertoolsmodule.c
+ _sre _sre/sre.c
+ _thread _threadmodule.c
+@@ -34,3 +34,8 @@ _symtable symtablemodule.c
+ 
+ # for systems without $HOME env, used by site._getuserbase()
+ @MODULE_PWD_TRUE@pwd pwdmodule.c
++
++# build-in modules for windows platform:
++@USE_WIN32_MODULE@winreg ../PC/winreg.c
++@MODULE_MSVCRT_TRUE@msvcrt -DPy_BUILD_CORE ../PC/msvcrtmodule.c
++@MODULE__WINAPI_TRUE@_winapi _winapi.c
+diff --git a/Modules/Setup.stdlib.in b/Modules/Setup.stdlib.in
+index 5e587dd3a5a..b96db5d6d2b 100644
+--- a/Modules/Setup.stdlib.in
++++ b/Modules/Setup.stdlib.in
+@@ -160,6 +160,13 @@
+ # _scproxy needs SystemConfiguration and CoreFoundation framework
+ @MODULE__SCPROXY_TRUE@_scproxy _scproxy.c
+ 
++############################################################################
++# Windows specific modules
++
++@MODULE__OVERLAPPED_TRUE@_overlapped overlapped.c
++@MODULE__MSI_TRUE@_msi ../PC/_msi.c
++@MODULE_WINSOUND_TRUE@winsound ../PC/winsound.c
++
+ 
+ ############################################################################
+ # Test modules
+@@ -177,6 +184,7 @@
+ @MODULE__TESTMULTIPHASE_TRUE@_testmultiphase _testmultiphase.c
+ @MODULE__TESTMULTIPHASE_TRUE@_testsinglephase _testsinglephase.c
+ @MODULE__CTYPES_TEST_TRUE@_ctypes_test _ctypes/_ctypes_test.c
++@MODULE__TESTCONSOLE_TRUE@_testconsole ../PC/_testconsole.c
+ 
+ # Limited API template modules; must be built as shared modules.
+ @MODULE_XXLIMITED_TRUE@xxlimited xxlimited.c
+diff --git a/Modules/_ctypes/_ctypes.c b/Modules/_ctypes/_ctypes.c
+index d3b496887b5..c208223b3f1 100644
+--- a/Modules/_ctypes/_ctypes.c
++++ b/Modules/_ctypes/_ctypes.c
+@@ -3416,6 +3416,18 @@ static PPROC FindAddress(void *handle, const char *name, PyObject *type)
+     mangled_name = alloca(strlen(name) + 1 + 1 + 1 + 3); /* \0 _ @ %d */
+     if (!mangled_name)
+         return NULL;
++    /* Issue: for stdcall decorated export functions MSVC compiler adds
++     * underscore, but GCC compiler create them without. This is
++     * visible by example for _ctypes_test.pyd module.
++     * As well functions from system libraries are without underscore.
++     * Solutions:
++     * - If a python module is build with gcc option --add-stdcall-alias
++     * the module will contain XXX as alias for function XXX@ as result
++     * first search in this method will succeed.
++     * - Distutil may use compiler to create def-file, to modify it as
++     * add underscore alias and with new def file to create module.
++     * - Or may be just to search for function without underscore.
++     */
+     for (i = 0; i < 32; ++i) {
+         sprintf(mangled_name, "_%s@%d", name, i*4);
+         Py_BEGIN_ALLOW_THREADS
+@@ -3423,6 +3435,13 @@ static PPROC FindAddress(void *handle, const char *name, PyObject *type)
+         Py_END_ALLOW_THREADS
+         if (address)
+             return address;
++        /* search for function without underscore as weel */
++        sprintf(mangled_name, "%s@%d", name, i*4);
++        Py_BEGIN_ALLOW_THREADS
++        address = (PPROC)GetProcAddress(handle, mangled_name);
++        Py_END_ALLOW_THREADS
++        if (address)
++            return address;
+     }
+     return NULL;
+ #endif
+diff --git a/Modules/_gdbmmodule.c b/Modules/_gdbmmodule.c
+index ffd7b642089..b536cedffce 100644
+--- a/Modules/_gdbmmodule.c
++++ b/Modules/_gdbmmodule.c
+@@ -18,7 +18,7 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ 
+-#if defined(WIN32) && !defined(__CYGWIN__)
++#if defined(WIN32) && !defined(__CYGWIN__) && !defined(__MINGW32__)
+ #include "gdbmerrno.h"
+ extern const char * gdbm_strerror(gdbm_error);
+ #endif
+diff --git a/Modules/_io/fileio.c b/Modules/_io/fileio.c
+index bab68077a21..919b8b0429e 100644
+--- a/Modules/_io/fileio.c
++++ b/Modules/_io/fileio.c
+@@ -20,6 +20,7 @@
+ #endif
+ #include <stddef.h> /* For offsetof */
+ #include "_iomodule.h"
++#include "iscygpty.h"
+ 
+ /*
+  * Known likely problems:
+@@ -1143,7 +1144,7 @@ _io_FileIO_isatty_impl(fileio *self)
+         return err_closed();
+     Py_BEGIN_ALLOW_THREADS
+     _Py_BEGIN_SUPPRESS_IPH
+-    res = isatty(self->fd);
++    res = isatty(self->fd) || is_cygpty(self->fd);
+     _Py_END_SUPPRESS_IPH
+     Py_END_ALLOW_THREADS
+     return PyBool_FromLong(res);
+diff --git a/Modules/_localemodule.c b/Modules/_localemodule.c
+index db8194372da..416bd591ea2 100644
+--- a/Modules/_localemodule.c
++++ b/Modules/_localemodule.c
+@@ -12,6 +12,13 @@ This software comes with no warranty. Use at your own risk.
+ #define PY_SSIZE_T_CLEAN
+ #include "Python.h"
+ #include "pycore_fileutils.h"
++#ifdef __MINGW32__
++/* The header libintl.h and library libintl may exist on mingw host.
++ * To be compatible with MSVC build we has to undef some defines.
++ */
++#undef HAVE_LIBINTL_H
++#undef HAVE_BIND_TEXTDOMAIN_CODESET
++#endif
+ 
+ #include <stdio.h>
+ #include <locale.h>
+diff --git a/Modules/_multiprocessing/multiprocessing.c b/Modules/_multiprocessing/multiprocessing.c
+index 8f9daa5c3de..eb2cb5f86f2 100644
+--- a/Modules/_multiprocessing/multiprocessing.c
++++ b/Modules/_multiprocessing/multiprocessing.c
+@@ -180,7 +180,7 @@ static PyMethodDef module_methods[] = {
+     _MULTIPROCESSING_RECV_METHODDEF
+     _MULTIPROCESSING_SEND_METHODDEF
+ #endif
+-#if !defined(POSIX_SEMAPHORES_NOT_ENABLED) && !defined(__ANDROID__)
++#if defined(MS_WINDOWS) || (!defined(POSIX_SEMAPHORES_NOT_ENABLED) && !defined(__ANDROID__))
+     _MULTIPROCESSING_SEM_UNLINK_METHODDEF
+ #endif
+     {NULL}
+diff --git a/Modules/_multiprocessing/multiprocessing.h b/Modules/_multiprocessing/multiprocessing.h
+index dfc2a8e0799..dc92a233d37 100644
+--- a/Modules/_multiprocessing/multiprocessing.h
++++ b/Modules/_multiprocessing/multiprocessing.h
+@@ -23,7 +23,10 @@
+ #  endif
+ #  define SEM_HANDLE HANDLE
+ #  define SEM_VALUE_MAX LONG_MAX
+-#  define HAVE_MP_SEMAPHORE
++#    define HAVE_MP_SEMAPHORE
++#  if defined(HAVE_SEM_OPEN) && defined(_POSIX_THREADS)
++#    include <semaphore.h>
++#  endif
+ #else
+ #  include <fcntl.h>                 /* O_CREAT and O_EXCL */
+ #  if defined(HAVE_SEM_OPEN) && !defined(POSIX_SEMAPHORES_NOT_ENABLED)
+diff --git a/Modules/_winapi.c b/Modules/_winapi.c
+index ac3ee113ffd..abb32f0bd8c 100644
+--- a/Modules/_winapi.c
++++ b/Modules/_winapi.c
+@@ -44,7 +44,9 @@
+ #endif
+ #include "windows.h"
+ #include <winioctl.h>
++#if defined(Py_DEBUG)
+ #include <crtdbg.h>
++#endif
+ #include "winreparse.h"
+ 
+ #if defined(MS_WIN32) && !defined(MS_WIN64)
+@@ -1125,7 +1127,7 @@ getattributelist(PyObject *obj, const char *name, AttributeList *attribute_list)
+     DWORD err;
+     BOOL result;
+     PyObject *value;
+-    Py_ssize_t handle_list_size;
++    Py_ssize_t handle_list_size = 0;
+     DWORD attribute_count = 0;
+     SIZE_T attribute_list_size = 0;
+ 
+diff --git a/Modules/getpath.c b/Modules/getpath.c
+index 0a310000751..47b89ebcf52 100644
+--- a/Modules/getpath.c
++++ b/Modules/getpath.c
+@@ -54,6 +54,25 @@
+ 
+ /* HELPER FUNCTIONS for getpath.py */
+ 
++static PyObject *
++getpath_normpath(PyObject *Py_UNUSED(self), PyObject *args)
++{
++    PyObject *r = NULL;
++    PyObject *pathobj;
++    wchar_t *path;
++    if (!PyArg_ParseTuple(args, "U", &pathobj)) {
++        return NULL;
++    }
++    Py_ssize_t len;
++    wchar_t *buffer = PyUnicode_AsWideCharString(pathobj, &len);
++    if (!buffer) {
++        return NULL;
++    }
++    r = PyUnicode_FromWideChar(_Py_normpath(buffer, len), -1);
++    PyMem_Free(buffer);
++    return r;
++}
++
+ static PyObject *
+ getpath_abspath(PyObject *Py_UNUSED(self), PyObject *args)
+ {
+@@ -88,6 +107,12 @@ getpath_basename(PyObject *Py_UNUSED(self), PyObject *args)
+     }
+     Py_ssize_t end = PyUnicode_GET_LENGTH(path);
+     Py_ssize_t pos = PyUnicode_FindChar(path, SEP, 0, end, -1);
++#ifdef ALTSEP
++    if (pos < 0) {
++        // try using altsep
++        pos = PyUnicode_FindChar(path, ALTSEP, 0, end, -1);
++    }
++#endif
+     if (pos < 0) {
+         return Py_NewRef(path);
+     }
+@@ -104,6 +129,12 @@ getpath_dirname(PyObject *Py_UNUSED(self), PyObject *args)
+     }
+     Py_ssize_t end = PyUnicode_GET_LENGTH(path);
+     Py_ssize_t pos = PyUnicode_FindChar(path, SEP, 0, end, -1);
++#ifdef ALTSEP
++    if (pos < 0) {
++        // try using altsep
++        pos = PyUnicode_FindChar(path, ALTSEP, 0, end, -1);
++    }
++#endif
+     if (pos < 0) {
+         return PyUnicode_FromStringAndSize(NULL, 0);
+     }
+@@ -510,6 +541,7 @@ getpath_realpath(PyObject *Py_UNUSED(self) , PyObject *args)
+ 
+ 
+ static PyMethodDef getpath_methods[] = {
++    {"normpath", getpath_normpath, METH_VARARGS, NULL},
+     {"abspath", getpath_abspath, METH_VARARGS, NULL},
+     {"basename", getpath_basename, METH_VARARGS, NULL},
+     {"dirname", getpath_dirname, METH_VARARGS, NULL},
+@@ -881,6 +913,11 @@ _PyConfig_InitPathConfig(PyConfig *config, int compute_path_config)
+ #else
+         !decode_to_dict(dict, "os_name", "posix") ||
+ #endif
++#ifdef __MINGW32__
++        !int_to_dict(dict, "is_mingw", 1) ||
++#else
++        !int_to_dict(dict, "is_mingw", 0) ||
++#endif
+ #ifdef WITH_NEXT_FRAMEWORK
+         !int_to_dict(dict, "WITH_NEXT_FRAMEWORK", 1) ||
+ #else
+@@ -907,6 +944,9 @@ _PyConfig_InitPathConfig(PyConfig *config, int compute_path_config)
+         !funcs_to_dict(dict, config->pathconfig_warnings) ||
+ #ifndef MS_WINDOWS
+         PyDict_SetItemString(dict, "winreg", Py_None) < 0 ||
++#endif
++#ifdef __MINGW32__
++        !env_to_dict(dict, "ENV_MSYSTEM", 0) ||
+ #endif
+         PyDict_SetItemString(dict, "__builtins__", PyEval_GetBuiltins()) < 0
+     ) {
+diff --git a/Modules/getpath.py b/Modules/getpath.py
+index 9913fcba497..d143f9776ef 100644
+--- a/Modules/getpath.py
++++ b/Modules/getpath.py
+@@ -30,6 +30,7 @@
+ 
+ # ** Values known at compile time **
+ # os_name           -- [in] one of 'nt', 'posix', 'darwin'
++# is_mingw          -- [in] True if targeting MinGW
+ # PREFIX            -- [in] sysconfig.get_config_var(...)
+ # EXEC_PREFIX       -- [in] sysconfig.get_config_var(...)
+ # PYTHONPATH        -- [in] sysconfig.get_config_var(...)
+@@ -51,6 +52,7 @@
+ # ENV_PYTHONHOME          -- [in] getenv(...)
+ # ENV_PYTHONEXECUTABLE    -- [in] getenv(...)
+ # ENV___PYVENV_LAUNCHER__ -- [in] getenv(...)
++# ENV_MSYSTEM             -- [in] getenv(...)
+ 
+ # ** Values calculated at runtime **
+ # config            -- [in/out] dict of the PyConfig structure
+@@ -185,8 +187,27 @@
+     ZIP_LANDMARK = f'{platlibdir}/python{VERSION_MAJOR}{VERSION_MINOR}.zip'
+     DELIM = ':'
+     SEP = '/'
++    ALTSEP = None
+ 
+-elif os_name == 'nt':
++elif os_name == 'nt' and is_mingw:
++    BUILDDIR_TXT = 'pybuilddir.txt'
++    BUILD_LANDMARK = 'Modules/Setup.local'
++    DEFAULT_PROGRAM_NAME = f'python{VERSION_MAJOR}'
++    STDLIB_SUBDIR = f'{platlibdir}/python{VERSION_MAJOR}.{VERSION_MINOR}'
++    STDLIB_LANDMARKS = [f'{STDLIB_SUBDIR}/os.py', f'{STDLIB_SUBDIR}/os.pyc']
++    PLATSTDLIB_LANDMARK = f'{platlibdir}/python{VERSION_MAJOR}.{VERSION_MINOR}/lib-dynload'
++    BUILDSTDLIB_LANDMARKS = ['Lib/os.py']
++    VENV_LANDMARK = 'pyvenv.cfg'
++    ZIP_LANDMARK = f'{platlibdir}/python{VERSION_MAJOR}{VERSION_MINOR}.zip'
++    DELIM = ';'
++    if ENV_MSYSTEM:
++        SEP = '/'
++        ALTSEP = '\\'
++    else:
++        SEP = '\\'
++        ALTSEP = '/'
++
++elif os_name == 'nt': # MSVC
+     BUILDDIR_TXT = 'pybuilddir.txt'
+     BUILD_LANDMARK = f'{VPATH}\\Modules\\Setup.local'
+     DEFAULT_PROGRAM_NAME = f'python'
+@@ -199,6 +220,7 @@
+     WINREG_KEY = f'SOFTWARE\\Python\\PythonCore\\{PYWINVER}\\PythonPath'
+     DELIM = ';'
+     SEP = '\\'
++    ALTSEP = '/'
+ 
+ 
+ # ******************************************************************************
+@@ -211,6 +233,8 @@ def search_up(prefix, *landmarks, test=isfile):
+             return prefix
+         prefix = dirname(prefix)
+ 
++def _normpath(p):
++    return normpath(p) if p is not None else None
+ 
+ # ******************************************************************************
+ # READ VARIABLES FROM config
+@@ -263,10 +287,10 @@ def search_up(prefix, *landmarks, test=isfile):
+     if not executable:
+         executable = real_executable
+ 
+-if not executable and SEP in program_name:
++if not executable and (SEP in program_name or 
++                       (ALTSEP and ALTSEP in program_name)):
+     # Resolve partial path program_name against current directory
+     executable = abspath(program_name)
+-
+ if not executable:
+     # All platforms default to real_executable if known at this
+     # stage. POSIX does not set this value.
+@@ -497,15 +521,15 @@ def search_up(prefix, *landmarks, test=isfile):
+     except (FileNotFoundError, PermissionError):
+         if isfile(joinpath(real_executable_dir, BUILD_LANDMARK)):
+             build_prefix = joinpath(real_executable_dir, VPATH)
+-            if os_name == 'nt':
++            if os_name == 'nt' and not is_mingw:
+                 # QUIRK: Windows builds need platstdlib_dir to be the executable
+                 # dir. Normally the builddir marker handles this, but in this
+                 # case we need to correct manually.
+                 platstdlib_dir = real_executable_dir
+ 
+     if build_prefix:
+-        if os_name == 'nt':
+-            # QUIRK: No searching for more landmarks on Windows
++        if os_name == 'nt' and not is_mingw:
++            # QUIRK: No searching for more landmarks on MSVC
+             build_stdlib_prefix = build_prefix
+         else:
+             build_stdlib_prefix = search_up(build_prefix, *BUILDSTDLIB_LANDMARKS)
+@@ -552,6 +576,9 @@ def search_up(prefix, *landmarks, test=isfile):
+     # First try to detect prefix by looking alongside our runtime library, if known
+     if library and not prefix:
+         library_dir = dirname(library)
++        if os_name == 'nt' and is_mingw:
++            # QUIRK: On Windows, mingw Python DLLs are in the bin directory
++            library_dir = joinpath(library_dir, '..')
+         if ZIP_LANDMARK:
+             if os_name == 'nt':
+                 # QUIRK: Windows does not search up for ZIP file
+@@ -597,7 +624,7 @@ def search_up(prefix, *landmarks, test=isfile):
+ 
+     # Detect exec_prefix by searching from executable for the platstdlib_dir
+     if PLATSTDLIB_LANDMARK and not exec_prefix:
+-        if os_name == 'nt':
++        if os_name == 'nt' and (not is_mingw):
+             # QUIRK: Windows always assumed these were the same
+             # gh-100320: Our PYDs are assumed to be relative to the Lib directory
+             # (that is, prefix) rather than the executable (that is, executable_dir)
+@@ -607,7 +634,7 @@ def search_up(prefix, *landmarks, test=isfile):
+         if not exec_prefix and EXEC_PREFIX:
+             exec_prefix = EXEC_PREFIX
+         if not exec_prefix or not isdir(joinpath(exec_prefix, PLATSTDLIB_LANDMARK)):
+-            if os_name == 'nt':
++            if os_name == 'nt' and (not is_mingw):
+                 # QUIRK: If DLLs is missing on Windows, don't warn, just assume
+                 # that they're in exec_prefix
+                 if not platstdlib_dir:
+@@ -645,7 +672,7 @@ def search_up(prefix, *landmarks, test=isfile):
+ 
+ if py_setpath:
+     # If Py_SetPath was called then it overrides any existing search path
+-    config['module_search_paths'] = py_setpath.split(DELIM)
++    config['module_search_paths'] = [_normpath(p) for p in py_setpath.split(DELIM)]
+     config['module_search_paths_set'] = 1
+ 
+ elif not pythonpath_was_set:
+@@ -660,7 +687,7 @@ def search_up(prefix, *landmarks, test=isfile):
+             pythonpath.append(abspath(p))
+ 
+     # Then add the default zip file
+-    if os_name == 'nt':
++    if os_name == 'nt' and (not is_mingw):
+         # QUIRK: Windows uses the library directory rather than the prefix
+         if library:
+             library_dir = dirname(library)
+@@ -673,7 +700,7 @@ def search_up(prefix, *landmarks, test=isfile):
+     else:
+         pythonpath.append(joinpath(prefix, ZIP_LANDMARK))
+ 
+-    if os_name == 'nt' and use_environment and winreg:
++    if (not is_mingw) and os_name == 'nt' and use_environment and winreg:
+         # QUIRK: Windows also lists paths in the registry. Paths are stored
+         # as the default value of each subkey of
+         # {HKCU,HKLM}\Software\Python\PythonCore\{winver}\PythonPath
+@@ -714,7 +741,7 @@ def search_up(prefix, *landmarks, test=isfile):
+     if not platstdlib_dir and exec_prefix:
+         platstdlib_dir = joinpath(exec_prefix, PLATSTDLIB_LANDMARK)
+ 
+-    if os_name == 'nt':
++    if os_name == 'nt' and (not is_mingw):
+         # QUIRK: Windows generates paths differently
+         if platstdlib_dir:
+             pythonpath.append(platstdlib_dir)
+@@ -732,7 +759,7 @@ def search_up(prefix, *landmarks, test=isfile):
+         if platstdlib_dir:
+             pythonpath.append(platstdlib_dir)
+ 
+-    config['module_search_paths'] = pythonpath
++    config['module_search_paths'] = [_normpath(p) for p in pythonpath]
+     config['module_search_paths_set'] = 1
+ 
+ 
+@@ -742,8 +769,8 @@ def search_up(prefix, *landmarks, test=isfile):
+ 
+ # QUIRK: Non-Windows replaces prefix/exec_prefix with defaults when running
+ # in build directory. This happens after pythonpath calculation.
+-if os_name != 'nt' and build_prefix:
+-    prefix = config.get('prefix') or PREFIX
++if (os_name != 'nt' or is_mingw) and build_prefix:
++    prefix = config.get('prefix') or abspath(PREFIX)
+     exec_prefix = config.get('exec_prefix') or EXEC_PREFIX or prefix
+ 
+ 
+@@ -767,23 +794,23 @@ def search_up(prefix, *landmarks, test=isfile):
+             warn("unsupported 'import' line in ._pth file")
+         else:
+             pythonpath.append(joinpath(pth_dir, line))
+-    config['module_search_paths'] = pythonpath
++    config['module_search_paths'] = [_normpath(p) for p in pythonpath]
+     config['module_search_paths_set'] = 1
+ 
+ # ******************************************************************************
+ # UPDATE config FROM CALCULATED VALUES
+ # ******************************************************************************
+ 
+-config['program_name'] = program_name
+-config['home'] = home
+-config['executable'] = executable
+-config['base_executable'] = base_executable
+-config['prefix'] = prefix
+-config['exec_prefix'] = exec_prefix
+-config['base_prefix'] = base_prefix or prefix
+-config['base_exec_prefix'] = base_exec_prefix or exec_prefix
++config['program_name'] = _normpath(program_name)
++config['home'] = _normpath(home)
++config['executable'] = _normpath(executable)
++config['base_executable'] = _normpath(base_executable)
++config['prefix'] = _normpath(prefix)
++config['exec_prefix'] = _normpath(exec_prefix)
++config['base_prefix'] = _normpath(base_prefix or prefix)
++config['base_exec_prefix'] = _normpath(base_exec_prefix or exec_prefix)
+ 
+-config['platlibdir'] = platlibdir
++config['platlibdir'] = _normpath(platlibdir)
+ # test_embed expects empty strings, not None
+-config['stdlib_dir'] = stdlib_dir or ''
+-config['platstdlib_dir'] = platstdlib_dir or ''
++config['stdlib_dir'] = _normpath(stdlib_dir or '')
++config['platstdlib_dir'] = _normpath(platstdlib_dir or '')
+diff --git a/Modules/main.c b/Modules/main.c
+index f4e4018212f..fbdccddaee9 100644
+--- a/Modules/main.c
++++ b/Modules/main.c
+@@ -7,6 +7,7 @@
+ #include "pycore_pathconfig.h"    // _PyPathConfig_ComputeSysPath0()
+ #include "pycore_pylifecycle.h"   // _Py_PreInitializeFromPyArgv()
+ #include "pycore_pystate.h"       // _PyInterpreterState_GET()
++#include "iscygpty.h"
+ 
+ /* Includes for exit_sigint() */
+ #include <stdio.h>                // perror()
+@@ -92,7 +93,7 @@ static inline int config_run_code(const PyConfig *config)
+ static int
+ stdin_is_interactive(const PyConfig *config)
+ {
+-    return (isatty(fileno(stdin)) || config->interactive);
++    return (isatty(fileno(stdin)) || config->interactive || is_cygpty(fileno(stdin)));
+ }
+ 
+ 
+diff --git a/Modules/makesetup b/Modules/makesetup
+index f000c9cd673..5e2ada098a5 100755
+--- a/Modules/makesetup
++++ b/Modules/makesetup
+@@ -88,7 +88,7 @@ NL='\
+ '
+ 
+ # Setup to link with extra libraries when making shared extensions.
+-# Currently, only Cygwin needs this baggage.
++# Currently, only Cygwin and MINGW needs this baggage.
+ case `uname -s` in
+ CYGWIN*) if test $libdir = .
+ 	 then
+@@ -97,6 +97,9 @@ CYGWIN*) if test $libdir = .
+ 	 	ExtraLibDir='$(LIBPL)'
+ 	 fi
+ 	 ExtraLibs="-L$ExtraLibDir -lpython\$(LDVERSION)";;
++*)
++	 ExtraLibs='$(BLDLIBRARY)'
++	 ExtraLibDepends='$(LIBRARY_DEPS)';;
+ esac
+ 
+ # Main loop
+@@ -285,7 +288,7 @@ sed -e 's/[ 	]*#.*//' -e '/^[ 	]*$/d' |
+ 				BUILT_SHARED="$BUILT_SHARED $mod"
+ 				;;
+ 			esac
+-			rule="$file: $objs"
++			rule="$file: $objs $ExtraLibDepends"
+ 			rule="$rule; \$(BLDSHARED) $objs $libs $ExtraLibs -o $file"
+ 			echo "$rule" >>$rulesf
+ 		done
+diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
+index c21c6f06c72..53b93d2e424 100644
+--- a/Modules/posixmodule.c
++++ b/Modules/posixmodule.c
+@@ -54,6 +54,7 @@
+ #ifdef __ANDROID__
+ #  undef HAVE_FACCESSAT
+ #endif
++#include "iscygpty.h"
+ 
+ #include <stdio.h>                // ctermid()
+ #include <stdlib.h>               // system()
+@@ -369,6 +370,32 @@ corresponding Unix manual entries for more information on calls.");
+ #  define HAVE_PIPE       1
+ #  define HAVE_FSYNC      1
+ #  define fsync _commit
++#elif defined(__MINGW32__)	/* GCC for windows hosts */
++/* getlogin is detected by configure on mingw-w64 */
++#  undef HAVE_GETLOGIN
++/* opendir is detected by configure on mingw-w64, and for some reason
++things don't work as expected. For example, os.listdir always returns
++the cwd's directory listing instead of the one specified. By 
++un-defining, this, os.listdir will use the one which uses native
++windows API. */
++#  undef HAVE_OPENDIR
++/*#    define HAVE_GETCWD     1 - detected by configure*/
++#  define HAVE_GETPPID    1
++#  define HAVE_GETLOGIN   1
++#  define HAVE_SPAWNV     1
++#  define HAVE_WSPAWNV    1
++#  define HAVE_WEXECV     1
++/*#    define HAVE_EXECV	     1 - detected by configure*/
++#  define HAVE_PIPE	     1
++#  define HAVE_POPEN	     1
++#  define HAVE_SYSTEM	   1
++#  define HAVE_CWAIT      1
++#  define HAVE_FSYNC      1
++#  define fsync _commit
++#  include <winioctl.h>
++#  ifndef _MAX_ENV
++#    define _MAX_ENV	32767
++#  endif
+ #endif  /* ! __WATCOMC__ || __QNX__ */
+ 
+ /*[clinic input]
+@@ -446,7 +473,7 @@ extern char        *ctermid_r(char *);
+ #  endif
+ #endif
+ 
+-#ifdef _MSC_VER
++#ifdef MS_WINDOWS
+ #  ifdef HAVE_DIRECT_H
+ #    include <direct.h>
+ #  endif
+@@ -457,7 +484,7 @@ extern char        *ctermid_r(char *);
+ #    include <process.h>
+ #  endif
+ #  include <malloc.h>
+-#endif /* _MSC_VER */
++#endif /* MS_WINDOWS */
+ 
+ #ifndef MAXPATHLEN
+ #  if defined(PATH_MAX) && PATH_MAX > 1024
+@@ -1594,9 +1621,9 @@ _Py_Sigset_Converter(PyObject *obj, void *addr)
+ ** man environ(7).
+ */
+ #include <crt_externs.h>
+-#elif !defined(_MSC_VER) && (!defined(__WATCOMC__) || defined(__QNX__) || defined(__VXWORKS__))
++#elif !defined(MS_WINDOWS) && (!defined(__WATCOMC__) || defined(__QNX__) || defined(__VXWORKS__))
+ extern char **environ;
+-#endif /* !_MSC_VER */
++#endif /* !MS_WINDOWS */
+ 
+ static PyObject *
+ convertenviron(void)
+@@ -3986,6 +4013,7 @@ posix_getcwd(int use_bytes)
+         return NULL;
+     }
+ 
++    Py_NormalizeSepsW(wbuf2);
+     PyObject *resobj = PyUnicode_FromWideChar(wbuf2, len);
+     if (wbuf2 != wbuf) {
+         PyMem_RawFree(wbuf2);
+@@ -4872,6 +4900,7 @@ os__getfinalpathname_impl(PyObject *module, path_t *path)
+         target_path = tmp;
+     }
+ 
++    Py_NormalizeSepsW(target_path);
+     result = PyUnicode_FromWideChar(target_path, result_length);
+     if (result && PyBytes_Check(path->object)) {
+         Py_SETREF(result, PyUnicode_EncodeFSDefault(result));
+@@ -6257,7 +6286,7 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
+ /*[clinic end generated code: output=cfcac69d027b82cf input=2fbd62a2f228f8f4]*/
+ {
+ #ifdef MS_WINDOWS
+-    HANDLE hFile;
++    HANDLE hFile = 0;
+     FILETIME atime, mtime;
+ #else
+     int result;
+@@ -11213,7 +11242,7 @@ os_isatty_impl(PyObject *module, int fd)
+     int return_value;
+     Py_BEGIN_ALLOW_THREADS
+     _Py_BEGIN_SUPPRESS_IPH
+-    return_value = isatty(fd);
++    return_value = isatty(fd) || is_cygpty(fd);
+     _Py_END_SUPPRESS_IPH
+     Py_END_ALLOW_THREADS
+     return return_value;
+diff --git a/Modules/selectmodule.c b/Modules/selectmodule.c
+index 50788e5344c..89396f31d0d 100644
+--- a/Modules/selectmodule.c
++++ b/Modules/selectmodule.c
+@@ -169,9 +169,9 @@ seq2set(PyObject *seq, fd_set *set, pylist fd2obj[FD_SETSIZE + 1])
+         v = PyObject_AsFileDescriptor( o );
+         if (v == -1) goto finally;
+ 
+-#if defined(_MSC_VER)
++#if defined(MS_WIN32)
+         max = 0;                             /* not used for Win32 */
+-#else  /* !_MSC_VER */
++#else  /* !MS_WIN32 */
+         if (!_PyIsSelectable_fd(v)) {
+             PyErr_SetString(PyExc_ValueError,
+                         "filedescriptor out of range in select()");
+@@ -179,7 +179,7 @@ seq2set(PyObject *seq, fd_set *set, pylist fd2obj[FD_SETSIZE + 1])
+         }
+         if (v > max)
+             max = v;
+-#endif /* _MSC_VER */
++#endif /* MS_WIN32 */
+         FD_SET(v, set);
+ 
+         /* add object and its file descriptor to the list */
+diff --git a/Modules/socketmodule.c b/Modules/socketmodule.c
+index 27afd73d970..f0d84d350b6 100644
+--- a/Modules/socketmodule.c
++++ b/Modules/socketmodule.c
+@@ -279,9 +279,10 @@ shutdown(how) -- shut down traffic in one or both directions\n\
+ # endif
+ 
+ /* Helpers needed for AF_HYPERV */
+-# include <Rpc.h>
++# include <rpc.h>
+ 
+ /* Macros based on the IPPROTO enum, see: https://bugs.python.org/issue29515 */
++#ifdef _MSC_VER
+ #define IPPROTO_ICMP IPPROTO_ICMP
+ #define IPPROTO_IGMP IPPROTO_IGMP
+ #define IPPROTO_GGP IPPROTO_GGP
+@@ -312,6 +313,7 @@ shutdown(how) -- shut down traffic in one or both directions\n\
+ #define IPPROTO_PGM IPPROTO_PGM  // WinSock2 only
+ #define IPPROTO_L2TP IPPROTO_L2TP  // WinSock2 only
+ #define IPPROTO_SCTP IPPROTO_SCTP  // WinSock2 only
++#endif /* _MSC_VER */
+ 
+ /* Provides the IsWindows7SP1OrGreater() function */
+ #include <versionhelpers.h>
+@@ -426,6 +428,10 @@ remove_unusable_flags(PyObject *m)
+   /* Do not include addrinfo.h for MSVC7 or greater. 'addrinfo' and
+    * EAI_* constants are defined in (the already included) ws2tcpip.h.
+    */
++#elif defined(__MINGW32__)
++  /* Do not include addrinfo.h as minimum supported version is
++   * _WIN32_WINNT >= WindowsXP(0x0501)
++   */
+ #else
+ #  include "addrinfo.h"
+ #endif
+diff --git a/Modules/socketmodule.h b/Modules/socketmodule.h
+index f5ca00450ee..1e92327d04f 100644
+--- a/Modules/socketmodule.h
++++ b/Modules/socketmodule.h
+@@ -68,8 +68,10 @@ struct SOCKADDR_BTH_REDEF {
+  */
+ # ifdef SIO_GET_MULTICAST_FILTER
+ #  include <mstcpip.h> /* for SIO_RCVALL */
++#ifndef __MINGW32__ /* resolve by configure */
+ #  define HAVE_ADDRINFO
+ #  define HAVE_SOCKADDR_STORAGE
++#endif
+ #  define HAVE_GETADDRINFO
+ #  define HAVE_GETNAMEINFO
+ #  define ENABLE_IPV6
+diff --git a/Modules/timemodule.c b/Modules/timemodule.c
+index 59078263571..4946cdc2f65 100644
+--- a/Modules/timemodule.c
++++ b/Modules/timemodule.c
+@@ -905,7 +905,7 @@ time_strftime(PyObject *module, PyObject *args)
+         return NULL;
+     }
+ 
+-#if defined(_MSC_VER) || (defined(__sun) && defined(__SVR4)) || defined(_AIX) || defined(__VXWORKS__)
++#if defined(MS_WINDOWS) || (defined(__sun) && defined(__SVR4)) || defined(_AIX) || defined(__VXWORKS__)
+     if (buf.tm_year + 1900 < 1 || 9999 < buf.tm_year + 1900) {
+         PyErr_SetString(PyExc_ValueError,
+                         "strftime() requires year in [1; 9999]");
+diff --git a/Objects/fileobject.c b/Objects/fileobject.c
+index e99e155f2b8..c74d2af4903 100644
+--- a/Objects/fileobject.c
++++ b/Objects/fileobject.c
+@@ -3,6 +3,7 @@
+ #define PY_SSIZE_T_CLEAN
+ #include "Python.h"
+ #include "pycore_call.h"          // _PyObject_CallNoArgs()
++#include "iscygpty.h"
+ #include "pycore_runtime.h"       // _PyRuntime
+ 
+ #if defined(HAVE_GETC_UNLOCKED) && !defined(_Py_MEMORY_SANITIZER)
+@@ -382,7 +383,7 @@ stdprinter_isatty(PyStdPrinter_Object *self, PyObject *Py_UNUSED(ignored))
+     }
+ 
+     Py_BEGIN_ALLOW_THREADS
+-    res = isatty(self->fd);
++    res = isatty(self->fd) || is_cygpty(self->fd);
+     Py_END_ALLOW_THREADS
+ 
+     return PyBool_FromLong(res);
+diff --git a/PC/_testconsole.c b/PC/_testconsole.c
+index 3221b985d01..47fbe6feb33 100644
+--- a/PC/_testconsole.c
++++ b/PC/_testconsole.c
+@@ -116,7 +116,7 @@ _testconsole_read_output_impl(PyObject *module, PyObject *file)
+     Py_RETURN_NONE;
+ }
+ 
+-#include "clinic\_testconsole.c.h"
++#include "clinic/_testconsole.c.h"
+ 
+ PyMethodDef testconsole_methods[] = {
+     _TESTCONSOLE_WRITE_INPUT_METHODDEF
+diff --git a/PC/launcher.c b/PC/launcher.c
+index dc265533740..ee7600468f1 100644
+--- a/PC/launcher.c
++++ b/PC/launcher.c
+@@ -924,7 +924,7 @@ static COMMAND path_command;
+ static COMMAND * find_on_path(wchar_t * name)
+ {
+     wchar_t * pathext;
+-    size_t    varsize;
++    size_t    requiredSize;
+     wchar_t * context = NULL;
+     wchar_t * extension;
+     COMMAND * result = NULL;
+@@ -941,18 +941,23 @@ static COMMAND * find_on_path(wchar_t * name)
+     }
+     else {
+         /* No extension - search using registered extensions. */
+-        rc = _wdupenv_s(&pathext, &varsize, L"PATHEXT");
+-        if (rc == 0) {
+-            extension = wcstok_s(pathext, L";", &context);
+-            while (extension) {
+-                len = SearchPathW(NULL, name, extension, MSGSIZE, path_command.value, NULL);
+-                if (len) {
+-                    result = &path_command;
+-                    break;
++        _wgetenv_s(&requiredSize, NULL, 0, L"PATHEXT");
++        if (requiredSize > 0) {
++            pathext = (wchar_t *)malloc(requiredSize * sizeof(wchar_t));
++            /* No extension - search using registered extensions. */
++            rc = _wgetenv_s(&requiredSize, pathext, requiredSize, L"PATHEXT");
++            if (rc == 0) {
++                extension = wcstok_s(pathext, L";", &context);
++                while (extension) {
++                    len = SearchPathW(NULL, name, extension, MSGSIZE, path_command.value, NULL);
++                    if (len) {
++                        result = &path_command;
++                        break;
++                    }
++                    extension = wcstok_s(NULL, L";", &context);
+                 }
+-                extension = wcstok_s(NULL, L";", &context);
++                free(pathext);
+             }
+-            free(pathext);
+         }
+     }
+     return result;
+@@ -1912,7 +1917,7 @@ process(int argc, wchar_t ** argv)
+         if (_wfopen_s(&f, venv_cfg_path, L"r")) {
+             error(RC_BAD_VENV_CFG, L"Cannot read '%ls'", venv_cfg_path);
+         }
+-        cb = fread_s(buffer, sizeof(buffer), sizeof(buffer[0]),
++        cb = fread(buffer, sizeof(buffer[0]),
+                      sizeof(buffer) / sizeof(buffer[0]), f);
+         fclose(f);
+ 
+@@ -1925,7 +1930,8 @@ process(int argc, wchar_t ** argv)
+         if (!cch) {
+             error(0, L"Cannot determine memory for home path");
+         }
+-        cch += (DWORD)wcslen(PYTHON_EXECUTABLE) + 4; /* include sep, null and quotes */
++        cch += (DWORD)max(wcslen(PYTHON_EXECUTABLE_WITH_VERSION),
++                          wcslen(PYTHON_EXECUTABLE)) + 4; /* include sep, null and quotes */
+         executable = (wchar_t *)malloc(cch * sizeof(wchar_t));
+         if (executable == NULL) {
+             error(RC_NO_MEMORY, L"A memory allocation failed");
+@@ -1943,13 +1949,22 @@ process(int argc, wchar_t ** argv)
+             executable[cch_actual++] = L'\\';
+             executable[cch_actual] = L'\0';
+         }
+-        if (wcscat_s(&executable[1], cch - 1, PYTHON_EXECUTABLE)) {
++        if (wcscat_s(&executable[1], cch - 1, PYTHON_EXECUTABLE_WITH_VERSION)) {
+             error(RC_BAD_VENV_CFG, L"Cannot create executable path from '%ls'",
+                   venv_cfg_path);
+         }
+         /* there's no trailing quote, so we only have to skip one character for the test */
++        // Check if the versioned executable (PYTHON_EXECUTABLE_WITH_VERSION) exists first
+         if (GetFileAttributesW(&executable[1]) == INVALID_FILE_ATTRIBUTES) {
+-            error(RC_NO_PYTHON, L"No Python at '%ls'", executable);
++            // If not found, try PYTHON_EXECUTABLE
++            executable[cch_actual] = L'\0';  // Reset the path
++            if (wcscat_s(&executable[1], cch - 1, PYTHON_EXECUTABLE)) {
++                error(RC_BAD_VENV_CFG, L"Cannot create executable path from '%ls'",
++                      venv_cfg_path);
++            }
++            if (GetFileAttributesW(&executable[1]) == INVALID_FILE_ATTRIBUTES) {
++                error(RC_NO_PYTHON, L"No Python at '%ls'", executable);
++            }
+         }
+         /* now append the final quote */
+         wcscat_s(executable, cch, L"\"");
+diff --git a/PC/msvcrtmodule.c b/PC/msvcrtmodule.c
+index 53ef26b732f..10cf78258a8 100644
+--- a/PC/msvcrtmodule.c
++++ b/PC/msvcrtmodule.c
+@@ -22,7 +22,9 @@
+ #include <io.h>
+ #include <conio.h>
+ #include <sys/locking.h>
++#ifdef _DEBUG
+ #include <crtdbg.h>
++#endif
+ #include <windows.h>
+ 
+ #ifdef _MSC_VER
+diff --git a/PC/pylauncher.rc b/PC/pylauncher.rc
+index 11862643aa6..84b291722f6 100644
+--- a/PC/pylauncher.rc
++++ b/PC/pylauncher.rc
+@@ -12,17 +12,17 @@
+ 1 RT_MANIFEST "python.manifest"
+ 
+ #if defined(PY_ICON)
+-1 ICON DISCARDABLE "icons\python.ico"
++1 ICON DISCARDABLE "icons/python.ico"
+ #elif defined(PYW_ICON)
+-1 ICON DISCARDABLE "icons\pythonw.ico"
++1 ICON DISCARDABLE "icons/pythonw.ico"
+ #else
+-1 ICON DISCARDABLE "icons\launcher.ico" 
+-2 ICON DISCARDABLE "icons\py.ico" 
+-3 ICON DISCARDABLE "icons\pyc.ico" 
+-4 ICON DISCARDABLE "icons\pyd.ico" 
+-5 ICON DISCARDABLE "icons\python.ico"
+-6 ICON DISCARDABLE "icons\pythonw.ico"
+-7 ICON DISCARDABLE "icons\setup.ico" 
++1 ICON DISCARDABLE "icons/launcher.ico"
++2 ICON DISCARDABLE "icons/py.ico" 
++3 ICON DISCARDABLE "icons/pyc.ico" 
++4 ICON DISCARDABLE "icons/pyd.ico" 
++5 ICON DISCARDABLE "icons/python.ico"
++6 ICON DISCARDABLE "icons/pythonw.ico"
++7 ICON DISCARDABLE "icons/setup.ico" 
+ #endif
+ 
+ 1 USAGE "launcher-usage.txt"
+@@ -64,4 +64,4 @@ BEGIN
+     BEGIN
+         VALUE "Translation", 0x0, 1200
+     END
+-END
+\ No newline at end of file
++END
+diff --git a/PC/python3dll.c b/PC/python3dll.c
+index 505feef4b98..ee9380c8143 100755
+--- a/PC/python3dll.c
++++ b/PC/python3dll.c
+@@ -2,6 +2,7 @@
+ 
+ /* Generated by Tools/build/stable_abi.py */
+ 
++#ifdef _MSC_VER
+ #ifdef _M_IX86
+ #define DECORATE "_"
+ #else
+@@ -12,6 +13,13 @@
+     __pragma(comment(linker, "/EXPORT:" DECORATE #name "=" PYTHON_DLL_NAME "." #name))
+ #define EXPORT_DATA(name) \
+     __pragma(comment(linker, "/EXPORT:" DECORATE #name "=" PYTHON_DLL_NAME "." #name ",DATA"))
++#else
++// XXX: Why do we need the .dll extension and no DECORATE compared to the MSVC case?
++#define EXPORT_FUNC(name) \
++    asm(".section .drectve\n\t.ascii \" -export:" #name "=\\\"" PYTHON_DLL_NAME "." #name "\\\" \"");
++#define EXPORT_DATA(name) \
++    asm(".section .drectve\n\t.ascii \" -export:" #name "=\\\"" PYTHON_DLL_NAME "." #name "\\\",DATA \"");
++#endif
+ 
+ EXPORT_FUNC(_Py_BuildValue_SizeT)
+ EXPORT_FUNC(_Py_CheckRecursiveCall)
+diff --git a/PC/python_exe.rc b/PC/python_exe.rc
+index c3d3bff0198..dde0e538420 100644
+--- a/PC/python_exe.rc
++++ b/PC/python_exe.rc
+@@ -12,7 +12,7 @@
+ // current versions of Windows.
+ 1 RT_MANIFEST "python.manifest"
+ 
+-1 ICON DISCARDABLE "icons\python.ico" 
++1 ICON DISCARDABLE "icons/python.ico"
+ 
+ 
+ /////////////////////////////////////////////////////////////////////////////
+diff --git a/PC/pythonw_exe.rc b/PC/pythonw_exe.rc
+index 38570b74fa3..7ce1043298e 100644
+--- a/PC/pythonw_exe.rc
++++ b/PC/pythonw_exe.rc
+@@ -12,7 +12,7 @@
+ // current versions of Windows.
+ 1 RT_MANIFEST "python.manifest"
+ 
+-1 ICON DISCARDABLE "icons\pythonw.ico" 
++1 ICON DISCARDABLE "icons/pythonw.ico"
+ 
+ 
+ /////////////////////////////////////////////////////////////////////////////
+diff --git a/PC/winreg.c b/PC/winreg.c
+index e2d5322f458..33ec8ffa07d 100644
+--- a/PC/winreg.c
++++ b/PC/winreg.c
+@@ -19,6 +19,25 @@
+ #include "structmember.h"         // PyMemberDef
+ #include <windows.h>
+ 
++#ifndef SIZEOF_HKEY
++/* used only here */
++#if defined(MS_WIN64)
++#  define SIZEOF_HKEY 8
++#elif defined(MS_WIN32)
++#  define SIZEOF_HKEY 4
++#else
++#  error "SIZEOF_HKEY is not defined"
++#endif
++#endif
++
++#ifndef REG_LEGAL_CHANGE_FILTER
++#define REG_LEGAL_CHANGE_FILTER        (\
++          REG_NOTIFY_CHANGE_NAME       |\
++          REG_NOTIFY_CHANGE_ATTRIBUTES |\
++          REG_NOTIFY_CHANGE_LAST_SET   |\
++          REG_NOTIFY_CHANGE_SECURITY   )
++#endif
++
+ #if defined(MS_WINDOWS_DESKTOP) || defined(MS_WINDOWS_SYSTEM) || defined(MS_WINDOWS_GAMES)
+ 
+ typedef struct {
+@@ -812,6 +831,7 @@ Reg2Py(BYTE *retDataBuf, DWORD retDataSize, DWORD typ)
+         case REG_BINARY:
+         /* ALSO handle ALL unknown data types here.  Even if we can't
+            support it natively, we should handle the bits. */
++           /* fallthrough */
+         default:
+             if (retDataSize == 0) {
+                 obData = Py_NewRef(Py_None);
+diff --git a/Python/bltinmodule.c b/Python/bltinmodule.c
+index 2ae28693bee..d918964a90e 100644
+--- a/Python/bltinmodule.c
++++ b/Python/bltinmodule.c
+@@ -1,6 +1,7 @@
+ /* Built-in functions */
+ 
+ #include "Python.h"
++#include "iscygpty.h"
+ #include <ctype.h>
+ #include "pycore_ast.h"           // _PyAST_Validate()
+ #include "pycore_call.h"          // _PyObject_CallNoArgs()
+@@ -2163,7 +2164,7 @@ builtin_input_impl(PyObject *module, PyObject *prompt)
+         if (fd < 0 && PyErr_Occurred()) {
+             goto error;
+         }
+-        tty = fd == fileno(stdin) && isatty(fd);
++        tty = fd == fileno(stdin) && (isatty(fd) || is_cygpty(fd));
+     }
+     if (tty) {
+         tmp = PyObject_CallMethodNoArgs(fout, &_Py_ID(fileno));
+@@ -2176,7 +2177,7 @@ builtin_input_impl(PyObject *module, PyObject *prompt)
+             Py_DECREF(tmp);
+             if (fd < 0 && PyErr_Occurred())
+                 goto error;
+-            tty = fd == fileno(stdout) && isatty(fd);
++            tty = fd == fileno(stdout) && (isatty(fd) || is_cygpty(fd));
+         }
+     }
+ 
+diff --git a/Python/dynamic_annotations.c b/Python/dynamic_annotations.c
+index 7febaa09df1..70d5b3dc720 100644
+--- a/Python/dynamic_annotations.c
++++ b/Python/dynamic_annotations.c
+@@ -27,7 +27,7 @@
+  * Author: Kostya Serebryany
+  */
+ 
+-#ifdef _MSC_VER
++#ifdef MS_WINDOWS
+ # include <windows.h>
+ #endif
+ 
+diff --git a/Python/dynload_win.c b/Python/dynload_win.c
+index acab05e2c6d..caa49681d17 100644
+--- a/Python/dynload_win.c
++++ b/Python/dynload_win.c
+@@ -4,6 +4,7 @@
+ #include "Python.h"
+ #include "pycore_fileutils.h"     // _Py_add_relfile()
+ #include "pycore_pystate.h"       // _PyInterpreterState_GET()
++#include "pycore_initconfig.h"
+ 
+ #ifdef HAVE_DIRECT_H
+ #include <direct.h>
+@@ -55,6 +56,16 @@ const char *_PyImport_DynLoadFiletab[] = {
+ #define DWORD_AT(mem) (*(DWORD *)(mem))
+ #define WORD_AT(mem)  (*(WORD *)(mem))
+ 
++#ifdef __MINGW32__
++#define DLL_PREFIX "libpython"
++#define DLL_PREFIX_LEN 9
++#define DLL_NAME_FORMAT "libpython%d.%d"
++#else
++#define DLL_PREFIX "python"
++#define DLL_PREFIX_LEN 6
++#define DLL_NAME_FORMAT "python%d%d"
++#endif
++
+ static char *GetPythonImport (HINSTANCE hModule)
+ {
+     unsigned char *dllbase, *import_data, *import_name;
+@@ -121,15 +132,15 @@ static char *GetPythonImport (HINSTANCE hModule)
+                                          import_off);
+         while (DWORD_AT(import_data)) {
+             import_name = dllbase + DWORD_AT(import_data+12);
+-            if (strlen(import_name) >= 6 &&
+-                !strncmp(import_name,"python",6)) {
++            if (strlen(import_name) >= DLL_PREFIX_LEN &&
++                !strncmp(import_name, DLL_PREFIX, DLL_PREFIX_LEN)) {
+                 char *pch;
+ 
+                 /* Don't claim that python3.dll is a Python DLL. */
+ #ifdef _DEBUG
+-                if (strcmp(import_name, "python3_d.dll") == 0) {
++                if (strcmp(import_name, DLL_PREFIX "3_d.dll") == 0) {
+ #else
+-                if (strcmp(import_name, "python3.dll") == 0) {
++                if (strcmp(import_name, DLL_PREFIX "3.dll") == 0) {
+ #endif
+                     import_data += 20;
+                     continue;
+@@ -137,7 +148,7 @@ static char *GetPythonImport (HINSTANCE hModule)
+ 
+                 /* Ensure python prefix is followed only
+                    by numbers to the end of the basename */
+-                pch = import_name + 6;
++                pch = import_name + DLL_PREFIX_LEN;
+ #ifdef _DEBUG
+                 while (*pch && pch[0] != '_' && pch[1] != 'd' && pch[2] != '.') {
+ #else
+@@ -171,8 +182,7 @@ static char *GetPythonImport (HINSTANCE hModule)
+    Return whether the DLL was found.
+ */
+ extern HMODULE PyWin_DLLhModule;
+-static int
+-_Py_CheckPython3(void)
++int _Py_CheckPython3(void)
+ {
+     static int python3_checked = 0;
+     static HANDLE hPython3;
+@@ -226,14 +236,38 @@ dl_funcptr _PyImport_FindSharedFuncptrWindows(const char *prefix,
+     dl_funcptr p;
+     char funcname[258], *import_python;
+ 
+-#ifdef Py_ENABLE_SHARED
+-    _Py_CheckPython3();
+-#endif /* Py_ENABLE_SHARED */
++    int use_legacy = 0;
++    DWORD load_library_flags = 0;
++
++    _Py_get_env_flag(1, &use_legacy, "PYTHONLEGACYWINDOWSDLLLOADING");
++
++    if (use_legacy) {
++        load_library_flags = LOAD_WITH_ALTERED_SEARCH_PATH;
++    } else {
++        load_library_flags = LOAD_LIBRARY_SEARCH_DEFAULT_DIRS |
++                              LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR;
++    }
++
++#ifdef _MSC_VER
++    _Py_CheckPython3(); 
++#endif /* _MSC_VER */
++
++// So we can adjust the separators in the path below
++#define USE_UNICODE_WCHAR_CACHE 0
+ 
+     wchar_t *wpathname = PyUnicode_AsWideCharString(pathname, NULL);
+     if (wpathname == NULL)
+         return NULL;
+ 
++    // LoadLibraryExW only considers paths using backslashes as "fully qualified",
++    // and for example LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR doesn't work with forward slashes.
++    // https://github.com/msys2-contrib/cpython-mingw/issues/151
++    for (size_t i = 0; wpathname[i] != L'\0'; ++i) {
++        if (wpathname[i] == L'/') {
++            wpathname[i] = L'\\';
++        }
++    }
++
+     PyOS_snprintf(funcname, sizeof(funcname), "%.20s_%.200s", prefix, shortname);
+ 
+     {
+@@ -250,9 +284,7 @@ dl_funcptr _PyImport_FindSharedFuncptrWindows(const char *prefix,
+            AddDllDirectory function. We add SEARCH_DLL_LOAD_DIR to
+            ensure DLLs adjacent to the PYD are preferred. */
+         Py_BEGIN_ALLOW_THREADS
+-        hDLL = LoadLibraryExW(wpathname, NULL,
+-                              LOAD_LIBRARY_SEARCH_DEFAULT_DIRS |
+-                              LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
++        hDLL = LoadLibraryExW(wpathname, NULL, load_library_flags);
+         Py_END_ALLOW_THREADS
+         PyMem_Free(wpathname);
+ 
+@@ -319,9 +351,9 @@ dl_funcptr _PyImport_FindSharedFuncptrWindows(const char *prefix,
+ 
+             PyOS_snprintf(buffer, sizeof(buffer),
+ #ifdef _DEBUG
+-                          "python%d%d_d.dll",
++                          DLL_NAME_FORMAT "_d.dll",
+ #else
+-                          "python%d%d.dll",
++                          DLL_NAME_FORMAT ".dll",
+ #endif
+                           PY_MAJOR_VERSION,PY_MINOR_VERSION);
+             import_python = GetPythonImport(hDLL);
+diff --git a/Python/fileutils.c b/Python/fileutils.c
+index c7521751cd2..aae41433515 100644
+--- a/Python/fileutils.c
++++ b/Python/fileutils.c
+@@ -1,4 +1,5 @@
+ #include "Python.h"
++#include "iscygpty.h"
+ #include "pycore_fileutils.h"     // fileutils definitions
+ #include "pycore_runtime.h"       // _PyRuntime
+ #include "osdefs.h"               // SEP
+@@ -77,7 +78,7 @@ _Py_device_encoding(int fd)
+     int valid;
+     Py_BEGIN_ALLOW_THREADS
+     _Py_BEGIN_SUPPRESS_IPH
+-    valid = isatty(fd);
++    valid = isatty(fd) || is_cygpty(fd);
+     _Py_END_SUPPRESS_IPH
+     Py_END_ALLOW_THREADS
+     if (!valid)
+@@ -1925,12 +1926,12 @@ _Py_write_impl(int fd, const void *buf, size_t count, int gil_held)
+            depending on heap usage). */
+         if (gil_held) {
+             Py_BEGIN_ALLOW_THREADS
+-            if (isatty(fd)) {
++            if (isatty(fd) || is_cygpty(fd)) {
+                 count = 32767;
+             }
+             Py_END_ALLOW_THREADS
+         } else {
+-            if (isatty(fd)) {
++            if (isatty(fd) || is_cygpty(fd)) {
+                 count = 32767;
+             }
+         }
+@@ -2143,19 +2144,31 @@ int
+ _Py_isabs(const wchar_t *path)
+ {
+ #ifdef MS_WINDOWS
++    // create a copy of path and replace all forward slashes with backslashes
++    // pathccskiproot does not handle forward slashes
++    wchar_t *path_copy = _wcsdup(path);
++    if (path_copy == NULL) {
++        return 0;
++    }
++    Py_NormalizeSepsPathcchW(path_copy);
++
+     const wchar_t *tail;
+-    HRESULT hr = PathCchSkipRoot(path, &tail);
+-    if (FAILED(hr) || path == tail) {
++    HRESULT hr = PathCchSkipRoot(path_copy, &tail);
++    if (FAILED(hr) || path_copy == tail) {
++        free(path_copy);
+         return 0;
+     }
+-    if (tail == &path[1] && (path[0] == SEP || path[0] == ALTSEP)) {
++    if (tail == &path_copy[1] && (path_copy[0] == SEP || path_copy[0] == ALTSEP)) {
+         // Exclude paths with leading SEP
++        free(path_copy);
+         return 0;
+     }
+-    if (tail == &path[2] && path[1] == L':') {
++    if (tail == &path_copy[2] && path_copy[1] == L':') {
+         // Exclude drive-relative paths (e.g. C:filename.ext)
++        free(path_copy);
+         return 0;
+     }
++    free(path_copy);
+     return 1;
+ #else
+     return (path[0] == SEP);
+@@ -2188,7 +2201,11 @@ _Py_abspath(const wchar_t *path, wchar_t **abspath_p)
+     }
+ 
+ #ifdef MS_WINDOWS
+-    return _PyOS_getfullpathname(path, abspath_p);
++    if (_PyOS_getfullpathname(path, abspath_p) < 0){
++        return -1;
++    }
++    *abspath_p = _Py_normpath(*abspath_p, -1);
++    return 0;
+ #else
+     wchar_t cwd[MAXPATHLEN + 1];
+     cwd[Py_ARRAY_LENGTH(cwd) - 1] = 0;
+@@ -2298,6 +2315,8 @@ join_relfile(wchar_t *buffer, size_t bufsize,
+              const wchar_t *dirname, const wchar_t *relfile)
+ {
+ #ifdef MS_WINDOWS
++    Py_NormalizeSepsPathcchW(dirname);
++    Py_NormalizeSepsPathcchW(relfile);
+     if (FAILED(PathCchCombineEx(buffer, bufsize, dirname, relfile,
+         PATHCCH_ALLOW_LONG_PATHS))) {
+         return -1;
+@@ -2400,11 +2419,16 @@ _Py_normpath_and_size(wchar_t *path, Py_ssize_t size, Py_ssize_t *normsize)
+     wchar_t *minP2 = path;  // the beginning of the destination range
+     wchar_t lastC = L'\0';  // the last ljusted character, p2[-1] in most cases
+ 
++    const wchar_t sep = Py_GetSepW(NULL);
++#ifdef ALTSEP
++    const wchar_t altsep = Py_GetAltSepW(NULL);
++#endif
++
+ #define IS_END(x) (pEnd ? (x) == pEnd : !*(x))
+ #ifdef ALTSEP
+-#define IS_SEP(x) (*(x) == SEP || *(x) == ALTSEP)
++#define IS_SEP(x) (*(x) == sep || *(x) == altsep)
+ #else
+-#define IS_SEP(x) (*(x) == SEP)
++#define IS_SEP(x) (*(x) == sep)
+ #endif
+ #define SEP_OR_END(x) (IS_SEP(x) || IS_END(x))
+ 
+@@ -2415,7 +2439,7 @@ _Py_normpath_and_size(wchar_t *path, Py_ssize_t size, Py_ssize_t *normsize)
+             path++;
+         }
+         p1 = p2 = minP2 = path;
+-        lastC = SEP;
++        lastC = sep;
+     }
+ #ifdef MS_WINDOWS
+     // Skip past drive segment and update minP2
+@@ -2429,13 +2453,13 @@ _Py_normpath_and_size(wchar_t *path, Py_ssize_t size, Py_ssize_t *normsize)
+     // and network paths, including the first segment.
+     else if (IS_SEP(&p1[0]) && IS_SEP(&p1[1])) {
+         int sepCount = 2;
+-        *p2++ = SEP;
+-        *p2++ = SEP;
++        *p2++ = sep;
++        *p2++ = sep;
+         p1 += 2;
+         for (; !IS_END(p1) && sepCount; ++p1) {
+             if (IS_SEP(p1)) {
+                 --sepCount;
+-                *p2++ = lastC = SEP;
++                *p2++ = lastC = sep;
+             } else {
+                 *p2++ = lastC = *p1;
+             }
+@@ -2448,7 +2472,7 @@ _Py_normpath_and_size(wchar_t *path, Py_ssize_t size, Py_ssize_t *normsize)
+         *p2++ = *p1++;
+         *p2++ = *p1++;
+         minP2 = p2 - 1;  // Absolute path has SEP at minP2
+-        lastC = SEP;
++        lastC = sep;
+     }
+ #endif /* MS_WINDOWS */
+ 
+@@ -2456,18 +2480,18 @@ _Py_normpath_and_size(wchar_t *path, Py_ssize_t size, Py_ssize_t *normsize)
+     for (; !IS_END(p1); ++p1) {
+         wchar_t c = *p1;
+ #ifdef ALTSEP
+-        if (c == ALTSEP) {
+-            c = SEP;
++        if (c == altsep) {
++            c = sep;
+         }
+ #endif
+-        if (lastC == SEP) {
++        if (lastC == sep) {
+             if (c == L'.') {
+                 int sep_at_1 = SEP_OR_END(&p1[1]);
+                 int sep_at_2 = !sep_at_1 && SEP_OR_END(&p1[2]);
+                 if (sep_at_2 && p1[1] == L'.') {
+                     wchar_t *p3 = p2;
+-                    while (p3 != minP2 && *--p3 == SEP) { }
+-                    while (p3 != minP2 && *(p3 - 1) != SEP) { --p3; }
++                    while (p3 != minP2 && *--p3 == sep) { }
++                    while (p3 != minP2 && *(p3 - 1) != sep) { --p3; }
+                     if (p2 == minP2
+                         || (p3[0] == L'.' && p3[1] == L'.' && IS_SEP(&p3[2])))
+                     {
+@@ -2476,7 +2500,7 @@ _Py_normpath_and_size(wchar_t *path, Py_ssize_t size, Py_ssize_t *normsize)
+                         *p2++ = L'.';
+                         *p2++ = L'.';
+                         lastC = L'.';
+-                    } else if (p3[0] == SEP) {
++                    } else if (p3[0] == sep) {
+                         // Absolute path, so absorb segment
+                         p2 = p3 + 1;
+                     } else {
+@@ -2487,7 +2511,7 @@ _Py_normpath_and_size(wchar_t *path, Py_ssize_t size, Py_ssize_t *normsize)
+                 } else {
+                     *p2++ = lastC = c;
+                 }
+-            } else if (c == SEP) {
++            } else if (c == sep) {
+             } else {
+                 *p2++ = lastC = c;
+             }
+@@ -2497,7 +2521,7 @@ _Py_normpath_and_size(wchar_t *path, Py_ssize_t size, Py_ssize_t *normsize)
+     }
+     *p2 = L'\0';
+     if (p2 != minP2) {
+-        while (--p2 != minP2 && *p2 == SEP) {
++        while (--p2 != minP2 && *p2 == sep) {
+             *p2 = L'\0';
+         }
+     } else {
+diff --git a/Python/frozenmain.c b/Python/frozenmain.c
+index f8be165f767..d18c7b3884c 100644
+--- a/Python/frozenmain.c
++++ b/Python/frozenmain.c
+@@ -3,6 +3,7 @@
+ #include "Python.h"
+ #include "pycore_runtime.h"  // _PyRuntime_Initialize()
+ #include <locale.h>
++#include "iscygpty.h"
+ 
+ #ifdef MS_WINDOWS
+ extern void PyWinFreeze_ExeInit(void);
+@@ -71,7 +72,7 @@ Py_FrozenMain(int argc, char **argv)
+         sts = 0;
+     }
+ 
+-    if (inspect && isatty((int)fileno(stdin))) {
++    if (inspect && (isatty((int)fileno(stdin)) || is_cygpty((int)fileno(stdin))))
+         sts = PyRun_AnyFile(stdin, "<stdin>") != 0;
+     }
+ 
+diff --git a/Python/getcompiler.c b/Python/getcompiler.c
+index a5d26239e87..dd4d3c8f101 100644
+--- a/Python/getcompiler.c
++++ b/Python/getcompiler.c
+@@ -7,10 +7,45 @@
+ 
+ // Note the __clang__ conditional has to come before the __GNUC__ one because
+ // clang pretends to be GCC.
+-#if defined(__clang__)
++#if defined(__clang__) && !defined(_WIN32)
+ #define COMPILER "[Clang " __clang_version__ "]"
+ #elif defined(__GNUC__)
+-#define COMPILER "[GCC " __VERSION__ "]"
++/* To not break compatibility with things that determine
++   CPU arch by calling get_build_version in msvccompiler.py
++   (such as NumPy) add "32 bit" or "64 bit (AMD64)" on Windows
++   and also use a space as a separator rather than a newline. */
++#if defined(_WIN32)
++#define COMP_SEP " "
++#if defined(__x86_64__)
++#define ARCH_SUFFIX " 64 bit (AMD64)"
++#elif defined(__aarch64__)
++#define ARCH_SUFFIX " 64 bit (ARM64)"
++#elif defined(__arm__)
++#define ARCH_SUFFIX " 32 bit (ARM)"
++#else
++#define ARCH_SUFFIX " 32 bit"
++#endif
++#else
++#define COMP_SEP "\n"
++#define ARCH_SUFFIX ""
++#endif
++#if defined(__clang__)
++#define str(x) #x
++#define xstr(x) str(x)
++#if defined(_UCRT)
++#define COMPILER COMP_SEP "[GCC UCRT Clang " xstr(__clang_major__) "." \
++        xstr(__clang_minor__) "." xstr(__clang_patchlevel__) ARCH_SUFFIX "]"
++#else
++#define COMPILER COMP_SEP "[GCC Clang " xstr(__clang_major__) "." \
++        xstr(__clang_minor__) "." xstr(__clang_patchlevel__) ARCH_SUFFIX "]"
++#endif
++#else
++#if defined(_UCRT)
++#define COMPILER COMP_SEP "[GCC UCRT " __VERSION__ ARCH_SUFFIX "]"
++#else
++#define COMPILER COMP_SEP "[GCC " __VERSION__ ARCH_SUFFIX "]"
++#endif
++#endif
+ // Generic fallbacks.
+ #elif defined(__cplusplus)
+ #define COMPILER "[C++]"
+diff --git a/Python/initconfig.c b/Python/initconfig.c
+index ed4c4e23f34..6ba6f5bfc86 100644
+--- a/Python/initconfig.c
++++ b/Python/initconfig.c
+@@ -164,7 +164,7 @@ static const char usage_envvars[] =
+ "PYTHONWARNINGS  : warning control (-W)\n"
+ ;
+ 
+-#if defined(MS_WINDOWS)
++#if defined(_MSC_VER)
+ #  define PYTHONHOMEHELP "<prefix>\\python{major}{minor}"
+ #else
+ #  define PYTHONHOMEHELP "<prefix>/lib/pythonX.X"
+diff --git a/Python/iscygpty.c b/Python/iscygpty.c
+new file mode 100644
+index 00000000000..722f88f2f46
+--- /dev/null
++++ b/Python/iscygpty.c
+@@ -0,0 +1,185 @@
++/*
++ * iscygpty.c -- part of ptycheck
++ * https://github.com/k-takata/ptycheck
++ *
++ * Copyright (c) 2015-2017 K.Takata
++ *
++ * You can redistribute it and/or modify it under the terms of either
++ * the MIT license (as described below) or the Vim license.
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining
++ * a copy of this software and associated documentation files (the
++ * "Software"), to deal in the Software without restriction, including
++ * without limitation the rights to use, copy, modify, merge, publish,
++ * distribute, sublicense, and/or sell copies of the Software, and to
++ * permit persons to whom the Software is furnished to do so, subject to
++ * the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be
++ * included in all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
++ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
++ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
++ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
++ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++ */
++
++#ifdef _WIN32
++
++#include <ctype.h>
++#include <io.h>
++#include <wchar.h>
++#include <windows.h>
++
++#ifdef USE_FILEEXTD
++/* VC 7.1 or earlier doesn't support SAL. */
++# if !defined(_MSC_VER) || (_MSC_VER < 1400)
++#  define __out
++#  define __in
++#  define __in_opt
++# endif
++/* Win32 FileID API Library:
++ * http://www.microsoft.com/en-us/download/details.aspx?id=22599
++ * Needed for WinXP. */
++# include <fileextd.h>
++#else /* USE_FILEEXTD */
++/* VC 8 or earlier. */
++# if defined(_MSC_VER) && (_MSC_VER < 1500)
++#  ifdef ENABLE_STUB_IMPL
++#   define STUB_IMPL
++#  else
++#   error "Win32 FileID API Library is required for VC2005 or earlier."
++#  endif
++# endif
++#endif /* USE_FILEEXTD */
++
++
++#include "iscygpty.h"
++
++//#define USE_DYNFILEID
++#ifdef USE_DYNFILEID
++typedef BOOL (WINAPI *pfnGetFileInformationByHandleEx)(
++		HANDLE                    hFile,
++		FILE_INFO_BY_HANDLE_CLASS FileInformationClass,
++		LPVOID                    lpFileInformation,
++		DWORD                     dwBufferSize
++);
++static pfnGetFileInformationByHandleEx pGetFileInformationByHandleEx = NULL;
++
++# ifndef USE_FILEEXTD
++static BOOL WINAPI stub_GetFileInformationByHandleEx(
++		HANDLE                    hFile,
++		FILE_INFO_BY_HANDLE_CLASS FileInformationClass,
++		LPVOID                    lpFileInformation,
++		DWORD                     dwBufferSize
++		)
++{
++	return FALSE;
++}
++# endif
++
++static void setup_fileid_api(void)
++{
++	if (pGetFileInformationByHandleEx != NULL) {
++		return;
++	}
++	pGetFileInformationByHandleEx = (pfnGetFileInformationByHandleEx)
++		GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")),
++				"GetFileInformationByHandleEx");
++	if (pGetFileInformationByHandleEx == NULL) {
++# ifdef USE_FILEEXTD
++		pGetFileInformationByHandleEx = GetFileInformationByHandleEx;
++# else
++		pGetFileInformationByHandleEx = stub_GetFileInformationByHandleEx;
++# endif
++	}
++}
++#else
++# define pGetFileInformationByHandleEx	GetFileInformationByHandleEx
++# define setup_fileid_api()
++#endif
++
++
++#define is_wprefix(s, prefix) \
++	(wcsncmp((s), (prefix), sizeof(prefix) / sizeof(WCHAR) - 1) == 0)
++
++/* Check if the fd is a cygwin/msys's pty. */
++int is_cygpty(int fd)
++{
++#ifdef STUB_IMPL
++	return 0;
++#else
++	HANDLE h;
++	int size = sizeof(FILE_NAME_INFO) + sizeof(WCHAR) * (MAX_PATH - 1);
++	FILE_NAME_INFO *nameinfo;
++	WCHAR *p = NULL;
++
++	setup_fileid_api();
++
++	h = (HANDLE) _get_osfhandle(fd);
++	if (h == INVALID_HANDLE_VALUE) {
++		return 0;
++	}
++	/* Cygwin/msys's pty is a pipe. */
++	if (GetFileType(h) != FILE_TYPE_PIPE) {
++		return 0;
++	}
++	nameinfo = malloc(size + sizeof(WCHAR));
++	if (nameinfo == NULL) {
++		return 0;
++	}
++	/* Check the name of the pipe:
++	 * '\{cygwin,msys}-XXXXXXXXXXXXXXXX-ptyN-{from,to}-master' */
++	if (pGetFileInformationByHandleEx(h, FileNameInfo, nameinfo, size)) {
++		nameinfo->FileName[nameinfo->FileNameLength / sizeof(WCHAR)] = L'\0';
++		p = nameinfo->FileName;
++		if (is_wprefix(p, L"\\cygwin-")) {		/* Cygwin */
++			p += 8;
++		} else if (is_wprefix(p, L"\\msys-")) {	/* MSYS and MSYS2 */
++			p += 6;
++		} else {
++			p = NULL;
++		}
++		if (p != NULL) {
++			while (*p && isxdigit(*p))	/* Skip 16-digit hexadecimal. */
++				++p;
++			if (is_wprefix(p, L"-pty")) {
++				p += 4;
++			} else {
++				p = NULL;
++			}
++		}
++		if (p != NULL) {
++			while (*p && isdigit(*p))	/* Skip pty number. */
++				++p;
++			if (is_wprefix(p, L"-from-master")) {
++				//p += 12;
++			} else if (is_wprefix(p, L"-to-master")) {
++				//p += 10;
++			} else {
++				p = NULL;
++			}
++		}
++	}
++	free(nameinfo);
++	return (p != NULL);
++#endif /* STUB_IMPL */
++}
++
++/* Check if at least one cygwin/msys pty is used. */
++int is_cygpty_used(void)
++{
++	int fd, ret = 0;
++
++	for (fd = 0; fd < 3; fd++) {
++		ret |= is_cygpty(fd);
++	}
++	return ret;
++}
++
++#endif /* _WIN32 */
++
++/* vim: set ts=4 sw=4: */
+diff --git a/Python/pathconfig.c b/Python/pathconfig.c
+index be0f97c4b20..7eb9006be5b 100644
+--- a/Python/pathconfig.c
++++ b/Python/pathconfig.c
+@@ -2,7 +2,7 @@
+ 
+ #include "Python.h"
+ #include "marshal.h"              // PyMarshal_ReadObjectFromString
+-#include "osdefs.h"               // DELIM
++#include "osdefs.h"               // DELIM, SEP
+ #include "pycore_initconfig.h"
+ #include "pycore_fileutils.h"
+ #include "pycore_pathconfig.h"
+@@ -18,6 +18,158 @@
+ extern "C" {
+ #endif
+ 
++#ifdef __MINGW32__
++#define wcstok  wcstok_s
++#include <windows.h>
++#endif
++
++static int
++Py_StartsWithA(const char * str, const char * prefix)
++{
++    while(*prefix)
++    {
++        if(*prefix++ != *str++)
++            return 0;
++    }
++
++    return 1;
++}
++
++static int
++Py_StartsWithW(const wchar_t * str, const wchar_t * prefix)
++{
++    while(*prefix)
++    {
++        if(*prefix++ != *str++)
++            return 0;
++    }
++
++    return 1;
++}
++
++char
++Py_GetSepA(const char *name)
++{
++    static char sep = '\0';
++#ifdef _WIN32
++    /* https://msdn.microsoft.com/en-gb/library/windows/desktop/aa365247%28v=vs.85%29.aspx
++     * The "\\?\" prefix .. indicate that the path should be passed to the system with minimal
++     * modification, which means that you cannot use forward slashes to represent path separators
++     */
++    if (name != NULL && Py_StartsWithA(name, "\\\\?\\") != 0)
++    {
++        return '\\';
++    }
++#endif
++    if (sep != '\0')
++        return sep;
++#if defined(__MINGW32__)
++    char* msystem = getenv("MSYSTEM");
++    if (msystem != NULL && strcmp(msystem, "") != 0)
++        sep = '/';
++    else
++        sep = '\\';
++#else
++    sep = SEP;
++#endif
++    return sep;
++}
++
++static char
++Py_GetAltSepA(const char *name)
++{
++    char sep = Py_GetSepA(name);
++    if (sep == '/')
++        return '\\';
++    return '/';
++}
++
++void
++Py_NormalizeSepsA(char *name)
++{
++    assert(name != NULL);
++    char sep = Py_GetSepA(name);
++    char altsep = Py_GetAltSepA(name);
++    char* seps;
++    if (name[0] != '\0' && name[1] == ':') {
++        name[0] = toupper(name[0]);
++    }
++    seps = strchr(name, altsep);
++    while(seps) {
++        *seps = sep;
++        seps = strchr(seps, altsep);
++    }
++}
++
++wchar_t
++Py_GetSepW(const wchar_t *name)
++{
++    static wchar_t sep = L'\0';
++#ifdef _WIN32
++    /* https://msdn.microsoft.com/en-gb/library/windows/desktop/aa365247%28v=vs.85%29.aspx
++     * The "\\?\" prefix .. indicate that the path should be passed to the system with minimal
++     * modification, which means that you cannot use forward slashes to represent path separators
++     */
++    if (name != NULL && Py_StartsWithW(name, L"\\\\?\\") != 0)
++    {
++        return L'\\';
++    }
++#endif
++    if (sep != L'\0')
++        return sep;
++#if defined(__MINGW32__)
++    char* msystem = getenv("MSYSTEM");
++    if (msystem != NULL && strcmp(msystem, "") != 0)
++        sep = L'/';
++    else
++        sep = L'\\';
++#else
++    sep = SEP;
++#endif
++    return sep;
++}
++
++wchar_t
++Py_GetAltSepW(const wchar_t *name)
++{
++    char sep = Py_GetSepW(name);
++    if (sep == L'/')
++        return L'\\';
++    return L'/';
++}
++
++void
++Py_NormalizeSepsW(wchar_t *name)
++{
++    assert(name != NULL);
++    wchar_t sep = Py_GetSepW(name);
++    wchar_t altsep = Py_GetAltSepW(name);
++    wchar_t* seps;
++    if (name[0] != L'\0' && name[1] == L':') {
++        name[0] = towupper(name[0]);
++    }
++    seps = wcschr(name, altsep);
++    while(seps) {
++        *seps = sep;
++        seps = wcschr(seps, altsep);
++    }
++}
++
++void
++Py_NormalizeSepsPathcchW(wchar_t *name)
++{
++#ifdef MS_WINDOWS
++    assert(name != NULL);
++    wchar_t sep = '\\';
++    wchar_t altsep = '/';
++    wchar_t* seps;
++    seps = wcschr(name, altsep);
++    while(seps) {
++        *seps = sep;
++        seps = wcschr(seps, altsep);
++    }
++#endif
++}
+ 
+ /* External interface */
+ 
+@@ -317,6 +469,7 @@ _Py_SetProgramFullPath(const wchar_t *program_full_path)
+     if (has_value && _Py_path_config.program_full_path == NULL) {
+         path_out_of_memory(__func__);
+     }
++    Py_NormalizeSepsW(_Py_path_config.program_name);
+ }
+ 
+ 
+@@ -509,7 +662,7 @@ _PyPathConfig_ComputeSysPath0(const PyWideStringList *argv, PyObject **path0_p)
+     }
+ #endif /* All others */
+ 
+-    PyObject *path0_obj = PyUnicode_FromWideChar(path0, n);
++    PyObject *path0_obj = PyUnicode_FromWideChar(_Py_normpath(path0, -1), n);
+     if (path0_obj == NULL) {
+         return -1;
+     }
+diff --git a/Python/pylifecycle.c b/Python/pylifecycle.c
+index f5bea14b16b..0bbb279511a 100644
+--- a/Python/pylifecycle.c
++++ b/Python/pylifecycle.c
+@@ -30,6 +30,7 @@
+ #include "pycore_unicodeobject.h" // _PyUnicode_InitTypes()
+ #include "opcode.h"
+ 
++#include "iscygpty.h"
+ #include <locale.h>               // setlocale()
+ #include <stdlib.h>               // getenv()
+ 
+@@ -3113,7 +3114,7 @@ Py_Exit(int sts)
+ int
+ Py_FdIsInteractive(FILE *fp, const char *filename)
+ {
+-    if (isatty(fileno(fp))) {
++    if (isatty(fileno(fp)) || is_cygpty(fileno(fp))) {
+         return 1;
+     }
+     if (!_Py_GetConfig()->interactive) {
+@@ -3128,7 +3129,7 @@ Py_FdIsInteractive(FILE *fp, const char *filename)
+ int
+ _Py_FdIsInteractive(FILE *fp, PyObject *filename)
+ {
+-    if (isatty(fileno(fp))) {
++    if (isatty(fileno(fp)) || is_cygpty(fileno(fp))) {
+         return 1;
+     }
+     if (!_Py_GetConfig()->interactive) {
+diff --git a/Python/sysmodule.c b/Python/sysmodule.c
+index 6ed28ec5fbd..0182569172b 100644
+--- a/Python/sysmodule.c
++++ b/Python/sysmodule.c
+@@ -45,7 +45,7 @@ Data members:
+ #  include <windows.h>
+ #endif /* MS_WINDOWS */
+ 
+-#ifdef MS_COREDLL
++#if defined(MS_WINDOWS) && defined(Py_ENABLE_SHARED)
+ extern void *PyWin_DLLhModule;
+ /* A string loaded from the DLL at startup: */
+ extern const char *PyWin_DLLVersionString;
+@@ -3429,7 +3429,7 @@ _PySys_InitCore(PyThreadState *tstate, PyObject *sysdict)
+     SET_SYS_FROM_STRING("byteorder", "little");
+ #endif
+ 
+-#ifdef MS_COREDLL
++#if defined(MS_WINDOWS) && defined(Py_ENABLE_SHARED)
+     SET_SYS("dllhandle", PyLong_FromVoidPtr(PyWin_DLLhModule));
+     SET_SYS_FROM_STRING("winver", PyWin_DLLVersionString);
+ #endif
+diff --git a/Python/traceback.c b/Python/traceback.c
+index 1cb82c57203..37df982bb73 100644
+--- a/Python/traceback.c
++++ b/Python/traceback.c
+@@ -342,7 +342,7 @@ _Py_FindSourceFile(PyObject *filename, char* namebuf, size_t namelen, PyObject *
+     filepath = PyBytes_AS_STRING(filebytes);
+ 
+     /* Search tail of filename in sys.path before giving up */
+-    tail = strrchr(filepath, SEP);
++    tail = strrchr(filepath, Py_GetSepA(filepath));
+     if (tail == NULL)
+         tail = filepath;
+     else
+diff --git a/Tools/build/check_extension_modules.py b/Tools/build/check_extension_modules.py
+index aa1ade71a8e..7ded0f464c2 100644
+--- a/Tools/build/check_extension_modules.py
++++ b/Tools/build/check_extension_modules.py
+@@ -61,6 +61,10 @@
+     "winsound",
+ }
+ 
++if sys.platform == "win32":
++    # Enable DLL loading from PATH.
++    os.environ["PYTHONLEGACYWINDOWSDLLLOADING"] = "1"
++
+ 
+ logger = logging.getLogger(__name__)
+ 
+diff --git a/configure.ac b/configure.ac
+index 1a02d19f1b2..10a6e8464f9 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -12,7 +12,7 @@ dnl
+ # Set VERSION so we only need to edit in one place (i.e., here)
+ m4_define([PYTHON_VERSION], [3.12])
+ 
+-AC_PREREQ([2.71])
++AC_PREREQ([2.69])
+ 
+ AC_INIT([python],[PYTHON_VERSION],[https://github.com/python/cpython/issues/])
+ 
+@@ -204,9 +204,11 @@ AC_SUBST([FREEZE_MODULE])
+ AC_SUBST([FREEZE_MODULE_DEPS])
+ AC_SUBST([PYTHON_FOR_BUILD_DEPS])
+ 
++NATIVE_PYTHON_SEARCH_PATH_MINGW=`echo $host | grep -Eq 'mingw*' && echo "$MINGW_PREFIX/bin" || echo $PATH`
+ AC_CHECK_PROGS([PYTHON_FOR_REGEN],
+   [python$PACKAGE_VERSION python3.12 python3.11 python3.10 python3 python],
+-  [python3])
++  [python3],
++  [$NATIVE_PYTHON_SEARCH_PATH_MINGW])
+ AC_SUBST([PYTHON_FOR_REGEN])
+ 
+ AC_MSG_CHECKING([Python for regen version])
+@@ -550,6 +552,9 @@ then
+ 	*-*-cygwin*)
+ 		ac_sys_system=Cygwin
+ 		;;
++	*-*-mingw*)
++		ac_sys_system=MINGW
++		;;
+ 	*-*-vxworks*)
+ 	    ac_sys_system=VxWorks
+ 	    ;;
+@@ -585,6 +590,7 @@ then
+ 	linux*) MACHDEP="linux";;
+ 	cygwin*) MACHDEP="cygwin";;
+ 	darwin*) MACHDEP="darwin";;
++	mingw*) MACHDEP="win32";;
+ 	'')	MACHDEP="unknown";;
+     esac
+ 
+@@ -618,6 +624,9 @@ if test "$cross_compiling" = yes; then
+ 		;;
+ 	wasm32-*-* | wasm64-*-*)
+ 		_host_cpu=$host_cpu
++    ;;
++	*-*-mingw*)
++		_host_cpu=
+ 		;;
+ 	*)
+ 		# for now, limit cross builds to known configurations
+@@ -625,6 +634,14 @@ if test "$cross_compiling" = yes; then
+ 		AC_MSG_ERROR([cross build not supported for $host])
+ 	esac
+ 	_PYTHON_HOST_PLATFORM="$MACHDEP${_host_cpu:+-$_host_cpu}"
++
++	case "$host_os" in
++	mingw*)
++	# As sys.platform() return 'win32' to build python and extantions
++	# we will use 'mingw' (in setup.py and etc.)
++	_PYTHON_HOST_PLATFORM=mingw
++	;;
++	esac
+ fi
+ 
+ # Some systems cannot stand _XOPEN_SOURCE being defined at all; they
+@@ -740,6 +757,65 @@ then
+             [Define to include mbstate_t for mbrtowc])
+ fi
+ 
++# On 'semi-native' build systems (MSYS*/Cygwin targeting MinGW-w64)
++# _sysconfigdata.py will contain paths that are correct only in the
++# build environment. This means external modules will fail to build
++# without setting up the same env and also that the build of Python
++# itself will fail as the paths are not correct for the host tools.
++#
++# To work around these issues a set of _b2h variables are created:
++# prefix_b2h, srcdir_b2h, abs_srcdir_b2h
++# and abs_builddir_b2h
++# .. where b2h stands for build to host. sysconfig.py replaces path
++# prefixes matching the non-b2h versions with the b2h equivalents.
++#
++# (note this assumes the host compilers are native and *not* cross
++#  - in the 'semi-native' scenario only that is.)
++
++AC_DEFUN([ABS_PATH_HOST],
++[$1=$(cd $$2 && pwd)
++  case $build_os in
++    mingw*)
++      case $host_os in
++        mingw*) $1=$(cd $$2 && pwd -W) ;;
++        *) ;;
++      esac
++      ;;
++    cygwin*)
++      case $host_os in
++        mingw*) $1=$(cygpath -w -m $$2) ;;
++        *) ;;
++      esac
++      ;;
++  esac
++AC_SUBST([$1])
++])
++
++AC_MSG_CHECKING(absolute host location of prefix)
++ABS_PATH_HOST([prefix_b2h],[prefix])
++AC_MSG_RESULT([$prefix_b2h])
++
++AC_MSG_CHECKING(absolute host location of srcdir)
++ABS_PATH_HOST([srcdir_b2h],[srcdir])
++AC_MSG_RESULT([$srcdir_b2h])
++
++AC_MSG_CHECKING(absolute host location of abs_srcdir)
++ABS_PATH_HOST([abs_srcdir_b2h],[srcdir])
++AC_MSG_RESULT([$abs_srcdir_b2h])
++
++my_builddir=.
++AC_MSG_CHECKING(Absolute host location of abs_builddir)
++ABS_PATH_HOST([abs_builddir_b2h],[my_builddir])
++AC_MSG_RESULT([$abs_builddir_b2h])
++
++AC_MSG_CHECKING([for init system calls])
++AC_SUBST(INITSYS)
++case $host in
++  *-*-mingw*)	INITSYS=nt;;
++  *)		INITSYS=posix;;
++esac
++AC_MSG_RESULT([$INITSYS])
++
+ # Record the configure-time value of MACOSX_DEPLOYMENT_TARGET,
+ # it may influence the way we can build extensions, so distutils
+ # needs to check it
+@@ -1190,6 +1266,28 @@ AC_CACHE_CHECK([for -Wl,--no-as-needed], [ac_cv_wl_no_as_needed], [
+ ])
+ AC_SUBST([NO_AS_NEEDED])
+ 
++# initialize default configuration
++py_config=
++case $host in
++  *-*-mingw*) py_config=mingw ;;
++esac
++if test -n "$py_config" ; then
++  AC_MSG_NOTICE([loading configure defaults from .../Misc/config_$py_config"])
++  . "$srcdir/Misc/config_$py_config"
++fi
++
++# initialize defaults for cross-builds
++if test "$cross_compiling" = yes; then
++  py_config=$host_os
++  case $py_config in
++    mingw32*) py_config=mingw32 ;;
++  esac
++  if test -f "$srcdir/Misc/cross_$py_config" ; then
++    AC_MSG_NOTICE([loading cross defaults from .../Misc/cross_$py_config"])
++    . "$srcdir/Misc/cross_$py_config"
++  fi
++fi
++
+ AC_MSG_CHECKING([for the Android API level])
+ cat > conftest.c <<EOF
+ #ifdef __ANDROID__
+@@ -1303,6 +1401,7 @@ AC_ARG_WITH([suffix],
+     [Emscripten/browser*], [EXEEXT=.js],
+     [Emscripten/node*], [EXEEXT=.js],
+     [WASI/*], [EXEEXT=.wasm],
++    [MINGW*], [EXEEXT=.exe],
+     [EXEEXT=]
+   )
+ ])
+@@ -1329,6 +1428,10 @@ else
+ fi
+ rmdir CaseSensitiveTestDir
+ 
++AS_CASE([$ac_sys_system],
++  [MINGW], [BUILDEXEEXT=".exe"]
++)
++
+ case $ac_sys_system in
+ hp*|HP*)
+     case $CC in
+@@ -1507,6 +1610,11 @@ if test $enable_shared = "yes"; then
+           LDLIBRARY='libpython$(LDVERSION).dll.a'
+           DLLLIBRARY='libpython$(LDVERSION).dll'
+           ;;
++    MINGW*)
++          LDLIBRARY='libpython$(LDVERSION).dll.a'
++          DLLLIBRARY='libpython$(LDVERSION).dll'
++          BLDLIBRARY='-L. -lpython$(LDVERSION)'
++          ;;
+     SunOS*)
+ 	  LDLIBRARY='libpython$(LDVERSION).so'
+ 	  BLDLIBRARY='-Wl,-R,$(LIBDIR) -L. -lpython$(LDVERSION)'
+@@ -1557,6 +1665,9 @@ else # shared is disabled
+           BLDLIBRARY='$(LIBRARY)'
+           LDLIBRARY='libpython$(LDVERSION).dll.a'
+           ;;
++    MINGW*)
++          LDLIBRARY='libpython$(LDVERSION).a'
++          ;;
+   esac
+ fi
+ 
+@@ -1650,6 +1761,10 @@ AC_SUBST([LINK_PYTHON_OBJS])
+ AC_SUBST([AR])
+ AC_CHECK_TOOLS([AR], [ar aal], [ar])
+ 
++# windres program
++AC_SUBST(WINDRES)
++AC_CHECK_TOOL(WINDRES, windres)
++
+ # tweak ARFLAGS only if the user didn't set it on the command line
+ AC_SUBST([ARFLAGS])
+ if test -z "$ARFLAGS"
+@@ -2413,6 +2528,14 @@ case $GCC in
+ yes)
+     CFLAGS_NODIST="$CFLAGS_NODIST -std=c11"
+ 
++    # GCC 14 and later error out with incompatible-pointer-types
++    # this only occues on mingw
++    case $host in
++    *-*-mingw*)
++        CFLAGS_NODIST="$CFLAGS_NODIST -Wno-error=incompatible-pointer-types"
++      ;;
++    esac
++
+     PY_CHECK_CC_WARNING([enable], [extra], [if we can add -Wextra])
+     AS_VAR_IF([ac_cv_enable_extra_warning], [yes],
+               [CFLAGS_NODIST="$CFLAGS_NODIST -Wextra"])
+@@ -2721,6 +2844,53 @@ then
+ 	BASECFLAGS="$BASECFLAGS $ac_arch_flags"
+ fi
+ 
++dnl NOTE:
++dnl - GCC 4.4+ for mingw* require and use posix threads(pthreads-w32)
++dnl - Host may contain installed pthreads-w32.
++dnl - On windows platform only NT-thread model is supported. 
++dnl To avoid miss detection scipt first will check for NT-thread model
++dnl and if is not found will try to detect build options for pthread
++dnl model. Autodetection could be overiden if variable with_nt_threads
++dnl is set in "Site Configuration" (see autoconf manual).
++dnl If NT-thread model is enabled script skips some checks that
++dnl impact build process. When a new functionality is added, developers
++dnl are responsible to update configure script to avoid thread models
++dnl to be mixed.
++
++AC_MSG_CHECKING([for --with-nt-threads])
++AC_ARG_WITH(nt-threads,
++            AS_HELP_STRING([--with-nt-threads], [build with windows threads (default is system-dependent)]),
++[
++	case $withval in
++	no)	with_nt_threads=no;;
++	yes)	with_nt_threads=yes;;
++	*)	with_nt_threads=yes;;
++	esac
++], [
++	case $host in
++		*-*-mingw*) with_nt_threads=yes;;
++		*) with_nt_threads=no;;
++	esac
++])
++AC_MSG_RESULT([$with_nt_threads])
++
++if test $with_nt_threads = yes ; then
++AC_MSG_CHECKING([whether linking with nt-threads work])
++AC_LINK_IFELSE([
++    AC_LANG_PROGRAM([[#include <process.h>]],[[_beginthread(0, 0, 0);]])
++  ],
++  [AC_MSG_RESULT([yes])],
++  [AC_MSG_ERROR([failed to link with nt-threads])])
++fi
++
++if test $with_nt_threads = yes ; then
++  dnl temporary default flag to avoid additional pthread checks
++  dnl and initilize other ac..thread flags to no
++  ac_cv_pthread_is_default=no
++  ac_cv_kthread=no
++  ac_cv_pthread=no
++  dnl ac_cv_kpthread is set to no if default is yes (see below)
++else
+ # On some compilers, pthreads are available without further options
+ # (e.g. MacOS X). On some of these systems, the compiler will not
+ # complain if unaccepted options are passed (e.g. gcc on Mac OS X).
+@@ -2832,6 +3002,8 @@ int main(void){
+ CC="$ac_save_cc"])
+ fi
+ 
++fi
++
+ # If we have set a CC compiler flag for thread support then
+ # check if it works for CXX, too.
+ if test ! -z "$CXX"
+@@ -2851,6 +3023,10 @@ elif test "$ac_cv_pthread" = "yes"
+ then
+   CXX="$CXX -pthread"
+   ac_cv_cxx_thread=yes
++elif test "$with_nt_threads" = "yes"
++then
++  dnl set to always to skip extra pthread check below
++  ac_cv_cxx_thread=always
+ else
+   ac_cv_cxx_thread=no
+ fi
+@@ -2889,11 +3065,11 @@ AC_DEFINE([STDC_HEADERS], [1],
+ 
+ # checks for header files
+ AC_CHECK_HEADERS([ \
+-  alloca.h asm/types.h bluetooth.h conio.h crypt.h direct.h dlfcn.h endian.h errno.h fcntl.h grp.h \
++  alloca.h asm/types.h bluetooth.h conio.h crypt.h direct.h endian.h errno.h fcntl.h grp.h \
+   ieeefp.h io.h langinfo.h libintl.h libutil.h linux/auxvec.h sys/auxv.h linux/fs.h linux/limits.h linux/memfd.h \
+   linux/random.h linux/soundcard.h \
+-  linux/tipc.h linux/wait.h netdb.h net/ethernet.h netinet/in.h netpacket/packet.h poll.h process.h pthread.h pty.h \
+-  sched.h setjmp.h shadow.h signal.h spawn.h stropts.h sys/audioio.h sys/bsdtty.h sys/devpoll.h \
++  linux/tipc.h linux/wait.h netdb.h net/ethernet.h netinet/in.h netpacket/packet.h poll.h process.h pty.h \
++  setjmp.h shadow.h signal.h spawn.h stropts.h sys/audioio.h sys/bsdtty.h sys/devpoll.h \
+   sys/endian.h sys/epoll.h sys/event.h sys/eventfd.h sys/file.h sys/ioctl.h sys/kern_control.h \
+   sys/loadavg.h sys/lock.h sys/memfd.h sys/mkdev.h sys/mman.h sys/modem.h sys/param.h sys/pidfd.h sys/poll.h \
+   sys/random.h sys/resource.h sys/select.h sys/sendfile.h sys/socket.h sys/soundcard.h sys/stat.h \
+@@ -2901,9 +3077,24 @@ AC_CHECK_HEADERS([ \
+   sys/types.h sys/uio.h sys/un.h sys/utsname.h sys/wait.h sys/xattr.h sysexits.h syslog.h \
+   termios.h util.h utime.h utmp.h \
+ ])
++
++case $host in
++  *-*-mingw*) ;;
++  *) AC_CHECK_HEADERS([dlfcn.h]);;
++esac
++
++
+ AC_HEADER_DIRENT
+ AC_HEADER_MAJOR
+ 
++# If using nt threads, don't look for pthread.h or thread.h
++if test "x$with_nt_threads" = xno ; then
++AC_HEADER_STDC
++AC_CHECK_HEADERS(pthread.h sched.h thread.h)
++AC_HEADER_DIRENT
++AC_HEADER_MAJOR
++fi
++
+ # bluetooth/bluetooth.h has been known to not compile with -std=c99.
+ # http://permalink.gmane.org/gmane.linux.bluez.kernel/22294
+ SAVE_CFLAGS=$CFLAGS
+@@ -3086,6 +3277,10 @@ dnl LFS does not work with Emscripten 3.1
+ AS_CASE([$ac_sys_system],
+   [Emscripten], [have_largefile_support="no"]
+ )
++dnl Activate on windows platforms (32&64-bit) where off_t(4) < fpos_t(8)
++AS_CASE([$ac_sys_system],
++  [MINGW], [have_largefile_support="yes"]
++)
+ AS_VAR_IF([have_largefile_support], [yes], [
+   AC_DEFINE([HAVE_LARGEFILE_SUPPORT], [1],
+   [Defined to enable large file support when an off_t is bigger than a long
+@@ -3116,6 +3311,10 @@ elif test "$ac_cv_pthread" = "yes"
+ then CC="$CC -pthread"
+ fi
+ 
++if test $with_nt_threads = yes ; then
++  dnl skip check for pthread_t if NT-thread model is enabled
++  ac_cv_have_pthread_t=skip
++else
+ AC_CACHE_CHECK([for pthread_t], [ac_cv_have_pthread_t], [
+ AC_COMPILE_IFELSE([
+   AC_LANG_PROGRAM([[@%:@include <pthread.h>]], [[pthread_t x; x = *(pthread_t*)0;]])
+@@ -3147,7 +3346,7 @@ AS_VAR_IF([ac_cv_pthread_key_t_is_arithmetic_type], [yes], [
+     AC_DEFINE([PTHREAD_KEY_T_IS_COMPATIBLE_WITH_INT], [1],
+               [Define if pthread_key_t is compatible with int.])
+ ])
+-
++fi
+ CC="$ac_save_cc"
+ 
+ AC_MSG_CHECKING([for --enable-framework])
+@@ -3302,6 +3501,9 @@ if test -z "$SHLIB_SUFFIX"; then
+ 	CYGWIN*)   SHLIB_SUFFIX=.dll;;
+ 	*)	   SHLIB_SUFFIX=.so;;
+ 	esac
++	case $host_os in
++	mingw*)    SHLIB_SUFFIX=.pyd;;
++	esac
+ fi
+ AC_MSG_RESULT([$SHLIB_SUFFIX])
+ 
+@@ -3431,6 +3633,10 @@ then
+ 	CYGWIN*)
+ 		LDSHARED="gcc -shared -Wl,--enable-auto-image-base"
+ 		LDCXXSHARED="g++ -shared -Wl,--enable-auto-image-base";;
++  MINGW*)
++    LDSHARED='$(CC) -shared -Wl,--enable-auto-image-base'
++    LDCXXSHARED='$(CXX) -shared -Wl,--enable-auto-image-base'
++    ;;
+ 	*)	LDSHARED="ld";;
+ 	esac
+ fi
+@@ -3554,6 +3760,11 @@ then
+ 	VxWorks*)
+ 		LINKFORSHARED='-Wl,-export-dynamic';;
+ 	esac
++	case $host in
++	*-*-mingw*)
++		# for https://bugs.python.org/issue40458 on MINGW
++		LINKFORSHARED="-Wl,--stack,4194304";;
++	esac
+ fi
+ AC_MSG_RESULT([$LINKFORSHARED])
+ 
+@@ -3618,7 +3829,12 @@ AC_SUBST([PERF_TRAMPOLINE_OBJ])
+ 
+ # checks for libraries
+ AC_CHECK_LIB([sendfile], [sendfile])
+-AC_CHECK_LIB([dl], [dlopen])       # Dynamic linking for SunOS/Solaris and SYSV
++
++case $host in
++  *-*-mingw*) ;;
++  *) AC_CHECK_LIB([dl], [dlopen]) ;;	# Dynamic linking for SunOS/Solaris and SYSV
++esac
++
+ AC_CHECK_LIB([dld], [shl_load])    # Dynamic linking for HP-UX
+ 
+ 
+@@ -3679,16 +3895,30 @@ AS_VAR_IF([have_uuid], [missing], [
+ 
+ AS_VAR_IF([have_uuid], [missing], [have_uuid=no])
+ 
++if test $with_nt_threads = yes ; then
++  dnl do not search for sem_init if NT-thread model is enabled
++  :
++else
+ # 'Real Time' functions on Solaris
+ # posix4 on Solaris 2.6
+ # pthread (first!) on Linux
+ AC_SEARCH_LIBS([sem_init], [pthread rt posix4])
++fi
+ 
+ # check if we need libintl for locale functions
++case $host in
++  *-*-mingw*)
++  dnl Native windows build don't use libintl (see _localemodule.c).
++  dnl Also we don't like setup.py to add "intl" library to the list
++  dnl when build _locale module.
++  ;;
++  *)
+ AC_CHECK_LIB([intl], [textdomain],
+ 	[AC_DEFINE([WITH_LIBINTL], [1],
+ 	[Define to 1 if libintl is needed for locale functions.])
+         LIBS="-lintl $LIBS"])
++  ;;
++esac
+ 
+ # checks for system dependent C++ extensions support
+ case "$ac_sys_system" in
+@@ -4054,6 +4284,36 @@ AS_CASE([$ac_sys_system],
+   [OSSAUDIODEV_LIBS=""]
+ )
+ 
++dnl On MINGW, you need to link against ws2_32 and iphlpapi for sockets to work
++AS_CASE([$MACHDEP],
++  [win32], [SOCKET_LIBS="-lws2_32 -liphlpapi -lrpcrt4"],
++  [SOCKET_LIBS=""]
++)
++
++dnl On MINGW, you need to link againt ws2_32 for _multiprocessing
++AS_CASE([$MACHDEP],
++  [win32], [MULTIPROCESSING_LIBS="-lws2_32"],
++  [MULTIPROCESSING_LIBS=""]
++)
++
++dnl On MINGW, you need to link againt ws2_32 for selectmodule
++AS_CASE([$MACHDEP],
++  [win32], [SELECTMODULE_LIBS="-lws2_32"],
++  [SELECTMODULE_LIBS=""]
++)
++
++dnl On MINGW, you need to link againt ole32, oleaut32 and uuid for ctypes
++AS_CASE([$MACHDEP],
++  [win32], [CTYPES_LIBS="-lole32 -loleaut32 -luuid"],
++  [CTYPES_LIBS=""]
++)
++
++dnl On MINGW, you need to link againt rpcrt4 for _uuid
++AS_CASE([$MACHDEP],
++  [win32], [UUID_LIBS="-lrpcrt4"],
++  [UUID_LIBS=""]
++)
++
+ dnl detect sqlite3 from Emscripten emport
+ PY_CHECK_EMSCRIPTEN_PORT([LIBSQLITE3], [-sUSE_SQLITE3])
+ 
+@@ -4368,6 +4628,18 @@ done
+ IFS=$as_save_IFS
+ AC_MSG_RESULT([$DBM_CFLAGS $DBM_LIBS])
+ 
++case $host in
++  *-*-mingw*)
++    CFLAGS_NODIST="$CFLAGS_NODIST -D_WIN32_WINNT=0x0602";;
++esac
++
++# Determine if windows modules should be used.
++AC_SUBST(USE_WIN32_MODULE)
++USE_WIN32_MODULE='#'
++case $host in
++  *-*-mingw*) USE_WIN32_MODULE=;;
++esac
++
+ # Templates for things AC_DEFINEd more than once.
+ # For a single AC_DEFINE, no template is needed.
+ AH_TEMPLATE([_REENTRANT],
+@@ -4402,6 +4674,11 @@ then
+         CXX="$CXX -pthread"
+     fi
+     posix_threads=yes
++elif test $with_nt_threads = yes
++then
++    posix_threads=no
++    AC_DEFINE(NT_THREADS, 1,
++        [Define to 1 if you want to use native NT threads])
+ else
+     if test ! -z "$withval" -a -d "$withval"
+     then LDFLAGS="$LDFLAGS -L$withval"
+@@ -4784,11 +5061,14 @@ AC_MSG_RESULT([$with_freelists])
+ AC_MSG_CHECKING([for --with-c-locale-coercion])
+ AC_ARG_WITH(
+   [c-locale-coercion],
+-  [AS_HELP_STRING([--with-c-locale-coercion], [enable C locale coercion to a UTF-8 based locale (default is yes)])])
++  [AS_HELP_STRING([--with-c-locale-coercion], [enable C locale coercion to a UTF-8 based locale (default is yes on Unix, no on Windows)])])
+ 
+ if test -z "$with_c_locale_coercion"
+ then
+-    with_c_locale_coercion="yes"
++    case $host in
++      *-*-mingw*) with_c_locale_coercion="no";;
++      *) with_c_locale_coercion="yes";;
++    esac
+ fi
+ if test "$with_c_locale_coercion" != "no"
+ then
+@@ -4893,12 +5173,36 @@ then
+ 	fi
+ 	;;
+ 	esac
++	case $host in
++	*-*-mingw*)
++    DYNLOADFILE="dynload_win.o"
++    extra_machdep_objs="$extra_machdep_objs PC/dl_nt.o"
++    CFLAGS_NODIST="$CFLAGS_NODIST -DPY3_DLLNAME='L\"$DLLLIBRARY\"'"
++    case $host in
++        i686*)
++                CFLAGS_NODIST="$CFLAGS_NODIST -DMS_DLL_ID='\"${VERSION}-32\"'"
++            ;;
++        armv7*)
++                CFLAGS_NODIST="$CFLAGS_NODIST -DMS_DLL_ID='\"${VERSION}-arm32\"'"
++            ;;
++        aarch64*)
++                CFLAGS_NODIST="$CFLAGS_NODIST -DMS_DLL_ID='\"${VERSION}-arm64\"'"
++            ;;
++            *)
++                CFLAGS_NODIST="$CFLAGS_NODIST -DMS_DLL_ID='\"$VERSION\"'"
++            ;;
++      esac
++    ;;
++	esac
+ fi
+ AC_MSG_RESULT([$DYNLOADFILE])
+ if test "$DYNLOADFILE" != "dynload_stub.o"
+ then
++  have_dynamic_loading=yes
+ 	AC_DEFINE([HAVE_DYNAMIC_LOADING], [1],
+         [Defined when any dynamic module loading is enabled.])
++else
++  have_dynamic_loading=no
+ fi
+ 
+ # MACHDEP_OBJS can be set to platform-specific object files needed by Python
+@@ -4918,13 +5222,22 @@ else
+ fi
+ 
+ # checks for library functions
++if test $with_nt_threads = yes ; then
++  dnl GCC(mingw) 4.4+ require and use posix threads(pthreads-w32)
++  dnl and host may contain installed pthreads-w32.
++  dnl Skip checks for some functions declared in pthreads-w32 if
++  dnl NT-thread model is enabled.
++  ac_cv_func_pthread_kill=skip
++  ac_cv_func_sem_open=skip
++  ac_cv_func_sched_setscheduler=skip
++fi
+ AC_CHECK_FUNCS([ \
+   accept4 alarm bind_textdomain_codeset chmod chown clock close_range confstr \
+   copy_file_range ctermid dup dup3 execv explicit_bzero explicit_memset \
+   faccessat fchmod fchmodat fchown fchownat fdopendir fdwalk fexecve \
+   fork fork1 fpathconf fstatat ftime ftruncate futimens futimes futimesat \
+   gai_strerror getegid getentropy geteuid getgid getgrgid getgrgid_r \
+-  getgrnam_r getgrouplist getgroups gethostname getitimer getloadavg getlogin \
++  getgrnam_r getgrouplist getgroups getitimer getloadavg getlogin \
+   getpeername getpgid getpid getppid getpriority _getpty \
+   getpwent getpwnam_r getpwuid getpwuid_r getresgid getresuid getrusage getsid getspent \
+   getspnam getuid getwd if_nameindex initgroups kill killpg lchown linkat \
+@@ -4937,7 +5250,7 @@ AC_CHECK_FUNCS([ \
+   sched_setparam sched_setscheduler sem_clockwait sem_getvalue sem_open \
+   sem_timedwait sem_unlink sendfile setegid seteuid setgid sethostname \
+   setitimer setlocale setpgid setpgrp setpriority setregid setresgid \
+-  setresuid setreuid setsid setuid setvbuf shutdown sigaction sigaltstack \
++  setresuid setreuid setsid setuid setvbuf sigaction sigaltstack \
+   sigfillset siginterrupt sigpending sigrelse sigtimedwait sigwait \
+   sigwaitinfo snprintf splice strftime strlcpy strsignal symlinkat sync \
+   sysconf system tcgetpgrp tcsetpgrp tempnam timegm times tmpfile \
+@@ -5151,7 +5464,13 @@ PKG_CHECK_MODULES([LIBLZMA], [liblzma], [have_liblzma=yes], [
+ ])
+ 
+ dnl PY_CHECK_NETDB_FUNC(FUNCTION)
+-AC_DEFUN([PY_CHECK_NETDB_FUNC], [PY_CHECK_FUNC([$1], [@%:@include <netdb.h>])])
++AC_DEFUN([PY_CHECK_NETDB_FUNC], [PY_CHECK_FUNC([$1], [
++#ifdef _WIN32
++  #include <winsock.h>
++#else
++  #include <netdb.h>
++#endif
++])])
+ 
+ PY_CHECK_NETDB_FUNC([hstrerror])
+ dnl not available in WASI yet
+@@ -5160,13 +5479,19 @@ PY_CHECK_NETDB_FUNC([getservbyport])
+ PY_CHECK_NETDB_FUNC([gethostbyname])
+ PY_CHECK_NETDB_FUNC([gethostbyaddr])
+ PY_CHECK_NETDB_FUNC([getprotobyname])
++PY_CHECK_NETDB_FUNC([gethostname])
++PY_CHECK_NETDB_FUNC([shutdown])
+ 
+ dnl PY_CHECK_SOCKET_FUNC(FUNCTION)
+ AC_DEFUN([PY_CHECK_SOCKET_FUNC], [PY_CHECK_FUNC([$1], [
++#ifdef _WIN32
++#include <ws2tcpip.h>
++#else
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+ #include <arpa/inet.h>
++#endif
+ ])])
+ 
+ PY_CHECK_SOCKET_FUNC([inet_aton])
+@@ -5274,6 +5599,9 @@ WITH_SAVE_ENV([
+   ])
+ ])
+ 
++case $host in
++  *-*-mingw*) ;;
++  *)
+ AC_CHECK_FUNCS([clock_gettime], [], [
+     AC_CHECK_LIB([rt], [clock_gettime], [
+         LIBS="$LIBS -lrt"
+@@ -5294,6 +5622,8 @@ AC_CHECK_FUNCS([clock_settime], [], [
+         AC_DEFINE([HAVE_CLOCK_SETTIME], [1])
+     ])
+ ])
++  ;;
++esac
+ 
+ AC_CHECK_FUNCS([clock_nanosleep], [], [
+     AC_CHECK_LIB([rt], [clock_nanosleep], [
+@@ -5489,18 +5819,33 @@ if test $ac_cv_header_time_altzone = yes; then
+     [Define this if your time.h defines altzone.])
+ fi
+ 
++AC_CHECK_HEADERS([ws2tcpip.h])
+ AC_CACHE_CHECK([for addrinfo], [ac_cv_struct_addrinfo],
+-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[@%:@include <netdb.h>]], [[struct addrinfo a]])],
++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
++#ifdef HAVE_WS2TCPIP_H
++#  include <ws2tcpip.h>
++#else
++#  include <netdb.h>
++#endif]],
++    [[struct addrinfo a]])],
+   [ac_cv_struct_addrinfo=yes],
+   [ac_cv_struct_addrinfo=no]))
+ if test $ac_cv_struct_addrinfo = yes; then
+-	AC_DEFINE([HAVE_ADDRINFO], [1], [struct addrinfo (netdb.h)])
++	AC_DEFINE([HAVE_ADDRINFO], [1], [struct addrinfo])
+ fi
+ 
+ AC_CACHE_CHECK([for sockaddr_storage], [ac_cv_struct_sockaddr_storage],
+ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+-#		include <sys/types.h>
+-@%:@		include <sys/socket.h>]], [[struct sockaddr_storage s]])],
++#ifdef HAVE_WS2TCPIP_H
++#include <ws2tcpip.h>
++#endif
++#ifdef HAVE_SYS_TYPES_H
++#include <sys/types.h>
++#endif
++#ifdef HAVE_SYS_SOCKET_H
++#include <sys/socket.h>
++#endif]],
++    [[struct sockaddr_storage s]])],
+   [ac_cv_struct_sockaddr_storage=yes],
+   [ac_cv_struct_sockaddr_storage=no]))
+ if test $ac_cv_struct_sockaddr_storage = yes; then
+@@ -5814,6 +6159,10 @@ dnl actually works.  For FreeBSD versions <= 7.2,
+ dnl the kernel module that provides POSIX semaphores
+ dnl isn't loaded by default, so an attempt to call
+ dnl sem_open results in a 'Signal 12' error.
++if test $with_nt_threads = yes ; then
++  dnl skip posix semaphores test if NT-thread model is enabled
++  ac_cv_posix_semaphores_enabled=no
++fi
+ AC_CACHE_CHECK([whether POSIX semaphores are enabled], [ac_cv_posix_semaphores_enabled],
+   AC_RUN_IFELSE([
+     AC_LANG_SOURCE([
+@@ -5847,6 +6196,14 @@ AS_VAR_IF([ac_cv_posix_semaphores_enabled], [no], [
+ ])
+ 
+ dnl Multiprocessing check for broken sem_getvalue
++if test $with_nt_threads = yes ; then
++  dnl Skip test if NT-thread model is enabled.
++  dnl NOTE the test case below fail for pthreads-w32 as:
++  dnl - SEM_FAILED is not defined;
++  dnl - sem_open is a stub;
++  dnl - sem_getvalue work(!).
++  ac_cv_broken_sem_getvalue=skip
++fi
+ AC_CACHE_CHECK([for broken sem_getvalue], [ac_cv_broken_sem_getvalue],
+   AC_RUN_IFELSE([
+     AC_LANG_SOURCE([
+@@ -5883,7 +6240,10 @@ AS_VAR_IF([ac_cv_broken_sem_getvalue], [yes], [
+   )
+ ])
+ 
+-AC_CHECK_DECLS([RTLD_LAZY, RTLD_NOW, RTLD_GLOBAL, RTLD_LOCAL, RTLD_NODELETE, RTLD_NOLOAD, RTLD_DEEPBIND, RTLD_MEMBER], [], [], [[@%:@include <dlfcn.h>]])
++case $host in
++  *-*-mingw*) ;;
++  *) AC_CHECK_DECLS([RTLD_LAZY, RTLD_NOW, RTLD_GLOBAL, RTLD_LOCAL, RTLD_NODELETE, RTLD_NOLOAD, RTLD_DEEPBIND, RTLD_MEMBER], [], [], [[@%:@include <dlfcn.h>]])
++esac
+ 
+ # determine what size digit to use for Python's longs
+ AC_MSG_CHECKING([digit size for Python's longs])
+@@ -5973,6 +6333,61 @@ esac
+ # check for endianness
+ AC_C_BIGENDIAN
+ 
++AC_SUBST(PYD_PLATFORM_TAG)
++# Special case of PYD_PLATFORM_TAG with python build with mingw. 
++# Python can with different cpu arch and c runtime as well as different
++# toolchain. We follow this`mingw_<cpu_arch>_<c_runtime>_<toolchain>`
++# convention for PYD_PLATFORM_TAG. Where:
++# `cpu_arch` = `x86_64`, `aarch64` or `i686`
++# `c_runtime` = `msvcrt` or `ucrt`
++# `toolchain` = `gnu` or `llvm`
++PYD_PLATFORM_TAG=""
++case $host in
++  *-*-mingw*)
++    # check if we are linking to ucrt
++    AC_MSG_CHECKING(whether linking to ucrt)
++    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
++    #include <stdio.h>
++    #ifndef _UCRT
++        #error no ucrt
++    #endif
++    int main(){ return 0; }
++    ]])],[linking_to_ucrt=yes],[linking_to_ucrt=no])
++    AC_MSG_RESULT($linking_to_ucrt)
++    ;;
++esac
++case $host_os in
++    mingw*)
++  AC_MSG_CHECKING(PYD_PLATFORM_TAG)
++  PYD_PLATFORM_TAG="mingw"
++  case $host in
++  i686-*-mingw*)
++    PYD_PLATFORM_TAG+="_i686"
++    ;;
++  x86_64-*-mingw*)
++    PYD_PLATFORM_TAG+="_x86_64"
++    ;;
++  aarch64-*-mingw*)
++    PYD_PLATFORM_TAG+="_aarch64"
++    ;;
++  armv7-*-mingw*)
++    PYD_PLATFORM_TAG+="_armv7"
++    ;;
++  esac
++  if test $linking_to_ucrt = no; then
++    PYD_PLATFORM_TAG+="_msvcrt"
++  else
++    PYD_PLATFORM_TAG+="_ucrt"
++  fi
++  if test -n "${cc_is_clang}"; then
++    # it is CLANG32
++    PYD_PLATFORM_TAG+="_llvm"
++  else
++    PYD_PLATFORM_TAG+="_gnu"
++  fi
++  AC_MSG_RESULT($PYD_PLATFORM_TAG)
++esac
++
+ # ABI version string for Python extension modules.  This appears between the
+ # periods in shared library file names, e.g. foo.<SOABI>.so.  It is calculated
+ # from the following attributes which affect the ABI of this Python build (in
+@@ -6005,7 +6420,12 @@ if test "$Py_DEBUG" = 'true' -a "$with_trace_refs" != "yes"; then
+ fi
+ 
+ AC_SUBST([EXT_SUFFIX])
+-EXT_SUFFIX=.${SOABI}${SHLIB_SUFFIX}
++VERSION_NO_DOTS=$(echo $LDVERSION | tr -d .)
++if test -n "${PYD_PLATFORM_TAG}"; then
++  EXT_SUFFIX=".cp${VERSION_NO_DOTS}-${PYD_PLATFORM_TAG}${SHLIB_SUFFIX}"
++else
++  EXT_SUFFIX=.${SOABI}${SHLIB_SUFFIX}
++fi
+ 
+ AC_MSG_CHECKING([LDVERSION])
+ LDVERSION='$(VERSION)$(ABIFLAGS)'
+@@ -6013,7 +6433,7 @@ AC_MSG_RESULT([$LDVERSION])
+ 
+ # On Android and Cygwin the shared libraries must be linked with libpython.
+ AC_SUBST([LIBPYTHON])
+-if test "$PY_ENABLE_SHARED" = "1" && ( test -n "$ANDROID_API_LEVEL" || test "$MACHDEP" = "cygwin"); then
++if test "$PY_ENABLE_SHARED" = "1" && ( test -n "$ANDROID_API_LEVEL" || test "$MACHDEP" = "cygwin" || test "$MACHDEP" = "win32"); then
+   LIBPYTHON="-lpython${VERSION}${ABIFLAGS}"
+ else
+   LIBPYTHON=''
+@@ -6446,6 +6866,14 @@ dnl have_panel=[no, panelw, panel]
+ have_curses=no
+ have_panel=no
+ 
++case "$host_os" in
++	mingw*)
++	# On Mingw, include directory is different, so just assume
++  # it's there.
++	ac_cv_header_ncurses_h=yes
++	;;
++esac
++
+ AH_TEMPLATE([HAVE_NCURSESW], [Define to 1 if you have the `ncursesw' library.])
+ AC_CHECK_HEADERS([curses.h ncurses.h])
+ 
+@@ -6557,11 +6985,16 @@ AS_VAR_IF([have_panel], [no], [
+   AC_MSG_RESULT([$have_panel (CFLAGS: $PANEL_CFLAGS, LIBS: $PANEL_LIBS)])
+ ])
+ 
++if test -n "$PKG_CONFIG"; then
++    NCURSESW_INCLUDEDIR="`"$PKG_CONFIG" ncursesw --cflags-only-I 2>/dev/null | sed -e 's/^-I//;s/ .*$//'`"
++else
++    NCURSESW_INCLUDEDIR=""
++fi
++AC_SUBST(NCURSESW_INCLUDEDIR)
++
+ # first curses header check
+ ac_save_cppflags="$CPPFLAGS"
+-if test "$cross_compiling" = no; then
+-  CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"
+-fi
++CPPFLAGS="$CPPFLAGS -I$NCURSESW_INCLUDEDIR"
+ 
+ # On Solaris, term.h requires curses.h
+ AC_CHECK_HEADERS([term.h], [], [], [
+@@ -6681,8 +7114,11 @@ AC_CHECK_TYPE(
+   [socklen_t], [],
+   [AC_DEFINE(
+     [socklen_t], [int],
+-    [Define to `int' if <sys/socket.h> does not define.]
++    [Define to `int' if <sys/socket.h> or <ws2tcpip.h> does not define.]
+   )], [
++#ifdef HAVE_WS2TCPIP_H
++#include <ws2tcpip.h>
++#endif
+ #ifdef HAVE_SYS_TYPES_H
+ #include <sys/types.h>
+ #endif
+@@ -6776,6 +7212,27 @@ do
+   THREADHEADERS="$THREADHEADERS \$(srcdir)/$h"
+ done
+ 
++case $host in
++  *-*-mingw*)
++    dnl Required for windows builds as Objects/exceptions.c require
++    dnl "errmap.h" from $srcdir/PC.
++    dnl Note we cannot use BASECPPFLAGS as autogenerated pyconfig.h
++    dnl has to be before customized located in ../PC.
++    dnl (-I. at end is workaround for setup.py logic)
++    CPPFLAGS="-I\$(srcdir)/PC $CPPFLAGS -I."
++    ;;
++esac
++
++dnl Python interpreter main program for frozen scripts
++AC_SUBST(PYTHON_OBJS_FROZENMAIN)
++PYTHON_OBJS_FROZENMAIN="Python/frozenmain.o"
++case $host in
++  *-*-mingw*)
++    dnl 'PC/frozen_dllmain.c' - not yet
++    PYTHON_OBJS_FROZENMAIN=
++    ;;
++esac
++
+ AC_SUBST([SRCDIRS])
+ SRCDIRS="\
+   Modules \
+@@ -6798,6 +7255,11 @@ SRCDIRS="\
+   Python \
+   Python/frozen_modules \
+   Python/deepfreeze"
++
++case $host in
++  *-*-mingw*) SRCDIRS="$SRCDIRS PC";;
++esac
++
+ AC_MSG_CHECKING([for build directories])
+ for dir in $SRCDIRS; do
+     if test ! -d $dir; then
+@@ -6806,6 +7268,38 @@ for dir in $SRCDIRS; do
+ done
+ AC_MSG_RESULT([done])
+ 
++# For mingw build need additional library for linking
++case $host in
++  *-*-mingw*)
++    LIBS="$LIBS -lversion -lshlwapi -lpathcch -lbcrypt"
++    AC_PROG_AWK
++    if test "$AWK" = "gawk"; then
++      awk_extra_flag="--non-decimal-data"
++    fi
++    AC_MSG_CHECKING([FIELD3])
++    FIELD3=$($AWK $awk_extra_flag '\
++      /^#define PY_RELEASE_LEVEL_/             {levels[$2]=$3}    \
++      /^#define PY_MICRO_VERSION[[:space:]]+/  {micro=$3}         \
++      /^#define PY_RELEASE_LEVEL[[:space:]]+/  {level=levels[$3]} \
++      /^#define PY_RELEASE_SERIAL[[:space:]]+/ {serial=$3}        \
++      END {print micro * 1000 + level * 10 + serial}' \
++      $srcdir/Include/patchlevel.h
++    )
++    
++    AC_MSG_RESULT([${FIELD3}])
++    RCFLAGS="$RCFLAGS -DFIELD3=$FIELD3 -O COFF"
++
++    case $host in
++      i686*)  RCFLAGS="$RCFLAGS --target=pe-i386" ;;
++      x86_64*)  RCFLAGS="$RCFLAGS --target=pe-x86-64" ;;
++      *) ;;
++    esac
++  ;;
++  *)
++  ;;
++esac
++AC_SUBST(RCFLAGS)
++
+ # Availability of -O2:
+ AC_CACHE_CHECK([for -O2], [ac_cv_compile_o2], [
+ saved_cflags="$CFLAGS"
+@@ -7284,6 +7778,7 @@ AS_CASE([$ac_sys_system],
+   [VxWorks*], [PY_STDLIB_MOD_SET_NA([_scproxy], [_crypt], [termios], [grp])],
+   [Darwin], [PY_STDLIB_MOD_SET_NA([ossaudiodev], [spwd])],
+   [CYGWIN*], [PY_STDLIB_MOD_SET_NA([_scproxy], [nis])],
++  [MINGW*], [PY_STDLIB_MOD_SET_NA([readline])],
+   [QNX*], [PY_STDLIB_MOD_SET_NA([_scproxy], [nis])],
+   [FreeBSD*], [PY_STDLIB_MOD_SET_NA([_scproxy], [spwd])],
+   [Emscripten|WASI], [
+@@ -7423,10 +7918,9 @@ PY_STDLIB_MOD_SIMPLE([_json])
+ PY_STDLIB_MOD_SIMPLE([_lsprof])
+ PY_STDLIB_MOD_SIMPLE([_opcode])
+ PY_STDLIB_MOD_SIMPLE([_pickle])
+-PY_STDLIB_MOD_SIMPLE([_posixsubprocess])
+ PY_STDLIB_MOD_SIMPLE([_queue])
+ PY_STDLIB_MOD_SIMPLE([_random])
+-PY_STDLIB_MOD_SIMPLE([select])
++PY_STDLIB_MOD_SIMPLE([select], [], [$SELECTMODULE_LIBS])
+ PY_STDLIB_MOD_SIMPLE([_struct])
+ PY_STDLIB_MOD_SIMPLE([_typing])
+ PY_STDLIB_MOD_SIMPLE([_xxsubinterpreters])
+@@ -7435,8 +7929,8 @@ PY_STDLIB_MOD_SIMPLE([_zoneinfo])
+ 
+ dnl multiprocessing modules
+ PY_STDLIB_MOD([_multiprocessing],
+-  [], [test "$ac_cv_func_sem_unlink" = "yes"],
+-  [-I\$(srcdir)/Modules/_multiprocessing])
++  [], [test "$ac_cv_func_sem_unlink" = "yes" -o "$MACHDEP" = "win32"],
++  [-I\$(srcdir)/Modules/_multiprocessing], [$MULTIPROCESSING_LIBS])
+ PY_STDLIB_MOD([_posixshmem],
+   [], [test "$have_posix_shmem" = "yes"],
+   [$POSIXSHMEM_CFLAGS], [$POSIXSHMEM_LIBS])
+@@ -7455,11 +7949,15 @@ PY_STDLIB_MOD([fcntl],
+   [], [test "$ac_cv_header_sys_ioctl_h" = "yes" -a "$ac_cv_header_fcntl_h" = "yes"],
+   [], [$FCNTL_LIBS])
+ PY_STDLIB_MOD([mmap],
+-  [], [test "$ac_cv_header_sys_mman_h" = "yes" -a "$ac_cv_header_sys_stat_h" = "yes"])
++  [], m4_flatten([test "$ac_cv_header_sys_mman_h" = "yes"
++                    -a "$ac_cv_header_sys_stat_h" = "yes"
++                    -o "$MACHDEP" = "win32"]))
+ PY_STDLIB_MOD([_socket],
+   [], m4_flatten([test "$ac_cv_header_sys_socket_h" = "yes"
+                     -a "$ac_cv_header_sys_types_h" = "yes"
+-                    -a "$ac_cv_header_netinet_in_h" = "yes"]))
++                    -a "$ac_cv_header_netinet_in_h" = "yes"
++                    -o "$MACHDEP" = "win32"]),
++  [], [$SOCKET_LIBS])
+ 
+ dnl platform specific extensions
+ PY_STDLIB_MOD([grp], [], [test "$ac_cv_func_getgrgid" = yes -o "$ac_cv_func_getgrgid_r" = yes])
+@@ -7474,6 +7972,7 @@ PY_STDLIB_MOD([_scproxy],
+ PY_STDLIB_MOD([spwd], [], [test "$ac_cv_func_getspent" = yes -o "$ac_cv_func_getspnam" = yes])
+ PY_STDLIB_MOD([syslog], [], [test "$ac_cv_header_syslog_h" = yes])
+ PY_STDLIB_MOD([termios], [], [test "$ac_cv_header_termios_h" = yes])
++PY_STDLIB_MOD([_posixsubprocess], [], [test "$MACHDEP" != "win32"])
+ 
+ dnl _elementtree loads libexpat via CAPI hook in pyexpat
+ PY_STDLIB_MOD([pyexpat],
+@@ -7510,7 +8009,7 @@ PY_STDLIB_MOD([_crypt],
+   [$LIBCRYPT_CFLAGS], [$LIBCRYPT_LIBS])
+ PY_STDLIB_MOD([_ctypes],
+   [], [test "$have_libffi" = yes],
+-  [$NO_STRICT_OVERFLOW_CFLAGS $LIBFFI_CFLAGS], [$LIBFFI_LIBS])
++  [$NO_STRICT_OVERFLOW_CFLAGS $LIBFFI_CFLAGS], [$LIBFFI_LIBS $CTYPES_LIBS])
+ PY_STDLIB_MOD([_curses],
+   [], [test "$have_curses" != "no"],
+   [$CURSES_CFLAGS], [$CURSES_LIBS]
+@@ -7540,8 +8039,8 @@ PY_STDLIB_MOD([_tkinter],
+   [], [test "$have_tcltk" = "yes"],
+   [$TCLTK_CFLAGS], [$TCLTK_LIBS])
+ PY_STDLIB_MOD([_uuid],
+-  [], [test "$have_uuid" = "yes"],
+-  [$LIBUUID_CFLAGS], [$LIBUUID_LIBS])
++  [], [test "$have_uuid" = "yes" -o "$MACHDEP" = "win32"],
++  [$LIBUUID_CFLAGS], [$LIBUUID_LIBS $UUID_LIBS])
+ 
+ dnl compression libs
+ PY_STDLIB_MOD([zlib], [], [test "$have_zlib" = yes],
+@@ -7555,28 +8054,39 @@ PY_STDLIB_MOD([_lzma], [], [test "$have_liblzma" = yes],
+ 
+ dnl OpenSSL bindings
+ PY_STDLIB_MOD([_ssl], [], [test "$ac_cv_working_openssl_ssl" = yes],
+-  [$OPENSSL_INCLUDES], [$OPENSSL_LDFLAGS $OPENSSL_LDFLAGS_RPATH $OPENSSL_LIBS])
++  [$OPENSSL_INCLUDES], [$OPENSSL_LDFLAGS $OPENSSL_LDFLAGS_RPATH $OPENSSL_LIBS -lws2_32])
+ PY_STDLIB_MOD([_hashlib], [], [test "$ac_cv_working_openssl_hashlib" = yes],
+   [$OPENSSL_INCLUDES], [$OPENSSL_LDFLAGS $OPENSSL_LDFLAGS_RPATH $LIBCRYPTO_LIBS])
+ 
++dnl windows specific modules
++PY_STDLIB_MOD([msvcrt], [test "$MACHDEP" = "win32"])
++PY_STDLIB_MOD([_winapi], [test "$MACHDEP" = "win32"])
++PY_STDLIB_MOD([_msi], [test "$MACHDEP" = "win32"], [], [],
++  [-lmsi -lcabinet -lrpcrt4])
++PY_STDLIB_MOD([winsound], [test "$MACHDEP" = "win32"], [], [],
++  [-lwinmm])
++PY_STDLIB_MOD([_overlapped], [test "$MACHDEP" = "win32"], [], [],
++  [-lws2_32])
++
+ dnl test modules
+ PY_STDLIB_MOD([_testcapi], [test "$TEST_MODULES" = yes])
+ PY_STDLIB_MOD([_testclinic], [test "$TEST_MODULES" = yes])
+-PY_STDLIB_MOD([_testinternalcapi], [test "$TEST_MODULES" = yes])
++PY_STDLIB_MOD([_testinternalcapi], [test "$TEST_MODULES" = yes], [], [-DPY3_DLLNAME="\"$DLLLIBRARY\""], [])
+ PY_STDLIB_MOD([_testbuffer], [test "$TEST_MODULES" = yes])
+-PY_STDLIB_MOD([_testimportmultiple], [test "$TEST_MODULES" = yes], [test "$ac_cv_func_dlopen" = yes])
+-PY_STDLIB_MOD([_testmultiphase], [test "$TEST_MODULES" = yes], [test "$ac_cv_func_dlopen" = yes])
++PY_STDLIB_MOD([_testimportmultiple], [test "$TEST_MODULES" = yes], [test "$have_dynamic_loading" = yes])
++PY_STDLIB_MOD([_testmultiphase], [test "$TEST_MODULES" = yes], [test "$have_dynamic_loading" = yes])
+ PY_STDLIB_MOD([xxsubtype], [test "$TEST_MODULES" = yes])
+ PY_STDLIB_MOD([_xxtestfuzz], [test "$TEST_MODULES" = yes])
++PY_STDLIB_MOD([_testconsole], [test "$TEST_MODULES" = yes -a "$MACHDEP" = "win32"])
+ PY_STDLIB_MOD([_ctypes_test],
+-  [test "$TEST_MODULES" = yes], [test "$have_libffi" = yes -a "$ac_cv_func_dlopen" = yes],
+-  [], [$LIBM])
++  [test "$TEST_MODULES" = yes], [test "$have_libffi" = yes -a "$have_dynamic_loading" = yes],
++  [], [$LIBM $CTYPES_LIBS])
+ 
+ dnl Limited API template modules.
+ dnl The limited C API is not compatible with the Py_TRACE_REFS macro.
+ dnl Emscripten does not support shared libraries yet.
+-PY_STDLIB_MOD([xxlimited], [test "$with_trace_refs" = "no"], [test "$ac_cv_func_dlopen" = yes])
+-PY_STDLIB_MOD([xxlimited_35], [test "$with_trace_refs" = "no"], [test "$ac_cv_func_dlopen" = yes])
++PY_STDLIB_MOD([xxlimited], [test "$with_trace_refs" = "no"], [test "$have_dynamic_loading" = yes])
++PY_STDLIB_MOD([xxlimited_35], [test "$with_trace_refs" = "no"], [test "$have_dynamic_loading" = yes])
+ 
+ # substitute multiline block, must come after last PY_STDLIB_MOD()
+ AC_SUBST([MODULE_BLOCK])
+diff --git a/mingw_ignorefile.txt b/mingw_ignorefile.txt
+new file mode 100644
+index 00000000000..550e72413a4
+--- /dev/null
++++ b/mingw_ignorefile.txt
+@@ -0,0 +1,25 @@
++test.test_ctypes.test_loading.LoaderTest.test_load_dll_with_flags
++distutils.tests.test_bdist_dumb.BuildDumbTestCase.test_simple_built
++distutils.tests.test_cygwinccompiler.CygwinCCompilerTestCase.test_get_versions
++distutils.tests.test_util.UtilTestCase.test_change_root
++test.test_compileall.CommandLineTestsNoSourceEpoch.*
++test.test_compileall.CommandLineTestsWithSourceEpoch.*
++test.test_compileall.CompileallTestsWithoutSourceEpoch.*
++test.test_compileall.CompileallTestsWithSourceEpoch.*
++test.test_import.ImportTests.test_dll_dependency_import
++test.test_ntpath.NtCommonTest.test_import
++test.test_os.StatAttributeTests.test_stat_block_device
++test.test_os.TestScandir.test_attributes
++test.test_os.UtimeTests.test_large_time
++test.test_platform.PlatformTest.test_architecture_via_symlink
++test.test_regrtest.ProgramsTestCase.test_pcbuild_rt
++test.test_regrtest.ProgramsTestCase.test_tools_buildbot_test
++test.test_site._pthFileTests.*
++test.test_site.HelperFunctionsTests.*
++test.test_site.StartupImportTests.*
++test.test_ssl.*
++test.test_venv.BasicTest.*
++test.test_venv.EnsurePipTest.*
++
++test.test_dict.DictTest.test_splittable_to_generic_combinedtable
++test.test_capi.test_run.CAPITest.test_run_fileexflags
+diff --git a/mingw_ignorefile_msvcrt.txt b/mingw_ignorefile_msvcrt.txt
+new file mode 100644
+index 00000000000..be363bd0faf
+--- /dev/null
++++ b/mingw_ignorefile_msvcrt.txt
+@@ -0,0 +1,8 @@
++test.datetimetester.TestLocalTimeDisambiguation_Fast.*
++test.datetimetester.TestLocalTimeDisambiguation_Pure.*
++test.test_cmath.CMathTests.test_specific_values
++test.test_math.MathTests.*
++test.test_strptime.CalculationTests.*
++test.test_strptime.StrptimeTests.test_weekday
++test.test_strptime.TimeRETests.test_compile
++test.test_tools.test_i18n.Test_pygettext.test_POT_Creation_Date
+diff --git a/mingw_smoketests.py b/mingw_smoketests.py
+new file mode 100644
+index 00000000000..5af27645e5d
+--- /dev/null
++++ b/mingw_smoketests.py
+@@ -0,0 +1,371 @@
++#!/usr/bin/env python3
++# Copyright 2017 Christoph Reiter
++#
++# Permission is hereby granted, free of charge, to any person obtaining
++# a copy of this software and associated documentation files (the
++# "Software"), to deal in the Software without restriction, including
++# without limitation the rights to use, copy, modify, merge, publish,
++# distribute, sublicense, and/or sell copies of the Software, and to
++# permit persons to whom the Software is furnished to do so, subject to
++# the following conditions:
++#
++# The above copyright notice and this permission notice shall be included
++# in all copies or substantial portions of the Software.
++#
++# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
++# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
++# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
++# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
++# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++
++"""The goal of this test suite is collect tests for update regressions
++and to test msys2 related modifications like for path handling.
++Feel free to extend.
++"""
++
++import os
++import unittest
++import sysconfig
++
++if os.environ.get("MSYSTEM", ""):
++    SEP = "/"
++else:
++    SEP = "\\"
++
++if sysconfig.is_python_build():
++    os.environ["PYTHONLEGACYWINDOWSDLLLOADING"] = "1"
++
++_UCRT = 'ucrt' in sysconfig.get_platform()
++
++
++class Tests(unittest.TestCase):
++
++    def test_zoneinfo(self):
++        # https://github.com/msys2-contrib/cpython-mingw/issues/32
++        import zoneinfo
++        self.assertTrue(any(os.path.exists(p) for p in zoneinfo.TZPATH))
++        zoneinfo.ZoneInfo("America/Sao_Paulo")
++
++    def test_userdir_path_sep(self):
++        # Make sure os.path and pathlib use the same path separators
++        from unittest import mock
++        from os.path import expanduser
++        from pathlib import Path
++
++        profiles = ["C:\\foo", "C:/foo"]
++        for profile in profiles:
++            with mock.patch.dict(os.environ, {"USERPROFILE": profile}):
++                self.assertEqual(expanduser("~"), os.path.normpath(expanduser("~")))
++                self.assertEqual(str(Path("~").expanduser()), expanduser("~"))
++                self.assertEqual(str(Path.home()), expanduser("~"))
++
++    # def test_sysconfig_schemes(self):
++    #     # https://github.com/msys2/MINGW-packages/issues/9319
++    #     import sysconfig
++    #     from distutils.dist import Distribution
++    #     from distutils.command.install import install
++
++    #     names = ['scripts', 'purelib', 'platlib', 'data', 'include']
++    #     for scheme in ["nt", "nt_user"]:
++    #         for name in names:
++    #             c = install(Distribution({"name": "foobar"}))
++    #             c.user = (scheme == "nt_user")
++    #             c.finalize_options()
++    #             if name == "include":
++    #                 dist_path = os.path.dirname(getattr(c, "install_" + "headers"))
++    #             else:
++    #                 dist_path = getattr(c, "install_" + name)
++    #             sys_path = sysconfig.get_path(name, scheme)
++    #             self.assertEqual(dist_path, sys_path, (scheme, name))
++
++    def test_ctypes_find_library(self):
++        from ctypes.util import find_library
++        from ctypes import cdll
++        self.assertTrue(cdll.msvcrt)
++        if _UCRT:
++            self.assertIsNone(find_library('c'))
++        else:
++            self.assertEqual(find_library('c'), 'msvcrt.dll')
++
++    def test_ctypes_dlopen(self):
++        import ctypes
++        import sys
++        self.assertEqual(ctypes.RTLD_GLOBAL, 0)
++        self.assertEqual(ctypes.RTLD_GLOBAL,  ctypes.RTLD_LOCAL)
++        self.assertFalse(hasattr(sys, 'setdlopenflags'))
++        self.assertFalse(hasattr(sys, 'getdlopenflags'))
++        self.assertFalse([n for n in dir(os) if n.startswith("RTLD_")])
++
++    def test_time_no_unix_stuff(self):
++        import time
++        self.assertFalse([n for n in dir(time) if n.startswith("clock_")])
++        self.assertFalse([n for n in dir(time) if n.startswith("CLOCK_")])
++        self.assertFalse([n for n in dir(time) if n.startswith("pthread_")])
++        self.assertFalse(hasattr(time, 'tzset'))
++
++    def test_strftime(self):
++        import time
++        with self.assertRaises(ValueError):
++            time.strftime('%Y', (12345,) + (0,) * 8)
++
++    def test_sep(self):
++        self.assertEqual(os.sep, SEP)
++
++    def test_module_file_path(self):
++        import asyncio
++        import zlib
++        self.assertEqual(zlib.__file__, os.path.normpath(zlib.__file__))
++        self.assertEqual(asyncio.__file__, os.path.normpath(asyncio.__file__))
++
++    def test_importlib_frozen_path_sep(self):
++        import importlib._bootstrap_external
++        self.assertEqual(importlib._bootstrap_external.path_sep, SEP)
++
++    def test_os_commonpath(self):
++        self.assertEqual(
++            os.path.commonpath(
++                [os.path.join("C:", os.sep, "foo", "bar"),
++                 os.path.join("C:", os.sep, "foo")]),
++                 os.path.join("C:", os.sep, "foo"))
++
++    def test_pathlib(self):
++        import pathlib
++
++        p = pathlib.Path("foo") / pathlib.Path("foo")
++        self.assertEqual(str(p), os.path.normpath(p))
++
++    def test_modules_import(self):
++        import sqlite3
++        import ssl
++        import ctypes
++        import curses
++
++    def test_c_modules_import(self):
++        import _decimal
++
++    def test_socket_inet_ntop(self):
++        import socket
++        self.assertTrue(hasattr(socket, "inet_ntop"))
++
++    def test_socket_inet_pton(self):
++        import socket
++        self.assertTrue(hasattr(socket, "inet_pton"))
++
++    def test_multiprocessing_queue(self):
++        from multiprocessing import Queue
++        Queue(0)
++
++    #def test_socket_timout_normal_error(self):
++    #    import urllib.request
++    #    from urllib.error import URLError
++
++    #    try:
++    #        urllib.request.urlopen(
++    #            'http://localhost', timeout=0.0001).close()
++    #    except URLError:
++    #        pass
++
++    def test_threads(self):
++        from concurrent.futures import ThreadPoolExecutor
++
++        with ThreadPoolExecutor(1) as pool:
++            for res in pool.map(lambda *x: None, range(10000)):
++                pass
++
++    def test_sysconfig(self):
++        import sysconfig
++        # This should be able to execute without exceptions
++        sysconfig.get_config_vars()
++
++    def test_sqlite_enable_load_extension(self):
++        # Make sure --enable-loadable-sqlite-extensions is used
++        import sqlite3
++        self.assertTrue(sqlite3.Connection.enable_load_extension)
++
++    def test_venv_creation(self):
++        import tempfile
++        import venv
++        import subprocess
++        import shutil
++        with tempfile.TemporaryDirectory() as tmp:
++            builder = venv.EnvBuilder()
++            builder.create(tmp)
++            assert os.path.exists(os.path.join(tmp, "bin", "activate"))
++            assert os.path.exists(os.path.join(tmp, "bin", "python.exe"))
++            assert os.path.exists(os.path.join(tmp, "bin", "python3.exe"))
++            subprocess.check_call([shutil.which("bash.exe"), os.path.join(tmp, "bin", "activate")])
++
++            # This will not work in in-tree build
++            if not sysconfig.is_python_build():
++                op = subprocess.check_output(
++                    [
++                        os.path.join(tmp, "bin", "python.exe"),
++                        "-c",
++                        "print('Hello World')"
++                    ],
++                    cwd=tmp,
++                )
++                assert op.decode().strip() == "Hello World"
++
++    def test_has_mktime(self):
++        from time import mktime, gmtime
++        mktime(gmtime())
++
++    def test_platform_things(self):
++        import sys
++        import sysconfig
++        import platform
++        import importlib.machinery
++        import tempfile
++        import venv
++        import subprocess
++        self.assertEqual(sys.implementation.name, "cpython")
++        self.assertEqual(sys.platform, "win32")
++        self.assertTrue(sysconfig.get_platform().startswith("mingw"))
++        self.assertTrue(sysconfig.get_config_var('SOABI').startswith("cpython-"))
++        ext_suffix = sysconfig.get_config_var('EXT_SUFFIX')
++        self.assertTrue(ext_suffix.endswith(".pyd"))
++        self.assertTrue("mingw" in ext_suffix)
++        self.assertEqual(sysconfig.get_config_var('SHLIB_SUFFIX'), ".pyd")
++        ext_suffixes = importlib.machinery.EXTENSION_SUFFIXES
++        self.assertTrue(ext_suffix in ext_suffixes)
++        self.assertTrue(".pyd" in ext_suffixes)
++        if sysconfig.get_platform().startswith('mingw_i686'):
++             self.assertEqual(sys.winver, ".".join(map(str, sys.version_info[:2])) + '-32')
++        elif sysconfig.get_platform().startswith('mingw_aarch64'):
++            self.assertEqual(sys.winver, ".".join(map(str, sys.version_info[:2])) + '-arm64')
++        elif sysconfig.get_platform().startswith('mingw_armv7'):
++            self.assertEqual(sys.winver, ".".join(map(str, sys.version_info[:2])) + '-arm32')
++        else:
++            self.assertEqual(sys.winver, ".".join(map(str, sys.version_info[:2])))
++        self.assertEqual(platform.python_implementation(), "CPython")
++        self.assertEqual(platform.system(), "Windows")
++        self.assertTrue(isinstance(sys.api_version, int) and sys.api_version > 0)
++
++        with tempfile.TemporaryDirectory() as tmp:
++            builder = venv.EnvBuilder()
++            builder.create(tmp)
++            # This will not work in in-tree build
++            if not sysconfig.is_python_build():
++                op = subprocess.check_output(
++                    [
++                        os.path.join(tmp, "bin", "python.exe"),
++                        "-c",
++                        "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))"
++                    ],
++                    cwd=tmp,
++                )
++                self.assertTrue(op.decode().strip().startswith(sys.base_prefix))
++
++    def test_sys_getpath(self):
++        # everything sourced from getpath.py
++        import sys
++
++        def assertNormpath(path):
++            self.assertEqual(path, os.path.normpath(path))
++
++        assertNormpath(sys.executable)
++        assertNormpath(sys._base_executable)
++        assertNormpath(sys.prefix)
++        assertNormpath(sys.base_prefix)
++        assertNormpath(sys.exec_prefix)
++        assertNormpath(sys.base_exec_prefix)
++        assertNormpath(sys.platlibdir)
++        assertNormpath(sys._stdlib_dir)
++        for p in sys.path:
++            assertNormpath(p)
++
++    def test_site(self):
++        import site
++
++        self.assertEqual(len(site.getsitepackages()), 1)
++
++    def test_c_ext_build(self):
++        import tempfile
++        import sys
++        import subprocess
++        import textwrap
++        import venv
++        from pathlib import Path
++
++        with tempfile.TemporaryDirectory() as tmppro:
++            builder = venv.EnvBuilder(with_pip=True)
++            builder.create(tmppro)
++            venv_exe = os.path.join(tmppro, "bin", os.path.basename(sys.executable))
++
++            with Path(tmppro, "setup.py").open("w") as f:
++                f.write(
++                    textwrap.dedent(
++                        """\
++                                    from setuptools import setup, Extension
++
++                                    setup(
++                                        name='cwrapper',
++                                        version='1.0',
++                                        ext_modules=[
++                                            Extension(
++                                                'cwrapper',
++                                                sources=['cwrapper.c']),
++                                        ],
++                                    )
++                                """
++                    )
++                )
++            with Path(tmppro, "cwrapper.c").open("w") as f:
++                f.write(
++                    textwrap.dedent(
++                        """\
++                                    #include <Python.h>
++                                    static PyObject *
++                                    helloworld(PyObject *self, PyObject *args)
++                                    {
++                                        printf("Hello World\\n");
++                                        Py_RETURN_NONE;
++                                    }
++                                    static PyMethodDef
++                                    myMethods[] = {
++                                        { "helloworld", helloworld, METH_NOARGS, "Prints Hello World" },
++                                        { NULL, NULL, 0, NULL }
++                                    };
++                                    static struct PyModuleDef cwrapper = {
++                                        PyModuleDef_HEAD_INIT,
++                                        "cwrapper",
++                                        "Test Module",
++                                        -1,
++                                        myMethods
++                                    };
++
++                                    PyMODINIT_FUNC
++                                    PyInit_cwrapper(void)
++                                    {
++                                        return PyModule_Create(&cwrapper);
++                                    }
++                                """
++                    )
++                )
++            subprocess.check_call(
++                [venv_exe, "-c", "import struct"],
++            )
++            subprocess.check_call(
++                [
++                    venv_exe,
++                    "-m",
++                    "pip",
++                    "install",
++                    tmppro,
++                ],
++            )
++            subprocess.check_call(
++                [venv_exe, "-c", "import cwrapper"],
++            )
++
++
++
++def suite():
++    return unittest.TestLoader().loadTestsFromName(__name__)
++
++
++if __name__ == '__main__':
++    unittest.main(defaultTest='suite')
+diff --git a/pyconfig.h.in b/pyconfig.h.in
+index df4d29fe549..398b64f2f0b 100644
+--- a/pyconfig.h.in
++++ b/pyconfig.h.in
+@@ -59,7 +59,7 @@
+ /* Define to 1 if you have the `acosh' function. */
+ #undef HAVE_ACOSH
+ 
+-/* struct addrinfo (netdb.h) */
++/* struct addrinfo */
+ #undef HAVE_ADDRINFO
+ 
+ /* Define to 1 if you have the `alarm' function. */
+@@ -1552,6 +1552,9 @@
+ /* Define if mvwdelch in curses.h is an expression. */
+ #undef MVWDELCH_IS_EXPRESSION
+ 
++/* Define to 1 if you want to use native NT threads */
++#undef NT_THREADS
++
+ /* Define to the address where bug reports for this package should be sent. */
+ #undef PACKAGE_BUGREPORT
+ 
+@@ -1923,7 +1926,7 @@
+ /* Define to `unsigned int' if <sys/types.h> does not define. */
+ #undef size_t
+ 
+-/* Define to `int' if <sys/socket.h> does not define. */
++/* Define to `int' if <sys/socket.h> or <ws2tcpip.h> does not define. */
+ #undef socklen_t
+ 
+ /* Define to `int' if <sys/types.h> doesn't define. */

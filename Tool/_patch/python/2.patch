@@ -268,6 +268,19 @@ index edbe78545a2..818c3b1b3f0 100644
      changed_name = __file__.upper()
      if changed_name == __file__:
          changed_name = __file__.lower()
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index 17e0c9904cc..6f805befcf8 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -97,7 +97,7 @@ CONFIGURE_LDFLAGS_NODIST=@LDFLAGS_NODIST@
+ # of _bootstrap_python and _freeze_module tools, which don't need LTO.
+ CONFIGURE_LDFLAGS_NOLTO=@LDFLAGS_NOLTO@
+ CONFIGURE_CPPFLAGS=	@CPPFLAGS@
+-CONFIGURE_LDFLAGS=	@LDFLAGS@
++CONFIGURE_LDFLAGS=
+ # Avoid assigning CFLAGS, LDFLAGS, etc. so users can use them on the
+ # command line to append to these values without stomping the pre-set
+ # values.
 diff --git a/Misc/platform_triplet.c b/Misc/platform_triplet.c
 index f5cd73bdea8..d062f2fd579 100644
 --- a/Misc/platform_triplet.c
@@ -415,8 +428,21 @@ index 567872b0983..2eb480b710d 100644
  #      define XMLIMPORT __declspec(dllimport)
  #    endif
  
+diff --git a/Modules/getpath.c b/Modules/getpath.c
+index 1e75993480a..bafda671b39 100644
+--- a/Modules/getpath.c
++++ b/Modules/getpath.c
+@@ -810,7 +810,7 @@ library_to_dict(PyObject *dict, const char *key)
+    instead link against a macOS Framework. */
+ #if defined(Py_ENABLE_SHARED) || defined(WITH_NEXT_FRAMEWORK)
+ 
+-#ifdef MS_WINDOWS
++#ifdef _MSC_VER
+     extern HMODULE PyWin_DLLhModule;
+     if (PyWin_DLLhModule) {
+         return winmodule_to_dict(dict, key, PyWin_DLLhModule);
 diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
-index 922694fa367..a2d8006cd0f 100644
+index 922694fa367..2056e88a619 100644
 --- a/Modules/posixmodule.c
 +++ b/Modules/posixmodule.c
 @@ -37,6 +37,11 @@
@@ -485,6 +511,15 @@ index 922694fa367..a2d8006cd0f 100644
  #endif
  
  
+@@ -596,7 +621,7 @@ extern char *ctermid_r(char *);
+ 
+ // --- os module ------------------------------------------------------------
+ 
+-#ifdef MS_WINDOWS
++#ifdef _MSC_VER
+ #  define INITFUNC PyInit_nt
+ #  define MODNAME "nt"
+ #  define MODNAME_OBJ &_Py_ID(nt)
 @@ -1730,9 +1755,9 @@ _Py_Sigset_Converter(PyObject *obj, void *addr)
  */
  #include <crt_externs.h>
@@ -640,6 +675,41 @@ index 6ce2131c7b8..3826a65a40b 100644
      {"msvcrt", PyInit_msvcrt},
      {"_locale", PyInit__locale},
  #endif
+diff --git a/Programs/_bootstrap_python.c b/Programs/_bootstrap_python.c
+index 6443d814a22..3bbcad2135b 100644
+--- a/Programs/_bootstrap_python.c
++++ b/Programs/_bootstrap_python.c
+@@ -46,7 +46,7 @@ const struct _module_alias *_PyImport_FrozenAliases = aliases;
+ const struct _frozen *PyImport_FrozenModules = NULL;
+ 
+ int
+-#ifdef MS_WINDOWS
++#ifdef _MSC_VER
+ wmain(int argc, wchar_t **argv)
+ #else
+ main(int argc, char **argv)
+@@ -64,7 +64,7 @@ main(int argc, char **argv)
+     config.isolated = 0;
+     config.safe_path = 0;
+ 
+-#ifdef MS_WINDOWS
++#ifdef _MSC_VER
+     status = PyConfig_SetArgv(&config, argc, argv);
+ #else
+     status = PyConfig_SetBytesArgv(&config, argc, argv);
+diff --git a/Programs/python.c b/Programs/python.c
+index 84148f7767a..d1e5fd1f0b0 100644
+--- a/Programs/python.c
++++ b/Programs/python.c
+@@ -2,7 +2,7 @@
+ 
+ #include "Python.h"
+ 
+-#ifdef MS_WINDOWS
++#ifdef _MSC_VER
+ int
+ wmain(int argc, wchar_t **argv)
+ {
 diff --git a/Python/ceval.c b/Python/ceval.c
 index 490b653f132..63a45b1fdc6 100644
 --- a/Python/ceval.c
@@ -778,7 +848,7 @@ index c4c1d9fd9e1..c73bede942b 100644
  _coerce_default_locale_settings(int warn, const _LocaleCoercionTarget *target)
  {
 diff --git a/Python/sysmodule.c b/Python/sysmodule.c
-index 00dce4527fb..c16df179fab 100644
+index 00dce4527fb..a296b04616e 100644
 --- a/Python/sysmodule.c
 +++ b/Python/sysmodule.c
 @@ -53,7 +53,7 @@ Data members:
@@ -786,7 +856,7 @@ index 00dce4527fb..c16df179fab 100644
  #endif /* MS_WINDOWS */
  
 -#ifdef MS_COREDLL
-+#if defined(MS_WINDOWS) && defined(Py_ENABLE_SHARED)
++#if defined(_MSC_VER) && defined(Py_ENABLE_SHARED)
  extern void *PyWin_DLLhModule;
  /* A string loaded from the DLL at startup: */
  extern const char *PyWin_DLLVersionString;
@@ -795,7 +865,7 @@ index 00dce4527fb..c16df179fab 100644
  #endif
  
 -#ifdef MS_COREDLL
-+#if defined(MS_WINDOWS) && defined(Py_ENABLE_SHARED)
++#if defined(_MSC_VER) && defined(Py_ENABLE_SHARED)
      SET_SYS("dllhandle", PyLong_FromVoidPtr(PyWin_DLLhModule));
      SET_SYS_FROM_STRING("winver", PyWin_DLLVersionString);
  #endif

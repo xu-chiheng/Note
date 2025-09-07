@@ -53,6 +53,12 @@ build() {
 		local configure_options=(
 			--with-computed-gotos
 		)
+		case "${HOST_TRIPLE}" in
+			*-mingw* )
+				local mingw_libc=( -lbcrypt -lversion -lpathcch -lws2_32 -lole32 -luuid )
+				configure_options+=( --with-libc="${mingw_libc[*]}" )
+				;;
+		esac
 
 		time_command configure_build_install_package \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \

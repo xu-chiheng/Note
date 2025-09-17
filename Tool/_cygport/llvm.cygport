@@ -28,7 +28,7 @@ cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-1,l,m,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b-1,c},\
 cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\
-cygwin/cygwin-{cmodel-2,general-{a-1,b,c-{a,b,c-1,d}},macro},\
+cygwin/cygwin-{cmodel-2,general-{a-1,b,c-{a,b,c-1,d}},macro-{a,b,c}},\
 cygwin-regression/cygwin-regression-{a,b,c,d,e},\
 mingw/mingw-{git-revision,emutls-1}}.patch
 

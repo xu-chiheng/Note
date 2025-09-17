@@ -461,7 +461,15 @@ set_environment_variables_at_bash_startup() {
 	set_common_windows_packages_PATH_at_bash_startup
 	set_other_linux_environment_variables_at_bash_startup
 
+	maybe_source_.bashrc.private
+
 	source_ssh-agent_env_script
+}
+
+maybe_source_.bashrc.private() {
+	if [ -f ~/.bashrc.private ]; then
+		. ~/.bashrc.private
+	fi
 }
 
 source_ssh-agent_env_script() {

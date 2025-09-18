@@ -43,13 +43,22 @@ maybe_set_environment_variables_at_bash_startup() {
 	fi
 }
 
+maybe_source_.bashrc.private() {
+	if [ -f ~/.bashrc.private ]; then
+		. ~/.bashrc.private
+	fi
+}
+
 # time \
 maybe_source_etc_bashrc
 # time \
 source_.bashrc.d_scripts
 # time_command \
 maybe_set_environment_variables_at_bash_startup
+# time_command \
+maybe_source_.bashrc.private
 
 unset -f maybe_source_etc_bashrc
 unset -f source_.bashrc.d_scripts
 unset -f maybe_set_environment_variables_at_bash_startup
+unset -f maybe_source_.bashrc.private

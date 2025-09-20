@@ -44,9 +44,12 @@ maybe_set_environment_variables_at_bash_startup() {
 	fi
 }
 
-maybe_source_.bashrc.private.sh() {
-	if [ -f ~/.bashrc.private.sh ]; then
-		. ~/.bashrc.private.sh
+maybe_source_.bashrc.d.private_scripts() {
+	if [ -d ~/.bashrc.d.private ]; then
+		local file
+		for file in ~/.bashrc.d.private/*.sh ; do
+			. "${file}"
+		done
 	fi
 }
 
@@ -57,9 +60,9 @@ source_.bashrc.d_scripts
 # time_command \
 maybe_set_environment_variables_at_bash_startup
 # time_command \
-maybe_source_.bashrc.private.sh
+maybe_source_.bashrc.d.private_scripts
 
 unset -f maybe_source_etc_bashrc
 unset -f source_.bashrc.d_scripts
 unset -f maybe_set_environment_variables_at_bash_startup
-unset -f maybe_source_.bashrc.private.sh
+unset -f maybe_source_.bashrc.d.private_scripts

@@ -104,7 +104,7 @@ code.lock
 !/.bash_profile
 !/.bashrc
 !/.bashrc.d
-!/.bashrc.private.sh
+!/.bashrc.d.private
 !/.gitconfig
 !/.gitignore
 !/.gitattributes

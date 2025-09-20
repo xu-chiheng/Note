@@ -33,7 +33,7 @@ do_update_all_files() {
 		Tool/README.txt
 		Tool/.gitignore
 
-		Tool/build-{llvm{,_vs2022},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs2022},python}.sh
+		Tool/build-{llvm{,_vs},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs},python}.sh
 
 		Tool/clean.sh
 		Tool/common.sh
@@ -43,7 +43,7 @@ do_update_all_files() {
 		Tool/_doc
 		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python}
 
-		Tool/{linux.sh,{cygwin,msys,mingw_ucrt,mingw_vcrt,vs2022_cygwin,vs2022_msys}.cmd}
+		Tool/{linux.sh,{cygwin,msys,mingw_{ucrt,vcrt},vs_{cygwin,msys}}.cmd}
 
 		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_2022_Enterprise,Windows_10_22H2_Enterprise_ISO}
 

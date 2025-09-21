@@ -424,7 +424,7 @@ git_remote_exists() {
 	git remote | quiet_command grep -E "^${remote}$"
 }
 
-git_verify_file_not_changed_from_root_commit () {
+git_verify_file_not_changed_since_root_commit () {
 	local root_commit="$(git rev-list --max-parents=0 HEAD)"
 	echo "root commit :"
 	git show -s "${root_commit}"

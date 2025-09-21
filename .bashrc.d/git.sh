@@ -423,3 +423,21 @@ git_remote_exists() {
 	local remote="$1"
 	git remote | quiet_command grep -E "^${remote}$"
 }
+
+git_verify_file_not_changed_from_root_commit () {
+	local root_commit="$(git rev-list --max-parents=0 HEAD)"
+	echo "root commit :"
+	git show -s "${root_commit}"
+	echo
+	echo "HEAD :"
+	git show -s "HEAD"
+	echo
+	if echo_command git diff "${root_commit}" HEAD -- "$@"; then
+		echo "Not Changed"
+		return 0
+	else
+		echo "Warning: The following file(s) changed since root commit:"
+		git diff --name-only "${root_commit}" HEAD -- "$@"
+		return 1
+	fi
+}

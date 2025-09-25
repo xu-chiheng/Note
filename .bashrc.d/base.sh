@@ -937,3 +937,20 @@ windows_download_executable_from_url_and_execute() {
 # 	rm -rf ~/AppData/Local/Microsoft/Edge
 # }
 
+copy_home_dir_files_to_current_directory() {
+	local path
+	for path in "$@"; do
+		if [ -e ~/"${path}" ]; then
+			echo "${path}"
+			dir="$(dirname "${path}")"
+			rm -rf "${path}" \
+			&& mkdir -p "${dir}" \
+			&& cp -rf ~/"${path}" "${dir}"
+		else
+			echo "${path} does not exist"
+		fi
+	done
+	echo "Completed!"
+}
+
+

@@ -55,19 +55,7 @@ do_update_all_files() {
 		Util/setting/Editors
 	)
 
-	local path
-	for path in "${paths[@]}"; do
-		if [ -e ~/"${path}" ]; then
-			echo "${path}"
-			dir="$(dirname "${path}")"
-			rm -rf "${path}" \
-			&& mkdir -p "${dir}" \
-			&& cp -rf ~/"${path}" "${dir}"
-		else
-			echo "${path} does not exist"
-		fi
-	done
-	echo "Completed!"
+	copy_home_dir_files_to_current_directory "${paths[@]}"
 }
 
 do_update_all_files "$@"

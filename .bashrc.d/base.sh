@@ -1006,6 +1006,10 @@ print_essential_files_for_tool_setup() {
 	done
 }
 
+copy_home_dir_files_for_basic_setup() {
+	copy_home_dir_files_to_current_directory $(print_essential_files_for_basic_setup)
+}
+
 copy_home_dir_files_for_tool_setup() {
 	copy_home_dir_files_to_current_directory $(print_essential_files_for_tool_setup)
 }

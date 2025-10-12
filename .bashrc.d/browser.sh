@@ -36,8 +36,6 @@ launch_browser_in_background() {
 		"https://claude.ai"
 		"https://gemini.google.com"
 		"https://chat.deepseek.com"
-		# "https://copilot.microsoft.com"
-		# "https://meta.ai"
 	)
 
 	# no proxy
@@ -49,6 +47,12 @@ launch_browser_in_background() {
 		"https://tongyi.aliyun.com/qianwen"
 		"https://yiyan.baidu.com"
 	)
+
+	# Google No Country Redirect
+	# https://www.ipvoid.com/google-ncr/
+	# You can force Google.com to not use country location redirection, also known as "no country redirect" (NCR), so when you search something on Google.com you get results always from Google.com domain and not from, i.e Google.co.uk if you are located in United Kingdom. Click on the link below to open Google.com with no country redirect (NCR) enabled:
+	# Google No Country Redirect: https://www.google.com/ncr
+	# Alternatively try: https://www.google.com/?hl=en
 
 	# NoCountryRedirect (NCR)
 	# https://whatis.techtarget.com/definition/NCR-no-country-redirect

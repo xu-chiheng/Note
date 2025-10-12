@@ -132,7 +132,7 @@ fix_system_quirks_one_time() {
 			*-cygwin )
 				time_command fix_cygwin_connect_quirk
 				time_command fix_cygwin_gpg_quirk
-				time_command fix_cygwin_python_quirk
+				# time_command fix_cygwin_python_quirk
 				;;
 			*-mingw* )
 				time_command fix_mingw_mode_quirk

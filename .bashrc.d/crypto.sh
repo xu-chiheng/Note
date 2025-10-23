@@ -248,7 +248,7 @@ gpg_export_all_private_keys_with_ascii_armored_output_and_to_text_file() {
 # 	Can be added or revoked at any time without affecting the primary key
 
 # https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
-gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pairs_for_git() {
+gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pair_for_git() {
 	expect -c "
 		# Set timeout for Expect commands (in seconds)
 		set timeout 10
@@ -284,7 +284,7 @@ gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pairs_for_git
 	"
 }
 
-gpg_generate_ecc_256_bit_no_expiration_encryption_and_signing_key_pairs_for_git() {
+gpg_generate_ecc_256_bit_no_expiration_encryption_and_signing_key_pair_for_git() {
 	expect -c "
 		# Set timeout for Expect commands (in seconds)
 		set timeout 10
@@ -351,6 +351,27 @@ ssh_generate_ed25519_authentication_key_pair_for_github() {
 	"
 }
 
+sha512_calculate_and_gpg_encrypt_and_sha512_calculate_gpg_file() {
+	local file="$1"
+
+	time_command sha512_calculate_file "${file}" \
+	&& time_command gpg_encrypt_file  "${file}" \
+	&& time_command sha512_calculate_file "${file}".gpg
+}
+
+sha512_check_gpg_and_gpg_decrypt_and_sha512_check_file() {
+	local gpg_sum="$1"
+	if ! [[ "${gpg_sum}" == *.gpg.sha512 ]]; then
+		echo "${gpg_sum} is not a .gpg.sha512 file"
+		return 1
+	fi
+	local gpg="$(dirname "${gpg_sum}")/$(basename "${gpg_sum}" .sha512)"
+	local file_sum="$(dirname "${gpg}")/$(basename "${gpg}" .gpg)".sha512
+
+	time_command sha512_check_file "${gpg_sum}" \
+	&& time_command gpg_decrypt_file  "${gpg}" \
+	&& time_command sha512_check_file "${file_sum}"
+}
 
 file_split_one() {
 	local size="$1"

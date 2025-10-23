@@ -243,7 +243,7 @@ set_bash_PS1_for_terminal_emulator_at_bash_startup() {
 			;;
 	esac
 	# Based on the PS1(Prompt String 1) of MSYS2
-	export PS1='\[\e]0;'"${system} "'\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]'"${system}"'\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n'"${ps1_symbol}"' '
+	export PS1='\[\e]0;'"${system}"' \w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]'"${system}"'\[\e[0m\] \[\e[33m\]\w\[\e[0m\]\n'"${ps1_symbol}"' '
 	# Decode the above code
 	# ChatGPT/Claude/Gemini/DeepSeek
 }
@@ -816,11 +816,6 @@ windows_clean_or_hide_home_dir_entries() {
 # https://stackoverflow.com/questions/21031171/how-to-run-a-command-in-the-background-on-windows
 # https://stackoverflow.com/questions/31164253/how-to-open-url-in-microsoft-edge-from-the-command-line
 windows_launch_program_in_background() {
-	if ! host_triple_is_windows; then
-		echo "unsupported host ${HOST_TRIPLE}"
-		return 1
-	fi
-
 	local program_unix_path="$(cygpath -u "$1")"
 	shift 1
 	local program_base_name="$(basename "${program_unix_path}")"
@@ -983,19 +978,10 @@ print_essential_files_for_tool_setup() {
 		IDE/{remove_unneeded_plug-ins,generate_list_of_changed_files}.{cmd,sh,sh.txt}
 		IDE/list_of{,_non}_java_files_{added,modified,deleted}.txt
 
-		Tool/README.txt
-		Tool/.gitignore
-
+		Tool/{README.txt,.gitignore,clean.sh,common.sh,_doc}
 		Tool/build-{llvm{,_vs},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs},python}.sh
-
-		Tool/clean.sh
-		Tool/common.sh
-
 		Tool/_cygport/{.gitignore,cygwin.cmd,llvm.cygport}
-
-		Tool/_doc
 		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python}
-
 		Tool/{linux.sh,{cygwin,msys,mingw_{ucrt,vcrt},vs_{cygwin,msys}}.cmd}
 	)
 

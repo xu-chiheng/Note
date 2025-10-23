@@ -424,20 +424,30 @@ git_remote_exists() {
 	git remote | quiet_command grep -E "^${remote}$"
 }
 
-git_verify_file_not_changed_since_root_commit () {
-	local root_commit="$(git rev-list --max-parents=0 HEAD)"
-	echo "root commit :"
+git_verify_file_not_changed_since_root_commit() {
+	if [ ! -d .git ]; then
+		echo "Error: not inside a Git repository."
+		return 1
+	fi
+
+	local root_commit
+	root_commit="$(git rev-list --max-parents=0 HEAD)"
+
+	echo "Root commit:"
 	git show -s "${root_commit}"
 	echo
-	echo "HEAD :"
-	git show -s "HEAD"
+	echo "HEAD:"
+	git show -s HEAD
 	echo
-	if echo_command git diff "${root_commit}" HEAD -- "$@"; then
-		echo "Not Changed"
+
+	# Check for differences in given files
+	if echo_command git diff --quiet "${root_commit}" HEAD -- "$@"; then
+		echo "✅ Not changed since root commit."
 		return 0
 	else
-		echo "Warning: The following file(s) changed since root commit:"
+		echo "⚠️  The following file(s) changed since root commit:"
 		git diff --name-only "${root_commit}" HEAD -- "$@"
 		return 1
 	fi
 }
+

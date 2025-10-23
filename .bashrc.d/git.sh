@@ -441,6 +441,7 @@ git_verify_file_not_changed_since_root_commit() {
 	echo
 
 	# Check for differences in given files
+	# git diff --quiet → exits 0 if no differences, 1 if there are differences.
 	if echo_command git diff --quiet "${root_commit}" HEAD -- "$@"; then
 		echo "✅ Not changed since root commit."
 		return 0

@@ -783,7 +783,8 @@ windows_clean_or_hide_home_dir_entries() {
 		return 1
 	fi
 
-	cd ~
+	# Assume current dir is home
+	# cd ~
 
 	local dir_entries_to_delete=(
 		.Xauthority .viminfo .emacs.d .bash_history .serverauth.* .cache .kde .local .mozilla .pki .pylint.d .python_history .lesshst .wget-hsts

@@ -17,4 +17,4 @@
 [safe]
 	directory = *
 [commit]
-	gpgSign = true
+	gpgSign = false

@@ -951,6 +951,8 @@ print_essential_files_for_basic_setup() {
 		.ssh/{.gitignore,README.txt,config}
 		.gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf}
 
+		.config/git/gitk
+
 		config.guess
 		editor.sh
 

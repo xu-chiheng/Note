@@ -129,6 +129,13 @@
 # v2ray有一个sniffing功能，它可以检测http和tls流量中的域名并把它提取出来交给vps解析，然后把这些流量的数据包的目的地址重写为解析所得的地址。其本意是解决dns污染的问题，但因为tor连接用了一些不寻常的方式(比如域名和ip不匹配等)，所以此功能反而会使连接失败。
 
 
+# v2rayNG在2025-10-26已经被小米HyperOS系统标记为危险/诈骗应用，禁止安装和更新。
+# 小米15 pro MIUI3.0.3.0无法安装v2rayNG_1.10.24_arm64-v8a #4972
+# https://github.com/2dust/v2rayNG/issues/4972
+# 小米/红米手机可在“手机管家—设置（右上角齿轮）—病毒扫描”，关闭“安装监控”即可安装。
+# 截至2025/10/27亲测有效。
+
+
 # Xray 25.1.1 (Xray, Penetrates Everything.) e80ca67 (go1.23.4 windows/amd64)
 # A unified platform for anti-censorship.
 # 2025/04/10 04:32:48 [Info] infra/conf/serial: Reading config: &{Name:configTest5633101108505334439.json Format:json}

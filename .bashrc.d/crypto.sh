@@ -41,7 +41,7 @@ ____how_to_use_mailvelope_browser_extension____() {
 
 	# https://keys.mailvelope.com
 	# https://keys.mailvelope.com/manage.html
-	# Using Mailvelope browser extension to import GnuPG exported public and private keys, 
+	# Using Mailvelope browser extension to import GnuPG exported public and private keys,
 	# it will upload the public key to the key server and the key server will send you an email to verify the email address of the public key.
 	# Email address chiheng.xu@gmail.com successfully verified
 	# Your public OpenPGP key is now available at the following link: https://keys.mailvelope.com/pks/lookup?op=get&search=chiheng.xu@gmail.com

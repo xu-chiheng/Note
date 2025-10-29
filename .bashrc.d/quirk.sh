@@ -71,7 +71,7 @@ fix_mingw_mode_quirk() {
 
 	local binmode_c='
 #include <fcntl.h>
-int _fmode = _O_BINARY; 
+int _fmode = _O_BINARY;
 '
 	local commode_c='
 // #include <corecrt_internal_stdio.h>

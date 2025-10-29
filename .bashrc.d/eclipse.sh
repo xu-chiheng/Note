@@ -47,7 +47,7 @@ eclipse_workspace_backup_metadata_dir() {
 # Platform-releng/Platform Build
 # https://wiki.eclipse.org/Platform-releng/Platform_Build
 
-# Running this command in Linux VPS is fast 
+# Running this command in Linux VPS is fast
 # On Windows, using v2rayN Tun mode(sing-box Virtual NIC), Cygwin git is slow, and has bug to finish the cloning.
 eclipse_download_and_backup_platform_source() {
 	local current_datetime="$(print_current_datetime)"

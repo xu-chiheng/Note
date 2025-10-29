@@ -336,7 +336,7 @@ EOF
 	time_command ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
 
 	# example.com  a.example.com  b.example.com
-	# --issue -d "${DOMAIN}" -d '*'"${DOMAIN}" 
+	# --issue -d "${DOMAIN}" -d '*'"${DOMAIN}"
 	# DNS @ record(@ for root)
 	# 对于一个域名example.com的所有下级域名a.example.com  b.example.com都在一个IP上的网站可能有用，但是对于翻墙梯子没有用
 
@@ -453,17 +453,17 @@ EOF
 server {
   listen ${PORT} ssl;
   listen [::]:${PORT} ssl;
-  
+
   ssl_certificate       ${CERT_FILE};
   ssl_certificate_key   ${KEY_FILE};
   ssl_session_timeout 1d;
   ssl_session_cache shared:MozSSL:10m;
   ssl_session_tickets off;
-  
+
   ssl_protocols         TLSv1.2 TLSv1.3;
   ssl_ciphers           ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
   ssl_prefer_server_ciphers off;
-  
+
   server_name           ${DOMAIN};
   location ${WSPATH} { # 与Xray配置中的${WSPATH}保持一致
     if (\$http_upgrade != "websocket") { # WebSocket协商失败时返回404
@@ -597,19 +597,19 @@ outputVmessWS() {
 EOF
 )"
 
-	echo  
-	echo  
+	echo
+	echo
 	echo "IP(address)           : ${IP}"
 	echo "端口(port)            : ${PORT}"
 	echo "id(uuid)              : ${UUID}"
 	echo "额外id(alterid)       : 0"
 	echo "加密方式(security)    : none"
-	echo "传输协议(network)     : ws" 
+	echo "传输协议(network)     : ws"
 	echo "伪装类型(type)        : none"
 	echo "伪装域名/主机名(host) : ${DOMAIN}"
 	echo "路径(path)            : ${WSPATH}"
 	echo "底层安全传输(tls)     : tls"
-	echo  
+	echo
 	echo "vmess链接 : ${link}"
 	echo
 	echo
@@ -626,13 +626,13 @@ menu() {
 	echo "# Telegram 群组: https://t.me/misakanoc                     #"
 	echo "# YouTube 频道: https://www.youtube.com/@misaka-blog        #"
 	echo "#############################################################"
-	echo ""
+	echo
 	echo "4. 安装Xray-VMESS+WS+TLS(推荐)"
 	echo "-------------"
 	echo "12. 卸载Xray"
 	echo "-------------"
 	echo "0. 退出"
-	echo 
+	echo
 
 	XRAY_INSTALL_SCRIPT="https://github.com/XTLS/Xray-install/raw/main/install-release.sh"
 	XRAY_CONF_PATH="/usr/local/etc/xray"

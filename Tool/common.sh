@@ -292,7 +292,7 @@ visual_studio_dump_tool_build_type_and_generator_toolset() {
 		v120 ) description="Visual Studio 2013 (MSVC 12.0)" ;;
 		v110 ) description="Visual Studio 2012 (MSVC 11.0)" ;;
 	esac
-	
+
 	echo "HOST_TRIPLE : ${HOST_TRIPLE}"
 	echo "package     : ${package}"
 	echo "host_os     : ${host_os}"
@@ -603,13 +603,13 @@ copy_dependent_dlls_to_install_exe_dir() {
 build_and_install_gmp_mpfr_mpc() {
 	local package="$1" compiler="$2" linker="$3" build_type="$4" gmp_mpfr_mpc_install_dir="$5"
 
-	# GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers. 
+	# GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers.
 	# https://gmplib.org
 	local gmp_version=6.3.0
-	# The MPFR library is a C library for multiple-precision floating-point computations with correct rounding. 
+	# The MPFR library is a C library for multiple-precision floating-point computations with correct rounding.
 	# https://www.mpfr.org
 	local mpfr_version=4.2.2
-	# GNU MPC is a C library for the arithmetic of complex numbers with arbitrarily high precision and correct rounding of the result. 
+	# GNU MPC is a C library for the arithmetic of complex numbers with arbitrarily high precision and correct rounding of the result.
 	# https://www.multiprecision.org
 	local mpc_version=1.3.1
 

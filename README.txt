@@ -15,3 +15,6 @@ I also use one of the following commands to make a link :
 ln -s ~ "$(cygpath -u 'E:\Note')"     # using Cygwin or MSYS2/MinGW bash in mintty terminal
 mklink /D E:\Note %HOME%              # using Windows cmd.exe command prompt
 ln -s ~ /mnt/work/Note                # using Linux bash in terminal
+
+To download and run the latest version of the scripts on a Linux VPS (logged in as root), execute the following command:
+bash <(wget -qO- "https://raw.githubusercontent.com/xu-chiheng/Note/main/get-latest.sh")

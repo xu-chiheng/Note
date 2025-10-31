@@ -227,9 +227,6 @@
 # https://www.ip123.in
 # https://whoer.net
 
-# Get the latest version of scripts
-# bash <(wget -qO- "https://raw.githubusercontent.com/xu-chiheng/Note/main/get-latest.sh")
-
 getData() {
 	echo
 	echo "Xray一键脚本，运行之前请确认如下条件已经具备："

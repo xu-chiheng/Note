@@ -82,9 +82,6 @@ cd "$(dirname "$0")"
 
 # https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
 
-# Get the latest version of scripts
-# bash <(wget -qO- "https://raw.githubusercontent.com/xu-chiheng/Note/main/get-latest.sh")
-
 set_fastest_mirror_and_update() {
 	case "${OS_NAME}" in
 		Ubuntu )

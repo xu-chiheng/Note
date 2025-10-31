@@ -23,8 +23,8 @@ setup() {
 	time_command linux_configure_sshd_keepalive
 
 	local install_script="https://raw.githubusercontent.com/yonggekkk/sing-box-yg/main/sb.sh"
-	wget -qO- "${install_script}" | bash
-	# curl -Ls "${install_script}" | bash
+	bash <(wget -qO- "${install_script}")
+	# bash <(curl -Ls "${install_script}")
 }
 
 setup

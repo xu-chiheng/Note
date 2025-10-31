@@ -961,7 +961,7 @@ print_essential_files_for_basic_setup() {
 		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_2022_Enterprise,Windows_10_22H2_Enterprise_ISO}
 
 		Util/other/{crypto,backup}
-		Util/{linux_setup,xray-nginx,sing-box-yg,sing-box,wireguard}.sh
+		Util/{linux_setup,xray-nginx,sing-box-yg,sing-box,v2ray-agent,wireguard}.sh
 
 		Util/quirk
 		Util/shell

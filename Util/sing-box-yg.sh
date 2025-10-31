@@ -3,17 +3,8 @@
 # Sing-box精装桶四合一协议VPS专用脚本：三大独家功能！自签/acme双证书切换、Argo固定临时双隧道（可共存）、Psiphon赛风VPN（30个国家）分流功能。Hostuno三合一代理脚本
 # https://github.com/yonggekkk/sing-box-yg
 
-____how_to_use_this_script____() {
-	# VPS SSH login as root
-	cd ~
-	rm -rf .git Note .bashrc.d Util
-	git clone https://github.com/xu-chiheng/Note -b main
-	mv Note/.git ./
-	rm -rf Note
-	git reset --hard HEAD
-	Util/sing-box-yg.sh
-}
-unset -f ____how_to_use_this_script____
+# Get the latest version of scripts
+# bash <(wget -qO- "https://raw.githubusercontent.com/xu-chiheng/Note/main/get-latest.sh")
 
 setup() {
 	time_command linux_server_common_setup

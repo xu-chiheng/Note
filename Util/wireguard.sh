@@ -10,6 +10,8 @@
 # https://www.wireguard.com/quickstart/
 # https://www.wireguard.com/install/
 
+# Get the latest version of scripts
+# bash <(wget -qO- "https://raw.githubusercontent.com/xu-chiheng/Note/main/get-latest.sh")
 
 install_wireguard() {
 	echo "Attempting to install WireGuard..."

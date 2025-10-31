@@ -82,18 +82,8 @@ cd "$(dirname "$0")"
 
 # https://stackoverflow.com/questions/16842014/redirect-all-output-to-file-using-bash-on-linux
 
-____how_to_use_this_script____() {
-	# Linux login as root
-	cd ~
-	rm -rf .git Note .bashrc.d Util
-	git clone https://github.com/xu-chiheng/Note -b main
-	mv Note/.git ./
-	rm -rf Note
-	git reset --hard HEAD
-	Util/linux_setup.sh
-
-}
-unset -f ____how_to_use_this_script____
+# Get the latest version of scripts
+# bash <(wget -qO- "https://raw.githubusercontent.com/xu-chiheng/Note/main/get-latest.sh")
 
 set_fastest_mirror_and_update() {
 	case "${OS_NAME}" in

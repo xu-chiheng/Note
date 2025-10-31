@@ -3,17 +3,8 @@
 # Xray、Tuic、hysteria2、sing-box 八合一一键脚本
 # https://github.com/mack-a/v2ray-agent
 
-____how_to_use_this_script____() {
-	# VPS SSH login as root
-	cd ~
-	rm -rf .git Note .bashrc.d Util
-	git clone https://github.com/xu-chiheng/Note -b main
-	mv Note/.git ./
-	rm -rf Note
-	git reset --hard HEAD
-	Util/v2ray-agent.sh
-}
-unset -f ____how_to_use_this_script____
+# Get the latest version of scripts
+# bash <(wget -qO- "https://raw.githubusercontent.com/xu-chiheng/Note/main/get-latest.sh")
 
 setup() {
 	time_command linux_server_common_setup

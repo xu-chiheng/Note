@@ -227,20 +227,8 @@
 # https://www.ip123.in
 # https://whoer.net
 
-____how_to_use_this_script____() {
-	# VPS SSH login as root
-	cd ~
-	rm -rf .git Note .bashrc.d Util
-	git clone https://github.com/xu-chiheng/Note -b main
-	mv Note/.git ./
-	rm -rf Note
-	git reset --hard HEAD
-	Util/xray-nginx.sh
-
-	# 4. 安装Xray-VMESS+WS+TLS(推荐)
-	# 12. 卸载Xray
-}
-unset -f ____how_to_use_this_script____
+# Get the latest version of scripts
+# bash <(wget -qO- "https://raw.githubusercontent.com/xu-chiheng/Note/main/get-latest.sh")
 
 getData() {
 	echo

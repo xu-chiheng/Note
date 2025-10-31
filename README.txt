@@ -17,4 +17,4 @@ mklink /D E:\Note %HOME%              # using Windows cmd.exe command prompt
 ln -s ~ /mnt/work/Note                # using Linux bash in terminal
 
 To download and run the latest version of the scripts on a Linux VPS (logged in as root), execute the following command:
-bash <(wget -qO- "https://raw.githubusercontent.com/xu-chiheng/Note/main/get-latest.sh")
+bash <(wget -qO- "https://raw.githubusercontent.com/xu-chiheng/Note/main/Util/get-latest.sh")

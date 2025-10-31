@@ -933,6 +933,11 @@ windows_download_executable_from_url_and_execute() {
 # 	rm -rf ~/AppData/Local/Microsoft/Edge
 # }
 
+ssh_remove_known_hosts_file() {
+	rm -rf ~/.ssh/known_hosts
+}
+
+
 print_essential_files_for_basic_setup() {
 	local paths=(
 		README.txt

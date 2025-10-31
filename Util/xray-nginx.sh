@@ -207,6 +207,7 @@
 
 # 多个地点Ping服务器,网站测速 - 站长工具
 # https://ping.chinaz.com
+# https://www.itdog.cn
 
 # The trusted source for IP address data
 # https://ipinfo.io

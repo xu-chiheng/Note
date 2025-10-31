@@ -197,3 +197,11 @@ linux_disable_selinux() {
 		# getenforce
 	fi
 }
+
+linux_server_common_setup() {
+	time_command linux_enable_bbr
+	time_command linux_disable_selinux
+	time_command linux_uninstall_firewall
+	time_command linux_install_server_tools
+	time_command linux_configure_sshd_keepalive
+}

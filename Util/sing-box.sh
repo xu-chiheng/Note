@@ -16,11 +16,7 @@ ____how_to_use_this_script____() {
 unset -f ____how_to_use_this_script____
 
 setup() {
-	time_command linux_enable_bbr
-	time_command linux_disable_selinux
-	time_command linux_uninstall_firewall
-	time_command linux_install_server_tools
-	time_command linux_configure_sshd_keepalive
+	time_command linux_server_common_setup
 
 	local install_script="https://raw.githubusercontent.com/fscarmen/sing-box/main/sing-box.sh"
 	bash <(wget -qO- "${install_script}")

@@ -546,11 +546,7 @@ install() {
 	XPORT="$(port_number_generate)"
 	WSPATH="/$(password_generate_one)"
 
-	time_command linux_enable_bbr
-	time_command linux_disable_selinux
-	time_command linux_uninstall_firewall
-	time_command linux_install_server_tools
-	time_command linux_configure_sshd_keepalive
+	time_command linux_server_common_setup
 
 	# 必须在启动Nginx之前，因为 --standalone 证书模式会临时使用80端口，通过HTTP协议，验证域名${DOMAIN}指向${IP}
 	time_command getCert

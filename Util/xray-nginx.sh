@@ -97,7 +97,12 @@
 # V2ray官方搭建 V2ray+WS+TCP+TLS底层传输加密，谷歌云搭建纯净官方V2ray，告别一键安装脚本
 # https://www.youtube.com/watch?v=dt8Ngw2vz-g
 
+# V2ray多合一脚本：支持VMESS+websocket+TLS+Nginx、VLESS+TCP+XTLS、VLESS+TCP+TLS等组合
+# https://www.hicairo.com/post/12.html
+# https://github.com/hiifeng/v2ray
 
+# Xray 一键安装脚本
+# https://github.com/Misaka-blog/xray-script
 
 # v2rayN has Tun mode(using sing-box as virtual NIC), using which, all non-browser apps(SSH git curl wget FileZilla WinSCP),
 # having different ways to setting Socks/HTTP proxy, do not need to set Socks/HTTP proxy in config files or by some GUI configuration.
@@ -598,16 +603,6 @@ EOF
 }
 
 menu() {
-	echo "#############################################################"
-	echo "#                    Xray 一键安装脚本                      #"
-	echo "# 作者: MisakaNo の 小破站                                  #"
-	echo "# 博客: https://blog.misaka.rest                            #"
-	echo "# GitHub 项目: https://github.com/Misaka-blog/xray-script   #"
-	echo "# GitLab 项目: https://gitlab.com/Misaka-blog/xray-script   #"
-	echo "# Telegram 频道: https://t.me/misakanocchannel              #"
-	echo "# Telegram 群组: https://t.me/misakanoc                     #"
-	echo "# YouTube 频道: https://www.youtube.com/@misaka-blog        #"
-	echo "#############################################################"
 	echo
 	echo "4. 安装Xray-VMESS+WS+TLS(推荐)"
 	echo "-------------"

@@ -84,8 +84,6 @@ install() {
 	CLIENT_DNS_1="1.1.1.1"
 	CLIENT_DNS_2="8.8.8.8"
 
-	time_command linux_server_common_setup
-
 	linux_enable_ip_forward
 	install_wireguard
 

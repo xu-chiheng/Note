@@ -537,8 +537,6 @@ install() {
 	XPORT="$(port_number_generate)"
 	WSPATH="/$(password_generate_one)"
 
-	time_command linux_server_common_setup
-
 	# 必须在启动Nginx之前，因为 --standalone 证书模式会临时使用80端口，通过HTTP协议，验证域名${DOMAIN}指向${IP}
 	time_command getCert
 

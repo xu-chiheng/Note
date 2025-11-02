@@ -6,10 +6,4 @@
 # https://github.com/yonggekkk/sing-box-yg
 # https://www.youtube.com/@ygkkk
 
-setup() {
-	local install_script="https://raw.githubusercontent.com/yonggekkk/sing-box-yg/main/sb.sh"
-	bash <(wget -qO- "${install_script}")
-	# bash <(curl -Ls "${install_script}")
-}
-
-setup
+bash_run_script_from_url "https://raw.githubusercontent.com/yonggekkk/sing-box-yg/main/sb.sh"

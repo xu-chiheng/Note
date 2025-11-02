@@ -12,10 +12,4 @@
 # sing box一键安装脚本，一键搭建，支持vless、vmess、hysteria2、tuic协议，功能完善、搭建简单，对刚接触的小伙伴也非常友好，脚本稳定性也特别高，值得了解#一瓶奶油
 # https://www.youtube.com/watch?v=NBsPCRTr76A
 
-setup() {
-	local install_script="https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh"
-	bash <(wget -qO- "${install_script}")
-	# bash <(curl -Ls "${install_script}")
-}
-
-setup
+bash_run_script_from_url "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh"

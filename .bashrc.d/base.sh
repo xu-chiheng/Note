@@ -1024,4 +1024,14 @@ copy_home_dir_files_to_current_directory() {
 	echo "Completed!"
 }
 
-
+bash_run_script_from_url() {
+	local script_url="$1"
+	if check_command_existence wget; then
+		bash <(wget -qO- "${script_url}")
+	elif check_command_existence curl; then
+		bash <(curl -Ls "${script_url}")
+	else
+		echo "No wget or curl command!"
+		return 1
+	fi
+}

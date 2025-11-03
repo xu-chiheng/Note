@@ -36,14 +36,6 @@ source_.bashrc.d_scripts(){
 	done
 }
 
-# https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files
-maybe_set_environment_variables_at_bash_startup() {
-	if [ ! -v HOST_TRIPLE ]; then
-		# uncomment the following line, to see the time consumed
-		set_environment_variables_at_bash_startup
-	fi
-}
-
 maybe_source_.bashrc.d.private_scripts() {
 	if [ -d ~/.bashrc.d.private ]; then
 		local file
@@ -53,16 +45,24 @@ maybe_source_.bashrc.d.private_scripts() {
 	fi
 }
 
+# https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files
+maybe_set_environment_variables_at_bash_startup() {
+	if [ ! -v HOST_TRIPLE ]; then
+		# uncomment the following line, to see the time consumed
+		set_environment_variables_at_bash_startup
+	fi
+}
+
 # time \
 maybe_source_etc_bashrc
 # time \
 source_.bashrc.d_scripts
 # time_command \
-maybe_set_environment_variables_at_bash_startup
-# time_command \
 maybe_source_.bashrc.d.private_scripts
+# time_command \
+maybe_set_environment_variables_at_bash_startup
 
 unset -f maybe_source_etc_bashrc
 unset -f source_.bashrc.d_scripts
-unset -f maybe_set_environment_variables_at_bash_startup
 unset -f maybe_source_.bashrc.d.private_scripts
+unset -f maybe_set_environment_variables_at_bash_startup

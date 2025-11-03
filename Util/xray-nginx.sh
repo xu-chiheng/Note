@@ -476,11 +476,11 @@ EOF
 
 # https://github.com/XTLS/Xray-install
 installXray() {
-	curl -L "${XRAY_INSTALL_SCRIPT}" | bash -s install
+	bash_run_script_from_url "${XRAY_INSTALL_SCRIPT}" install
 }
 
 uninstallXray() {
-	curl -L "${XRAY_INSTALL_SCRIPT}" | bash -s remove
+	bash_run_script_from_url "${XRAY_INSTALL_SCRIPT}" remove
 }
 
 configXray() {
@@ -601,6 +601,11 @@ EOF
 }
 
 menu() {
+	XRAY_INSTALL_SCRIPT="https://github.com/XTLS/Xray-install/raw/main/install-release.sh"
+	XRAY_CONF_PATH="/usr/local/etc/xray"
+	NGINX_CONF_PATH="/etc/nginx"
+	NGINX_HTDOC_PATH="/usr/share/nginx/html"
+
 	echo
 	echo "4. 安装Xray-VMESS+WS+TLS(推荐)"
 	echo "-------------"
@@ -608,11 +613,6 @@ menu() {
 	echo "-------------"
 	echo "0. 退出"
 	echo
-
-	XRAY_INSTALL_SCRIPT="https://github.com/XTLS/Xray-install/raw/main/install-release.sh"
-	XRAY_CONF_PATH="/usr/local/etc/xray"
-	NGINX_CONF_PATH="/etc/nginx"
-	NGINX_HTDOC_PATH="/usr/share/nginx/html"
 
 	read -p "请选择操作[0-17]：" answer
 	case "${answer}" in

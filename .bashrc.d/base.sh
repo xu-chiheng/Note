@@ -940,37 +940,12 @@ ssh_remove_known_hosts_file() {
 
 print_essential_files_for_basic_setup() {
 	local paths=(
-		README.txt
-		~git-tools~
-		.gitattributes
-		.gitconfig
-		.gitignore
-		.bash_profile
-		.curlrc
-		.minttyrc
-		.wgetrc
-
-		.bashrc
-		.bashrc.d
-
-		.ssh/{.gitignore,README.txt,config}
-		.gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf}
-
-		.config/{.gitignore,git/gitk}
-
-		config.guess
-		editor.sh
-
-		__clean_or_hide.cmd
+		README.txt ~git-tools~ .gitattributes .gitconfig .gitignore .bash_profile .curlrc .minttyrc .wgetrc .bashrc .bashrc.d config.guess editor.sh
+		.ssh/{.gitignore,README.txt,config} .gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf} .config/{.gitignore,git/gitk} __clean_or_hide.cmd
 
 		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_2022_Enterprise,Windows_10_22H2_Enterprise_ISO}
-
-		Util/other/{crypto,backup}
+		Util/{other/{crypto,backup},quirk,shell,setting/Editors}
 		Util/{_vps-get-latest-scripts-and-do-common-setup,linux_setup,xray-nginx,sing-box-yg,sing-box-f,v2ray-agent,wireguard}.sh
-
-		Util/quirk
-		Util/shell
-		Util/setting/Editors
 	)
 	local path
 	for path in "${paths[@]}"; do
@@ -1026,12 +1001,14 @@ copy_home_dir_files_to_current_directory() {
 
 bash_run_script_from_url() {
 	local script_url="$1"
+	shift 1
+
 	if check_command_existence wget; then
-		bash <(wget -qO- "${script_url}")
+		wget -qO- "$script_url" | bash -s -- "$@"
 	elif check_command_existence curl; then
-		bash <(curl -Ls "${script_url}")
+		curl -Ls "$script_url" | bash -s -- "$@"
 	else
-		echo "No wget or curl command!"
+		echo "Error: wget or curl is required to run scripts from URL."
 		return 1
 	fi
 }

@@ -1,8 +1,5 @@
 #!/usr/bin/env -S bash -i
 
-cd "$(dirname "$0")"
-. "./common.sh"
-
 clean() {
 	local find_args=(
 		-mindepth 1

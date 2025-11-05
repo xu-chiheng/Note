@@ -42,9 +42,6 @@
 # ERROR: meson setup failed
 
 
-cd "$(dirname "$0")"
-. "./common.sh"
-
 build() {
 	local current_datetime="$(print_current_datetime)"
 	local package="qemu"

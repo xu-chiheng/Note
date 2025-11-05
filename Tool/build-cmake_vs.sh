@@ -22,9 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-cd "$(dirname "$0")"
-. "./common.sh"
-
 build() {
 	local current_datetime="$(print_current_datetime)"
 	local package="cmake"

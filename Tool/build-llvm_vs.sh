@@ -22,9 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-cd "$(dirname "$0")"
-. "./common.sh"
-
 # https://clang.llvm.org/get_started.html
 # https://llvm.org/docs/GettingStartedVS.html
 # https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild

@@ -1038,7 +1038,7 @@ print_essential_files_for_tool_setup() {
 		IDE/{remove_unneeded_plug-ins,generate_list_of_changed_files}.{cmd,sh,sh.txt}
 		IDE/list_of{,_non}_java_files_{added,modified,deleted}.txt
 
-		Tool/{README.txt,.gitignore,clean.sh,common.sh,_doc}
+		Tool/{README.txt,.gitignore,clean.sh,_doc}
 		Tool/build-{llvm{,_vs},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs},python}.sh
 		Tool/_cygport/{.gitignore,cygwin.cmd,llvm.cygport}
 		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python}

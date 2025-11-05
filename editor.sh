@@ -6,4 +6,4 @@ source ~/.bashrc
 # Interactive shells (bash -i) are not guaranteed to work properly from Makefile targets (non-interactive context).
 #!/usr/bin/env -S bash -i
 
-open_files_in_editor "$@"
+open_files_in_editor_in_foreground "$@"

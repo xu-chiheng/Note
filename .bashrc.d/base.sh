@@ -560,7 +560,7 @@ time_command() {
 	fi
 }
 
-open_files_in_editor() {
+open_files_in_editor_in_foreground() {
 	case "${HOST_TRIPLE}" in
 		*-cygwin | *-msys | *-mingw* )
 			local translated_file_paths=()
@@ -569,29 +569,38 @@ open_files_in_editor() {
 				translated_file_paths+=( "$(cygpath -w "${file}")" )
 			done
 			# echo "${translated_file_paths[@]}"
-
-			# https://stackoverflow.com/questions/10564/how-can-i-set-up-an-editor-to-work-with-git-on-windows
-			# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
-			# https://git-scm.com/book/ms/v2/Getting-Started-First-Time-Git-Setup
-			# https://npp-user-manual.org/docs/command-prompt/
-			local notepadpp_options=( -multiInst -nosession -noPlugin )
-			if [ $# -le 1 ]; then
-				notepadpp_options+=( -notabbar )
-			else
-				# Can't specify -notabbar if you want to open multiple files
-				true
-			fi
-			"$(cygpath -u 'C:\Program Files\Notepad++\notepad++.exe')" "${notepadpp_options[@]}" "${translated_file_paths[@]}"
-
-			# https://stackoverflow.com/questions/30024353/how-can-i-use-visual-studio-code-as-default-editor-for-git
-			# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
-			# https://code.visualstudio.com/docs/configure/command-line
-			# "$(cygpath -u 'C:\Program Files\Microsoft VS Code\Code.exe')" --wait --new-window "${translated_file_paths[@]}"
+			windows_launch_notepad++_in_foreground "${translated_file_paths[@]}"
+			# windows_launch_vs_code_in_foreground   "${translated_file_paths[@]}"
 			;;
 		*-linux* )
 			# code --wait --new-window "$@"
 			# gedit "$@"
 			kwrite "$@"
+			;;
+		* )
+			# unknown
+			# assume KDE environment
+			kwrite "$@"
+			;;
+	esac
+}
+
+open_files_in_editor_in_background() {
+	case "${HOST_TRIPLE}" in
+		*-cygwin | *-msys | *-mingw* )
+			local translated_file_paths=()
+			local file
+			for file in "$@"; do
+				translated_file_paths+=( "$(cygpath -w "${file}")" )
+			done
+			# echo "${translated_file_paths[@]}"
+			windows_launch_notepad++_in_background "${translated_file_paths[@]}"
+			# windows_launch_vs_code_in_background   "${translated_file_paths[@]}"
+			;;
+		*-linux* )
+			# linux_launch_program_in_background code --wait --new-window "$@"
+			# linux_launch_program_in_background gedit "$@"
+			linux_launch_program_in_background kwrite "$@"
 			;;
 		* )
 			# unknown
@@ -607,7 +616,7 @@ show_command_output_in_editor() {
 
 	time_command "$@" >"${output}" 2>&1
 
-	open_files_in_editor "${output}"
+	open_files_in_editor_in_foreground "${output}"
 
 	rm -rf "${output}"
 }
@@ -921,6 +930,74 @@ windows_download_executable_from_url_and_execute() {
 	&& echo_command chmod +x "${executable}" \
 	&& time_command ./"${executable}" "$@" \
 	&& echo_command rm -rf "${executable}"
+}
+
+print_full_path_of_windows_program_vs_code() {
+	echo 'C:\Program Files\Microsoft VS Code\Code.exe'
+}
+
+print_full_path_of_windows_program_notepad++() {
+	echo 'C:\Program Files\Notepad++\notepad++.exe'
+}
+
+print_full_path_of_windows_program_ultraiso() {
+	echo 'C:\Program Files (x86)\UltraISO\UltraISO.exe'
+}
+
+print_full_path_of_windows_program_source_insight_3() {
+	echo 'C:\Program Files (x86)\Source Insight 3\Insight3.exe'
+}
+
+print_full_path_of_windows_program_source_insight_4() {
+	echo 'C:\Program Files (x86)\Source Insight 4.0\sourceinsight4.exe'
+}
+
+windows_launch_notepad++_in_background() {
+	# https://stackoverflow.com/questions/10564/how-can-i-set-up-an-editor-to-work-with-git-on-windows
+	# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
+	# https://git-scm.com/book/ms/v2/Getting-Started-First-Time-Git-Setup
+	# https://npp-user-manual.org/docs/command-prompt/
+	local notepadpp_options=( -multiInst -nosession -noPlugin )
+	if [ $# -le 1 ]; then
+		notepadpp_options+=( -notabbar )
+	else
+		# Can't specify -notabbar if you want to open multiple files
+		true
+	fi
+
+	windows_launch_program_in_background "$(print_full_path_of_windows_program_notepad++)" "${notepadpp_options[@]}" "$@"
+}
+
+windows_launch_notepad++_in_foreground() {
+	local notepadpp_options=( -multiInst -nosession -noPlugin )
+	if [ $# -le 1 ]; then
+		notepadpp_options+=( -notabbar )
+	else
+		# Can't specify -notabbar if you want to open multiple files
+		true
+	fi
+
+	"$(cygpath -u "$(print_full_path_of_windows_program_notepad++)")" "${notepadpp_options[@]}" "$@"
+}
+
+windows_launch_vs_code_in_background() {
+	# https://stackoverflow.com/questions/30024353/how-can-i-use-visual-studio-code-as-default-editor-for-git
+	# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
+	# https://code.visualstudio.com/docs/configure/command-line
+
+	windows_launch_program_in_background "$(print_full_path_of_windows_program_vs_code)" --wait --new-window "$@"
+}
+
+windows_launch_vs_code_in_foreground() {
+	"$(cygpath -u "$(print_full_path_of_windows_program_vs_code)")" --wait --new-window "$@"
+}
+
+windows_launch_source_insight_3_in_background() {
+	windows_launch_program_in_background "$(print_full_path_of_windows_program_source_insight_3)" -s "$@"
+}
+
+windows_launch_source_insight_4_in_background() {
+	windows_launch_program_in_background "$(print_full_path_of_windows_program_source_insight_4)" -s "$@"
 }
 
 # google_chrome_remove_remnant_files_after_uninstall() {

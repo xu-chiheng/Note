@@ -944,7 +944,7 @@ print_essential_files_for_basic_setup() {
 		.ssh/{.gitignore,README.txt,config} .gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf} .config/{.gitignore,git/gitk} __clean_or_hide.cmd
 
 		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_2022_Enterprise,Windows_10_22H2_Enterprise_ISO}
-		Util/{other/{crypto,backup},quirk,shell,setting/Editors}
+		Util/{other/{crypto,backup},quirk,shell,setting/editor}
 		Util/{_vps-get-latest-scripts-and-do-common-setup,linux_setup,xray-nginx,sing-box-y,sing-box-f,v2ray-agent,wireguard}.sh
 	)
 	local path

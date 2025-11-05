@@ -24,13 +24,6 @@
 
 cd "$(dirname "$0")"
 
-
-# Fedora KDE 39             https://fedoraproject.org/spins/kde
-# Rocky Linux KDE 9         https://docs.rockylinux.org/guides/desktop/kde_installation   https://dl.rockylinux.org/pub/rocky/9.3/live/x86_64/
-# AlmaLinux KDE 9           https://almalinux.org/get-almalinux   https://repo.almalinux.org/almalinux/9/live/x86_64/
-# Debian KDE 12             https://www.debian.org/CD/live
-# Kubuntu 22.04             https://kubuntu.org
-
 # GPT(GUID Partition Table)
 # /dev/sda1      /boot/efi        EFI System        500M      FAT32/ESP(EFI System Partition)  (flags=boot hidden)
 # /dev/sda2      /                Linux Root        400G      xfs or ext4

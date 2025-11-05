@@ -205,3 +205,38 @@ linux_server_common_setup() {
 	time_command linux_install_server_tools
 	time_command linux_configure_sshd_keepalive
 }
+
+linux_print_distribution_kde_iso_url() {
+	# Kubuntu  https://kubuntu.org
+	local ubuntu_mirror="https://mirrors.tuna.tsinghua.edu.cn/ubuntu-cdimage"
+	local kubuntu_version_major=24.04
+	local kubuntu_version_minor=3
+
+	# Fedora KDE  https://fedoraproject.org/spins/kde
+	local fedora_mirror="https://mirrors.tuna.tsinghua.edu.cn/fedora"
+	local fedora_kde_version_major=43
+	local fedora_kde_version_minor=1.6
+
+	# Debian KDE  https://www.debian.org/CD/live
+	local debian_mirror="https://mirrors.tuna.tsinghua.edu.cn/debian-cd"
+	local debian_kde_version_major=13
+	local debian_kde_version_minor=1.0
+
+	# Rocky Linux KDE  https://docs.rockylinux.org/guides/desktop/kde_installation
+	local rocky_mirror="https://mirrors.ustc.edu.cn/rocky"
+	local rocky_linux_kde_version_major=10.0
+	local rocky_linux_kde_version_minor=20250606.2
+
+	# AlmaLinux KDE  https://almalinux.org/get-almalinux
+	local alma_mirror="https://mirrors.aliyun.com/almalinux"
+	local alma_linux_kde_version_major=10.0
+
+	cat <<EOF
+${ubuntu_mirror}/kubuntu/releases/${kubuntu_version_major}.${kubuntu_version_minor}/release/kubuntu-${kubuntu_version_major}.${kubuntu_version_minor}-desktop-amd64.iso
+${fedora_mirror}/releases/${fedora_kde_version_major}/KDE/x86_64/iso//Fedora-KDE-Desktop-Live-${fedora_kde_version_major}-${fedora_kde_version_minor}.x86_64.iso
+${debian_mirror}/${debian_kde_version_major}.${debian_kde_version_minor}-live/amd64/iso-hybrid/debian-live-${debian_kde_version_major}.${debian_kde_version_minor}-amd64-kde.iso
+${rocky_mirror}/${rocky_linux_kde_version_major}/live/x86_64/Rocky-${rocky_linux_kde_version_major}-KDE-x86_64-${rocky_linux_kde_version_minor}.iso
+${alma_mirror}/${alma_linux_kde_version_major}/live/x86_64/AlmaLinux-${alma_linux_kde_version_major}-x86_64-Live-KDE.iso
+EOF
+
+}

@@ -1,5 +1,0 @@
-https://mirrors.tuna.tsinghua.edu.cn/ubuntu-cdimage/kubuntu/releases/22.04.4/release/kubuntu-22.04.4-desktop-amd64.iso
-https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/39/Spins/x86_64/iso/Fedora-KDE-Live-x86_64-39-1.5.iso
-https://mirrors.tuna.tsinghua.edu.cn/debian-cd/12.5.0-live/amd64/iso-hybrid/debian-live-12.5.0-amd64-kde.iso
-https://dl.rockylinux.org/pub/rocky/9.3/live/x86_64/Rocky-9.3-KDE-x86_64-20240217.0.iso
-https://mirrors.cloud.tencent.com/almalinux/9.3/live/x86_64/AlmaLinux-9.3-x86_64-Live-KDE.iso

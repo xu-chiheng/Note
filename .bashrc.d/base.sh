@@ -976,16 +976,19 @@ print_essential_files_for_tool_setup() {
 }
 
 copy_home_dir_files_for_basic_setup() {
-	copy_home_dir_files_to_current_directory $(print_essential_files_for_basic_setup)
+	print_essential_files_for_basic_setup | copy_home_dir_files_to_current_directory
 }
 
 copy_home_dir_files_for_tool_setup() {
-	copy_home_dir_files_to_current_directory $(print_essential_files_for_tool_setup)
+	print_essential_files_for_tool_setup  | copy_home_dir_files_to_current_directory
 }
 
 copy_home_dir_files_to_current_directory() {
 	local path
-	for path in "$@"; do
+	while IFS= read -r path; do
+		# ignore empty line
+		[ -z "$path" ] && continue
+
 		if [ -e ~/"${path}" ]; then
 			echo "${path}"
 			dir="$(dirname "${path}")"
@@ -996,6 +999,7 @@ copy_home_dir_files_to_current_directory() {
 			echo "${path} does not exist"
 		fi
 	done
+
 	echo "Completed!"
 }
 
@@ -1006,7 +1010,7 @@ bash_run_script_from_url() {
 	if check_command_existence wget; then
 		wget -qO- "$script_url" | bash -s -- "$@"
 	elif check_command_existence curl; then
-		curl -Ls "$script_url" | bash -s -- "$@"
+		curl -Ls  "$script_url" | bash -s -- "$@"
 	else
 		echo "Error: wget or curl is required to run scripts from URL."
 		return 1

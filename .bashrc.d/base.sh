@@ -952,11 +952,11 @@ print_full_path_of_windows_program_source_insight_4() {
 	echo 'C:\Program Files (x86)\Source Insight 4.0\sourceinsight4.exe'
 }
 
+windows_launch_ultraiso_in_foreground() {
+	"$(cygpath -u "$(print_full_path_of_windows_program_ultraiso)")" "$@"
+}
+
 windows_launch_notepad++_in_background() {
-	# https://stackoverflow.com/questions/10564/how-can-i-set-up-an-editor-to-work-with-git-on-windows
-	# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
-	# https://git-scm.com/book/ms/v2/Getting-Started-First-Time-Git-Setup
-	# https://npp-user-manual.org/docs/command-prompt/
 	local notepadpp_options=( -multiInst -nosession -noPlugin )
 	if [ $# -le 1 ]; then
 		notepadpp_options+=( -notabbar )
@@ -969,6 +969,10 @@ windows_launch_notepad++_in_background() {
 }
 
 windows_launch_notepad++_in_foreground() {
+	# https://stackoverflow.com/questions/10564/how-can-i-set-up-an-editor-to-work-with-git-on-windows
+	# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
+	# https://git-scm.com/book/ms/v2/Getting-Started-First-Time-Git-Setup
+	# https://npp-user-manual.org/docs/command-prompt/
 	local notepadpp_options=( -multiInst -nosession -noPlugin )
 	if [ $# -le 1 ]; then
 		notepadpp_options+=( -notabbar )

@@ -944,11 +944,11 @@ print_full_path_of_windows_program_ultraiso() {
 	echo 'C:\Program Files (x86)\UltraISO\UltraISO.exe'
 }
 
-print_full_path_of_windows_program_source_insight_3() {
+print_full_path_of_windows_program_source_insight_3.5() {
 	echo 'C:\Program Files (x86)\Source Insight 3\Insight3.exe'
 }
 
-print_full_path_of_windows_program_source_insight_4() {
+print_full_path_of_windows_program_source_insight_4.0() {
 	echo 'C:\Program Files (x86)\Source Insight 4.0\sourceinsight4.exe'
 }
 
@@ -996,12 +996,12 @@ windows_launch_vs_code_in_foreground() {
 	"$(cygpath -u "$(print_full_path_of_windows_program_vs_code)")" --wait --new-window "$@"
 }
 
-windows_launch_source_insight_3_in_background() {
-	windows_launch_program_in_background "$(print_full_path_of_windows_program_source_insight_3)" -s "$@"
+windows_launch_source_insight_3.5_in_background() {
+	windows_launch_program_in_background "$(print_full_path_of_windows_program_source_insight_3.5)" -s "$@"
 }
 
-windows_launch_source_insight_4_in_background() {
-	windows_launch_program_in_background "$(print_full_path_of_windows_program_source_insight_4)" -s "$@"
+windows_launch_source_insight_4.0_in_background() {
+	windows_launch_program_in_background "$(print_full_path_of_windows_program_source_insight_4.0)" -s "$@"
 }
 
 # google_chrome_remove_remnant_files_after_uninstall() {

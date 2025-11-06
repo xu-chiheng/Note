@@ -985,14 +985,14 @@ windows_launch_notepad++_in_foreground() {
 }
 
 windows_launch_vs_code_in_background() {
-	# https://stackoverflow.com/questions/30024353/how-can-i-use-visual-studio-code-as-default-editor-for-git
-	# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
-	# https://code.visualstudio.com/docs/configure/command-line
-
 	windows_launch_program_in_background "$(print_full_path_of_windows_program_vs_code)" --wait --new-window "$@"
 }
 
 windows_launch_vs_code_in_foreground() {
+	# https://stackoverflow.com/questions/30024353/how-can-i-use-visual-studio-code-as-default-editor-for-git
+	# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
+	# https://code.visualstudio.com/docs/configure/command-line
+
 	"$(cygpath -u "$(print_full_path_of_windows_program_vs_code)")" --wait --new-window "$@"
 }
 

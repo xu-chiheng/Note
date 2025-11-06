@@ -560,7 +560,7 @@ gcc_pushd_and_configure() {
 			--disable-bootstrap
 			--disable-nls
 			--disable-werror
-			--disable-win32-registry
+			# --disable-win32-registry
 			--enable-checking=release
 			--disable-fixincludes
 	)

@@ -248,7 +248,7 @@ gpg_export_all_private_keys_with_ascii_armored_output_and_to_text_file() {
 # 	Can be added or revoked at any time without affecting the primary key
 
 # https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
-gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pair_for_git() {
+gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pair() {
 	expect -c "
 		# Set timeout for Expect commands (in seconds)
 		set timeout 10
@@ -284,7 +284,7 @@ gpg_generate_rsa_4096_bit_no_expiration_encryption_and_signing_key_pair_for_git(
 	"
 }
 
-gpg_generate_ecc_256_bit_no_expiration_encryption_and_signing_key_pair_for_git() {
+gpg_generate_ecc_256_bit_no_expiration_encryption_and_signing_key_pair() {
 	expect -c "
 		# Set timeout for Expect commands (in seconds)
 		set timeout 10

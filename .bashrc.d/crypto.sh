@@ -351,6 +351,21 @@ ssh_generate_ed25519_authentication_key_pair_for_github() {
 	"
 }
 
+delete_file_permanently() {
+	local file="$1"
+	if [ ! -f "${file}" ] || [ ! -w "${file}" ]; then
+		return 1
+	fi
+
+	# shred --force --iterations=3 --zero --remove "${file}"
+
+	local filesize=$(stat -c%s "${file}")
+	local count=$(( (filesize >> 20) + 1 ))
+	dd if=/dev/urandom of="${file}" bs=1M count="${count}" conv=fdatasync status=progress 2>/dev/null \
+	&& dd if=/dev/zero of="${file}" bs=1M count="${count}" conv=fdatasync status=progress 2>/dev/null \
+	&& rm -f "${file}"
+}
+
 sha512_calculate_and_gpg_encrypt_and_sha512_calculate_gpg_file() {
 	local file="$1"
 
@@ -446,7 +461,7 @@ gpg_encrypt_file() {
 		--s2k-mode 3 --s2k-digest-algo SHA512 --s2k-count 1000000 \
 		--encrypt --recipient "${recipient}" --output "${file}".gpg "${file}"; then
 		echo "${file} finished"
-		rm -rf "${file}"
+		delete_file_permanently "${file}"
 		return 0
 	else
 		echo "${file} failed"

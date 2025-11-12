@@ -831,7 +831,8 @@ windows_launch_program_in_background() {
 	local program_base_name="$(basename "${program_unix_path}")"
 	local program_dir_name="$(dirname "${program_unix_path}")"
 
-	PATH="$(join_array_elements ':' "${program_dir_name}" "${PATH}")" cmd.exe /c start /B "${program_base_name}" "$@"
+	PATH="$(join_array_elements ':' "${program_dir_name}" "${PATH}")" \
+	cmd.exe /c start /B "${program_base_name}" "$@"
 }
 
 linux_launch_program_in_background() {

@@ -29,7 +29,7 @@ launch_browser_in_background() {
 	# There should be no '&' character in URL
 
 	# proxy
-	local sites_0_0=(
+	local urls_0=(
 		"https://www.youtube.com/?gl=US"
 		"https://mail.google.com"
 		"https://chat.openai.com"
@@ -38,8 +38,12 @@ launch_browser_in_background() {
 		"https://chat.deepseek.com"
 	)
 
+	if declare -F print_private_urls_that_need_be_opened >/dev/null; then
+		urls_0+=( $(print_private_urls_that_need_be_opened) )
+	fi
+
 	# no proxy
-	local sites_0_1=(
+	local urls_1=(
 		"https://www.bilibili.com"
 		"https://outlook.live.com"
 		"https://www.doubao.com/chat"
@@ -73,18 +77,18 @@ launch_browser_in_background() {
 	# https://www.stayonsearch.com/using-googles-gl-parameter-to-beat-geo-targeting
 
 
-	local sites_1=(
+	local urls_2=(
 		"https://www.google.com/ncr"
 		"https://www.youtube.com/?gl=US"
 		"https://duckduckgo.com"
 	)
 
-	local sites_2=(
+	local urls_3=(
 		"https://www.baidu.com"
 		"https://www.bing.com"
 	)
 
-	local sites_3=(
+	local urls_4=(
 		"https://www.2345.com"
 		"https://hao.360.com"
 		"https://hao.qq.com"
@@ -92,12 +96,12 @@ launch_browser_in_background() {
 		"https://www.hao123.com"
 	)
 
-	local sites_4=(
+	local urls_5=(
 		"https://translate.google.com/?tl=zh-CN"
 		"https://translate.google.com/?tl=en"
 	)
 
-	local sites_5=(
+	local urls_6=(
 		"https://www.bing.com/translator"
 	)
 
@@ -162,7 +166,7 @@ launch_browser_in_background() {
 			esac
 			case "${command}" in
 				firefox | firefox_private_mode )
-					args+=( "${sites_1[@]}" "${sites_2[@]}" "${sites_3[@]}" )
+					args+=( "${urls_2[@]}" "${urls_3[@]}" "${urls_4[@]}" )
 					;;
 				* )
 					echo "Unknown command '${command}'!"
@@ -206,19 +210,19 @@ launch_browser_in_background() {
 					esac
 					case "${command}" in
 						chrome )
-							args+=( "${sites_0_0[@]}" )
+							args+=( "${urls_0[@]}" )
 							;;
 						chrome_incognito_mode )
-							args+=( "${sites_1[@]}" "${sites_2[@]}" "${sites_4[@]}" )
+							args+=( "${urls_2[@]}" "${urls_3[@]}" "${urls_5[@]}" )
 							;;
 						# https://www.chromium.org/developers/design-documents/network-settings/
 						# --no-proxy-server
 						# This tells Chrome not to use a Proxy. It overrides any other proxy settings provided.
 						chrome_no_proxy_server )
-							args+=( "${sites_0_1[@]}" )
+							args+=( "${urls_1[@]}" )
 							;;
 						chrome_no_proxy_server_incognito_mode )
-							args+=( "${sites_2[@]}" "${sites_3[@]}" "${sites_5[@]}" )
+							args+=( "${urls_3[@]}" "${urls_4[@]}" "${urls_6[@]}" )
 							;;
 						* )
 							echo "Unknown command '${command}'!"
@@ -234,16 +238,16 @@ launch_browser_in_background() {
 					esac
 					case "${command}" in
 						edge )
-							args+=( "${sites_0_0[@]}" )
+							args+=( "${urls_0[@]}" )
 							;;
 						edge_inprivate_mode )
-							args+=( "${sites_1[@]}" "${sites_2[@]}" "${sites_4[@]}" )
+							args+=( "${urls_2[@]}" "${urls_3[@]}" "${urls_5[@]}" )
 							;;
 						edge_no_proxy_server )
-							args+=( "${sites_0_1[@]}" )
+							args+=( "${urls_1[@]}" )
 							;;
 						edge_no_proxy_server_inprivate_mode )
-							args+=( "${sites_2[@]}" "${sites_3[@]}" "${sites_5[@]}" )
+							args+=( "${urls_3[@]}" "${urls_4[@]}" "${urls_6[@]}" )
 							;;
 						* )
 							echo "Unknown command '${command}'!"

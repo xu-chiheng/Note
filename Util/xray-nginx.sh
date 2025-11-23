@@ -46,6 +46,10 @@
 # https://apkpure.com/v2rayng/com.v2ray.ang
 # https://apkpure.com/v2rayng/com.v2ray.ang/download
 
+# APKPure
+# https://apkpure.com/apkpure/com.apkpure.aegon
+# https://apkpure.com/apkpure/com.apkpure.aegon/download
+
 # Shadowrocket
 # Rule based proxy utility client for iPhone/iPad.
 # Shadowrocket on the App Store.

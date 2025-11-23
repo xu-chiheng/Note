@@ -461,6 +461,10 @@ set_environment_variables_at_bash_startup() {
 	set_common_windows_packages_PATH_at_bash_startup
 	set_other_linux_environment_variables_at_bash_startup
 
+	if declare -F set_private_environment_variables_at_bash_startup >/dev/null; then
+		set_private_environment_variables_at_bash_startup
+	fi
+
 	source_ssh-agent_env_script
 }
 
@@ -561,53 +565,45 @@ time_command() {
 }
 
 open_files_in_editor_in_foreground() {
-	case "${HOST_TRIPLE}" in
-		*-cygwin | *-msys | *-mingw* )
-			local translated_file_paths=()
-			local file
-			for file in "$@"; do
-				translated_file_paths+=( "$(cygpath -w "${file}")" )
-			done
-			# echo "${translated_file_paths[@]}"
-			windows_launch_notepad++_in_foreground "${translated_file_paths[@]}"
-			# windows_launch_vs_code_in_foreground   "${translated_file_paths[@]}"
-			;;
-		*-linux* )
-			# code --wait --new-window "$@"
-			# gedit "$@"
-			kwrite "$@"
-			;;
-		* )
-			# unknown
-			# assume KDE environment
-			kwrite "$@"
-			;;
-	esac
+	if host_triple_is_windows; then
+		local translated_file_paths=()
+		local file
+		for file in "$@"; do
+			translated_file_paths+=( "$(cygpath -w "${file}")" )
+		done
+		# echo "${translated_file_paths[@]}"
+		windows_launch_notepad++_in_foreground "${translated_file_paths[@]}"
+		# windows_launch_vs_code_in_foreground   "${translated_file_paths[@]}"
+	elif host_triple_is_linux; then
+		# code --wait --new-window "$@"
+		# gedit "$@"
+		kwrite "$@"
+	else
+		# unknown
+		# assume KDE environment
+		kwrite "$@"
+	fi
 }
 
 open_files_in_editor_in_background() {
-	case "${HOST_TRIPLE}" in
-		*-cygwin | *-msys | *-mingw* )
-			local translated_file_paths=()
-			local file
-			for file in "$@"; do
-				translated_file_paths+=( "$(cygpath -w "${file}")" )
-			done
-			# echo "${translated_file_paths[@]}"
-			windows_launch_notepad++_in_background "${translated_file_paths[@]}"
-			# windows_launch_vs_code_in_background   "${translated_file_paths[@]}"
-			;;
-		*-linux* )
-			# linux_launch_program_in_background code --wait --new-window "$@"
-			# linux_launch_program_in_background gedit "$@"
-			linux_launch_program_in_background kwrite "$@"
-			;;
-		* )
-			# unknown
-			# assume KDE environment
-			kwrite "$@"
-			;;
-	esac
+	if host_triple_is_windows; then
+		local translated_file_paths=()
+		local file
+		for file in "$@"; do
+			translated_file_paths+=( "$(cygpath -w "${file}")" )
+		done
+		# echo "${translated_file_paths[@]}"
+		windows_launch_notepad++_in_background "${translated_file_paths[@]}"
+		# windows_launch_vs_code_in_background   "${translated_file_paths[@]}"
+	elif host_triple_is_linux; then
+		# linux_launch_program_in_background code --wait --new-window "$@"
+		# linux_launch_program_in_background gedit "$@"
+		linux_launch_program_in_background kwrite "$@"
+	else
+		# unknown
+		# assume KDE environment
+		kwrite "$@"
+	fi
 }
 
 show_command_output_in_editor() {

@@ -452,7 +452,7 @@ set_environment_variables_at_bash_startup() {
 	# just enforces UTF-8 for stdin/stdout/stderr.
 	# export PYTHONIOENCODING=utf-8
 
-	# the order is important here
+	# Note : the order is important here
 	set_bash_PS1_for_terminal_emulator_at_bash_startup
 	set_cygwin_CYGWIN_msys_MSYS_at_bash_startup
 	set_mingw_PATH_INCLUDE_LIB_at_bash_startup
@@ -461,11 +461,11 @@ set_environment_variables_at_bash_startup() {
 	set_common_windows_packages_PATH_at_bash_startup
 	set_other_linux_environment_variables_at_bash_startup
 
+	source_ssh-agent_env_script
+
 	if declare -F set_private_environment_variables_at_bash_startup >/dev/null; then
 		set_private_environment_variables_at_bash_startup
 	fi
-
-	source_ssh-agent_env_script
 }
 
 source_ssh-agent_env_script() {

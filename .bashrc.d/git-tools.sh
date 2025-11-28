@@ -117,7 +117,7 @@ do_git_commit() {
 				return 1
 			fi
 			local branch="$(cat .git/branch)"
-			local current_branch="$(git branch --show-current)"
+			local current_branch="$(git_print_current_branch)"
 			if [ "${current_branch}" == "${branch}" ]; then
 				echo "current branch is alreay ${branch} !"
 				return 1
@@ -158,44 +158,47 @@ git_show_commit_message() {
 	fi
 }
 
-git_show_branch_info_print_current_branch() {
-	echo "current branch  : $(git branch --show-current)"
+git_print_current_branch() {
+	git branch --show-current
 }
 
-git_show_branch_info_for_diff_0(){
-	git_show_branch_info_print_current_branch
+git_show_current_branch() {
+	echo "current branch   : $(git_print_current_branch)"
+}
+
+git_show_.git_branch_file(){
 	if [ -f .git/branch ]; then
-		echo "cat .git/branch : $(cat .git/branch)"
+		echo ".git/branch file : $(cat .git/branch)"
 	else
-		echo "no .git/branch file"
+		echo ".git/branch file : (not exist)"
 	fi
 }
 
-git_show_branch_info_for_diff_1(){
+git_show_reference_branch(){
 	local branch="$1"
-	git_show_branch_info_print_current_branch
-	if [ ! -z "${branch}" ]; then
-		echo "branch          : ${branch}"
+	echo "reference branch : ${branch}"
+}
+
+git_show_.git_remote_file(){
+	if [ -f .git/remote ]; then
+		echo ".git/remote file : $(cat .git/remote)"
 	else
-		echo "no branch specified"
+		echo ".git/remote file : (not exist)"
 	fi
 }
 
-git_show_branch_info_for_diff_2(){
-	git_show_branch_info_print_current_branch
-	if [ -f .git/branch ]; then
-		echo "cat .git/branch : $(cat .git/branch)"
-	fi
-	if [ -f .git/remote ]; then
-		echo "cat .git/remote : $(cat .git/remote)"
-	fi
+git_show_reference_remote(){
+	local remote="$1"
+	echo "reference remote : ${remote}"
 }
 
 git_diff_HEAD() {
 	git_show_commit_message
 
 	printf "\n\n"
-	git_show_branch_info_for_diff_2
+	git_show_current_branch
+	git_show_.git_branch_file
+	git_show_.git_remote_file
 
 	printf "\n\n"
 	echo "git diff HEAD"
@@ -214,7 +217,9 @@ git_diff_HEAD_remote_branch_tag() {
 	git_show_commit_message
 
 	printf "\n\n"
-	git_show_branch_info_for_diff_2
+	git_show_current_branch
+	git_show_.git_branch_file
+	git_show_.git_remote_file
 
 	printf "\n\n"
 	git_print_remote_branch_tag
@@ -249,14 +254,12 @@ git_diff_branch...HEAD() {
 	git_show_commit_message
 
 	printf "\n\n"
-	if [ -z "$1" ]; then
-		git_show_branch_info_for_diff_0
-	else
-		git_show_branch_info_for_diff_1 "${branch}"
-	fi
+	git_show_current_branch
+	git_show_.git_branch_file
+	git_show_reference_branch "${branch}"
 
 	printf "\n\n"
-	local current_branch="$(git branch --show-current)"
+	local current_branch="$(git_print_current_branch)"
 	echo "git diff ${branch}...HEAD"
 	echo "git diff ${branch}...${current_branch}"
 	echo "git diff \$(git merge-base ${branch} ${current_branch}) ${current_branch}"
@@ -350,13 +353,19 @@ do_git_misc() {
 				echo "remote ${remote} does not exist."
 				return 1
 			fi
+
+			git_show_current_branch
+			git_show_.git_branch_file
+			git_show_.git_remote_file
+			git_show_reference_remote "${remote}"
+
 			case "${misc_command}" in
 				git_pull_--rebase )
-					time_command git pull --rebase "${remote}" "$(git branch --show-current)" \
+					time_command git pull --rebase "${remote}" "$(git_print_current_branch)" \
 					&& time_command sync .git
 					;;
 				git_push )
-					time_command git push "${remote}" "$(git branch --show-current)"
+					time_command git push "${remote}" "$(git_print_current_branch)"
 					;;
 				git_fetch )
 					time_command git fetch "${remote}" \

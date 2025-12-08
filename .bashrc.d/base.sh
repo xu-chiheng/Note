@@ -993,12 +993,14 @@ windows_launch_vs_code_in_foreground() {
 	"$(cygpath -u "$(print_full_path_of_windows_program_vs_code)")" --wait --new-window "$@"
 }
 
+# https://www.sourceinsight.com/doc/v3/af916403.htm
 windows_launch_source_insight_3.5_in_background() {
 	windows_launch_program_in_background "$(print_full_path_of_windows_program_source_insight_3.5)" -s "$@"
 }
 
+# https://www.sourceinsight.com/doc/v4/userguide/Manual/Concepts/Command_Line_Options.htm
 windows_launch_source_insight_4.0_in_background() {
-	windows_launch_program_in_background "$(print_full_path_of_windows_program_source_insight_4.0)" -s "$@"
+	windows_launch_program_in_background "$(print_full_path_of_windows_program_source_insight_4.0)" -ni -s "$@"
 }
 
 # google_chrome_remove_remnant_files_after_uninstall() {

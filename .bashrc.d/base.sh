@@ -529,6 +529,13 @@ print_array_elements() {
 	done
 }
 
+print_array_elements_no_tab() {
+	local element
+	for element in "$@"; do
+		echo "${element}"
+	done
+}
+
 print_command_path() {
 	command -v "$1"
 	# which "$1"
@@ -1027,13 +1034,12 @@ print_essential_files_for_basic_setup() {
 		Util/{other/{crypto,backup},quirk,shell,setting/editor}
 		Util/{_vps-get-latest-scripts-and-do-common-setup,linux_setup,xray-nginx,sing-box-y,sing-box-f,v2ray-agent,wireguard}.sh
 	)
-	local path
-	for path in "${paths[@]}"; do
-		echo "${path}"
-	done
+	print_array_elements_no_tab "${paths[@]}"
 }
 
 print_essential_files_for_tool_setup() {
+	print_essential_files_for_basic_setup
+
 	local paths=(
 		{eclipse-workspace,runtime-EclipseApplication}/{.gitignore,{clean,cygwin,backup_metadata_dir,git_add_-f_prefs_files}.cmd}
 
@@ -1047,12 +1053,7 @@ print_essential_files_for_tool_setup() {
 		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python}
 		Tool/{linux.sh,{cygwin,msys,mingw_{ucrt,vcrt},vs_{cygwin,msys}}.cmd}
 	)
-
-	print_essential_files_for_basic_setup
-	local path
-	for path in "${paths[@]}"; do
-		echo "${path}"
-	done
+	print_array_elements_no_tab "${paths[@]}"
 }
 
 copy_home_dir_files_for_basic_setup() {

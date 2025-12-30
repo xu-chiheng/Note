@@ -48,7 +48,6 @@ maybe_source_.bashrc.d.private_scripts() {
 # https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files
 maybe_set_environment_variables_at_bash_startup() {
 	if [ ! -v HOST_TRIPLE ]; then
-		# uncomment the following line, to see the time consumed
 		set_environment_variables_at_bash_startup
 	fi
 }

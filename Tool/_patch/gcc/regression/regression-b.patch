@@ -1,0 +1,12 @@
+diff --git a/libstdc++-v3/config/os/mingw32-w64/os_defines.h b/libstdc++-v3/config/os/mingw32-w64/os_defines.h
+index 70106fe792c..cc67b20a48f 100644
+--- a/libstdc++-v3/config/os/mingw32-w64/os_defines.h
++++ b/libstdc++-v3/config/os/mingw32-w64/os_defines.h
+@@ -98,6 +98,6 @@
+ 
+ // Use functions to access thread-local variables from a different module.
+ // Windows does not support exporting thread-local data.
+-#define _GLIBCXX_NO_EXTERN_THREAD_LOCAL 1
++#undef _GLIBCXX_NO_EXTERN_THREAD_LOCAL
+ 
+ #endif

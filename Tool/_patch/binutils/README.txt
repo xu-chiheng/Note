@@ -13,17 +13,28 @@ patch_apply . ../_patch/binutils/{\
 cygming-PICFLAG-{a,b,c,d,e,f,g,h},\
 mingw-replace-{mingw32-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q},w64-{a,b}}}.patch
 
+2.44    a253bea8995323201b016fe477280c1782688ab4    2024-08-28
 2.44    572920f968385ece96e6df2e49cb9776f64f71cf    2025-01-19    branch point
 2.45    5c778308bdb8c85585eb703ca8b3fda4a967aa08    2025-08-13    branch point
-2.46    7e432e93f8aaa14368476cf5eae9d55c18a266fb    2025-08-18
 patch_apply . ../_patch/binutils/{\
 ../gcc/mingw/mingw-include-lib-b,\
 cygming-PICFLAG-{a,b,c,d,e,f,g,h},\
 mingw-replace-{mingw32-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q},w64-{a,b}},\
 regression-a}.patch
 
+2.46    3f89802f207adad4f2f0b8e0f60c44d77727af42    2025-12-19
+2.46    7be6efd7d4bf9eb93a876fffddb34ced3bceb546    2026-01-07
+patch_apply . ../_patch/binutils/{\
+../gcc/mingw/mingw-include-lib-b,\
+cygming-PICFLAG-{a,b,c,d,e,f,g,h},\
+mingw-replace-{mingw32-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q},w64-{a,b}},\
+regression-{a,b}}.patch
+
 
 
 
 regression-a.patch
 Fix build on MinGW due to undefined NAME_MAX, caused by commit a253bea8995323201b016fe477280c1782688ab4 2024-08-28.
+
+regression-b.patch
+Fix build on MinGW due to undefined ARRAY_SIZE, caused by commit 3f89802f207adad4f2f0b8e0f60c44d77727af42 2025-12-19.

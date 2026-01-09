@@ -1,0 +1,13 @@
+diff --git a/libstdc++-v3/include/bits/new_except.h b/libstdc++-v3/include/bits/new_except.h
+index 41cefbf8a5f..ea3deb41496 100644
+--- a/libstdc++-v3/include/bits/new_except.h
++++ b/libstdc++-v3/include/bits/new_except.h
+@@ -61,7 +61,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+     _GLIBCXX26_CONSTEXPR bad_alloc& operator=(const bad_alloc&) = default;
+ #endif
+ 
+-#if __cplusplus >= 202400L
++#if 0 //__cplusplus >= 202400L
+     constexpr virtual ~bad_alloc() noexcept {}
+ 
+     constexpr virtual const char* what() const noexcept

@@ -1,0 +1,12 @@
+diff --git a/bfd/bfdio.c b/bfd/bfdio.c
+index 21e864d1318..6c3bbb6e273 100644
+--- a/bfd/bfdio.c
++++ b/bfd/bfdio.c
+@@ -29,6 +29,7 @@
+ #if defined (_WIN32)
+ #include <windows.h>
+ #include <locale.h>
++#include <libiberty.h>  /* for macro ARRAY_SIZE */
+ #endif
+ 
+ #ifndef S_IXUSR

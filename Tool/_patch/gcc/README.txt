@@ -24,6 +24,15 @@ cygming/cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1,PICFLAG-{a,b,c,d,e,f,g,h,i,j,k,l,
 cygwin/cygwin-{ldflags-{a,b},macro-{a,b,c,d-1},include-w32api,no-wrap-{a-1,b-1,c,d,e-1,f,g},no-manifest,no-host_shared,jit-{a,b}},\
 mingw/mingw-{replace-w64-{a,b,c-1,d,e,f,g,h,i,j},no-manifest-1,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
+16.0.0    62c126db6b6017011dcbe6945aab371ab48f8ded    2025-12-12
+16.0.0    72a376da3b780ace74e6f929f53af7b05e3ba627    2026-01-07
+patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
+cygming/cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1,PICFLAG-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v}},\
+cygwin/cygwin-{ldflags-{a,b},macro-{a,b,c,d-1},include-w32api,no-wrap-{a-1,b-1,c,d,e-1,f,g},no-manifest,no-host_shared,jit-{a,b}},\
+mingw/mingw-{replace-w64-{a,b,c-1,d,f,g,h,i,j},no-manifest-1,gethostname,libgcc-no-libc,include-lib-{a,b,{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h},\
+regression/regression-a}.patch
+
+
 
 _PREFIX_INCLUDE_DIR.patch
 $prefix/include, on MinGW, $prefix is not converted from unix path to windows path,

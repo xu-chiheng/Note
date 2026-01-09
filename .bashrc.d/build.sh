@@ -98,7 +98,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 		echo "compiler is not in a bin directory"
 		exit 1
 	fi
-	# local _compiler_install_dir="$(dirname "${_cc_dir}")"
+	local _compiler_install_dir="$(dirname "${_cc_dir}")"
 
 	local _cpu_arch_flags=()
 	case "${HOST_TRIPLE}" in
@@ -316,7 +316,8 @@ git_repo_url_of_package() {
 			echo "git://gcc.gnu.org/git/gcc.git"
 			;;
 		llvm )
-			echo "git@github.com:llvm/llvm-project.git"
+			echo "https://github.com/llvm/llvm-project.git"
+			# echo "git@github.com:llvm/llvm-project.git"
 			;;
 		qemu )
 			echo "https://gitlab.com/qemu-project/qemu.git"
@@ -325,7 +326,8 @@ git_repo_url_of_package() {
 			echo "https://gitlab.kitware.com/cmake/cmake.git"
 			;;
 		meson )
-			echo "git@github.com:mesonbuild/meson.git"
+			echo "https://github.com/mesonbuild/meson.git"
+			# echo "git@github.com:mesonbuild/meson.git"
 			;;
 		bash )
 			echo "https://git.savannah.gnu.org/git/bash.git"
@@ -367,13 +369,16 @@ git_repo_url_of_package() {
 			echo "git://sourceware.org/git/glibc.git"
 			;;
 		linux )
-			echo "git@github.com:torvalds/linux.git"
+			echo "https://github.com/torvalds/linux.git"
+			# echo "git@github.com:torvalds/linux.git"
 			;;
 		mintty )
-			echo "git@github.com:mintty/mintty.git"
+			echo "https://github.com/mintty/mintty.git"
+			# echo "git@github.com:mintty/mintty.git"
 			;;
 		konsole )
-			echo "git@github.com:KDE/konsole.git"
+			echo "https://github.com/KDE/konsole.git"
+			# echo "git@github.com:KDE/konsole.git"
 			;;
 		gnome-terminal )
 			echo "https://gitlab.gnome.org/GNOME/gnome-terminal"
@@ -392,6 +397,7 @@ check_dir_maybe_clone_from_url() {
 	if [ ! -d "${package}" ]; then
 		echo "the following command need to executed to download ${package} source to ${package} directory :"
 		echo git clone "${git_repo_url}" "${package}"
+		echo git clone --no-checkout "${git_repo_url}" "${package}"
 		echo "patches in $(pwd)/_patch/${package} need to be applied manually to ${package}."
 		exit
 	fi

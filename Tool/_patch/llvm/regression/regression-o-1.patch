@@ -1,0 +1,13 @@
+diff --git a/clang/test/Analysis/LifetimeSafety/CMakeLists.txt b/clang/test/Analysis/LifetimeSafety/CMakeLists.txt
+index 2f9c2ac24749..7c599dc8de8f 100644
+--- a/clang/test/Analysis/LifetimeSafety/CMakeLists.txt
++++ b/clang/test/Analysis/LifetimeSafety/CMakeLists.txt
+@@ -15,7 +15,7 @@ set(LIFETIME_BENCHMARK_REQUIREMENTS
+ set(LIFETIME_BENCHMARK_OUTPUT_DIR
+   "${CMAKE_CURRENT_BINARY_DIR}/benchmark_results")
+ 
+-if(WIN32)
++if(MSVC)
+   set(LIFETIME_BENCHMARK_VENV_PYTHON_EXECUTABLE
+     "${LIFETIME_BENCHMARK_VENV_DIR}/Scripts/python")
+ else()

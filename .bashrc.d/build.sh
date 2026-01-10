@@ -442,7 +442,7 @@ make_tarball_and_calculate_sha512() {
 	echo_command mkdir -p "${dest_dir}" \
 	&& echo_command rm -rf "${dest_dir}/${tarball}"{,.sha512} \
 	&& { echo_command pushd "${install_dir}" \
-		&& time_command tar -cvf "${dest_dir}/${tarball}" * \
+		&& time_command tar -cvf "../${dest_dir}/${tarball}" * \
 		&& echo_command popd;} \
 	&& time_command sha512_calculate_file "${dest_dir}/${tarball}"
 }
@@ -455,7 +455,7 @@ maybe_make_tarball_and_calculate_sha512() {
 	fi
 
 	local host_os="$(print_host_os_of_host_triple)"
-	local dest_dir="$(pwd)/__${host_os,,}-${compiler,,}-${linker,,}"
+	local dest_dir="__${host_os,,}-${compiler,,}-${linker,,}"
 
 	make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}"
 }
@@ -468,7 +468,7 @@ maybe_make_tarball_and_calculate_sha512_1() {
 	fi
 
 	local host_os="$(print_host_os_of_host_triple)"
-	local dest_dir="$(pwd)/__${host_os,,}-${tool,,}"
+	local dest_dir="__${host_os,,}-${tool,,}"
 
 	make_tarball_and_calculate_sha512 "${dest_dir}" "${tarball}" "${install_dir}"
 }

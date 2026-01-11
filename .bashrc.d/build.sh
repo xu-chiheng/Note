@@ -258,6 +258,7 @@ visual_studio_check_tool_build_type_and_set_generator_toolset() {
 		MSVC )
 			_toolset="unknown"
 			case "${year}" in
+				2026) _toolset="v145" ;;
 				2022) _toolset="v143" ;;
 				2019) _toolset="v142" ;;
 				2017) _toolset="v141" ;;
@@ -285,6 +286,7 @@ visual_studio_dump_tool_build_type_and_generator_toolset() {
 	local description="Unknown"
 	case "${toolset}" in
 		ClangCL ) description="Clang with MSVC-like command-line" ;;
+		v145 ) description="Visual Studio 2026 (MSVC 14.5x)" ;;
 		v143 ) description="Visual Studio 2022 (MSVC 14.3x)" ;;
 		v142 ) description="Visual Studio 2019 (MSVC 14.2x)" ;;
 		v141 ) description="Visual Studio 2017 (MSVC 14.1x)" ;;

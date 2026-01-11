@@ -165,6 +165,7 @@ print_visual_studio_release_year() {
     local major="$(print_visual_studio_major_version)"
     local year="Unknown"
     case "${major}" in
+        18) year="2026" ;;
         17) year="2022" ;;
         16) year="2019" ;;
         15) year="2017" ;;

@@ -35,7 +35,7 @@
 /__mingw_vcrt-*
 /__cygwin-*
 /__linux-*
-/__vs2022-*
+/__vs20??-*
 /_temp
 
 /*.cpp

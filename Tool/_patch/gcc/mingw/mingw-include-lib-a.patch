@@ -20,7 +20,7 @@ index 28cf2efac4e..bafa8eecfea 100644
 +static void
 +check_static_array_cpp_include_defaults()
 +{
-+	bool checked = false;
++	static bool checked = false;
 +	if (!checked) {
 +
 +		const struct default_include * p;

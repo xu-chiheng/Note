@@ -99,6 +99,14 @@ Fix the regression caused by commit 7615503409f19ad7e2e2f946437919d0689d4b3e 202
        (CustomBuild 目标) ->
          C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(237,5): error MSB8066: Custom build for 'E:\Note\Tool\llvm-visual_studio-build\CMakeFiles\d147c9e9362f1dc0f4e6b3a8a8ad82b9\pyvenv.cfg.rule' exited with code 1. [E:\Note\Tool\llvm-visual_studio-build\tools\clang\test\Analysis\LifetimeSafety\benchmark_venv_setup.vcxproj]
 
-
+regression-p.patch
+Fix build on MinGW, using Clang and BFD, caused by commit 93d326038959fd87fb666a8bf97d774d0abb3591 2025-10-10.
+[ 87%] Linking CXX executable ../../../../bin/lldb.exe
+D:/_mingw_ucrt/binutils/bin/ld.bfd.exe: unrecognized option '--delayload=liblldb.dll'
+D:/_mingw_ucrt/binutils/bin/ld.bfd.exe: use the --help option for usage information
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+make[2]: *** [tools/lldb/tools/driver/CMakeFiles/lldb.dir/build.make:131: bin/lldb.exe] Error 1
+make[1]: *** [CMakeFiles/Makefile2:195047: tools/lldb/tools/driver/CMakeFiles/lldb.dir/all] Error 2
+make: *** [Makefile:156: all] Error 2
 
 

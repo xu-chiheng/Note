@@ -558,10 +558,22 @@ cygwin/cygwin-{cmodel-2,general-{a-1,b,c-{a,b,c-1,d}},macro-{a,b,c}},\
 cygwin-regression/cygwin-regression-{a,b,c,d,e},\
 mingw/mingw-{git-revision,emutls-1}}.patch
 
+22.0.0    93d326038959fd87fb666a8bf97d774d0abb3591    2025-10-10
+patch_apply . \
+../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
+regression/regression-{a,b-1,d-5,g-2,h-2,i,m-1,n,o,p},\
+cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-2,l,m-1,n,o-2},\
+cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
+cygwin-lld/cygwin-lld-{a,b-1,c},\
+cygwin-lldb/cygwin-lldb-{a,b,c,d-1,e,h-1,i-1,k-2,l-{a,b,c,d},m,o,p},\
+cygwin/cygwin-{cmodel-2,general-{a-1,b,c-{a,b,c-1,d}},macro-{a,b,c}},\
+cygwin-regression/cygwin-regression-{a,b,c,d,e},\
+mingw/mingw-{git-revision,emutls-1}}.patch
+
 22.0.0    6e25a04027ca786b7919657c7df330a33985ceea    2025-11-01
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
-regression/regression-{a,b-1,d-5,g-2,h-2,i,n,o},\
+regression/regression-{a,b-1,d-5,g-2,h-2,i,n,o,p},\
 cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-2,l,m-1,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b-1,c},\
@@ -573,7 +585,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 22.0.0    f42e58f61680e325555f382cab5115c54df6f6df    2025-12-01
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
-regression/regression-{a,b-1,d-5,g-2,h-2,i,n,o-1},\
+regression/regression-{a,b-1,d-5,g-2,h-2,i,n,o-1,p},\
 cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-2,l,m-1,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b-1,c},\
@@ -585,7 +597,7 @@ mingw/mingw-{git-revision,emutls-1}}.patch
 22.0.0    44b44bc81babc38ac65868691054c25199aea420    2026-01-07
 patch_apply . \
 ../_patch/llvm/{_prevent-versioning-{a,b},_cmake-dump,\
-regression/regression-{a,b-1,d-5,g-2,h-2,i,n,o-1},\
+regression/regression-{a,b-1,d-5,g-2,h-2,i,n,o-1,p},\
 cygming-build/cygming-build-{a-2,b-1,c-1,d,e,f,g,h,i,j-3,k-2,l,m-1,n,o-2},\
 cygming-driver/cygming-driver-{b-1,c,d,e,f,g,h,i,j,k,l,m,n,o,p},\
 cygwin-lld/cygwin-lld-{a,b-1,c},\

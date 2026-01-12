@@ -1,53 +1,63 @@
 diff --git a/gcc/incpath.cc b/gcc/incpath.cc
-index 64cdd2f4a1b..7571fbcc3bf 100644
+index 28cf2efac4e..bafa8eecfea 100644
 --- a/gcc/incpath.cc
 +++ b/gcc/incpath.cc
-@@ -134,6 +134,11 @@ add_standard_paths (const char *sysroot, const char *iprefix,
+@@ -179,6 +179,49 @@ add_env_var_paths (const char *env_var, incpath_kind chain)
+ #endif
+ }
+ 
++static void
++dump_static_array_cpp_include_defaults()
++{
++	size_t i = 0;
++	const struct default_include * p;
++	for (p = cpp_include_defaults; p->fname; p++) {
++		fprintf(stderr, "%zu. %s\n", i, p->fname);
++		i++;
++	}
++}
++
++static void
++check_static_array_cpp_include_defaults()
++{
++	bool checked = false;
++	if (!checked) {
++
++		const struct default_include * p;
++		for (p = cpp_include_defaults; p->fname; p++) {
++#ifdef _WIN32
++			if (p->fname[0] == '/') {
++				fprintf(stderr, "array cpp_include_defaults cantain path start with '/'.\n");
++				dump_static_array_cpp_include_defaults();
++				exit(1);
++			}
++			if (!(filename_ncmp(p->fname, cpp_PREFIX, cpp_PREFIX_len) == 0)) {
++				fprintf(stderr, "array cpp_include_defaults cantain path not start with PREFIX %s.\n", cpp_PREFIX);
++				dump_static_array_cpp_include_defaults();
++				exit(1);
++			}
++#else
++			if (p->fname[0] != '/') {
++				fprintf(stderr, "array cpp_include_defaults cantain path not start with '/'.\n");
++				dump_static_array_cpp_include_defaults();
++				exit(1);
++			}
++#endif
++		}
++
++		checked = true;
++	}
++}
++
+ /* Append the standard include chain defined in cppdefault.cc.  */
+ static void
+ add_standard_paths (const char *sysroot, const char *iprefix,
+@@ -188,6 +231,8 @@ add_standard_paths (const char *sysroot, const char *iprefix,
    int relocated = cpp_relocated ();
    size_t len;
  
-+	bool host_is_win32 = false;
-+#ifdef _WIN32
-+	host_is_win32 = true;
-+#endif
++  check_static_array_cpp_include_defaults();
 +
    if (iprefix && (len = cpp_GCC_INCLUDE_DIR_len) != 0)
      {
        /* Look for directories that start with the standard prefix.
-@@ -178,9 +183,28 @@ add_standard_paths (const char *sysroot, const char *iprefix,
- 	{
- 	  char *str;
- 
-+		if (host_is_win32) {
-+			if (p->fname[0] == '/') {
-+				// should never happen
-+				continue;
-+			} else if (!filename_ncmp (p->fname, cpp_PREFIX, cpp_PREFIX_len)) {
-+				if (p->add_sysroot) {
-+					if (sysroot) {
-+						goto label_sysroot;
-+					} else {
-+						continue;
-+					}
-+				} else {
-+					goto label_relocated;
-+				}
-+			} else {
-+				continue;
-+			}
-+		}
- 	  /* Should this directory start with the sysroot?  */
- 	  if (sysroot && p->add_sysroot)
- 	    {
-+label_sysroot:
- 	      char *sysroot_no_trailing_dir_separator = xstrdup (sysroot);
- 	      size_t sysroot_len = strlen (sysroot);
- 
-@@ -192,6 +216,7 @@ add_standard_paths (const char *sysroot, const char *iprefix,
- 	  else if (!p->add_sysroot && relocated
- 		   && !filename_ncmp (p->fname, cpp_PREFIX, cpp_PREFIX_len))
- 	    {
-+label_relocated:
-  	      static const char *relocated_prefix;
- 	      char *ostr;
- 	      /* If this path starts with the configure-time prefix,

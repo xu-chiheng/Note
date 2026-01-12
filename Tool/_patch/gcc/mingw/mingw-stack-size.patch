@@ -1,0 +1,12 @@
+diff --git a/config/mh-mingw b/config/mh-mingw
+index f5fb064813f..5e6e3ab4260 100644
+--- a/config/mh-mingw
++++ b/config/mh-mingw
+@@ -10,5 +10,5 @@ STAGE4_CXXFLAGS += -D__USE_MINGW_ACCESS
+ 
+ # Increase stack limit to a figure based on the Linux default, with 4MB added
+ # as GCC turns out to need that much more to pass all the limits-* tests.
+-LDFLAGS += -Wl,--stack,12582912
+-BOOT_LDFLAGS += -Wl,--stack,12582912
++LDFLAGS += -Wl,--stack,0x1000000
++BOOT_LDFLAGS += -Wl,--stack,0x1000000

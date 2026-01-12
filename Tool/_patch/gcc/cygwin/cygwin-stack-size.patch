@@ -1,0 +1,11 @@
+diff --git a/config/mh-cygwin b/config/mh-cygwin
+index 1f746bdea84..075f2b49950 100644
+--- a/config/mh-cygwin
++++ b/config/mh-cygwin
+@@ -1,4 +1,4 @@
+ # Increase stack limit to a figure based on the Linux default, with 4MB added
+ # as GCC turns out to need that much more to pass all the limits-* tests.
+-LDFLAGS += -Wl,--stack,12582912
+-BOOT_LDFLAGS += -Wl,--stack,12582912
++LDFLAGS += -Wl,--stack,0x1000000
++BOOT_LDFLAGS += -Wl,--stack,0x1000000

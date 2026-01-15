@@ -1,11 +1,16 @@
 diff --git a/lldb/cmake/modules/AddLLDB.cmake b/lldb/cmake/modules/AddLLDB.cmake
-index 6493df27f38d..c8002912ee8e 100644
+index 6493df27f38d..54b19f2f04a5 100644
 --- a/lldb/cmake/modules/AddLLDB.cmake
 +++ b/lldb/cmake/modules/AddLLDB.cmake
-@@ -178,7 +178,6 @@ function(add_lldb_executable name)
-         # library is a short type import library (which LLD and MS link.exe produce).
-         # With ld.bfd, with long import libraries (as produced by GNU binutils), one
-         # has to generate a separate delayload import library with dlltool.
+@@ -173,12 +173,6 @@ function(add_lldb_executable name)
+       if (MSVC)
+         target_link_options(${name} PRIVATE "/DELAYLOAD:$<TARGET_FILE_NAME:liblldb>")
+         target_link_libraries(${name} PRIVATE delayimp)
+-      elseif (MINGW AND LINKER_IS_LLD)
+-        # LLD can delay load just by passing a --delayload flag, as long as the import
+-        # library is a short type import library (which LLD and MS link.exe produce).
+-        # With ld.bfd, with long import libraries (as produced by GNU binutils), one
+-        # has to generate a separate delayload import library with dlltool.
 -        target_link_options(${name} PRIVATE "-Wl,--delayload=$<TARGET_FILE_NAME:liblldb>")
        elseif (DEFINED LLDB_PYTHON_DLL_RELATIVE_PATH)
          # If liblldb can't be delayloaded, then LLDB_PYTHON_DLL_RELATIVE_PATH will not

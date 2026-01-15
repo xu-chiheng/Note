@@ -1,0 +1,19 @@
+diff --git a/libgcc/config/i386/cygming-crtend.c b/libgcc/config/i386/cygming-crtend.c
+index 3dfae1eb7e4..e0e050bf0a6 100644
+--- a/libgcc/config/i386/cygming-crtend.c
++++ b/libgcc/config/i386/cygming-crtend.c
+@@ -24,6 +24,8 @@ a copy of the GCC Runtime Library Exception along with this program;
+ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+ <http://www.gnu.org/licenses/>.  */
+ 
++#ifndef inhibit_libc
++
+ /* Target machine header files require this define. */
+ #define IN_LIBGCC2
+ 
+@@ -79,3 +81,5 @@ deregister_frame_dtor (void)
+   __gcc_deregister_frame ();
+ }
+ #endif
++
++#endif

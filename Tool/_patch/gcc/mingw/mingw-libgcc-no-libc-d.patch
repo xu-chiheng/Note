@@ -1,0 +1,20 @@
+diff --git a/libgcc/libgcc2.c b/libgcc/libgcc2.c
+index 2d4434c6fd5..e819775c359 100644
+--- a/libgcc/libgcc2.c
++++ b/libgcc/libgcc2.c
+@@ -2997,6 +2997,7 @@ __clear_cache (void *beg __attribute__((__unused__)),
+ 
+ #endif /* L_clear_cache */
+ 
++#ifndef inhibit_libc
+ #ifdef L_trampoline
+ 
+ /* Jump to a trampoline, loading the static chain address.  */
+@@ -3049,6 +3050,7 @@ mprotect (char *addr, int len, int prot)
+ TRANSFER_FROM_TRAMPOLINE
+ #endif
+ #endif /* L_trampoline */
++#endif
+ 
+ #ifndef __CYGWIN__
+ #ifdef L__main

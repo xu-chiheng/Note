@@ -1,0 +1,18 @@
+diff --git a/libgcc/unwind-seh.c b/libgcc/unwind-seh.c
+index ed038854787..ddeceffc691 100644
+--- a/libgcc/unwind-seh.c
++++ b/libgcc/unwind-seh.c
+@@ -22,6 +22,8 @@
+    see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+    <http://www.gnu.org/licenses/>.  */
+ 
++#ifndef inhibit_libc
++
+ #include "tconfig.h"
+ #include "tsystem.h"
+ #include "coretypes.h"
+@@ -481,3 +483,4 @@ _Unwind_Backtrace(_Unwind_Trace_Fn trace,
+     }
+ }
+ #endif /* __SEH__  && !defined (__USING_SJLJ_EXCEPTIONS__)  */
++#endif

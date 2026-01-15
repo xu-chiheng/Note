@@ -1,0 +1,19 @@
+diff --git a/libgcc/config/i386/cygming-crtbegin.c b/libgcc/config/i386/cygming-crtbegin.c
+index 8435a125817..3cee47a9790 100644
+--- a/libgcc/config/i386/cygming-crtbegin.c
++++ b/libgcc/config/i386/cygming-crtbegin.c
+@@ -24,6 +24,8 @@ a copy of the GCC Runtime Library Exception along with this program;
+ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+ <http://www.gnu.org/licenses/>.  */
+ 
++#ifndef inhibit_libc
++
+ /* Target machine header files require this define. */
+ #define IN_LIBGCC2
+ 
+@@ -159,3 +161,5 @@ __gcc_deregister_frame (void)
+     FreeLibrary (hmod_libgcc);
+ #endif
+ }
++
++#endif

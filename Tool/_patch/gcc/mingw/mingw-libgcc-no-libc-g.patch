@@ -1,0 +1,18 @@
+diff --git a/libgcc/unwind-sjlj.c b/libgcc/unwind-sjlj.c
+index 0184a5da424..9b8d7ee1deb 100644
+--- a/libgcc/unwind-sjlj.c
++++ b/libgcc/unwind-sjlj.c
+@@ -22,6 +22,8 @@
+    see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+    <http://www.gnu.org/licenses/>.  */
+ 
++#ifndef inhibit_libc
++
+ #include "tconfig.h"
+ #include "tsystem.h"
+ #include "coretypes.h"
+@@ -325,3 +327,4 @@ uw_identify_context (struct _Unwind_Context *context)
+ #include "unwind.inc"
+ 
+ #endif /* USING_SJLJ_EXCEPTIONS */
++#endif

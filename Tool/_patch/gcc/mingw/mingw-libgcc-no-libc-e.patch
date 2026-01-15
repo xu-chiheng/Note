@@ -1,0 +1,18 @@
+diff --git a/libgcc/unwind-c.c b/libgcc/unwind-c.c
+index 99dbf349c5b..cf8558dfbfb 100644
+--- a/libgcc/unwind-c.c
++++ b/libgcc/unwind-c.c
+@@ -24,6 +24,8 @@ a copy of the GCC Runtime Library Exception along with this program;
+ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+ <http://www.gnu.org/licenses/>.  */
+ 
++#ifndef inhibit_libc
++
+ #include "tconfig.h"
+ #include "tsystem.h"
+ #include "auto-target.h"
+@@ -244,3 +246,4 @@ __gcc_personality_seh0 (PEXCEPTION_RECORD ms_exc, void *this_frame,
+ 				ms_disp, __gcc_personality_imp);
+ }
+ #endif /* SEH */
++#endif

@@ -1,0 +1,17 @@
+diff --git a/libgcc/config/i386/enable-execute-stack-mingw32.c b/libgcc/config/i386/enable-execute-stack-mingw32.c
+index 92f75defdb2..94ac5688202 100644
+--- a/libgcc/config/i386/enable-execute-stack-mingw32.c
++++ b/libgcc/config/i386/enable-execute-stack-mingw32.c
+@@ -22,6 +22,7 @@
+    see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+    <http://www.gnu.org/licenses/>.  */
+ 
++#ifndef inhibit_libc
+ #define WIN32_LEAN_AND_MEAN
+ #include <stdlib.h>
+ #include <windows.h>
+@@ -38,3 +39,4 @@ __enable_execute_stack (void *addr)
+   VirtualProtect (b.BaseAddress, b.RegionSize, PAGE_EXECUTE_READWRITE,
+ 		  &b.Protect);
+ }
++#endif

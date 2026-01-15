@@ -1,0 +1,13 @@
+diff --git a/gcc/config/loongarch/loongarch.cc b/gcc/config/loongarch/loongarch.cc
+index e7c291f3056..f3c97b5dbe1 100644
+--- a/gcc/config/loongarch/loongarch.cc
++++ b/gcc/config/loongarch/loongarch.cc
+@@ -1420,7 +1420,7 @@ loongarch_can_use_return_insn (void)
+ bool
+ loongarch_16b_atomic_lock_free_p (void)
+ {
+-#ifdef HAVE_IFUNC_FOR_LIBATOMIC_16B
++#if defined(HAVE_IFUNC_FOR_LIBATOMIC_16B) && defined(OPTION_GLIBC)
+   bool ok_p = HAVE_IFUNC_FOR_LIBATOMIC_16B;
+ #else
+   bool ok_p = false;

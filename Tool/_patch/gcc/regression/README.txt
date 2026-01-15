@@ -37,3 +37,25 @@ make[2]: Leaving directory '/e/Note/Tool/gdb-mingw_ucrt-gcc-bfd-release-build/gd
 make[1]: *** [Makefile:11769: all-gdb] Error 2
 make[1]: Leaving directory '/e/Note/Tool/gdb-mingw_ucrt-gcc-bfd-release-build'
 make: *** [Makefile:1046: all] Error 2
+
+regression-c.patch
+Fix build of riscv64-elf cross compiler using Clang, caused by commit 62287200dfe0863fee96a89b58f891909a58e393 2025-09-23.
+../../gcc/gcc/config/riscv/riscv.cc:14879:3: error: no matching function for call to 'parse_features_for_version'
+make[1]: *** [Makefile:2772: riscv.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+
+regression-d.patch
+Fix build, caused by commit 8a155c170b443e332b3db4922f0f0d588a17604f 2025-11-11.
+This patch is backported from commit 5ce13174c0cf8271f37ca72d1bfc5560b35448dc 2025-11-17.
+../../gcc/gcc/diagnostics/sarif-sink.cc:58:10: fatal error: 'sys/un.h' file not found
+   58 | #include <sys/un.h>
+
+regression-e.patch
+Fix build of loongarch64-elf cross compiler, caused by commit f77f4797010736d9fea7b313b52267d643ebcff7 2025-11-14.
+../../gcc/gcc/config/loongarch/loongarch.cc:1424:15: error: use of undeclared identifier 'OPTION_GLIBC'
+ 1424 |   bool ok_p = HAVE_IFUNC_FOR_LIBATOMIC_16B;
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../gcc/gcc/config/loongarch/linux.h:59:61: note: expanded from macro 'HAVE_IFUNC_FOR_LIBATOMIC_16B'
+   59 | #define HAVE_IFUNC_FOR_LIBATOMIC_16B (HAVE_AS_16B_ATOMIC && OPTION_GLIBC)
+      |                                                             ^~~~~~~~~~~~
+[Makefile:2773: loongarch.o] Error 1

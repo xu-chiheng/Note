@@ -63,6 +63,6 @@ set geometry(topwidth) 3840
 set geometry(topheight) 1083
 set geometry(pwsash0) "1569 1"
 set geometry(pwsash1) "2871 1"
-set geometry(botwidth) 2342
+set geometry(botwidth) 2322
 set geometry(botheight) 918
 set permviews {}

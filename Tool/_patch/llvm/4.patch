@@ -1,0 +1,13 @@
+diff --git a/clang/include/clang/Interpreter/Value.h b/clang/include/clang/Interpreter/Value.h
+index b91301e6096e..e065828ed3a2 100644
+--- a/clang/include/clang/Interpreter/Value.h
++++ b/clang/include/clang/Interpreter/Value.h
+@@ -54,7 +54,7 @@ class ASTContext;
+ class Interpreter;
+ class QualType;
+ 
+-#if defined(_WIN32)
++#if defined(_MSC_VER)
+ // REPL_EXTERNAL_VISIBILITY are symbols that we need to be able to locate
+ // at runtime. On Windows, this requires them to be exported from any of the
+ // modules loaded at runtime. Marking them as dllexport achieves this; both

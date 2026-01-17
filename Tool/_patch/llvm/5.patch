@@ -1,0 +1,13 @@
+diff --git a/llvm/include/llvm/Support/Compiler.h b/llvm/include/llvm/Support/Compiler.h
+index 56f498a36ae5..1d84724762a5 100644
+--- a/llvm/include/llvm/Support/Compiler.h
++++ b/llvm/include/llvm/Support/Compiler.h
+@@ -183,7 +183,7 @@
+ // TODO(https://github.com/llvm/llvm-project/issues/145406): eliminate need for
+ // two preprocessor definitions to gate LLVM_ABI macro definitions.
+ #if defined(LLVM_ENABLE_LLVM_EXPORT_ANNOTATIONS) && !defined(LLVM_BUILD_STATIC)
+-#if defined(_WIN32) && !defined(__MINGW32__)
++#if defined(_MSC_VER)
+ #if defined(LLVM_EXPORTS)
+ #define LLVM_ABI __declspec(dllexport)
+ #define LLVM_TEMPLATE_ABI

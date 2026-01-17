@@ -192,28 +192,28 @@ dump_compiler_linker_build_type_and_compiler_flags() {
 }
 
 # control whether llvm, as library, is static or shared
-check_llvm_static_or_shared() {
-	local _llvm_static_or_shared="$1"
+check_llvm_lib_type() {
+	local _llvm_lib_type="$1"
 
-	if [ -z "${_llvm_static_or_shared}" ]; then
-		_llvm_static_or_shared=shared
+	if [ -z "${_llvm_lib_type}" ]; then
+		_llvm_lib_type=dylib
 	fi
-	case "${_llvm_static_or_shared}" in
-		static | shared )
+	case "${_llvm_lib_type}" in
+		static | shared | dylib )
 			true
 			;;
 		* )
-			echo "unknown arg : ${_llvm_static_or_shared}"
-			echo "valid arg : static shared"
+			echo "unknown arg : ${_llvm_lib_type}"
+			echo "valid arg : static shared dylib"
 			exit 1
 			;;
 	esac
 
-	printf -v llvm_static_or_shared '%s' "${_llvm_static_or_shared}"
+	printf -v llvm_lib_type '%s' "${_llvm_lib_type}"
 }
 
-dump_llvm_static_or_shared() {
-	echo "llvm_static_or_shared : $1"
+dump_llvm_lib_type() {
+	echo "llvm_lib_type : $1"
 }
 
 visual_studio_check_tool_build_type_and_set_generator_toolset() {

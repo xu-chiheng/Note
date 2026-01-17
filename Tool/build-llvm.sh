@@ -46,13 +46,13 @@ build() {
 	local package="llvm"
 	local compiler linker build_type cc cxx cflags cxxflags ldflags
 	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
-	local llvm_static_or_shared
-	check_llvm_static_or_shared "$4"
+	local llvm_lib_type
+	check_llvm_lib_type "$4"
 	{
 		dump_compiler_linker_build_type_and_compiler_flags \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
-		dump_llvm_static_or_shared "${llvm_static_or_shared}"
+		dump_llvm_lib_type "${llvm_lib_type}"
 
 		local projects=(
 			clang
@@ -115,7 +115,7 @@ build() {
 			# LLVM_ENABLE_PIC
 		)
 
-		case "${llvm_static_or_shared}" in
+		case "${llvm_lib_type}" in
 			static )
 				cmake_options+=(
 					-DBUILD_SHARED_LIBS=OFF
@@ -124,6 +124,13 @@ build() {
 			shared )
 				cmake_options+=(
 					-DBUILD_SHARED_LIBS=ON
+				)
+				;;
+			dylib )
+				cmake_options+=(
+					-DLLVM_BUILD_STATIC=OFF
+					-DLLVM_BUILD_LLVM_DYLIB=ON
+					-DLLVM_LINK_LLVM_DYLIB=ON
 				)
 				;;
 		esac

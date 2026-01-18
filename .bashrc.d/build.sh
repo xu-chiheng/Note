@@ -196,7 +196,7 @@ check_llvm_lib_type() {
 	local _llvm_lib_type="$1"
 
 	if [ -z "${_llvm_lib_type}" ]; then
-		_llvm_lib_type=dylib
+		_llvm_lib_type=shared
 	fi
 	case "${_llvm_lib_type}" in
 		static | shared | dylib )

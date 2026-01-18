@@ -1,14 +1,24 @@
 diff --git a/llvm/include/llvm/Support/Compiler.h b/llvm/include/llvm/Support/Compiler.h
-index 1d2d751d4dc1..ec97db50217c 100644
+index 1d2d751d4dc1..71aeaa8bc07c 100644
 --- a/llvm/include/llvm/Support/Compiler.h
 +++ b/llvm/include/llvm/Support/Compiler.h
-@@ -128,18 +128,11 @@
- #define LLVM_EXTERNAL_VISIBILITY
+@@ -112,8 +112,8 @@
+ 
+ #if LLVM_HAS_CPP_ATTRIBUTE(gnu::visibility) && defined(__GNUC__) &&            \
+     !defined(__clang__)
+-#define LLVM_ATTRIBUTE_VISIBILITY_HIDDEN [[gnu::visibility("hidden")]]
+-#define LLVM_ATTRIBUTE_VISIBILITY_DEFAULT [[gnu::visibility("default")]]
++#define LLVM_ATTRIBUTE_VISIBILITY_HIDDEN __attribute__((visibility("hidden")))
++#define LLVM_ATTRIBUTE_VISIBILITY_DEFAULT __attribute__((visibility("default")))
+ #elif __has_attribute(visibility)
+ #define LLVM_ATTRIBUTE_VISIBILITY_HIDDEN __attribute__((visibility("hidden")))
+ #define LLVM_ATTRIBUTE_VISIBILITY_DEFAULT __attribute__((visibility("default")))
+@@ -129,17 +129,11 @@
  #endif
  
--#if (!(defined(_WIN32) || defined(__CYGWIN__)) ||                              \
+ #if (!(defined(_WIN32) || defined(__CYGWIN__)) ||                              \
 -     (defined(__MINGW32__) && defined(__clang__)))
-+#if defined(__CYGWIN__) || defined(__MINGW32__)
++     (defined(__MINGW32__) || defined(__CYGWIN__)))
  #define LLVM_LIBRARY_VISIBILITY LLVM_ATTRIBUTE_VISIBILITY_HIDDEN
 -// Clang compilers older then 15 do not support gnu style attributes on
 -// namespaces.
@@ -23,7 +33,7 @@ index 1d2d751d4dc1..ec97db50217c 100644
  #define LLVM_ALWAYS_EXPORT __declspec(dllexport)
  #define LLVM_LIBRARY_VISIBILITY
  #define LLVM_LIBRARY_VISIBILITY_NAMESPACE
-@@ -179,7 +172,7 @@
+@@ -179,7 +173,7 @@
  #define LLVM_ABI
  #define LLVM_TEMPLATE_ABI
  #define LLVM_EXPORT_TEMPLATE
@@ -32,12 +42,12 @@ index 1d2d751d4dc1..ec97db50217c 100644
  #if defined(LLVM_EXPORTS)
  #define LLVM_ABI __declspec(dllexport)
  #define LLVM_TEMPLATE_ABI
-@@ -189,7 +182,7 @@
+@@ -189,7 +183,7 @@
  #define LLVM_TEMPLATE_ABI __declspec(dllimport)
  #define LLVM_EXPORT_TEMPLATE
  #endif
 -#elif defined(__ELF__) || defined(__MINGW32__) || defined(_AIX)
-+#elif defined(__ELF__) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(_AIX)
++#elif defined(__ELF__) || defined(__MINGW32__) || defined(_AIX) || defined(__CYGWIN__)
  #define LLVM_ABI LLVM_ATTRIBUTE_VISIBILITY_DEFAULT
  #define LLVM_TEMPLATE_ABI LLVM_ATTRIBUTE_VISIBILITY_DEFAULT
  #define LLVM_EXPORT_TEMPLATE

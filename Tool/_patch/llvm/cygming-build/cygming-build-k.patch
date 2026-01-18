@@ -7,7 +7,7 @@ index 87821669e3bf..e6e945925975 100644
  
  if((NOT (${CMAKE_SYSTEM_NAME} MATCHES "AIX")) AND
 -   (NOT (WIN32 OR CYGWIN) OR (MINGW AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")))
-+   (NOT (WIN32 OR CYGWIN)))
++   (NOT ((WIN32 OR CYGWIN) AND NOT LLVM_BUILD_LLVM_DYLIB)))
    # GCC for MinGW does nothing about -fvisibility-inlines-hidden, but warns
    # about use of the attributes. As long as we don't use the attributes (to
    # override the default) we shouldn't set the command line options either.

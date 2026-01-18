@@ -1,0 +1,15 @@
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index 4fb450b596cb..3f9d3c43cd41 100644
+--- a/llvm/CMakeLists.txt
++++ b/llvm/CMakeLists.txt
+@@ -775,6 +775,10 @@ if (LLVM_LINK_LLVM_DYLIB AND BUILD_SHARED_LIBS)
+   message(FATAL_ERROR "Cannot enable BUILD_SHARED_LIBS with LLVM_LINK_LLVM_DYLIB.  We recommend disabling BUILD_SHARED_LIBS.")
+ endif()
+ 
++if ((MINGW OR CYGWIN) AND LLVM_BUILD_LLVM_DYLIB) 
++	message(FATAL_ERROR "Current version of LLVM source does not support LLVM_BUILD_LLVM_DYLIB on Cygwin/MinGW.")
++endif()
++
+ option(LLVM_OPTIMIZED_TABLEGEN "Force TableGen to be built with optimization" OFF)
+ if(CMAKE_CROSSCOMPILING OR (LLVM_OPTIMIZED_TABLEGEN AND (LLVM_ENABLE_ASSERTIONS OR CMAKE_CONFIGURATION_TYPES)))
+   set(LLVM_USE_HOST_TOOLS ON)

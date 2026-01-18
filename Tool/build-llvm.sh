@@ -138,6 +138,11 @@ build() {
 							echo "On Cygwin/MinGW, GCC can't be used to build LLVM dylib"
 							return 1
 
+							# On Cygwin/MinGW, GCC does nothing on 
+							# __attribute__((visibility("hidden"))) and __attribute__((visibility("default")))
+							# [[gnu::visibility("hidden")]] and [[gnu::visibility("default")]]
+							# llvm/include/llvm/Support/Compiler.h
+
 							# /cygdrive/d/_cygwin/binutils/bin/ld.bfd: error: export ordinal too large: 85198
 							# collect2: error: ld returned 1 exit status
 							# /cygdrive/d/_cygwin/gcc/bin/g++.exe -march=x86-64 -O3 -fvisibility-inlines-hidden -Werror=date-time -Wall -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wno-missing-field-initializers -pedantic -Wno-long-long -Wimplicit-fallthrough -Wno-maybe-uninitialized -Wno-nonnull -Wno-class-memaccess -Wno-dangling-reference -Wno-redundant-move -Wno-pessimizing-move -Wno-array-bounds -Wno-stringop-overread -Wno-noexcept-type -Wdelete-non-virtual-dtor -Wsuggest-override -Wno-comment -Wno-misleading-indentation -Wctad-maybe-unsupported -O3 -DNDEBUG  -Wl,--gc-sections -Wl,--export-all-symbols -shared -Wl,--enable-auto-import -fuse-ld=bfd -Wl,--strip-all -o ../../bin/cygLLVM-22git.dll -Wl,--out-implib,../../lib/libLLVM-22git.dll.a -Wl,--major-image-version,0,--minor-image-version,0 CMakeFiles/LLVM.dir/libllvm.cpp.o  -Wl,--whole-archive 

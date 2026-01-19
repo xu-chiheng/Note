@@ -110,4 +110,20 @@ make[2]: *** [tools/lldb/tools/driver/CMakeFiles/lldb.dir/build.make:131: bin/ll
 make[1]: *** [CMakeFiles/Makefile2:195047: tools/lldb/tools/driver/CMakeFiles/lldb.dir/all] Error 2
 make: *** [Makefile:156: all] Error 2
 
+regression-q.patch
+Fix the regression caused by commit 98e6d5cd47d4db020a1406032f96fd5cdfc56563 2025-07-01, that build fails on MinGW using Clang.
+This patch is backported from commmit d457621872528d27c8081cf147d41a6f46276d1d 2025-07-03.
+E:/Note/Tool/llvm/lldb/source/Host/posix/ConnectionFileDescriptorPosix.cpp:279:15: error: static_cast from 'WaitableHandle' (aka 'void *') to 'uint64_t' (aka 'unsigned long long') is not allowed
+  279 |               static_cast<uint64_t>(m_io_sp->GetWaitableHandle()),
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/Note/Tool/llvm/lldb/include/lldb/Utility/Log.h:380:48: note: expanded from macro 'LLDB_LOGF'
+  380 |       log_private->Formatf(__FILE__, __func__, __VA_ARGS__);                   \
+      |                                                ^~~~~~~~~~~
+make  -f lib/DWP/CMakeFiles/LLVMDWP.dir/build.make lib/DWP/CMakeFiles/LLVMDWP.dir/depend
+E:/Note/Tool/llvm/lldb/source/Host/posix/ConnectionFileDescriptorPosix.cpp:383:15: error: static_cast from 'WaitableHandle' (aka 'void *') to 'uint64_t' (aka 'unsigned long long') is not allowed
+  383 |               static_cast<uint64_t>(m_io_sp->GetWaitableHandle()),
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/Note/Tool/llvm/lldb/include/lldb/Utility/Log.h:380:48: note: expanded from macro 'LLDB_LOGF'
+  380 |       log_private->Formatf(__FILE__, __func__, __VA_ARGS__);                   \
+
 

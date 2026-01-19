@@ -1049,7 +1049,7 @@ print_essential_files_for_tool_setup() {
 		IDE/list_of{,_non}_java_files_{added,modified,deleted}.txt
 
 		Tool/{README.txt,.gitignore,clean.sh,_doc}
-		Tool/build-{llvm{,_vs},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs},python}.sh
+		Tool/build-{llvm{,_vs},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs},python,git}.sh
 		Tool/_cygport/{.gitignore,cygwin.cmd,llvm.cygport}
 		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python}
 		Tool/{linux.sh,{cygwin,msys,mingw_{ucrt,vcrt},vs_{cygwin,msys}}.cmd}

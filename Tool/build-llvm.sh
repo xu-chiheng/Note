@@ -61,7 +61,7 @@ build() {
 			lldb
 		)
 
-		# runtime are not needed to build Cross Clang
+		# runtimes are not needed to build usable Clang
 		local runtimes=(
 			# compiler-rt
 			# libcxx

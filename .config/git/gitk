@@ -60,9 +60,9 @@ set wrapdefault none
 set geometry(main) 3840x2006+0+23
 set geometry(state) normal
 set geometry(topwidth) 3840
-set geometry(topheight) 1543
+set geometry(topheight) 942
 set geometry(pwsash0) "1569 1"
 set geometry(pwsash1) "2871 1"
 set geometry(botwidth) 2322
-set geometry(botheight) 458
+set geometry(botheight) 1059
 set permviews {}

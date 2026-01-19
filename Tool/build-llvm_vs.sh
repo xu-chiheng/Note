@@ -45,7 +45,7 @@ build() {
 			lldb
 		)
 
-		# runtime projects are not needed to build Cross Clang
+		# runtime are not needed to build Cross Clang
 		local runtimes=(
 			# compiler-rt
 			# libcxx
@@ -75,7 +75,6 @@ build() {
 			-DLLVM_INCLUDE_DOCS=OFF
 
 			-DCLANG_BUILD_TOOLS=ON
-			-DCLANG_ENABLE_ARCMT=ON
 			-DCLANG_ENABLE_STATIC_ANALYZER=ON
 			-DCLANG_INCLUDE_TESTS=ON
 			-DCLANG_BUILD_EXAMPLES=OFF

@@ -142,6 +142,23 @@ build() {
 							# [[gnu::visibility("hidden")]] and [[gnu::visibility("default")]]
 							# llvm/include/llvm/Support/Compiler.h
 
+							# -fvisibility=hidden
+							# -fvisibility-inlines-hidden
+
+							# if (MINGW OR CYGWIN)
+							# 	# The LLVM DLL is supposed to export all symbols (except for ones
+							# 	# that are explicitly hidden). Normally, this is what happens anyway, but
+							# 	# if there are symbols that are marked explicitly as dllexport, we'd only
+							# 	# export them and nothing else. Therefore, add --export-all-symbols to
+							# 	# make sure we export all symbols despite potential dllexports.
+							# 	target_link_options(LLVM PRIVATE LINKER:--export-all-symbols)
+							# endif()
+
+							# GCC for MinGW does nothing about -fvisibility-inlines-hidden, but warns
+							# about use of the attributes. As long as we don't use the attributes (to
+							# override the default) we shouldn't set the command line options either.
+
+
 							# /cygdrive/d/_cygwin/binutils/bin/ld.bfd: error: export ordinal too large: 85198
 							# collect2: error: ld returned 1 exit status
 							# /cygdrive/d/_cygwin/gcc/bin/g++.exe -march=x86-64 -O3 -fvisibility-inlines-hidden -Werror=date-time -Wall -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wno-missing-field-initializers -pedantic -Wno-long-long -Wimplicit-fallthrough -Wno-maybe-uninitialized -Wno-nonnull -Wno-class-memaccess -Wno-dangling-reference -Wno-redundant-move -Wno-pessimizing-move -Wno-array-bounds -Wno-stringop-overread -Wno-noexcept-type -Wdelete-non-virtual-dtor -Wsuggest-override -Wno-comment -Wno-misleading-indentation -Wctad-maybe-unsupported -O3 -DNDEBUG  -Wl,--gc-sections -Wl,--export-all-symbols -shared -Wl,--enable-auto-import -fuse-ld=bfd -Wl,--strip-all -o ../../bin/cygLLVM-22git.dll -Wl,--out-implib,../../lib/libLLVM-22git.dll.a -Wl,--major-image-version,0,--minor-image-version,0 CMakeFiles/LLVM.dir/libllvm.cpp.o  -Wl,--whole-archive 

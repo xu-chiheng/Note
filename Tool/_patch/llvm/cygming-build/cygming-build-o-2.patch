@@ -1,16 +1,15 @@
 diff --git a/llvm/cmake/modules/HandleLLVMOptions.cmake b/llvm/cmake/modules/HandleLLVMOptions.cmake
-index c126b0d07332..8e1c9df303ca 100644
+index 5db06ccdadbe..c8ae625b8d3b 100644
 --- a/llvm/cmake/modules/HandleLLVMOptions.cmake
 +++ b/llvm/cmake/modules/HandleLLVMOptions.cmake
-@@ -552,9 +552,9 @@ if(MSVC)
+@@ -542,9 +542,9 @@ if(MSVC)
    # behavior was changed in CMake 2.8.11 (Issue 12437) to use the MSVC default
    # value (1 MB) which is not enough for us in tasks such as parsing recursive
    # C++ templates in Clang.
 -  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_CXX_LINKER_WRAPPER_FLAG}/STACK:10000000")
--elseif(MINGW OR CYGWIN)
--  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,16777216")
 +  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_CXX_LINKER_WRAPPER_FLAG}/STACK:0x1000000")
-+elseif(CYGWIN OR MINGW)
+ elseif(MINGW OR CYGWIN)
+-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,16777216")
 +  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,0x1000000")
  
    # Pass -mbig-obj to mingw gas to avoid COFF 2**16 section limit.

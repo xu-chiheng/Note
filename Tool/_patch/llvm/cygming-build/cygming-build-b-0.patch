@@ -1,5 +1,5 @@
 diff --git a/clang/tools/clang-shlib/CMakeLists.txt b/clang/tools/clang-shlib/CMakeLists.txt
-index de9daba6716a..bcd2214de50b 100644
+index de9daba6716a..a7df90bb4834 100644
 --- a/clang/tools/clang-shlib/CMakeLists.txt
 +++ b/clang/tools/clang-shlib/CMakeLists.txt
 @@ -50,6 +50,6 @@ add_clang_library(clang-cpp
@@ -7,6 +7,6 @@ index de9daba6716a..bcd2214de50b 100644
  # Optimize function calls for default visibility definitions to avoid PLT and
  # reduce dynamic relocations.
 -if (NOT APPLE AND NOT MINGW)
-+if (NOT APPLE AND NOT CYGWIN AND NOT MINGW)
++if (NOT APPLE AND NOT (MINGW OR CYGWIN))
    target_link_options(clang-cpp PRIVATE LINKER:-Bsymbolic-functions)
  endif()

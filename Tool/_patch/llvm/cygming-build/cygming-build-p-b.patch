@@ -6,7 +6,7 @@ index 818dff58acee..dedee00cc53c 100644
    add_lldb_test_dependency(clang)
  
    # TestFullLtoStepping depends on LTO, and only runs when the compiler is clang.
-+if(NOT ((CYGWIN OR MINGW) AND NOT (BUILD_SHARED_LIBS OR LLVM_BUILD_LLVM_DYLIB)))
++if(NOT ((MINGW OR CYGWIN) AND NOT (BUILD_SHARED_LIBS OR LLVM_BUILD_LLVM_DYLIB)))
    add_lldb_test_dependency(LTO)
 +endif()
  

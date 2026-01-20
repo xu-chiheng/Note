@@ -1,5 +1,5 @@
 diff --git a/llvm/cmake/modules/HandleLLVMOptions.cmake b/llvm/cmake/modules/HandleLLVMOptions.cmake
-index 6119ecdce0f4..e1607850053e 100644
+index 6119ecdce0f4..9846fdc0450b 100644
 --- a/llvm/cmake/modules/HandleLLVMOptions.cmake
 +++ b/llvm/cmake/modules/HandleLLVMOptions.cmake
 @@ -447,9 +447,9 @@ if(MSVC)
@@ -10,7 +10,7 @@ index 6119ecdce0f4..e1607850053e 100644
 -elseif(MINGW) # FIXME: Also cygwin?
 -  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,16777216")
 +  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:0x1000000")
-+elseif(CYGWIN OR MINGW)
++elseif(MINGW OR CYGWIN)
 +  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,0x1000000")
  
    # Pass -mbig-obj to mingw gas to avoid COFF 2**16 section limit.

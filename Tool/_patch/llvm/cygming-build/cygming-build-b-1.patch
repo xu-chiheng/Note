@@ -1,20 +1,13 @@
 diff --git a/clang/tools/clang-shlib/CMakeLists.txt b/clang/tools/clang-shlib/CMakeLists.txt
-index 945076e1ad81..5d2e9f3d6d71 100644
+index 945076e1ad81..fe84238cb5ce 100644
 --- a/clang/tools/clang-shlib/CMakeLists.txt
 +++ b/clang/tools/clang-shlib/CMakeLists.txt
-@@ -57,10 +57,13 @@ endif()
+@@ -57,7 +57,7 @@ endif()
  
  # Optimize function calls for default visibility definitions to avoid PLT and
  # reduce dynamic relocations.
 -if (NOT APPLE AND LLVM_LINKER_SUPPORTS_B_SYMBOLIC_FUNCTIONS)
-+if (NOT APPLE AND NOT CYGWIN AND NOT MINGW AND LLVM_LINKER_SUPPORTS_B_SYMBOLIC_FUNCTIONS)
++if (NOT APPLE AND NOT (MINGW OR CYGWIN) AND LLVM_LINKER_SUPPORTS_B_SYMBOLIC_FUNCTIONS)
    target_link_options(clang-cpp PRIVATE LINKER:-Bsymbolic-functions)
  endif()
--if (MINGW OR CYGWIN)
-+# On Cygwin and MinGW, if add subdir clang-shlib, there is link error of cygclang-cpp.dll or libclang-cpp.dll
-+# /usr/bin/ld: error: export ordinal too large: 101192
-+# caused by commit de07b1e84d8de948304766df602fee2b845e9532 2021-06-02
-+if ((MINGW OR CYGWIN) AND LLVM_BUILD_LLVM_DYLIB)
-   # The clang-cpp DLL is supposed to export all symbols (except for ones
-   # that are explicitly hidden). Normally, this is what happens anyway, but
-   # if there are symbols that are marked explicitly as dllexport, we'd only
+ if (MINGW OR CYGWIN)

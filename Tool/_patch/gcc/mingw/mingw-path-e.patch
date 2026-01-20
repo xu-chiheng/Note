@@ -1,18 +1,26 @@
 diff --git a/gcc/incpath.cc b/gcc/incpath.cc
-index 07e3d565bb2..2dacb432ffa 100644
+index 2872472a585..92d600a68d6 100644
 --- a/gcc/incpath.cc
 +++ b/gcc/incpath.cc
-@@ -464,7 +464,7 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
+@@ -551,23 +551,9 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
    cpp_dir *p;
    size_t pathlen = strlen (path);
  
 -#if defined (HAVE_DOS_BASED_FILE_SYSTEM)
-+#if 0
-   /* Remove unnecessary trailing slashes.  On some versions of MS
-      Windows, trailing  _forward_ slashes cause no problems for stat().
-      On newer versions, stat() does not recognize a directory that ends
-@@ -481,6 +481,7 @@ add_path (char *path, incpath_kind chain, int cxx_aware, bool user_supplied_p)
- 
+-  /* Remove unnecessary trailing slashes.  On some versions of MS
+-     Windows, trailing  _forward_ slashes cause no problems for stat().
+-     On newer versions, stat() does not recognize a directory that ends
+-     in a '\\' or '/', unless it is a drive root dir, such as "c:/",
+-     where it is obligatory.  */
+-  char* end = path + pathlen - 1;
+-  /* Preserve the lead '/' or lead "c:/".  */
+-  char* start = path + (pathlen > 2 && path[1] == ':' ? 3 : 1);
+-
+-  for (; end > start && IS_DIR_SEPARATOR (*end); end--)
+-    *end = 0;
+-  pathlen = end - path;
+-#endif
+-
    p = XNEW (cpp_dir);
    p->next = NULL;
 +  pathlen = convert_path(path, pathlen);

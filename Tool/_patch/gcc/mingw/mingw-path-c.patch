@@ -1,30 +1,21 @@
 diff --git a/gcc/gcc.cc b/gcc/gcc.cc
-index d07a8e172a4..296500f80d3 100644
+index 32520c17778..ce2f0457904 100644
 --- a/gcc/gcc.cc
 +++ b/gcc/gcc.cc
-@@ -3149,13 +3149,22 @@ add_prefix (struct path_prefix *pprefix, const char *prefix,
+@@ -3158,6 +3158,16 @@ add_prefix (struct path_prefix *pprefix, const char *prefix,
  
-   /* Keep track of the longest prefix.  */
- 
--  prefix = update_path (prefix, component);
--  len = strlen (prefix);
-+  char * prefix2 = update_path (prefix, component);
-+  len = strlen (prefix2);
-+  len = convert_path(prefix2, len);
-+  char prefix3[len + 10];
-+  strcpy(prefix3, prefix2);
-+  free(prefix2);
-+  prefix2 = 0;
-+  if (len > 0 && prefix3[len - 1] != '/') {
-+    prefix3[len++] = '/';
-+    prefix3[len] = 0;
+   prefix = update_path (prefix, component);
+   len = strlen (prefix);
++  char prefix1[len + 10];
++  strcpy(prefix1, prefix);
++  free((char *)prefix);
++  prefix = 0;
++  len = convert_path(prefix1, len);
++  if (len > 0 && prefix1[len - 1] != '/') {
++    prefix1[len++] = '/';
++    prefix1[len] = 0;
 +  }
++  prefix = xstrdup(prefix1);
    if (len > pprefix->max_len)
      pprefix->max_len = len;
  
-   pl = XNEW (struct prefix_list);
--  pl->prefix = prefix;
-+  pl->prefix = xstrdup(prefix3);
-   pl->require_machine_suffix = require_machine_suffix;
-   pl->priority = priority;
-   pl->os_multilib = os_multilib;

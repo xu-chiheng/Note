@@ -941,7 +941,7 @@ print_full_path_of_windows_program_vs_code() {
 	echo 'C:\Program Files\Microsoft VS Code\Code.exe'
 }
 
-print_full_path_of_windows_program_notepad++() {
+print_full_path_of_windows_program_notepadpp() {
 	echo 'C:\Program Files\Notepad++\notepad++.exe'
 }
 
@@ -970,7 +970,7 @@ windows_launch_notepad++_in_background() {
 		true
 	fi
 
-	windows_launch_program_in_background "$(print_full_path_of_windows_program_notepad++)" "${notepadpp_options[@]}" "$@"
+	windows_launch_program_in_background "$(print_full_path_of_windows_program_notepadpp)" "${notepadpp_options[@]}" "$@"
 }
 
 windows_launch_notepad++_in_foreground() {
@@ -986,7 +986,7 @@ windows_launch_notepad++_in_foreground() {
 		true
 	fi
 
-	"$(cygpath -u "$(print_full_path_of_windows_program_notepad++)")" "${notepadpp_options[@]}" "$@"
+	"$(cygpath -u "$(print_full_path_of_windows_program_notepadpp)")" "${notepadpp_options[@]}" "$@"
 }
 
 windows_launch_vs_code_in_background() {

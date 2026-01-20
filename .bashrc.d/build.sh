@@ -387,6 +387,10 @@ git_repo_url_of_package() {
 		gnome-terminal )
 			echo "https://gitlab.gnome.org/GNOME/gnome-terminal"
 			;;
+		git )
+			echo "https://github.com/git/git.git"
+			# echo "git@github.com:git/git.git"
+			;;
 		* )
 			echo "unknown package : ${package}"
 			return 1

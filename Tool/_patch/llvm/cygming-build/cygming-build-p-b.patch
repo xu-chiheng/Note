@@ -1,0 +1,14 @@
+diff --git a/lldb/test/CMakeLists.txt b/lldb/test/CMakeLists.txt
+index 818dff58acee..dedee00cc53c 100644
+--- a/lldb/test/CMakeLists.txt
++++ b/lldb/test/CMakeLists.txt
+@@ -159,7 +159,9 @@ if(TARGET clang)
+   add_lldb_test_dependency(clang)
+ 
+   # TestFullLtoStepping depends on LTO, and only runs when the compiler is clang.
++if(NOT ((CYGWIN OR MINGW) AND NOT (BUILD_SHARED_LIBS OR LLVM_BUILD_LLVM_DYLIB)))
+   add_lldb_test_dependency(LTO)
++endif()
+ 
+   if (TARGET libcxx OR ("libcxx" IN_LIST LLVM_ENABLE_RUNTIMES))
+     set(LLDB_HAS_LIBCXX ON)

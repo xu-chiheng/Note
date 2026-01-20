@@ -1,0 +1,15 @@
+diff --git a/llvm/tools/CMakeLists.txt b/llvm/tools/CMakeLists.txt
+index 06f2c1f55410..27f1722afff8 100644
+--- a/llvm/tools/CMakeLists.txt
++++ b/llvm/tools/CMakeLists.txt
+@@ -25,6 +25,10 @@ if(NOT LLVM_ENABLE_PIC)
+   set(LLVM_TOOL_LTO_BUILD Off)
+ endif()
+ 
++if((CYGWIN OR MINGW) AND NOT (BUILD_SHARED_LIBS OR LLVM_BUILD_LLVM_DYLIB))
++  set(LLVM_TOOL_LTO_BUILD Off)
++endif()
++
+ if (LLVM_TOOL_LLVM_DRIVER_BUILD)
+   add_llvm_tool(llvm-driver)
+ endif()

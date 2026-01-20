@@ -7,39 +7,39 @@ https://src.fedoraproject.org/rpms/gcc.git
 
 
 14.0.0    b8e9fd535d6093e3a24af858364d8517a767b0d7    2024-04-24    branch point
-patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
+patch_apply . ../_patch/gcc/{_convert-path,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
 cygming/cygming-{STMP_FIXINC-0,LIMITS_H_TEST-0,PICFLAG-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v}},\
 cygwin/cygwin-{stack-size,ldflags-{a,b},macro-{a,b,c,d},include-w32api,no-wrap-{a,b,c,d,e,f,g},no-manifest,no-host_shared,jit-{a,b}},\
 mingw/mingw-{stack-size,replace-w64-{a,b,c,d,g,h,i,j},no-manifest-0,libgcc-no-libc-{a,b,c,d,e,f,g},include-lib-{a,b-{a,b},{c,d,e}-0},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 15.0.0    5d05d496b2b4a3d4674b2e5a46d3a355abf4055d    2025-04-17    branch point
-patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
+patch_apply . ../_patch/gcc/{_convert-path,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
 cygming/cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1,PICFLAG-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v}},\
 cygwin/cygwin-{stack-size,ldflags-{a,b},macro-{a,b,c,d-1},include-w32api,no-wrap-{a-1,b-1,c,d,e-1,f,g},no-manifest,no-host_shared,jit-{a,b}},\
 mingw/mingw-{stack-size,replace-w64-{a,b,c,d,e,f,g,h,i,j},no-manifest-1,libgcc-no-libc-{a,b,c,d,e,f,g},include-lib-{a,b-{a,b},{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 16.0.0    fc8e2846c24bd62091b31cc35c143b990e79d557    2025-08-19
-patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
+patch_apply . ../_patch/gcc/{_convert-path,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
 cygming/cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1,PICFLAG-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v}},\
 cygwin/cygwin-{stack-size,ldflags-{a,b},macro-{a,b,c,d-1},include-w32api,no-wrap-{a-1,b-1,c,d,e-1,f,g},no-manifest,no-host_shared,jit-{a,b}},\
 mingw/mingw-{stack-size,replace-w64-{a,b,c-1,d,e,f,g,h,i,j},no-manifest-1,libgcc-no-libc-{a,b,c,d,e,f,g},include-lib-{a,b-{a,b},{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h}}.patch
 
 16.0.0    62287200dfe0863fee96a89b58f891909a58e393    2025-09-23
-patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
+patch_apply . ../_patch/gcc/{_convert-path,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
 cygming/cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1,PICFLAG-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v}},\
 cygwin/cygwin-{stack-size,ldflags-{a,b},macro-{a,b,c,d-1},include-w32api,no-wrap-{a-1,b-1,c,d,e-1,f,g},no-manifest,no-host_shared,jit-{a,b}},\
 mingw/mingw-{stack-size,replace-w64-{a,b,c-1,d,e,f,g,h,i,j},no-manifest-1,libgcc-no-libc-{a,b,c,d,e,f,g},include-lib-{a,b-{a,b},{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h},\
 regression/regression-c}.patch
 
 16.0.0    f77f4797010736d9fea7b313b52267d643ebcff7    2025-11-14
-patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
+patch_apply . ../_patch/gcc/{_convert-path,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
 cygming/cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1,PICFLAG-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v}},\
 cygwin/cygwin-{stack-size,ldflags-{a,b},macro-{a,b,c,d-1},include-w32api,no-wrap-{a-1,b-1,c,d,e-1,f,g},no-manifest,no-host_shared,jit-{a,b}},\
 mingw/mingw-{stack-size,replace-w64-{a,b,c-1,d,e,f,g,h,i,j},no-manifest-1,libgcc-no-libc-{a,b,c,d,e,f,g},include-lib-{a,b-{a,b},{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h},\
 regression/regression-{c,d,e}}.patch
 
 16.0.0    62c126db6b6017011dcbe6945aab371ab48f8ded    2025-12-12
-patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
+patch_apply . ../_patch/gcc/{_convert-path,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
 cygming/cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1,PICFLAG-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v}},\
 cygwin/cygwin-{stack-size,ldflags-{a,b},macro-{a,b,c,d-1},include-w32api,no-wrap-{a-1,b-1,c,d,e-1,f,g},no-manifest,no-host_shared,jit-{a,b}},\
 mingw/mingw-{stack-size,replace-w64-{a,b,c-1,d,f,g,h,i,j},no-manifest-1,libgcc-no-libc-{a,b,c,d,e,f,g},include-lib-{a,b-{a,b},{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h},\
@@ -47,7 +47,7 @@ regression/regression-{a,c,e}}.patch
 
 16.0.0    7ad39bc909d1b425d0fa1803dc53cd741c10150f    2025-12-18
 16.0.0    72a376da3b780ace74e6f929f53af7b05e3ba627    2026-01-07
-patch_apply . ../_patch/gcc/{_convert-path,_add_env_var_paths,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
+patch_apply . ../_patch/gcc/{_convert-path,_copy-headers-of-gcc,_PREFIX_INCLUDE_DIR,_FIXED_INCLUDE_DIR,\
 cygming/cygming-{STMP_FIXINC-1,LIMITS_H_TEST-1,PICFLAG-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v}},\
 cygwin/cygwin-{stack-size,ldflags-{a,b},macro-{a,b,c,d-1},include-w32api,no-wrap-{a-1,b-1,c,d,e-1,f,g},no-manifest,no-host_shared,jit-{a,b}},\
 mingw/mingw-{stack-size,replace-w64-{a,b,c-1,d,f,g,h,i,j},no-manifest-1,libgcc-no-libc-{a,b,c,d,e,f,g},include-lib-{a,b-{a,b},{c,d,e}-1},path-{a,b,c,d,e},compiler-{INCLUDE,LIB},glimits.h},\

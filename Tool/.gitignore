@@ -6,6 +6,9 @@
 /mpc
 /gcc
 /llvm
+/llvm-dylib
+/llvm-shared
+/llvm-static
 /qemu
 /cmake
 /meson

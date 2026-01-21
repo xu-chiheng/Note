@@ -166,11 +166,12 @@ build() {
 				;;
 		esac
 
-		time_command cmake_build_install_package \
-			"${package}" "${compiler}" "${linker}" "${build_type}" \
+		ln -f -s "${package}" "${package}-${llvm_lib_type}" \
+		&& time_command cmake_build_install_package \
+			"${package}-${llvm_lib_type}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${cmake_options[@]}"
 
-	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}" "${compiler}" "${linker}" "${build_type}" output.txt)"
+	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${package}-${llvm_lib_type}" "${compiler}" "${linker}" "${build_type}" output.txt)"
 
 	sync .
 }

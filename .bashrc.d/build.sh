@@ -313,6 +313,11 @@ print_gcc_install_dir() {
 git_repo_url_of_package() {
 	local package="$1"
 	case "${package}" in
+		llvm-dylib | llvm-shared | llvm-static )
+			package=llvm
+			;;
+	esac
+	case "${package}" in
 		binutils | gdb )
 			echo "git://sourceware.org/git/binutils-gdb.git"
 			;;

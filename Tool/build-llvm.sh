@@ -143,7 +143,6 @@ build() {
 							# llvm/include/llvm/Support/Compiler.h
 
 							# -fvisibility=hidden
-							# -fvisibility-inlines-hidden
 
 							# if (MINGW OR CYGWIN)
 							# 	# The LLVM DLL is supposed to export all symbols (except for ones
@@ -153,11 +152,6 @@ build() {
 							# 	# make sure we export all symbols despite potential dllexports.
 							# 	target_link_options(LLVM PRIVATE LINKER:--export-all-symbols)
 							# endif()
-
-							# GCC for MinGW does nothing about -fvisibility-inlines-hidden, but warns
-							# about use of the attributes. As long as we don't use the attributes (to
-							# override the default) we shouldn't set the command line options either.
-
 
 							# /cygdrive/d/_cygwin/binutils/bin/ld.bfd: error: export ordinal too large: 85198
 							# collect2: error: ld returned 1 exit status

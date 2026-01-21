@@ -467,6 +467,12 @@ set_environment_variables_at_bash_startup() {
 	if declare -F set_private_environment_variables_at_bash_startup >/dev/null; then
 		set_private_environment_variables_at_bash_startup
 	fi
+
+	# if host_triple_is_windows; then
+	# 	if [ ! "${HOST_TRIPLE}" = "$(~/config.guess)" ]; then
+	# 		echo "host triple ${HOST_TRIPLE} not equal to the output of config.guess $(~/config.guess)"
+	# 	fi
+	# fi
 }
 
 source_ssh-agent_env_script() {
@@ -580,7 +586,7 @@ open_files_in_editor_in_foreground() {
 			translated_file_paths+=( "$(cygpath -w "${file}")" )
 		done
 		# echo "${translated_file_paths[@]}"
-		windows_launch_notepad++_in_foreground "${translated_file_paths[@]}"
+		windows_launch_notepadpp_in_foreground "${translated_file_paths[@]}"
 		# windows_launch_vs_code_in_foreground   "${translated_file_paths[@]}"
 	elif host_triple_is_linux; then
 		# code --wait --new-window "$@"
@@ -601,7 +607,7 @@ open_files_in_editor_in_background() {
 			translated_file_paths+=( "$(cygpath -w "${file}")" )
 		done
 		# echo "${translated_file_paths[@]}"
-		windows_launch_notepad++_in_background "${translated_file_paths[@]}"
+		windows_launch_notepadpp_in_background "${translated_file_paths[@]}"
 		# windows_launch_vs_code_in_background   "${translated_file_paths[@]}"
 	elif host_triple_is_linux; then
 		# linux_launch_program_in_background code --wait --new-window "$@"
@@ -961,7 +967,7 @@ windows_launch_ultraiso_in_foreground() {
 	"$(cygpath -u "$(print_full_path_of_windows_program_ultraiso)")" "$@"
 }
 
-windows_launch_notepad++_in_background() {
+windows_launch_notepadpp_in_background() {
 	local notepadpp_options=( -multiInst -nosession -noPlugin )
 	if [ $# -le 1 ]; then
 		notepadpp_options+=( -notabbar )
@@ -973,7 +979,7 @@ windows_launch_notepad++_in_background() {
 	windows_launch_program_in_background "$(print_full_path_of_windows_program_notepadpp)" "${notepadpp_options[@]}" "$@"
 }
 
-windows_launch_notepad++_in_foreground() {
+windows_launch_notepadpp_in_foreground() {
 	# https://stackoverflow.com/questions/10564/how-can-i-set-up-an-editor-to-work-with-git-on-windows
 	# https://docs.github.com/en/get-started/git-basics/associating-text-editors-with-git
 	# https://git-scm.com/book/ms/v2/Getting-Started-First-Time-Git-Setup

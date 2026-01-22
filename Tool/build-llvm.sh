@@ -48,7 +48,7 @@ build() {
 	check_compiler_linker_build_type_and_set_compiler_flags "$1" "$2" "$3"
 	local llvm_lib_type
 	check_llvm_lib_type "$4"
-	local pseduo_package="${package}-${llvm_lib_type}"
+	local pseudo_package="${package}-${llvm_lib_type}"
 	{
 		dump_compiler_linker_build_type_and_compiler_flags \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \
@@ -167,15 +167,15 @@ build() {
 				;;
 		esac
 
-		if ! { [ -e "${pseduo_package}" ] && [ "$(readlink -f "${pseduo_package}")" = "$(readlink -f "${package}")" ] ;}; then
-			rm -rf "${pseduo_package}" \
-			&& ln -s "${package}" "${pseduo_package}"
+		if ! { [ -e "${pseudo_package}" ] && [ "$(readlink -f "${pseudo_package}")" = "$(readlink -f "${package}")" ] ;}; then
+			rm -rf "${pseudo_package}" \
+			&& ln -s "${package}" "${pseudo_package}"
 		fi \
 		&& time_command cmake_build_install_package \
-			"${pseduo_package}" "${compiler}" "${linker}" "${build_type}" \
+			"${pseudo_package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${cmake_options[@]}"
 
-	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${pseduo_package}" "${compiler}" "${linker}" "${build_type}" output.txt)"
+	} 2>&1 | tee "$(print_name_for_config "~${current_datetime}-${pseudo_package}" "${compiler}" "${linker}" "${build_type}" output.txt)"
 
 	sync .
 }

@@ -1,0 +1,13 @@
+diff --git a/llvm/tools/llvm-shlib/CMakeLists.txt b/llvm/tools/llvm-shlib/CMakeLists.txt
+index 8909ef768cca..299295919b10 100644
+--- a/llvm/tools/llvm-shlib/CMakeLists.txt
++++ b/llvm/tools/llvm-shlib/CMakeLists.txt
+@@ -34,7 +34,7 @@ if(LLVM_BUILD_LLVM_DYLIB)
+     set(INSTALL_WITH_TOOLCHAIN INSTALL_WITH_TOOLCHAIN)
+   endif()
+   if (WIN32 OR CYGWIN)
+-    add_llvm_library(LLVM SHARED DISABLE_LLVM_LINK_LLVM_DYLIB SONAME ${INSTALL_WITH_TOOLCHAIN} ${SOURCES})
++    add_llvm_library(LLVM SHARED DISABLE_LLVM_LINK_LLVM_DYLIB ${INSTALL_WITH_TOOLCHAIN} ${SOURCES})
+   else()
+     add_llvm_library(LLVM SHARED DISABLE_LLVM_LINK_LLVM_DYLIB OUTPUT_NAME LLVM ${INSTALL_WITH_TOOLCHAIN} ${SOURCES})
+     # Add symlink for backwards compatibility with old library name

@@ -1,23 +1,21 @@
 diff --git a/include/libiberty.h b/include/libiberty.h
-index 32385911690..86fd016e278 100644
+index 1af4fa86101..ed9bc89fdfb 100644
 --- a/include/libiberty.h
 +++ b/include/libiberty.h
-@@ -137,6 +137,10 @@ extern const char *unix_lbasename (const char *) ATTRIBUTE_RETURNS_NONNULL ATTRI
+@@ -149,6 +149,8 @@ extern char *unix_ldirname (const char *) ATTRIBUTE_NONNULL(1);
  
  extern char *lrealpath (const char *);
  
 +extern size_t convert_path(char * path, size_t len);
 +
-+extern size_t convert_paths(char * paths, size_t len, char path_separator);
-+
  /* Return true when FD file descriptor exists.  */
  
  extern int is_valid_fd (int fd);
 diff --git a/libiberty/xstrdup.c b/libiberty/xstrdup.c
-index fa12c96a3cd..60127db6089 100644
+index fa12c96a3cd..9ee0866e7c2 100644
 --- a/libiberty/xstrdup.c
 +++ b/libiberty/xstrdup.c
-@@ -34,3 +34,350 @@ xstrdup (const char *s)
+@@ -34,3 +34,298 @@ xstrdup (const char *s)
    register char *ret = XNEWVEC (char, len);
    return (char *) memcpy (ret, s, len);
  }
@@ -315,56 +313,4 @@ index fa12c96a3cd..60127db6089 100644
 +	len = convert_path_4(path, len);
 +	len = convert_path_2(path, len);
 +	return len;
-+}
-+
-+size_t convert_paths(char * paths, size_t len, char path_separator)
-+{
-+	size_t i = 0;
-+	size_t j = 0;
-+	while (i < len) {
-+		size_t path_start, path_end;
-+
-+		while (i < len && paths[i] == path_separator) {
-+			i++;
-+		}
-+		// i == len || paths[i] != path_separator
-+		path_start = i;
-+		while (i < len && paths[i] != path_separator) {
-+			i++;
-+		}
-+		// i == len || paths[i] == path_separator
-+		path_end = i;
-+
-+		bool completed;
-+		if (i < len) {
-+			// paths[i] == path_separator
-+			// see the separator
-+			completed = false;
-+			i++;
-+		} else {
-+			// i == len
-+			// end of line \0
-+			completed = true;
-+		}
-+
-+		size_t path_len = path_end > path_start;
-+		if (path_len > 0) {
-+			paths[path_end] = 0;
-+			path_len = convert_path(paths + path_start, path_len);
-+			for (size_t k = 0; k < path_len; k++) {
-+				paths[j++] = paths[path_start + k];
-+			}
-+			if (!completed) {
-+				paths[j++] = path_separator;
-+			} else {
-+				break;
-+			}
-+		} else {
-+			// empty path, ignore
-+		}
-+		
-+	}
-+
-+	paths[j] = 0;
-+	return j;
 +}

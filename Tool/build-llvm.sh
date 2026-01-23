@@ -167,7 +167,7 @@ build() {
 				;;
 		esac
 
-		if ! { [ -e "${pseudo_package}" ] && [ "$(readlink -f "${pseudo_package}")" = "$(readlink -f "${package}")" ] ;}; then
+		if ! { [ -e "${pseudo_package}" ] && [ -d "${package}" ] && [ "$(readlink -f "${pseudo_package}")" = "$(readlink -f "${package}")" ] ;}; then
 			rm -rf "${pseudo_package}" \
 			&& ln -s "${package}" "${pseudo_package}"
 		fi \

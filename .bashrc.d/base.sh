@@ -910,15 +910,15 @@ email_is_valid() {
 	fi
 }
 
-windows_power_management_hibernate() {
+windows_hibernate() {
 	rundll32 powrProf.dll,SetSuspendState
 }
 
-windows_screen_lock() {
+windows_lock_screen() {
 	rundll32 user32.dll,LockWorkStation
 }
 
-windows_time_synchonize() {
+windows_sync_time() {
 	# need to start "Windows Time" service
 	# https://serverfault.com/questions/294787/how-do-i-force-sync-the-time-on-windows-workstation-or-server
 	net start w32time
@@ -1056,7 +1056,6 @@ print_essential_files_for_tool_setup() {
 
 		Tool/{README.txt,.gitignore,clean.sh,_doc}
 		Tool/build-{llvm{,_vs},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs},python,git}.sh
-		Tool/_cygport/{.gitignore,cygwin.cmd,llvm.cygport}
 		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python}
 		Tool/{linux.sh,{cygwin,msys,mingw_{ucrt,vcrt},vs_{cygwin,msys}}.cmd}
 	)

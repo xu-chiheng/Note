@@ -1,6 +1,0 @@
-
-/llvm*
-/*.gz
-
-!/*.cygport
-!/*.cmd

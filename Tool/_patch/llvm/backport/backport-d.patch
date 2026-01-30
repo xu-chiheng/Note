@@ -1,0 +1,13 @@
+diff --git a/llvm/unittests/TableGen/CMakeLists.txt b/llvm/unittests/TableGen/CMakeLists.txt
+index 57b237306b19..854f6c0f9b16 100644
+--- a/llvm/unittests/TableGen/CMakeLists.txt
++++ b/llvm/unittests/TableGen/CMakeLists.txt
+@@ -13,6 +13,8 @@ add_llvm_unittest(TableGenTests
+   AutomataTest.cpp
+   CodeExpanderTest.cpp
+   ParserEntryPointTest.cpp
++
++  DISABLE_LLVM_LINK_LLVM_DYLIB
+   )
+ 
+ target_link_libraries(TableGenTests PRIVATE LLVMTableGenCommon LLVMTableGen)

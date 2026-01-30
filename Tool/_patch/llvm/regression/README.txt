@@ -126,4 +126,13 @@ E:/Note/Tool/llvm/lldb/source/Host/posix/ConnectionFileDescriptorPosix.cpp:383:1
 E:/Note/Tool/llvm/lldb/include/lldb/Utility/Log.h:380:48: note: expanded from macro 'LLDB_LOGF'
   380 |       log_private->Formatf(__FILE__, __func__, __VA_ARGS__);                   \
 
+regression-r.patch
+Fix the regression caused by commit afc82ce3aa56670101495d7f328d938f55ccaf8b 2025-07-09, that build fails on Cygwin.
+This patch is backported from commmit 76a841a5e6f696890ce6abf6f11bd9915f1d77d9 2025-07-10.
+make[2]: *** No rule to make target 'include/lldb/SBDefines.h', needed by 'tools/lldb/tools/lldb-rpc/DerivedHeaders/SBDefines.h'.  Stop.
+make[2]: Leaving directory '/cygdrive/e/Note/Tool/llvm-dylib-cygwin-clang-bfd-release-build'
+make[1]: *** [CMakeFiles/Makefile2:180304: tools/lldb/tools/lldb-rpc/CMakeFiles/copy-aux-rpc-headers.dir/all] Error 2
+[  1%] Building CXX object lib/Support/CMakeFiles/LLVMSupport.dir/MSP430AttributeParser.cpp.o
+make[1]: *** Waiting for unfinished jobs....
+
 

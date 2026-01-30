@@ -1,0 +1,50 @@
+diff --git a/lldb/cmake/modules/LLDBConfig.cmake b/lldb/cmake/modules/LLDBConfig.cmake
+index f674c2968216..8c30b6e09d2c 100644
+--- a/lldb/cmake/modules/LLDBConfig.cmake
++++ b/lldb/cmake/modules/LLDBConfig.cmake
+@@ -323,6 +323,4 @@ else()
+     set(LLDB_CAN_USE_DEBUGSERVER OFF)
+ endif()
+ 
+-set(LLDB_BUILD_LLDBRPC ON CACHE BOOL "")
+-
+ include(LLDBGenerateConfig)
+diff --git a/lldb/test/CMakeLists.txt b/lldb/test/CMakeLists.txt
+index dc6c2b66e3a5..4ccff3f41727 100644
+--- a/lldb/test/CMakeLists.txt
++++ b/lldb/test/CMakeLists.txt
+@@ -132,10 +132,6 @@ if(TARGET lldb-framework)
+   add_lldb_test_dependency(lldb-framework)
+ endif()
+ 
+-if (LLDB_BUILD_LLDBRPC)
+-  add_lldb_test_dependency(lldb-rpc-generate-sources)
+-endif()
+-
+ # Add dependencies that are not exported targets when building standalone.
+ if(NOT LLDB_BUILT_STANDALONE)
+   add_lldb_test_dependency(
+@@ -255,8 +251,7 @@ llvm_canonicalize_cmake_booleans(
+   LLDB_TEST_SHELL_DISABLE_REMOTE
+   LLDB_TOOL_LLDB_SERVER_BUILD
+   LLDB_USE_SYSTEM_DEBUGSERVER
+-  LLDB_IS_64_BITS
+-  LLDB_BUILD_LLDBRPC)
++  LLDB_IS_64_BITS)
+ 
+ # Configure the individual test suites.
+ add_subdirectory(API)
+diff --git a/lldb/tools/CMakeLists.txt b/lldb/tools/CMakeLists.txt
+index 73ffbbbee305..6804dc234555 100644
+--- a/lldb/tools/CMakeLists.txt
++++ b/lldb/tools/CMakeLists.txt
+@@ -10,9 +10,6 @@ add_subdirectory(lldb-fuzzer EXCLUDE_FROM_ALL)
+ 
+ add_lldb_tool_subdirectory(lldb-instr)
+ add_lldb_tool_subdirectory(lldb-dap)
+-if (LLDB_BUILD_LLDBRPC)
+-  add_lldb_tool_subdirectory(lldb-rpc)
+-endif()
+ 
+ if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+   add_lldb_tool_subdirectory(darwin-debug)

@@ -367,6 +367,12 @@ set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup() {
 				gcc binutils gdb cross-gcc llvm cmake
 				# bash make
 			)
+			case "${HOST_TRIPLE}" in
+				*-cygwin )
+					packages+=( git )
+				;;
+			esac
+
 			if host_triple_is_windows; then
 				# share the self built QEMU
 				true

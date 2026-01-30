@@ -36,7 +36,7 @@ build() {
 
 		)
 
-		time_command configure_build_install_package \
+		time_command git_configure_build_install_package \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${configure_options[@]}"
 

@@ -34,6 +34,14 @@ clean() {
 	# Windows also has a find command
 	# /cygdrive/c/Windows/system32/find
 	/usr/bin/find "${find_args[@]}" -print0 | xargs -0 -n100 rm -rf
+
+	if [ -d git ]; then
+		if [ -d git/.git ] ; then
+			(cd git && git clean -xfd)
+		else
+			(cd git && make distclean)
+		fi
+	fi
 }
 
 clean "$@"

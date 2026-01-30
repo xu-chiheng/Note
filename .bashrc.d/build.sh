@@ -543,6 +543,18 @@ pushd_and_configure() {
 	&& time_command ../"${package}"/configure "$@"
 }
 
+pushd_and_configure_2() {
+	local package="$1"
+	shift 1
+
+	echo "configure options :"
+	print_array_elements "$@"
+
+	echo_command pushd "${package}" \
+	&& echo_command make configure \
+	&& time_command ./configure "$@"
+}
+
 extract_tarball() {
 	local package="$1" tarball="$2" extracted_dir="$3"
 
@@ -585,6 +597,19 @@ gcc_pushd_and_configure() {
 	)
 
 	time_command pushd_and_configure "${package}" "${build_dir}" "${gcc_generic_configure_options[@]}" "$@"
+}
+
+git_pushd_and_configure() {
+	local package="$1" install_dir="$2"
+	shift 2
+
+	local install_prefix="$(pwd)/${install_dir}"
+
+	local git_generic_configure_options=(
+			--prefix="${install_prefix}"
+	)
+
+	time_command pushd_and_configure_2 "${package}" "${git_generic_configure_options[@]}" "$@"
 }
 
 copy_dependent_dlls_to_install_exe_dir() {
@@ -1003,6 +1028,21 @@ gcc_configure_build_install_package() {
 		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
 		"${install_dir}" gcc_pushd_and_configure "${package}" "${build_dir}" "${install_dir}" \
 		"$(join_array_elements ',' "${languages[@]}" "${extra_languages}")" "$@"
+}
+
+git_configure_build_install_package() {
+	local package="$1" compiler="$2" linker="$3" build_type="$4"
+	local cc="$5" cxx="$6" cflags="$7" cxxflags="$8" ldflags="$9"
+	shift 9
+
+	local build_dir install_dir
+	get_build_dir_and_install_dir "${package}" "${compiler}" "${linker}" "${build_type}"
+
+	time_command generate_build_install_package \
+		"${package}" "${compiler}" "${linker}" "${build_type}" \
+		"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" \
+		"${install_dir}" git_pushd_and_configure "${package}" "${install_dir}" \
+		"$@"
 }
 
 # https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild?#custom_llvm_location

@@ -512,11 +512,14 @@ download_and_verify_source_tarball() {
 	fi
 }
 
-print_cmake_location_version_options() {
+print_cmake_location_version() {
 	echo "cmake location :"
 	echo_command which cmake | grep -v '^$'
 	echo "cmake version :"
 	echo_command cmake --version | grep -v '^$'
+}
+
+print_cmake_options() {
 	echo "cmake options :"
 	print_array_elements "$@"
 }
@@ -530,7 +533,8 @@ pushd_and_cmake() {
 	local build_dir="$1"
 	shift 1
 
-	print_cmake_location_version_options "$@"
+	print_cmake_location_version
+	print_cmake_options "$@"
 
 	echo_command rm -rf "${build_dir}" \
 	&& echo_command mkdir "${build_dir}" \
@@ -542,7 +546,8 @@ pushd_and_cmake_1() {
 	local build_dir="$1"
 	shift 1
 
-	print_cmake_location_version_options "$@"
+	print_cmake_location_version
+	print_cmake_options "$@"
 
 	echo_command rm -rf "${build_dir}" \
 	&& echo_command mkdir "${build_dir}" \

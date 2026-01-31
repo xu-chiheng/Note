@@ -1062,7 +1062,7 @@ print_essential_files_for_tool_setup() {
 
 		Tool/{README.txt,.gitignore,clean.sh,_doc}
 		Tool/build-{llvm{,_vs},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs},python,git}.sh
-		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python}
+		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python,git}
 		Tool/{linux.sh,{cygwin,msys,mingw_{ucrt,vcrt},vs_{cygwin,msys}}.cmd}
 	)
 	print_array_elements_no_tab "${paths[@]}"

@@ -1,20 +1,23 @@
 
 
-v2.20.5
-v2.24.4
-v2.27.1
+v2.20.5    8b1a5f33d3ed427b0a6eaee595537805db6bc38c    2021-02-12
+v2.24.4    06214d171b10e9474a0233dbc5187fd6b109ff2a    2021-02-12
+v2.27.1    6ff7f460394745395f3eec1e414ad2300c6a402f    2021-02-12
 patch_apply . ../_patch/git/backport-{a-2,b-1,c}.patch
 
-v2.30.9
-v2.33.8
+v2.30.9    668f2d53613ac8fd373926ebe219f2c29112d93e    2023-04-14
+v2.33.8    3a19048ce498d519bd564c9fd222161dca789321    2023-03-11
 patch_apply . ../_patch/git/backport-{a-2,b,c}.patch
 
-v2.35.8
+v2.35.8    7380a72f6b4da51f6db975f4a37c4ea9dadbf477    2023-03-11
 patch_apply . ../_patch/git/backport-{a-1,b}.patch
 
-v2.40.4
+v2.40.4    54a3711a9dd968a04249beef157393d64b579d64    2024-10-30
+v2.46.4    47d3b506d48b7971080f09770f5b06b42569c967    2025-05-28
 patch_apply . ../_patch/git/backport-{a,b}.patch
 
+
+v2.48.2    fbae1f06cbb04a6592c32f465e9bc28149039358    2025-05-28
 v2.51.2    bb5c624209fcaebd60b9572b2cc8c61086e39b57    2025-10-26
 
 

@@ -1061,6 +1061,7 @@ git_configure_build_install_package() {
 
 	local build_dir install_dir
 	get_build_dir_and_install_dir "${package}" "${compiler}" "${linker}" "${build_type}"
+	# Note : build_dir is not used
 
 	time_command generate_build_install_package \
 		"${package}" "${compiler}" "${linker}" "${build_type}" \

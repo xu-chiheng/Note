@@ -123,7 +123,6 @@ do_git_commit() {
 				return 1
 			fi
 			# https://stackoverflow.com/questions/3005392/how-can-i-tell-if-one-commit-is-a-descendant-of-another-commit
-			# if [ "$(git merge-base "${branch}" "${current_branch}")" != "${branch}" ]; then
 			if ! git merge-base --is-ancestor "${branch}" "${current_branch}"; then
 				echo "${branch} is not ancestor of ${current_branch} !"
 				return 1

@@ -1,0 +1,22 @@
+diff --git a/builtin/reflog.c b/builtin/reflog.c
+index 09541d1c80..f0580509d9 100644
+--- a/builtin/reflog.c
++++ b/builtin/reflog.c
+@@ -261,7 +261,7 @@ static void mark_reachable(struct expire_reflog_policy_cb *cb)
+ 	cb->mark_list = leftover;
+ }
+ 
+-static int unreachable(struct expire_reflog_policy_cb *cb, struct commit *commit, struct object_id *oid)
++static int is_unreachable(struct expire_reflog_policy_cb *cb, struct commit *commit, struct object_id *oid)
+ {
+ 	/*
+ 	 * We may or may not have the commit yet - if not, look it
+@@ -312,7 +312,7 @@ static int should_expire_reflog_ent(struct object_id *ooid, struct object_id *no
+ 	if (timestamp < cb->cmd.expire_unreachable) {
+ 		if (cb->unreachable_expire_kind == UE_ALWAYS)
+ 			return 1;
+-		if (unreachable(cb, old_commit, ooid) || unreachable(cb, new_commit, noid))
++		if (is_unreachable(cb, old_commit, ooid) || is_unreachable(cb, new_commit, noid))
+ 			return 1;
+ 	}
+ 

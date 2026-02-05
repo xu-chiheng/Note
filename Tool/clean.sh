@@ -37,9 +37,9 @@ clean() {
 
 	if [ -d git ]; then
 		if [ -d git/.git ] ; then
-			(cd git && git reset --hard HEAD && git clean -xfd -e '~git-tools~')
+			(cd git && git reset --hard HEAD && git clean -xfd -e '~git-tools~') 2>&1 >/dev/null
 		else
-			(cd git && make distclean)
+			(cd git && make distclean) 2>&1 >/dev/null
 		fi
 	fi
 }

@@ -1,5 +1,5 @@
 diff --git a/gcc/config/i386/cygwin-w64.h b/gcc/config/i386/cygwin-w64.h
-index 8dac104cb43..5d600245b6f 100644
+index 614cc2259a7..3b8d8744c0c 100644
 --- a/gcc/config/i386/cygwin-w64.h
 +++ b/gcc/config/i386/cygwin-w64.h
 @@ -66,8 +66,8 @@ along with GCC; see the file COPYING3.  If not see
@@ -8,7 +8,7 @@ index 8dac104cb43..5d600245b6f 100644
    %(shared_libgcc_undefs) \
 -  --dll-search-prefix=cyg \
 -  %{!shared: %{!mdll: %{" SPEC_32 ":--large-address-aware} --tsaware}}"
-+  --dynamicbase \
++  %{" SPEC_64 ":--dynamicbase} \
 +  %{!shared: %{!mdll: %{" SPEC_32 ":--large-address-aware}}}"
  
  /* Cygwin64 will have a 64-bit long type. */

@@ -1,8 +1,8 @@
 diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
-index c81a7ed17029..d194ff1ac8d8 100644
+index 2c9a174069f7..0a57dcea9366 100644
 --- a/clang/lib/Driver/ToolChains/MinGW.cpp
 +++ b/clang/lib/Driver/ToolChains/MinGW.cpp
-@@ -162,12 +168,31 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -174,12 +174,34 @@ void tools::MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
      CmdArgs.push_back("-Bdynamic");
    if (Args.hasArg(options::OPT_mdll) || Args.hasArg(options::OPT_shared)) {
      CmdArgs.push_back("-e");
@@ -10,11 +10,13 @@ index c81a7ed17029..d194ff1ac8d8 100644
 +    if (TC.getArch() == llvm::Triple::x86)
 +      CmdArgs.push_back("__cygwin_dll_entry@12");
 +    else
++      // llvm::Triple::x86_64
 +      CmdArgs.push_back("_cygwin_dll_entry");
 +#else
      if (TC.getArch() == llvm::Triple::x86)
        CmdArgs.push_back("_DllMainCRTStartup@12");
      else
++      // llvm::Triple::x86_64
        CmdArgs.push_back("DllMainCRTStartup");
 +#endif
      CmdArgs.push_back("--enable-auto-image-base");
@@ -29,7 +31,8 @@ index c81a7ed17029..d194ff1ac8d8 100644
 +    }
    }
 +#ifdef __CYGWIN__
-+  CmdArgs.push_back("--dynamicbase");
++  if (TC.getArch() == llvm::Triple::x86_64)
++    CmdArgs.push_back("--dynamicbase");
 +#endif
  
    if (Args.hasArg(options::OPT_Z_Xlinker__no_demangle))

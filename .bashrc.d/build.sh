@@ -153,18 +153,6 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 			# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
 			_ldflags+=( -Wl,"$(cygpath -m "$(gcc -print-file-name=binmode.o)")" )
 			# _ldflags+=( -Wl,"$(cygpath -m "$(print_mingw_root_dir)")/lib/binmode.o" )
-
-			# On MinGW, export TERM=dumb may have no effect.
-			case "${_compiler}" in
-				GCC )
-					_cflags+=(   -fdiagnostics-color=never )
-					_cxxflags+=( -fdiagnostics-color=never )
-					;;
-				Clang )
-					_cflags+=(   -fno-color-diagnostics )
-					_cxxflags+=( -fno-color-diagnostics )
-					;;
-			esac
 			;;
 	esac
 

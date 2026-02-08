@@ -8,8 +8,6 @@ https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-clang/PKGBUILD
 
 https://src.fedoraproject.org/rpms/llvm.git
 
-on Cygwin, Clang 8.0.1 (pre-installed) at /usr does not work, can't be used to build LLVM.
-
 
 16.0.0    b0daacf58f417634f7c7c9496589d723592a8f5a    2023-01-24    branch point
 17.0.0    84de01908b58f3aa25cc3dc700a8a1b01b5263f0    2023-03-23    c4125a37806aa2f663018f4f8dc5bbd5159c51c1^

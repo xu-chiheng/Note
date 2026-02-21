@@ -50,6 +50,8 @@ launch_browser_in_background() {
 		"https://kimi.moonshot.cn"
 		"https://tongyi.aliyun.com/qianwen"
 		"https://yiyan.baidu.com"
+		"https://www.zhipuai.cn"
+		"https://agent.minimax.io"
 	)
 
 	# Google No Country Redirect

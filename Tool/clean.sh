@@ -7,9 +7,7 @@ clean() {
 		'('
 			-name '*output.txt'
 
-			-or -name 'llvm-dylib'
-			-or -name 'llvm-shared'
-			-or -name 'llvm-static'
+			-or -name 'llvm-*'
 
 			-or -name '*.cpp'
 			-or -name '*.c'

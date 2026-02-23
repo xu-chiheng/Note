@@ -53,18 +53,18 @@ fix_cygwin_gpg_quirk() {
 	fi
 }
 
-fix_cygwin_python_quirk() {
-	local usr_bin_python_version="/usr/bin/python3.12.exe"
-	local usr_bin_python
-	if [ -f "${usr_bin_python_version}" ]; then
-		for usr_bin_python in "/usr/bin/python.exe" "/usr/bin/python3.exe"; do
-			if [ ! -f "${usr_bin_python}" ]; then
-				rm -rf "${usr_bin_python}" \
-				&& cp -f "${usr_bin_python_version}" "${usr_bin_python}"
-			fi
-		done
-	fi
-}
+# fix_cygwin_python_quirk() {
+# 	local usr_bin_python_version="/usr/bin/python3.12.exe"
+# 	local usr_bin_python
+# 	if [ -f "${usr_bin_python_version}" ]; then
+# 		for usr_bin_python in "/usr/bin/python.exe" "/usr/bin/python3.exe"; do
+# 			if [ ! -f "${usr_bin_python}" ]; then
+# 				rm -rf "${usr_bin_python}" \
+# 				&& cp -f "${usr_bin_python_version}" "${usr_bin_python}"
+# 			fi
+# 		done
+# 	fi
+# }
 
 fix_mingw_mode_quirk() {
 	# https://learn.microsoft.com/en-us/cpp/c-runtime-library/link-options
@@ -122,6 +122,22 @@ fix_cygwin_msys_ssh_quirk() {
 	fi
 }
 
+fix_cygwin_tls_certs() {
+	# # git clone https://gitlab.com/qemu-project/qemu.git
+	# Cloning into 'qemu'...
+	# fatal: unable to access 'https://gitlab.com/qemu-project/qemu.git/': error adding trust anchors from file: /etc/pki/tls/certs/ca-bundle.crt
+
+	# # file /etc/pki/tls/certs/ca-bundle.crt
+	# /etc/pki/tls/certs/ca-bundle.crt: symbolic link to /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+
+	local source=/etc/pki/tls/certs/ca-bundle.crt
+	local target=~/Util/tls-ca-bundle.pem
+	if ! { [ -e "${source}" ] && [ "$(readlink -f "${source}")" = "$(readlink -f "${target}")" ] ;}; then
+		rm -rf "${source}" \
+		&& ln -s "${target}" "${source}"
+	fi
+}
+
 fix_system_quirks_one_time() {
 	if host_triple_is_windows; then
 		case "${HOST_TRIPLE}" in
@@ -129,6 +145,7 @@ fix_system_quirks_one_time() {
 				time_command fix_cygwin_connect_quirk
 				time_command fix_cygwin_gpg_quirk
 				# time_command fix_cygwin_python_quirk
+				time_command fix_cygwin_tls_certs
 				;;
 			*-mingw* )
 				time_command fix_mingw_mode_quirk

@@ -122,21 +122,21 @@ fix_cygwin_msys_ssh_quirk() {
 	fi
 }
 
-# fix_cygwin_tls_certs() {
-# 	# # git clone https://gitlab.com/qemu-project/qemu.git
-# 	# Cloning into 'qemu'...
-# 	# fatal: unable to access 'https://gitlab.com/qemu-project/qemu.git/': error adding trust anchors from file: /etc/pki/tls/certs/ca-bundle.crt
+fix_cygwin_tls_certs() {
+	# # git clone https://gitlab.com/qemu-project/qemu.git
+	# Cloning into 'qemu'...
+	# fatal: unable to access 'https://gitlab.com/qemu-project/qemu.git/': error adding trust anchors from file: /etc/pki/tls/certs/ca-bundle.crt
 
-# 	# # file /etc/pki/tls/certs/ca-bundle.crt
-# 	# /etc/pki/tls/certs/ca-bundle.crt: symbolic link to /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+	# # file /etc/pki/tls/certs/ca-bundle.crt
+	# /etc/pki/tls/certs/ca-bundle.crt: symbolic link to /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 
-# 	local source=/etc/pki/tls/certs/ca-bundle.crt
-# 	local target=~/Util/tls-ca-bundle.pem
-# 	if ! { [ -e "${source}" ] && [ "$(readlink -f "${source}")" = "$(readlink -f "${target}")" ] ;}; then
-# 		rm -rf "${source}" \
-# 		&& ln -s "${target}" "${source}"
-# 	fi
-# }
+	local source=/etc/pki/tls/certs/ca-bundle.crt
+	local target=~/Util/tls-ca-bundle.pem
+	if ! { [ -e "${source}" ] && [ "$(readlink -f "${source}")" = "$(readlink -f "${target}")" ] ;}; then
+		rm -rf "${source}" \
+		&& ln -s "${target}" "${source}"
+	fi
+}
 
 fix_system_quirks_one_time() {
 	if host_triple_is_windows; then

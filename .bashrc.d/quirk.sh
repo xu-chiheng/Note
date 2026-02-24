@@ -108,8 +108,8 @@ int _commode = 0x0800; // _IOCOMMIT
 	done
 }
 
-# problem mostly fixed at 2026-02-24
-# ssh.exe still want to access "/home/${USERNAME}"
+# problem still not fixed at 2026-02-24
+# ssh.exe still use "/home/${USERNAME}" as home, not honoring the HOME environment variable.
 
 # git push origin main  # at /cygdrive/e/Tool started
 # The authenticity of host 'github.com (140.82.121.4)' can't be established.

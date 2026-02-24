@@ -38,20 +38,20 @@ fix_cygwin_connect_quirk() {
 	fi
 }
 
-fix_cygwin_gpg_quirk() {
-	# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
-	local usr_bin_gpg="/usr/bin/gpg.exe"
-	local usr_bin_gpg2="/usr/bin/gpg2.exe"
-	if [ -f "${usr_bin_gpg2}" ] ; then
-		if [ -f "${usr_bin_gpg}" ] && [ ! -f "${usr_bin_gpg}".backup ]; then
-			mv -f "${usr_bin_gpg}" "${usr_bin_gpg}".backup
-		fi \
-		&& if [ ! -f "${usr_bin_gpg}" ] || ! cmp --quiet "${usr_bin_gpg}" "${usr_bin_gpg2}" ; then
-			rm -rf "${usr_bin_gpg}" \
-			&& cp -f "${usr_bin_gpg2}" "${usr_bin_gpg}"
-		fi
-	fi
-}
+# fix_cygwin_gpg_quirk() {
+# 	# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
+# 	local usr_bin_gpg="/usr/bin/gpg.exe"
+# 	local usr_bin_gpg2="/usr/bin/gpg2.exe"
+# 	if [ -f "${usr_bin_gpg2}" ] ; then
+# 		if [ -f "${usr_bin_gpg}" ] && [ ! -f "${usr_bin_gpg}".backup ]; then
+# 			mv -f "${usr_bin_gpg}" "${usr_bin_gpg}".backup
+# 		fi \
+# 		&& if [ ! -f "${usr_bin_gpg}" ] || ! cmp --quiet "${usr_bin_gpg}" "${usr_bin_gpg2}" ; then
+# 			rm -rf "${usr_bin_gpg}" \
+# 			&& cp -f "${usr_bin_gpg2}" "${usr_bin_gpg}"
+# 		fi
+# 	fi
+# }
 
 # fix_cygwin_python_quirk() {
 # 	local usr_bin_python_version="/usr/bin/python3.12.exe"
@@ -122,30 +122,30 @@ fix_cygwin_msys_ssh_quirk() {
 	fi
 }
 
-fix_cygwin_tls_certs() {
-	# # git clone https://gitlab.com/qemu-project/qemu.git
-	# Cloning into 'qemu'...
-	# fatal: unable to access 'https://gitlab.com/qemu-project/qemu.git/': error adding trust anchors from file: /etc/pki/tls/certs/ca-bundle.crt
+# fix_cygwin_tls_certs() {
+# 	# # git clone https://gitlab.com/qemu-project/qemu.git
+# 	# Cloning into 'qemu'...
+# 	# fatal: unable to access 'https://gitlab.com/qemu-project/qemu.git/': error adding trust anchors from file: /etc/pki/tls/certs/ca-bundle.crt
 
-	# # file /etc/pki/tls/certs/ca-bundle.crt
-	# /etc/pki/tls/certs/ca-bundle.crt: symbolic link to /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+# 	# # file /etc/pki/tls/certs/ca-bundle.crt
+# 	# /etc/pki/tls/certs/ca-bundle.crt: symbolic link to /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 
-	local source=/etc/pki/tls/certs/ca-bundle.crt
-	local target=~/Util/tls-ca-bundle.pem
-	if ! { [ -e "${source}" ] && [ "$(readlink -f "${source}")" = "$(readlink -f "${target}")" ] ;}; then
-		rm -rf "${source}" \
-		&& ln -s "${target}" "${source}"
-	fi
-}
+# 	local source=/etc/pki/tls/certs/ca-bundle.crt
+# 	local target=~/Util/tls-ca-bundle.pem
+# 	if ! { [ -e "${source}" ] && [ "$(readlink -f "${source}")" = "$(readlink -f "${target}")" ] ;}; then
+# 		rm -rf "${source}" \
+# 		&& ln -s "${target}" "${source}"
+# 	fi
+# }
 
 fix_system_quirks_one_time() {
 	if host_triple_is_windows; then
 		case "${HOST_TRIPLE}" in
 			*-cygwin )
 				time_command fix_cygwin_connect_quirk
-				time_command fix_cygwin_gpg_quirk
+				# time_command fix_cygwin_gpg_quirk
 				# time_command fix_cygwin_python_quirk
-				time_command fix_cygwin_tls_certs
+				# time_command fix_cygwin_tls_certs
 				;;
 			*-mingw* )
 				time_command fix_mingw_mode_quirk

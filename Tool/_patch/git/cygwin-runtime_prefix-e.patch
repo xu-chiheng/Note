@@ -1,0 +1,21 @@
+diff --git a/exec-cmd.c b/exec-cmd.c
+index 507e67d528..70648196a8 100644
+--- a/exec-cmd.c
++++ b/exec-cmd.c
+@@ -59,6 +59,16 @@ static const char *system_prefix(void)
+ 				"but prefix computation failed.  "
+ 				"Using static fallback '%s'.\n", prefix);
+ 	}
++#if 0
++	static bool printed = false;
++	if (!printed) {
++		printf("system_prefix() executable_dirname : %s\n", executable_dirname);
++		printf("system_prefix() GIT_EXEC_PATH : %s\n", GIT_EXEC_PATH);
++		printf("system_prefix() BINDIR : %s\n", BINDIR);
++		printf("system_prefix() prefix : %s\n", prefix);
++		printed = true;
++	}
++#endif
+ 	return prefix;
+ }
+ 

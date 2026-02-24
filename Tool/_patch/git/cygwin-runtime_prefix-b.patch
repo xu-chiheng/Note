@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index 1f444eec3c..3ac2fc24e7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2333,6 +2334,7 @@ localedir_relative_SQ = $(subst ','\'',$(localedir_relative))
+ gitexecdir_SQ = $(subst ','\'',$(gitexecdir))
+ gitexecdir_relative_SQ = $(subst ','\'',$(gitexecdir_relative))
+ template_dir_SQ = $(subst ','\'',$(template_dir))
++template_dir_relative_SQ = $(subst ','\'',$(template_dir_relative))
+ htmldir_relative_SQ = $(subst ','\'',$(htmldir_relative))
+ prefix_SQ = $(subst ','\'',$(prefix))
+ perllibdir_relative_SQ = $(subst ','\'',$(perllibdir_relative))

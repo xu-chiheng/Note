@@ -141,7 +141,7 @@ check_compiler_linker_build_type_and_set_compiler_flags() {
 			# _cflags+=(   "${_cygwin_c_cxx_common_flags[@]}" )
 			# _cxxflags+=( "${_cygwin_c_cxx_common_flags[@]}" )
 			if [ "${_compiler_install_dir}" = /usr ]; then
-				# pre-installed GCC 11.4.0 and Clang 8.0.1 at /usr need this option
+				# pre-installed GCC and Clang at /usr need this option
 				_ldflags+=( -Wl,--dynamicbase )
 			fi
 			;;

@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index 1f444eec3c..3ac2fc24e7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -633,6 +633,7 @@ bindir_relative = $(patsubst $(prefix)/%,%,$(bindir))
+ mandir_relative = $(patsubst $(prefix)/%,%,$(mandir))
+ infodir_relative = $(patsubst $(prefix)/%,%,$(infodir))
+ gitexecdir_relative = $(patsubst $(prefix)/%,%,$(gitexecdir))
++template_dir_relative = $(patsubst $(prefix)/%,%,$(template_dir))
+ localedir_relative = $(patsubst $(prefix)/%,%,$(localedir))
+ htmldir_relative = $(patsubst $(prefix)/%,%,$(htmldir))
+ perllibdir_relative = $(patsubst $(prefix)/%,%,$(perllibdir))

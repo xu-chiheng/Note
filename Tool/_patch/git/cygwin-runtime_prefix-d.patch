@@ -1,0 +1,13 @@
+diff --git a/config.mak.uname b/config.mak.uname
+index 1691c6ae6e..2e84134ed8 100644
+--- a/config.mak.uname
++++ b/config.mak.uname
+@@ -288,6 +288,8 @@ ifeq ($(uname_O),Cygwin)
+ 	MMAP_PREVENTS_DELETE = UnfortunatelyYes
+ 	COMPAT_OBJS += compat/win32/path-utils.o
+ 	FREAD_READS_DIRECTORIES = UnfortunatelyYes
++	RUNTIME_PREFIX = YesPlease
++	PROCFS_EXECUTABLE_PATH = /proc/self/exe
+ endif
+ ifeq ($(uname_S),FreeBSD)
+ 	NEEDS_LIBICONV = YesPlease

@@ -1,0 +1,21 @@
+diff --git a/Makefile b/Makefile
+index 79ed649d97..ee9e267a6d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2741,14 +2741,14 @@ endif
+ 
+ exec-cmd.sp exec-cmd.s exec-cmd.o: GIT-PREFIX
+ exec-cmd.sp exec-cmd.s exec-cmd.o: EXTRA_CPPFLAGS = \
+-	'-DGIT_EXEC_PATH="$(gitexecdir_SQ)"' \
++	'-DGIT_EXEC_PATH="$(gitexecdir_relative_SQ)"' \
+ 	'-DGIT_LOCALE_PATH="$(localedir_relative_SQ)"' \
+ 	'-DBINDIR="$(bindir_relative_SQ)"' \
+ 	'-DFALLBACK_RUNTIME_PREFIX="$(prefix_SQ)"'
+ 
+ builtin/init-db.sp builtin/init-db.s builtin/init-db.o: GIT-PREFIX
+ setup.sp setup.s setup.o: EXTRA_CPPFLAGS = \
+-	-DDEFAULT_GIT_TEMPLATE_DIR='"$(template_dir_SQ)"'
++	-DDEFAULT_GIT_TEMPLATE_DIR='"$(template_dir_relative_SQ)"'
+ 
+ config.sp config.s config.o: GIT-PREFIX
+ config.sp config.s config.o: EXTRA_CPPFLAGS = \

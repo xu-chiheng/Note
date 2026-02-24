@@ -38,20 +38,20 @@ fix_cygwin_connect_quirk() {
 	fi
 }
 
-# fix_cygwin_gpg_quirk() {
-# 	# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
-# 	local usr_bin_gpg="/usr/bin/gpg.exe"
-# 	local usr_bin_gpg2="/usr/bin/gpg2.exe"
-# 	if [ -f "${usr_bin_gpg2}" ] ; then
-# 		if [ -f "${usr_bin_gpg}" ] && [ ! -f "${usr_bin_gpg}".backup ]; then
-# 			mv -f "${usr_bin_gpg}" "${usr_bin_gpg}".backup
-# 		fi \
-# 		&& if [ ! -f "${usr_bin_gpg}" ] || ! cmp --quiet "${usr_bin_gpg}" "${usr_bin_gpg2}" ; then
-# 			rm -rf "${usr_bin_gpg}" \
-# 			&& cp -f "${usr_bin_gpg2}" "${usr_bin_gpg}"
-# 		fi
-# 	fi
-# }
+fix_cygwin_gpg_quirk() {
+	# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
+	local usr_bin_gpg="/usr/bin/gpg.exe"
+	local usr_bin_gpg2="/usr/bin/gpg2.exe"
+	if [ -f "${usr_bin_gpg2}" ] ; then
+		if [ -f "${usr_bin_gpg}" ] && [ ! -f "${usr_bin_gpg}".backup ]; then
+			mv -f "${usr_bin_gpg}" "${usr_bin_gpg}".backup
+		fi \
+		&& if [ ! -f "${usr_bin_gpg}" ] || ! cmp --quiet "${usr_bin_gpg}" "${usr_bin_gpg2}" ; then
+			rm -rf "${usr_bin_gpg}" \
+			&& cp -f "${usr_bin_gpg2}" "${usr_bin_gpg}"
+		fi
+	fi
+}
 
 # fix_cygwin_python_quirk() {
 # 	local usr_bin_python_version="/usr/bin/python3.12.exe"

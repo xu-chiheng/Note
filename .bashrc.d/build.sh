@@ -396,6 +396,10 @@ git_repo_url_of_package() {
 			echo "https://github.com/git/git.git"
 			# echo "git@github.com:git/git.git"
 			;;
+		openssh )
+			echo "https://github.com/openssh/openssh-portable.git"
+			# echo "git@github.com:openssh/openssh-portable.git"
+			;;
 		* )
 			echo "unknown package : ${package}"
 			return 1

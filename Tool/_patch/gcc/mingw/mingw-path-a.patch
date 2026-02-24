@@ -1,15 +1,23 @@
 diff --git a/gcc/gcc.cc b/gcc/gcc.cc
-index d07a8e172a4..296500f80d3 100644
+index d63e863d2be..2d3f4271064 100644
 --- a/gcc/gcc.cc
 +++ b/gcc/gcc.cc
-@@ -8263,6 +8323,12 @@ driver::main (int argc, char **argv)
+@@ -8290,6 +8290,20 @@ driver::main (int argc, char **argv)
  {
    bool early_exit;
  
-+#ifdef _WIN32
-+  size_t len0 = strlen(argv[0]);
-+  len0 = convert_path(argv[0], len0);
-+  (void)len0;
++#if defined(_WIN32)
++	size_t len0 = strlen(argv[0]);
++	len0 = convert_path(argv[0], len0);
++	(void)len0;
++#elif defined(__CYGWIN__)
++	char path[PATH_MAX];
++	ssize_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
++	if (len != -1) {
++		path[len] = '\0';
++		// printf("Executable path: %s\n", path);
++		argv[0] = xstrdup(path);
++	}
 +#endif
 +
    set_progname (argv[0]);

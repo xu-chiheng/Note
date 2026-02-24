@@ -9,8 +9,6 @@ Downloading during the late night or early morning hours (00:00 - 07:00) typical
 
 When installing setup-x86_64.exe, it's necessary to maximize the window or drag the scrollbar to the right in order to see the dropdown list next to "Default" under "All". Only then can "Default" be changed to "Install", enabling the complete installation.
 
-After the installation is complete, you will need to restart the Windows system.
-
 下载之前，系统中应该没有安装Cygwin。如果有安装过Cygwin，需要将安装的痕迹删除(或者重命名)，如将安装目录D:\cygwin64，重命名为cygwin641，让Cygwin的安装程序找不到已经安装的Cygwin的位置。
 因为如果Windows中安装过Cygwin，安装程序会在注册表中记录Cygwin的安装位置(D:\cygwin64)。使用命令行下载Cygwin时，会自动忽略掉在注册表中记录的Cygwin的安装位置中已经安装的包。
 
@@ -21,8 +19,6 @@ After the installation is complete, you will need to restart the Windows system.
 在凌晨或清早(00:00 - 07:00)，下载，网速最快。
 
 点击setup-x86_64.exe安装时，需要将窗口最大化，或者向右拖动下面的滑动条，才能在All右边的Default处看到下拉列表，才能将Default改为Install，这样才能完全安装。
-
-安装完成之后需要重启Windows系统。
 
 
 

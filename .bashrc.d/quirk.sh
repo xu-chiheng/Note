@@ -38,6 +38,7 @@ fix_cygwin_connect_quirk() {
 	fi
 }
 
+# problem fixed at 2026-02-24
 fix_cygwin_gpg_quirk() {
 	# Cygwin has gpg and gpg2 commands, override gpg command to gpg2
 	local usr_bin_gpg="/usr/bin/gpg.exe"
@@ -107,6 +108,8 @@ int _commode = 0x0800; // _IOCOMMIT
 	done
 }
 
+# problem mostly fixed at 2026-02-24
+# ssh.exe still want to access "/home/${USERNAME}"
 fix_cygwin_msys_ssh_quirk() {
 	# ssh uses wrong home directory in Cygwin - Server Fault
 	# https://serverfault.com/questions/95750/ssh-uses-wrong-home-directory-in-cygwin
@@ -122,6 +125,7 @@ fix_cygwin_msys_ssh_quirk() {
 	fi
 }
 
+# problem fixed at 2026-02-24
 fix_cygwin_tls_certs() {
 	# # git clone https://gitlab.com/qemu-project/qemu.git
 	# Cloning into 'qemu'...

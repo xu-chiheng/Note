@@ -96,14 +96,14 @@ print_compiler_version() {
 		return 1
 	fi
 
-	case "$1" in
-		*clang | *clang++ | *clang-cl )
+	case "$(basename  "$1")" in
+		clang | clang++ | clang-cl )
 			"$1" -v  2>&1 | grep -E '^clang version ' | sed -E -e 's/^clang version //'
 			;;
-		*gcc | *g++ )
+		gcc | g++ | *-gcc | *-g++ )
 			"$1" -v  2>&1 | grep -E '^gcc version ' | sed -E -e 's/^gcc version //' | sed -E -e 's/ \((GCC|experimental)\)//g'
 			;;
-		*cl )
+		cl )
 			"$1"  2>&1 | grep -E ' Compiler Version ' | sed -E -e 's/.+ Compiler Version //'
 			;;
 		* )
@@ -118,11 +118,11 @@ print_compiler_predefined_macros() {
 		return 1
 	fi
 
-	case "$1" in
-		g++ | clang++ | *-g++ | *-clang++ )
+	case "$(basename  "$1")" in
+		g++ | *-g++ | clang++ )
 			"$@" -E -dM -x c++ - </dev/null | sort
 			;;
-		gcc | clang | *-gcc | *-clang )
+		gcc | *-gcc | clang )
 			"$@" -E -dM -x c - </dev/null | sort
 			;;
 		cl )
@@ -151,11 +151,11 @@ print_compiler_include_dirs() {
 		return 1
 	fi
 
-	case "$1" in
-		g++ | clang++ | *-g++ | *-clang++ )
+	case "$(basename  "$1")" in
+		g++ | *-g++ | clang++ )
 			echo | "$@" -E -Wp,-v -xc++ - 2>&1
 			;;
-		gcc | clang | *-gcc | *-clang )
+		gcc | *-gcc | clang )
 			echo | "$@" -E -Wp,-v -xc - 2>&1
 			;;
 		cl )
@@ -208,13 +208,13 @@ int main(int argc, char ** argv)
 }
 '
 	local options=()
-	case "$1" in
-		g++ | clang++ | *-g++ | *-clang++ )
+	case "$(basename  "$1")" in
+		g++ | *-g++ | clang++ )
 			hello_world_source="${hello_world_in_cxx}"
 			source_file_name=main.cpp
 			options+=( -v -Wl,-v )
 			;;
-		gcc | clang | *-gcc | *-clang )
+		gcc | *-gcc | clang )
 			hello_world_source="${hello_world_in_c}"
 			source_file_name=main.c
 			options+=( -v -Wl,-v )

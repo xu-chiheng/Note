@@ -1,14 +1,14 @@
 
-v6.2.0    44f28df24767cf9dca1ddc9b23157737c4cbb645    2021-12-14
+
+v9.2.4     b2995afed254e4804611df52210067a4d5dbdf0b    2025-05-26
+
+v10.0.8    bb779689554ca5e69e0ac0bb56f90c41c64a80bb    2026-02-12
+
+v10.1.4    384ba786abb18469038f1b7adfe37da6949494c3    2026-02-12
+
+v10.2.1    2d3df8abca265c9bcc9e438d691d561592060998    2026-02-12
 
 
-v7.1.0    621da7789083b80d6f1ff1c0fb499334007b4f51    2022-08-30
-patch_apply . ../_patch/qemu/backport-a.patch
-
-
-
-backport-a.patch
-Backport commit d9bb73d8e3a02135a34b2b7d7ba8f8e1e660a1e5 2023-03-19, Fix build on MinGW
 
 
 

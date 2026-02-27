@@ -1061,8 +1061,8 @@ print_essential_files_for_tool_setup() {
 		IDE/list_of{,_non}_java_files_{added,modified,deleted}.txt
 
 		Tool/{README.txt,.gitignore,clean.sh,_doc}
-		Tool/build-{llvm{,_vs},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs},python,git,openssh,gnupg}.sh
-		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python,git,openssh,gnupg}
+		Tool/build-{llvm{,_vs},cross-gcc{,2},binutils,gcc,gdb,qemu,cmake{,_vs},python,git,openssh,gnupg,cygwin}.sh
+		Tool/_patch/{bash,binutils,cmake,gcc,gdb,llvm,make,mintty,konsole,qemu,python,git,openssh,gnupg,cygwin}
 		Tool/{linux.sh,{cygwin,msys,mingw_{ucrt,vcrt},vs_{cygwin,msys}}.cmd}
 	)
 	print_array_elements_no_tab "${paths[@]}"

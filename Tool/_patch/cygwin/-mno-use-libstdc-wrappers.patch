@@ -1,0 +1,12 @@
+diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
+index 383f4f34a..40858a13b 100644
+--- a/winsup/cygwin/Makefile.am
++++ b/winsup/cygwin/Makefile.am
+@@ -603,7 +603,6 @@ $(LDSCRIPT): $(LDSCRIPT).in
+ $(NEW_DLL_NAME): $(LDSCRIPT) libdll.a $(VERSION_OFILES) $(LIBSERVER)\
+ 		  $(newlib_build)/libm.a $(newlib_build)/libc.a
+ 	$(AM_V_CXXLD)$(CXX) $(CXXFLAGS) \
+-	-mno-use-libstdc-wrappers \
+ 	-Wl,--gc-sections -nostdlib -Wl,-T$(LDSCRIPT) \
+ 	-Wl,--dynamicbase -static \
+ 	$${SOURCE_DATE_EPOCH:+-Wl,--no-insert-timestamp} \

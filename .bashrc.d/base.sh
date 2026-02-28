@@ -369,7 +369,7 @@ set_packages_PATH_and_LD_LIBRARY_PATH_at_bash_startup() {
 			)
 			case "${HOST_TRIPLE}" in
 				*-cygwin )
-					packages+=( git )
+					packages+=( git openssh )
 				;;
 			esac
 

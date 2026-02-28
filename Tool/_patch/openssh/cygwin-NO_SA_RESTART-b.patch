@@ -1,0 +1,14 @@
+diff --git a/configure b/configure
+index 652d7e137..5bcb4fe79 100755
+--- a/configure
++++ b/configure
+@@ -18951,6 +18951,9 @@ static void sighandler(int sig) { }
+ int
+ main (void)
+ {
++#ifdef __CYGWIN__
++    return 0;
++#endif
+ 
+ 	int r;
+ 	pid_t pid;

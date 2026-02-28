@@ -33,14 +33,15 @@ build() {
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}"
 
 		local configure_options=(
-			--libexecdir=/usr/sbin
+			# --libexecdir=/usr/sbin
 			--with-kerberos5=/usr
 			--with-libedit
-			--with-xauth=/usr/bin/xauth
-			--disable-strip
-			--with-security-key-builtin
+			# --with-xauth=/usr/bin/xauth
+			# --disable-strip
+			# --with-security-key-builtin
 		)
 
+		# (cd openssh && autoreconf)
 		time_command configure_build_install_package \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${configure_options[@]}"

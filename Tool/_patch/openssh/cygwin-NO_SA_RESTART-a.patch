@@ -1,0 +1,15 @@
+diff --git a/configure.ac b/configure.ac
+index db5211013..99323a714 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2846,6 +2846,10 @@ AC_RUN_IFELSE(
+ #include <unistd.h>
+ static void sighandler(int sig) { }
+ 		]], [[
++#ifdef __CYGWIN__
++    return 0;
++#endif
++
+ 	int r;
+ 	pid_t pid;
+ 	struct sigaction sa;

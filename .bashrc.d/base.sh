@@ -468,6 +468,7 @@ set_environment_variables_at_bash_startup() {
 	set_common_windows_packages_PATH_at_bash_startup
 	set_other_linux_environment_variables_at_bash_startup
 
+	ensure_cygwin_msys_ssh_home_dir_point_to_real_home
 	source_ssh-agent_env_script
 
 	if declare -F set_private_environment_variables_at_bash_startup >/dev/null; then
@@ -479,6 +480,33 @@ set_environment_variables_at_bash_startup() {
 	# 		echo "host triple ${HOST_TRIPLE} not equal to the output of config.guess $(~/config.guess)"
 	# 	fi
 	# fi
+}
+
+ensure_cygwin_msys_ssh_home_dir_point_to_real_home() {
+	# problem still not fixed at 2026-02-24
+	# ssh.exe still use "/home/${USERNAME}" as home, not honoring the HOME environment variable.
+
+	# git push origin main  # at /cygdrive/e/Tool started
+	# The authenticity of host 'github.com (140.82.121.4)' can't be established.
+	# ED25519 key fingerprint is: SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU
+	# This key is not known by any other names.
+	# Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+	# Could not create directory '/home/Administrator/.ssh' (No such file or directory).
+	# Failed to add the host to the list of known hosts (/home/Administrator/.ssh/known_hosts).
+
+	# ssh uses wrong home directory in Cygwin - Server Fault
+	# https://serverfault.com/questions/95750/ssh-uses-wrong-home-directory-in-cygwin
+
+	# https://linux.die.net/man/1/readlink
+	# https://www.geeksforgeeks.org/readlink-command-in-linux-with-examples/
+	# https://serverfault.com/questions/76042/find-out-symbolic-link-target-via-command-line
+	if host_triple_is_windows; then
+		local ssh_home_dir="/home/${USERNAME}"
+		if ! { [ -e "${ssh_home_dir}" ] && [ "$(readlink -f "${ssh_home_dir}")" = "$(readlink -f ~)" ] ;}; then
+			rm -rf "${ssh_home_dir}" \
+			&& ln -s ~ "${ssh_home_dir}"
+		fi
+	fi
 }
 
 source_ssh-agent_env_script() {

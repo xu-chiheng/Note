@@ -79,32 +79,6 @@ int _commode = 0x0800; // _IOCOMMIT
 	done
 }
 
-# problem still not fixed at 2026-02-24
-# ssh.exe still use "/home/${USERNAME}" as home, not honoring the HOME environment variable.
-
-# git push origin main  # at /cygdrive/e/Tool started
-# The authenticity of host 'github.com (140.82.121.4)' can't be established.
-# ED25519 key fingerprint is: SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU
-# This key is not known by any other names.
-# Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-# Could not create directory '/home/Administrator/.ssh' (No such file or directory).
-# Failed to add the host to the list of known hosts (/home/Administrator/.ssh/known_hosts).
-
-fix_cygwin_msys_ssh_quirk() {
-	# ssh uses wrong home directory in Cygwin - Server Fault
-	# https://serverfault.com/questions/95750/ssh-uses-wrong-home-directory-in-cygwin
-
-	# https://linux.die.net/man/1/readlink
-	# https://www.geeksforgeeks.org/readlink-command-in-linux-with-examples/
-	# https://serverfault.com/questions/76042/find-out-symbolic-link-target-via-command-line
-	local home_unix_path="$(cygpath -u "${HOME}")"
-	local ssh_home_dir="/home/${USERNAME}"
-	if ! { [ -e "${ssh_home_dir}" ] && [ "$(readlink -f "${ssh_home_dir}")" = "$(readlink -f "${home_unix_path}")" ] ;}; then
-		rm -rf "${ssh_home_dir}" \
-		&& ln -s "${home_unix_path}" "${ssh_home_dir}"
-	fi
-}
-
 fix_system_quirks_one_time() {
 	if host_triple_is_windows; then
 		case "${HOST_TRIPLE}" in
@@ -115,7 +89,5 @@ fix_system_quirks_one_time() {
 				time_command fix_mingw_mode_quirk
 				;;
 		esac
-
-		time_command fix_cygwin_msys_ssh_quirk
 	fi
 }

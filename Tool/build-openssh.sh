@@ -41,6 +41,15 @@ build() {
 			# --with-security-key-builtin
 		)
 
+		case "${HOST_TRIPLE}" in
+			*-cygwin )
+				if [ "${compiler}" = Clang ]; then
+					echo "On Cygwin, Clang can't be used to build openssh"
+					return 1
+				fi
+			;;
+		esac
+
 		# (cd openssh && autoreconf)
 		time_command configure_build_install_package \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \

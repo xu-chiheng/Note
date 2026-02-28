@@ -45,6 +45,19 @@ build() {
 			# --disable-doc
 		)
 
+		case "${HOST_TRIPLE}" in
+			*-cygwin )
+				if [ "${compiler}" = Clang ]; then
+					echo "On Cygwin, Clang can't be used to build cygwin"
+					return 1
+				fi
+			;;
+			* )
+				echo "On ${HOST_TRIPLE}, cross build cygwin is not tested."
+				return 1
+			;;
+		esac
+
 		# (cd cygwin/winsup && ./autogen.sh)
 		time_command configure_build_install_package \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \

@@ -34,8 +34,10 @@ build() {
 
 		local configure_options=(
 			--disable-libdns
+			--enable-maintainer-mode
 		)
 
+		# (cd gnupg && autoreconf)
 		time_command configure_build_install_package \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${configure_options[@]}"

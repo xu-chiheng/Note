@@ -1,3 +1,4 @@
 
+https://cygwin.com/cgit/cygwin-packages/gnupg2
 
 gnupg-2.5.17    17b514596f6000ebbffe5ec1101b6818b9c83cfe    2026-01-27

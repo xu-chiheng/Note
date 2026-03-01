@@ -35,6 +35,7 @@ build() {
 		local configure_options=(
 			--disable-libdns
 			--enable-maintainer-mode
+			--with-pinentry-pgm=/usr/bin/pinentry
 		)
 
 		# (cd gnupg && autoreconf)

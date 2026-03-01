@@ -6,7 +6,7 @@ index ce77ec943..418c499c6 100644
  	struct passwd *pw;
  	size_t len;
  	int ret = -1, r, slash;
-+    const char *home_env = NULL;
++	const char *home_env = NULL;
  
  	*retp = NULL;
  	if (*filename != '~') {

@@ -36,6 +36,9 @@ build() {
 			--disable-libdns
 			--enable-maintainer-mode
 			--with-pinentry-pgm=/usr/bin/pinentry
+
+			# --disable-nls
+			# --enable-werror
 		)
 
 		(cd gnupg && autoreconf) \

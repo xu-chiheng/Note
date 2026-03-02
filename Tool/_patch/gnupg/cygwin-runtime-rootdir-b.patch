@@ -8,7 +8,7 @@ index e1615e58d..a60f7021d 100644
        *p = 0;
 +#ifdef __CYGWIN__
 +      // printf("unix_rootdir readlink : %s\n", buffer);
-+      gpgconf_ctl.rootdir = strdup(buffer);
++      gpgconf_ctl.rootdir = xstrdup(buffer);
 +      gpgconf_ctl.checked = 1;
 +      gpgconf_ctl.valid = 1;
 +#endif

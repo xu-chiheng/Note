@@ -35,12 +35,8 @@ clean() {
 
 	local package
 	for package in git openssh gnupg; do
-		if [ -d "${package}" ]; then
-			if [ -d "${package}"/.git ] ; then
-				(cd "${package}" && git reset --hard HEAD && git clean -xfd -e '~git-tools~') 2>&1 >/dev/null
-			else
-				(cd "${package}" && make distclean) 2>&1 >/dev/null
-			fi
+		if [ -d "${package}" ] && [ -d "${package}"/.git ]; then
+			(cd "${package}" && git reset --hard HEAD && git clean -xfd -e '~git-tools~') 2>&1 >/dev/null
 		fi
 	done
 }

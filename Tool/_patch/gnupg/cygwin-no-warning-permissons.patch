@@ -1,0 +1,13 @@
+diff --git a/g10/gpg.c b/g10/gpg.c
+index db83e6a62..7dd4a4399 100644
+--- a/g10/gpg.c
++++ b/g10/gpg.c
+@@ -1623,7 +1623,7 @@ rm_group(char *name)
+ static int
+ check_permissions (const char *path, int item)
+ {
+-#if defined(HAVE_STAT) && !defined(HAVE_DOSISH_SYSTEM)
++#if defined(HAVE_STAT) && !defined(HAVE_DOSISH_SYSTEM) && !defined(__CYGWIN__)
+   static int homedir_cache=-1;
+   char *tmppath,*dir;
+   struct stat statbuf,dirbuf;

@@ -1,0 +1,13 @@
+diff --git a/g10/gpg.c b/g10/gpg.c
+index db83e6a62..7dd4a4399 100644
+--- a/g10/gpg.c
++++ b/g10/gpg.c
+@@ -1208,7 +1208,7 @@ my_strusage( int level )
+       p = ver_gcry;
+       break;
+ 
+-#ifdef IS_DEVELOPMENT_VERSION
++#if 0
+       case 25:
+ 	p="NOTE: THIS IS A DEVELOPMENT VERSION!";
+ 	break;

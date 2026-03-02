@@ -33,13 +33,16 @@ clean() {
 	# /cygdrive/c/Windows/system32/find
 	/usr/bin/find "${find_args[@]}" -print0 | xargs -0 -n100 rm -rf
 
-	if [ -d git ]; then
-		if [ -d git/.git ] ; then
-			(cd git && git reset --hard HEAD && git clean -xfd -e '~git-tools~') 2>&1 >/dev/null
-		else
-			(cd git && make distclean) 2>&1 >/dev/null
+	local package
+	for package in git openssh gnupg; do
+		if [ -d "${package}" ]; then
+			if [ -d "${package}"/.git ] ; then
+				(cd "${package}" && git reset --hard HEAD && git clean -xfd -e '~git-tools~') 2>&1 >/dev/null
+			else
+				(cd "${package}" && make distclean) 2>&1 >/dev/null
+			fi
 		fi
-	fi
+	done
 }
 
 clean "$@"

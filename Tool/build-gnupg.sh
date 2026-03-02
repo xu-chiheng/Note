@@ -38,8 +38,8 @@ build() {
 			--with-pinentry-pgm=/usr/bin/pinentry
 		)
 
-		# (cd gnupg && autoreconf)
-		time_command configure_build_install_package \
+		(cd gnupg && autoreconf) \
+		&& time_command configure_build_install_package \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${configure_options[@]}"
 

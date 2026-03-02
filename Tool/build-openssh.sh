@@ -36,9 +36,9 @@ build() {
 			# --libexecdir=/usr/sbin
 			--with-kerberos5=/usr
 			--with-libedit
-			# --with-xauth=/usr/bin/xauth
-			# --disable-strip
-			# --with-security-key-builtin
+			--with-xauth=/usr/bin/xauth
+			--disable-strip
+			--with-security-key-builtin
 		)
 
 		case "${HOST_TRIPLE}" in
@@ -50,8 +50,8 @@ build() {
 			;;
 		esac
 
-		# (cd openssh && autoreconf)
-		time_command configure_build_install_package \
+		(cd openssh && autoreconf) \
+		&& time_command configure_build_install_package \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${configure_options[@]}"
 

@@ -1,0 +1,41 @@
+diff --git a/common/homedir.c b/common/homedir.c
+index e1615e58d..a60f7021d 100644
+--- a/common/homedir.c
++++ b/common/homedir.c
+@@ -928,16 +928,36 @@ unix_rootdir (enum wantdir_values wantdir)
+ 
+       /* Strip one part and expect the file below a bin dir.  */
+       *p = 0;
++#ifdef __CYGWIN__
++      // printf("unix_rootdir readlink : %s\n", buffer);
++      gpgconf_ctl.rootdir = strdup(buffer);
++      gpgconf_ctl.checked = 1;
++      gpgconf_ctl.valid = 1;
++#endif
+       p = xstrconcat (buffer, "/bin/gpgconf.ctl", NULL);
+       xfree (buffer);
+       buffer = p;
++#ifndef __CYGWIN__
+       parse_gpgconf_ctl (buffer);
++#endif
+       xfree (buffer);
+     }
+ 
+   if (!gpgconf_ctl.valid)
+     return NULL; /* No valid entries in gpgconf.ctl  */
+ 
++#if 0
++	{
++		static bool printed = false;
++		if (!printed) {
++			printf("unix_rootdir WANTDIR_ROOT : %s\n", gpgconf_ctl.rootdir);
++			printf("unix_rootdir WANTDIR_SYSCONF : %s\n", gpgconf_ctl.sysconfdir);
++			printf("unix_rootdir WANTDIR_SOCKET : %s\n", gpgconf_ctl.socketdir);
++			printed = true;
++		}
++	}
++#endif
++
+   switch (wantdir)
+     {
+     case WANTDIR_ROOT:    return gpgconf_ctl.rootdir;

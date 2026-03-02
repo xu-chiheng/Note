@@ -1,0 +1,13 @@
+diff --git a/common/homedir.c b/common/homedir.c
+index e1615e58d..a60f7021d 100644
+--- a/common/homedir.c
++++ b/common/homedir.c
+@@ -66,7 +66,7 @@
+ 
+ /* The name of the symbolic link to the file from which the process
+  * text was read.  */
+-#if __linux__
++#if defined(__linux__) || defined(__CYGWIN__)
+ # define MYPROC_SELF_EXE "/proc/self/exe"
+ #elif defined(__NetBSD__)
+ # define MYPROC_SELF_EXE "/proc/curproc/exe"

@@ -1,0 +1,12 @@
+diff --git a/autogen.sh b/autogen.sh
+index 8695fcb51..6ad597c7a 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -279,6 +279,7 @@ if [ "$myhost" = "find-version" ]; then
+               fi
+           fi
+       fi
++      tmp=
+       [ -n "$tmp" ] && beta=yes
+       cid=$(git rev-parse --verify HEAD | tr -d '\n\r')
+       rev=$(git rev-parse --short HEAD | tr -d '\n\r')

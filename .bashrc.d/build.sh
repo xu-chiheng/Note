@@ -571,7 +571,6 @@ pushd_and_configure_2() {
 	print_configure_options "$@"
 
 	echo_command pushd "${package}" \
-	&& echo_command make configure \
 	&& time_command ./configure "$@"
 }
 

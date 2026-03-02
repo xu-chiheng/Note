@@ -41,7 +41,7 @@ build() {
 			# --enable-werror
 		)
 
-		(cd gnupg && autoreconf) \
+		(cd "${package}" && autoreconf) \
 		&& time_command configure_build_install_package \
 			"${package}" "${compiler}" "${linker}" "${build_type}" \
 			"${cc}" "${cxx}" "${cflags}" "${cxxflags}" "${ldflags}" "${configure_options[@]}"

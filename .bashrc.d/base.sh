@@ -842,6 +842,7 @@ windows_clean_or_hide_home_dir_entries() {
 	local dir_entries_to_delete=(
 		.Xauthority .viminfo .emacs.d .bash_history .serverauth.* .cache .kde .local .mozilla .pki .pylint.d .python_history .lesshst .wget-hsts
 		ansel source .ms-ad _build .cgdb .dotnet .fltk .fvwm .ncftp .qt .source-highlight .kde4 .templateengine
+		.gnupg/.#lk* .ssh/known_hosts.old .ssh/ssh-agent_env_*.sh .ssh/agent
 	)
 
 	echo "dir entries to delete :"
@@ -1068,7 +1069,7 @@ ssh_remove_known_hosts_file() {
 
 print_essential_files_for_basic_setup() {
 	local paths=(
-		README.txt ~git-tools~ .gitattributes .gitconfig .gitignore .bash_profile .curlrc .minttyrc .wgetrc .bashrc .bashrc.d config.guess editor.sh
+		README.txt '~git-tools~' .gitattributes .gitconfig .gitignore .bash_profile .curlrc .minttyrc .wgetrc .bashrc .bashrc.d config.guess editor.sh
 		.ssh/{.gitignore,README.txt,config} .gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf} .config/{.gitignore,git/gitk} __clean_or_hide.cmd
 
 		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_Enterprise,Windows_10_22H2_Enterprise_ISO}

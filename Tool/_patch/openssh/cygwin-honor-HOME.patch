@@ -1,0 +1,21 @@
+diff --git a/misc.c b/misc.c
+index ce77ec943..ff2348f7a 100644
+--- a/misc.c
++++ b/misc.c
+@@ -1258,6 +1258,16 @@ tilde_expand(const char *filename, uid_t uid, char **retp)
+ 		goto out;
+ 	}
+ 
++#ifdef __CYGWIN__
++	// On Cygwin, prefer $HOME if it is an absolute path.
++	const char * home_env = getenv("HOME");
++	if (home_env != NULL && *home_env == '/') {
++		pw->pw_dir = xstrdup(home_env);
++	} else {
++
++	}
++#endif
++
+ 	/* Make sure directory has a trailing '/' */
+ 	slash = (len = strlen(pw->pw_dir)) == 0 || pw->pw_dir[len - 1] != '/';
+ 

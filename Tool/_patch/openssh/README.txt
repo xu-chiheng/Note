@@ -2,7 +2,7 @@
 https://cygwin.com/cgit/cygwin-packages/openssh
 
 V_10_2_P1    d01efaa1c9ed84fd9011201dbc3c7cb0a82bcee3    2025-10-10
-patch_apply . ../_patch/openssh/cygwin-NO_SA_RESTART-{a,b}.patch
+patch_apply . ../_patch/openssh/cygwin-{NO_SA_RESTART-{a,b},honor-HOME}.patch
 
 
 
@@ -20,53 +20,3 @@ no
 checking for openssl... /usr/bin/openssl
 rm: cannot remove 'conftest.exe': Permission denied
 configure: error: *** working libcrypto not found, check config.log
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-tilde_expand
-tilde_expand_filename
-hostfile_create_user_ssh_dir
-Could not create directory
-
-
-HOME LOGNAME USER USERNAME
-
-
-char *
-get_homedir(void)
-{
-	char *cp;
-	struct passwd *pw;
-
-	if ((cp = getenv("HOME")) != NULL && *cp != '\0')
-		return xstrdup(cp);
-
-	if ((pw = getpwuid(getuid())) != NULL && *pw->pw_dir != '\0')
-		return xstrdup(pw->pw_dir);
-
-	return NULL;
-}
-

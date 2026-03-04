@@ -468,7 +468,7 @@ set_environment_variables_at_bash_startup() {
 	set_common_windows_packages_PATH_at_bash_startup
 	set_other_linux_environment_variables_at_bash_startup
 
-	ensure_cygwin_msys_ssh_home_dir_point_to_real_home
+	# ensure_cygwin_msys_ssh_home_dir_point_to_real_home
 	source_ssh-agent_env_script
 
 	if declare -F set_private_environment_variables_at_bash_startup >/dev/null; then

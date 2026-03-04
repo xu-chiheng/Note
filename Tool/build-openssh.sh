@@ -39,16 +39,26 @@ build() {
 			--with-xauth=/usr/bin/xauth
 			--disable-strip
 			--with-security-key-builtin
-		)
 
-		case "${HOST_TRIPLE}" in
-			*-cygwin )
-				if [ "${compiler}" = Clang ]; then
-					echo "On Cygwin, Clang can't be used to build openssh"
-					return 1
-				fi
-			;;
-		esac
+			--with-stackprotect
+			--with-hardening
+			--without-retpoline
+
+			# --with-retpoline will cause the following error when building with Clang
+			# clang -march=x86-64 -O3 -pipe -Wunknown-warning-option -Wno-error=format-truncation -Qunused-arguments -Wall -Wextra -Wpointer-arith -Wuninitialized -Wsign-compare -Wformat-security -Wsizeof-pointer-memaccess -Wno-pointer-sign -Wno-unused-parameter -Wno-unused-result -Wmisleading-indentation -Wbitwise-instead-of-logical -fno-strict-aliasing -D_FORTIFY_SOURCE=2 -ftrapv -fzero-call-used-regs=used -ftrivial-auto-var-init=zero -mretpoline -fno-builtin-memset -Wno-attributes   -I. -I../openssh -I"/cygdrive/e/Note/Tool/openssh-cygwin-clang-bfd-release-build/openbsd-compat/include"  -I/usr/include/editline -DOPENSSL_API_COMPAT=0x10100000L    -DSSHDIR=\"/cygdrive/e/Note/Tool/openssh-cygwin-clang-bfd-release-install/etc\" -D_PATH_SSH_PROGRAM=\"/cygdrive/e/Note/Tool/openssh-cygwin-clang-bfd-release-install/bin/ssh\" -D_PATH_SSH_ASKPASS_DEFAULT=\"/cygdrive/e/Note/Tool/openssh-cygwin-clang-bfd-release-install/libexec/ssh-askpass\" -D_PATH_SFTP_SERVER=\"/cygdrive/e/Note/Tool/openssh-cygwin-clang-bfd-release-install/libexec/sftp-server\" -D_PATH_SSH_KEY_SIGN=\"/cygdrive/e/Note/Tool/openssh-cygwin-clang-bfd-release-install/libexec/ssh-keysign\" -D_PATH_SSHD_SESSION=\"/cygdrive/e/Note/Tool/openssh-cygwin-clang-bfd-release-install/libexec/sshd-session\" -D_PATH_SSHD_AUTH=\"/cygdrive/e/Note/Tool/openssh-cygwin-clang-bfd-release-install/libexec/sshd-auth\" -D_PATH_SSH_PKCS11_HELPER=\"/cygdrive/e/Note/Tool/openssh-cygwin-clang-bfd-release-install/libexec/ssh-pkcs11-helper\" -D_PATH_SSH_SK_HELPER=\"/cygdrive/e/Note/Tool/openssh-cygwin-clang-bfd-release-install/libexec/ssh-sk-helper\" -D_PATH_SSH_PIDDIR=\"/var/run\" -D_PATH_PRIVSEP_CHROOT_DIR=\"/var/empty\" -DHAVE_CONFIG_H -c ../openssh/ssh-ecdsa-sk.c -o ssh-ecdsa-sk.o
+			# make: *** [Makefile:211: ssh-ecdsa-sk.o] Error 1
+			# clang: note: diagnostic msg: 
+			# ********************
+
+			# PLEASE ATTACH THE FOLLOWING FILES TO THE BUG REPORT:
+			# Preprocessed source(s) and associated run script(s) are located at:
+			# clang: note: diagnostic msg: /cygdrive/c/Users/ADMINI~1/AppData/Local/Temp/ssh-ed25519-sk-498767.c
+			# clang: note: diagnostic msg: /cygdrive/c/Users/ADMINI~1/AppData/Local/Temp/ssh-ed25519-sk-498767.sh
+			# clang: note: diagnostic msg: 
+
+			# ********************
+			# make: *** [Makefile:211: ssh-ed25519-sk.o] Error 1
+		)
 
 		(cd "${package}" && autoreconf) \
 		&& time_command configure_build_install_package \

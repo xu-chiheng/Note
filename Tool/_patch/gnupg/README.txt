@@ -10,19 +10,13 @@ On Cygwin, modify function unix_rootdir() to use runtime rootdir instead of hard
 This affect the function gnupg_bindir() and gnupg_libexecdir().
 
 no-warning-development-version.patch
-Remove a warning
+Remove warning about development version.
 
 cygwin-no-warning-permissons.patch
-Remove a warning
+Remove warning about permission on Cygwin.
 
 version-no-beta.patch
-Remove beta in version string.
-
-
-
-
-
-
+Remove "beta" in version string.
 
 
 

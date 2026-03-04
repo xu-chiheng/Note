@@ -7,6 +7,7 @@ patch_apply . ../_patch/openssh/cygwin-{NO_SA_RESTART-{a,b},honor-HOME}.patch
 
 
 cygwin-NO_SA_RESTART-{a,b}.patch
+Fix a build error on Cygwin.
 checking whether snprintf correctly terminates long strings... yes
 checking whether snprintf understands %zu... yes
 checking whether vsnprintf returns correct values on overflow... yes
@@ -20,3 +21,7 @@ no
 checking for openssl... /usr/bin/openssl
 rm: cannot remove 'conftest.exe': Permission denied
 configure: error: *** working libcrypto not found, check config.log
+
+
+cygwin-honor-HOME.patch
+Honor HOME environment variable on Cygwin.

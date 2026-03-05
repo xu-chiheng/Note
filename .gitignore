@@ -108,8 +108,6 @@ code.lock
 !/.gitconfig
 !/.gitignore
 !/.gitattributes
-!/.hgignore
-!/.hgrc
 !/.minttyrc
 !/.wgetrc
 !/.curlrc

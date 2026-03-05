@@ -840,9 +840,9 @@ windows_clean_or_hide_home_dir_entries() {
 	# cd ~
 
 	local dir_entries_to_delete=(
-		.Xauthority .viminfo .emacs.d .bash_history .serverauth.* .cache .kde .local .mozilla .pki .pylint.d .python_history .lesshst .wget-hsts
-		ansel source .ms-ad _build .cgdb .dotnet .fltk .fvwm .ncftp .qt .source-highlight .kde4 .templateengine
-		.gnupg/.#lk* .ssh/known_hosts.old .ssh/ssh-agent_env_*.sh .ssh/agent
+		.Xauthority .viminfo .emacs.d .bash_history .serverauth.* .cache .kde .local .mozilla .pylint.d .python_history .lesshst
+		.wget-hsts ansel source .ms-ad _build .cgdb .dotnet .fltk .fvwm .ncftp .qt .source-highlight .kde4 .templateengine .pki
+		.gnupg/.#lk* .ssh/{known_hosts.old,agent,ssh-agent_env_*.sh}
 	)
 
 	echo "dir entries to delete :"

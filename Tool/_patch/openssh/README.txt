@@ -2,7 +2,7 @@
 https://cygwin.com/cgit/cygwin-packages/openssh
 
 V_10_2_P1    d01efaa1c9ed84fd9011201dbc3c7cb0a82bcee3    2025-10-10
-patch_apply . ../_patch/openssh/cygwin-{NO_SA_RESTART-{a,b},honor-HOME-{a,b}}.patch
+patch_apply . ../_patch/openssh/cygwin-{NO_SA_RESTART-{a,b},honor-HOME}.patch
 
 
 
@@ -23,5 +23,5 @@ rm: cannot remove 'conftest.exe': Permission denied
 configure: error: *** working libcrypto not found, check config.log
 
 
-cygwin-honor-HOME-{a,b}.patch
+cygwin-honor-HOME.patch
 Honor HOME environment variable on Cygwin.

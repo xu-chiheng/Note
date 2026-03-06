@@ -2,11 +2,11 @@
 https://cygwin.com/cgit/cygwin-packages/openssh
 
 V_10_2_P1    d01efaa1c9ed84fd9011201dbc3c7cb0a82bcee3    2025-10-10
-patch_apply . ../_patch/openssh/cygwin-{NO_SA_RESTART-{a,b},honor-HOME}.patch
+patch_apply . ../_patch/openssh/cygwin-{NO_SA_RESTART,honor-HOME}.patch
 
 
 
-cygwin-NO_SA_RESTART-{a,b}.patch
+cygwin-NO_SA_RESTART.patch
 Fix a build error on Cygwin.
 checking whether snprintf correctly terminates long strings... yes
 checking whether snprintf understands %zu... yes

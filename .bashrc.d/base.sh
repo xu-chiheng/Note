@@ -502,7 +502,7 @@ ensure_cygwin_msys_ssh_home_dir_point_to_real_home() {
 	# https://serverfault.com/questions/76042/find-out-symbolic-link-target-via-command-line
 	if host_triple_is_windows; then
 		local ssh_home_dir="/home/${USERNAME}"
-		if ! { [ -e "${ssh_home_dir}" ] && [ "$(readlink -f "${ssh_home_dir}")" = "$(readlink -f ~)" ] ;}; then
+		if [ ! "${ssh_home_dir}" = ~ ] && ! { [ -e "${ssh_home_dir}" ] && [ "$(readlink -f "${ssh_home_dir}")" = "$(readlink -f ~)" ] ;}; then
 			rm -rf "${ssh_home_dir}" \
 			&& ln -s ~ "${ssh_home_dir}"
 		fi

@@ -111,3 +111,14 @@ code.lock
 !/.minttyrc
 !/.wgetrc
 !/.curlrc
+
+# Vibe Coding
+!/.openclaw
+!/.claude
+!/.cursor
+!/.codex
+!/.aider.conf.yml
+!/.continue
+!/.windsurf
+!/.sourcegraph
+!/.zed

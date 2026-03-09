@@ -115,8 +115,10 @@ code.lock
 # Vibe Coding
 !/.openclaw
 !/.claude
-!/.cursor
+!/.opencode
 !/.codex
+!/.vscode
+!/.cursor
 !/.aider.conf.yml
 !/.continue
 !/.windsurf

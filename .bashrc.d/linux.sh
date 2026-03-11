@@ -206,11 +206,12 @@ linux_server_common_setup() {
 	time_command linux_configure_sshd_keepalive
 }
 
+# linux_print_distribution_kde_iso_url | xargs -n1 wget
 linux_print_distribution_kde_iso_url() {
 	# Kubuntu  https://kubuntu.org
 	local ubuntu_mirror="https://mirrors.tuna.tsinghua.edu.cn/ubuntu-cdimage"
 	local kubuntu_version_major=24.04
-	local kubuntu_version_minor=3
+	local kubuntu_version_minor=4
 
 	# Fedora KDE  https://fedoraproject.org/spins/kde
 	local fedora_mirror="https://mirrors.tuna.tsinghua.edu.cn/fedora"
@@ -220,16 +221,26 @@ linux_print_distribution_kde_iso_url() {
 	# Debian KDE  https://www.debian.org/CD/live
 	local debian_mirror="https://mirrors.tuna.tsinghua.edu.cn/debian-cd"
 	local debian_kde_version_major=13
-	local debian_kde_version_minor=1.0
+	local debian_kde_version_minor=3.0
 
 	# Rocky Linux KDE  https://docs.rockylinux.org/guides/desktop/kde_installation
+	# https://mirrors.rockylinux.org/mirrormanager/mirrors
 	local rocky_mirror="https://mirrors.ustc.edu.cn/rocky"
-	local rocky_linux_kde_version_major=10.0
-	local rocky_linux_kde_version_minor=20250606.2
+	# local rocky_mirror="https://mirror.sjtu.edu.cn/rocky"
+	# local rocky_mirror="https://mirror.nju.edu.cn/rocky"
+	# local rocky_mirror="https://mirror.nyist.edu.cn/rocky"
+	# local rocky_mirror="https://mirrors.qlu.edu.cn/rocky"
+	local rocky_linux_kde_version_major=10.1
+	local rocky_linux_kde_version_minor=20251116.0
 
 	# AlmaLinux KDE  https://almalinux.org/get-almalinux
-	local alma_mirror="https://mirrors.aliyun.com/almalinux"
-	local alma_linux_kde_version_major=10.0
+	# https://mirrors.almalinux.org
+	local alma_mirror="https://mirrors.sjtug.sjtu.edu.cn/almalinux"
+	# local alma_mirror="https://mirrors.zju.edu.cn/almalinux"
+	# local alma_mirror="https://mirrors.nju.edu.cn/almalinux"
+	# local alma_mirror="https://mirrors.cloud.tencent.com/almalinux"
+	# local alma_mirror="https://mirrors.aliyun.com/almalinux"
+	local alma_linux_kde_version_major=10.1
 
 	cat <<EOF
 ${ubuntu_mirror}/kubuntu/releases/${kubuntu_version_major}.${kubuntu_version_minor}/release/kubuntu-${kubuntu_version_major}.${kubuntu_version_minor}-desktop-amd64.iso

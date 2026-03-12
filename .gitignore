@@ -119,8 +119,9 @@ code.lock
 !/.codex
 !/.vscode
 !/.cursor
+!/.windsurf
+!/.gemini
 !/.aider.conf.yml
 !/.continue
-!/.windsurf
 !/.sourcegraph
 !/.zed

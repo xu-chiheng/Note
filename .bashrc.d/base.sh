@@ -874,17 +874,19 @@ windows_clean_or_hide_home_dir_entries() {
 	echo "completed"
 }
 
-# https://superuser.com/questions/198525/how-can-i-execute-a-windows-command-line-in-background
-# https://stackoverflow.com/questions/21031171/how-to-run-a-command-in-the-background-on-windows
-# https://stackoverflow.com/questions/31164253/how-to-open-url-in-microsoft-edge-from-the-command-line
 windows_launch_program_in_background() {
-	local program_unix_path="$(cygpath -u "$1")"
-	shift 1
-	local program_base_name="$(basename "${program_unix_path}")"
-	local program_dir_name="$(dirname "${program_unix_path}")"
-
-	PATH="$(join_array_elements ':' "${program_dir_name}" "${PATH}")" \
-	cmd.exe /c start /B "${program_base_name}" "$@"
+	# https://superuser.com/questions/198525/how-can-i-execute-a-windows-command-line-in-background
+	# https://stackoverflow.com/questions/21031171/how-to-run-a-command-in-the-background-on-windows
+	# https://stackoverflow.com/questions/31164253/how-to-open-url-in-microsoft-edge-from-the-command-line
+	local command_and_args=( cmd.exe /c start "" /B "$@" )
+	case "${HOST_TRIPLE}" in
+		*-cygwin )
+			"${command_and_args[@]}"
+			;;
+		*-msys | *-mingw* )
+			MSYS2_ARG_CONV_EXCL="*" "${command_and_args[@]}"
+			;;
+	esac
 }
 
 linux_launch_program_in_background() {

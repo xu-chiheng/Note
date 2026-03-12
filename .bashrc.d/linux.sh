@@ -212,16 +212,19 @@ linux_print_distribution_kde_iso_url() {
 	local ubuntu_mirror="https://mirrors.tuna.tsinghua.edu.cn/ubuntu-cdimage"
 	local kubuntu_version_major=24.04
 	local kubuntu_version_minor=4
+	echo "${ubuntu_mirror}/kubuntu/releases/${kubuntu_version_major}.${kubuntu_version_minor}/release/kubuntu-${kubuntu_version_major}.${kubuntu_version_minor}-desktop-amd64.iso"
 
 	# Fedora KDE  https://fedoraproject.org/spins/kde
 	local fedora_mirror="https://mirrors.tuna.tsinghua.edu.cn/fedora"
 	local fedora_kde_version_major=43
 	local fedora_kde_version_minor=1.6
+	echo "${fedora_mirror}/releases/${fedora_kde_version_major}/KDE/x86_64/iso//Fedora-KDE-Desktop-Live-${fedora_kde_version_major}-${fedora_kde_version_minor}.x86_64.iso"
 
 	# Debian KDE  https://www.debian.org/CD/live
 	local debian_mirror="https://mirrors.tuna.tsinghua.edu.cn/debian-cd"
 	local debian_kde_version_major=13
 	local debian_kde_version_minor=3.0
+	echo "${debian_mirror}/${debian_kde_version_major}.${debian_kde_version_minor}-live/amd64/iso-hybrid/debian-live-${debian_kde_version_major}.${debian_kde_version_minor}-amd64-kde.iso"
 
 	# Rocky Linux KDE  https://docs.rockylinux.org/guides/desktop/kde_installation
 	# https://mirrors.rockylinux.org/mirrormanager/mirrors
@@ -232,6 +235,7 @@ linux_print_distribution_kde_iso_url() {
 	# local rocky_mirror="https://mirrors.qlu.edu.cn/rocky"
 	local rocky_linux_kde_version_major=10.1
 	local rocky_linux_kde_version_minor=20251116.0
+	echo "${rocky_mirror}/${rocky_linux_kde_version_major}/live/x86_64/Rocky-${rocky_linux_kde_version_major}-KDE-x86_64-${rocky_linux_kde_version_minor}.iso"
 
 	# AlmaLinux KDE  https://almalinux.org/get-almalinux
 	# https://mirrors.almalinux.org
@@ -241,13 +245,6 @@ linux_print_distribution_kde_iso_url() {
 	# local alma_mirror="https://mirrors.cloud.tencent.com/almalinux"
 	# local alma_mirror="https://mirrors.aliyun.com/almalinux"
 	local alma_linux_kde_version_major=10.1
-
-	cat <<EOF
-${ubuntu_mirror}/kubuntu/releases/${kubuntu_version_major}.${kubuntu_version_minor}/release/kubuntu-${kubuntu_version_major}.${kubuntu_version_minor}-desktop-amd64.iso
-${fedora_mirror}/releases/${fedora_kde_version_major}/KDE/x86_64/iso//Fedora-KDE-Desktop-Live-${fedora_kde_version_major}-${fedora_kde_version_minor}.x86_64.iso
-${debian_mirror}/${debian_kde_version_major}.${debian_kde_version_minor}-live/amd64/iso-hybrid/debian-live-${debian_kde_version_major}.${debian_kde_version_minor}-amd64-kde.iso
-${rocky_mirror}/${rocky_linux_kde_version_major}/live/x86_64/Rocky-${rocky_linux_kde_version_major}-KDE-x86_64-${rocky_linux_kde_version_minor}.iso
-${alma_mirror}/${alma_linux_kde_version_major}/live/x86_64/AlmaLinux-${alma_linux_kde_version_major}-x86_64-Live-KDE.iso
-EOF
+	echo "${alma_mirror}/${alma_linux_kde_version_major}/live/x86_64/AlmaLinux-${alma_linux_kde_version_major}-x86_64-Live-KDE.iso"
 
 }

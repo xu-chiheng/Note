@@ -31,6 +31,7 @@
 /ventoy
 /ipxe
 /wimboot
+/shim
 /xnu
 /netbsd
 /openbsd

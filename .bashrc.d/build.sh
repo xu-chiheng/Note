@@ -377,10 +377,6 @@ git_repo_url_of_package() {
 		glibc )
 			echo "git://sourceware.org/git/glibc.git"
 			;;
-		linux )
-			echo "https://github.com/torvalds/linux.git"
-			# echo "git@github.com:torvalds/linux.git"
-			;;
 		mintty )
 			echo "https://github.com/mintty/mintty.git"
 			# echo "git@github.com:mintty/mintty.git"
@@ -415,6 +411,14 @@ git_repo_url_of_package() {
 		wimboot )
 			echo "https://github.com/ipxe/wimboot.git"
 			# echo "git@github.com:ipxe/wimboot.git"
+			;;
+		shim )
+			echo "https://github.com/rhboot/shim.git"
+			# echo "git@github.com:rhboot/shim.git"
+			;;
+		linux )
+			echo "https://github.com/torvalds/linux.git"
+			# echo "git@github.com:torvalds/linux.git"
 			;;
 		xnu )
 			echo "https://github.com/apple-oss-distributions/xnu.git"

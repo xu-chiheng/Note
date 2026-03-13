@@ -1081,10 +1081,9 @@ print_essential_files_for_basic_setup() {
 		README.txt '~git-tools~' .gitattributes .gitconfig .gitignore .bash_profile .curlrc .minttyrc .wgetrc .bashrc .bashrc.d config.guess editor.sh
 		.ssh/{.gitignore,README.txt,config} .gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf} .config/{.gitignore,git/gitk} __clean_or_hide.cmd
 
-		'~shortcuts~'/{_______bash-command-prompt.cmd,____pc_hibernate.cmd,____pc_lock_sceen.cmd,____pc_sync_data.cmd,____pc_sync_time.cmd,\
-___Google_Chrome____.cmd,___Microsoft_Edge____.cmd,_Notepad++.cmd,_Source_Insight_3.5.cmd,_Source_Insight_4.0.cmd,\
-_Code_cygwin.cmd,_Code_mingw_ucrt.cmd,_Code_mingw_vcrt.cmd,_Code_msys.cmd,_Code_vs_cygwin.cmd,_Code_vs_msys.cmd}
-	
+		'~shortcuts~'/{_______bash-command-prompt,____pc_{hibernate,lock_sceen,sync_data,sync_time},___Google_Chrome____,___Microsoft_Edge____,\
+_Notepad++,_Source_Insight_{3.5,4.0},_Code_{cygwin,mingw_{ucrt,vcrt},msys,vs_{cygwin,msys}}}.cmd
+
 		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_Enterprise,Windows_10_22H2_Enterprise_ISO}
 		Util/{other/{crypto,backup},quirk,shell,setting/editor}
 		Util/{_vps-get-latest-scripts-and-do-common-setup,linux_setup,xray-nginx,sing-box-y,sing-box-f,v2ray-agent,wireguard}.sh

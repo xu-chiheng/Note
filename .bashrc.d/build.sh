@@ -412,6 +412,10 @@ git_repo_url_of_package() {
 			echo "https://github.com/ipxe/ipxe.git"
 			# echo "git@github.com:ipxe/ipxe.git"
 			;;
+		wimboot )
+			echo "https://github.com/ipxe/wimboot.git"
+			# echo "git@github.com:ipxe/wimboot.git"
+			;;
 		xnu )
 			echo "https://github.com/apple-oss-distributions/xnu.git"
 			# echo "git@github.com:apple-oss-distributions/xnu.git"

@@ -404,6 +404,30 @@ git_repo_url_of_package() {
 			echo "https://github.com/gpg/gnupg.git"
 			# echo "git@github.com:gpg/gnupg.git"
 			;;
+		ventoy )
+			echo "https://github.com/ventoy/Ventoy.git"
+			# echo "git@github.com:ventoy/Ventoy.git"
+			;;
+		ipxe )
+			echo "https://github.com/ipxe/ipxe.git"
+			# echo "git@github.com:ipxe/ipxe.git"
+			;;
+		xnu )
+			echo "https://github.com/apple-oss-distributions/xnu.git"
+			# echo "git@github.com:apple-oss-distributions/xnu.git"
+			;;
+		netbsd )
+			echo "https://github.com/NetBSD/src.git"
+			# echo "git@github.com:NetBSD/src.git"
+			;;
+		openbsd )
+			echo "https://github.com/openbsd/src.git"
+			# echo "git@github.com:openbsd/src.git"
+			;;
+		freebsd )
+			echo "https://github.com/freebsd/freebsd-src.git"
+			# echo "git@github.com:freebsd/freebsd-src.git"
+			;;
 		* )
 			echo "unknown package : ${package}"
 			return 1

@@ -28,6 +28,12 @@
 /mintty
 /konsole
 /gnome-terminal
+/ventoy
+/ipxe
+/xnu
+/netbsd
+/openbsd
+/freebsd
 /*-build
 /*-install
 /*.xz

@@ -1082,7 +1082,8 @@ print_essential_files_for_basic_setup() {
 		.ssh/{.gitignore,README.txt,config} .gnupg/{.gitignore,README.txt,gpg.conf,gpg-agent.conf} .config/{.gitignore,git/gitk} __clean_or_hide.cmd
 
 		'~shortcuts~'/{_______bash-command-prompt,____pc_{hibernate,lock_sceen,sync_data,sync_time},___Google_Chrome____,___Microsoft_Edge____,\
-_Notepad++,_Source_Insight_{3.5,4.0},_Code_{cygwin,mingw_{ucrt,vcrt},msys,vs_{cygwin,msys}}}.cmd
+_Notepad++,_Source_Insight_{3.5,4.0},_Code_{cygwin,mingw_{ucrt,vcrt},msys,vs_{cygwin,msys}},\
+A_{,Note{,_~git-tools~_{cygwin,msys},_Tool}},shortcuts}.cmd
 
 		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_Enterprise,Windows_10_22H2_Enterprise_ISO}
 		Util/{other/{crypto,backup},quirk,shell,setting/editor}

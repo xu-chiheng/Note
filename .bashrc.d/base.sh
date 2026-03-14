@@ -973,12 +973,9 @@ windows_download_executable_from_url_and_execute() {
 	local executable="$1"
 	local url="$2"
 	shift 2
-	# using Cygwin's /usr/bin/curl will have problem
-	# curl: (77) error setting certificate file: /etc/pki/tls/certs/ca-bundle.crt
-	# Since Windows 10, a native curl.exe is included. You can invoke it directly
-	# This version uses Windows' certificate store and avoids the issue.
 	local curl
 	curl="/usr/bin/curl"
+	# Since Windows 10, a native curl.exe is included.
 	# curl="$(cygpath -u 'C:\Windows\System32\curl.exe')"
 	echo_command rm -rf "${executable}" \
 	&& time_command "${curl}" -L -o "${executable}" "${url}" \
@@ -988,22 +985,27 @@ windows_download_executable_from_url_and_execute() {
 }
 
 print_full_path_of_windows_program_vs_code() {
+	# https://code.visualstudio.com/Download
 	echo 'C:\Program Files\Microsoft VS Code\Code.exe'
 }
 
 print_full_path_of_windows_program_notepadpp() {
+	# https://notepad-plus-plus.org/downloads
 	echo 'C:\Program Files\Notepad++\notepad++.exe'
 }
 
 print_full_path_of_windows_program_ultraiso() {
+	# https://www.ultraiso.com/download.html
 	echo 'C:\Program Files (x86)\UltraISO\UltraISO.exe'
 }
 
 print_full_path_of_windows_program_source_insight_3.5() {
+	# https://www.sourceinsight.com/updates
 	echo 'C:\Program Files (x86)\Source Insight 3\Insight3.exe'
 }
 
 print_full_path_of_windows_program_source_insight_4.0() {
+	# https://www.sourceinsight.com/updates
 	echo 'C:\Program Files (x86)\Source Insight 4.0\sourceinsight4.exe'
 }
 

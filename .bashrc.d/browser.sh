@@ -112,15 +112,19 @@ launch_browser_in_background() {
 	if host_triple_is_windows; then
 		case "${command}" in
 			tor_browser )
+				# https://www.torproject.org/download
 				browser='D:\Tor Browser\Browser\firefox.exe'
 				;;
 			firefox* )
+				# https://www.mozilla.org/en-US/firefox/all
 				browser='C:\Program Files\Mozilla Firefox\firefox.exe'
 				;;
 			chrome* )
+				# https://chromeenterprise.google/browser/download
 				browser='C:\Program Files\Google\Chrome\Application\chrome.exe'
 				;;
 			edge* )
+				# https://www.microsoft.com/en-us/edge/business/download
 				browser='C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
 				;;
 			* )

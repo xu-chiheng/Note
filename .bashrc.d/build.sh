@@ -416,6 +416,10 @@ git_repo_url_of_package() {
 			echo "https://github.com/rhboot/shim.git"
 			# echo "git@github.com:rhboot/shim.git"
 			;;
+		netboot.xyz )
+			echo "https://github.com/netbootxyz/netboot.xyz.git"
+			# echo "git@github.com:netbootxyz/netboot.xyz.git"
+			;;
 		linux )
 			echo "https://github.com/torvalds/linux.git"
 			# echo "git@github.com:torvalds/linux.git"

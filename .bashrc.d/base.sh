@@ -1091,7 +1091,7 @@ A_{,Note{,_~git-tools~_{cygwin,msys},_Tool}},shortcuts}.cmd
 
 		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_Enterprise,Windows_10_22H2_Enterprise_ISO}
 		Util/{other/{crypto,backup},quirk,shell,setting/editor}
-		Util/{_vps-get-latest-scripts-and-do-common-setup,linux_setup,xray-nginx,sing-box-y,sing-box-f,v2ray-agent,wireguard}.sh
+		Util/{_vps-get-latest-scripts-and-do-common-setup,linux-setup,xray-nginx,sing-box-y,sing-box-f,v2ray-agent,wireguard}.sh
 	)
 	print_array_elements_no_tab "${paths[@]}"
 }

@@ -1,0 +1,45 @@
+
+从Win10原版ISO安装Win10
+* 移除所有USB移动硬盘。否则安装Win10失败。
+* 启动到WinPE中。
+* 删除要安装系统的硬盘的所有分区。
+* 使用WinPE自带的虚拟光驱，加载Win10 ISO，双击setup开始安装。
+
+* 安装过程中，创建临时账户user。
+* 以user账户登录，使能Administrator账户。"命令提示符"，右键选择"以管理员身份运行"，在弹出的窗口中输入"net user administrator /active:yes"。
+* 以Administrator账户登录，删除临时user账户。
+* “文档”文件夹位置改为D:\Documents，“下载”文件夹位置改为D:\Downloads。
+* 设置桌面显示控制面板，此电脑，命令提示符。
+* 安装Nvidia显卡驱动和Realtek声卡驱动，调整分辨率为3840*2160，文本缩放改为100%，调整音量到20%。
+* 鼠标“指针选项/移动速度”调到最快，“滚轮/垂直滚动”设置为“一次滚动15行”。
+* 显示设置中，设置多显示器，主显示器两边的附显示器，调整位置，为主显示器的左下角或右下角，以防止鼠标光标经常跑出主显示器。
+* 安装无线网卡驱动，连接WiFi。网络连接中禁用其它网卡，只留一个无线网卡。只连接路由器的5G信号，不要连接5G/2.5G混合信号，否则，休眠启动之后，会自动连接2.5G信号，网速变慢。
+* 关闭“病毒和威胁防护”“实时保护”。
+* 使用KMSoffline(或者KMS的W10 Digital Activation功能)激活Win10。
+* 安装搜狗输入法，设置“候选项数”为9。删除微软拼音输入法。语言首选项中添加“英语（美国）”，并且键盘中设置默认键盘为“英语-美式键盘”。
+* 安装Monaco字体。
+* 安装WinRAR，UltraISO，Source Insight 3.5/4.0，Notepad++，VS Code，HashCheck Shell Extension，Google Chrome，Microsoft Edge，Acrobat Reader，WinDjView，并发送快捷方式到桌面。
+* 浏览器Zoom设置为100%。从GHOST恢复之后，可以根据需要调整Zoom，Chrome和Edge会记住每个网站的Zoom。
+* 设置所有的.txt文件由Notepad++打开。
+* 声音方案调整为“无声”。
+* 在通知管理中关闭所有通知。
+* 系统属性，高级， 性能中，点选“调整为最佳外观”，取消勾选 “在最大化和最小化时显示窗口动画”。
+* “病毒和威胁防护” “排除项” 中添加D:\。
+* 调整Explorer设置。
+* 调整任务栏的设置。
+* 可选地，更改计算机名为Xu-Chiheng。
+* 电源选项中，禁用休眠，禁用关闭显示器。处理器电源管理，最小处理器状态改为100%（默认为5%）。
+* 发送v2rayN快捷方式到桌面，并启动v2rayN，设置开机启动。
+* 发送Beyond Compare快捷方式到桌面。
+* 设置CYGWIN_DIR，MSYS2_DIR，VS_DIR，HOME，DATA_DIR环境变量。初始安装时HOME设置为E:\Note，是一个目录，不是一个symlink，以免污染%USERPROFILE%(C:\Users\Administrator)。从GHOST恢复之后，HOME需要设置为%USERPROFILE%，并且建立E:\Note-->%USERPROFILE%的symlink。
+* 卸载Internet Explorer。
+* 重启到WinPE中，使用GHOST备份系统。
+* 重启到Win10之后，计算GHOST文件的SHA512值，并将GHOST文件拷贝到移动硬盘。
+
+* 安装Office 2019，使用KMSoffline(或者KMS的AAct Network-->Office Activation)激活Office 2019。
+* 安装VLC media player。
+
+* 安装360安全卫士，体检，查杀，修复，优化，清理系统。
+* 卸载360安全卫士。
+* 重启到WinPE中，使用GHOST备份系统。
+* 重启到Win10之后，计算GHOST文件的SHA512值，并将GHOST文件拷贝到移动硬盘。

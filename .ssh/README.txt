@@ -1,21 +1,200 @@
-In the ~/.ssh directory, there are typically configuration files and keys required for SSH client and server operations. This directory serves as the default location for storing SSH-related files, including:
-
-authorized_keys: This file contains the public keys of users allowed to connect to an SSH server. Each user's public key usually occupies one line. When a user attempts to connect to the server, it checks if the private key provided by the user matches any of the public keys listed in authorized_keys. If a match is found, the user is granted access.
-id_rsa and id_rsa.pub: These two files are the private and public keys used by the SSH client. id_rsa is the private key file, while id_rsa.pub is the corresponding public key file. The private key should be kept secure, while the public key can be safely shared with others or servers.
-id_dsa and id_dsa.pub: Similar to the above, these files represent the private and public keys used by the SSH client, but they utilize the DSA (Digital Signature Algorithm) instead of RSA.
-config: This file contains configuration options for the SSH client, allowing users to define host aliases, port numbers, authentication methods, etc. By editing this file, users can conveniently customize the behavior of the SSH client.
-known_hosts: This file stores the public keys of remote hosts that the SSH client has previously connected to. When a user attempts to connect to a host, the client checks if the host's public key matches any records in known_hosts. If there's no match, it may issue a warning.
-These files in the ~/.ssh directory typically have default permissions set to be owned by the user, with private key files often requiring strict permissions to ensure security.
 
 
-在 ~/.ssh 目录中通常包含了 SSH 客户端和服务器所需的配置文件和密钥。这个目录是用来存放 SSH 相关文件的默认位置，其中的文件有以下一些：
+Here are the full expanded meanings of the two OpenSSH hybrid key-exchange algorithm names.
 
-authorized_keys: 这个文件包含了允许连接到 SSH 服务器的用户的公钥。每个用户的公钥通常占据一行。当用户尝试连接到服务器时，服务器会检查用户提供的私钥是否与 authorized_keys 中的公钥匹配，如果匹配成功，用户就可以登录。
-id_rsa 和 id_rsa.pub: 这两个文件是 SSH 客户端使用的私钥和公钥。id_rsa 是私钥文件，而 id_rsa.pub 是对应的公钥文件。私钥应该保持私密，而公钥可以安全地分享给其他人或服务器。
-id_dsa 和 id_dsa.pub: 这两个文件同样是 SSH 客户端的私钥和公钥，不过它们采用了 DSA（Digital Signature Algorithm）算法，而不是 RSA 算法。
-config: 这个文件包含了 SSH 客户端的配置选项，可以在其中定义主机别名、端口号、身份验证方法等信息。通过编辑这个文件，用户可以方便地配置 SSH 客户端的行为。
-known_hosts: 这个文件包含了 SSH 客户端曾经连接过的远程主机的公钥。当用户尝试连接某个主机时，客户端会检查该主机的公钥是否匹配 known_hosts 中的记录，如果不匹配，可能会发出警告。
-这些文件在 ~/.ssh 目录中的默认权限设置为用户所有，并且私钥文件通常要求权限非常严格，以确保安全性。
+---
+
+mlkem768x25519-sha256
+
+Full meaning:
+
+ML-KEM-768 × X25519 with SHA-256
+
+Expanded components:
+
+ML-KEM-768
+Module-Lattice-based Key-Encapsulation Mechanism, parameter set 768 (the NIST-standardized version of CRYSTALS-Kyber)
+
+X25519
+Elliptic-curve Diffie–Hellman over Curve25519
+
+SHA-256
+Secure Hash Algorithm 256-bit hash function
+
+Meaning of the full name:
+
+A hybrid key exchange that combines the post-quantum ML-KEM-768 key encapsulation mechanism with the classical X25519 elliptic-curve Diffie–Hellman exchange, using SHA-256 in the key derivation process.
+
+---
+
+sntrup761x25519-sha512
+
+Full meaning:
+
+Streamlined NTRU Prime 761 × X25519 with SHA-512
+
+Expanded components:
+
+sntrup761
+Streamlined NTRU Prime with parameter set 761
+
+NTRU
+Nth Degree Truncated Polynomial Ring Units
+
+X25519
+Elliptic-curve Diffie–Hellman over Curve25519
+
+SHA-512
+Secure Hash Algorithm 512-bit hash function
+
+Meaning of the full name:
+
+A hybrid key exchange combining the post-quantum Streamlined NTRU Prime (sntrup761) algorithm with the classical X25519 elliptic-curve Diffie–Hellman exchange, using SHA-512 in the key derivation process.
+
+---
+
+In short:
+
+mlkem768x25519-sha256
+= ML-KEM-768 + X25519 hybrid key exchange using SHA-256
+
+sntrup761x25519-sha512
+= Streamlined NTRU Prime-761 + X25519 hybrid key exchange using SHA-512.
+
+
+
+
+
+
+The difference between DH/ECDH key exchange and ML-KEM/NTRU (post-quantum key exchange) mainly comes from their mathematical foundations, protocol structure, and resistance to quantum computers.
+
+1. Classical SSH key exchange: DH and ECDH
+
+Traditional SSH key exchange uses Diffie–Hellman or Elliptic-curve Diffie–Hellman.
+
+Both follow the same idea: two parties exchange public values derived from private secrets and independently compute the same shared secret.
+
+In Diffie–Hellman:
+
+Public parameters are g and p.
+
+Alice chooses a private number a.
+Bob chooses a private number b.
+
+They exchange:
+
+A = g^a mod p
+B = g^b mod p
+
+Then they compute the shared secret:
+
+Alice computes B^a mod p.
+Bob computes A^b mod p.
+
+Both results equal g^(ab) mod p.
+
+ECDH uses the same concept but with elliptic curve mathematics instead of modular exponentiation. For example, with Curve25519:
+
+Alice computes a × G.
+Bob computes b × G.
+
+After exchanging these values, both compute the shared secret a × (b × G).
+
+The security relies on the discrete logarithm problem (or elliptic-curve discrete logarithm problem).
+
+2. Why DH/ECDH are not quantum-safe
+
+Quantum computers could run Shor’s algorithm, which can efficiently solve integer factorization and discrete logarithm problems.
+
+If large-scale quantum computers become practical, they could break RSA, DH, and ECDH.
+
+This creates a threat called “store now, decrypt later”. Attackers can record encrypted traffic today and decrypt it in the future once quantum computers are powerful enough.
+
+3. Post-quantum key exchange: ML-KEM and NTRU
+
+Post-quantum algorithms used in modern SSH include ML-KEM and NTRU Prime.
+
+These algorithms are based on lattice cryptography, especially problems like Learning With Errors (LWE).
+
+Unlike discrete logarithm problems, there is currently no known efficient classical or quantum algorithm that solves these lattice problems.
+
+Therefore they are considered resistant to quantum attacks.
+
+4. Structural difference between DH and post-quantum KEX
+
+DH and ECDH are symmetric key agreement protocols. Both sides contribute values and compute the secret.
+
+Alice sends A.
+Bob sends B.
+Both compute the same secret independently.
+
+Post-quantum schemes like ML-KEM use a Key Encapsulation Mechanism (KEM).
+
+The process works more like public-key encryption:
+
+The server publishes a public key.
+The client encapsulates a shared secret using that public key.
+The server decapsulates it to recover the same secret.
+
+Both sides end up with the same shared secret, but the protocol is structurally different from Diffie–Hellman.
+
+5. Hybrid key exchange in OpenSSH
+
+Modern OpenSSH versions combine classical and post-quantum algorithms.
+
+Example: mlkem768x25519-sha256.
+
+This means the shared secret is derived from two independent exchanges:
+
+ML-KEM (post-quantum) and X25519 (ECDH).
+
+The final session key is generated by combining both secrets.
+
+This hybrid design protects against two risks:
+
+If the post-quantum algorithm later turns out to be weak, the classical ECDH still protects the session.
+
+If quantum computers break ECDH in the future, the post-quantum algorithm still protects the session.
+
+6. Summary
+
+DH and ECDH rely on discrete logarithm problems and are vulnerable to quantum computers.
+
+ML-KEM and NTRU rely on lattice problems that are believed to remain secure even against quantum attacks.
+
+OpenSSH therefore uses hybrid key exchange algorithms that combine both approaches to provide long-term security.
+
+
+
+
+| Type   | Example             | Security assumption         | Quantum safe |
+| ------ | ------------------- | --------------------------- | ------------ |
+| DH     | modp Diffie-Hellman | discrete logarithm          | ❌            |
+| ECDH   | Curve25519          | elliptic-curve discrete log | ❌            |
+| PQC    | ML-KEM / NTRU       | lattice problems            | ✅            |
+| Hybrid | ML-KEM + X25519     | combined security           | ✅            |
+
+In short:
+
+DH/ECDH rely on discrete logarithm problems and are vulnerable to future quantum computers.
+
+ML-KEM / NTRU rely on lattice problems believed to resist quantum attacks.
+
+OpenSSH hybrid KEX combines classical and post-quantum methods to achieve long-term security.
+
+
+
+
+
+
+Post-Quantum KEX（ML-KEM / NTRU）
+ML-KEM(Module-Lattice-based Key-Encapsulation Mechanism)     Lattice problem
+NTRU Prime(Nth Degree Truncated Polynomial Ring Units)	     Lattice problem
+
+Learning With Errors problem
+Lattice-based cryptography
+
+KEM（Key Encapsulation Mechanism）
 
 
 
@@ -35,6 +214,34 @@ Curve25519 (X25519)    255 bits  Key exchange   ≈ RSA 3072 bits          TLS, 
 Ed25519                255 bits  Signatures     ≈ RSA 3072 bits          SSH, Git, JWTs
 Curve448 (X448)        448 bits  Key exchange   ≈ RSA 7680 bits          Higher security ECDH
 Ed448                  448 bits  Signatures     ≈ RSA 7680 bits          High-assurance signatures
+
+
+
+
+
+
+
+
+
+
+In the ~/.ssh directory, there are typically configuration files and keys required for SSH client and server operations. This directory serves as the default location for storing SSH-related files, including:
+
+authorized_keys: This file contains the public keys of users allowed to connect to an SSH server. Each user's public key usually occupies one line. When a user attempts to connect to the server, it checks if the private key provided by the user matches any of the public keys listed in authorized_keys. If a match is found, the user is granted access.
+id_rsa and id_rsa.pub: These two files are the private and public keys used by the SSH client. id_rsa is the private key file, while id_rsa.pub is the corresponding public key file. The private key should be kept secure, while the public key can be safely shared with others or servers.
+id_dsa and id_dsa.pub: Similar to the above, these files represent the private and public keys used by the SSH client, but they utilize the DSA (Digital Signature Algorithm) instead of RSA.
+config: This file contains configuration options for the SSH client, allowing users to define host aliases, port numbers, authentication methods, etc. By editing this file, users can conveniently customize the behavior of the SSH client.
+known_hosts: This file stores the public keys of remote hosts that the SSH client has previously connected to. When a user attempts to connect to a host, the client checks if the host's public key matches any records in known_hosts. If there's no match, it may issue a warning.
+These files in the ~/.ssh directory typically have default permissions set to be owned by the user, with private key files often requiring strict permissions to ensure security.
+
+
+在 ~/.ssh 目录中通常包含了 SSH 客户端和服务器所需的配置文件和密钥。这个目录是用来存放 SSH 相关文件的默认位置，其中的文件有以下一些：
+
+authorized_keys: 这个文件包含了允许连接到 SSH 服务器的用户的公钥。每个用户的公钥通常占据一行。当用户尝试连接到服务器时，服务器会检查用户提供的私钥是否与 authorized_keys 中的公钥匹配，如果匹配成功，用户就可以登录。
+id_rsa 和 id_rsa.pub: 这两个文件是 SSH 客户端使用的私钥和公钥。id_rsa 是私钥文件，而 id_rsa.pub 是对应的公钥文件。私钥应该保持私密，而公钥可以安全地分享给其他人或服务器。
+id_dsa 和 id_dsa.pub: 这两个文件同样是 SSH 客户端的私钥和公钥，不过它们采用了 DSA（Digital Signature Algorithm）算法，而不是 RSA 算法。
+config: 这个文件包含了 SSH 客户端的配置选项，可以在其中定义主机别名、端口号、身份验证方法等信息。通过编辑这个文件，用户可以方便地配置 SSH 客户端的行为。
+known_hosts: 这个文件包含了 SSH 客户端曾经连接过的远程主机的公钥。当用户尝试连接某个主机时，客户端会检查该主机的公钥是否匹配 known_hosts 中的记录，如果不匹配，可能会发出警告。
+这些文件在 ~/.ssh 目录中的默认权限设置为用户所有，并且私钥文件通常要求权限非常严格，以确保安全性。
 
 
 

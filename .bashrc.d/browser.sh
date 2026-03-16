@@ -46,9 +46,9 @@ launch_browser_in_background() {
 	local urls_1=(
 		"https://www.bilibili.com"
 		"https://outlook.live.com"
-		"https://www.doubao.com/chat"
-		"https://kimi.moonshot.cn"
-		"https://tongyi.aliyun.com/qianwen"
+		"https://www.doubao.com"
+		"https://www.kimi.com"
+		"https://www.qianwen.com"
 		"https://yiyan.baidu.com"
 		"https://www.zhipuai.cn"
 		"https://agent.minimax.io"

@@ -1,12 +1,12 @@
 Installing Windows 10 from an Official ISO Image
 
-Remove all USB external hard drives before installation. Otherwise, the Windows 10 installation may fail.
+Remove all USB external hard drives before installation; otherwise, the Windows 10 installation process may fail.
 
 Boot the system into the WinPE environment.
 
-Delete all partitions on the target disk where Windows will be installed.
+Delete all partitions on the target disk to ensure that the disk is completely clean.
 
-Use the virtual CD/DVD drive provided by WinPE to mount the Windows 10 ISO file, then double-click setup.exe to start the installation.
+Use the virtual CD/DVD drive provided by WinPE to mount the Windows 10 ISO image file, then double-click setup.exe to start the installation program.
 
 During installation, create a temporary user account named user.
 
@@ -18,25 +18,27 @@ Log in using the Administrator account and delete the temporary user account.
 
 Change the location of the Documents folder to D:\Documents, and the Downloads folder to D:\Downloads.
 
-Configure desktop icons to display Control Panel, This PC, and Command Prompt.
+In Desktop Icon Settings, enable the following system icons: Control Panel, This PC, and Command Prompt.
 
-Install the Nvidia graphics driver and the Realtek audio driver. Set the display resolution to 3840×2160, set text scaling to 100%, and adjust system volume to 20%.
+Install the Nvidia graphics driver and the Realtek audio driver. Set the display resolution to 3840×2160, set text scaling to 100%, and adjust the system volume to 20%.
 
-In the mouse settings, set Pointer Options → Pointer speed to the maximum. Under Wheel → Vertical scrolling, set it to 15 lines at a time.
+In Mouse settings, set Pointer Options → Pointer speed to the maximum. Under Wheel → Vertical scrolling, set it to 15 lines at a time.
 
-In Display Settings, configure multiple monitors. Position the auxiliary displays on both sides of the primary display, aligning them to the lower-left or lower-right corner of the primary display to prevent the mouse cursor from frequently moving out of the main display unintentionally.
+In Display Settings, configure multiple monitors. Position the auxiliary displays on both sides of the primary display and align them to the lower-left or lower-right corner of the primary display to prevent the mouse cursor from frequently moving out of the main display unintentionally.
 
-Install the wireless network adapter driver and connect to WiFi. In Network Connections, disable all network adapters except the wireless adapter, leaving only one active wireless interface. Connect only to the router’s 5 GHz SSID, and avoid connecting to mixed 5 GHz / 2.4 GHz SSIDs, otherwise after waking from sleep the system may reconnect to the 2.4 GHz band, resulting in slower network speed.
+Install the wireless network adapter driver and connect to WiFi. In Network Connections, disable all network adapters except the wireless adapter so that only one wireless interface remains active.
+Connect only to the router’s 5 GHz SSID. Do not connect to mixed 5 GHz / 2.4 GHz SSIDs, otherwise after waking from sleep the system may reconnect to the 2.4 GHz band, resulting in slower network speed.
 
 In Virus & Threat Protection, disable Real-time protection.
 
 Activate Windows 10 using KMSoffline (or the W10 Digital Activation function of KMS).
 
-Install Sogou Input Method, and set the candidate count to 9. Remove Microsoft Pinyin Input Method. In language preferences, add English (United States), and set the default keyboard layout to English – US keyboard.
+Install Sogou Input Method and set the candidate count to 9. Remove Microsoft Pinyin Input Method. In language preferences, add English (United States) and set the default keyboard layout to English – US keyboard.
 
 Install the Monaco font.
 
 Install the following software and send their shortcuts to the desktop:
+
 WinRAR, UltraISO, Source Insight 3.5/4.0, Notepad++, VS Code, HashCheck Shell Extension, Google Chrome, Microsoft Edge, Acrobat Reader, WinDjView.
 
 Set the browser zoom level to 100%. After restoring from a GHOST image, the zoom level may be adjusted as needed; Chrome and Edge will remember the zoom setting for each website.
@@ -45,13 +47,13 @@ Configure all .txt files to open with Notepad++ by default.
 
 Set the Sound Scheme to No Sounds.
 
-Disable all notifications in Notification settings.
+Disable all notifications in Notification Settings.
 
 In System Properties → Advanced → Performance, select Adjust for best appearance, and uncheck Animate windows when minimizing and maximizing.
 
 In Virus & Threat Protection → Exclusions, add the directory D:\.
 
-Adjust Explorer (File Explorer) settings as needed.
+Adjust File Explorer settings as needed.
 
 Adjust Taskbar settings as needed.
 
@@ -63,7 +65,12 @@ Send the v2rayN shortcut to the desktop, launch it, and configure it to start au
 
 Send the Beyond Compare shortcut to the desktop.
 
-Configure the environment variables CYGWIN_DIR, MSYS2_DIR, VS_DIR, HOME, and DATA_DIR. During the initial installation, set HOME to E:\Note. This must be a real directory, not a symbolic link, to avoid contaminating %USERPROFILE% (C:\Users\Administrator). After restoring from a GHOST image, HOME should be set to %USERPROFILE%, and a symbolic link E:\Note → %USERPROFILE% should be created.
+Configure the environment variables CYGWIN_DIR, MSYS2_DIR, VS_DIR, HOME, and DATA_DIR.
+
+During the initial installation, set HOME to E:\Note. This must be a real directory, not a symbolic link, to avoid contaminating %USERPROFILE% (C:\Users\Administrator).
+After restoring from a GHOST image, set HOME to %USERPROFILE%, and create a symbolic link:
+
+E:\Note → %USERPROFILE%
 
 Uninstall Internet Explorer.
 
@@ -73,16 +80,17 @@ After rebooting into Windows 10, calculate the SHA512 checksum of the GHOST imag
 
 Install Office 2019, and activate it using KMSoffline (or KMS AAct Network → Office Activation).
 
-Install VLC media player.
+Install the following software and send their shortcuts to the desktop:
 
-Install 360 Security Guard, and perform system checkup, virus scan, repair, optimization, and cleanup.
+VLC media player, FileZilla, WinSCP, Baidu Netdisk, Thunder (Xunlei), qBittorrent.
+
+Install 360 Security Guard, and perform system checkup, virus scan, system repair, system optimization, and system cleanup.
 
 Uninstall 360 Security Guard.
 
 Reboot into the WinPE environment and create another system backup using GHOST.
 
 After rebooting into Windows 10, calculate the SHA512 checksum of the GHOST image file and copy it to an external hard drive.
-
 
 
 
@@ -163,7 +171,7 @@ net user administrator /active:yes
 
 安装 Office 2019，并使用 KMSoffline（或 KMS 的 AAct Network → Office Activation）激活 Office 2019。
 
-安装 VLC media player。
+安装以下软件，并将快捷方式发送到桌面：VLC media player，FileZilla，WinSCP，百度网盘，迅雷，qBittorrent。
 
 安装 360 安全卫士，执行系统体检、病毒查杀、系统修复、系统优化以及系统清理操作。
 

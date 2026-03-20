@@ -35,6 +35,7 @@ launch_browser_in_background() {
 		"https://chat.openai.com"
 		"https://claude.ai"
 		"https://gemini.google.com"
+		"https://grok.com"
 		"https://chat.deepseek.com"
 	)
 
@@ -181,18 +182,12 @@ launch_browser_in_background() {
 			esac
 			;;
 		chrome* | edge* )
-			# https://www.maketecheasier.com/useful-chrome-command-line-switches/
+			# https://peter.sh/experiments/chromium-command-line-switches/
+
 			args+=(
 				--start-maximized
 				--new-window
-				# --disable-extensions
-				# --disable-plugins
-				# --disable-notifications
-				# --disable-sync
-				# --no-referrers
-				# --dns-prefetch-disable
-				# --disable-background-mode
-				# --disable-translate
+				--disable-notifications
 			)
 			case "${command}" in
 				*no_proxy_server* )

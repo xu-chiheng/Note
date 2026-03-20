@@ -86,7 +86,7 @@ do_git_backup() {
 			;;
 		* )
 			echo "unknown backup_command : ${backup_command}"
-			false
+			return 1
 			;;
 	esac
 }
@@ -291,7 +291,7 @@ do_git_diff() {
 			;;
 		* )
 			echo "unknown diff_command : ${diff_command}"
-			false
+			return 1
 			;;
 	esac
 }
@@ -382,7 +382,7 @@ do_git_misc() {
 			;;
 		* )
 			echo "unknown misc_command : ${misc_command}"
-			false
+			return 1
 			;;
 	esac
 }

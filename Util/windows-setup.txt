@@ -5,6 +5,7 @@ Remove all USB external hard drives before installation; otherwise, the Windows 
 Boot the system into the WinPE environment.
 
 Delete all partitions on the target disk to ensure that the disk is completely clean.
+⚠️ This will erase all data on the disk.
 
 Use the virtual CD/DVD drive provided by WinPE to mount the Windows 10 ISO image file, then double-click setup.exe to start the installation program.
 
@@ -20,16 +21,17 @@ Change the location of the Documents folder to D:\Documents, and the Downloads f
 
 In Desktop Icon Settings, enable the following system icons: Control Panel, This PC, and Command Prompt.
 
-Install the Nvidia graphics driver and the Realtek audio driver. Set the display resolution to 3840×2160, set text scaling to 100%, and adjust the system volume to 20%.
+Install the NVIDIA GPU driver and the Realtek HD Audio driver. Set the display resolution to 3840×2160, set text scaling to 100%, and adjust the system volume to 20%.
 
-In Mouse settings, set Pointer Options → Pointer speed to the maximum. Under Wheel → Vertical scrolling, set it to 15 lines at a time.
+In Mouse Settings, set Pointer Options → Pointer speed to the maximum. Under Wheel → Vertical scrolling, set it to 15 lines at a time.
 
 In Display Settings, configure multiple monitors. Position the auxiliary displays on both sides of the primary display and align them to the lower-left or lower-right corner of the primary display to prevent the mouse cursor from frequently moving out of the main display unintentionally.
 
-Install the wireless network adapter driver and connect to WiFi. In Network Connections, disable all network adapters except the wireless adapter so that only one wireless interface remains active.
-Connect only to the router’s 5 GHz SSID. Do not connect to mixed 5 GHz / 2.4 GHz SSIDs, otherwise after waking from sleep the system may reconnect to the 2.4 GHz band, resulting in slower network speed.
+Install the wireless network adapter driver and connect to Wi-Fi. In Network Connections, disable all network adapters except the wireless adapter so that only one wireless interface remains active.
 
-In Virus & Threat Protection, disable Real-time protection.
+Connect only to the router’s 5 GHz Wi-Fi network (SSID). Do not connect to mixed 5 GHz / 2.4 GHz networks, otherwise after waking from sleep the system may reconnect to the 2.4 GHz band, resulting in slower network speed.
+
+In Windows Security → Virus & threat protection, disable Real-time protection.
 
 Activate Windows 10 using KMSoffline (or the W10 Digital Activation function of KMS).
 
@@ -51,11 +53,11 @@ Disable all notifications in Notification Settings.
 
 In System Properties → Advanced → Performance, select Adjust for best appearance, and uncheck Animate windows when minimizing and maximizing.
 
-In Virus & Threat Protection → Exclusions, add the directory D:\.
+In Windows Security → Virus & threat protection → Exclusions, add the directory D:\.
 
-Adjust File Explorer settings as needed.
+Adjust File Explorer settings according to personal preference.
 
-Adjust Taskbar settings as needed.
+Adjust Taskbar settings according to personal preference.
 
 Optionally change the computer name to Xu-Chiheng.
 
@@ -72,7 +74,9 @@ After restoring from a GHOST image, set HOME to %USERPROFILE%, and create a symb
 
 E:\Note → %USERPROFILE%
 
-Uninstall Internet Explorer.
+Ensure that virtualization (Intel VT-x / AMD-V) is enabled in BIOS/UEFI before enabling Hyper-V.
+
+Open Control Panel → Programs and Features → Turn Windows features on or off, then disable Internet Explorer 11 and enable Hyper-V.
 
 Reboot into the WinPE environment and create a system backup using GHOST.
 
@@ -95,8 +99,6 @@ After rebooting into Windows 10, calculate the SHA512 checksum of the GHOST imag
 
 
 
-
-
 从 Windows 10 原版 ISO 镜像安装 Windows 10
 
 在开始安装前，移除所有 USB 移动硬盘设备，否则可能导致 Windows 10 安装过程失败。
@@ -104,6 +106,7 @@ After rebooting into Windows 10, calculate the SHA512 checksum of the GHOST imag
 启动系统进入 WinPE 环境。
 
 删除目标系统硬盘上的所有分区，以确保磁盘处于干净状态。
+⚠️ 此操作将清除磁盘上的所有数据，请提前做好备份。
 
 使用 WinPE 自带的虚拟光驱挂载 Windows 10 ISO 镜像文件，双击 setup.exe 启动安装程序。
 
@@ -119,15 +122,17 @@ net user administrator /active:yes
 
 在桌面图标设置中启用以下系统图标：控制面板、此电脑、命令提示符。
 
-安装 Nvidia 显卡驱动和 Realtek 声卡驱动；设置显示分辨率为 3840×2160，文本缩放比例为 100%；将系统音量调整至 20%。
+安装 NVIDIA 显卡驱动和 Realtek 高清音频驱动；设置显示分辨率为 3840×2160，文本缩放比例为 100%；将系统音量调整至 20%。
 
 在鼠标设置中，将“指针选项 / 移动速度”调整至最高；在“滚轮 / 垂直滚动”中设置为“每次滚动 15 行”。
 
 在显示设置中配置多显示器布局。将主显示器两侧的辅助显示器位置调整至主显示器的左下角或右下角，以避免鼠标指针频繁意外移出主显示器。
 
-安装无线网卡驱动并连接 WiFi。在“网络连接”中禁用除无线网卡以外的所有网卡，仅保留一个无线网卡。只连接路由器的 5 GHz 无线信号，不要连接 5G/2.4G 混合信号，否则系统从休眠恢复后可能自动连接至 2.4 GHz 信号，导致网络速度下降。
+安装无线网卡驱动并连接 Wi-Fi。在“网络连接”中禁用除无线网卡以外的所有网卡，仅保留一个无线网卡。
 
-在“病毒和威胁防护”设置中关闭“实时保护”。
+只连接路由器的 5 GHz 无线网络（SSID），不要连接 5 GHz / 2.4 GHz 混合网络，否则系统从休眠恢复后可能自动连接至 2.4 GHz 网络，导致网络速度下降。
+
+在“Windows 安全中心 → 病毒和威胁防护”中关闭“实时保护”。
 
 使用 KMSoffline（或 KMS 的 W10 Digital Activation 功能）激活 Windows 10。
 
@@ -141,15 +146,15 @@ net user administrator /active:yes
 
 将所有 .txt 文件的默认打开程序设置为 Notepad++。
 
-将系统声音方案设置为“无声”。
+将声音方案设置为“无声”。
 
 在通知管理中关闭所有通知。
 
 在“系统属性 → 高级 → 性能”设置中选择“调整为最佳外观”，并取消勾选“在最大化和最小化时显示窗口动画”。
 
-在“病毒和威胁防护 → 排除项”中添加 D:\ 目录。
+在“Windows 安全中心 → 病毒和威胁防护 → 排除项”中添加 D:\ 目录。
 
-根据个人使用习惯调整 Explorer（文件资源管理器）设置。
+根据个人使用习惯调整文件资源管理器（File Explorer）设置。
 
 根据个人使用习惯调整任务栏设置。
 
@@ -163,7 +168,9 @@ net user administrator /active:yes
 
 设置环境变量 CYGWIN_DIR、MSYS2_DIR、VS_DIR、HOME、DATA_DIR。在初始安装阶段，将 HOME 设置为 E:\Note（必须为实际目录，而不是符号链接），以避免污染 %USERPROFILE%（C:\Users\Administrator）。从 GHOST 恢复系统之后，需要将 HOME 设置为 %USERPROFILE%，并建立符号链接 E:\Note → %USERPROFILE%。
 
-卸载 Internet Explorer。
+在启用 Hyper-V 之前，请确保已在 BIOS/UEFI 中开启 CPU 虚拟化功能（Intel VT-x / AMD-V）。
+
+在“控制面板 → 程序和功能 → 启用或关闭 Windows 功能”中，禁用 Internet Explorer 11，并启用 Hyper-V。
 
 重启进入 WinPE 环境，并使用 GHOST 备份系统。
 

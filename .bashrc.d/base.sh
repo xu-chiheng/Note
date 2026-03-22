@@ -1089,7 +1089,7 @@ A_{,Note{,_~git-tools~_{cygwin,msys},_Tool}},shortcuts}.cmd
 
 		'~shortcuts_'/{code,editor,file-explorer,google-chrome,mozilla-firefox,Note{,_{~git-tools~_linux,Tool}},shortcuts,sync,task-manager,terminal}.sh
 
-		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_Enterprise,Windows_10_22H2_Enterprise_ISO}
+		Util/download/{Cygwin,MSYS2,Linux,Visual_Studio_Enterprise,Win10_22H2_Enterprise}
 		Util/{other/{crypto,backup},quirk,shell,setting/editor}
 		Util/{_vps-get-latest-scripts-and-do-common-setup,linux-setup,xray-nginx,sing-box-y,sing-box-f,v2ray-agent,wireguard}.sh
 		Util//windows-setup.txt

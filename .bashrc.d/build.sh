@@ -440,6 +440,10 @@ git_repo_url_of_package() {
 			echo "https://github.com/freebsd/freebsd-src.git"
 			# echo "git@github.com:freebsd/freebsd-src.git"
 			;;
+		virtualbox )
+			echo "https://github.com/VirtualBox/virtualbox.git"
+			# echo "git@github.com:VirtualBox/virtualbox.git"
+			;;
 		* )
 			echo "unknown package : ${package}"
 			return 1

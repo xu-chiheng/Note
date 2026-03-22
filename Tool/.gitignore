@@ -32,10 +32,13 @@
 /ipxe
 /wimboot
 /shim
+/nt
+/linux
 /xnu
 /netbsd
 /openbsd
 /freebsd
+/virtualbox
 /*-build
 /*-install
 /*.xz

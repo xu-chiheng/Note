@@ -330,7 +330,7 @@ gpg_generate_ecc_256_bit_no_expiration_encryption_and_signing_key_pair() {
 # https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 ssh_generate_ed25519_authentication_key_pair_for_github() {
 	# Define the path for the SSH key file
-	local key_file=~/.ssh/id_github
+	local key_file=~/.ssh/id_ed25519
 	# Remove any existing key pair with the same name
 	rm -rf "${key_file}"{,.pub}
 	# Use expect to automate the ssh-keygen prompt for the file path,

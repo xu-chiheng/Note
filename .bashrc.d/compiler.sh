@@ -48,7 +48,7 @@ common_create_test_branches_for_bisect() {
 	local major_version
 	for major_version in $(seq "${major_version_start}" 99); do
 		# echo "${major_version}"
-		local major_branch="${major_branch_pattern_begin}${major_version}${major_branch_pattern_end}"
+		local major_branch="remotes/origin/${major_branch_pattern_begin}${major_version}${major_branch_pattern_end}"
 		local test_branch="$(printf "test%02d0000\n" "${major_version}")"
 		if git_branch_exists "${major_branch}"; then
 			maybe_create_test_branch_for_bisect "${major_branch}" "${test_branch}" "${trunk_branch}"
@@ -61,23 +61,27 @@ common_create_test_branches_for_bisect() {
 }
 
 llvm_create_test_branches_for_bisect() {
-	common_create_test_branches_for_bisect llvm 16 "remotes/origin/release/" ".x" main
+	common_create_test_branches_for_bisect llvm 16 "release/" ".x" main
 }
 
 gcc_create_test_branches_for_bisect() {
-	common_create_test_branches_for_bisect gcc 14 "remotes/origin/releases/gcc-" "" master
+	common_create_test_branches_for_bisect gcc 14 "releases/gcc-" "" master
 }
 
 binutils_create_test_branches_for_bisect() {
-	common_create_test_branches_for_bisect binutils 42 "remotes/origin/binutils-2_" "-branch" master
+	common_create_test_branches_for_bisect binutils 42 "binutils-2_" "-branch" master
 }
 
 gdb_create_test_branches_for_bisect() {
-	common_create_test_branches_for_bisect gdb 15 "remotes/origin/gdb-" "-branch" master
+	common_create_test_branches_for_bisect gdb 15 "gdb-" "-branch" master
 }
 
 python_create_test_branches_for_bisect() {
-	common_create_test_branches_for_bisect python 14 "remotes/origin/3." "" main
+	common_create_test_branches_for_bisect python 14 "3." "" main
+}
+
+cygwin_create_test_branches_for_bisect() {
+	common_create_test_branches_for_bisect cygwin 5 "cygwin-3_" "-branch" main
 }
 
 check_compiler_existence() {

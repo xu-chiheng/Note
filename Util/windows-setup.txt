@@ -43,7 +43,7 @@ Install the following software and send their shortcuts to the desktop:
 
 WinRAR, UltraISO, Source Insight 3.5/4.0, Notepad++, VS Code, HashCheck Shell Extension, Google Chrome, Microsoft Edge, Acrobat Reader, WinDjView.
 
-Set the browser zoom level to 100%. After restoring from a GHOST image, the zoom level may be adjusted as needed; Chrome and Edge will remember the zoom setting for each website.
+Set the browser zoom level to 200%. After restoring from a GHOST image, the zoom level may be adjusted as needed; Chrome and Edge will remember the zoom setting for each website.
 
 Configure all .txt files to open with Notepad++ by default.
 
@@ -142,7 +142,7 @@ net user administrator /active:yes
 
 安装以下软件，并将快捷方式发送到桌面：WinRAR、UltraISO、Source Insight 3.5/4.0、Notepad++、VS Code、HashCheck Shell Extension、Google Chrome、Microsoft Edge、Acrobat Reader、WinDjView。
 
-将浏览器缩放比例设置为 100%。从 GHOST 恢复系统后，可根据需要调整缩放比例；Chrome 和 Edge 会记住每个网站的缩放设置。
+将浏览器缩放比例设置为 200%。从 GHOST 恢复系统后，可根据需要调整缩放比例；Chrome 和 Edge 会记住每个网站的缩放设置。
 
 将所有 .txt 文件的默认打开程序设置为 Notepad++。
 

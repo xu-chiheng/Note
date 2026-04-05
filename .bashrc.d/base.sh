@@ -974,9 +974,9 @@ windows_download_executable_from_url_and_execute() {
 	local url="$2"
 	shift 2
 	local curl
-	curl="/usr/bin/curl"
+	# curl="/usr/bin/curl"
 	# Since Windows 10, a native curl.exe is included.
-	# curl="$(cygpath -u 'C:\Windows\System32\curl.exe')"
+	curl="$(cygpath -u 'C:\Windows\System32\curl.exe')"
 	echo_command rm -rf "${executable}" \
 	&& time_command "${curl}" -L -o "${executable}" "${url}" \
 	&& echo_command chmod +x "${executable}" \
